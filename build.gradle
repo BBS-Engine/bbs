@@ -1,0 +1,83 @@
+import org.gradle.internal.os.OperatingSystem
+
+apply plugin: 'java'
+
+/* Common dependencies */
+ext.lwjglVersion = "3.3.0"
+ext.commonDependencies = []
+ext.gitHash = { ->
+    def stdout = new ByteArrayOutputStream()
+
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = stdout
+    }
+
+    return stdout.toString().trim()
+}.call()
+
+switch (OperatingSystem.current()) {
+    case OperatingSystem.LINUX:
+        project.ext.lwjglNatives = "natives-linux"
+        project.ext.commonDependencies.add("org.bytedeco:javacpp:1.5.8:linux-x86_64")
+        project.ext.commonDependencies.add("org.bytedeco:ffmpeg:1.5.8:linux-x86_64")
+
+        break
+    case OperatingSystem.MAC_OS:
+        def isArm = System.getProperty("os.arch").startsWith("aarch64")
+
+        project.ext.lwjglNatives = isArm ? "natives-macos-arm64" : "natives-macos"
+
+        if (isArm)
+        {
+            project.ext.commonDependencies.add("org.bytedeco:javacpp:1.5.8:macosx-arm64")
+            project.ext.commonDependencies.add("org.bytedeco:ffmpeg:1.5.8:macosx-arm64")
+        }
+        else
+        {
+            project.ext.commonDependencies.add("org.bytedeco:javacpp:1.5.8:macosx-x86_64")
+            project.ext.commonDependencies.add("org.bytedeco:ffmpeg:1.5.8:macosx-x86_64")
+        }
+
+        break
+    case OperatingSystem.WINDOWS:
+        project.ext.lwjglNatives = "natives-windows"
+        project.ext.commonDependencies.add("org.bytedeco:javacpp:1.5.8:windows-x86_64")
+        project.ext.commonDependencies.add("org.bytedeco:ffmpeg:1.5.8:windows-x86_64")
+
+        break
+}
+
+if (project.hasProperty("os")) {
+    ext.lwjglNatives = "natives-" + project.getProperties().get("os")
+}
+
+ext.commonDependencies.addAll([
+    "org.lwjgl:lwjgl:$lwjglVersion",
+    "org.lwjgl:lwjgl-glfw:$lwjglVersion",
+    "org.lwjgl:lwjgl-openal:$lwjglVersion",
+    "org.lwjgl:lwjgl-opengl:$lwjglVersion",
+    "org.lwjgl:lwjgl-stb:$lwjglVersion",
+    "org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives",
+    "org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives",
+    "org.lwjgl:lwjgl-openal:$lwjglVersion:$lwjglNatives",
+    "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives",
+    "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives",
+    "org.greenrobot:eventbus-java:3.3.1",
+    "org.joml:joml:1.9.2",
+    "org.spongepowered:mixin:0.8.5",
+    "net.fabricmc:fabric-loader:0.13.0",
+    "net.fabricmc:access-widener:2.1.0",
+    "net.fabricmc:tiny-mappings-parser:0.2.2.14",
+    "com.github.Querz:NBT:6.1",
+    "com.google.guava:guava:21.0",
+    "com.google.code.gson:gson:2.8.7",
+    "org.ow2.asm:asm:9.2",
+    "org.ow2.asm:asm-analysis:9.2",
+    "org.ow2.asm:asm-commons:9.2",
+    "org.ow2.asm:asm-tree:9.2",
+    "org.ow2.asm:asm-util:9.2",
+    "org.bytedeco:javacv:1.5.8",
+    "org.bytedeco:javacpp:1.5.8",
+    "org.bytedeco:ffmpeg:5.1.2-1.5.8"
+])

@@ -1,0 +1,67 @@
+apply plugin: 'java'
+
+group = 'mchorse'
+archivesBaseName = 'bbs-engine'
+version = '0.1'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.spongepowered.org/maven/"
+    }
+    maven {
+        url "https://maven.fabricmc.net/"
+    }
+    maven {
+        url "https://jitpack.io/"
+    }
+}
+
+dependencies {
+    implementation commonDependencies
+
+    /* Unit testing */
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.1"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.3.1"
+}
+
+/* Utility tasks */
+
+task scriptingJavadocsJson(type: Exec) {
+    // Writing gradle tasks is PAIN, if you'll ever would need to run this, clone and build:
+    // https://github.com/mchorse/jsonDoclet
+    //
+    // Rename it to jsonDoclet.jar, and place it in the root folder of the project
+    executable "javadoc"
+    args "-doclet", "mchorse.utils.doclets.JsonDoclet", "-docletpath", "./jsonDoclet.jar", "-sourcepath", "./src/main/java/", "-subpackages", "mchorse.bbs.game.scripts.user:mchorse.bbs.game.scripts.ui.components:mchorse.bbs.game.scripts.ui.graphics"
+
+    doLast {
+        file("src/main/resources/assets/docs.json").setText(file("docs.json").text)
+    }
+}
+
+tasks.processResources.dependsOn(scriptingJavadocsJson)
+
+task copyRuntimeLibs(type: Copy) {
+    from sourceSets.main.compileClasspath
+    into "build/dependencies/"
+    exclude {
+        return [
+            "leptonica-1.82.0-1.5.8.jar",
+            "flandmark-1.07-1.5.8.jar",
+            "openblas-0.3.21-1.5.8.jar",
+            "flycapture-2.13.3.31-1.5.8.jar",
+            "libdc1394-2.2.6-1.5.8.jar",
+            "libfreenect-0.5.7-1.5.8.jar",
+            "libfreenect2-0.2.0-1.5.8.jar",
+            "librealsense-1.12.4-1.5.8.jar",
+            "librealsense2-2.50.0-1.5.8.jar",
+            "videoinput-0.200-1.5.8.jar",
+            "artoolkitplus-2.3.1-1.5.8.jar",
+            "tesseract-5.2.0-1.5.8.jar",
+            "leptonica-1.82.0-1.5.8.jar"
+        ].contains(it.name)
+    }
+}
+
+tasks.build.dependsOn.add(copyRuntimeLibs)

@@ -1,0 +1,1631 @@
+{
+    "name": "BBS Font (Round, Mono)",
+    "height": 7,
+    "formats": {},
+    "glyphs": {
+        "32": {
+            "kerning": {},
+            "offset": [0, 0],
+            "emoji": false,
+            "tile": [13, 108, 0, 0],
+            "advance": 5
+        },
+        "33": {
+            "kerning": {},
+            "offset": [2, -7],
+            "emoji": false,
+            "tile": [51, 32, 1, 7],
+            "advance": 5
+        },
+        "34": {
+            "kerning": {},
+            "offset": [1, -7],
+            "emoji": false,
+            "tile": [100, 102, 3, 2],
+            "advance": 5
+        },
+        "35": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [14, 89, 5, 5],
+            "advance": 5
+        },
+        "36": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [25, 12, 5, 9],
+            "advance": 5
+        },
+        "37": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [53, 32, 5, 7],
+            "advance": 5
+        },
+        "38": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [59, 32, 5, 7],
+            "advance": 5
+        },
+        "39": {
+            "kerning": {},
+            "offset": [2, -7],
+            "emoji": false,
+            "tile": [103, 96, 1, 2],
+            "advance": 5
+        },
+        "40": {
+            "kerning": {},
+            "offset": [1, -7],
+            "emoji": false,
+            "tile": [65, 32, 3, 7],
+            "advance": 5
+        },
+        "41": {
+            "kerning": {},
+            "offset": [1, -7],
+            "emoji": false,
+            "tile": [69, 32, 3, 7],
+            "advance": 5
+        },
+        "42": {
+            "kerning": {},
+            "offset": [0, -6],
+            "emoji": false,
+            "tile": [20, 89, 5, 5],
+            "advance": 5
+        },
+        "43": {
+            "kerning": {},
+            "offset": [0, -6],
+            "emoji": false,
+            "tile": [26, 89, 5, 5],
+            "advance": 5
+        },
+        "44": {
+            "kerning": {},
+            "offset": [1, -2],
+            "emoji": false,
+            "tile": [85, 102, 2, 4],
+            "advance": 5
+        },
+        "45": {
+            "kerning": {},
+            "offset": [0, -4],
+            "emoji": false,
+            "tile": [1, 108, 5, 1],
+            "advance": 5
+        },
+        "46": {
+            "kerning": {},
+            "offset": [1, -2],
+            "emoji": false,
+            "tile": [100, 81, 2, 2],
+            "advance": 5
+        },
+        "47": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [73, 32, 5, 7],
+            "advance": 5
+        },
+        "48": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [79, 32, 5, 7],
+            "advance": 5
+        },
+        "49": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [85, 32, 5, 7],
+            "advance": 5
+        },
+        "50": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [91, 32, 5, 7],
+            "advance": 5
+        },
+        "51": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [97, 32, 5, 7],
+            "advance": 5
+        },
+        "52": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [1, 41, 5, 7],
+            "advance": 5
+        },
+        "53": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [7, 41, 5, 7],
+            "advance": 5
+        },
+        "54": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [13, 41, 5, 7],
+            "advance": 5
+        },
+        "55": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [19, 41, 5, 7],
+            "advance": 5
+        },
+        "56": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [25, 41, 5, 7],
+            "advance": 5
+        },
+        "57": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [31, 41, 5, 7],
+            "advance": 5
+        },
+        "58": {
+            "kerning": {},
+            "offset": [1, -5],
+            "emoji": false,
+            "tile": [32, 89, 2, 5],
+            "advance": 5
+        },
+        "59": {
+            "kerning": {},
+            "offset": [1, -5],
+            "emoji": false,
+            "tile": [37, 41, 2, 7],
+            "advance": 5
+        },
+        "60": {
+            "kerning": {},
+            "offset": [1, -6],
+            "emoji": false,
+            "tile": [35, 89, 3, 5],
+            "advance": 5
+        },
+        "61": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [88, 102, 5, 4],
+            "advance": 5
+        },
+        "62": {
+            "kerning": {},
+            "offset": [1, -6],
+            "emoji": false,
+            "tile": [39, 89, 3, 5],
+            "advance": 5
+        },
+        "63": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [40, 41, 5, 7],
+            "advance": 5
+        },
+        "64": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [46, 41, 5, 7],
+            "advance": 5
+        },
+        "65": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [52, 41, 5, 7],
+            "advance": 5
+        },
+        "66": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [58, 41, 5, 7],
+            "advance": 5
+        },
+        "67": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [64, 41, 5, 7],
+            "advance": 5
+        },
+        "68": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [70, 41, 5, 7],
+            "advance": 5
+        },
+        "69": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [76, 41, 5, 7],
+            "advance": 5
+        },
+        "70": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [82, 41, 5, 7],
+            "advance": 5
+        },
+        "71": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [88, 41, 5, 7],
+            "advance": 5
+        },
+        "72": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [94, 41, 5, 7],
+            "advance": 5
+        },
+        "73": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [1, 49, 5, 7],
+            "advance": 5
+        },
+        "74": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [7, 49, 5, 7],
+            "advance": 5
+        },
+        "75": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [13, 49, 5, 7],
+            "advance": 5
+        },
+        "76": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [19, 49, 5, 7],
+            "advance": 5
+        },
+        "77": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [25, 49, 5, 7],
+            "advance": 5
+        },
+        "78": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [31, 49, 5, 7],
+            "advance": 5
+        },
+        "79": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [37, 49, 5, 7],
+            "advance": 5
+        },
+        "80": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [43, 49, 5, 7],
+            "advance": 5
+        },
+        "81": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [97, 12, 5, 8],
+            "advance": 5
+        },
+        "82": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [49, 49, 5, 7],
+            "advance": 5
+        },
+        "83": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [55, 49, 5, 7],
+            "advance": 5
+        },
+        "84": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [61, 49, 5, 7],
+            "advance": 5
+        },
+        "85": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [67, 49, 5, 7],
+            "advance": 5
+        },
+        "86": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [73, 49, 5, 7],
+            "advance": 5
+        },
+        "87": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [79, 49, 5, 7],
+            "advance": 5
+        },
+        "88": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [85, 49, 5, 7],
+            "advance": 5
+        },
+        "89": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [91, 49, 5, 7],
+            "advance": 5
+        },
+        "90": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [97, 49, 5, 7],
+            "advance": 5
+        },
+        "91": {
+            "kerning": {},
+            "offset": [1, -7],
+            "emoji": false,
+            "tile": [100, 41, 3, 7],
+            "advance": 5
+        },
+        "92": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [1, 57, 5, 7],
+            "advance": 5
+        },
+        "93": {
+            "kerning": {},
+            "offset": [1, -7],
+            "emoji": false,
+            "tile": [7, 57, 3, 7],
+            "advance": 5
+        },
+        "94": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [94, 102, 5, 3],
+            "advance": 5
+        },
+        "95": {
+            "kerning": {},
+            "offset": [0, -1],
+            "emoji": false,
+            "tile": [7, 108, 5, 1],
+            "advance": 5
+        },
+        "97": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [43, 89, 5, 5],
+            "advance": 5
+        },
+        "98": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [11, 57, 5, 7],
+            "advance": 5
+        },
+        "99": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [49, 89, 5, 5],
+            "advance": 5
+        },
+        "100": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [17, 57, 5, 7],
+            "advance": 5
+        },
+        "101": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [55, 89, 5, 5],
+            "advance": 5
+        },
+        "102": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [23, 57, 5, 7],
+            "advance": 5
+        },
+        "103": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [29, 57, 5, 7],
+            "advance": 5
+        },
+        "104": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [35, 57, 5, 7],
+            "advance": 5
+        },
+        "105": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [41, 57, 5, 7],
+            "advance": 5
+        },
+        "106": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [31, 12, 5, 9],
+            "advance": 5
+        },
+        "107": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [47, 57, 5, 7],
+            "advance": 5
+        },
+        "108": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [53, 57, 5, 7],
+            "advance": 5
+        },
+        "109": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [61, 89, 5, 5],
+            "advance": 5
+        },
+        "110": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [67, 89, 5, 5],
+            "advance": 5
+        },
+        "111": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [73, 89, 5, 5],
+            "advance": 5
+        },
+        "112": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [59, 57, 5, 7],
+            "advance": 5
+        },
+        "113": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [65, 57, 5, 7],
+            "advance": 5
+        },
+        "114": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [79, 89, 5, 5],
+            "advance": 5
+        },
+        "115": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [85, 89, 5, 5],
+            "advance": 5
+        },
+        "116": {
+            "kerning": {},
+            "offset": [0, -6],
+            "emoji": false,
+            "tile": [75, 81, 5, 6],
+            "advance": 5
+        },
+        "117": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [91, 89, 5, 5],
+            "advance": 5
+        },
+        "118": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [97, 89, 5, 5],
+            "advance": 5
+        },
+        "119": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [1, 96, 5, 5],
+            "advance": 5
+        },
+        "120": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [7, 96, 5, 5],
+            "advance": 5
+        },
+        "121": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [71, 57, 5, 7],
+            "advance": 5
+        },
+        "122": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [13, 96, 5, 5],
+            "advance": 5
+        },
+        "123": {
+            "kerning": {},
+            "offset": [1, -7],
+            "emoji": false,
+            "tile": [77, 57, 4, 7],
+            "advance": 5
+        },
+        "124": {
+            "kerning": {},
+            "offset": [2, -8],
+            "emoji": false,
+            "tile": [37, 12, 1, 9],
+            "advance": 5
+        },
+        "125": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [82, 57, 4, 7],
+            "advance": 5
+        },
+        "161": {
+            "kerning": {},
+            "offset": [2, -7],
+            "emoji": false,
+            "tile": [87, 57, 1, 7],
+            "advance": 5
+        },
+        "191": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [89, 57, 5, 7],
+            "advance": 5
+        },
+        "192": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [1, 1, 5, 10],
+            "advance": 5
+        },
+        "193": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [7, 1, 5, 10],
+            "advance": 5
+        },
+        "194": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [13, 1, 5, 10],
+            "advance": 5
+        },
+        "195": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [19, 1, 5, 10],
+            "advance": 5
+        },
+        "196": {
+            "kerning": {},
+            "offset": [0, -9],
+            "emoji": false,
+            "tile": [39, 12, 5, 9],
+            "advance": 5
+        },
+        "197": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [25, 1, 5, 10],
+            "advance": 5
+        },
+        "198": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [95, 57, 5, 7],
+            "advance": 5
+        },
+        "199": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [45, 12, 5, 9],
+            "advance": 5
+        },
+        "200": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [31, 1, 5, 10],
+            "advance": 5
+        },
+        "201": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [37, 1, 5, 10],
+            "advance": 5
+        },
+        "202": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [43, 1, 5, 10],
+            "advance": 5
+        },
+        "203": {
+            "kerning": {},
+            "offset": [0, -9],
+            "emoji": false,
+            "tile": [51, 12, 5, 9],
+            "advance": 5
+        },
+        "205": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [49, 1, 5, 10],
+            "advance": 5
+        },
+        "206": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [55, 1, 5, 10],
+            "advance": 5
+        },
+        "207": {
+            "kerning": {},
+            "offset": [0, -9],
+            "emoji": false,
+            "tile": [57, 12, 5, 9],
+            "advance": 5
+        },
+        "209": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [61, 1, 5, 10],
+            "advance": 5
+        },
+        "210": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [67, 1, 5, 10],
+            "advance": 5
+        },
+        "211": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [73, 1, 5, 10],
+            "advance": 5
+        },
+        "212": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [79, 1, 5, 10],
+            "advance": 5
+        },
+        "213": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [85, 1, 5, 10],
+            "advance": 5
+        },
+        "214": {
+            "kerning": {},
+            "offset": [0, -9],
+            "emoji": false,
+            "tile": [63, 12, 5, 9],
+            "advance": 5
+        },
+        "216": {
+            "kerning": {},
+            "offset": [-1, -7],
+            "emoji": false,
+            "tile": [1, 65, 7, 7],
+            "advance": 5
+        },
+        "217": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [91, 1, 5, 10],
+            "advance": 5
+        },
+        "218": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [97, 1, 5, 10],
+            "advance": 5
+        },
+        "219": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [1, 12, 5, 10],
+            "advance": 5
+        },
+        "220": {
+            "kerning": {},
+            "offset": [0, -9],
+            "emoji": false,
+            "tile": [69, 12, 5, 9],
+            "advance": 5
+        },
+        "223": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [9, 65, 5, 7],
+            "advance": 5
+        },
+        "224": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [1, 23, 5, 8],
+            "advance": 5
+        },
+        "225": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [7, 23, 5, 8],
+            "advance": 5
+        },
+        "226": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [13, 23, 5, 8],
+            "advance": 5
+        },
+        "227": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [19, 23, 5, 8],
+            "advance": 5
+        },
+        "228": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [15, 65, 5, 7],
+            "advance": 5
+        },
+        "229": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [25, 23, 5, 8],
+            "advance": 5
+        },
+        "230": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [19, 96, 5, 5],
+            "advance": 5
+        },
+        "231": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [21, 65, 5, 7],
+            "advance": 5
+        },
+        "232": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [31, 23, 5, 8],
+            "advance": 5
+        },
+        "233": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [37, 23, 5, 8],
+            "advance": 5
+        },
+        "234": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [43, 23, 5, 8],
+            "advance": 5
+        },
+        "235": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [27, 65, 5, 7],
+            "advance": 5
+        },
+        "237": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [49, 23, 5, 8],
+            "advance": 5
+        },
+        "238": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [55, 23, 5, 8],
+            "advance": 5
+        },
+        "239": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [33, 65, 5, 7],
+            "advance": 5
+        },
+        "241": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [61, 23, 5, 8],
+            "advance": 5
+        },
+        "242": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [67, 23, 5, 8],
+            "advance": 5
+        },
+        "243": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [73, 23, 5, 8],
+            "advance": 5
+        },
+        "244": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [79, 23, 5, 8],
+            "advance": 5
+        },
+        "245": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [85, 23, 5, 8],
+            "advance": 5
+        },
+        "246": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [39, 65, 5, 7],
+            "advance": 5
+        },
+        "248": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [25, 96, 5, 5],
+            "advance": 5
+        },
+        "249": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [91, 23, 5, 8],
+            "advance": 5
+        },
+        "250": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [97, 23, 5, 8],
+            "advance": 5
+        },
+        "251": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [1, 32, 5, 8],
+            "advance": 5
+        },
+        "252": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [45, 65, 5, 7],
+            "advance": 5
+        },
+        "255": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [75, 12, 5, 9],
+            "advance": 5
+        },
+        "338": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [51, 65, 5, 7],
+            "advance": 5
+        },
+        "339": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [31, 96, 5, 5],
+            "advance": 5
+        },
+        "352": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [7, 12, 5, 10],
+            "advance": 5
+        },
+        "353": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [7, 32, 5, 8],
+            "advance": 5
+        },
+        "376": {
+            "kerning": {},
+            "offset": [0, -9],
+            "emoji": false,
+            "tile": [81, 12, 5, 9],
+            "advance": 5
+        },
+        "381": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [13, 12, 5, 10],
+            "advance": 5
+        },
+        "382": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [13, 32, 5, 8],
+            "advance": 5
+        },
+        "1025": {
+            "kerning": {},
+            "offset": [0, -9],
+            "emoji": false,
+            "tile": [87, 12, 5, 9],
+            "advance": 5
+        },
+        "1028": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [57, 65, 5, 7],
+            "advance": 5
+        },
+        "1030": {
+            "kerning": {},
+            "offset": [1, -7],
+            "emoji": false,
+            "tile": [63, 65, 3, 7],
+            "advance": 5
+        },
+        "1031": {
+            "kerning": {},
+            "offset": [1, -9],
+            "emoji": false,
+            "tile": [93, 12, 3, 9],
+            "advance": 5
+        },
+        "1040": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [67, 65, 5, 7],
+            "advance": 5
+        },
+        "1041": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [73, 65, 5, 7],
+            "advance": 5
+        },
+        "1042": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [79, 65, 5, 7],
+            "advance": 5
+        },
+        "1043": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [85, 65, 5, 7],
+            "advance": 5
+        },
+        "1044": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [19, 32, 5, 8],
+            "advance": 5
+        },
+        "1045": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [91, 65, 5, 7],
+            "advance": 5
+        },
+        "1046": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [97, 65, 5, 7],
+            "advance": 5
+        },
+        "1047": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [1, 73, 5, 7],
+            "advance": 5
+        },
+        "1048": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [7, 73, 5, 7],
+            "advance": 5
+        },
+        "1049": {
+            "kerning": {},
+            "offset": [0, -10],
+            "emoji": false,
+            "tile": [19, 12, 5, 10],
+            "advance": 5
+        },
+        "1050": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [13, 73, 5, 7],
+            "advance": 5
+        },
+        "1051": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [19, 73, 5, 7],
+            "advance": 5
+        },
+        "1052": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [25, 73, 5, 7],
+            "advance": 5
+        },
+        "1053": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [31, 73, 5, 7],
+            "advance": 5
+        },
+        "1054": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [37, 73, 5, 7],
+            "advance": 5
+        },
+        "1055": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [43, 73, 5, 7],
+            "advance": 5
+        },
+        "1056": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [49, 73, 5, 7],
+            "advance": 5
+        },
+        "1057": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [55, 73, 5, 7],
+            "advance": 5
+        },
+        "1058": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [61, 73, 5, 7],
+            "advance": 5
+        },
+        "1059": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [67, 73, 5, 7],
+            "advance": 5
+        },
+        "1060": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [73, 73, 5, 7],
+            "advance": 5
+        },
+        "1061": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [79, 73, 5, 7],
+            "advance": 5
+        },
+        "1062": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [25, 32, 6, 8],
+            "advance": 5
+        },
+        "1063": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [85, 73, 5, 7],
+            "advance": 5
+        },
+        "1064": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [91, 73, 5, 7],
+            "advance": 5
+        },
+        "1065": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [32, 32, 6, 8],
+            "advance": 5
+        },
+        "1066": {
+            "kerning": {},
+            "offset": [-1, -7],
+            "emoji": false,
+            "tile": [97, 73, 6, 7],
+            "advance": 5
+        },
+        "1067": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [1, 81, 5, 7],
+            "advance": 5
+        },
+        "1068": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [7, 81, 5, 7],
+            "advance": 5
+        },
+        "1069": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [13, 81, 5, 7],
+            "advance": 5
+        },
+        "1070": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [19, 81, 5, 7],
+            "advance": 5
+        },
+        "1071": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [25, 81, 5, 7],
+            "advance": 5
+        },
+        "1072": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [37, 96, 5, 5],
+            "advance": 5
+        },
+        "1073": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [31, 81, 5, 7],
+            "advance": 5
+        },
+        "1074": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [43, 96, 5, 5],
+            "advance": 5
+        },
+        "1075": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [49, 96, 5, 5],
+            "advance": 5
+        },
+        "1076": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [81, 81, 5, 6],
+            "advance": 5
+        },
+        "1077": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [55, 96, 5, 5],
+            "advance": 5
+        },
+        "1078": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [61, 96, 5, 5],
+            "advance": 5
+        },
+        "1079": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [67, 96, 5, 5],
+            "advance": 5
+        },
+        "1080": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [73, 96, 5, 5],
+            "advance": 5
+        },
+        "1081": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [39, 32, 5, 8],
+            "advance": 5
+        },
+        "1082": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [79, 96, 5, 5],
+            "advance": 5
+        },
+        "1083": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [85, 96, 5, 5],
+            "advance": 5
+        },
+        "1084": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [91, 96, 5, 5],
+            "advance": 5
+        },
+        "1085": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [97, 96, 5, 5],
+            "advance": 5
+        },
+        "1086": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [1, 102, 5, 5],
+            "advance": 5
+        },
+        "1087": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [7, 102, 5, 5],
+            "advance": 5
+        },
+        "1088": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [37, 81, 5, 7],
+            "advance": 5
+        },
+        "1089": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [13, 102, 5, 5],
+            "advance": 5
+        },
+        "1090": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [19, 102, 5, 5],
+            "advance": 5
+        },
+        "1091": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [43, 81, 5, 7],
+            "advance": 5
+        },
+        "1092": {
+            "kerning": {},
+            "offset": [0, -6],
+            "emoji": false,
+            "tile": [87, 81, 5, 6],
+            "advance": 5
+        },
+        "1093": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [25, 102, 5, 5],
+            "advance": 5
+        },
+        "1094": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [93, 81, 6, 6],
+            "advance": 5
+        },
+        "1095": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [31, 102, 5, 5],
+            "advance": 5
+        },
+        "1096": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [37, 102, 5, 5],
+            "advance": 5
+        },
+        "1097": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [1, 89, 6, 6],
+            "advance": 5
+        },
+        "1098": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [43, 102, 5, 5],
+            "advance": 5
+        },
+        "1099": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [49, 102, 5, 5],
+            "advance": 5
+        },
+        "1100": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [55, 102, 5, 5],
+            "advance": 5
+        },
+        "1101": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [61, 102, 5, 5],
+            "advance": 5
+        },
+        "1102": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [67, 102, 5, 5],
+            "advance": 5
+        },
+        "1103": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [73, 102, 5, 5],
+            "advance": 5
+        },
+        "1105": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [49, 81, 5, 7],
+            "advance": 5
+        },
+        "1108": {
+            "kerning": {},
+            "offset": [0, -5],
+            "emoji": false,
+            "tile": [79, 102, 5, 5],
+            "advance": 5
+        },
+        "1110": {
+            "kerning": {},
+            "offset": [1, -7],
+            "emoji": false,
+            "tile": [55, 81, 3, 7],
+            "advance": 5
+        },
+        "1111": {
+            "kerning": {},
+            "offset": [1, -7],
+            "emoji": false,
+            "tile": [59, 81, 3, 7],
+            "advance": 5
+        },
+        "1168": {
+            "kerning": {},
+            "offset": [0, -8],
+            "emoji": false,
+            "tile": [45, 32, 5, 8],
+            "advance": 5
+        },
+        "1169": {
+            "kerning": {},
+            "offset": [0, -6],
+            "emoji": false,
+            "tile": [8, 89, 5, 6],
+            "advance": 5
+        },
+        "8240": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [63, 81, 5, 7],
+            "advance": 5
+        },
+        "8364": {
+            "kerning": {},
+            "offset": [0, -7],
+            "emoji": false,
+            "tile": [69, 81, 5, 7],
+            "advance": 5
+        }
+    }
+}

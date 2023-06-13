@@ -1,0 +1,33 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+.DS_Store
+/game/
+/game-2d/
+/release*/
+hs_err_pid*.log
+
+# Project specific
+docs.json
+/launcher.jar
+/fabricloader.log
+/zips

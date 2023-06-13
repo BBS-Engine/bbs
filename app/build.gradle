@@ -1,0 +1,39 @@
+apply plugin: 'java'
+
+group = 'mchorse'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.spongepowered.org/maven/"
+    }
+    maven {
+        url "https://maven.fabricmc.net/"
+    }
+    maven {
+        url "https://jitpack.io/"
+    }
+}
+
+task processSource(type: Sync) {
+    from sourceSets.main.java
+    filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [GIT_HASH: gitHash])
+    into "$buildDir/src"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'mchorse.Launcher', 'Class-Path': 'dependencies/bbs-engine-0.1.jar'
+    }
+}
+
+compileJava {
+    archivesBaseName = "launcher"
+    version = ""
+    source = processSource.outputs
+}
+
+dependencies {
+    implementation project(":engine")
+    implementation commonDependencies
+}
