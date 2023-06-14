@@ -22,3 +22,14 @@ To launch Core Survivor in IntelliJ, you need to create an Application run confi
 * Main class: `net.fabricmc.loader.impl.launch.knot.KnotClient`
 
 You'll need to create folder `game/` in the root of the project.
+
+## Credits
+
+The code is written entirely by me. While localization files were made by:
+
+| Language           | Author          |
+|--------------------|-----------------|
+| English `en_us`    | McHorse         |
+| Portuguese `pt_BR` | Draacoun, Aloan |
+| Russian `ru_RU`    | Kirkus, McHorse |
+| Ukrainian `uk_UA`  | Kirkus          |
