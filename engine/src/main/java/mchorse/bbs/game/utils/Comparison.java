@@ -21,12 +21,9 @@ public class Comparison implements IMapSerializable
 
     static
     {
-        VALUE = new Variable("value", 0);
-        VALUE2 = new Variable("x", 0);
-
         MATH = new MathBuilder();
-        MATH.register(VALUE);
-        MATH.register(VALUE2);
+        VALUE = MATH.register("value");
+        VALUE2 = MATH.register("x");
     }
 
     /**

@@ -63,7 +63,7 @@ public class UIGraphPanel extends UIDashboardPanel
             super();
 
             this.builder = new MathBuilder();
-            this.builder.register(this.x = new Variable("x", 0));
+            this.x = this.builder.register("x");
 
             this.scaleY.inverse = true;
         }

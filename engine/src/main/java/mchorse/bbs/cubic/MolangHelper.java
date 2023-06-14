@@ -13,24 +13,24 @@ public class MolangHelper
 {
     public static void registerVars(MolangParser parser)
     {
-        parser.register(new Variable("query.anim_time", 0));
-        parser.register(new Variable("query.ground_speed", 0));
-        parser.register(new Variable("query.yaw_speed", 0));
+        parser.register("query.anim_time");
+        parser.register("query.ground_speed");
+        parser.register("query.yaw_speed");
 
         /* Additional Chameleon specific variables */
-        parser.register(new Variable("query.head_yaw", 0));
-        parser.register(new Variable("query.head_pitch", 0));
+        parser.register("query.head_yaw");
+        parser.register("query.head_pitch");
 
-        parser.register(new Variable("query.velocity", 0));
-        parser.register(new Variable("query.age", 0));
+        parser.register("query.velocity");
+        parser.register("query.age");
 
         /* Cool joystick variables */
-        parser.register(new Variable("joystick.l_x", 0));
-        parser.register(new Variable("joystick.l_y", 0));
-        parser.register(new Variable("joystick.r_x", 0));
-        parser.register(new Variable("joystick.r_y", 0));
-        parser.register(new Variable("joystick.l_trigger", 0));
-        parser.register(new Variable("joystick.r_trigger", 0));
+        parser.register("joystick.l_x");
+        parser.register("joystick.l_y");
+        parser.register("joystick.r_x");
+        parser.register("joystick.r_y");
+        parser.register("joystick.l_trigger");
+        parser.register("joystick.r_trigger");
     }
 
     public static void setMolangVariables(MolangParser parser, Entity target, float frame, float transition)

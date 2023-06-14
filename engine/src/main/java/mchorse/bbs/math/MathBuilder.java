@@ -70,8 +70,8 @@ public class MathBuilder
     public MathBuilder()
     {
         /* Some default values */
-        this.register(new Variable("PI", Math.PI));
-        this.register(new Variable("E", Math.E));
+        this.register("PI", Math.PI);
+        this.register("E", Math.E);
 
         /* Rounding functions */
         this.functions.put("floor", Floor.class);
@@ -120,6 +120,20 @@ public class MathBuilder
         this.strict = false;
 
         return this;
+    }
+
+    public Variable register(String name)
+    {
+        return this.register(name, 0D);
+    }
+
+    public Variable register(String name, double value)
+    {
+        Variable variable = new Variable(name, value);
+
+        this.register(variable);
+
+        return variable;
     }
 
     /**

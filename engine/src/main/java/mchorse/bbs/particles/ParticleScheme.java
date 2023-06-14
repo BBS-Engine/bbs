@@ -87,25 +87,25 @@ public class ParticleScheme extends AbstractData
         this.parser = new MolangParser();
 
         /* Default variables */
-        this.parser.register(new Variable("variable.particle_age", 0));
-        this.parser.register(new Variable("variable.particle_lifetime", 0));
-        this.parser.register(new Variable("variable.particle_random_1", 0));
-        this.parser.register(new Variable("variable.particle_random_2", 0));
-        this.parser.register(new Variable("variable.particle_random_3", 0));
-        this.parser.register(new Variable("variable.particle_random_4", 0));
+        this.parser.register("variable.particle_age");
+        this.parser.register("variable.particle_lifetime");
+        this.parser.register("variable.particle_random_1");
+        this.parser.register("variable.particle_random_2");
+        this.parser.register("variable.particle_random_3");
+        this.parser.register("variable.particle_random_4");
 
-        this.parser.register(new Variable("variable.particle_speed.length", 0));
-        this.parser.register(new Variable("variable.particle_speed.x", 0));
-        this.parser.register(new Variable("variable.particle_speed.y", 0));
-        this.parser.register(new Variable("variable.particle_speed.z", 0));
-        this.parser.register(new Variable("variable.particle_bounces", 0));
+        this.parser.register("variable.particle_speed.length");
+        this.parser.register("variable.particle_speed.x");
+        this.parser.register("variable.particle_speed.y");
+        this.parser.register("variable.particle_speed.z");
+        this.parser.register("variable.particle_bounces");
 
-        this.parser.register(new Variable("variable.emitter_age", 0));
-        this.parser.register(new Variable("variable.emitter_lifetime", 0));
-        this.parser.register(new Variable("variable.emitter_random_1", 0));
-        this.parser.register(new Variable("variable.emitter_random_2", 0));
-        this.parser.register(new Variable("variable.emitter_random_3", 0));
-        this.parser.register(new Variable("variable.emitter_random_4", 0));
+        this.parser.register("variable.emitter_age");
+        this.parser.register("variable.emitter_lifetime");
+        this.parser.register("variable.emitter_random_1");
+        this.parser.register("variable.emitter_random_2");
+        this.parser.register("variable.emitter_random_3");
+        this.parser.register("variable.emitter_random_4");
     }
 
     public void setup()

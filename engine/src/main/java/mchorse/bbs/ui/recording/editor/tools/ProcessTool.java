@@ -28,12 +28,12 @@ public class ProcessTool extends Tool
 
         this.builder = new MathBuilder();
 
-        this.builder.register(this.initial = new Variable("initial", 0));
-        this.builder.register(this.value = new Variable("value", 0));
-        this.builder.register(this.tick = new Variable("tick", 0));
-        this.builder.register(this.from = new Variable("from", 0));
-        this.builder.register(this.to = new Variable("to", 0));
-        this.builder.register(this.factor = new Variable("factor", 0));
+        this.initial = this.builder.register("initial");
+        this.value = this.builder.register("value");
+        this.tick = this.builder.register("tick");
+        this.from = this.builder.register("from");
+        this.to = this.builder.register("to");
+        this.factor = this.builder.register("factor");
     }
 
     @Override

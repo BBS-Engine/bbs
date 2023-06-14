@@ -53,43 +53,24 @@ public class MathClip extends ComponentClip
 
         this.register(this.expression);
 
-        this.varTicks = new Variable("t", 0);
-        this.varOffset = new Variable("o", 0);
-        this.varTransition = new Variable("pt", 0);
-        this.varDuration = new Variable("d", 0);
-        this.varProgress = new Variable("p", 0);
-        this.varFactor = new Variable("f", 0);
-        this.varVelocity = new Variable("v", 0);
+        this.varTicks = this.builder.register("t");
+        this.varOffset = this.builder.register("o");
+        this.varTransition = this.builder.register("pt");
+        this.varDuration = this.builder.register("d");
+        this.varProgress = this.builder.register("p");
+        this.varFactor = this.builder.register("f");
+        this.varVelocity = this.builder.register("v");
 
-        this.varValue = new Variable("value", 0);
+        this.varValue = this.builder.register("value");
 
-        this.varX = new Variable("x", 0);
-        this.varY = new Variable("y", 0);
-        this.varZ = new Variable("z", 0);
+        this.varX = this.builder.register("x");
+        this.varY = this.builder.register("y");
+        this.varZ = this.builder.register("z");
 
-        this.varYaw = new Variable("yaw", 0);
-        this.varPitch = new Variable("pitch", 0);
-        this.varRoll = new Variable("roll", 0);
-        this.varFov = new Variable("fov", 0);
-
-        this.builder.register(this.varTicks);
-        this.builder.register(this.varOffset);
-        this.builder.register(this.varTransition);
-        this.builder.register(this.varDuration);
-        this.builder.register(this.varProgress);
-        this.builder.register(this.varFactor);
-        this.builder.register(this.varVelocity);
-
-        this.builder.register(this.varValue);
-
-        this.builder.register(this.varX);
-        this.builder.register(this.varY);
-        this.builder.register(this.varZ);
-
-        this.builder.register(this.varYaw);
-        this.builder.register(this.varPitch);
-        this.builder.register(this.varRoll);
-        this.builder.register(this.varFov);
+        this.varYaw = this.builder.register("yaw");
+        this.varPitch = this.builder.register("pitch");
+        this.varRoll = this.builder.register("roll");
+        this.varFov = this.builder.register("fov");
     }
 
     @Override
