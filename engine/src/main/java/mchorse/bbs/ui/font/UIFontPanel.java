@@ -7,6 +7,7 @@ import mchorse.bbs.graphics.text.Font;
 import mchorse.bbs.graphics.text.Glyph;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.UISidebarDashboardPanel;
@@ -68,6 +69,8 @@ public class UIFontPanel extends UISidebarDashboardPanel
         this.iconBar.add(this.open, this.load, this.save, this.codes);
 
         this.loadFont(Link.create("assets:fonts/bbs_round.json"));
+
+        this.keys().register(Keys.OPEN_DATA_MANAGER, this.open::clickItself);
     }
 
     private void openFormattingCodesEditor()

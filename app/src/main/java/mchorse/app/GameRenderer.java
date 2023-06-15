@@ -120,7 +120,7 @@ public class GameRenderer implements IComponent
 
         this.finalFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("final"), (framebuffer) ->
         {
-            Texture texture = BBS.getTextures().createTexture(Link.create("main:final"));
+            Texture texture = new Texture();
 
             texture.setFilter(GL11.GL_LINEAR);
             texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
@@ -131,31 +131,31 @@ public class GameRenderer implements IComponent
 
         this.gbufferFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("gbuffer"), (framebuffer) ->
         {
-            Texture albedo = BBS.getTextures().createTexture(Link.create("main:albedo"));
+            Texture albedo = new Texture();
 
             albedo.setFilter(GL11.GL_NEAREST);
             albedo.setWrap(GL13.GL_CLAMP_TO_EDGE);
 
-            Texture position = BBS.getTextures().createTexture(Link.create("main:position"));
+            Texture position = new Texture();
 
             position.setFilter(GL11.GL_NEAREST);
             position.setWrap(GL13.GL_CLAMP_TO_EDGE);
             position.setFormat(GL30.GL_RGBA16F, GL11.GL_RGBA, GL11.GL_FLOAT);
 
-            Texture normal = BBS.getTextures().createTexture(Link.create("main:normal"));
+            Texture normal = new Texture();
 
             normal.setFilter(GL11.GL_NEAREST);
             normal.setWrap(GL13.GL_CLAMP_TO_EDGE);
             normal.setFormat(GL30.GL_RGBA16F, GL11.GL_RGBA, GL11.GL_FLOAT);
 
-            Texture lighting = BBS.getTextures().createTexture(Link.create("main:lighting"));
+            Texture lighting = new Texture();
 
             lighting.setFilter(GL11.GL_NEAREST);
             lighting.setWrap(GL13.GL_CLAMP_TO_EDGE);
 
             Renderbuffer depth = new Renderbuffer();
 
-            framebuffer.attach(albedo, GL30.GL_COLOR_ATTACHMENT0);
+            framebuffer.deleteTextures().attach(albedo, GL30.GL_COLOR_ATTACHMENT0);
             framebuffer.attach(position, GL30.GL_COLOR_ATTACHMENT1);
             framebuffer.attach(normal, GL30.GL_COLOR_ATTACHMENT2);
             framebuffer.attach(lighting, GL30.GL_COLOR_ATTACHMENT3);

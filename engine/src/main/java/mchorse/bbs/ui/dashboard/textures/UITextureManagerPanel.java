@@ -3,6 +3,7 @@ package mchorse.bbs.ui.dashboard.textures;
 import mchorse.bbs.BBS;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.UISidebarDashboardPanel;
@@ -47,6 +48,8 @@ public class UITextureManagerPanel extends UISidebarDashboardPanel
         this.overlay = new UITextureManagerOverlayPanel(UIKeys.TEXTURES_TITLE, this);
 
         this.pickLink(null);
+
+        this.keys().register(Keys.OPEN_DATA_MANAGER, icon::clickItself);
     }
 
     public Link getLink()

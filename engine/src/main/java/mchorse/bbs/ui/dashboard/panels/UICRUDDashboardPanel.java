@@ -26,10 +26,7 @@ public abstract class UICRUDDashboardPanel extends UISidebarDashboardPanel
 
         this.iconBar.prepend(this.openOverlay);
 
-        this.keys().register(Keys.OPEN_DATA_MANAGER, () ->
-        {
-            this.openOverlay.clickItself();
-        });
+        this.keys().register(Keys.OPEN_DATA_MANAGER, this.openOverlay::clickItself);
     }
 
     protected abstract UICRUDOverlayPanel createOverlayPanel();

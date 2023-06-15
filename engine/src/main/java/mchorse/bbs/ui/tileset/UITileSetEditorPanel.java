@@ -7,6 +7,7 @@ import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.game.utils.factory.MapFactory;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.UIDashboardPanel;
@@ -77,6 +78,8 @@ public class UITileSetEditorPanel extends UIDashboardPanel
         {
             this.panels.put(factory.getTypeClass(key), factory.getData(key).panel.apply(this));
         }
+
+        this.keys().register(Keys.OPEN_DATA_MANAGER, this.edit::clickItself);
     }
 
     public ChunkBuilder getBlockBuilder()
