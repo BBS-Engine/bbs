@@ -32,13 +32,6 @@ public class UIScrollView extends UIElement implements IViewport
         this.scroll.scrollSpeed = 20;
     }
 
-    public UIScrollView cancelScrollEdge()
-    {
-        this.scroll.cancelScrollEdge = true;
-
-        return this;
-    }
-
     public UIScrollView preRenderDraw(Consumer<UIContext> callback)
     {
         this.preRenderDraw = callback;

@@ -26,7 +26,7 @@ public class UIWorldSettingsPanel extends UIWorldPanel
 
         this.editor = UI.scrollView(5, 10);
         this.editor.relative(this).w(160).h(1F);
-        this.editor.scroll.opposite().cancelScrolling();
+        this.editor.scroll.cancelScrolling().opposite();
 
         this.changePreset = new UIButton(UIKeys.WORLD_SETTINGS_OPEN_PRESETS, (b) ->
         {

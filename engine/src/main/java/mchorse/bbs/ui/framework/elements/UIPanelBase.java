@@ -38,7 +38,7 @@ public class UIPanelBase <T extends UIElement> extends UIElement
 
         this.direction = direction == null ? Direction.BOTTOM : direction;
         this.buttons = new UIScrollView();
-        this.buttons.scroll.cancelScrolling().drawScrollbars = false;
+        this.buttons.scroll.cancelScrolling().noScrollbar();
         this.buttons.scroll.scrollSpeed = 5;
         this.buttons.preRenderDraw((context) ->
         {

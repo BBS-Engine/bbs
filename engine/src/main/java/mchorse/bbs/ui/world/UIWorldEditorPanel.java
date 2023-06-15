@@ -172,7 +172,7 @@ public class UIWorldEditorPanel extends UIWorldPanel
                 this.mask.area.render(context.batcher, Colors.A50 | BBSSettings.primaryColor.get());
             }
         });
-        this.toolBar.scroll.cancelScrolling().opposite = true;
+        this.toolBar.scroll.cancelScrolling().opposite();
         this.toolBar.relative(this).w(30).h(1F).column(0).scroll().vertical().height(20).padding(5);
 
         this.actionBar = new UIScrollView();

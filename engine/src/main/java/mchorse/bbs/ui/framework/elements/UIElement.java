@@ -24,7 +24,6 @@ import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.colors.Colors;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +89,7 @@ public class UIElement implements IUIElement
     /**
      * Children elements
      */
-    private UIElements<IUIElement> children;
+    private List<IUIElement> children = new ArrayList<IUIElement>();
 
     /**
      * Whether this element is enabled (can handle any input) 
@@ -167,12 +166,7 @@ public class UIElement implements IUIElement
 
     public List<IUIElement> getChildren()
     {
-        if (this.children == null)
-        {
-            return Collections.emptyList();
-        }
-
-        return this.children.elements;
+        return this.children;
     }
 
     public <T> List<T> getChildren(Class<T> clazz)
@@ -210,62 +204,61 @@ public class UIElement implements IUIElement
 
     public void prepend(IUIElement element)
     {
-        if (this.children == null)
+        if (element != null)
         {
-            this.children = new UIElements<IUIElement>(this);
+            this.children.add(0, element);
+            this.markChild(element);
         }
-
-        this.children.prepend(element);
-        this.markChild(element);
     }
 
     public void add(IUIElement element)
     {
-        if (this.children == null)
-        {
-            this.children = new UIElements<IUIElement>(this);
-        }
-
-        this.children.add(element);
-        this.markChild(element);
-    }
-
-    public void add(IUIElement... elements)
-    {
-        if (this.children == null)
-        {
-            this.children = new UIElements<IUIElement>(this);
-        }
-
-        for (IUIElement element : elements)
+        if (element != null)
         {
             this.children.add(element);
             this.markChild(element);
         }
     }
 
+    public void add(IUIElement... elements)
+    {
+        for (IUIElement element : elements)
+        {
+            if (element != null)
+            {
+                this.children.add(element);
+                this.markChild(element);
+            }
+        }
+    }
+
     public void addAfter(IUIElement target, IUIElement element)
     {
-        if (this.children == null)
-        {
-            return;
-        }
+        int index = this.children.indexOf(target);
 
-        if (this.children.addAfter(target, element))
+        if (index != -1 && element != null)
         {
+            if (index + 1 >= this.children.size())
+            {
+                this.children.add(element);
+            }
+            else
+            {
+                this.children.add(index + 1, element);
+            }
+
             this.markChild(element);
         }
     }
 
     public void addBefore(IUIElement target, IUIElement element)
     {
-        if (this.children == null)
-        {
-            return;
-        }
+        int index = this.children.indexOf(target);
 
-        if (this.children.addBefore(target, element))
+        if (index != -1 && element != null)
         {
+            this.children.add(index, element);
+
             this.markChild(element);
         }
     }
@@ -293,7 +286,7 @@ public class UIElement implements IUIElement
             return;
         }
 
-        for (IUIElement uiElement : this.children.elements)
+        for (IUIElement uiElement : this.children)
         {
             if (uiElement instanceof UIElement)
             {
@@ -322,12 +315,12 @@ public class UIElement implements IUIElement
 
     public void remove(IUIElement element)
     {
-        this.children.elements.remove(element);
+        this.children.remove(element);
     }
 
     public void remove(UIElement element)
     {
-        if (this.children.elements.remove(element))
+        if (this.children.remove(element))
         {
             if (this.resizer != null)
             {
@@ -975,9 +968,9 @@ public class UIElement implements IUIElement
 
         this.afterResizeApplied();
 
-        if (this.children != null)
+        for (IUIElement element : this.children)
         {
-            this.children.resize();
+            element.resize();
         }
 
         if (this.resizer != null)
@@ -1029,7 +1022,7 @@ public class UIElement implements IUIElement
     @Override
     public boolean mouseClicked(UIContext context)
     {
-        if ((this.children != null && this.children.mouseClicked(context)) || this.subMouseClicked(context))
+        if ((this.children != null && this.childrenMouseClicked(context)) || this.subMouseClicked(context))
         {
             return true;
         }
@@ -1052,6 +1045,21 @@ public class UIElement implements IUIElement
         return this.cantPropagate(context);
     }
 
+    private boolean childrenMouseClicked(UIContext context)
+    {
+        for (int i = this.children.size() - 1; i >= 0; i--)
+        {
+            IUIElement element = this.children.get(i);
+
+            if (element.isEnabled() && element.mouseClicked(context))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected boolean subMouseClicked(UIContext context)
     {
         return false;
@@ -1060,12 +1068,27 @@ public class UIElement implements IUIElement
     @Override
     public boolean mouseScrolled(UIContext context)
     {
-        if ((this.children != null && this.children.mouseScrolled(context)) || this.subMouseScrolled(context))
+        if ((this.children != null && this.childrenMouseScrolled(context)) || this.subMouseScrolled(context))
         {
             return true;
         }
 
         return this.cantPropagate(context);
+    }
+
+    private boolean childrenMouseScrolled(UIContext context)
+    {
+        for (int i = this.children.size() - 1; i >= 0; i--)
+        {
+            IUIElement element = this.children.get(i);
+
+            if (element.isEnabled() && element.mouseScrolled(context))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected boolean subMouseScrolled(UIContext context)
@@ -1076,12 +1099,27 @@ public class UIElement implements IUIElement
     @Override
     public boolean mouseReleased(UIContext context)
     {
-        if ((this.children != null && this.children.mouseReleased(context)) || this.subMouseReleased(context))
+        if ((this.children != null && this.childrenMouseReleased(context)) || this.subMouseReleased(context))
         {
             return true;
         }
 
         return this.cantPropagate(context);
+    }
+
+    private boolean childrenMouseReleased(UIContext context)
+    {
+        for (int i = this.children.size() - 1; i >= 0; i--)
+        {
+            IUIElement element = this.children.get(i);
+
+            if (element.isEnabled() && element.mouseReleased(context))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected boolean subMouseReleased(UIContext context)
@@ -1092,7 +1130,7 @@ public class UIElement implements IUIElement
     @Override
     public boolean keyPressed(UIContext context)
     {
-        if ((this.children != null && this.children.keyPressed(context)) || this.subKeyPressed(context))
+        if ((this.children != null && this.childrenKeyPressed(context)) || this.subKeyPressed(context))
         {
             return true;
         }
@@ -1105,6 +1143,21 @@ public class UIElement implements IUIElement
         return this.cantPropagate(context);
     }
 
+    private boolean childrenKeyPressed(UIContext context)
+    {
+        for (int i = this.children.size() - 1; i >= 0; i--)
+        {
+            IUIElement element = this.children.get(i);
+
+            if (element.isEnabled() && element.keyPressed(context))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected boolean subKeyPressed(UIContext context)
     {
         return false;
@@ -1113,12 +1166,27 @@ public class UIElement implements IUIElement
     @Override
     public boolean textInput(UIContext context)
     {
-        if ((this.children != null && this.children.textInput(context)) || this.subTextInput(context))
+        if ((this.children != null && this.childrenTextInput(context)) || this.subTextInput(context))
         {
             return true;
         }
 
         return this.cantPropagate(context);
+    }
+
+    private boolean childrenTextInput(UIContext context)
+    {
+        for (int i = this.children.size() - 1; i >= 0; i--)
+        {
+            IUIElement element = this.children.get(i);
+
+            if (element.isEnabled() && element.textInput(context))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected boolean subTextInput(UIContext context)
@@ -1163,9 +1231,12 @@ public class UIElement implements IUIElement
             context.resetTooltip();
         }
 
-        if (this.children != null)
+        for (IUIElement element : this.children)
         {
-            this.children.render(context);
+            if (element.isVisible() && element.canBeRendered(context.getViewport()))
+            {
+                element.render(context);
+            }
         }
     }
 

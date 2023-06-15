@@ -134,6 +134,13 @@ public class ScrollArea extends Area
         return this;
     }
 
+    public ScrollArea noScrollbar()
+    {
+        this.drawScrollbars = false;
+
+        return this;
+    }
+
     public int getScrollbarWidth()
     {
         return this.scrollbarWidth <= 0 ? BBSSettings.scrollbarWidth.get() : this.scrollbarWidth;

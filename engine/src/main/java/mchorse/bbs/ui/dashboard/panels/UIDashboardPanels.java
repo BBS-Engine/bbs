@@ -34,7 +34,7 @@ public class UIDashboardPanels extends UIElement
         this.pinned.relative(this.taskBar).h(20).row(0).resize();
         this.panelButtons = new UIScrollView(ScrollDirection.HORIZONTAL);
         this.panelButtons.relative(this.pinned).x(1F, 5).h(20).wTo(this.taskBar.area, 1F).column(0).scroll();
-        this.panelButtons.scroll.cancelScrolling().drawScrollbars = false;
+        this.panelButtons.scroll.cancelScrolling().noScrollbar();
         this.panelButtons.scroll.scrollSpeed = 5;
         this.panelButtons.preRenderDraw((context) ->
         {
