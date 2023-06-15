@@ -14,7 +14,7 @@ public class ItemExtruder
     public static VAO extrude(Pixels pixels, Vector2i uv)
     {
         VAO vao = new VAO().register(VBOAttributes.VERTEX_NORMAL_UV_RGBA);
-        VAOBuilder builder = BBS.getRender().getVAO().setup(vao, VAO.DATA, null);
+        VAOBuilder builder = BBS.getRender().getVAO().setup(vao, null);
 
         builder.begin();
 

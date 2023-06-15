@@ -240,7 +240,7 @@ public abstract class UIBaseMenu implements ITickable, IKeyHandler
 
     public void renderDefaultBackground()
     {
-        this.context.draw.box(0, 0, this.width, this.height, Colors.A50);
+        this.context.batcher.box(0, 0, this.width, this.height, Colors.A50);
     }
 
     public void renderMenu(UIRenderingContext context, int mouseX, int mouseY)
@@ -314,7 +314,7 @@ public abstract class UIBaseMenu implements ITickable, IKeyHandler
 
         for (String line : text.split("\n"))
         {
-            context.draw.textCard(font, line, 7, y, Colors.WHITE, BBSSettings.primaryColor(Colors.A100));
+            context.batcher.textCard(font, line, 7, y, Colors.WHITE, BBSSettings.primaryColor(Colors.A100));
 
             y += font.getHeight() + 7;
         }

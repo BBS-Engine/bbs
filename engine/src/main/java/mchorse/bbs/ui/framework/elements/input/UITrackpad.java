@@ -490,7 +490,7 @@ public class UITrackpad extends UIBaseTextbox
         }
         else
         {
-            this.area.render(context.draw, Colors.A100);
+            this.area.render(context.batcher, Colors.A100);
 
             if (dragging)
             {
@@ -498,21 +498,22 @@ public class UITrackpad extends UIBaseTextbox
                 int color = BBSSettings.primaryColor.get();
                 int fx = MathUtils.clamp(context.mouseX, this.area.x + padding, this.area.ex() - padding);
 
-                context.draw.box(Math.min(fx, this.initialX), this.area.y + padding, Math.max(fx, this.initialX), this.area.ey() - padding, Colors.A100 | color);
+                context.batcher.box(Math.min(fx, this.initialX), this.area.y + padding, Math.max(fx, this.initialX), this.area.ey() - padding, Colors.A100 | color);
             }
 
-            int lx = this.area.mx();
+            String label = this.textbox.getText();
+            int lx = this.area.mx(context.font.getWidth(label));
             int ly = this.area.my() - context.font.getHeight() / 2;
 
-            context.font.renderCentered(context.render, this.textbox.getText(), lx, ly, this.textbox.getColor());
+            context.batcher.text(label, lx, ly, this.textbox.getColor());
 
             if (BBSSettings.enableTrackpadIncrements.get())
             {
-                this.plusOne.render(context.draw, plus ? 0x22ffffff : 0x0affffff, padding);
-                this.minusOne.render(context.draw, minus ? 0x22ffffff : 0x0affffff, padding);
+                this.plusOne.render(context.batcher, plus ? 0x22ffffff : 0x0affffff, padding);
+                this.minusOne.render(context.batcher, minus ? 0x22ffffff : 0x0affffff, padding);
 
-                Icons.MOVE_LEFT.render(context.draw, x + (this.plusOne.w - Icons.MOVE_LEFT.w) / 2, y + (h - 16) / 2, minus ? Colors.WHITE : Colors.setA(Colors.WHITE, 0.5F));
-                Icons.MOVE_RIGHT.render(context.draw, x + w - this.minusOne.w + (this.minusOne.w - Icons.MOVE_RIGHT.w) / 2, y + (h - 16) / 2, plus ? Colors.WHITE : Colors.setA(Colors.WHITE, 0.5F));
+                context.batcher.icon(Icons.MOVE_LEFT, minus ? Colors.WHITE : Colors.setA(Colors.WHITE, 0.5F), x + (this.plusOne.w - Icons.MOVE_LEFT.w) / 2, y + (h - 16) / 2);
+                context.batcher.icon(Icons.MOVE_RIGHT, plus ? Colors.WHITE : Colors.setA(Colors.WHITE, 0.5F), x + w - this.minusOne.w + (this.minusOne.w - Icons.MOVE_RIGHT.w) / 2, y + (h - 16) / 2);
             }
         }
 
@@ -580,10 +581,10 @@ public class UITrackpad extends UIBaseTextbox
             }
 
             /* Draw active element */
-            context.draw.outlineCenter(this.initialX, this.initialY, 4, Colors.WHITE);
+            context.batcher.outlineCenter(this.initialX, this.initialY, 4, Colors.WHITE);
         }
 
-        context.draw.lockedArea(this);
+        this.renderLockedArea(context);
 
         super.render(context);
     }

@@ -359,7 +359,7 @@ public class UIFormEditor extends UIElement implements IUIFormList
     {
         if (this.formsArea.isVisible())
         {
-            this.formsArea.area.render(context.draw, Colors.A50);
+            this.formsArea.area.render(context.batcher, Colors.A50);
         }
 
         super.render(context);

@@ -1355,7 +1355,7 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
 
         super.render(context);
 
-        context.draw.clip(this.area, context);
+        context.batcher.clip(this.area, context);
 
         int x = this.area.x + this.padding;
         int y = this.area.y + this.padding;
@@ -1374,8 +1374,10 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
             this.renderSelectionBar(font, context, x, y, min, max);
         }
 
+        context.batcher.render();
+
         Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_UV_RGBA_2D);
-        VAOBuilder builder = context.render.getVAO().setup(shader, VAO.DATA, VAO.INDICES);
+        VAOBuilder builder = context.render.getVAO().setup(shader, VAO.INDICES);
 
         builder.begin();
 
@@ -1451,15 +1453,15 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
             float a = (float) Math.sin(context.getTickTransition() / 2D);
             int c = Colors.setA(Colors.WHITE, a * 0.5F + 0.5F);
 
-            context.draw.box(cx, cy - 1, cx + 1, cy + font.getHeight() + 1, c);
+            context.batcher.box(cx, cy - 1, cx + 1, cy + font.getHeight() + 1, c);
         }
 
-        this.horizontal.renderScrollbar(context.draw);
-        this.vertical.renderScrollbar(context.draw);
+        this.horizontal.renderScrollbar(context.batcher);
+        this.vertical.renderScrollbar(context.batcher);
 
         this.renderForeground(font, context);
 
-        context.draw.unclip(context);
+        context.batcher.unclip(context);
     }
 
     protected int getShiftX()
@@ -1481,8 +1483,8 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
     {
         int borderColor = this.focused ? Colors.A100 | BBSSettings.primaryColor.get() : Colors.LIGHTER_GRAY;
 
-        this.area.render(context.draw, borderColor);
-        this.area.render(context.draw, Colors.A100, 1);
+        this.area.render(context.batcher, borderColor);
+        this.area.render(context.batcher, Colors.A100, 1);
     }
 
     protected void renderForeground(FontRenderer font, UIContext context)
@@ -1632,16 +1634,16 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
             endY += selectionPad;
         }
 
-        context.draw.box(x1 - selectionPad, y1 - selectionPad, endX, endY, color);
+        context.batcher.box(x1 - selectionPad, y1 - selectionPad, endX, endY, color);
 
         if (middle)
         {
-            context.draw.box(this.area.x, y1 + font.getHeight(), this.area.ex(), y2, color);
+            context.batcher.box(this.area.x, y1 + font.getHeight(), this.area.ex(), y2, color);
         }
 
         if (bottom)
         {
-            context.draw.box(this.area.x, y2, x2 + selectionPad, y2 + font.getHeight() + selectionPad, color);
+            context.batcher.box(this.area.x, y2, x2 + selectionPad, y2 + font.getHeight() + selectionPad, color);
         }
     }
 }

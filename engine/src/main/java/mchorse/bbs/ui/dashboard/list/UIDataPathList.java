@@ -252,7 +252,7 @@ public class UIDataPathList extends UIList<DataPath>
     @Override
     protected void renderElementPart(UIContext context, DataPath element, int i, int x, int y, boolean hover, boolean selected)
     {
-        (element.folder ? Icons.FOLDER : this.fileIcon).render(context.draw, x, y);
+        context.batcher.icon(element.folder ? Icons.FOLDER : this.fileIcon, x, y);
 
         super.renderElementPart(context, element, i, x + 12, y, hover, selected);
     }

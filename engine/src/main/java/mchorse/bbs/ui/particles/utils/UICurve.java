@@ -3,8 +3,6 @@ package mchorse.bbs.ui.particles.utils;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.graphics.line.LineBuilder;
 import mchorse.bbs.graphics.line.SolidColorLineRenderer;
-import mchorse.bbs.graphics.shaders.Shader;
-import mchorse.bbs.graphics.vao.VAO;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.math.Constant;
@@ -214,15 +212,15 @@ public class UICurve extends UIElement
     @Override
     public void render(UIContext context)
     {
-        this.area.render(context.draw, Colors.A50);
+        this.area.render(context.batcher, Colors.A50);
 
         if (this.curve != null)
         {
             this.handleDragging(context);
 
-            context.draw.clip(this.area, context);
+            context.batcher.clip(this.area, context);
             this.drawGraph(context);
-            context.draw.unclip(context);
+            context.batcher.unclip(context);
         }
 
         super.render(context);
@@ -257,10 +255,7 @@ public class UICurve extends UIElement
     {
         int c = this.curve.nodes.size();
 
-        Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_RGBA_2D);
-        VAOBuilder builder = context.render.getVAO().setup(shader, VAO.DATA);
-
-        builder.begin();
+        VAOBuilder builder = context.batcher.begin(GL11.GL_LINES, VBOAttributes.VERTEX_RGBA_2D, null);
 
         /* Top and bottom */
         builder.xy(this.area.x, this.graph.y).rgba(0.5F, 0.5F, 0.5F, 0.5F);
@@ -288,8 +283,6 @@ public class UICurve extends UIElement
             builder.xy((float) last.x, this.graph.y).rgba(0.25F, 0.25F, 0.25F, 0.5F);
             builder.xy((float) last.x, this.graph.ey()).rgba(0.25F, 0.25F, 0.25F, 0.5F);
         }
-
-        builder.render(GL11.GL_LINES);
 
         Color color = Colors.COLOR;
         LineBuilder line = new LineBuilder(0.75F);
@@ -335,7 +328,7 @@ public class UICurve extends UIElement
             }
         }
 
-        line.render(builder, SolidColorLineRenderer.get(color.r, color.g, color.b, 1F));
+        line.render(context.batcher, SolidColorLineRenderer.get(color.r, color.g, color.b, 1F));
 
         for (int i = 0; i < c; i++)
         {
@@ -343,8 +336,8 @@ public class UICurve extends UIElement
             int x = (int) vector.x;
             int y = (int) vector.y;
 
-            context.draw.box(x - 3, y - 3, x + 3, y + 3, this.index == i ? Colors.setA(Colors.ACTIVE, 1F) : Colors.WHITE);
-            context.draw.box(x - 2, y - 2, x + 2, y + 2, Colors.A100);
+            context.batcher.box(x - 3, y - 3, x + 3, y + 3, this.index == i ? Colors.setA(Colors.ACTIVE, 1F) : Colors.WHITE);
+            context.batcher.box(x - 2, y - 2, x + 2, y + 2, Colors.A100);
         }
     }
 }

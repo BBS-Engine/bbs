@@ -138,7 +138,7 @@ public class UICraftingTablePanel extends UIDataDashboardPanel<CraftingTable>
     {
         if (this.editor.isVisible())
         {
-            this.recipes.area.render(context.draw, Colors.A100);
+            this.recipes.area.render(context.batcher, Colors.A100);
 
             if (this.data.recipes.isEmpty())
             {

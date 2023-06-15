@@ -123,7 +123,7 @@ public class UIOverlay extends UIElement
     {
         if (Colors.getAlpha(this.background) > 0F)
         {
-            this.area.render(context.draw, this.background);
+            this.area.render(context.batcher, this.background);
         }
 
         super.render(context);

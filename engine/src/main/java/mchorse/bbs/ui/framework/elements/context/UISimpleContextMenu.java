@@ -69,7 +69,7 @@ public class UISimpleContextMenu extends UIContextMenu
         {
             int color = BBSSettings.primaryColor.get();
 
-            context.draw.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
+            context.batcher.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
         }
 
         super.render(context);

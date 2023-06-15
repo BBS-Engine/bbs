@@ -135,7 +135,7 @@ public abstract class UIClip <T extends Clip> extends UIElement
     @Override
     public void render(UIContext context)
     {
-        context.draw.gradientHBox(this.left.area.x, this.left.area.y, this.left.area.mx(), this.left.area.ey(), Colors.A25, 0);
+        context.batcher.gradientHBox(this.left.area.x, this.left.area.y, this.left.area.mx(), this.left.area.ey(), Colors.A25, 0);
 
         super.render(context);
     }

@@ -122,7 +122,7 @@ public class UIQuestChainPanel extends UIDataDashboardPanel<QuestChain>
     {
         if (this.editor.isVisible())
         {
-            this.entries.area.render(context.draw, Colors.A100);
+            this.entries.area.render(context.batcher, Colors.A100);
 
             if (this.data.entries.isEmpty())
             {

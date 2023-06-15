@@ -125,6 +125,7 @@ public class UIActionsFormPanel extends UIFormPanel<ModelForm>
     {
         super.render(context);
 
-        context.font.renderWithShadow(context.render, "Actions", this.actions.area.x, this.actions.area.y - 12);
+        /* TODO: Extract */
+        context.batcher.textShadow("Actions", this.actions.area.x, this.actions.area.y - 12);
     }
 }

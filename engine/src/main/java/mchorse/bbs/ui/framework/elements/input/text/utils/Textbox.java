@@ -697,13 +697,13 @@ public class Textbox
 
         if (this.background)
         {
-            this.area.render(context.draw, 0xff000000);
+            this.area.render(context.batcher, 0xff000000);
 
             if (this.border)
             {
                 int borderColor = this.focused ? 0xff000000 + BBSSettings.primaryColor.get() : 0xffaaaaaa;
 
-                context.draw.outline(this.area.x, this.area.y, this.area.ex(), this.area.ey(), borderColor);
+                context.batcher.outline(this.area.x, this.area.y, this.area.ex(), this.area.ey(), borderColor);
             }
 
             x = this.area.x + 4;
@@ -724,10 +724,10 @@ public class Textbox
             int sx = x + offset;
             int sw = this.font.getWidth(text.substring(min, max));
 
-            context.draw.box(sx, y - 2, sx + sw, y + this.font.getHeight() + 2, 0x88000000 + BBSSettings.primaryColor.get());
+            context.batcher.box(sx, y - 2, sx + sw, y + this.font.getHeight() + 2, 0x88000000 + BBSSettings.primaryColor.get());
         }
 
-        this.font.renderWithShadow(context.render, text, x, y, color);
+        context.batcher.textShadow(this.font, text, x, y, color);
 
         if (this.focused)
         {
@@ -740,7 +740,7 @@ public class Textbox
                 float alpha = (float) Math.sin(context.getTickTransition() / 2D);
                 int c = Colors.setA(0xffffff, alpha * 0.5F + 0.5F);
 
-                context.draw.box(x, y - 1, x + 1, y + this.font.getHeight() + 1, c);
+                context.batcher.box(x, y - 1, x + 1, y + this.font.getHeight() + 1, c);
             }
         }
     }

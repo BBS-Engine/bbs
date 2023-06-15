@@ -28,8 +28,8 @@ public class UIWorldPanel extends UIDashboardPanel implements IFlightSupported
     @Override
     public void render(UIContext context)
     {
-        context.draw.gradientHBox(this.area.x, this.area.y, this.area.x + 50, this.area.ey(), Colors.A50, 0);
-        context.draw.gradientHBox(this.area.ex() - 50, this.area.y, this.area.ex(), this.area.ey(), 0, Colors.A50);
+        context.batcher.gradientHBox(this.area.x, this.area.y, this.area.x + 50, this.area.ey(), Colors.A50, 0);
+        context.batcher.gradientHBox(this.area.ex() - 50, this.area.y, this.area.ex(), this.area.ey(), 0, Colors.A50);
 
         super.render(context);
     }

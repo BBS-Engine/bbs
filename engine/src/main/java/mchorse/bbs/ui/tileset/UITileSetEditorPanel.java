@@ -196,7 +196,7 @@ public class UITileSetEditorPanel extends UIDashboardPanel
 
     private void renderBackground(UIContext context)
     {
-        this.iconBar.area.render(context.draw, Colors.A50);
-        context.draw.gradientHBox(this.iconBar.area.x - 6, this.iconBar.area.y, this.iconBar.area.x, this.iconBar.area.ey(), 0, Colors.A12);
+        this.iconBar.area.render(context.batcher, Colors.A50);
+        context.batcher.gradientHBox(this.iconBar.area.x - 6, this.iconBar.area.y, this.iconBar.area.x, this.iconBar.area.ey(), 0, Colors.A12);
     }
 }

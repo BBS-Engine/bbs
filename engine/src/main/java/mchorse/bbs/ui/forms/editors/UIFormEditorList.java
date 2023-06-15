@@ -30,7 +30,7 @@ public class UIFormEditorList extends UIFormList
     @Override
     public void render(UIContext context)
     {
-        this.area.render(context.draw, Colors.A50);
+        this.area.render(context.batcher, Colors.A50);
 
         super.render(context);
     }

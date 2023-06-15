@@ -147,11 +147,10 @@ public class UIUVEditor extends UICanvasEditor
     {
         Area area = this.calculate(-this.w / 2, -this.h / 2, -this.w / 2 + this.w, -this.h / 2 + this.h);
 
-        context.render.getTextures().bind(this.atlas);
-        context.draw.fullTexturedBox(area.x, area.y, area.w, area.h);
+        context.batcher.fullTexturedBox(context.render.getTextures().getTexture(this.atlas), area.x, area.y, area.w, area.h);
 
         area = this.calculate(-this.w / 2 + this.uv.x, -this.h / 2 + this.uv.y, -this.w / 2 + this.uv.x + 16, -this.h / 2 + this.uv.y + 16);
 
-        context.draw.outline(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.ACTIVE, 1F));
+        context.batcher.outline(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.ACTIVE, 1F));
     }
 }

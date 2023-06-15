@@ -794,7 +794,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
      */
     private void renderEditorsBackground(UIContext context)
     {
-        context.draw.gradientVBox(this.area.x, this.area.y, this.area.ex(), this.area.y + 20, Colors.A50, 0);
+        context.batcher.gradientVBox(this.area.x, this.area.y, this.area.ex(), this.area.y + 20, Colors.A50, 0);
     }
 
     /**
@@ -808,13 +808,13 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
         if (this.dashboard.orbitUI.canControl())
         {
-            Icons.ORBIT.render(context.draw, x, y);
+            context.batcher.icon(Icons.ORBIT, x, y);
             y -= 20;
         }
 
         if (BBSSettings.editorLoop.get())
         {
-            Icons.REFRESH.render(context.draw, x, y);
+            context.batcher.icon(Icons.REFRESH, x, y);
         }
     }
 
@@ -841,8 +841,8 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             int y = panel.getY() - 20 - 15 * (labels.length - i - 1);
             int x = panel.getX() + 10;
 
-            context.draw.box(x, y - 3, x + width + 4, y + 10, Colors.A75);
-            context.font.renderWithShadow(context.render, label, x + 2, y);
+            context.batcher.box(x, y - 3, x + width + 4, y + 10, Colors.A75);
+            context.batcher.textShadow(label, x + 2, y);
         }
     }
 
@@ -881,20 +881,21 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         this.dashboard.bridge.get(IBridgeRender.class).renderSceneTo(this.camera, framebuffer, 0, true, 0);
         GLStates.setupDepthFunction2D();
 
-        viewport.render(context.draw, Colors.A75);
-        texture.bind();
-        context.draw.customTexturedBox(area.x, area.y, 0, height, area.w, area.h, width, height, width, 0);
+        context.batcher.reset();
+
+        viewport.render(context.batcher, Colors.A75);
+        context.batcher.texturedBox(texture, Colors.WHITE, area.x, area.y, area.w, area.h, 0, height, width, 0, width, height);
 
         /* Render rule of thirds */
         if (BBSSettings.editorRuleOfThirds.get())
         {
             int color = BBSSettings.editorGuidesColor.get();
 
-            context.draw.box(area.x + area.w / 3 - 1, area.y, area.x + area.w / 3, area.y + area.h, color);
-            context.draw.box(area.x + area.w - area.w / 3, area.y, area.x + area.w - area.w / 3 + 1, area.y + area.h, color);
+            context.batcher.box(area.x + area.w / 3 - 1, area.y, area.x + area.w / 3, area.y + area.h, color);
+            context.batcher.box(area.x + area.w - area.w / 3, area.y, area.x + area.w - area.w / 3 + 1, area.y + area.h, color);
 
-            context.draw.box(area.x, area.y + area.h / 3 - 1, area.x + area.w, area.y + area.h / 3, color);
-            context.draw.box(area.x, area.y + area.h - area.h / 3, area.x + area.w, area.y + area.h - area.h / 3 + 1, color);
+            context.batcher.box(area.x, area.y + area.h / 3 - 1, area.x + area.w, area.y + area.h / 3, color);
+            context.batcher.box(area.x, area.y + area.h - area.h / 3, area.x + area.w, area.y + area.h - area.h / 3 + 1, color);
         }
 
         if (BBSSettings.editorCenterLines.get())
@@ -903,8 +904,8 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             int x = area.mx();
             int y = area.my();
 
-            context.draw.box(area.x, y, area.ex(), y + 1, color);
-            context.draw.box(x, area.y, x + 1, area.ey(), color);
+            context.batcher.box(area.x, y, area.ex(), y + 1, color);
+            context.batcher.box(x, area.y, x + 1, area.ey(), color);
         }
 
         if (BBSSettings.editorCrosshair.get())
@@ -912,8 +913,8 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             int x = area.mx() + 1;
             int y = area.my() + 1;
 
-            context.draw.box(x - 4, y - 1, x + 3, y, Colors.setA(Colors.WHITE, 0.5F));
-            context.draw.box(x - 1, y - 4, x, y + 3, Colors.setA(Colors.WHITE, 0.5F));
+            context.batcher.box(x - 4, y - 1, x + 3, y, Colors.setA(Colors.WHITE, 0.5F));
+            context.batcher.box(x - 1, y - 4, x, y + 3, Colors.setA(Colors.WHITE, 0.5F));
         }
     }
 }

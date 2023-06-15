@@ -87,8 +87,8 @@ public class UIBlockVariant extends UIClickable<IBlockVariant>
     {
         int border = this.picker != null && this.picker.hasParent() ? Colors.A100 | BBSSettings.primaryColor.get() : Colors.WHITE;
 
-        context.draw.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), border);
-        context.draw.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
+        context.batcher.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), border);
+        context.batcher.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
 
         if (this.variant != null)
         {
@@ -98,16 +98,16 @@ public class UIBlockVariant extends UIClickable<IBlockVariant>
             int y = this.area.y;
             int scale = Math.min(this.area.w, this.area.h) / 2;
 
-            context.draw.clip(x + 1, y + 1, this.area.w - 2, this.area.h - 2, context);
+            context.batcher.clip(x + 1, y + 1, this.area.w - 2, this.area.h - 2, context);
 
             blockBuilder.renderInUI(context, this.variant, this.area.mx(), this.area.my(), scale);
 
-            context.draw.unclip(context);
+            context.batcher.unclip(context);
         }
 
         if (this.renderDisabled)
         {
-            context.draw.lockedArea(this);
+            this.renderLockedArea(context);
         }
     }
 }

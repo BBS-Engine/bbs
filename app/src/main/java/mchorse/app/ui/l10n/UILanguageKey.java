@@ -2,7 +2,6 @@ package mchorse.app.ui.l10n;
 
 import mchorse.app.ui.UIKeysApp;
 import mchorse.bbs.BBSSettings;
-import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.l10n.keys.LangKey;
@@ -16,6 +15,7 @@ import mchorse.bbs.ui.framework.elements.utils.UIText;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
+import mchorse.bbs.utils.colors.Colors;
 
 public class UILanguageKey extends UIElement
 {
@@ -107,23 +107,23 @@ public class UILanguageKey extends UIElement
     {
         int color = Colors.A100 | BBSSettings.primaryColor.get();
 
-        this.base.area.render(context.draw, Colors.mulRGB(color, 0.25F));
+        this.base.area.render(context.batcher, Colors.mulRGB(color, 0.25F));
 
         if (this.reference != null)
         {
-            this.reference.area.render(context.draw, Colors.mulRGB(color, 0.125F));
+            this.reference.area.render(context.batcher, Colors.mulRGB(color, 0.125F));
         }
 
         if (!this.isStillSame())
         {
-            int check = Colors.A100 | Colors.POSITIVE;
+            int checkColor = Colors.A100 | Colors.POSITIVE;
 
             if (this.panel.hasMarked(this.langKey.key))
             {
-                check = Colors.A100 | Colors.ACTIVE;
+                checkColor = Colors.A100 | Colors.ACTIVE;
             }
 
-            Icons.CHECKMARK.render(context.draw, this.key.area.ex() - 10, this.key.area.my(), check, 0.5F, 0.5F);
+            context.batcher.icon(Icons.CHECKMARK, checkColor, this.key.area.ex() - 10, this.key.area.my(), 0.5F, 0.5F);
         }
 
         super.render(context);

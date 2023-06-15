@@ -70,14 +70,14 @@ public abstract class UICanvasEditor extends UICanvas
         int y = -this.h / 2;
         Area area = this.calculate(x, y, x + this.w, y + this.h);
 
-        context.draw.box(area.x - 1, area.y - 1, area.ex() + 1, area.ey() + 1, 0xff181818);
+        context.batcher.box(area.x - 1, area.y - 1, area.ex() + 1, area.ey() + 1, 0xff181818);
 
         if (!this.shouldDrawCanvas(context))
         {
             return;
         }
 
-        context.draw.clip(area, context);
+        context.batcher.clip(area, context);
 
         int ox = (this.area.x - area.x) % 16;
         int oy = (this.area.y - area.y) % 16;
@@ -89,19 +89,19 @@ public abstract class UICanvasEditor extends UICanvas
         this.renderCheckboard(context, area);
         this.renderCanvasFrame(context);
 
-        context.draw.unclip(context);
+        context.batcher.unclip(context);
 
         this.renderForeground(context);
     }
 
     protected void renderCheckboard(UIContext context, Area processed)
     {
-        Icons.CHECKBOARD.renderArea(context.draw, processed.x, processed.y, processed.w, processed.h);
+        context.batcher.iconArea(Icons.CHECKBOARD, processed.x, processed.y, processed.w, processed.h);
     }
 
     protected void renderBackground(UIContext context)
     {
-        this.area.render(context.draw, 0xff2f2f2f);
+        this.area.render(context.batcher, 0xff2f2f2f);
     }
 
     protected void renderForeground(UIContext context)

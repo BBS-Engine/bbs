@@ -21,7 +21,7 @@ public class ColorfulContextAction extends ContextAction
     {
         super.renderBackground(context, x, y, w, h, hover, selected);
 
-        context.draw.box(x, y, x + 2, y + h, Colors.A100 | this.color);
-        context.draw.gradientHBox(x + 2, y, x + 24, y + h, Colors.A25 | this.color, this.color);
+        context.batcher.box(x, y, x + 2, y + h, Colors.A100 | this.color);
+        context.batcher.gradientHBox(x + 2, y, x + 24, y + h, Colors.A25 | this.color, this.color);
     }
 }

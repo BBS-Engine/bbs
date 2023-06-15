@@ -234,14 +234,18 @@ public abstract class UIBaseInteractionMenu extends UIBaseMenu implements ICraft
 
         if (this.interaction.isEmpty())
         {
-            this.context.font.renderCentered(context, UIKeys.INTERACTION_NO_REPLIES.get(), this.replies.area.mx(), this.replies.area.my(), 0x333333);
+            String label = UIKeys.INTERACTION_NO_REPLIES.get();
+            int x = this.replies.area.mx(context.getFont().getWidth(label));
+            int y = this.replies.area.my();
+
+            context.batcher.text(label, x, y, 0x333333);
         }
 
         if (!this.interaction.quests.isEmpty() && this.quests.getList().isEmpty())
         {
             int w = (int) (this.questArea.area.w / 1.5F);
 
-            context.draw.wallText(this.context.font, UIKeys.INTERACTION_NO_QUESTS.get(), this.questArea.area.mx() - w / 2, (this.quest.area.y + this.accept.area.y - 10) / 2, Colors.WHITE, w, 12, 0.5F, 0.5F);
+            context.batcher.wallText(this.context.font, UIKeys.INTERACTION_NO_QUESTS.get(), this.questArea.area.mx() - w / 2, (this.quest.area.y + this.accept.area.y - 10) / 2, Colors.WHITE, w, 12, 0.5F, 0.5F);
         }
     }
 }

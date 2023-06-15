@@ -1,6 +1,5 @@
 package mchorse.bbs.ui.framework.elements.input.keyframes;
 
-import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
@@ -313,7 +312,7 @@ public abstract class UIKeyframes extends UIElement
         this.handleMouse(context, context.mouseX, context.mouseY);
         this.renderBackground(context);
 
-        context.draw.clip(this.area, context);
+        context.batcher.clip(this.area, context);
 
         this.renderGrid(context);
         this.renderCursor(context);
@@ -324,25 +323,25 @@ public abstract class UIKeyframes extends UIElement
         /* Draw selection box */
         if (this.isGrabbing())
         {
-            context.draw.normalizedBox(this.lastX, this.lastY, context.mouseX, context.mouseY, Colors.setA(Colors.ACTIVE, 0.25F));
+            context.batcher.normalizedBox(this.lastX, this.lastY, context.mouseX, context.mouseY, Colors.setA(Colors.ACTIVE, 0.25F));
         }
 
-        context.draw.unclip(context);
+        context.batcher.unclip(context);
 
         super.render(context);
     }
 
     protected void renderBackground(UIContext context)
     {
-        this.area.render(context.draw, Colors.A50);
+        this.area.render(context.batcher, Colors.A50);
 
         if (this.duration > 0)
         {
             int leftBorder = this.toGraphX(0);
             int rightBorder = this.toGraphX(this.duration);
 
-            if (leftBorder > this.area.x) context.draw.box(this.area.x, this.area.y, leftBorder, this.area.y + this.area.h, Colors.A50);
-            if (rightBorder < this.area.ex()) context.draw.box(rightBorder, this.area.y, this.area.ex() , this.area.y + this.area.h, Colors.A50);
+            if (leftBorder > this.area.x) context.batcher.box(this.area.x, this.area.y, leftBorder, this.area.y + this.area.h, Colors.A50);
+            if (rightBorder < this.area.ex()) context.batcher.box(rightBorder, this.area.y, this.area.ex() , this.area.y + this.area.h, Colors.A50);
         }
     }
 
@@ -364,18 +363,18 @@ public abstract class UIKeyframes extends UIElement
 
             String label = this.converter == null ? String.valueOf(j * mult) : this.converter.format(j * mult);
 
-            context.draw.box(x, this.area.y, x + 1, this.area.ey(), Colors.setA(Colors.WHITE, 0.25F));
-            context.font.render(context.render, label, x + 4, this.area.y + 4);
+            context.batcher.box(x, this.area.y, x + 1, this.area.ey(), Colors.setA(Colors.WHITE, 0.25F));
+            context.batcher.text(label, x + 4, this.area.y + 4);
         }
     }
 
     protected abstract void renderGraph(UIContext context, int mouseX, int mouseY);
 
-    protected void renderRect(UIContext context, VAOBuilder builder, int x, int y, int offset, int c)
+    protected void renderRect(UIContext context, int x, int y, int offset, int c)
     {
         c = Colors.A100 | c;
 
-        context.draw.fillBox(builder, x - offset, y - offset, x + offset, y + offset, c, c, c, c);
+        context.batcher.box(x - offset, y - offset, x + offset, y + offset, c, c, c, c);
     }
 
     /* Handling dragging */

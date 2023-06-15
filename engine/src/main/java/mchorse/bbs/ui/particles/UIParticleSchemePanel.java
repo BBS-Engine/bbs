@@ -209,7 +209,7 @@ public class UIParticleSchemePanel extends UIDataDashboardPanel<ParticleScheme>
 
             int y = (this.textEditor.isVisible() ? this.textEditor.area.y : this.area.ey()) - 12;
 
-            context.font.renderWithShadow(context.render, label, this.editor.area.ex() - 4 - context.font.getWidth(label), y);
+            context.batcher.textShadow(label, this.editor.area.ex() - 4 - context.font.getWidth(label), y);
         }
     }
 
@@ -222,7 +222,7 @@ public class UIParticleSchemePanel extends UIDataDashboardPanel<ParticleScheme>
         {
             int w = context.font.getWidth(this.molangId);
 
-            context.draw.textCard(context.font, this.molangId, this.textEditor.area.ex() - 6 - w, this.textEditor.area.ey() - 6 - context.font.getHeight());
+            context.batcher.textCard(context.font, this.molangId, this.textEditor.area.ex() - 6 - w, this.textEditor.area.ey() - 6 - context.font.getHeight());
         }
     }
 }

@@ -51,12 +51,12 @@ public class UIConditionBlockPanel <T extends ConditionBlock> extends UIElement
 
         if (this.block.not)
         {
-            this.not.area.render(context.draw, Colors.A50 | primary);
+            this.not.area.render(context.batcher, Colors.A50 | primary);
         }
 
         if (this.block.or)
         {
-            this.or.area.render(context.draw, Colors.A50 | primary);
+            this.or.area.render(context.batcher, Colors.A50 | primary);
         }
 
         super.render(context);

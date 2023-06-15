@@ -11,6 +11,7 @@ import mchorse.bbs.ui.framework.tooltips.ITooltip;
 import mchorse.bbs.ui.framework.tooltips.LabelTooltip;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
+import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.keys.KeybindManager;
 import mchorse.bbs.ui.utils.resizers.Flex;
 import mchorse.bbs.ui.utils.resizers.IResizer;
@@ -20,6 +21,7 @@ import mchorse.bbs.ui.utils.resizers.layout.ColumnResizer;
 import mchorse.bbs.ui.utils.resizers.layout.GridResizer;
 import mchorse.bbs.ui.utils.resizers.layout.RowResizer;
 import mchorse.bbs.utils.Direction;
+import mchorse.bbs.utils.colors.Colors;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1170,6 +1172,19 @@ public class UIElement implements IUIElement
     public void renderTooltip(UIContext context, Area area)
     {
         context.tooltip.render(this.tooltip, context);
+    }
+
+    /**
+     * Generic method for rendering locked (disabled) state of an input field
+     */
+    public void renderLockedArea(UIContext context)
+    {
+        if (!this.isEnabled())
+        {
+            this.area.render(context.batcher, Colors.A50);
+
+            context.batcher.outlinedIcon(Icons.LOCKED, this.area.mx(), this.area.my(), 0.5F, 0.5F);
+        }
     }
 
     public static enum EventPropagation

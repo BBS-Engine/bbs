@@ -170,15 +170,15 @@ public class UIFormCategory extends UIElement
     {
         super.render(context);
 
-        context.draw.textCard(context.font, this.category.title.get(), this.area.x + 26, this.area.y + 6);
+        context.batcher.textCard(context.font, this.category.title.get(), this.area.x + 26, this.area.y + 6);
 
         if (this.category.hidden)
         {
-            Icons.MOVE_UP.render(context.draw, this.area.x + 16, this.area.y + 4, 0.5F, 0);
+            context.batcher.icon(Icons.MOVE_UP, this.area.x + 16, this.area.y + 4, 0.5F, 0F);
         }
         else
         {
-            Icons.MOVE_DOWN.render(context.draw, this.area.x + 16, this.area.y + 5, 0.5F, 0);
+            context.batcher.icon(Icons.MOVE_DOWN, this.area.x + 16, this.area.y + 5, 0.5F, 0F);
         }
 
         List<Form> forms = this.getForms();
@@ -202,21 +202,21 @@ public class UIFormCategory extends UIElement
                 int cy = this.area.y + h;
                 boolean isSelected = this.selected == form;
 
-                context.draw.clip(cx, cy, CELL_WIDTH, CELL_HEIGHT, context);
+                context.batcher.clip(cx, cy, CELL_WIDTH, CELL_HEIGHT, context);
 
                 if (isSelected)
                 {
-                    context.draw.box(cx, cy, cx + CELL_WIDTH, cy + CELL_HEIGHT, Colors.A50 | BBSSettings.primaryColor.get());
+                    context.batcher.box(cx, cy, cx + CELL_WIDTH, cy + CELL_HEIGHT, Colors.A50 | BBSSettings.primaryColor.get());
                 }
 
                 form.getRenderer().renderUI(context, cx, cy, cx + CELL_WIDTH, cy + CELL_HEIGHT);
 
                 if (isSelected)
                 {
-                    context.draw.outline(cx, cy, cx + CELL_WIDTH, cy + CELL_HEIGHT, Colors.A50 | BBSSettings.primaryColor.get(), 2);
+                    context.batcher.outline(cx, cy, cx + CELL_WIDTH, cy + CELL_HEIGHT, Colors.A50 | BBSSettings.primaryColor.get(), 2);
                 }
 
-                context.draw.unclip(context);
+                context.batcher.unclip(context);
 
                 x += CELL_WIDTH;
                 i += 1;

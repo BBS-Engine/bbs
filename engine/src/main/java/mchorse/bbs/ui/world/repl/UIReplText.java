@@ -27,7 +27,7 @@ public class UIReplText extends UIText
     {
         if (this.odd)
         {
-            this.area.render(context.draw, Colors.A50);
+            this.area.render(context.batcher, Colors.A50);
         }
 
         super.render(context);

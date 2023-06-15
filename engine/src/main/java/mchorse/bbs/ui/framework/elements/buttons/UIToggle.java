@@ -89,7 +89,7 @@ public class UIToggle extends UIClickable<UIToggle> implements ITextColoring
         FontRenderer font = context.font;
         String label = font.limitToWidth(this.label.get(), this.area.w - 18);
 
-        font.render(context.render, label, this.area.x, this.area.my(font.getHeight()), this.color, this.textShadow);
+        context.batcher.text(label, this.area.x, this.area.my(font.getHeight()), this.color, this.textShadow);
 
         /* Draw toggle switch */
         int w = 16;
@@ -104,36 +104,36 @@ public class UIToggle extends UIClickable<UIToggle> implements ITextColoring
         }
 
         /* Draw toggle background */
-        context.draw.box(x, y - h / 2, x + w, y - h / 2 + h, Colors.A100);
-        context.draw.box(x + 1, y - h / 2 + 1, x + w - 1, y - h / 2 + h - 1, Colors.A100 | (this.value ? color : (this.hover ? 0x3a3a3a : 0x444444)));
+        context.batcher.box(x, y - h / 2, x + w, y - h / 2 + h, Colors.A100);
+        context.batcher.box(x + 1, y - h / 2 + 1, x + w - 1, y - h / 2 + h - 1, Colors.A100 | (this.value ? color : (this.hover ? 0x3a3a3a : 0x444444)));
 
         if (this.value)
         {
-            context.draw.gradientHBox(x + 1, y - h / 2 + 1, x + w / 2, y - h / 2 + h - 1, Colors.setA(Colors.WHITE, 0.33F), Colors.setA(Colors.WHITE, 0F));
+            context.batcher.gradientHBox(x + 1, y - h / 2 + 1, x + w / 2, y - h / 2 + h - 1, Colors.setA(Colors.WHITE, 0.33F), Colors.setA(Colors.WHITE, 0F));
         }
         else
         {
-            context.draw.gradientHBox(x + w / 2, y - h / 2 + 1, x + w - 1, y - h / 2 + h - 1, 0, Colors.A50);
+            context.batcher.gradientHBox(x + w / 2, y - h / 2 + 1, x + w - 1, y - h / 2 + h - 1, 0, Colors.A50);
         }
 
         if (!this.isEnabled())
         {
-            context.draw.box(x, y - h / 2, x + w, y - h / 2 + h, Colors.A50);
+            context.batcher.box(x, y - h / 2, x + w, y - h / 2 + h, Colors.A50);
         }
 
         x += this.value ? w - 2 : 2;
 
         /* Draw toggle switch */
-        context.draw.box(x - 4, y - 8, x + 4, y + 8, Colors.A100);
-        context.draw.box(x - 3, y - 7, x + 3, y + 7, Colors.WHITE);
-        context.draw.box(x - 2, y - 6, x + 3, y + 7, Colors.GRAY);
-        context.draw.box(x - 2, y - 6, x + 2, y + 6, Colors.LIGHTER_GRAY);
+        context.batcher.box(x - 4, y - 8, x + 4, y + 8, Colors.A100);
+        context.batcher.box(x - 3, y - 7, x + 3, y + 7, Colors.WHITE);
+        context.batcher.box(x - 2, y - 6, x + 3, y + 7, Colors.GRAY);
+        context.batcher.box(x - 2, y - 6, x + 2, y + 6, Colors.LIGHTER_GRAY);
 
         if (!this.isEnabled())
         {
-            context.draw.box(x - 4, y - 8, x + 4, y + 8, Colors.A50);
+            context.batcher.box(x - 4, y - 8, x + 4, y + 8, Colors.A50);
 
-            context.draw.outlinedIcon(Icons.LOCKED, this.area.ex() - w / 2 - 2, y, 0.5F, 0.5F);
+            context.batcher.outlinedIcon(Icons.LOCKED, this.area.ex() - w / 2 - 2, y, 0.5F, 0.5F);
         }
     }
 }

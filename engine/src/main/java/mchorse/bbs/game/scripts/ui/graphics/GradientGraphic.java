@@ -26,11 +26,11 @@ public class GradientGraphic extends Graphic
     {
         if (this.horizontal)
         {
-            context.draw.gradientHBox(area.x, area.y, area.ex(), area.ey(), this.primary, this.secondary);
+            context.batcher.gradientHBox(area.x, area.y, area.ex(), area.ey(), this.primary, this.secondary);
         }
         else
         {
-            context.draw.gradientVBox(area.x, area.y, area.ex(), area.ey(), this.primary, this.secondary);
+            context.batcher.gradientVBox(area.x, area.y, area.ex(), area.ey(), this.primary, this.secondary);
         }
     }
 

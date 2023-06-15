@@ -54,8 +54,7 @@ public class BillboardFormRenderer extends FormRenderer<BillboardForm>
         int x = x1 + (ow - w) / 2 + 2;
         int y = y1 + (oh - h) / 2 + 2;
 
-        texture.bind();
-        context.draw.fullTexturedBox(x, y, w, h);
+        context.batcher.fullTexturedBox(texture, x, y, w, h);
     }
 
     @Override

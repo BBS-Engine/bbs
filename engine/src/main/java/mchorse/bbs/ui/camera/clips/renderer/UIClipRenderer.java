@@ -4,8 +4,6 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.smooth.Envelope;
-import mchorse.bbs.graphics.RenderingContext;
-import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.ui.framework.UIContext;
@@ -39,7 +37,7 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
         {
             int color = BBSSettings.primaryColor.get();
 
-            context.draw.dropShadow(left + 2, y + 2, right - 2, y + h - 2, 8, Colors.A75 + color, color);
+            context.batcher.dropShadow(left + 2, y + 2, right - 2, y + h - 2, 8, Colors.A75 + color, color);
         }
 
         int clipColor = clip.color.get();
@@ -51,10 +49,10 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
         }
         else
         {
-            Icons.DISABLED.renderArea(context.draw, left, y, (right - left), h, color);
+            context.batcher.iconArea(Icons.DISABLED, color, left, y, (right - left), h);
         }
 
-        context.draw.outline(left, y, right, y + h, selected ? Colors.WHITE : Colors.A50);
+        context.batcher.outline(left, y, right, y + h, selected ? Colors.WHITE : Colors.A50);
 
         if (!compact)
         {
@@ -62,32 +60,29 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
 
             if (right - left > 10 && envelope.enabled.get())
             {
-                this.renderEnvelope(context.render, envelope, clip.duration.get(), left + 1, y + 1, right - 1, y + 17);
+                this.renderEnvelope(context, envelope, clip.duration.get(), left + 1, y + 1, right - 1, y + 17);
             }
 
             String label = context.font.limitToWidth(clip.title.get(), right - 5 - left);
 
             if (!label.isEmpty())
             {
-                context.font.renderWithShadow(context.render, label, left + 5, y + (h - context.font.getHeight()) / 2);
+                context.batcher.textShadow(label, left + 5, y + (h - context.font.getHeight()) / 2);
             }
         }
     }
 
     protected void renderBackground(UIContext context, int color, T clip, Area area, boolean compact, boolean selected, boolean current)
     {
-        context.draw.box(area.x, area.y, area.ex(), area.ey(), color);
+        context.batcher.box(area.x, area.y, area.ex(), area.ey(), color);
     }
 
     /**
      * Render envelope's preview (either through keyframes or simple)
      */
-    private void renderEnvelope(RenderingContext context, Envelope envelope, int duration, int x1, int y1, int x2, int y2)
+    private void renderEnvelope(UIContext context, Envelope envelope, int duration, int x1, int y1, int x2, int y2)
     {
-        Shader shader = context.getShaders().get(VBOAttributes.VERTEX_RGBA_2D);
-        VAOBuilder builder = context.getVAO().setup(shader);
-
-        builder.begin();
+        VAOBuilder builder = context.batcher.begin(VBOAttributes.VERTEX_RGBA_2D);
 
         if (envelope.keyframes.get())
         {

@@ -2,9 +2,6 @@ package mchorse.bbs.ui.dashboard.utils;
 
 import mchorse.bbs.graphics.line.LineBuilder;
 import mchorse.bbs.graphics.line.SolidColorLineRenderer;
-import mchorse.bbs.graphics.shaders.Shader;
-import mchorse.bbs.graphics.vao.VAOBuilder;
-import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.math.IExpression;
 import mchorse.bbs.math.MathBuilder;
@@ -99,7 +96,7 @@ public class UIGraphPanel extends UIDashboardPanel
         @Override
         protected void renderCanvas(UIContext context)
         {
-            this.area.render(context.draw, Colors.A50);
+            this.area.render(context.batcher, Colors.A50);
 
             this.renderVerticalGrid(context);
             this.renderHorizontalGridAndGraph(context);
@@ -127,8 +124,8 @@ public class UIGraphPanel extends UIDashboardPanel
                     continue;
                 }
 
-                context.draw.box(this.area.x, y, this.area.ex(), y + 1, Colors.setA(Colors.WHITE, 0.25F));
-                context.font.render(context.render, String.valueOf(min + j * mult), this.area.x + 4, y + 4);
+                context.batcher.box(this.area.x, y, this.area.ex(), y + 1, Colors.setA(Colors.WHITE, 0.25F));
+                context.batcher.text(String.valueOf(min + j * mult), this.area.x + 4, y + 4);
             }
         }
 
@@ -154,8 +151,8 @@ public class UIGraphPanel extends UIDashboardPanel
                     break;
                 }
 
-                context.draw.box(x, this.area.y, x + 1, this.area.ey(), Colors.setA(Colors.WHITE, 0.25F));
-                context.font.render(context.render, String.valueOf(min + j * mult), x + 4, this.area.y + 4);
+                context.batcher.box(x, this.area.y, x + 1, this.area.ey(), Colors.setA(Colors.WHITE, 0.25F));
+                context.batcher.text(String.valueOf(min + j * mult), x + 4, this.area.y + 4);
             }
 
             if (this.expression == null)
@@ -184,7 +181,7 @@ public class UIGraphPanel extends UIDashboardPanel
 
                 if (!isNaN)
                 {
-                    context.draw.box(mouseX, Math.min(y1, y2), mouseX + 1, Math.max(y1, y2), Colors.CURSOR);
+                    context.batcher.box(mouseX, Math.min(y1, y2), mouseX + 1, Math.max(y1, y2), Colors.CURSOR);
                 }
 
                 int y3 = y1 < y2 ? y1 : y1 - 12;
@@ -192,8 +189,8 @@ public class UIGraphPanel extends UIDashboardPanel
 
                 mouseX += 1;
 
-                context.draw.box(mouseX, y3, mouseX + w + 4, y3 + 12, Colors.WHITE);
-                context.font.render(context.render, coordinate, mouseX + 2, y3 + 2, 0);
+                context.batcher.box(mouseX, y3, mouseX + w + 4, y3 + 12, Colors.WHITE);
+                context.batcher.text(coordinate, mouseX + 2, y3 + 2, 0);
             }
 
             LineBuilder line = new LineBuilder(1F);
@@ -209,10 +206,7 @@ public class UIGraphPanel extends UIDashboardPanel
                 line.add((float) j, (float) this.scaleY.to(y1));
             }
 
-            Shader basic = context.render.getShaders().get(VBOAttributes.VERTEX_RGBA_2D);
-            VAOBuilder builder = context.render.getVAO().setup(basic);
-
-            line.render(builder, SolidColorLineRenderer.get(0F, 0.5F, 1F, 1F));
+            line.render(context.batcher, SolidColorLineRenderer.get(0F, 0.5F, 1F, 1F));
         }
     }
 }

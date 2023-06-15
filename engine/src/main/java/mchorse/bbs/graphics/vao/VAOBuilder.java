@@ -1,8 +1,10 @@
 package mchorse.bbs.graphics.vao;
 
+import mchorse.bbs.graphics.MatrixStack;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.utils.colors.Color;
-import org.joml.Vector3f;
+import mchorse.bbs.utils.joml.Vectors;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
@@ -10,55 +12,51 @@ import java.nio.IntBuffer;
 
 public class VAOBuilder
 {
+    private static final MatrixStack tempStack = new MatrixStack();
+
     public VAO vao;
-    public ByteBuffer buffer;
-    public IntBuffer indices;
-    public Shader shader;
-    public VBOAttributes enforce;
+
+    private ByteBuffer buffer = VAO.DATA;
+    private IntBuffer indices;
+    private Shader shader;
+    private MatrixStack stack;
+
+    private boolean uploading;
 
     public final VAOManager vaos;
-
-    public Vector3f translation = new Vector3f();
 
     public VAOBuilder(VAOManager vaos)
     {
         this.vaos = vaos;
     }
 
+    /* For rendering */
+
     public VAOBuilder setup(Shader shader)
     {
-        return this.setup(shader.attributes, VAO.DATA).shader(shader);
+        return this.setup(shader.attributes, null).shader(shader);
     }
 
-    public VAOBuilder setup(Shader shader, ByteBuffer buffer)
+    public VAOBuilder setup(Shader shader, IntBuffer indices)
     {
-        return this.setup(shader.attributes, buffer, null).shader(shader);
+        return this.setup(shader.attributes, indices).shader(shader);
     }
 
-    public VAOBuilder setup(Shader shader, ByteBuffer buffer, IntBuffer indices)
-    {
-        return this.setup(shader.attributes, buffer, indices).shader(shader);
-    }
+    /* For data uploading */
 
     public VAOBuilder setup(VBOAttributes type)
     {
-        return this.setup(type, VAO.DATA);
+        return this.setup(type, null);
     }
 
-    public VAOBuilder setup(VBOAttributes type, ByteBuffer buffer)
+    public VAOBuilder setup(VBOAttributes type, IntBuffer indices)
     {
-        return this.setup(type, buffer, null);
+        return this.setup(this.vaos.getTemporary(type, indices != null), indices);
     }
 
-    public VAOBuilder setup(VBOAttributes type, ByteBuffer buffer, IntBuffer indices)
-    {
-        return this.setup(this.vaos.getTemporary(type, indices != null), buffer, indices);
-    }
-
-    public VAOBuilder setup(VAO vao, ByteBuffer buffer, IntBuffer indices)
+    public VAOBuilder setup(VAO vao, IntBuffer indices)
     {
         this.vao = vao;
-        this.buffer = buffer;
         this.indices = indices;
 
         return this;
@@ -71,14 +69,9 @@ public class VAOBuilder
         return this;
     }
 
-    public VAOBuilder enforce()
+    public VAOBuilder stack(MatrixStack stack)
     {
-        return this.enforce(this.shader.attributes);
-    }
-
-    public VAOBuilder enforce(VBOAttributes attributes)
-    {
-        this.enforce = attributes;
+        this.stack = stack;
 
         return this;
     }
@@ -92,27 +85,48 @@ public class VAOBuilder
 
     public VAOBuilder xy(float x, float y)
     {
-        this.buffer.putFloat(x + this.translation.x);
-        this.buffer.putFloat(y + this.translation.y);
+        Vector4f vector = Vectors.TEMP_4F.set(x, y, 0, 1);
+
+        if (this.stack != null)
+        {
+            this.stack.getModelMatrix().transform(vector);
+        }
+
+        this.buffer.putFloat(vector.x);
+        this.buffer.putFloat(vector.y);
 
         return this;
     }
 
     public VAOBuilder xyz(float x, float y, float z)
     {
-        this.buffer.putFloat(x + this.translation.x);
-        this.buffer.putFloat(y + this.translation.y);
-        this.buffer.putFloat(z + this.translation.z);
+        Vector4f vector = Vectors.TEMP_4F.set(x, y, z, 1);
+
+        if (this.stack != null)
+        {
+            this.stack.getModelMatrix().transform(vector);
+        }
+
+        this.buffer.putFloat(vector.x);
+        this.buffer.putFloat(vector.y);
+        this.buffer.putFloat(vector.z);
 
         return this;
     }
 
     public VAOBuilder xyzw(float x, float y, float z, float w)
     {
-        this.buffer.putFloat(x + this.translation.x);
-        this.buffer.putFloat(y + this.translation.y);
-        this.buffer.putFloat(z + this.translation.z);
-        this.buffer.putFloat(w);
+        Vector4f vector = Vectors.TEMP_4F.set(x, y, z, w);
+
+        if (this.stack != null)
+        {
+            this.stack.getModelMatrix().transform(vector);
+        }
+
+        this.buffer.putFloat(vector.x);
+        this.buffer.putFloat(vector.y);
+        this.buffer.putFloat(vector.z);
+        this.buffer.putFloat(vector.w);
 
         return this;
     }
@@ -179,13 +193,21 @@ public class VAOBuilder
 
     public void begin(float x, float y, float z)
     {
-        this.translation.set(x, y, z);
+        this.stack = tempStack;
+
+        this.stack.identity();
+        this.stack.translate(x, y, z);
 
         this.begin();
     }
 
     public void begin()
     {
+        if (this.uploading)
+        {
+            System.err.println("VAOBuilder is already uploading!");
+        }
+
         this.buffer.clear();
 
         if (this.indices != null)
@@ -193,15 +215,7 @@ public class VAOBuilder
             this.indices.clear();
         }
 
-        if (this.shader != null && this.enforce != null)
-        {
-            Shader program = this.shader;
-
-            if (program.attributes != this.enforce)
-            {
-                throw new RuntimeException("Shader " + program.name.toString() + " is not matching enforced " + this.enforce.name.toString() + " VBO attributes layout! Actual: " + program.attributes.name.toString());
-            }
-        }
+        this.uploading = true;
     }
 
     public void render()
@@ -234,10 +248,6 @@ public class VAOBuilder
 
     public void flush()
     {
-        this.shader = null;
-        this.enforce = null;
-
-        this.translation.set(0, 0, 0);
         this.buffer.flip();
 
         if (this.indices != null)
@@ -252,5 +262,14 @@ public class VAOBuilder
         {
             this.vao.uploadIndexData(this.indices);
         }
+
+        this.reset();
+    }
+
+    public void reset()
+    {
+        this.shader = null;
+        this.stack = null;
+        this.uploading = false;
     }
 }

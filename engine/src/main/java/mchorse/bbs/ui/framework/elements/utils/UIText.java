@@ -177,14 +177,7 @@ public class UIText extends UIElement implements ITextColoring
                     x = x + (int) (((this.area.w - this.paddingH * 2) - (context.font.getWidth(line))) * this.anchorX);
                 }
 
-                if (this.shadow)
-                {
-                    context.font.renderWithShadow(context.render, line, x, this.area.y + y, color);
-                }
-                else
-                {
-                    context.font.render(context.render, line, x, this.area.y + y, color);
-                }
+                context.batcher.text(line, x, this.area.y + y, color, this.shadow);
 
                 y += this.lineHeight;
             }

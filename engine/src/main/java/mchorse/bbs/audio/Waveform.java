@@ -1,7 +1,7 @@
 package mchorse.bbs.audio;
 
 import mchorse.bbs.graphics.texture.Texture;
-import mchorse.bbs.ui.framework.elements.utils.UIDraw;
+import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.resources.Pixels;
 import org.lwjgl.opengl.GL11;
@@ -15,7 +15,7 @@ public class Waveform
     public float[] average;
     public float[] maximum;
 
-    private List<WaveformSprite> sprites = new ArrayList<WaveformSprite>();
+    private List<Texture> sprites = new ArrayList<Texture>();
     private int w;
     private int h;
     private int pixelsPerSecond;
@@ -69,7 +69,7 @@ public class Waveform
             texture.setParameter(GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
             texture.unbind();
 
-            this.sprites.add(new WaveformSprite(texture, width));
+            this.sprites.add(texture);
 
             offset += maxTextureSize;
         }
@@ -119,9 +119,9 @@ public class Waveform
 
     public void delete()
     {
-        for (WaveformSprite sprite : this.sprites)
+        for (Texture sprite : this.sprites)
         {
-            sprite.texture.delete();
+            sprite.delete();
         }
 
         this.sprites.clear();
@@ -147,7 +147,7 @@ public class Waveform
         return this.h;
     }
 
-    public List<WaveformSprite> getSprites()
+    public List<Texture> getSprites()
     {
         return this.sprites;
     }
@@ -155,11 +155,11 @@ public class Waveform
     /**
      * Draw the waveform out of multiple sprites of desired cropped region
      */
-    public void render(UIDraw draw, int color, int x, int y, int w, int h, float startTime, float endTime)
+    public void render(Batcher2D batcher, int color, int x, int y, int w, int h, float startTime, float endTime)
     {
         float offset = 0;
 
-        for (WaveformSprite sprite : this.sprites)
+        for (Texture sprite : this.sprites)
         {
             int sw = sprite.width;
             float spriteTime = sw / (float) this.pixelsPerSecond;
@@ -180,34 +180,31 @@ public class Waveform
                 w2 = (int) (w2 * (spriteEnd / endTime));
             }
 
-            Texture texture = sprite.texture;
-
-            texture.bind();
-            draw.customTexturedBox(color, x, y, u1, 0, w2, h, texture.width, texture.height, u2, texture.height);
+            batcher.texturedBox(sprite, color, x, y, w2, h, u1, 0, u2, sprite.height, sprite.width, sprite.height);
 
             offset = spriteEnd;
             x += u2 - u1;
         }
     }
 
-    public void render2(UIDraw draw, int x, int y, int u, int v, int w, int h)
+    public void render2(Batcher2D batcher, int x, int y, int u, int v, int w, int h)
     {
-        this.render2(draw, Colors.WHITE, x, y, u, v, w, h, this.h);
+        this.render2(batcher, Colors.WHITE, x, y, u, v, w, h, this.h);
     }
 
-    public void render2(UIDraw draw, int color, int x, int y, int u, int v, int w, int h)
+    public void render2(Batcher2D batcher, int color, int x, int y, int u, int v, int w, int h)
     {
-        this.render2(draw, color, x, y, u, v, w, h, this.h);
+        this.render2(batcher, color, x, y, u, v, w, h, this.h);
     }
 
     /**
      * Draw the waveform out of multiple sprites of desired cropped region
      */
-    public void render2(UIDraw draw, int color, int x, int y, int u, int v, int w, int h, int height)
+    public void render2(Batcher2D batcher, int color, int x, int y, int u, int v, int w, int h, int height)
     {
         int offset = 0;
 
-        for (WaveformSprite sprite : this.sprites)
+        for (Texture sprite : this.sprites)
         {
             int sw = sprite.width;
             offset += sw;
@@ -224,8 +221,7 @@ public class Waveform
 
             int so = offset - u;
 
-            sprite.texture.bind();
-            draw.scaledTexturedBox(color, x, y, u, v, Math.min(w, so), h, sw, height);
+            batcher.texturedBox(sprite, color, x, y, Math.min(w, so), h, u, v, sw, height, sprite.width, sprite.height);
 
             x += so;
             u += so;

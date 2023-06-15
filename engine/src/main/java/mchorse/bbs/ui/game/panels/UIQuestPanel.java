@@ -173,7 +173,7 @@ public class UIQuestPanel extends UIDataDashboardPanel<Quest>
 
         if (this.preview.isVisible())
         {
-            ((UIElement) this.preview.getChildren().get(0)).area.render(context.draw, Colors.A25);
+            ((UIElement) this.preview.getChildren().get(0)).area.render(context.batcher, Colors.A25);
         }
     }
 }

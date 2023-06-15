@@ -162,7 +162,7 @@ public class UIDedicatedRecordEditor extends UIElement implements IRecordEditor,
     {
         if (this.actionPanel != null || this.framePanel != null)
         {
-            context.draw.box(this.area.ex() - 200, this.area.y, this.area.ex(), this.area.ey(), 0xaa000000);
+            context.batcher.box(this.area.ex() - 200, this.area.y, this.area.ex(), this.area.ey(), 0xaa000000);
         }
 
         super.render(context);

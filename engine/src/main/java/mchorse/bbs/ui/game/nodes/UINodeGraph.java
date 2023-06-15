@@ -8,9 +8,6 @@ import mchorse.bbs.game.utils.nodes.Node;
 import mchorse.bbs.game.utils.nodes.NodeRelation;
 import mchorse.bbs.game.utils.nodes.NodeSystem;
 import mchorse.bbs.graphics.line.LineBuilder;
-import mchorse.bbs.graphics.shaders.Shader;
-import mchorse.bbs.graphics.vao.VAOBuilder;
-import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
@@ -31,7 +28,6 @@ import mchorse.bbs.utils.math.MathUtils;
 import org.joml.Intersectionf;
 import org.joml.Vector2d;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -734,16 +730,16 @@ public abstract class UINodeGraph <T extends Node, D> extends UICanvas
         {
             int w = this.area.w / 2;
 
-            context.draw.wallText(context.font, UIKeys.NODES_INFO_EMPTY_NODES.get(), this.area.mx(w), this.area.my(), 0xffffff, w, 12, 0.5F, 0.5F);
+            context.batcher.wallText(context.font, UIKeys.NODES_INFO_EMPTY_NODES.get(), this.area.mx(w), this.area.my(), 0xffffff, w, 12, 0.5F, 0.5F);
         }
         else if (this.notifyAboutMain && this.system.main == null)
         {
             String label = UIKeys.NODES_INFO_EMPTY_MAIN.get();
             int w = context.font.getWidth(label);
 
-            context.draw.box(this.area.x + 4, this.area.y + 4, this.area.x + 24 + w, this.area.y + 20, Colors.A50);
-            Icons.EXCLAMATION.render(context.draw, this.area.x + 4, this.area.y + 4, 0xffff0010);
-            context.font.renderWithShadow(context.render, label, this.area.x + 20, this.area.y + 8, 0xff0010);
+            context.batcher.box(this.area.x + 4, this.area.y + 4, this.area.x + 24 + w, this.area.y + 20, Colors.A50);
+            context.batcher.icon(Icons.EXCLAMATION, 0xffff0010, this.area.x + 4, this.area.y + 4);
+            context.batcher.textShadow(label, this.area.x + 20, this.area.y + 8, 0xff0010);
         }
     }
 
@@ -759,8 +755,6 @@ public abstract class UINodeGraph <T extends Node, D> extends UICanvas
 
         int thickness = BBSSettings.nodeThickness.get();
 
-        Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_RGBA_2D);
-        VAOBuilder builder = context.render.getVAO().setup(shader);
         T lastSelected = this.selected.isEmpty() ? null : this.selected.get(this.selected.size() - 1);
         List<Vector2d> positions = new ArrayList<Vector2d>();
 
@@ -769,11 +763,9 @@ public abstract class UINodeGraph <T extends Node, D> extends UICanvas
         {
             LineBuilder<Integer> lines = new LineBuilder<Integer>(thickness / 2F);
 
-            builder.begin();
             this.renderConnections(context, lines, positions, lastSelected);
-            builder.render(GL11.GL_LINES);
 
-            lines.render(builder, (b, point) -> b.xy(point.x, point.y).rgba(Colors.COLOR.set(point.user)));
+            lines.render(context.batcher, (b, point) -> b.xy(point.x, point.y).rgba(Colors.COLOR.set(point.user)));
         }
 
         /* Draw node boxes */
@@ -798,12 +790,12 @@ public abstract class UINodeGraph <T extends Node, D> extends UICanvas
             {
                 int colorSh = index == this.selected.size() - 1 ? 0x0088ff : 0x0022aa;
 
-                context.draw.dropShadow(nodeArea.x + 4, nodeArea.y + 4, nodeArea.ex() - 4, nodeArea.ey() - 4, 8, 0xff000000 + colorSh, colorSh);
+                context.batcher.dropShadow(nodeArea.x + 4, nodeArea.y + 4, nodeArea.ex() - 4, nodeArea.ey() - 4, 8, 0xff000000 + colorSh, colorSh);
             }
 
-            context.draw.box(nodeArea.x + 1, nodeArea.y, nodeArea.ex() - 1, nodeArea.ey(), colorBg);
-            context.draw.box(nodeArea.x, nodeArea.y + 1, nodeArea.ex(), nodeArea.ey() - 1, colorBg);
-            context.draw.outline(nodeArea.x + 3, nodeArea.y + 3, nodeArea.ex() - 3, nodeArea.ey() - 3, colorFg);
+            context.batcher.box(nodeArea.x + 1, nodeArea.y, nodeArea.ex() - 1, nodeArea.ey(), colorBg);
+            context.batcher.box(nodeArea.x, nodeArea.y + 1, nodeArea.ex(), nodeArea.ey() - 1, colorBg);
+            context.batcher.outline(nodeArea.x + 3, nodeArea.y + 3, nodeArea.ex() - 3, nodeArea.ey() - 3, colorFg);
 
             if (node == this.system.main)
             {
@@ -826,7 +818,7 @@ public abstract class UINodeGraph <T extends Node, D> extends UICanvas
                     title = title.substring(0, 37) + "§r...";
                 }
 
-                context.draw.textCard(context.font, title, nodeArea.mx() - context.font.getWidth(title) / 2, nodeArea.my() - 4);
+                context.batcher.textCard(context.font, title, nodeArea.mx() - context.font.getWidth(title) / 2, nodeArea.my() - 4);
             }
         }
 
@@ -836,19 +828,19 @@ public abstract class UINodeGraph <T extends Node, D> extends UICanvas
             Vector2d pos = positions.get(i);
             String label = String.valueOf(i);
 
-            context.font.renderWithShadow(context.render, label, (int) pos.x - context.font.getWidth(label) / 2, (int) pos.y - 4, this.getIndexLabelColor(lastSelected, i));
+            context.batcher.textShadow(label, (int) pos.x - context.font.getWidth(label) / 2, (int) pos.y - 4, this.getIndexLabelColor(lastSelected, i));
         }
 
         /* Draw main entry node icon */
         if (main != null)
         {
-            context.draw.outlinedIcon(Icons.DOWNLOAD, main.mx(), main.y - 4, 0.5F, 1F);
+            context.batcher.outlinedIcon(Icons.DOWNLOAD, main.mx(), main.y - 4, 0.5F, 1F);
         }
 
         /* Draw selection */
         if (this.selecting)
         {
-            context.draw.box(this.lastX, this.lastY, context.mouseX, context.mouseY, Colors.setA(Colors.ACTIVE, 0.25F));
+            context.batcher.box(this.lastX, this.lastY, context.mouseX, context.mouseY, Colors.setA(Colors.ACTIVE, 0.25F));
         }
     }
 
@@ -891,11 +883,11 @@ public abstract class UINodeGraph <T extends Node, D> extends UICanvas
             if (insideO) colorO = Colors.POSITIVE;
         }
 
-        context.draw.outline(output.x, output.y, output.ex(), output.ey(), 0xff000000 + colorO);
+        context.batcher.outline(output.x, output.y, output.ex(), output.ey(), 0xff000000 + colorO);
 
         if (this.system.main != node)
         {
-            context.draw.outline(input.x, input.y, input.ex(), input.ey(), 0xff000000 + colorI);
+            context.batcher.outline(input.x, input.y, input.ex(), input.ey(), 0xff000000 + colorI);
         }
     }
 

@@ -34,9 +34,8 @@ public class UIWorldMetadataList extends UIList<WorldMetadata>
     protected void renderElementPart(UIContext context, WorldMetadata element, int i, int x, int y, boolean hover, boolean selected)
     {
         int h = this.scroll.scrollItemSize;
-        int w = this.scroll.w;
 
-        context.font.renderWithShadow(context.render, element.name, x + 6, y + 6);
-        context.font.renderWithShadow(context.render, element.save.getName(), x + 6, y + h - 6 - context.font.getHeight(), Colors.GRAY);
+        context.batcher.textShadow(element.name, x + 6, y + 6);
+        context.batcher.textShadow(element.save.getName(), x + 6, y + h - 6 - context.font.getHeight(), Colors.GRAY);
     }
 }

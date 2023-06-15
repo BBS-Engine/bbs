@@ -122,21 +122,21 @@ public class UIKeybind extends UIElement
 
         if (this.reading)
         {
-            this.area.render(context.draw, Colors.A100 | BBSSettings.primaryColor.get());
+            this.area.render(context.batcher, Colors.A100 | BBSSettings.primaryColor.get());
 
             int x = this.area.mx(w);
             int y = this.area.my() + context.font.getHeight() - 1;
             float a = (float) Math.sin(context.getTickTransition() / 2D);
             int c = Colors.setA(Colors.WHITE, a * 0.5F + 0.5F);
 
-            context.draw.box(x, y, x + w, y + 1, c);
+            context.batcher.box(x, y, x + w, y + 1, c);
         }
         else
         {
-            this.area.render(context.draw, Colors.A100);
+            this.area.render(context.batcher, Colors.A100);
         }
 
-        context.font.renderWithShadow(context.render, label, this.area.mx(w), this.area.my() - context.font.getHeight() / 2);
+        context.batcher.textShadow(label, this.area.mx(w), this.area.my() - context.font.getHeight() / 2);
 
         super.render(context);
     }

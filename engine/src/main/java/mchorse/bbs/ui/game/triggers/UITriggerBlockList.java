@@ -21,8 +21,8 @@ public class UITriggerBlockList extends UIList<TriggerBlock>
     {
         int color = BBS.getFactoryTriggers().getData(element).color;
 
-        context.draw.box(x, y, x + 4, y + this.scroll.scrollItemSize, Colors.A100 + color);
-        context.draw.gradientHBox(x + 4, y, x + 24, y + this.scroll.scrollItemSize, Colors.A25 + color, color);
+        context.batcher.box(x, y, x + 4, y + this.scroll.scrollItemSize, Colors.A100 + color);
+        context.batcher.gradientHBox(x + 4, y, x + 24, y + this.scroll.scrollItemSize, Colors.A25 + color, color);
 
         super.renderElementPart(context, element, i, x + 4, y, hover, selected);
     }

@@ -93,7 +93,7 @@ public class UIHUD
             {
                 int color = Colors.setA(Colors.WHITE, alpha);
 
-                font.renderWithShadow(context, message.content.get(), 10, y, color);
+                context.batcher.textShadow(font, message.content.get(), 10, y, color);
             }
 
             y += 12;
@@ -147,14 +147,14 @@ public class UIHUD
 
         FontRenderer font = context.getFont();
 
-        context.draw.gradientHBox(x, y, x + w, y + 16, Colors.A6, Colors.A75);
-        font.renderWithShadow(context, title, x + 4, y + 4);
+        context.batcher.gradientHBox(x, y, x + w, y + 16, Colors.A6, Colors.A75);
+        context.batcher.textShadow(font, title, x + 4, y + 4);
 
         if (this.screen.engine.development)
         {
             int lw = font.getWidth(value.getId());
 
-            context.draw.textCard(font, value.getId(), x - 4 - lw, y + 4, Colors.LIGHTER_GRAY, Colors.A50, 2);
+            context.batcher.textCard(font, value.getId(), x - 4 - lw, y + 4, Colors.LIGHTER_GRAY, Colors.A50, 2);
         }
 
         int original = y;
@@ -169,7 +169,7 @@ public class UIHUD
 
             for (String line : lines)
             {
-                font.renderWithShadow(context, line, x + 4, y + 2, complete ? Colors.WHITE : Colors.LIGHTER_GRAY);
+                context.batcher.textShadow(font, line, x + 4, y + 2, complete ? Colors.WHITE : Colors.LIGHTER_GRAY);
 
                 y += 12;
             }
@@ -189,8 +189,8 @@ public class UIHUD
 
         if (alpha > 0)
         {
-            Icons.SPHERE.render(context.draw, 4, 4, Colors.setA(Colors.RED, alpha));
-            context.draw.textCard(context.getFont(), this.event.label.get(), 22, 8, Colors.setA(Colors.WHITE, alpha), Colors.mulA(Colors.A50, alpha));
+            context.batcher.icon(Icons.SPHERE, Colors.setA(Colors.RED, alpha), 4, 4);
+            context.batcher.textCard(context.getFont(), this.event.label.get(), 22, 8, Colors.setA(Colors.WHITE, alpha), Colors.mulA(Colors.A50, alpha));
         }
     }
 
@@ -201,7 +201,7 @@ public class UIHUD
             int aw = (int) (w * BBSSettings.audioWaveformWidth.get());
             int ah = BBSSettings.audioWaveformHeight.get();
 
-            AudioRenderer.renderAll(context.draw, (w - aw) / 2, 20, aw, ah, w, h);
+            AudioRenderer.renderAll(context.batcher, (w - aw) / 2, 20, aw, ah, w, h);
         }
 
         if (this.fade < 0)
@@ -209,7 +209,7 @@ public class UIHUD
             return;
         }
 
-        context.draw.box(0, 0, w, h, Colors.setA(Colors.WHITE, this.fade / 20F));
+        context.batcher.box(0, 0, w, h, Colors.setA(Colors.WHITE, this.fade / 20F));
 
         this.fade -= 1;
     }

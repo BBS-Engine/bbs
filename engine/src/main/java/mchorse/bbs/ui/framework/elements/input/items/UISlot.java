@@ -115,8 +115,8 @@ public class UISlot extends UIClickable<ItemStack>
     {
         int border = this.inventory.hasParent() ? Colors.A100 | BBSSettings.primaryColor.get() : Colors.WHITE;
 
-        context.draw.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), border);
-        context.draw.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
+        context.batcher.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), border);
+        context.batcher.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
 
         BBS.getItems().renderInUI(context.render, this.stack, this.area.x, this.area.y, this.area.w, this.area.h);
 
@@ -127,7 +127,7 @@ public class UISlot extends UIClickable<ItemStack>
 
         if (this.renderDisabled)
         {
-            context.draw.lockedArea(this);
+            this.renderLockedArea(context);
         }
     }
 

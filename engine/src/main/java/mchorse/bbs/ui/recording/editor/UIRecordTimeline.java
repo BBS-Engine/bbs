@@ -471,14 +471,14 @@ public class UIRecordTimeline extends UIElement
 
         this.handleLogic(context);
 
-        this.area.render(context.draw, Colors.A50);
-        context.draw.gradientHBox(this.area.ex() - 8, this.area.y, this.area.ex(), this.area.ey(), 0, Colors.A50);
-        context.draw.gradientHBox(this.area.x, this.area.y, this.area.x + 8, this.area.ey(), Colors.A50, 0);
+        this.area.render(context.batcher, Colors.A50);
+        context.batcher.gradientHBox(this.area.ex() - 8, this.area.y, this.area.ex(), this.area.ey(), 0, Colors.A50);
+        context.batcher.gradientHBox(this.area.x, this.area.y, this.area.x + 8, this.area.ey(), Colors.A50, 0);
 
         this.renderTimeline(context);
 
-        this.scroll.renderScrollbar(context.draw);
-        this.vertical.renderScrollbar(context.draw);
+        this.scroll.renderScrollbar(context.batcher);
+        this.vertical.renderScrollbar(context.batcher);
 
         /* Draw cursor (tick indicator) */
         if (this.cursor >= 0 && this.cursor < this.record.frames.size())
@@ -496,11 +496,11 @@ public class UIRecordTimeline extends UIElement
                 cursorX -= width + 4 + 2;
             }
 
-            context.draw.clip(this.area, context);
-            context.draw.box(x, this.scroll.y, x + 2, this.scroll.ey(), Colors.CURSOR);
-            context.draw.box(cursorX, offsetY, cursorX + width + 4, offsetY + height, Colors.setA(Colors.CURSOR, 0.75F));
-            context.font.renderWithShadow(context.render, label, cursorX + 2, offsetY + 2);
-            context.draw.unclip(context);
+            context.batcher.clip(this.area, context);
+            context.batcher.box(x, this.scroll.y, x + 2, this.scroll.ey(), Colors.CURSOR);
+            context.batcher.box(cursorX, offsetY, cursorX + width + 4, offsetY + height, Colors.setA(Colors.CURSOR, 0.75F));
+            context.batcher.textShadow(label, cursorX + 2, offsetY + 2);
+            context.batcher.unclip(context);
         }
 
         if (this.moving)
@@ -544,10 +544,10 @@ public class UIRecordTimeline extends UIElement
 
         if (max < this.area.ex())
         {
-            context.draw.box(max, this.area.y, this.area.ex(), this.area.ey(), 0xaa000000);
+            context.batcher.box(max, this.area.y, this.area.ex(), this.area.ey(), 0xaa000000);
         }
 
-        context.draw.clip(this.area, context);
+        context.batcher.clip(this.area, context);
 
         int w = this.scroll.scrollItemSize;
         int index = this.scroll.scroll / w;
@@ -566,13 +566,13 @@ public class UIRecordTimeline extends UIElement
             if (i < count)
             {
                 /* Draw tick separators */
-                context.draw.box(x, this.area.y, x + 1, this.area.ey(), 0x22ffffff);
+                context.batcher.box(x, this.area.y, x + 1, this.area.ey(), 0x22ffffff);
             }
 
             if (i >= range.min && i <= range.max)
             {
                 /* Draw selected highlight */
-                context.draw.box(x, this.area.y, x + w + 1, this.area.ey(), 0x440088ff);
+                context.batcher.box(x, this.area.y, x + w + 1, this.area.ey(), 0x440088ff);
             }
 
             if (i >= 0 && i < count)
@@ -581,11 +581,11 @@ public class UIRecordTimeline extends UIElement
                 int y = this.area.y - this.vertical.scroll;
                 Frame frame = this.record.frames.get(i);
 
-                Icons.CHECKBOARD.renderArea(context.draw, x + 2, y + 1, w - 3, 18, 0xff000000 + frame.color);
+                context.batcher.iconArea(Icons.CHECKBOARD, 0xff000000 + frame.color, x + 2, y + 1, w - 3, 18);
 
                 if (this.frame && i == this.current.tick)
                 {
-                    context.draw.outline(x + 2, y + 1, x + w - 1, y + 19, 0xffffffff);
+                    context.batcher.outline(x + 2, y + 1, x + w - 1, y + 19, 0xffffffff);
                 }
 
                 List<Action> actions = frame.actions;
@@ -618,12 +618,12 @@ public class UIRecordTimeline extends UIElement
                 String str = String.valueOf(i);
                 int bottomColor = Colors.mulRGB(Colors.A50 | BBSSettings.primaryColor.get(), 0.5F);
 
-                context.draw.gradientVBox(x + 1, y - 6, x + w, y + 12, 0, bottomColor);
-                context.font.renderWithShadow(context.render, str, x + (this.scroll.scrollItemSize - context.font.getWidth(str) + 2) / 2, y);
+                context.batcher.gradientVBox(x + 1, y - 6, x + w, y + 12, 0, bottomColor);
+                context.batcher.textShadow(str, x + (this.scroll.scrollItemSize - context.font.getWidth(str) + 2) / 2, y);
             }
         }
 
-        context.draw.unclip(context);
+        context.batcher.unclip(context);
     }
 
     private void renderAction(UIContext context, Action action, int x, int y, boolean selected)
@@ -633,11 +633,11 @@ public class UIRecordTimeline extends UIElement
 
         this.renderAnimationLength(context, action, x, y, color, selected);
 
-        context.draw.box(x + 2, y + 1, x + w - 1, y + this.vertical.scrollItemSize - 2, color + Colors.A75);
+        context.batcher.box(x + 2, y + 1, x + w - 1, y + this.vertical.scrollItemSize - 2, color + Colors.A75);
 
         if (selected)
         {
-            context.draw.outline(x + 2, y + 1, x + w - 1, y + this.vertical.scrollItemSize - 2, Colors.WHITE);
+            context.batcher.outline(x + 2, y + 1, x + w - 1, y + this.vertical.scrollItemSize - 2, Colors.WHITE);
         }
     }
 
@@ -654,8 +654,8 @@ public class UIRecordTimeline extends UIElement
 
                 int offset = x + this.scroll.scrollItemSize;
 
-                context.draw.box(offset - 1, y + 7, offset + ticks * this.scroll.scrollItemSize, y + 12, selected ? Colors.WHITE : Colors.A25 | color);
-                context.draw.box(offset + ticks * this.scroll.scrollItemSize - 1, y + 1, offset + ticks * this.scroll.scrollItemSize, y + this.vertical.scrollItemSize - 2, selected ? Colors.WHITE : Colors.A100 | color);
+                context.batcher.box(offset - 1, y + 7, offset + ticks * this.scroll.scrollItemSize, y + 12, selected ? Colors.WHITE : Colors.A25 | color);
+                context.batcher.box(offset + ticks * this.scroll.scrollItemSize - 1, y + 1, offset + ticks * this.scroll.scrollItemSize, y + this.vertical.scrollItemSize - 2, selected ? Colors.WHITE : Colors.A100 | color);
             }
 
             this.adaptiveMaxIndex = Math.max(ticks, this.adaptiveMaxIndex);

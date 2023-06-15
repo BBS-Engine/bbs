@@ -21,7 +21,6 @@ import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.resources.FilteredLink;
-import org.lwjgl.opengl.GL13;
 
 public class UIMultiLinkEditor extends UICanvasEditor
 {
@@ -223,7 +222,7 @@ public class UIMultiLinkEditor extends UICanvasEditor
 
                 if (child == this.picker.currentFiltered)
                 {
-                    context.draw.box(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.RED, 0.25F));
+                    context.batcher.box(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.RED, 0.25F));
                 }
 
                 Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_UV_RGBA_2D);
@@ -240,7 +239,7 @@ public class UIMultiLinkEditor extends UICanvasEditor
                 context.render.getTextures().bind(Icons.ATLAS, 5);
                 texture.bind(0);
 
-                context.draw.scaledTexturedBox(shader, child.color, area.x, area.y, 0, 0, area.w, area.h, area.w, area.h);
+                context.batcher.texturedBox(shader, texture, child.color, area.x, area.y, area.w, area.h, 0, 0);
             }
         }
     }

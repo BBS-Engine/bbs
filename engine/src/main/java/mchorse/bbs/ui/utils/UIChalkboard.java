@@ -185,8 +185,6 @@ public class UIChalkboard extends UIBaseMenu implements IDisposable, IMouseHandl
 
         if (this.pixels != null)
         {
-            this.texture.bind();
-
             if (this.drawing)
             {
                 double distance = new Vector2d(x, y).distance(this.lastX, this.lastY);
@@ -202,16 +200,17 @@ public class UIChalkboard extends UIBaseMenu implements IDisposable, IMouseHandl
                 }
 
                 this.pixels.rewindBuffer();
+                this.texture.bind();
                 this.texture.updateTexture(this.pixels);
 
                 this.lastX = x;
                 this.lastY = y;
             }
 
-            this.context.draw.fullTexturedBox(0, 0, Window.width / scale, Window.height / scale);
+            this.context.batcher.fullTexturedBox(this.texture, 0, 0, Window.width / scale, Window.height / scale);
         }
 
-        this.context.draw.box(sx - 1, sy - 1, sx + 1, sy + 1, this.color);
+        this.context.batcher.box(sx - 1, sy - 1, sx + 1, sy + 1, this.color);
 
         this.renderMenu(this.render, sx, sy);
     }

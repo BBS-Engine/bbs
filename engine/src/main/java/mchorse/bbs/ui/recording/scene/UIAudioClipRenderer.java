@@ -22,8 +22,8 @@ public class UIAudioClipRenderer extends UIClipRenderer<AudioClip>
 
             if (player != null)
             {
-                context.draw.box(area.x, area.y, area.ex(), area.ey(), Colors.mulRGB(color, 0.6F));
-                player.getWaveform().render(context.draw, Colors.WHITE, area.x, area.y, area.w, area.h, 0, clip.duration.get() / 20F);
+                context.batcher.box(area.x, area.y, area.ex(), area.ey(), Colors.mulRGB(color, 0.6F));
+                player.getWaveform().render(context.batcher, Colors.WHITE, area.x, area.y, area.w, area.h, 0, clip.duration.get() / 20F);
             }
         }
         else

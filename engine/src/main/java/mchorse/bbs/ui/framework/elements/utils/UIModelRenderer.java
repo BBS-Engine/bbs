@@ -173,9 +173,9 @@ public abstract class UIModelRenderer extends UIElement
         context.render.setCamera(this.camera);
         rendering = true;
 
-        context.draw.clip(this.area, context);
+        context.batcher.clip(this.area, context);
         this.renderModel(context);
-        context.draw.unclip(context);
+        context.batcher.unclip(context);
 
         rendering = false;
 

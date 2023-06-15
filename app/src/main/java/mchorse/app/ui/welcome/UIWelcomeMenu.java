@@ -6,11 +6,8 @@ import mchorse.app.ui.KeysApp;
 import mchorse.app.ui.UIKeysApp;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridge;
-import mchorse.bbs.graphics.shaders.CommonShaderAccess;
-import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.graphics.texture.Texture;
-import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.framework.UIBaseMenu;
@@ -27,9 +24,7 @@ import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
-import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.math.Interpolation;
-import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 public class UIWelcomeMenu extends UIBaseMenu
@@ -298,21 +293,17 @@ public class UIWelcomeMenu extends UIBaseMenu
 
         if (this.page == WELCOME)
         {
+            String label = UIKeysApp.WELCOME_WELCOME_TITLE.get();
             float factor = Math.min((this.counter + context.getTransition()) / 25F, 1);
             float scale = Interpolation.EXP_OUT.interpolate(20, 4, factor);
-            Matrix4f matrix = new Matrix4f();
 
-            matrix.translate(x, y, 0);
-            matrix.scale(scale, scale, 1);
+            context.stack.push();
+            context.stack.translate(x, y, 0);
+            context.stack.scale(scale, scale, 1);
 
-            Shader shader = context.getShaders().get(VBOAttributes.VERTEX_UV_RGBA_2D);
+            context.batcher.textShadow(font, label, -font.getWidth(label) / 2, -4);
 
-            CommonShaderAccess.setModelView(shader, matrix, Matrices.EMPTY_3F);
-
-            String label = UIKeysApp.WELCOME_WELCOME_TITLE.get();
-            font.renderWithShadow(context, label, -font.getWidth(label) / 2, -4);
-
-            CommonShaderAccess.setModelView(shader);
+            context.stack.pop();
 
             String subtext = UIKeysApp.WELCOME_WELCOME_SUBTITLE.get();
             int ly = y + 2 * font.getHeight() + 16;
@@ -321,7 +312,7 @@ public class UIWelcomeMenu extends UIBaseMenu
 
             for (String line : font.split(subtext, 320))
             {
-                font.renderCentered(context, line, x, ly);
+                context.batcher.textShadow(font, line, x - font.getWidth(line) / 2, ly);
 
                 ly += font.getHeight() * 2;
             }
@@ -329,12 +320,12 @@ public class UIWelcomeMenu extends UIBaseMenu
         else if (this.page == KEYS)
         {
             Texture texture = context.getTextures().getTexture(KEYBOARD);
+            String label = UIKeysApp.WELCOME_KEYS_SUBTITLE.get();
             int tx = this.keys.area.x;
             int ty = this.keys.area.y;
 
-            texture.bind();
-            context.draw.scaledTexturedBox(Colors.GRAY, tx, ty, 0, 0, texture.width, texture.height, texture.width, texture.height);
-            font.renderCentered(context, UIKeysApp.WELCOME_KEYS_SUBTITLE.get(), x, y + texture.height / 2 + 8);
+            context.batcher.texturedBox(texture, Colors.GRAY, tx, ty, texture.width, texture.height, 0, 0);
+            context.batcher.textShadow(font, label, x - font.getWidth(label) / 2, y + texture.height / 2 + 8);
         }
         else if (this.page == FEATURES)
         {
@@ -345,17 +336,16 @@ public class UIWelcomeMenu extends UIBaseMenu
                 int ex = this.featureList.area.ex();
                 int ey = this.featureList.area.y;
 
-                this.features.area.render(context.draw, Colors.A50);
+                this.features.area.render(context.batcher, Colors.A50);
 
-                texture.bind();
-                context.draw.fullTexturedBox(ex, ey, texture.width / 2, texture.height / 2);
+                context.batcher.fullTexturedBox(texture, ex, ey, texture.width / 2, texture.height / 2);
 
                 int lx = ex + 8;
                 int ly = ey + texture.height / 2 + 8;
 
                 for (String line : font.split(this.description.description.get(), this.features.area.w - this.featureList.area.w - 16))
                 {
-                    font.renderWithShadow(context, line, lx, ly);
+                    context.batcher.textShadow(font, line, lx, ly);
 
                     ly += 12;
                 }
@@ -363,51 +353,43 @@ public class UIWelcomeMenu extends UIBaseMenu
         }
         else if (this.page == RESOURCES)
         {
-            float scale = 3;
-            Matrix4f matrix = new Matrix4f();
-
-            matrix.translate(x, y, 0);
-            matrix.scale(scale, scale, 1);
-
-            Shader shader = context.getShaders().get(VBOAttributes.VERTEX_UV_RGBA_2D);
-
-            CommonShaderAccess.setModelView(shader, matrix, Matrices.EMPTY_3F);
-
             String label = UIKeysApp.WELCOME_RESOURCES_TITLE.get();
-            font.renderWithShadow(context, label, -font.getWidth(label) / 2, -4);
+            float scale = 3;
 
-            CommonShaderAccess.setModelView(shader);
+            context.stack.push();
+            context.stack.translate(x, y, 0);
+            context.stack.scale(scale, scale, 1);
+
+            context.batcher.textShadow(font, label, -font.getWidth(label) / 2, -4);
+
+            context.stack.pop();
 
             String subtext = UIKeysApp.WELCOME_RESOURCES_SUBTITLE.get();
             int ly = y + 2 * font.getHeight() + 12;
 
             for (String line : font.split(subtext, 320))
             {
-                font.renderCentered(context, line, x, ly);
+                context.batcher.textShadow(font, line, x - font.getWidth(line) / 2, ly);
 
                 ly += font.getHeight() * 2;
             }
 
             String tip = UIKeysApp.WELCOME_RESOURCES_TIP.get();
 
-            context.draw.textCard(font, tip, this.resources.area.mx(font.getWidth(tip)), this.resources.area.y + 26);
+            context.batcher.textCard(font, tip, this.resources.area.mx(font.getWidth(tip)), this.resources.area.y + 26);
         }
         else if (this.page == PATRONS)
         {
-            float scale = 4;
-            Matrix4f matrix = new Matrix4f();
-
-            matrix.translate(x, this.patrons.area.y - font.getHeight() * 3, 0);
-            matrix.scale(scale, scale, 1);
-
-            Shader shader = context.getShaders().get(VBOAttributes.VERTEX_UV_RGBA_2D);
-
-            CommonShaderAccess.setModelView(shader, matrix, Matrices.EMPTY_3F);
-
             String label = UIKeysApp.WELCOME_THANK_YOU.get();
-            font.renderWithShadow(context, label, -font.getWidth(label) / 2, -font.getHeight());
+            float scale = 4;
 
-            CommonShaderAccess.setModelView(shader);
+            context.stack.push();
+            context.stack.translate(x, this.patrons.area.y - font.getHeight() * 3, 0);
+            context.stack.scale(scale, scale, 1);
+
+            context.batcher.textShadow(font, label, -font.getWidth(label) / 2, -font.getHeight());
+
+            context.stack.pop();
         }
     }
 
@@ -418,7 +400,7 @@ public class UIWelcomeMenu extends UIBaseMenu
         int opaque = hover ? Colors.A50 | BBSSettings.primaryColor.get() : Colors.A50;
         int shadow = hover ? BBSSettings.primaryColor.get() : 0;
 
-        this.context.draw.dropShadow(area.x + 4, area.y + 4, area.ex() - 4, area.ey() - 4, 4, opaque, shadow);
+        this.context.batcher.dropShadow(area.x + 4, area.y + 4, area.ex() - 4, area.ey() - 4, 4, opaque, shadow);
     }
 
     public static class LinkDescription

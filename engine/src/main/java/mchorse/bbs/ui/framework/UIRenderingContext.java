@@ -5,8 +5,8 @@ import mchorse.bbs.graphics.shaders.ShaderRepository;
 import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.graphics.texture.TextureManager;
 import mchorse.bbs.graphics.vao.VAOBuilder;
+import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.ui.framework.elements.utils.StencilMap;
-import mchorse.bbs.ui.framework.elements.utils.UIDraw;
 import mchorse.bbs.world.World;
 import org.joml.Matrix4f;
 
@@ -17,7 +17,7 @@ public class UIRenderingContext extends RenderingContext
      */
     public Matrix4f projection;
 
-    public UIDraw draw;
+    public Batcher2D batcher;
 
     private RenderingContext render;
     private ShaderRepository pickingShaders = new ShaderRepository();
@@ -27,7 +27,7 @@ public class UIRenderingContext extends RenderingContext
     {
         this.render = render;
         this.projection = projection;
-        this.draw = new UIDraw(this);
+        this.batcher = new Batcher2D(this);
     }
 
     public ShaderRepository getPickingShaders()

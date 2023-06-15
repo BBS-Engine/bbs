@@ -33,7 +33,7 @@ public class UIIconList extends UIList<Icon>
     @Override
     protected void renderElementPart(UIContext context, Icon element, int i, int x, int y, boolean hover, boolean selected)
     {
-        element.render(context.draw, x + 10, y + 10, 0.5F, 0.5F);
+        context.batcher.icon(element, x + 10, y + 10, 0.5F, 0.5F);
 
         super.renderElementPart(context, element, i, x + 20, y, hover, selected);
     }

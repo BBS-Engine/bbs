@@ -185,7 +185,7 @@ public class UITextureManagerOverlayPanel extends UIOverlayPanel
 
         if (this.linkLinear)
         {
-            this.linear.area.render(context.draw, Colors.A50 | BBSSettings.primaryColor.get());
+            this.linear.area.render(context.batcher, Colors.A50 | BBSSettings.primaryColor.get());
         }
     }
 }

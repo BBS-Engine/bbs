@@ -88,7 +88,7 @@ public class UILabel extends UIElement implements ITextColoring
         int x = this.area.x(this.anchorX, context.font.getWidth(label));
         int y = this.area.y(this.anchorY, context.font.getHeight());
 
-        context.draw.textCard(context.font, label, x, y, this.color, this.getColor(), 3, this.textShadow);
+        context.batcher.textCard(context.font, label, x, y, this.color, this.getColor(), 3, this.textShadow);
 
         super.render(context);
     }

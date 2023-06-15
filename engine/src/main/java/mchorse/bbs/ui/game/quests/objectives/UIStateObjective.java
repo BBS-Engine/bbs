@@ -35,6 +35,6 @@ public class UIStateObjective extends UIObjective<StateObjective>
     {
         super.render(context);
 
-        context.font.renderWithShadow(context.render, UIKeys.QUESTS_OBJECTIVE_STATE_EXPRESSION.get(), this.expression.area.x, this.expression.area.y - 12);
+        context.batcher.textShadow(UIKeys.QUESTS_OBJECTIVE_STATE_EXPRESSION.get(), this.expression.area.x, this.expression.area.y - 12);
     }
 }

@@ -181,14 +181,14 @@ public abstract class UIDataDashboardPanel <T extends AbstractData> extends UICR
             int x = this.openOverlay.area.x - 10 + (int) Interpolation.SINE_INOUT.interpolate(-10, 0, factor);
             int y = this.openOverlay.area.my();
 
-            Icons.ARROW_RIGHT.render(context.draw, x, y, 0.5F, 0.5F);
+            context.batcher.icon(Icons.ARROW_RIGHT, x, y, 0.5F, 0.5F);
         }
 
         super.render(context);
 
         if (!this.editor.isEnabled() && this.data != null)
         {
-            context.draw.lockedArea(this.editor);
+            this.renderLockedArea(context);
         }
     }
 }

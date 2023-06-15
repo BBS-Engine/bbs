@@ -431,12 +431,12 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
     {
         if (this.editor.isVisible())
         {
-            this.quickArea.area.render(context.draw, Colors.A75);
+            this.quickArea.area.render(context.batcher, Colors.A75);
 
             int x = this.showKeyframes.area.ex();
             int y = this.showKeyframes.area.my() - context.font.getHeight() / 2;
 
-            context.draw.textCard(context.font, this.lastChannel, x, y);
+            context.batcher.textCard(context.font, this.lastChannel, x, y);
         }
 
         if (this.model != null && this.editor.area.isInside(context))
@@ -483,12 +483,10 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
         int w = texture.width;
         int h = texture.height;
 
-        texture.bind();
-
         Shader shader = context.render.getPickingShaders().get(VBOAttributes.VERTEX_UV_RGBA_2D);
 
         CommonShaderAccess.setTarget(shader, index);
-        context.draw.customTextured(shader, Colors.WHITE, 0, 0, 0, h, this.dashboard.width, this.dashboard.height, w, h, w, 0);
+        context.batcher.texturedBox(shader, texture, Colors.WHITE, 0, 0, this.dashboard.width, this.dashboard.height, 0, h, w, 0);
 
         if (pair != null)
         {
@@ -499,7 +497,7 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
                 label += " - " + pair.b;
             }
 
-            context.draw.textCard(context.font, label, context.mouseX + 12, context.mouseY + 8);
+            context.batcher.textCard(context.font, label, context.mouseX + 12, context.mouseY + 8);
         }
     }
 

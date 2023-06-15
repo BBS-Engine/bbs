@@ -139,12 +139,10 @@ public class UIPickableFormRenderer extends UIFormRenderer
         int w = texture.width;
         int h = texture.height;
 
-        texture.bind();
-
         Shader shader = context.render.getPickingShaders().get(VBOAttributes.VERTEX_UV_RGBA_2D);
 
         CommonShaderAccess.setTarget(shader, index);
-        context.draw.customTextured(shader, Colors.WHITE, this.area.x, this.area.y, 0, h, this.area.w, this.area.h, w, h, w, 0);
+        context.batcher.texturedBox(shader, texture, Colors.WHITE, this.area.x, this.area.y, this.area.w, this.area.h, 0, h, w, 0, w, h);
 
         if (this.callback != null && pair != null)
         {
@@ -155,7 +153,7 @@ public class UIPickableFormRenderer extends UIFormRenderer
                 label += " - " + pair.b;
             }
 
-            context.draw.textCard(context.font, label, context.mouseX + 12, context.mouseY + 8);
+            context.batcher.textCard(context.font, label, context.mouseX + 12, context.mouseY + 8);
         }
     }
 }

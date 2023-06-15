@@ -6,8 +6,8 @@ import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.context.UIContextMenu;
 import mchorse.bbs.ui.framework.elements.input.UIKeybinds;
+import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.ui.framework.elements.utils.IViewportStack;
-import mchorse.bbs.ui.framework.elements.utils.UIDraw;
 import mchorse.bbs.ui.framework.elements.utils.UIViewportStack;
 import mchorse.bbs.ui.framework.tooltips.UITooltip;
 import mchorse.bbs.ui.utils.Area;
@@ -15,7 +15,6 @@ import mchorse.bbs.ui.utils.ScrollDirection;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
 import mchorse.bbs.ui.utils.keys.KeyAction;
 import mchorse.bbs.utils.math.MathUtils;
-import org.joml.Matrix4f;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -23,9 +22,8 @@ import java.util.function.Consumer;
 public class UIContext implements IViewportStack
 {
     public FontRenderer font;
-    public Matrix4f matrix = new Matrix4f();
     public UIRenderingContext render;
-    public UIDraw draw;
+    public Batcher2D batcher;
 
     /* GUI elements */
     public final UIBaseMenu menu;
@@ -78,7 +76,7 @@ public class UIContext implements IViewportStack
     {
         this.font = context.getFont();
         this.render = context;
-        this.draw = context.draw;
+        this.batcher = context.batcher;
     }
 
     public void setMouse(int mouseX, int mouseY)
@@ -401,7 +399,7 @@ public class UIContext implements IViewportStack
     public void shiftX(int x)
     {
         this.mouseX += x;
-        this.matrix.translate(-x, 0, 0);
+        this.render.stack.translate(-x, 0, 0);
         this.viewportStack.shiftX(x);
     }
 
@@ -409,7 +407,7 @@ public class UIContext implements IViewportStack
     public void shiftY(int y)
     {
         this.mouseY += y;
-        this.matrix.translate(0, -y, 0);
+        this.render.stack.translate(0, -y, 0);
         this.viewportStack.shiftY(y);
     }
 
@@ -433,14 +431,7 @@ public class UIContext implements IViewportStack
 
     public void resetMatrix()
     {
-        this.matrix.identity();
-
-        this.updateShaders();
-    }
-
-    public void updateShaders()
-    {
-        this.render.getUBO().updateView(this.matrix);
+        this.render.stack.identity();
     }
 
     public void update()

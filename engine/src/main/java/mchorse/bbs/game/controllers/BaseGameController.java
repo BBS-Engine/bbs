@@ -167,9 +167,9 @@ public abstract class BaseGameController implements IGameController
             String combo = KeyCodes.getName(hotkey.keycode);
             int kw = font.getWidth(combo);
 
-            context.draw.box(hx - 2, hy - 2, hx + kw + 2, hy + font.getHeight() + 2, color);
-            font.render(context, combo, hx, hy);
-            font.renderWithShadow(context, hotkey.title, hx + kw + 5, hy);
+            context.batcher.box(hx - 2, hy - 2, hx + kw + 2, hy + font.getHeight() + 2, color);
+            context.batcher.text(combo, hx, hy);
+            context.batcher.textShadow(hotkey.title, hx + kw + 5, hy);
 
             hy += 24;
         }

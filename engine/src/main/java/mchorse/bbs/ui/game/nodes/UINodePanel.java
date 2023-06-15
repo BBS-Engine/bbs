@@ -36,8 +36,8 @@ public abstract class UINodePanel <T extends Node> extends UIElement
     @Override
     public void render(UIContext context)
     {
-        context.draw.box(this.area.x, this.area.ey() - 40, this.area.ex(), this.area.ey(), Colors.A50);
-        context.draw.gradientVBox(this.area.x, this.area.y, this.area.ex(), this.area.ey() - 40, 0, Colors.A50);
+        context.batcher.box(this.area.x, this.area.ey() - 40, this.area.ex(), this.area.ey(), Colors.A50);
+        context.batcher.gradientVBox(this.area.x, this.area.y, this.area.ex(), this.area.ey() - 40, 0, Colors.A50);
 
         super.render(context);
     }

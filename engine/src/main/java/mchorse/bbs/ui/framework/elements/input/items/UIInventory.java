@@ -59,18 +59,18 @@ public class UIInventory extends UIElement
         x = MathUtils.clamp(x, 2, context.menu.width - w - 2);
         y = MathUtils.clamp(y, 2, context.menu.height - h - 2);
 
-        context.draw.box(x, y, x + w, y + h, Colors.A75);
-        context.draw.outline(x + 2, y + 2, x + w - 2, y + h - 2, Colors.A100 | stack.getFrameColor());
+        context.batcher.box(x, y, x + w, y + h, Colors.A75);
+        context.batcher.outline(x + 2, y + 2, x + w - 2, y + h - 2, Colors.A100 | stack.getFrameColor());
 
         BBS.getItems().renderInUI(context.render, stack, x + 5, y + 5, 20, 20);
-        context.font.renderWithShadow(context.render, stack.getDisplayName(), x + 30, y + 5 + (20 - context.font.getHeight()) / 2);
+        context.batcher.textShadow(stack.getDisplayName(), x + 30, y + 5 + (20 - context.font.getHeight()) / 2);
 
         int nx = x + 7;
         int ny = y + 30;
 
         for (String line : lines)
         {
-            context.font.renderWithShadow(context.render, line, nx, ny);
+            context.batcher.textShadow(line, nx, ny);
 
             ny += context.font.getHeight() + 4;
         }
@@ -225,8 +225,8 @@ public class UIInventory extends UIElement
         this.active = null;
 
         /* Background rendering */
-        context.draw.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.WHITE);
-        context.draw.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
+        context.batcher.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.WHITE);
+        context.batcher.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
 
         int scroll = 0;
 
@@ -245,13 +245,13 @@ public class UIInventory extends UIElement
             this.active = container.get(index);
         }
 
-        context.draw.lockedArea(this);
+        this.renderLockedArea(context);
 
         this.inventory.drag(context);
 
-        context.draw.clip(this.inventory, context);
-        this.inventory.renderScrollbar(context.draw);
-        context.draw.unclip(context);
+        context.batcher.clip(this.inventory, context);
+        this.inventory.renderScrollbar(context.batcher);
+        context.batcher.unclip(context);
 
         super.render(context);
 
@@ -276,7 +276,7 @@ public class UIInventory extends UIElement
             int diffX = context.mouseX - x;
             int diffY = context.mouseY - y;
 
-            context.draw.box(x - 1, y - 1, x + 17, y + 17, Colors.A25);
+            context.batcher.box(x - 1, y - 1, x + 17, y + 17, Colors.A25);
 
             if (k < inventory.size())
             {
@@ -285,7 +285,7 @@ public class UIInventory extends UIElement
 
                 if (hover)
                 {
-                    context.draw.box(x - 2, y - 2, x + 18, y + 18, Colors.A75 | BBSSettings.primaryColor.get());
+                    context.batcher.box(x - 2, y - 2, x + 18, y + 18, Colors.A75 | BBSSettings.primaryColor.get());
                     index = k;
                 }
 

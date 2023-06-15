@@ -107,7 +107,7 @@ public class UIDollyClip extends UIClip<DollyClip>
         double speed = this.clip.distance.get() / (this.clip.duration.get() / 20D);
         String label = UIKeys.CAMERA_PANELS_DOLLY_SPEED.formatString(UITrackpad.format(speed));
 
-        context.draw.textCard(context.font, label, this.area.mx(context.font.getWidth(label)), this.area.ey() - context.font.getHeight() - 20);
+        context.batcher.textCard(context.font, label, this.area.mx(context.font.getWidth(label)), this.area.ey() - context.font.getHeight() - 20);
 
         super.render(context);
     }

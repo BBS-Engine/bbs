@@ -27,7 +27,7 @@ public class ItemFormRenderer extends FormRenderer<ItemForm>
         }
         else
         {
-            Icons.CUP.render(context.draw, (x2 + x1) / 2, (y2 + y1) / 2, 0.5F, 0.5F);
+            context.batcher.icon(Icons.CUP, (x2 + x1) / 2, (y2 + y1) / 2, 0.5F, 0.5F);
         }
     }
 

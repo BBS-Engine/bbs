@@ -190,9 +190,9 @@ public class UIFormList extends UIElement
             int x = this.search.area.x;
             int y = this.search.area.y - 24;
 
-            context.draw.box(x, y, x + w + 8, this.search.area.y, Colors.A50);
-            context.font.renderWithShadow(context.render, displayName, x + 4, y + 4);
-            context.font.renderWithShadow(context.render, id, x + 4, y + 14, Colors.LIGHTEST_GRAY);
+            context.batcher.box(x, y, x + w + 8, this.search.area.y, Colors.A50);
+            context.batcher.textShadow(displayName, x + 4, y + 4);
+            context.batcher.textShadow(id, x + 4, y + 14, Colors.LIGHTEST_GRAY);
         }
     }
 }

@@ -146,7 +146,10 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     public void render(UIContext context)
     {
         /* Draw title of the channel */
-        context.font.renderWithShadow(context.render, this.title.get(), this.area.ex() - context.font.getWidth(this.title.get()) - 10, this.graph.area.y - context.font.getHeight() - 5);
+        int x = this.area.ex() - context.font.getWidth(this.title.get()) - 10;
+        int y = this.graph.area.y - context.font.getHeight() - 5;
+
+        context.batcher.textShadow(this.title.get(), x, y);
 
         super.render(context);
     }

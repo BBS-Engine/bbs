@@ -600,15 +600,15 @@ public abstract class UIList <T> extends UIElement
 
         if (this.background)
         {
-            this.area.render(context.draw, this.color);
+            this.area.render(context.batcher, this.color);
         }
 
-        context.draw.clip(this.scroll, context);
+        context.batcher.clip(this.scroll, context);
         this.renderList(context);
-        this.scroll.renderScrollbar(context.draw);
-        context.draw.unclip(context);
+        this.scroll.renderScrollbar(context.batcher);
+        context.batcher.unclip(context);
 
-        context.draw.lockedArea(this);
+        this.renderLockedArea(context);
 
         super.render(context);
 
@@ -744,11 +744,11 @@ public abstract class UIList <T> extends UIElement
         {
             if (this.isHorizontal())
             {
-                context.draw.box(x, y, x + this.scroll.scrollItemSize, y + this.scroll.h, Colors.A50 | BBSSettings.primaryColor.get());
+                context.batcher.box(x, y, x + this.scroll.scrollItemSize, y + this.scroll.h, Colors.A50 | BBSSettings.primaryColor.get());
             }
             else
             {
-                context.draw.box(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, Colors.A50 | BBSSettings.primaryColor.get());
+                context.batcher.box(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, Colors.A50 | BBSSettings.primaryColor.get());
             }
         }
 
@@ -760,7 +760,7 @@ public abstract class UIList <T> extends UIElement
      */
     protected void renderElementPart(UIContext context, T element, int i, int x, int y, boolean hover, boolean selected)
     {
-        context.font.renderWithShadow(context.render, this.elementToString(i, element), x + 4, y + (this.scroll.scrollItemSize - context.font.getHeight()) / 2, hover ? Colors.HIGHLIGHT : Colors.WHITE);
+        context.batcher.textShadow(context.font, this.elementToString(i, element), x + 4, y + (this.scroll.scrollItemSize - context.font.getHeight()) / 2, hover ? Colors.HIGHLIGHT : Colors.WHITE);
     }
 
     /**

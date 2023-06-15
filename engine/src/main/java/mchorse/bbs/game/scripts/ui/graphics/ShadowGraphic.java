@@ -24,7 +24,7 @@ public class ShadowGraphic extends Graphic
     @Override
     protected void renderGraphic(UIContext context, Area area)
     {
-        context.draw.dropShadow(area.x, area.y, area.ex(), area.ey(), this.offset, this.primary, this.secondary);
+        context.batcher.dropShadow(area.x, area.y, area.ex(), area.ey(), this.offset, this.primary, this.secondary);
     }
 
     @Override

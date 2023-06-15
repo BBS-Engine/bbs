@@ -293,14 +293,13 @@ public class UIPixelsEditor extends UICanvasEditor
         Area area = this.calculate(x, y, x + this.w, y + this.h);
         Texture texture = this.getRenderTexture(context);
 
-        texture.bind();
-        context.draw.fullTexturedBox(area.x, area.y, area.w, area.h);
+        context.batcher.fullTexturedBox(texture, area.x, area.y, area.w, area.h);
 
         /* Draw current pixel */
         int pixelX = (int) Math.floor(this.scaleX.from(context.mouseX));
         int pixelY = (int) Math.floor(this.scaleY.from(context.mouseY));
 
-        context.draw.outline(
+        context.batcher.outline(
             (int) Math.round(this.scaleX.to(pixelX)), (int) Math.round(this.scaleY.to(pixelY)),
             (int) Math.round(this.scaleX.to(pixelX + 1)), (int) Math.round(this.scaleY.to(pixelY + 1)),
             Colors.A50
@@ -340,7 +339,7 @@ public class UIPixelsEditor extends UICanvasEditor
         int brightness = (int) (this.brightness.getValue() * 255);
         int color = Colors.setA(brightness << 16 | brightness << 8 | brightness, 1F);
 
-        Icons.CHECKBOARD.renderArea(context.draw, area.x, area.y, area.w, area.h, color);
+        context.batcher.iconArea(Icons.CHECKBOARD, color, area.x, area.y, area.w, area.h);
     }
 
     @Override
@@ -350,8 +349,8 @@ public class UIPixelsEditor extends UICanvasEditor
 
         if (this.editing)
         {
-            context.draw.box(this.area.x, this.area.y, this.area.ex(), this.area.y + 10, Colors.A50);
-            context.draw.gradientVBox(this.area.x, this.area.y + 10, this.area.ex(), this.area.y + 30, Colors.A50, 0);
+            context.batcher.box(this.area.x, this.area.y, this.area.ex(), this.area.y + 10, Colors.A50);
+            context.batcher.gradientVBox(this.area.x, this.area.y + 10, this.area.ex(), this.area.y + 30, Colors.A50, 0);
         }
 
         Vector2i pixel = this.getHoverPixel(context.mouseX, context.mouseY);
@@ -380,7 +379,7 @@ public class UIPixelsEditor extends UICanvasEditor
 
         for (String line : information)
         {
-            context.draw.textCard(context.font, line, x, y);
+            context.batcher.textCard(context.font, line, x, y);
 
             y += 14;
         }

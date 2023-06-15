@@ -116,9 +116,9 @@ public abstract class UICanvas extends UIElement
     {
         this.dragging(context);
 
-        context.draw.clip(this.area, context);
+        context.batcher.clip(this.area, context);
         this.renderCanvas(context);
-        context.draw.unclip(context);
+        context.batcher.unclip(context);
 
         super.render(context);
     }

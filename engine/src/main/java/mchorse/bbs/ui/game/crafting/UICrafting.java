@@ -114,7 +114,7 @@ public class UICrafting extends UIElement implements ICraftingScreen
         {
             int w = context.font.getWidth(this.table.getId());
 
-            context.draw.textCard(context.font, this.table.getId(), this.area.mx(w), this.craft.area.my(context.font.getHeight() - 2));
+            context.batcher.textCard(context.font, this.table.getId(), this.area.mx(w), this.craft.area.my(context.font.getHeight() - 2));
         }
     }
 }

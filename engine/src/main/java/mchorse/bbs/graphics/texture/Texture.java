@@ -123,7 +123,7 @@ public class Texture implements IDisposable
 
     public void updateTexture(int target, Pixels pixels)
     {
-        this.uploadTexture(target, pixels.width, pixels.height, pixels.bits, pixels.getBuffer());
+        this.uploadTexture(target, 0, pixels.width, pixels.height, pixels.getBuffer());
     }
 
     public void uploadTexture(Pixels pixels)
@@ -149,7 +149,7 @@ public class Texture implements IDisposable
 
     public void uploadTexture(int target, int level, int w, int h, ByteBuffer buffer)
     {
-        GL11.glTexImage2D(target, level, this.internalFormat, w, h, 0, this.format, GL11.GL_UNSIGNED_BYTE, buffer);
+        GL11.glTexImage2D(target, level, this.internalFormat, w, h, 0, this.format, this.type, buffer);
 
         if (level == 0)
         {

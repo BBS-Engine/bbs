@@ -304,8 +304,8 @@ public class ThirdPersonGameController extends BaseGameController
             int x = w / 2;
             int y = h / 2;
 
-            context.draw.box(x - 4, y - 1, x + 3, y, Colors.A50 | Colors.WHITE);
-            context.draw.box(x - 1, y - 4, x, y + 3, Colors.A50 | Colors.WHITE);
+            context.batcher.box(x - 4, y - 1, x + 3, y, Colors.A50 | Colors.WHITE);
+            context.batcher.box(x - 1, y - 4, x, y + 3, Colors.A50 | Colors.WHITE);
         }
 
         super.renderHUD(context, w, h);

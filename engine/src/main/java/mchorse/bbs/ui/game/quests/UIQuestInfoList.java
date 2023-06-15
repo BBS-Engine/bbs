@@ -28,7 +28,7 @@ public class UIQuestInfoList extends UIList<QuestInfo>
     @Override
     protected void renderElementPart(UIContext context, QuestInfo element, int i, int x, int y, boolean hover, boolean selected)
     {
-        context.font.renderWithShadow(context.render, this.elementToString(i, element), x + 4, y + this.scroll.scrollItemSize / 2 - context.font.getHeight() / 2, element.status.color.getRGBColor());
+        context.batcher.textShadow(this.elementToString(i, element), x + 4, y + this.scroll.scrollItemSize / 2 - context.font.getHeight() / 2, element.status.color.getRGBColor());
     }
 
     @Override

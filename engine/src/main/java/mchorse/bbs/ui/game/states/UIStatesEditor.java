@@ -83,7 +83,7 @@ public class UIStatesEditor extends UIScrollView
             int w = this.area.w / 2;
             int x = this.area.mx(w);
 
-            context.draw.wallText(context.font, UIKeys.STATES_EMPTY.get(), x, this.area.my(), Colors.WHITE, w, 12, 0.5F, 0.5F);
+            context.batcher.wallText(context.font, UIKeys.STATES_EMPTY.get(), x, this.area.my(), Colors.WHITE, w, 12, 0.5F, 0.5F);
         }
     }
 }

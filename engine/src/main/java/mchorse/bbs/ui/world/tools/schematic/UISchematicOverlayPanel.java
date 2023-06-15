@@ -116,7 +116,7 @@ public class UISchematicOverlayPanel extends UIOverlayPanel
 
     private void renderScrollBackground(UIContext context)
     {
-        this.blocks.area.render(context.draw, Colors.A50);
+        this.blocks.area.render(context.batcher, Colors.A50);
     }
 
     @Override
@@ -131,6 +131,6 @@ public class UISchematicOverlayPanel extends UIOverlayPanel
 
         super.renderBackground(context);
 
-        this.renderer.area.render(context.draw, 0xff2f2f2f);
+        this.renderer.area.render(context.batcher, 0xff2f2f2f);
     }
 }

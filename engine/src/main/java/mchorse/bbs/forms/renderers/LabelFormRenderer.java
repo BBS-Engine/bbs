@@ -32,7 +32,7 @@ public class LabelFormRenderer extends FormRenderer<LabelForm>
     {
         int color = this.form.color.get(context.getTransition()).getARGBColor();
 
-        context.draw.wallText(this.getRenderer(this.form.font.get(), context.render), TextUtils.processColoredText(this.form.text.get()), x1 + 4, y1 + 4, color, x2 - x1 - 8);
+        context.batcher.wallText(this.getRenderer(this.form.font.get(), context.render), TextUtils.processColoredText(this.form.text.get()), x1 + 4, y1 + 4, color, x2 - x1 - 8);
     }
 
     @Override

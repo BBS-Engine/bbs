@@ -1,6 +1,7 @@
 package mchorse.bbs.ui.dashboard;
 
 import mchorse.bbs.BBS;
+import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.bridge.IBridgePlayer;
@@ -408,12 +409,27 @@ public class UIDashboard extends UIBaseMenu
 
         if (this.panels.panel != null && this.panels.panel.needsBackground())
         {
-            context.draw.background(0, 0, this.width, this.height);
+            this.background(context);
         }
         else
         {
-            context.draw.gradientVBox(0, 0, this.width, this.height / 8, Colors.A25, 0);
-            context.draw.gradientVBox(0, this.height - this.height / 8, this.width, this.height, 0, Colors.A25);
+            context.batcher.gradientVBox(0, 0, this.width, this.height / 8, Colors.A25, 0);
+            context.batcher.gradientVBox(0, this.height - this.height / 8, this.width, this.height, 0, Colors.A25);
+        }
+    }
+
+    private void background(UIRenderingContext context)
+    {
+        Link background = BBSSettings.backgroundImage.get();
+        int color = BBSSettings.backgroundColor.get();
+
+        if (background == null)
+        {
+            context.batcher.box(0, 0, this.width, this.height, color);
+        }
+        else
+        {
+            context.batcher.texturedBox(context.getTextures().getTexture(background), color, 0, 0, this.width, this.height, 0, 0, this.width, this.height, this.width, this.height);
         }
     }
 
@@ -443,11 +459,11 @@ public class UIDashboard extends UIBaseMenu
 
         if (this.main.isVisible() && this.orbit.distance > 0.1F && this.displayAxes && this.panels.isFlightSupported())
         {
-            this.renderAxes(context);
+            this.renderWorldAxes(context);
         }
     }
 
-    public void renderAxes(RenderingContext context)
+    public void renderWorldAxes(RenderingContext context)
     {
         Vector3f relative = context.getCamera().getRelative(this.orbit.position);
 
@@ -501,19 +517,19 @@ public class UIDashboard extends UIBaseMenu
             GLStates.depthTest(false);
             GLStates.cullFaces(false);
 
-            this.renderAxisLabel(context, "-X", -labelOffset, 0, 0, relative);
-            this.renderAxisLabel(context, "+X", labelOffset, 0, 0, relative);
-            this.renderAxisLabel(context, "+Y", 0, labelOffset, 0, relative);
-            this.renderAxisLabel(context, "-Y", 0, -labelOffset, 0, relative);
-            this.renderAxisLabel(context, "-Z", 0, 0, -labelOffset, relative);
-            this.renderAxisLabel(context, "+Z", 0, 0, labelOffset, relative);
+            this.renderWorldAxisLabel(context, "-X", -labelOffset, 0, 0, relative);
+            this.renderWorldAxisLabel(context, "+X", labelOffset, 0, 0, relative);
+            this.renderWorldAxisLabel(context, "+Y", 0, labelOffset, 0, relative);
+            this.renderWorldAxisLabel(context, "-Y", 0, -labelOffset, 0, relative);
+            this.renderWorldAxisLabel(context, "-Z", 0, 0, -labelOffset, relative);
+            this.renderWorldAxisLabel(context, "+Z", 0, 0, labelOffset, relative);
 
             GLStates.depthTest(true);
             GLStates.cullFaces(true);
         }
     }
 
-    private void renderAxisLabel(RenderingContext context, String label, float x, float y, float z, Vector3f relative)
+    private void renderWorldAxisLabel(RenderingContext context, String label, float x, float y, float z, Vector3f relative)
     {
         final float scale = 0.125F / 16F;
         MatrixStack stack = context.stack;
@@ -535,7 +551,7 @@ public class UIDashboard extends UIBaseMenu
 
         font.bindTexture(context);
 
-        VAOBuilder builder = context.getVAO().setup(shader, VAO.DATA, VAO.INDICES);
+        VAOBuilder builder = context.getVAO().setup(shader, VAO.INDICES);
 
         builder.begin();
         font.buildVAO(-font.getWidth(label) / 2, -font.getHeight() / 2, label, builder, ITextBuilder.colored3D.setup(Colors.A100));

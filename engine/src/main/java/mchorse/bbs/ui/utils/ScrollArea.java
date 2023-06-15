@@ -2,7 +2,7 @@ package mchorse.bbs.ui.utils;
 
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.utils.UIDraw;
+import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.MathUtils;
 
@@ -66,13 +66,13 @@ public class ScrollArea extends Area
      */
     public boolean drawScrollbars = true;
 
-    public static void bar(UIDraw draw, int x1, int y1, int x2, int y2, int color)
+    public static void bar(Batcher2D batcher, int x1, int y1, int x2, int y2, int color)
     {
-        draw.dropShadow(x1, y1, x2, y2, 5, color, Colors.setA(color, 0F));
+        batcher.dropShadow(x1, y1, x2, y2, 5, color, Colors.setA(color, 0F));
 
-        draw.box(x1, y1, x2, y2, 0xffeeeeee);
-        draw.box(x1 + 1, y1 + 1, x2, y2, 0xff666666);
-        draw.box(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xffaaaaaa);
+        batcher.box(x1, y1, x2, y2, 0xffeeeeee);
+        batcher.box(x1 + 1, y1 + 1, x2, y2, 0xff666666);
+        batcher.box(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xffaaaaaa);
 
         int dx = x2 - x1;
         int dy = y2 - y1;
@@ -88,15 +88,15 @@ public class ScrollArea extends Area
         /* Little handle */
         if (dx > dy)
         {
-            draw.box(x - 3, y - 1, x - 2, y + 1, Colors.GRAY);
-            draw.box(x, y - 1, x + 1, y + 1, Colors.GRAY);
-            draw.box(x + 3, y - 1, x + 4, y + 1, Colors.GRAY);
+            batcher.box(x - 3, y - 1, x - 2, y + 1, Colors.GRAY);
+            batcher.box(x, y - 1, x + 1, y + 1, Colors.GRAY);
+            batcher.box(x + 3, y - 1, x + 4, y + 1, Colors.GRAY);
         }
         else
         {
-            draw.box(x - 1, y - 3, x + 1, y - 2, Colors.GRAY);
-            draw.box(x - 1, y, x + 1, y + 1, Colors.GRAY);
-            draw.box(x - 1, y + 3, x + 1, y + 4, Colors.GRAY);
+            batcher.box(x - 1, y - 3, x + 1, y - 2, Colors.GRAY);
+            batcher.box(x - 1, y, x + 1, y + 1, Colors.GRAY);
+            batcher.box(x - 1, y + 3, x + 1, y + 4, Colors.GRAY);
         }
     }
 
@@ -340,7 +340,7 @@ public class ScrollArea extends Area
     /**
      * This method is responsible for render a scroll bar
      */
-    public void renderScrollbar(UIDraw draw)
+    public void renderScrollbar(Batcher2D batcher)
     {
         int side = this.direction.getSide(this);
 
@@ -372,30 +372,30 @@ public class ScrollArea extends Area
 
             int color = BBSSettings.scrollbarShadow.get();
 
-            bar(draw, x, y, rx, ry, color);
+            bar(batcher, x, y, rx, ry, color);
         }
         else if (this.direction == ScrollDirection.VERTICAL)
         {
             if (this.scroll > 0)
             {
-                draw.gradientVBox(this.x, this.y, this.ex(), this.y + 20, shadow, 0);
+                batcher.gradientVBox(this.x, this.y, this.ex(), this.y + 20, shadow, 0);
             }
 
             if (this.scroll < this.scrollSize - side)
             {
-                draw.gradientVBox(this.x, this.ey() - 20, this.ex(), this.ey(), 0, shadow);
+                batcher.gradientVBox(this.x, this.ey() - 20, this.ex(), this.ey(), 0, shadow);
             }
         }
         else if (this.direction == ScrollDirection.HORIZONTAL)
         {
             if (this.scroll > 0)
             {
-                draw.gradientHBox(this.x, this.y, this.x + 20, this.ey(), shadow, 0);
+                batcher.gradientHBox(this.x, this.y, this.x + 20, this.ey(), shadow, 0);
             }
 
             if (this.scroll < this.scrollSize - side)
             {
-                draw.gradientHBox(this.ex() - 20, this.y, this.ex(), this.ey(), 0, shadow);
+                batcher.gradientHBox(this.ex() - 20, this.y, this.ex(), this.ey(), 0, shadow);
             }
         }
     }

@@ -50,7 +50,7 @@ public abstract class UIContextMenu extends UIElement
     @Override
     public void render(UIContext context)
     {
-        this.area.render(context.draw, Colors.A100);
+        this.area.render(context.batcher, Colors.A100);
 
         super.render(context);
     }

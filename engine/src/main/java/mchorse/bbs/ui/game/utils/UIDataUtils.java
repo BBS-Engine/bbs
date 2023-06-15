@@ -84,17 +84,17 @@ public class UIDataUtils
 
         int offset = (int) (factor * 70 + factor2 * 2);
 
-        context.draw.dropCircleShadow(area.mx(), area.my() + (int) (factor * 70), 16, 0, 16, Colors.A50 | primary, primary);
-        InputRenderer.renderMouseButtons(context.draw, area.mx() - 6, area.my() - 8 + offset, 0, false, factor2 > 0, false, false);
+        context.batcher.dropCircleShadow(area.mx(), area.my() + (int) (factor * 70), 16, 0, 16, Colors.A50 | primary, primary);
+        InputRenderer.renderMouseButtons(context.batcher, area.mx() - 6, area.my() - 8 + offset, 0, false, factor2 > 0, false, false);
 
         String label = UIKeys.RIGHT_CLICK.get();
         int w = (int) (area.w / 1.1F);
         int color = Colors.mulRGB(0x444444, 1 - (float) factor);
 
-        context.draw.wallText(context.font, label, area.mx() - w / 2, area.my() - 20, color, w, 12, 0.5F, 1);
+        context.batcher.wallText(context.font, label, area.mx() - w / 2, area.my() - 20, color, w, 12, 0.5F, 1);
 
-        context.draw.gradientVBox(area.x, area.my() + 20, area.ex(), area.my() + 40, 0, Colors.A100);
-        context.draw.box(area.x, area.my() + 40, area.ex(), area.my() + 90, Colors.A100);
+        context.batcher.gradientVBox(area.x, area.my() + 20, area.ex(), area.my() + 40, 0, Colors.A100);
+        context.batcher.box(area.x, area.my() + 40, area.ex(), area.my() + 90, Colors.A100);
     }
 
     public static UICirculate createTargetCirculate(TargetMode defaultTarget, Consumer<TargetMode> callback)

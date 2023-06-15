@@ -51,7 +51,7 @@ public class UIGraphView extends UIGraph
 
             if (cy < this.area.ey() && cx >= this.area.x && cx <= this.area.ex())
             {
-                context.draw.box(cx - 1, cy, cx + 1, this.area.ey(), Colors.CURSOR);
+                context.batcher.box(cx - 1, cy, cx + 1, this.area.ey(), Colors.CURSOR);
             }
         }
     }

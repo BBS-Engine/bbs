@@ -144,8 +144,8 @@ public class UISettingsPanel extends UIDashboardPanel
     @Override
     public void render(UIContext context)
     {
-        this.mods.area.render(context.draw, Colors.A75, -10, -35, -10, -10);
-        context.font.renderWithShadow(context.render, this.title.get(), this.area.x + 10, this.area.y + 20 - context.font.getHeight() / 2);
+        this.mods.area.render(context.batcher, Colors.A75, -10, -35, -10, -10);
+        context.batcher.textShadow(this.title.get(), this.area.x + 10, this.area.y + 20 - context.font.getHeight() / 2);
 
         super.render(context);
     }

@@ -9,8 +9,8 @@ public class LightTooltipStyle extends TooltipStyle
     @Override
     public void renderBackground(UIContext context, Area area)
     {
-        context.draw.dropShadow(area.x, area.y, area.ex(), area.ey(), 4, Colors.A50, 0);
-        area.render(context.draw, Colors.WHITE);
+        context.batcher.dropShadow(area.x, area.y, area.ex(), area.ey(), 4, Colors.A50, 0);
+        area.render(context.batcher, Colors.WHITE);
     }
 
     @Override

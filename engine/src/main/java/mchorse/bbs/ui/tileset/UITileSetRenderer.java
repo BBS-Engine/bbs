@@ -110,7 +110,7 @@ public class UITileSetRenderer extends UIModelRenderer
         {
             String label = this.lastHovered.toString();
 
-            context.draw.textCard(context.font, label, context.mouseX - context.font.getWidth(label) / 2 + 4, context.mouseY - 12);
+            context.batcher.textCard(context.font, label, context.mouseX - context.font.getWidth(label) / 2 + 4, context.mouseY - 12);
         }
     }
 
@@ -119,7 +119,7 @@ public class UITileSetRenderer extends UIModelRenderer
     {
         ChunkBuilder blockBuilder = this.editor.getBlockBuilder();
         Shader shader = context.render.getShaders().get(blockBuilder.getAttributes());
-        VAOBuilder builder = context.render.getVAO().setup(shader, VAO.DATA, VAO.INDICES);
+        VAOBuilder builder = context.render.getVAO().setup(shader, VAO.INDICES);
         BlockModelFactory hover = this.getHoverBlock(context);
         int selectedIndex = -1;
 

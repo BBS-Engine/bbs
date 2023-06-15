@@ -125,7 +125,8 @@ public class UIParticleSchemeRenderer extends UIModelRenderer
     {
         super.renderGrid(context);
 
-        VAOBuilder builder = context.render.getVAO().setup(VBOAttributes.VERTEX_RGBA);
+        Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_RGBA);
+        VAOBuilder builder = context.render.getVAO().setup(shader);
 
         builder.begin();
         Draw.axis(builder, 1F, 0.01F);

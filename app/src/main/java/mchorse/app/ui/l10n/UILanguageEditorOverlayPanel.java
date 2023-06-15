@@ -354,7 +354,7 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
 
         if (this.viewMissing)
         {
-            this.missing.area.render(context.draw, Colors.A50 | BBSSettings.primaryColor.get());
+            this.missing.area.render(context.batcher, Colors.A50 | BBSSettings.primaryColor.get());
         }
     }
 }

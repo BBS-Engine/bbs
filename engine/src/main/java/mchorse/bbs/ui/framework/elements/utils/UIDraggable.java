@@ -53,7 +53,7 @@ public class UIDraggable extends UIElement
 
         if (!this.hover || this.area.isInside(context) || this.dragging)
         {
-            ScrollArea.bar(context.draw, this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.A50);
+            ScrollArea.bar(context.batcher, this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.A50);
         }
 
         if (this.dragging && this.callback != null)

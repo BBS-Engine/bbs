@@ -6,7 +6,7 @@ import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.framework.UIBaseMenu;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.utils.UIDraw;
+import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.keys.KeyCodes;
 import mchorse.bbs.utils.colors.Colors;
@@ -39,18 +39,18 @@ public class InputRenderer
     }
 
     /* Shift -6 and -8 to get it into the center */
-    public static void renderMouseButtons(UIDraw draw, int x, int y, int scroll, boolean left, boolean right, boolean middle, boolean isScrolling)
+    public static void renderMouseButtons(Batcher2D batcher, int x, int y, int scroll, boolean left, boolean right, boolean middle, boolean isScrolling)
     {
-        Icons.MOUSE_BODY.render(draw, x - 1, y);
+        batcher.icon(Icons.MOUSE_BODY, x - 1, y);
 
         if (left)
         {
-            Icons.MOUSE_LMB.render(draw, x, y + 1);
+            batcher.icon(Icons.MOUSE_LMB, x, y + 1);
         }
 
         if (right)
         {
-            Icons.MOUSE_RMB.render(draw, x + 6, y + 1);
+            batcher.icon(Icons.MOUSE_RMB, x + 6, y + 1);
         }
 
         if (middle || isScrolling)
@@ -64,19 +64,19 @@ public class InputRenderer
                 offset = scroll < 0 ? 1 : -1;
             }
 
-            draw.box(x + 4, y, x + 8, y + 6, 0x20000000);
-            draw.box(x + 5, y + 1 + offset, x + 7, y + 5 + offset, 0xff444444);
-            draw.box(x + 5, y + 4 + offset, x + 7, y + 5 + offset, 0xff333333);
+            batcher.box(x + 4, y, x + 8, y + 6, 0x20000000);
+            batcher.box(x + 5, y + 1 + offset, x + 7, y + 5 + offset, 0xff444444);
+            batcher.box(x + 5, y + 4 + offset, x + 7, y + 5 + offset, 0xff333333);
         }
     }
 
-    public static void renderMouseWheel(UIDraw draw, int x, int y, int scroll, long current)
+    public static void renderMouseWheel(Batcher2D batcher, int x, int y, int scroll, long current)
     {
         int color = BBSSettings.primaryColor.get();
 
-        draw.dropShadow(x, y, x + 4, y + 16, 2, Colors.A50 | color, color);
-        draw.box(x, y, x + 4, y + 16, 0xff111111);
-        draw.box(x + 1, y, x + 3, y + 15, 0xff2a2a2a);
+        batcher.dropShadow(x, y, x + 4, y + 16, 2, Colors.A50 | color, color);
+        batcher.box(x, y, x + 4, y + 16, 0xff111111);
+        batcher.box(x + 1, y, x + 3, y + 15, 0xff2a2a2a);
 
         int offset = (int) ((current % 1000 / 50) % 4);
 
@@ -87,7 +87,7 @@ public class InputRenderer
 
         for (int i = 0; i < 4; i++)
         {
-            draw.box(x, y + offset, x + 4, y + offset + 1, 0x88555555);
+            batcher.box(x, y + offset, x + 4, y + offset + 1, 0x88555555);
 
             y += 4;
         }
@@ -102,7 +102,7 @@ public class InputRenderer
             return;
         }
 
-        this.renderMouse(menu.context.draw, mouseX, mouseY);
+        this.renderMouse(menu.context.batcher, mouseX, mouseY);
 
         if (BBSSettings.enableKeystrokeRendering.get())
         {
@@ -113,11 +113,11 @@ public class InputRenderer
     /**
      * Draw mouse cursor
      */
-    private void renderMouse(UIDraw draw, int x, int y)
+    private void renderMouse(Batcher2D batcher, int x, int y)
     {
         if (BBSSettings.enableCursorRendering.get())
         {
-            Icons.CURSOR.render(draw, x, y);
+            batcher.icon(Icons.CURSOR, x, y);
         }
 
         if (BBSSettings.enableMouseButtonRendering.get())
@@ -146,14 +146,14 @@ public class InputRenderer
 
             if (left || right || middle || isScrolling)
             {
-                renderMouseButtons(draw, x, y, scroll, left, right, middle, isScrolling);
+                renderMouseButtons(batcher, x, y, scroll, left, right, middle, isScrolling);
             }
 
             if (isScrolling)
             {
                 x += 16;
 
-                renderMouseWheel(draw, x, y, scroll, current);
+                renderMouseWheel(batcher, x, y, scroll, current);
             }
         }
     }
@@ -219,12 +219,12 @@ public class InputRenderer
                 int y = my + (int) (Interpolation.EXP_INOUT.interpolate(0, 1, key.getFactor()) * 50 * fy);
                 int fw = 16 + key.width;
 
-                UIDraw draw = menu.context.draw;
+                Batcher2D batcher = menu.context.batcher;
 
-                Icons.KEY_CAP_LEFT.render(draw, x, y);
-                Icons.KEY_CAP_REPEATABLE.renderArea(draw, x + 4, y, fw - 8, 20);
-                Icons.KEY_CAP_RIGHT.render(draw, x + fw, y, 1F, 0F);
-                font.render(draw.context, key.getLabel(), x + 8, y + 5, Colors.A100);
+                batcher.icon(Icons.KEY_CAP_LEFT, x, y);
+                batcher.iconArea(Icons.KEY_CAP_REPEATABLE, x + 4, y, fw - 8, 20);
+                batcher.icon(Icons.KEY_CAP_RIGHT, x + fw, y, 1F, 0F);
+                batcher.text(key.getLabel(), x + 8, y + 5, Colors.A100);
             }
         }
 

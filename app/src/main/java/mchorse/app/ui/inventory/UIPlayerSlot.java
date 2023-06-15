@@ -66,12 +66,12 @@ public class UIPlayerSlot extends UIElement implements IUIInventory
     @Override
     public void render(UIContext context)
     {
-        context.draw.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.WHITE);
-        context.draw.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
+        context.batcher.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.WHITE);
+        context.batcher.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
 
         if (this.area.isInside(context))
         {
-            context.draw.box(this.area.x + 1, this.area.y + 1, this.area.x + 19, this.area.y + 19, Colors.A75 | BBSSettings.primaryColor.get());
+            context.batcher.box(this.area.x + 1, this.area.y + 1, this.area.x + 19, this.area.y + 19, Colors.A75 | BBSSettings.primaryColor.get());
         }
 
         BBS.getItems().renderInUI(context.render, this.inventory.getStack(this.slot), this.area.x, this.area.y, this.area.w, this.area.h);

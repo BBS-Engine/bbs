@@ -28,6 +28,8 @@ public class ParticleFormRenderer extends FormRenderer<ParticleForm>
     @Override
     public void renderUI(UIContext context, int x1, int y1, int x2, int y2)
     {
+        context.batcher.render();
+
         this.form.ensureEmitter(context.menu.bridge.get(IBridgeWorld.class).getWorld());
 
         ParticleEmitter emitter = this.form.getEmitter();

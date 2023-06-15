@@ -66,8 +66,8 @@ public class UIBasicInteractionMenu extends UIBaseInteractionMenu
 
         UIRenderable background = new UIRenderable((context) ->
         {
-            context.draw.box(0, 0, this.area.area.x(0.65F), this.area.area.ey(), Colors.A75);
-            context.draw.gradientHBox(this.area.area.x(0.65F), 0, this.area.area.x(1.125F), this.area.area.ey(), Colors.A75, 0);
+            context.batcher.box(0, 0, this.area.area.x(0.65F), this.area.area.ey(), Colors.A75);
+            context.batcher.gradientHBox(this.area.area.x(0.65F), 0, this.area.area.x(1.125F), this.area.area.ey(), Colors.A75, 0);
         });
 
         this.area.add(this.quest, this.crafting, this.replies, this.reactionText, this.back);

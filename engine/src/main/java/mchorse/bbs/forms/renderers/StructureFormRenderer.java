@@ -8,7 +8,6 @@ import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.texture.Texture;
-import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.voxel.ChunkBuilder;
@@ -74,7 +73,7 @@ public class StructureFormRenderer extends FormRenderer<StructureForm>
             x -= context.font.getWidth(label) / 2;
             y -= context.font.getHeight() / 2;
 
-            context.font.renderWithShadow(context.render, label, x, y);
+            context.batcher.textShadow(label, x, y);
         }
     }
 

@@ -75,13 +75,13 @@ public class UIForms extends UIList<UIForms.FormEntry>
         {
             x += this.scroll.w - 40;
 
-            context.draw.clip(x, y, 40, 20, context);
+            context.batcher.clip(x, y, 40, 20, context);
 
             y -= 10;
 
             form.getRenderer().renderUI(context, x, y, x + 40, y + 40);
 
-            context.draw.unclip(context);
+            context.batcher.unclip(context);
         }
     }
 

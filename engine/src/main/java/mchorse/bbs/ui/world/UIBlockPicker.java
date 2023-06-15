@@ -98,10 +98,10 @@ public class UIBlockPicker extends UIElement
     {
         this.scroll.drag(context);
 
-        context.draw.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.WHITE);
-        context.draw.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
+        context.batcher.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.WHITE);
+        context.batcher.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
 
-        context.draw.clip(this.scroll, context);
+        context.batcher.clip(this.scroll, context);
 
         int blocks = this.scroll.w / BLOCK_SLOT_SIZE;
         int hovered = -2;
@@ -117,7 +117,7 @@ public class UIBlockPicker extends UIElement
 
             boolean inside = Area.SHARED.isInside(context);
 
-            context.draw.box(x + 1, y + 1, x + BLOCK_SLOT_SIZE - 1, y + BLOCK_SLOT_SIZE - 1, inside ? Colors.setA(Colors.ACTIVE, 0.25F) : Colors.A25);
+            context.batcher.box(x + 1, y + 1, x + BLOCK_SLOT_SIZE - 1, y + BLOCK_SLOT_SIZE - 1, inside ? Colors.setA(Colors.ACTIVE, 0.25F) : Colors.A25);
 
             if (inside)
             {
@@ -126,6 +126,8 @@ public class UIBlockPicker extends UIElement
                 hoveredY = y;
             }
         }
+
+        context.batcher.render();
 
         Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_NORMAL_UV_RGBA);
         ChunkBuilder blockBuilder = context.menu.bridge.get(IBridgeWorld.class).getChunkBuilder();
@@ -143,18 +145,18 @@ public class UIBlockPicker extends UIElement
             int y = this.scroll.y + (i / blocks) * BLOCK_SLOT_SIZE - this.scroll.scroll;
             int scale = 12;
 
-            context.draw.clip(x + 1, y + 1, BLOCK_SLOT_SIZE - 2, BLOCK_SLOT_SIZE - 2, context);
+            context.batcher.clip(x + 1, y + 1, BLOCK_SLOT_SIZE - 2, BLOCK_SLOT_SIZE - 2, context);
             blockBuilder.renderInUI(context, variant, x + BLOCK_SLOT_SIZE / 2, y + BLOCK_SLOT_SIZE / 2, scale);
-            context.draw.unclip(context);
+            context.batcher.unclip(context);
         }
 
         CommonShaderAccess.resetColor(shader);
 
         GLStates.setupDepthFunction2D();
 
-        this.scroll.renderScrollbar(context.draw);
+        this.scroll.renderScrollbar(context.batcher);
 
-        context.draw.unclip(context);
+        context.batcher.unclip(context);
 
         if (hovered >= -1)
         {
@@ -162,7 +164,7 @@ public class UIBlockPicker extends UIElement
             String label = variant.getLink().toString();
             int w = context.font.getWidth(label);
 
-            context.draw.textCard(context.font, label, hoveredX + BLOCK_SLOT_SIZE / 2 - w / 2, hoveredY + BLOCK_SLOT_SIZE + 2);
+            context.batcher.textCard(context.font, label, hoveredX + BLOCK_SLOT_SIZE / 2 - w / 2, hoveredY + BLOCK_SLOT_SIZE + 2);
         }
 
         super.render(context);

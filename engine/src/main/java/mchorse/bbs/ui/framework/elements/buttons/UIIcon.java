@@ -76,15 +76,8 @@ public class UIIcon extends UIClickable<UIIcon>
     protected void renderSkin(UIContext context)
     {
         Icon icon = this.hover ? this.hoverIcon : this.icon;
-        int color = this.hover ? this.hoverColor : this.iconColor;
+        int color = this.isEnabled() ? (this.hover ? this.hoverColor : this.iconColor) : this.disabledColor;
 
-        if (this.isEnabled())
-        {
-            icon.render(context.draw, this.area.mx(), this.area.my(), color, 0.5F, 0.5F);
-        }
-        else
-        {
-            icon.render(context.draw, this.area.mx(), this.area.my(), this.disabledColor, 0.5F, 0.5F);
-        }
+        context.batcher.icon(icon, color, this.area.mx(), this.area.my(), 0.5F, 0.5F);
     }
 }

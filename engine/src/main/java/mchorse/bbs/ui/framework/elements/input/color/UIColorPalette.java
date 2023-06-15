@@ -87,10 +87,10 @@ public class UIColorPalette extends UIElement
 
             if (this.area.h > this.cellSize)
             {
-                Icons.CHECKBOARD.renderArea(context.draw, this.area.x, this.area.y, this.area.w, this.area.h - this.cellSize);
+                context.batcher.iconArea(Icons.CHECKBOARD, this.area.x, this.area.y, this.area.w, this.area.h - this.cellSize);
             }
 
-            Icons.CHECKBOARD.renderArea(context.draw, this.area.x, this.area.ey() - this.cellSize, count % elements * this.cellSize, this.cellSize);
+            context.batcher.iconArea(Icons.CHECKBOARD, this.area.x, this.area.ey() - this.cellSize, count % elements * this.cellSize, this.cellSize);
 
             for (int i = count - 1, j = 0; i >= 0; i--, j++)
             {
@@ -98,7 +98,7 @@ public class UIColorPalette extends UIElement
                 int x = this.area.x + j % elements * this.cellSize;
                 int y = this.area.y + j / elements * this.cellSize;
 
-                UIColorPicker.renderAlphaPreviewQuad(context.render, x, y, x + this.cellSize, y + this.cellSize, c);
+                UIColorPicker.renderAlphaPreviewQuad(context.batcher, x, y, x + this.cellSize, y + this.cellSize, c);
             }
         }
 

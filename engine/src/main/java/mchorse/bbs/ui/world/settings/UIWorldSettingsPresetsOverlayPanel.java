@@ -122,7 +122,7 @@ public class UIWorldSettingsPresetsOverlayPanel extends UIOverlayPanel
 
         if (list.getList().isEmpty())
         {
-            context.draw.wallText(context.font, UIKeys.WORLD_SETTINGS_PRESETS_EMPTY.get(), list.area.x(0.25F), list.area.my(), Colors.WHITE, list.area.w / 2, 12, 0.5F, 0.5F);
+            context.batcher.wallText(context.font, UIKeys.WORLD_SETTINGS_PRESETS_EMPTY.get(), list.area.x(0.25F), list.area.my(), Colors.WHITE, list.area.w / 2, 12, 0.5F, 0.5F);
         }
     }
 }

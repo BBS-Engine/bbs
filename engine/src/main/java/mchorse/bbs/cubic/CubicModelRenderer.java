@@ -45,7 +45,7 @@ public class CubicModelRenderer
         this.vaoModel = BBS.getVAOs().create();
         this.vaoModel.register(VBOAttributes.VERTEX_NORMAL_UV_RGBA_BONES);
 
-        VAOBuilder builder = BBS.getRender().getVAO().setup(this.vaoModel, VAO.DATA, null);
+        VAOBuilder builder = BBS.getRender().getVAO().setup(this.vaoModel, null);
         MatrixStack stack = new MatrixStack();
         CubicVAORenderer processor = new CubicVAORenderer(this.model.normals);
 

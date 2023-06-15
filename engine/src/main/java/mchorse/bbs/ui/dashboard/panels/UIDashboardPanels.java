@@ -45,8 +45,8 @@ public class UIDashboardPanels extends UIElement
                     Area area = ((UIIcon) this.panelButtons.getChildren().get(i)).area;
                     int color = BBSSettings.primaryColor.get();
 
-                    context.draw.box(area.x, area.ey() - 2, area.ex(), area.ey(), Colors.A100 | color);
-                    context.draw.gradientVBox(area.x, area.y, area.ex(), area.ey() - 2, color, Colors.A75 | color);
+                    context.batcher.box(area.x, area.ey() - 2, area.ex(), area.ey(), Colors.A100 | color);
+                    context.batcher.gradientVBox(area.x, area.y, area.ex(), area.ey() - 2, color, Colors.A75 | color);
                 }
             }
         });
@@ -135,8 +135,8 @@ public class UIDashboardPanels extends UIElement
         Area area = this.taskBar.area;
         Area a = this.pinned.area;
 
-        context.draw.box(area.x, area.y, area.ex(), area.ey(), 0xff141417);
-        context.draw.box(a.ex() + 2, a.y + 3, a.ex() + 3, a.ey() - 3, 0x44ffffff);
+        context.batcher.box(area.x, area.y, area.ex(), area.ey(), 0xff141417);
+        context.batcher.box(a.ex() + 2, a.y + 3, a.ex() + 3, a.ey() - 3, 0x44ffffff);
     }
 
     public static class PanelEvent extends UIEvent<UIDashboardPanels>

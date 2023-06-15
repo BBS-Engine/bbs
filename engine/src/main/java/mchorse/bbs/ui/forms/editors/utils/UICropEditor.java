@@ -154,8 +154,7 @@ public class UICropEditor extends UICanvasEditor
     {
         Area area = this.calculate(-this.w / 2, -this.h / 2, this.w / 2, this.h / 2);
 
-        context.render.getTextures().bind(this.texture);
-        context.draw.fullTexturedBox(area.x, area.y, area.w, area.h);
+        context.batcher.fullTexturedBox(context.render.getTextures().getTexture(this.texture), area.x, area.y, area.w, area.h);
     }
 
     @Override
@@ -163,8 +162,8 @@ public class UICropEditor extends UICanvasEditor
     {
         Area area = this.calculateCropArea();
 
-        context.draw.normalizedBox(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.ACTIVE, 0.25F));
-        context.draw.normalizedBox(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.WHITE, 0.25F));
+        context.batcher.normalizedBox(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.ACTIVE, 0.25F));
+        context.batcher.normalizedBox(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.WHITE, 0.25F));
 
         this.drawHandle(context, 0, new Vector2f(area.x, area.y));
         this.drawHandle(context, 1, new Vector2f(area.ex(), area.y));
@@ -183,8 +182,8 @@ public class UICropEditor extends UICanvasEditor
             color = Colors.setA(Colors.ACTIVE, 1F);
         }
 
-        context.draw.box(x - 3, y - 3, x + 3, y + 3, color);
-        context.draw.box(x - 2, y - 2, x + 2, y + 2, Colors.A100);
+        context.batcher.box(x - 3, y - 3, x + 3, y + 3, color);
+        context.batcher.box(x - 2, y - 2, x + 2, y + 2, Colors.A100);
     }
 
     private Area calculateCropArea()

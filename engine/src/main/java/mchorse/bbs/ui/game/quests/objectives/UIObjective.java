@@ -33,7 +33,7 @@ public abstract class UIObjective <T extends Objective> extends UIElement
 
         if (this.message.hasParent())
         {
-            context.font.renderWithShadow(context.render, UIKeys.QUESTS_OBJECTIVES_MESSAGE.get(), this.message.area.x, this.message.area.y - 12);
+            context.batcher.textShadow(UIKeys.QUESTS_OBJECTIVES_MESSAGE.get(), this.message.area.x, this.message.area.y - 12);
         }
     }
 }

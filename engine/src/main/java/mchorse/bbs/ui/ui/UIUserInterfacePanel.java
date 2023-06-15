@@ -300,7 +300,7 @@ public class UIUserInterfacePanel extends UIDataDashboardPanel<UserInterface>
     {
         if (this.editorPane.isVisible())
         {
-            this.editorPane.area.render(context.draw, Colors.A50);
+            this.editorPane.area.render(context.batcher, Colors.A50);
         }
 
         super.renderBackground(context);
@@ -314,16 +314,16 @@ public class UIUserInterfacePanel extends UIDataDashboardPanel<UserInterface>
         {
             Area area = hovered.a.area;
 
-            context.draw.outline(area.x - 1, area.y - 1, area.ex() + 1, area.ey() + 1, Colors.A100);
-            context.draw.box(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.ACTIVE, 0.5F));
+            context.batcher.outline(area.x - 1, area.y - 1, area.ex() + 1, area.ey() + 1, Colors.A100);
+            context.batcher.box(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.ACTIVE, 0.5F));
         }
 
         if (hovered.b != null && hovered.b != hovered.a)
         {
             Area area = hovered.b.area;
 
-            context.draw.outline(area.x - 1, area.y - 1, area.ex() + 1, area.ey() + 1, Colors.A100);
-            context.draw.box(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.POSITIVE, 0.25F));
+            context.batcher.outline(area.x - 1, area.y - 1, area.ex() + 1, area.ey() + 1, Colors.A100);
+            context.batcher.box(area.x, area.y, area.ex(), area.ey(), Colors.setA(Colors.POSITIVE, 0.25F));
         }
 
         if (this.timer.checkReset())
@@ -333,7 +333,7 @@ public class UIUserInterfacePanel extends UIDataDashboardPanel<UserInterface>
 
         if (this.editorPane.canBeSeen())
         {
-            this.editorPane.area.render(context.draw, Colors.A25);
+            this.editorPane.area.render(context.batcher, Colors.A25);
         }
     }
 

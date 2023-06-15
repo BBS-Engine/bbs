@@ -1,7 +1,6 @@
 package mchorse.bbs.ui.world;
 
 import mchorse.bbs.BBSSettings;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
@@ -99,7 +98,7 @@ public class UIMaskContextMenu extends UIContextMenu
     {
         int color = BBSSettings.primaryColor.get();
 
-        context.draw.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
+        context.batcher.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
 
         super.render(context);
     }

@@ -30,7 +30,7 @@ public class UIConditionBlockList extends UIList<ConditionBlock>
             y -= 4;
             int w = context.font.getWidth(label);
 
-            context.draw.textCard(context.font, label, this.scroll.mx(w), y, Colors.WHITE, Colors.A50, 2);
+            context.batcher.textCard(context.font, label, this.scroll.mx(w), y, Colors.WHITE, Colors.A50, 2);
         }
     }
 
@@ -39,12 +39,12 @@ public class UIConditionBlockList extends UIList<ConditionBlock>
     {
         int color = BBS.getFactoryConditions().getData(element).color;
 
-        context.draw.box(x, y, x + 4, y + this.scroll.scrollItemSize, Colors.A100 + color);
-        context.draw.gradientHBox(x + 4, y, x + 24, y + this.scroll.scrollItemSize, Colors.A25 + color, color);
+        context.batcher.box(x, y, x + 4, y + this.scroll.scrollItemSize, Colors.A100 + color);
+        context.batcher.gradientHBox(x + 4, y, x + 24, y + this.scroll.scrollItemSize, Colors.A25 + color, color);
 
         if (element.not)
         {
-            context.draw.textCard(context.font, "!", x + 6, y + this.scroll.scrollItemSize / 2 - context.font.getHeight() / 2,Colors.WHITE, Colors.A50, 2);
+            context.batcher.textCard(context.font, "!", x + 6, y + this.scroll.scrollItemSize / 2 - context.font.getHeight() / 2,Colors.WHITE, Colors.A50, 2);
         }
 
         super.renderElementPart(context, element, i, x + 4, y, hover, selected);

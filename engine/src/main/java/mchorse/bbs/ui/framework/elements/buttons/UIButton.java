@@ -75,15 +75,15 @@ public class UIButton extends UIClickable<UIButton> implements ITextColoring
 
         if (this.background)
         {
-            this.area.render(context.draw, color);
+            this.area.render(context.batcher, color);
         }
 
         String label = context.font.limitToWidth(this.label.get(), this.area.w - 4);
         int x = this.area.mx(context.font.getWidth(label));
         int y = this.area.my(context.font.getHeight());
 
-        context.font.render(context.render, label, x, y, Colors.mulRGB(this.textColor, this.hover ? 0.9F : 1F), this.textShadow);
+        context.batcher.text(label, x, y, Colors.mulRGB(this.textColor, this.hover ? 0.9F : 1F), this.textShadow);
 
-        context.draw.lockedArea(this);
+        this.renderLockedArea(context);
     }
 }

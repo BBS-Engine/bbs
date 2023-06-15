@@ -44,8 +44,8 @@ public class UIKeybinds extends UIScrollView
     {
         int cx = 40;
 
-        context.draw.box(this.area.x, this.area.y, cx, this.area.ey(), Colors.A75);
-        context.draw.gradientHBox(cx, this.area.y, this.area.ex(), this.area.ey(), Colors.A75, 0);
+        context.batcher.box(this.area.x, this.area.y, cx, this.area.ey(), Colors.A75);
+        context.batcher.gradientHBox(cx, this.area.y, this.area.ex(), this.area.ey(), Colors.A75, 0);
 
         super.render(context);
     }
@@ -106,8 +106,8 @@ public class UIKeybinds extends UIScrollView
 
             if (!title.isEmpty())
             {
-                context.draw.box(x - 10, y + i - 2, x + context.font.getWidth(title) + 2, y + i + context.font.getHeight() + 2, color);
-                context.font.render(context.render, title, x, y + i);
+                context.batcher.box(x - 10, y + i - 2, x + context.font.getWidth(title) + 2, y + i + context.font.getHeight() + 2, color);
+                context.batcher.text(title, x, y + i);
                 i += 14;
             }
 
@@ -116,9 +116,9 @@ public class UIKeybinds extends UIScrollView
                 String combo = keybind.getKeyCombo();
                 int w = context.font.getWidth(combo);
 
-                context.draw.box(x - 2, y + i - 2, x + w + 2, y + i + context.font.getHeight() + 2, color);
-                context.font.render(context.render, combo, x, y + i);
-                context.font.renderWithShadow(context.render, keybind.getLabel().get(), x + w + 5, y + i);
+                context.batcher.box(x - 2, y + i - 2, x + w + 2, y + i + context.font.getHeight() + 2, color);
+                context.batcher.text(combo, x, y + i);
+                context.batcher.textShadow(keybind.getLabel().get(), x + w + 5, y + i);
                 i += 14;
             }
 

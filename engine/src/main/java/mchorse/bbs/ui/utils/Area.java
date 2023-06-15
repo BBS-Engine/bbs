@@ -2,7 +2,7 @@ package mchorse.bbs.ui.utils;
 
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
-import mchorse.bbs.ui.framework.elements.utils.UIDraw;
+import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.ui.utils.resizers.IResizer;
 import mchorse.bbs.utils.math.MathUtils;
 
@@ -284,33 +284,33 @@ public class Area implements IResizer
     /**
      * Draw a rect within the bound of this rect
      */
-    public void render(UIDraw draw, int color)
+    public void render(Batcher2D batcher, int color)
     {
-        this.render(draw, color, 0, 0, 0, 0);
+        this.render(batcher, color, 0, 0, 0, 0);
     }
 
     /**
      * Draw a rect within the bound of this rect
      */
-    public void render(UIDraw draw, int color, int offset)
+    public void render(Batcher2D batcher, int color, int offset)
     {
-        this.render(draw, color, offset, offset, offset, offset);
+        this.render(batcher, color, offset, offset, offset, offset);
     }
 
     /**
      * Draw a rect within the bound of this rect
      */
-    public void render(UIDraw draw, int color, int horizontal, int vertical)
+    public void render(Batcher2D batcher, int color, int horizontal, int vertical)
     {
-        this.render(draw, color, horizontal, vertical, horizontal, vertical);
+        this.render(batcher, color, horizontal, vertical, horizontal, vertical);
     }
 
     /**
      * Draw a rect within the bound of this rect
      */
-    public void render(UIDraw draw, int color, int lx, int ty, int rx, int by)
+    public void render(Batcher2D batcher, int color, int lx, int ty, int rx, int by)
     {
-        draw.box(this.x + lx, this.y + ty, this.ex() - rx, this.ey() - by, color);
+        batcher.box(this.x + lx, this.y + ty, this.ex() - rx, this.ey() - by, color);
     }
 
     /* IResizer implementation */

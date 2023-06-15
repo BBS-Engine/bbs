@@ -153,21 +153,19 @@ public class UIScrollView extends UIElement implements IViewport
 
         this.scroll.drag(context.mouseX, context.mouseY);
 
-        context.draw.clip(this.scroll, context);
+        context.batcher.clip(this.scroll, context);
 
         this.apply(context);
-        context.updateShaders();
 
         this.preRender(context);
         super.render(context);
         this.postRender(context);
 
         this.unapply(context);
-        context.updateShaders();
 
-        this.scroll.renderScrollbar(context.draw);
+        this.scroll.renderScrollbar(context.batcher);
 
-        context.draw.unclip(context);
+        context.batcher.unclip(context);
 
         /* Clear tooltip in case if it was set outside of scroll area within the scroll */
         if (!this.area.isInside(context) && context.tooltip.element != lastTooltip)

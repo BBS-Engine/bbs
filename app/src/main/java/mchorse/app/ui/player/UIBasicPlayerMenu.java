@@ -70,19 +70,19 @@ public class UIBasicPlayerMenu extends UIBasePlayerMenu
     {
         super.preRenderMenu(context);
 
-        this.viewport.render(this.context.draw, Colors.A75);
+        this.viewport.render(this.context.batcher, Colors.A75);
     }
 
     private void renderOverlayLabels(UIContext context)
     {
         int h = this.context.font.getHeight() + 3;
 
-        context.font.renderWithShadow(context.render, UIKeysApp.PLAYER_EQUIPMENT.get(), this.mainHand.area.x, this.mainHand.area.y - h);
-        context.font.renderWithShadow(context.render, UIKeysApp.PLAYER_INVENTORY.get(), this.inventory.area.x, this.inventory.area.y - h);
+        context.batcher.textShadow(UIKeysApp.PLAYER_EQUIPMENT.get(), this.mainHand.area.x, this.mainHand.area.y - h);
+        context.batcher.textShadow(UIKeysApp.PLAYER_INVENTORY.get(), this.inventory.area.x, this.inventory.area.y - h);
 
         if (this.quest.isVisible())
         {
-            context.font.renderWithShadow(context.render, UIKeys.PANELS_QUESTS.get(), this.quests.area.x, this.quests.area.y - h);
+            context.batcher.textShadow(UIKeys.PANELS_QUESTS.get(), this.quests.area.x, this.quests.area.y - h);
         }
     }
 }

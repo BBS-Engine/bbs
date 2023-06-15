@@ -270,8 +270,8 @@ public class UIPointsModule extends UIAbstractModule
         int c = this.path.size();
 
         /* Draw background and buttons */
-        context.draw.box(x, y, x + this.scroll.w, y + this.scroll.h, Colors.A50);
-        context.draw.clip(this.scroll, context);
+        context.batcher.box(x, y, x + this.scroll.w, y + this.scroll.h, Colors.A50);
+        context.batcher.clip(this.scroll, context);
 
         for (int i = 0; i < c; i++)
         {
@@ -279,12 +279,12 @@ public class UIPointsModule extends UIAbstractModule
             int xx = this.scroll.x + i * this.scroll.scrollItemSize - this.scroll.scroll;
             int w = context.font.getWidth(label);
 
-            context.draw.box(xx, y, xx + 20, y + 20, this.index == i ? 0xffcc1170 : 0xffff2280);
-            context.draw.box(xx + 19, y, xx + 20, y + 20, Colors.A12);
-            context.font.renderWithShadow(context.render, label, xx + 10 - w / 2, y + 6);
+            context.batcher.box(xx, y, xx + 20, y + 20, this.index == i ? 0xffcc1170 : 0xffff2280);
+            context.batcher.box(xx + 19, y, xx + 20, y + 20, Colors.A12);
+            context.batcher.textShadow(label, xx + 10 - w / 2, y + 6);
         }
 
-        context.draw.unclip(context);
+        context.batcher.unclip(context);
 
         /* Display scroll bar */
         int mw = this.scroll.w;
@@ -295,18 +295,18 @@ public class UIPointsModule extends UIAbstractModule
             int bx = this.scroll.x + (int) (this.scroll.scroll / (float) (this.scroll.scrollSize - this.scroll.w) * (mw - scroll));
             int by = y + this.scroll.h + 2;
 
-            context.draw.box(bx, by, bx + scroll, by + 2, Colors.A50);
+            context.batcher.box(bx, by, bx + scroll, by + 2, Colors.A50);
         }
 
         /* Overlay "shadows" for informing the user that  */
         if (this.scroll.scroll > 0 && this.scroll.scrollSize >= this.scroll.w - 40)
         {
-            context.draw.gradientHBox(x, y, x + 4, y + this.scroll.h, Colors.A50, 0);
+            context.batcher.gradientHBox(x, y, x + 4, y + this.scroll.h, Colors.A50, 0);
         }
 
         if (this.scroll.scroll < this.scroll.scrollSize - this.scroll.w && this.scroll.scrollSize >= this.scroll.w)
         {
-            context.draw.gradientHBox(x + this.scroll.w - 4, y, x + this.scroll.w, y + this.scroll.h, 0, Colors.A50);
+            context.batcher.gradientHBox(x + this.scroll.w - 4, y, x + this.scroll.w, y + this.scroll.h, 0, Colors.A50);
         }
 
         super.render(context);
@@ -314,6 +314,6 @@ public class UIPointsModule extends UIAbstractModule
         String label = UIKeys.CAMERA_PANELS_PATH_POINTS.get();
         int w = context.font.getWidth(label);
 
-        context.font.renderWithShadow(context.render, label, this.scroll.mx(w), this.scroll.y - 14);
+        context.batcher.textShadow(label, this.scroll.mx(w), this.scroll.y - 14);
     }
 }

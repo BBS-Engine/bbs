@@ -32,7 +32,7 @@ public class TextGraphic extends Graphic
         int left = area.x(this.anchorX) - (int) (w * this.anchorX);
         int top = area.y(this.anchorY) - (int) (font.getHeight() * this.anchorY);
 
-        font.renderWithShadow(context.render, text, left, top, this.primary);
+        context.batcher.textShadow(text, left, top, this.primary);
     }
 
     @Override

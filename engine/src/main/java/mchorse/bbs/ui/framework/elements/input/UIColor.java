@@ -92,21 +92,21 @@ public class UIColor extends UIElement
     {
         int padding = 0;
 
-        this.picker.renderRect(context.draw, this.area.x, this.area.y, this.area.ex(), this.area.ey());
+        this.picker.renderRect(context.batcher, this.area.x, this.area.y, this.area.ex(), this.area.ey());
 
         if (this.area.isInside(context))
         {
-            this.area.render(context.draw, Colors.A12, padding);
+            this.area.render(context.batcher, Colors.A12, padding);
         }
 
         if (this.label)
         {
             String label = this.picker.color.stringify(this.picker.editAlpha);
 
-            context.draw.textCard(context.font, label, this.area.mx(context.font.getWidth(label)), this.area.my(context.font.getHeight() - 1), Colors.WHITE, Colors.A25, 1);
+            context.batcher.textCard(context.font, label, this.area.mx(context.font.getWidth(label)), this.area.my(context.font.getHeight() - 1), Colors.WHITE, Colors.A25, 1);
         }
 
-        context.draw.lockedArea(this);
+        this.renderLockedArea(context);
 
         super.render(context);
     }

@@ -86,8 +86,8 @@ public class UIPlayerInventory extends UIElement implements IUIInventory
     @Override
     public void render(UIContext context)
     {
-        context.draw.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.WHITE);
-        context.draw.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
+        context.batcher.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.WHITE);
+        context.batcher.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
 
         for (int i = 0, size = this.inventory.getSize(); i < size; i++)
         {
@@ -97,14 +97,14 @@ public class UIPlayerInventory extends UIElement implements IUIInventory
             int diffX = context.mouseX - x;
             int diffY = context.mouseY - y;
 
-            context.draw.box(x + 1, y + 1, x + 19, y + 19, Colors.A25);
+            context.batcher.box(x + 1, y + 1, x + 19, y + 19, Colors.A25);
 
             ItemStack stack = this.inventory.getStack(i);
             boolean hover = diffX >= 0 && diffX < 18 && diffY >= 0 && diffY < 18;
 
             if (hover)
             {
-                context.draw.box(x + 1, y + 1, x + 19, y + 19, Colors.A75 | BBSSettings.primaryColor.get());
+                context.batcher.box(x + 1, y + 1, x + 19, y + 19, Colors.A75 | BBSSettings.primaryColor.get());
             }
 
             BBS.getItems().renderInUI(context.render, stack, x, y, 20, 20);

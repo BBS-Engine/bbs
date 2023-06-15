@@ -1,15 +1,13 @@
 package mchorse.bbs.ui.framework.elements.input.color;
 
 import mchorse.bbs.BBSSettings;
-import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
-import mchorse.bbs.ui.framework.elements.utils.UIDraw;
+import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Color;
@@ -28,8 +26,6 @@ import java.util.function.Consumer;
 public class UIColorPicker extends UIElement
 {
     public static final int COLOR_SLIDER_HEIGHT = 50;
-    public static final IKey FAVORITE = UIKeys.COLOR_FAVORITE;
-    public static final IKey RECENT = UIKeys.COLOR_RECENT;
 
     public static List<Color> recentColors = new ArrayList<Color>();
 
@@ -50,18 +46,16 @@ public class UIColorPicker extends UIElement
     private int dragging = -1;
     private Color hsv = new Color();
 
-    public static void renderAlphaPreviewQuad(RenderingContext context, int x1, int y1, int x2, int y2, Color color)
+    public static void renderAlphaPreviewQuad(Batcher2D batcher, int x1, int y1, int x2, int y2, Color color)
     {
-        VAOBuilder builder = context.getVAO().setup(context.getShaders().get(VBOAttributes.VERTEX_RGBA_2D));
+        VAOBuilder builder = batcher.begin(VBOAttributes.VERTEX_RGBA_2D);
 
-        builder.begin();
         builder.xy(x1, y1).rgba(color.r, color.g, color.b, 1);
         builder.xy(x1, y2).rgba(color.r, color.g, color.b, 1);
         builder.xy(x2, y1).rgba(color.r, color.g, color.b, 1);
         builder.xy(x2, y1).rgba(color.r, color.g, color.b, color.a);
         builder.xy(x1, y2).rgba(color.r, color.g, color.b, color.a);
         builder.xy(x2, y2).rgba(color.r, color.g, color.b, color.a);
-        builder.render();
     }
 
     public UIColorPicker(Consumer<Integer> callback)
@@ -321,14 +315,14 @@ public class UIColorPicker extends UIElement
             this.updateColor();
         }
 
-        this.area.render(context.draw, Colors.LIGHTEST_GRAY);
-        this.renderRect(context.draw, this.area.ex() - 25, this.area.y + 5, this.area.ex() - 5, this.area.y + 25);
+        this.area.render(context.batcher, Colors.LIGHTEST_GRAY);
+        this.renderRect(context.batcher, this.area.ex() - 25, this.area.y + 5, this.area.ex() - 5, this.area.y + 25);
 
-        context.draw.outline(this.area.ex() - 25, this.area.y + 5, this.area.ex() - 5, this.area.y + 25, Colors.A25);
+        context.batcher.outline(this.area.ex() - 25, this.area.y + 5, this.area.ex() - 5, this.area.y + 25, Colors.A25);
 
         if (this.editAlpha)
         {
-            Icons.CHECKBOARD.renderArea(context.draw, this.alpha.x, this.red.y, this.alpha.w, this.alpha.ey() - this.red.y);
+            context.batcher.iconArea(Icons.CHECKBOARD, this.alpha.x, this.red.y, this.alpha.w, this.alpha.ey() - this.red.y);
         }
 
         Color temp = new Color();
@@ -347,7 +341,7 @@ public class UIColorPicker extends UIElement
                 Colors.HSVtoRGB(temp, (i + 1) / 6F, 1F, 1F);
                 right = temp.getARGBColor();
 
-                context.draw.gradientHBox(this.red.x(i / 6F), this.red.y, this.red.x((i + 1) / 6F), this.red.ey(), left, right);
+                context.batcher.gradientHBox(this.red.x(i / 6F), this.red.y, this.red.x((i + 1) / 6F), this.red.ey(), left, right);
             }
 
             /* Draw green slider */
@@ -356,14 +350,14 @@ public class UIColorPicker extends UIElement
             Colors.HSVtoRGB(temp, this.hsv.r, 1F, this.hsv.b);
             right = temp.getARGBColor();
 
-            context.draw.gradientHBox(this.green.x, this.green.y, this.green.ex(), this.green.ey(), left, right);
+            context.batcher.gradientHBox(this.green.x, this.green.y, this.green.ex(), this.green.ey(), left, right);
 
             /* Draw blue slider */
             Colors.HSVtoRGB(temp, this.hsv.r, this.hsv.g, 0F);
             left = temp.getARGBColor();
             Colors.HSVtoRGB(temp, this.hsv.r, this.hsv.g, 1F);
             right = temp.getARGBColor();
-            context.draw.gradientHBox(this.blue.x, this.blue.y, this.blue.ex(), this.blue.ey(), left, right);
+            context.batcher.gradientHBox(this.blue.x, this.blue.y, this.blue.ex(), this.blue.ey(), left, right);
 
             if (this.editAlpha)
             {
@@ -375,7 +369,7 @@ public class UIColorPicker extends UIElement
                 temp.a = 1F;
                 right = temp.getARGBColor();
 
-                context.draw.gradientHBox(this.alpha.x, this.alpha.y, this.alpha.ex(), this.alpha.ey(), left, right);
+                context.batcher.gradientHBox(this.alpha.x, this.alpha.y, this.alpha.ex(), this.alpha.ey(), left, right);
             }
         }
         else
@@ -386,7 +380,7 @@ public class UIColorPicker extends UIElement
             temp.copy(color).r = 1;
             right = temp.getARGBColor();
 
-            context.draw.gradientHBox(this.red.x, this.red.y, this.red.ex(), this.red.ey(), left, right);
+            context.batcher.gradientHBox(this.red.x, this.red.y, this.red.ex(), this.red.ey(), left, right);
 
             /* Draw green slider */
             temp.copy(color).g = 0;
@@ -394,14 +388,14 @@ public class UIColorPicker extends UIElement
             temp.copy(color).g = 1;
             right = temp.getARGBColor();
 
-            context.draw.gradientHBox(this.green.x, this.green.y, this.green.ex(), this.green.ey(), left, right);
+            context.batcher.gradientHBox(this.green.x, this.green.y, this.green.ex(), this.green.ey(), left, right);
 
             /* Draw blue slider */
             temp.copy(color).b = 0;
             left = temp.getARGBColor();
             temp.copy(color).b = 1;
             right = temp.getARGBColor();
-            context.draw.gradientHBox(this.blue.x, this.blue.y, this.blue.ex(), this.blue.ey(), left, right);
+            context.batcher.gradientHBox(this.blue.x, this.blue.y, this.blue.ex(), this.blue.ey(), left, right);
 
             if (this.editAlpha)
             {
@@ -411,51 +405,51 @@ public class UIColorPicker extends UIElement
                 temp.copy(color).a = 1;
                 right = temp.getARGBColor();
 
-                context.draw.gradientHBox(this.alpha.x, this.alpha.y, this.alpha.ex(), this.alpha.ey(), left, right);
+                context.batcher.gradientHBox(this.alpha.x, this.alpha.y, this.alpha.ex(), this.alpha.ey(), left, right);
             }
         }
 
-        context.draw.outline(this.red.x, this.red.y, this.red.ex(), this.editAlpha ? this.alpha.ey() : this.blue.ey(), 0x44000000);
+        context.batcher.outline(this.red.x, this.red.y, this.red.ex(), this.editAlpha ? this.alpha.ey() : this.blue.ey(), 0x44000000);
 
-        this.renderMarker(context.draw, this.red.x + 7 + (int) ((this.red.w - 14) * color.r), this.red.my());
-        this.renderMarker(context.draw, this.green.x + 7 + (int) ((this.green.w - 14) * color.g), this.green.my());
-        this.renderMarker(context.draw, this.blue.x + 7 + (int) ((this.blue.w - 14) * color.b), this.blue.my());
+        this.renderMarker(context.batcher, this.red.x + 7 + (int) ((this.red.w - 14) * color.r), this.red.my());
+        this.renderMarker(context.batcher, this.green.x + 7 + (int) ((this.green.w - 14) * color.g), this.green.my());
+        this.renderMarker(context.batcher, this.blue.x + 7 + (int) ((this.blue.w - 14) * color.b), this.blue.my());
 
         if (this.editAlpha)
         {
-            this.renderMarker(context.draw, this.alpha.x + 7 + (int) ((this.alpha.w - 14) * color.a), this.alpha.my());
+            this.renderMarker(context.batcher, this.alpha.x + 7 + (int) ((this.alpha.w - 14) * color.a), this.alpha.my());
         }
 
         if (!this.favorite.colors.isEmpty())
         {
-            context.font.render(context.render, FAVORITE.get(), this.favorite.area.x, this.favorite.area.y - 10, Colors.GRAY);
+            context.batcher.text(UIKeys.COLOR_FAVORITE.get(), this.favorite.area.x, this.favorite.area.y - 10, Colors.GRAY);
         }
 
         if (!this.recent.colors.isEmpty())
         {
-            context.font.render(context.render, RECENT.get(), this.recent.area.x, this.recent.area.y - 10, Colors.GRAY);
+            context.batcher.text(UIKeys.COLOR_RECENT.get(), this.recent.area.x, this.recent.area.y - 10, Colors.GRAY);
         }
 
         super.render(context);
     }
 
-    public void renderRect(UIDraw draw, int x1, int y1, int x2, int y2)
+    public void renderRect(Batcher2D batcher, int x1, int y1, int x2, int y2)
     {
         if (this.editAlpha)
         {
-            Icons.CHECKBOARD.renderArea(draw, x1, y1,x2 - x1, y2 - y1);
-            renderAlphaPreviewQuad(draw.context, x1, y1, x2, y2, this.color);
+            batcher.iconArea(Icons.CHECKBOARD, x1, y1, x2 - x1, y2 - y1);
+            renderAlphaPreviewQuad(batcher, x1, y1, x2, y2, this.color);
         }
         else
         {
-            draw.box(x1, y1, x2, y2, this.color.getARGBColor());
+            batcher.box(x1, y1, x2, y2, this.color.getARGBColor());
         }
     }
 
-    private void renderMarker(UIDraw draw, int x, int y)
+    private void renderMarker(Batcher2D batcher, int x, int y)
     {
-        draw.box(x - 4, y - 4, x + 4, y + 4, Colors.A100);
-        draw.box(x - 3, y - 3, x + 3, y + 3, Colors.WHITE);
-        draw.box(x - 2, y - 2, x + 2, y + 2, Colors.LIGHTEST_GRAY);
+        batcher.box(x - 4, y - 4, x + 4, y + 4, Colors.A100);
+        batcher.box(x - 3, y - 3, x + 3, y + 3, Colors.WHITE);
+        batcher.box(x - 2, y - 2, x + 2, y + 2, Colors.LIGHTEST_GRAY);
     }
 }

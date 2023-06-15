@@ -41,12 +41,16 @@ public class UIReplayList extends UIList<Replay>
             int w = context.font.getWidth(this.hovered);
             int x = this.hoverX + this.scroll.scrollItemSize / 2 - w / 2;
 
-            context.draw.box(x - 2, this.hoverY - 1, x + w + 2, this.hoverY + 9, Colors.A50);
-            context.font.renderWithShadow(context.render, this.hovered, x, this.hoverY);
+            context.batcher.box(x - 2, this.hoverY - 1, x + w + 2, this.hoverY + 9, Colors.A50);
+            context.batcher.textShadow(this.hovered, x, this.hoverY);
         }
         else if (this.getList().isEmpty())
         {
-            context.font.renderCentered(context.render, UIKeys.SCENE_NO_REPLAYS.get(), this.area.mx(), this.area.my() - 6);
+            String label = UIKeys.SCENE_NO_REPLAYS.get();
+            int x = this.area.mx(context.font.getWidth(label));
+            int y = this.area.my() - 6;
+
+            context.batcher.text(label, x, y);
         }
     }
 
@@ -59,8 +63,8 @@ public class UIReplayList extends UIList<Replay>
 
         if (selected && !isDragging)
         {
-            context.draw.box(x, y, x + w, y + h, Colors.A75 | BBSSettings.primaryColor.get());
-            context.draw.clip(x, y, w, h, context);
+            context.batcher.box(x, y, x + w, y + h, Colors.A75 | BBSSettings.primaryColor.get());
+            context.batcher.clip(x, y, w, h, context);
         }
 
         if (replay.form != null)
@@ -69,13 +73,13 @@ public class UIReplayList extends UIList<Replay>
         }
         else
         {
-            Icons.POSE.render(context.draw, x + w / 2 - 8, y + this.scroll.h / 2 - 8);
+            context.batcher.icon(Icons.POSE, x + w / 2 - 8, y + this.scroll.h / 2 - 8);
         }
 
         if (selected && !isDragging)
         {
-            context.draw.outline(x, y, x + w, y + h, Colors.A100 | BBSSettings.primaryColor.get(), 2);
-            context.draw.unclip(context);
+            context.batcher.outline(x, y, x + w, y + h, Colors.A100 | BBSSettings.primaryColor.get(), 2);
+            context.batcher.unclip(context);
         }
 
         if (hover && !replay.id.isEmpty() && this.hovered == null)

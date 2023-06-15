@@ -3,9 +3,6 @@ package mchorse.bbs.ui.framework.elements.input.keyframes;
 import mchorse.bbs.graphics.line.Line;
 import mchorse.bbs.graphics.line.LineBuilder;
 import mchorse.bbs.graphics.line.SolidColorLineRenderer;
-import mchorse.bbs.graphics.shaders.Shader;
-import mchorse.bbs.graphics.vao.VAOBuilder;
-import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.framework.UIContext;
@@ -466,8 +463,8 @@ public class UIGraph extends UIKeyframes
                 continue;
             }
 
-            context.draw.box(this.area.x, y, this.area.ex(), y + 1, Colors.setA(Colors.WHITE, 0.25F));
-            context.font.render(context.render, String.valueOf(min + j * mult), this.area.x + 4, y + 4);
+            context.batcher.box(this.area.x, y, this.area.ex(), y + 1, Colors.setA(Colors.WHITE, 0.25F));
+            context.batcher.text(String.valueOf(min + j * mult), this.area.x + 4, y + 4);
         }
     }
 
@@ -482,8 +479,6 @@ public class UIGraph extends UIKeyframes
             return;
         }
 
-        Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_RGBA_2D);
-        VAOBuilder builder = context.render.getVAO().setup(shader);
         KeyframeChannel channel = this.sheet.channel;
         LineBuilder lines = new LineBuilder(0.75F);
         Line main = new Line();
@@ -495,8 +490,6 @@ public class UIGraph extends UIKeyframes
         float b = COLOR.b;
 
         /* Draw the graph */
-        builder.begin();
-
         int index = 0;
         int count = channel.getKeyframes().size();
         Keyframe prev = null;
@@ -561,26 +554,24 @@ public class UIGraph extends UIKeyframes
         main.add(this.toGraphX(prev.tick), this.toGraphY(prev.value))
             .add(this.area.ex(), this.toGraphY(prev.value));
 
-        lines.push(main).render(builder, SolidColorLineRenderer.get(r, g, b, 0.65F));
+        lines.push(main).render(context.batcher, SolidColorLineRenderer.get(r, g, b, 0.65F));
 
         /* Draw points */
-        builder.begin();
-
         index = 0;
         prev = null;
 
         for (Keyframe frame : channel.getKeyframes())
         {
-            this.renderRect(context, builder, this.toGraphX(frame.tick), this.toGraphY(frame.value), 3, Colors.WHITE);
+            this.renderRect(context, this.toGraphX(frame.tick), this.toGraphY(frame.value), 3, Colors.WHITE);
 
             if (frame.interp == KeyframeInterpolation.BEZIER && index != count - 1)
             {
-                this.renderRect(context, builder, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 3, Colors.WHITE);
+                this.renderRect(context, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 3, Colors.WHITE);
             }
 
             if (prev != null && prev.interp == KeyframeInterpolation.BEZIER)
             {
-                this.renderRect(context, builder, this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly), 3, Colors.WHITE);
+                this.renderRect(context, this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly), 3, Colors.WHITE);
             }
 
             prev = frame;
@@ -594,23 +585,21 @@ public class UIGraph extends UIKeyframes
         {
             boolean has = this.sheet.selected.contains(index);
 
-            this.renderRect(context, builder, this.toGraphX(frame.tick), this.toGraphY(frame.value), 2, has && this.which == Selection.KEYFRAME ? Colors.ACTIVE : 0);
+            this.renderRect(context, this.toGraphX(frame.tick), this.toGraphY(frame.value), 2, has && this.which == Selection.KEYFRAME ? Colors.ACTIVE : 0);
 
             if (frame.interp == KeyframeInterpolation.BEZIER && index != count - 1)
             {
-                this.renderRect(context, builder, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 2, has && this.which == Selection.RIGHT_HANDLE ? Colors.ACTIVE : 0);
+                this.renderRect(context, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 2, has && this.which == Selection.RIGHT_HANDLE ? Colors.ACTIVE : 0);
             }
 
             if (prev != null && prev.interp == KeyframeInterpolation.BEZIER)
             {
-                this.renderRect(context, builder, this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly), 2, has && this.which == Selection.LEFT_HANDLE ? Colors.ACTIVE : 0);
+                this.renderRect(context, this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly), 2, has && this.which == Selection.LEFT_HANDLE ? Colors.ACTIVE : 0);
             }
 
             prev = frame;
             index++;
         }
-
-        builder.render();
     }
 
     /* Handling dragging */

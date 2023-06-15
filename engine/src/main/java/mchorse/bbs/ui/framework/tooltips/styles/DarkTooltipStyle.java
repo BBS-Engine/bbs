@@ -12,8 +12,8 @@ public class DarkTooltipStyle extends TooltipStyle
     {
         int color = BBSSettings.primaryColor.get();
 
-        context.draw.dropShadow(area.x, area.y, area.ex(), area.ey(), 6, Colors.A25 + color, color);
-        area.render(context.draw, Colors.A100);
+        context.batcher.dropShadow(area.x, area.y, area.ex(), area.ey(), 6, Colors.A25 + color, color);
+        area.render(context.batcher, Colors.A100);
     }
 
     @Override

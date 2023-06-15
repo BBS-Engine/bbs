@@ -198,8 +198,11 @@ public class ItemManager implements IMapSerializable, IDisposable
 
         Texture texture = context.getTextures().getTexture(this.atlas);
 
-        texture.bind();
-        context.draw.scaledTexturedBox(x + (w - 16) / 2, y + (h - 16) / 2, render.uv.x, render.uv.y, 16, 16, texture.width, texture.height);
+        context.batcher.texturedBox(texture, Colors.WHITE,
+            x + (w - 16) / 2, y + (h - 16) / 2, 16, 16,
+            render.uv.x, render.uv.y, render.uv.x + 16, render.uv.y + 16,
+            texture.width, texture.height
+        );
 
         if (stack.getSize() > 1)
         {
@@ -210,7 +213,7 @@ public class ItemManager implements IMapSerializable, IDisposable
             int sizeX = x + w - 1 - sizeW;
             int sizeY = y + h - 2 - font.getHeight();
 
-            context.draw.textCard(font, size, sizeX, sizeY, Colors.WHITE, Colors.A50, 1);
+            context.batcher.textCard(font, size, sizeX, sizeY, Colors.WHITE, Colors.A50, 1);
         }
     }
 

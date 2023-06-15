@@ -131,14 +131,14 @@ public class UICirculate extends UIClickable<UICirculate>
             color = Colors.mulRGB(color, 0.85F);
         }
 
-        this.area.render(context.draw, color);
+        this.area.render(context.batcher, color);
 
         String label = context.font.limitToWidth(this.label.get(), this.area.w - 4);
         int x = this.area.mx(context.font.getWidth(label));
         int y = this.area.my(context.font.getHeight());
 
-        context.font.renderWithShadow(context.render, label, x, y, Colors.mulRGB(Colors.WHITE, this.hover ? 0.9F : 1F));
+        context.batcher.textShadow(label, x, y, Colors.mulRGB(Colors.WHITE, this.hover ? 0.9F : 1F));
 
-        context.draw.lockedArea(this);
+        this.renderLockedArea(context);
     }
 }

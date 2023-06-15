@@ -413,7 +413,7 @@ public class UITextEditor extends UITextarea<HighlightedTextLine>
     @Override
     protected void renderBackground(UIContext context)
     {
-        this.area.render(context.draw, Colors.A100 | Colors.mulRGB(this.highlighter.getStyle().background, 0.8F));
+        this.area.render(context.batcher, Colors.A100 | Colors.mulRGB(this.highlighter.getStyle().background, 0.8F));
     }
 
     @Override
@@ -424,7 +424,7 @@ public class UITextEditor extends UITextarea<HighlightedTextLine>
             /* Draw line numbers background */
             int x = this.area.x + this.getShiftX();
 
-            context.draw.box(this.area.x, this.area.y, x, this.area.ey(), Colors.A100 | this.highlighter.getStyle().background);
+            context.batcher.box(this.area.x, this.area.y, x, this.area.ey(), Colors.A100 | this.highlighter.getStyle().background);
 
             /* Draw cached line numbers */
             for (TextLineNumber number : this.numbers)
@@ -434,7 +434,7 @@ public class UITextEditor extends UITextarea<HighlightedTextLine>
                     break;
                 }
 
-                font.render(context.render, number.line, number.x, number.y, this.highlighter.getStyle().lineNumbers);
+                context.batcher.text(font, number.line, number.x, number.y, this.highlighter.getStyle().lineNumbers);
                 number.render = false;
             }
 
@@ -445,7 +445,7 @@ public class UITextEditor extends UITextarea<HighlightedTextLine>
 
             if (a > 0)
             {
-                context.draw.gradientHBox(x, this.area.y, x + 10, this.area.ey(), Colors.a(a), 0);
+                context.batcher.gradientHBox(x, this.area.y, x + 10, this.area.ey(), Colors.a(a), 0);
             }
         }
     }

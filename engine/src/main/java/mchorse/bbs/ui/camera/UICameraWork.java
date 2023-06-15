@@ -31,7 +31,7 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
-import mchorse.bbs.ui.framework.elements.utils.UIDraw;
+import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.ui.game.utils.UIDataUtils;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.Scale;
@@ -1213,7 +1213,7 @@ public class UICameraWork extends UIElement
      */
     private void renderCameraWork(UIContext context)
     {
-        UIDraw draw = context.draw;
+        Batcher2D batcher = context.batcher;
         Area area = this.getArea();
         int h = this.isCompact() ? LAYER_COMPACT_HEIGHT : LAYER_HEIGHT;
 
@@ -1221,11 +1221,11 @@ public class UICameraWork extends UIElement
         {
             int y = this.embedded.area.ey();
 
-            draw.gradientVBox(this.embedded.area.x, y - MARGIN, this.embedded.area.ex(), y, 0, Colors.A50);
+            batcher.gradientVBox(this.embedded.area.x, y - MARGIN, this.embedded.area.ex(), y, 0, Colors.A50);
         }
 
-        area.render(draw, Colors.A50);
-        draw.clip(this.vertical, context);
+        area.render(batcher, Colors.A50);
+        batcher.clip(this.vertical, context);
 
         for (int i = 0; i < LAYERS; i++)
         {
@@ -1233,17 +1233,17 @@ public class UICameraWork extends UIElement
 
             if (i % 2 != 0)
             {
-                draw.box(this.area.x, ly, this.area.ex(), ly + h, Colors.A50);
+                batcher.box(this.area.x, ly, this.area.ex(), ly + h, Colors.A50);
             }
         }
 
-        draw.unclip(context);
-        draw.clip(this.area, context);
+        batcher.unclip(context);
+        batcher.clip(this.area, context);
 
         this.renderTickMarkers(context, area.y, area.h);
 
-        draw.unclip(context);
-        draw.clip(this.vertical, context);
+        batcher.unclip(context);
+        batcher.clip(this.vertical, context);
 
         List<Clip> clips = this.work.clips.get();
 
@@ -1271,18 +1271,18 @@ public class UICameraWork extends UIElement
         this.renderAddPreview(context, h);
         this.renderLoopingRegion(context, area.y);
 
-        draw.unclip(context);
-        draw.clip(this.area, context);
+        batcher.unclip(context);
+        batcher.clip(this.area, context);
 
         this.renderCursor(context, area.y);
         this.renderSelection(context);
 
-        draw.unclip(context);
-        draw.clip(this.vertical, context);
+        batcher.unclip(context);
+        batcher.clip(this.vertical, context);
 
-        this.vertical.renderScrollbar(draw);
+        this.vertical.renderScrollbar(batcher);
 
-        draw.unclip(context);
+        batcher.unclip(context);
     }
 
     private void renderAddPreview(UIContext context, int h)
@@ -1296,7 +1296,7 @@ public class UICameraWork extends UIElement
         int y = this.toLayerY(this.addPreview.y);
         int d = this.toGraphX(this.addPreview.x + this.addPreview.z);
 
-        context.draw.outline(x, y, d, y + h, Colors.WHITE);
+        context.batcher.outline(x, y, d, y + h, Colors.WHITE);
     }
 
     /**
@@ -1321,7 +1321,7 @@ public class UICameraWork extends UIElement
             int xx = this.toGraphX(j);
             String value = TimeUtils.formatTime(j);
 
-            context.draw.box(xx, y, xx + 1, y + h, Colors.setA(Colors.WHITE, 0.2F));
+            context.batcher.box(xx, y, xx + 1, y + h, Colors.setA(Colors.WHITE, 0.2F));
 
             float alpha = MathUtils.clamp(Math.abs(cursor - xx) / 20F - 0.25F, 0, 1);
 
@@ -1329,7 +1329,7 @@ public class UICameraWork extends UIElement
             {
                 int c = Colors.setA(Colors.WHITE, alpha);
 
-                context.font.renderWithShadow(context.render, value, xx + 3, y + h - 2 - context.font.getHeight(), c);
+                context.batcher.textShadow(value, xx + 3, y + h - 2 - context.font.getHeight(), c);
             }
         }
     }
@@ -1345,7 +1345,7 @@ public class UICameraWork extends UIElement
         int cursorX = this.toGraphX(this.tick);
         int width = context.font.getWidth(label) + 3;
 
-        context.draw.box(cursorX, y, cursorX + 2, this.area.ey(), Colors.CURSOR);
+        context.batcher.box(cursorX, y, cursorX + 2, this.area.ey(), Colors.CURSOR);
 
         /* Move the tick line left, so it won't overflow the timeline */
         if (cursorX + 2 + width > this.area.ex())
@@ -1354,7 +1354,7 @@ public class UICameraWork extends UIElement
         }
 
         /* Draw the tick label */
-        context.draw.textCard(context.font, label, cursorX + 4, this.area.ey() - 2 - context.font.getHeight(), Colors.WHITE, Colors.setA(Colors.CURSOR, 0.75F), 2);
+        context.batcher.textCard(context.font, label, cursorX + 4, this.area.ey() - 2 - context.font.getHeight(), Colors.WHITE, Colors.setA(Colors.CURSOR, 0.75F), 2);
     }
 
     /**
@@ -1364,7 +1364,7 @@ public class UICameraWork extends UIElement
     {
         if (this.selecting)
         {
-            context.draw.normalizedBox(this.lastX, this.lastY, context.mouseX, context.mouseY, Colors.setA(Colors.ACTIVE, 0.25F));
+            context.batcher.normalizedBox(this.lastX, this.lastY, context.mouseX, context.mouseY, Colors.setA(Colors.ACTIVE, 0.25F));
         }
     }
 
@@ -1392,9 +1392,9 @@ public class UICameraWork extends UIElement
             float alpha = BBSSettings.editorLoop.get() ? 1 : 0.4F;
             int color = Colors.mulRGB(0xff88ffff, alpha);
 
-            context.draw.gradientVBox(minX, y, maxX, this.area.ey(), Colors.mulRGB(0x0000ffff, alpha), Colors.mulRGB(0xaa0088ff, alpha));
-            context.draw.box(minX, y, minX + 1, this.area.ey(), color);
-            context.draw.box(maxX - 1, y, maxX, this.area.ey(), color);
+            context.batcher.gradientVBox(minX, y, maxX, this.area.ey(), Colors.mulRGB(0x0000ffff, alpha), Colors.mulRGB(0xaa0088ff, alpha));
+            context.batcher.box(minX, y, minX + 1, this.area.ey(), color);
+            context.batcher.box(maxX - 1, y, maxX, this.area.ey(), color);
         }
     }
 }

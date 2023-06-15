@@ -133,12 +133,12 @@ public class UIOverlayPanel extends UIElement
     {
         int color = BBSSettings.primaryColor.get();
 
-        context.draw.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
-        this.area.render(context.draw, Colors.A100);
+        context.batcher.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
+        this.area.render(context.batcher, Colors.A100);
 
         if (this.title.area.isInside(context))
         {
-            Icons.ALL_DIRECTIONS.render(context.draw, this.area.mx(), this.area.y + 14, Colors.GRAY, 0.5F, 0.5F);
+            context.batcher.icon(Icons.ALL_DIRECTIONS, Colors.GRAY, this.area.mx(), this.area.y + 14, 0.5F, 0.5F);
         }
     }
 

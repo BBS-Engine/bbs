@@ -17,6 +17,6 @@ public class RectGraphic extends Graphic
     @Override
     public void renderGraphic(UIContext context, Area area)
     {
-        context.draw.box(area.x, area.y, area.ex(), area.ey(), this.primary);
+        context.batcher.box(area.x, area.y, area.ex(), area.ey(), this.primary);
     }
 }

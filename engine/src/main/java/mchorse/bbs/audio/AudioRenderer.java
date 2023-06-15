@@ -3,13 +3,13 @@ package mchorse.bbs.audio;
 import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.graphics.text.FontRenderer;
-import mchorse.bbs.ui.framework.elements.utils.UIDraw;
+import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.utils.StringUtils;
 import mchorse.bbs.utils.colors.Colors;
 
 public class AudioRenderer
 {
-    public static void renderAll(UIDraw draw, int x, int y, int w, int h, int sw, int sh)
+    public static void renderAll(Batcher2D batcher, int x, int y, int w, int h, int sw, int sh)
     {
         if (!BBSSettings.audioWaveformVisible.get())
         {
@@ -20,14 +20,14 @@ public class AudioRenderer
         {
             if (file.getBuffer().getWaveform() != null && !file.isStopped())
             {
-                renderWaveform(draw, file, x, y, w, h, sw, sh);
+                renderWaveform(batcher, file, x, y, w, h, sw, sh);
 
                 y -= h + 5;
             }
         }
     }
 
-    public static void renderWaveform(UIDraw draw, SoundPlayer file, int x, int y, int w, int h, int sw, int sh)
+    public static void renderWaveform(Batcher2D batcher, SoundPlayer file, int x, int y, int w, int h, int sw, int sh)
     {
         if (file == null || file.getBuffer().getWaveform() == null)
         {
@@ -38,12 +38,12 @@ public class AudioRenderer
         int half = w / 2;
 
         /* Draw background */
-        draw.gradientVBox(x + 2, y + 2, x + w - 2, y + h, 0, Colors.A50);
-        draw.box(x + 1, y, x + 2, y + h, 0xaaffffff);
-        draw.box(x + w - 2, y, x + w - 1, y + h, 0xaaffffff);
-        draw.box(x, y + h - 1, x + w, y + h, 0xffffffff);
+        batcher.gradientVBox(x + 2, y + 2, x + w - 2, y + h, 0, Colors.A50);
+        batcher.box(x + 1, y, x + 2, y + h, 0xaaffffff);
+        batcher.box(x + w - 2, y, x + w - 1, y + h, 0xaaffffff);
+        batcher.box(x, y + h - 1, x + w, y + h, 0xffffffff);
 
-        draw.clip(x + 2, y + 2, w - 4, h - 4, sw, sh);
+        batcher.clip(x + 2, y + 2, w - 4, h - 4, sw, sh);
 
         Waveform wave = file.getBuffer().getWaveform();
 
@@ -61,7 +61,7 @@ public class AudioRenderer
 
         if (runningOffset > 0)
         {
-            wave.render2(draw, Colors.WHITE, x + half, y, offset, 0, Math.min(runningOffset, half), h, h);
+            wave.render2(batcher, Colors.WHITE, x + half, y, offset, 0, Math.min(runningOffset, half), h, h);
         }
 
         /* Draw the passed waveform */
@@ -72,18 +72,18 @@ public class AudioRenderer
             int ww = offset > half ? half : offset;
             int color = Colors.COLOR.set(brightness, brightness, brightness, 1F).getARGBColor();
 
-            wave.render2(draw, color, xx, y, oo, 0, ww, h, h);
+            wave.render2(batcher, color, xx, y, oo, 0, ww, h, h);
         }
 
-        draw.unclip(sw, sh);
+        batcher.unclip(sw, sh);
 
-        draw.box(x + half, y + 1, x + half + 1, y + h - 1, 0xff57f52a);
+        batcher.box(x + half, y + 1, x + half + 1, y + h - 1, 0xff57f52a);
 
-        FontRenderer fontRenderer = draw.context.getFont();
+        FontRenderer fontRenderer = batcher.getContext().getFont();
 
         if (BBSSettings.audioWaveformFilename.get())
         {
-            draw.textCard(fontRenderer, file.getBuffer().getId().toString(), x + 8, y + h / 2 - 4, 0xffffff, 0x99000000);
+            batcher.textCard(fontRenderer, file.getBuffer().getId().toString(), x + 8, y + h / 2 - 4, 0xffffff, 0x99000000);
         }
 
         if (BBSSettings.audioWaveformTime.get())
@@ -94,7 +94,7 @@ public class AudioRenderer
 
             String tickLabel = tick + "t (" + seconds + "." + StringUtils.leftPad(String.valueOf(milliseconds), 2, "0") + "s)";
 
-            draw.textCard(fontRenderer, tickLabel, x + w - 8 - fontRenderer.getWidth(tickLabel), y + h / 2 - 4, 0xffffff, 0x99000000);
+            batcher.textCard(fontRenderer, tickLabel, x + w - 8 - fontRenderer.getWidth(tickLabel), y + h / 2 - 4, 0xffffff, 0x99000000);
         }
     }
 }

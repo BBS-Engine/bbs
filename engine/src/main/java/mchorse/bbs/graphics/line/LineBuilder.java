@@ -1,6 +1,8 @@
 package mchorse.bbs.graphics.line;
 
 import mchorse.bbs.graphics.vao.VAOBuilder;
+import mchorse.bbs.graphics.vao.VBOAttributes;
+import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -70,20 +72,18 @@ public class LineBuilder <T>
         return output;
     }
 
-    public void render(VAOBuilder builder, ILineRenderer<T> renderer)
+    public void render(Batcher2D batcher2D, ILineRenderer<T> renderer)
     {
         List<List<LinePoint<T>>> build = this.build();
 
         for (List<LinePoint<T>> points : build)
         {
-            builder.begin();
+            VAOBuilder builder = batcher2D.begin(GL11.GL_TRIANGLE_STRIP, VBOAttributes.VERTEX_RGBA_2D, null);
 
             for (LinePoint<T> point : points)
             {
                 renderer.render(builder, point);
             }
-
-            builder.render(GL11.GL_TRIANGLE_STRIP);
         }
     }
 }

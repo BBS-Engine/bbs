@@ -1,9 +1,9 @@
 package mchorse.bbs.ui.framework.tooltips;
 
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.tooltips.styles.TooltipStyle;
 import mchorse.bbs.ui.utils.Area;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.math.MathUtils;
 
@@ -67,7 +67,8 @@ public class LabelTooltip implements ITooltip
 
         for (String line : strings)
         {
-            context.font.render(context.render, line, Area.SHARED.x, Area.SHARED.y, style.getTextColor());
+            context.batcher.text(line, Area.SHARED.x, Area.SHARED.y, style.getTextColor());
+
             Area.SHARED.y += context.font.getHeight() + 4;
         }
     }

@@ -32,7 +32,7 @@ public class IconGraphic extends Graphic
 
         if (icon != null)
         {
-            icon.render(context.draw, left, top, this.primary, 0.5F, 0.5F);
+            context.batcher.icon(icon, this.primary, left, top, 0.5F, 0.5F);
         }
     }
 

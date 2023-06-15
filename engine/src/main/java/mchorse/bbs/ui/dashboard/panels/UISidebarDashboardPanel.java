@@ -57,8 +57,8 @@ public abstract class UISidebarDashboardPanel extends UIDashboardPanel
     {
         if (this.iconBar.isVisible())
         {
-            this.iconBar.area.render(context.draw, Colors.A50);
-            context.draw.gradientHBox(this.iconBar.area.x - 6, this.iconBar.area.y, this.iconBar.area.x, this.iconBar.area.ey(), 0, 0x29000000);
+            this.iconBar.area.render(context.batcher, Colors.A50);
+            context.batcher.gradientHBox(this.iconBar.area.x - 6, this.iconBar.area.y, this.iconBar.area.x, this.iconBar.area.ey(), 0, 0x29000000);
         }
     }
 }

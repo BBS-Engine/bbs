@@ -97,12 +97,12 @@ public class UICraftingRecipe extends UIElement
     {
         if (this.recipes.getCurrent() == this)
         {
-            this.area.render(context.draw, Colors.A50 | BBSSettings.primaryColor.get());
+            this.area.render(context.batcher, Colors.A50 | BBSSettings.primaryColor.get());
         }
 
         int y = this.area.ey();
 
-        context.draw.box(this.area.x, y - 1, this.area.ex(), y, Colors.A50);
+        context.batcher.box(this.area.x, y - 1, this.area.ex(), y, Colors.A50);
 
         super.render(context);
     }

@@ -160,16 +160,16 @@ public class UIWorldEditorPanel extends UIWorldPanel
         this.toolBar = new UIScrollView();
         this.toolBar.preRenderDraw((context) ->
         {
-            this.currentTool.button.area.render(context.draw, Colors.A50 | BBSSettings.primaryColor.get());
+            this.currentTool.button.area.render(context.batcher, Colors.A50 | BBSSettings.primaryColor.get());
 
             if (this.factoryVariant)
             {
-                this.factory.area.render(context.draw, Colors.A50 | BBSSettings.primaryColor.get());
+                this.factory.area.render(context.batcher, Colors.A50 | BBSSettings.primaryColor.get());
             }
 
             if (this.proxy.isMaskEnabled())
             {
-                this.mask.area.render(context.draw, Colors.A50 | BBSSettings.primaryColor.get());
+                this.mask.area.render(context.batcher, Colors.A50 | BBSSettings.primaryColor.get());
             }
         });
         this.toolBar.scroll.cancelScrolling().opposite = true;
@@ -180,7 +180,7 @@ public class UIWorldEditorPanel extends UIWorldPanel
         {
             if (this.selectionBar.isVisible())
             {
-                this.toggleSelection.area.render(context.draw, Colors.A50);
+                this.toggleSelection.area.render(context.batcher, Colors.A50);
             }
         });
         this.actionBar.scroll.cancelScrolling();
@@ -733,7 +733,7 @@ public class UIWorldEditorPanel extends UIWorldPanel
 
         if (this.selectionBar.isVisible())
         {
-            this.selectionBar.area.render(context.draw, Colors.A50);
+            this.selectionBar.area.render(context.batcher, Colors.A50);
         }
 
         super.render(context);
@@ -746,7 +746,7 @@ public class UIWorldEditorPanel extends UIWorldPanel
             Vector3i size = this.selection.getSize();
             String label = size.x + "x" + size.y + "x" + size.z + " (" + (size.x * size.y * size.z) + " blocks)";
 
-            context.draw.textCard(font, label, x, y, Colors.WHITE, Colors.A50, 2);
+            context.batcher.textCard(font, label, x, y, Colors.WHITE, Colors.A50, 2);
 
             y -= 12;
         }
@@ -756,7 +756,7 @@ public class UIWorldEditorPanel extends UIWorldPanel
             Vector3i block = this.result.block;
             String label = "(" + block.x + ", " + block.y + ", " + block.z + ")";
 
-            context.draw.textCard(font, label, x, y, Colors.WHITE, Colors.A50, 2);
+            context.batcher.textCard(font, label, x, y, Colors.WHITE, Colors.A50, 2);
         }
     }
 
@@ -766,13 +766,13 @@ public class UIWorldEditorPanel extends UIWorldPanel
         int y = this.block.area.y + 10;
         int scale = 20;
 
-        context.draw.dropCircleShadow(x, y, scale, 6, Colors.A100, Colors.A100);
+        context.batcher.dropCircleShadow(x, y, scale, 6, Colors.A100, Colors.A100);
 
         ChunkBuilder blockBuilder = this.dashboard.bridge.get(IBridgeWorld.class).getChunkBuilder();
 
         blockBuilder.renderInUI(context, this.getVariant(), x, y, scale);
 
-        font.renderWithShadow(context.render, this.variantToPlace.getLink().toString(), this.block.area.x, this.block.area.y - 12);
+        context.batcher.textShadow(font, this.variantToPlace.getLink().toString(), this.block.area.x, this.block.area.y - 12);
     }
 
     @Override

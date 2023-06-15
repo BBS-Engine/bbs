@@ -151,7 +151,7 @@ public class UIFormPalette extends UIElement implements IUIFormList
     @Override
     public void render(UIContext context)
     {
-        this.area.render(context.draw, Colors.A75);
+        this.area.render(context.batcher, Colors.A75);
 
         super.render(context);
     }

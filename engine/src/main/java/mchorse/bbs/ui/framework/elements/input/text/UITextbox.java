@@ -212,7 +212,7 @@ public class UITextbox extends UIBaseTextbox implements ITextColoring
     {
         this.textbox.render(context);
 
-        context.draw.lockedArea(this);
+        this.renderLockedArea(context);
 
         super.render(context);
     }

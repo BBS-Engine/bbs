@@ -116,7 +116,7 @@ public class UIBitToggle extends UIElement
     {
         super.render(context);
 
-        this.area.render(context.draw, Colors.A50);
+        this.area.render(context.batcher, Colors.A50);
 
         int size = this.bits.size();
         int w = this.area.w / size;
@@ -138,27 +138,27 @@ public class UIBitToggle extends UIElement
 
             if (isSelected)
             {
-                context.draw.box(x, this.area.y, right, this.area.y + this.area.h, Colors.mulRGB(bit.color, isHover ? 0.8F : 1F));
+                context.batcher.box(x, this.area.y, right, this.area.y + this.area.h, Colors.mulRGB(bit.color, isHover ? 0.8F : 1F));
             }
             else if (isHover)
             {
-                context.draw.box(x, this.area.y, right, this.area.y + this.area.h, Colors.mulRGB(bit.color, 0.2F));
+                context.batcher.box(x, this.area.y, right, this.area.y + this.area.h, Colors.mulRGB(bit.color, 0.2F));
             }
 
             if (!isSelected && i != 6)
             {
-                context.draw.box(right - 1, this.area.y, right, this.area.y + this.area.h, Colors.A50);
+                context.batcher.box(right - 1, this.area.y, right, this.area.y + this.area.h, Colors.A50);
             }
         }
 
-        context.draw.outline(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.A50);
+        context.batcher.outline(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.A50);
 
         if (hovered >= 0)
         {
             Bit bit = this.bits.get(hovered);
             String label = bit.label.get();
 
-            context.draw.textCard(context.font, label, this.area.mx(context.font.getWidth(label)), this.area.my(context.font.getHeight()));
+            context.batcher.textCard(context.font, label, this.area.mx(context.font.getWidth(label)), this.area.my(context.font.getHeight()));
         }
     }
 

@@ -107,7 +107,7 @@ public class ChunkBuilder
         }
 
         VAO vao = chunk.display;
-        VAOBuilder builder = context.getVAO().setup((VAO) null, VAO.DATA, VAO.INDICES);
+        VAOBuilder builder = context.getVAO().setup((VAO) null, VAO.INDICES);
 
         builder.begin();
         this.generateGeometry(builder);
@@ -124,6 +124,8 @@ public class ChunkBuilder
             {
                 vao.delete();
             }
+
+            builder.reset();
 
             return null;
         }
@@ -266,8 +268,10 @@ public class ChunkBuilder
 
     public void renderInUI(UIContext context, IBlockVariant variant, int x, int y, int scale)
     {
+        context.batcher.render();
+
         Shader shader = context.render.getShaders().get(this.getAttributes());
-        VAOBuilder builder = context.render.getVAO().setup(shader, VAO.DATA, VAO.INDICES);
+        VAOBuilder builder = context.render.getVAO().setup(shader, VAO.INDICES);
 
         Matrix4f model = new Matrix4f();
         Matrix3f normal = new Matrix3f();

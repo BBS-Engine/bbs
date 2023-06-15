@@ -323,9 +323,9 @@ public abstract class UITransformations extends UIElement
     {
         if (!this.vertical)
         {
-            context.font.renderWithShadow(context.render, UIKeys.TRANSFORMS_TRANSLATE.get(), this.tx.area.x, this.tx.area.y - 12);
-            context.font.renderWithShadow(context.render, UIKeys.TRANSFORMS_SCALE.get(), this.sx.area.x, this.sx.area.y - 12);
-            context.font.renderWithShadow(context.render, UIKeys.TRANSFORMS_ROTATE.get(), this.rx.area.x, this.rx.area.y - 12);
+            context.batcher.textShadow(UIKeys.TRANSFORMS_TRANSLATE.get(), this.tx.area.x, this.tx.area.y - 12);
+            context.batcher.textShadow(UIKeys.TRANSFORMS_SCALE.get(), this.sx.area.x, this.sx.area.y - 12);
+            context.batcher.textShadow(UIKeys.TRANSFORMS_ROTATE.get(), this.rx.area.x, this.rx.area.y - 12);
         }
 
         super.render(context);

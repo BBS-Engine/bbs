@@ -94,7 +94,7 @@ public class UIDopeSheetView extends UIDopeSheet
         {
             int cx = this.toGraphX(this.getOffset());
 
-            context.draw.box(cx - 1, this.area.y, cx + 1, this.area.ey(), Colors.CURSOR);
+            context.batcher.box(cx - 1, this.area.y, cx + 1, this.area.ey(), Colors.CURSOR);
         }
     }
 }

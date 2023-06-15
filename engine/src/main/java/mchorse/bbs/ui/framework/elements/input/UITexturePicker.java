@@ -609,18 +609,18 @@ public class UITexturePicker extends UIElement implements IFileDropListener
         }
 
         /* Draw the background */
-        context.draw.gradientVBox(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.A50, Colors.A100);
+        context.batcher.gradientVBox(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.A50, Colors.A100);
 
         if (this.multiList.isVisible())
         {
-            context.draw.box(this.area.x, this.area.y, this.area.x + 120, this.area.ey(), 0xff181818);
-            context.draw.box(this.area.x, this.area.y, this.area.x + 120, this.area.y + 30, Colors.A25);
-            context.draw.gradientVBox(this.area.x, this.area.ey() - 20, this.buttons.area.ex(), this.area.ey(), 0, Colors.A50);
+            context.batcher.box(this.area.x, this.area.y, this.area.x + 120, this.area.ey(), 0xff181818);
+            context.batcher.box(this.area.x, this.area.y, this.area.x + 120, this.area.y + 30, Colors.A25);
+            context.batcher.gradientVBox(this.area.x, this.area.ey() - 20, this.buttons.area.ex(), this.area.ey(), 0, Colors.A50);
         }
 
         if (this.editor.isVisible())
         {
-            this.edit.area.render(context.draw, Colors.A50 | BBSSettings.primaryColor.get());
+            this.edit.area.render(context.batcher, Colors.A50 | BBSSettings.primaryColor.get());
         }
 
         super.render(context);
@@ -633,7 +633,7 @@ public class UITexturePicker extends UIElement implements IFileDropListener
                 String label = UIKeys.TEXTURE_NO_DATA.get();
                 int w = context.font.getWidth(label);
 
-                context.font.renderWithShadow(context.render, label, this.picker.area.mx(w), this.picker.area.my() - 8);
+                context.batcher.text(label, this.picker.area.mx(w), this.picker.area.my() - 8);
             }
 
             if (!this.lastTyped.check() && this.lastTyped.enabled)
@@ -642,8 +642,8 @@ public class UITexturePicker extends UIElement implements IFileDropListener
                 int x = this.text.area.x;
                 int y = this.text.area.ey();
 
-                context.draw.box(x, y, x + w + 4, y + 4 + context.font.getHeight(), Colors.A50 | BBSSettings.primaryColor.get());
-                context.font.renderWithShadow(context.render, this.typed, x + 2, y + 2);
+                context.batcher.box(x, y, x + w + 4, y + 4 + context.font.getHeight(), Colors.A50 | BBSSettings.primaryColor.get());
+                context.batcher.textShadow(this.typed, x + 2, y + 2);
             }
 
             Link link = this.current;
@@ -678,10 +678,8 @@ public class UITexturePicker extends UIElement implements IFileDropListener
                 x -= fw + 10;
                 y -= fh + 10;
 
-                Icons.CHECKBOARD.renderArea(context.draw, x, y, fw, fh);
-
-                texture.bind();
-                context.draw.fullTexturedBox(x, y, fw, fh);
+                context.batcher.iconArea(Icons.CHECKBOARD, x, y, fw, fh);
+                context.batcher.fullTexturedBox(texture, x, y, fw, fh);
             }
         }
     }

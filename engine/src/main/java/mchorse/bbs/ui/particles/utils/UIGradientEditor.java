@@ -189,11 +189,11 @@ public class UIGradientEditor extends UIElement
             this.gradient.sort();
         }
 
-        this.area.render(context.draw, Colors.A100);
+        this.area.render(context.batcher, Colors.A100);
 
         int size = this.gradient.stops.size();
 
-        Icons.CHECKBOARD.renderArea(context.draw, this.a.x, this.a.y, this.a.w, this.a.h);
+        context.batcher.iconArea(Icons.CHECKBOARD, this.a.x, this.a.y, this.a.w, this.a.h);
 
         Gradient.ColorStop first = this.gradient.stops.get(0);
 
@@ -202,7 +202,7 @@ public class UIGradientEditor extends UIElement
             int x1 = this.a.x(first.stop / this.gradient.range);
             int rgba1 = this.fillColor(first.color).getARGBColor();
 
-            context.draw.box(this.a.x, this.a.y, x1, this.a.ey(), rgba1);
+            context.batcher.box(this.a.x, this.a.y, x1, this.a.ey(), rgba1);
         }
 
         for (int i = 0; i < size; i++)
@@ -216,7 +216,7 @@ public class UIGradientEditor extends UIElement
             int rgba1 = this.fillColor(stop.color).getARGBColor();
             int rgba2 = this.fillColor(next.color).getARGBColor();
 
-            context.draw.gradientHBox(x1, this.a.y, x2, this.a.ey(), rgba1, rgba2);
+            context.batcher.gradientHBox(x1, this.a.y, x2, this.a.ey(), rgba1, rgba2);
         }
 
         for (int i = 0; i < size; i++)
@@ -225,8 +225,8 @@ public class UIGradientEditor extends UIElement
             Area area = this.fillBound(stop);
             int handleColor = this.fillColor(stop.color).getARGBColor();
 
-            context.draw.box(area.x, area.y, area.ex(), area.ey(), this.current == stop ? Colors.WHITE : Colors.A100);
-            context.draw.box(area.x + 1, area.y + 1, area.ex() - 1, area.ey() - 1, handleColor);
+            context.batcher.box(area.x, area.y, area.ex(), area.ey(), this.current == stop ? Colors.WHITE : Colors.A100);
+            context.batcher.box(area.x + 1, area.y + 1, area.ex() - 1, area.ey() - 1, handleColor);
         }
 
         super.render(context);

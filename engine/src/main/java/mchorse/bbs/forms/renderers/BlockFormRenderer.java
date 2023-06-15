@@ -57,7 +57,7 @@ public class BlockFormRenderer extends FormRenderer<BlockForm>
         if (variant != null)
         {
             Shader shader = context.getShaders().get(chunkBuilder.getAttributes());
-            VAOBuilder builder = context.getVAO().setup(shader, VAO.DATA, VAO.INDICES);
+            VAOBuilder builder = context.getVAO().setup(shader, VAO.INDICES);
 
             context.getTextures().bind(chunkBuilder.models.atlas);
 

@@ -299,7 +299,7 @@ public class UIReplPanel extends UIWorldPanel
     @Override
     public void render(UIContext context)
     {
-        this.log.area.render(context.draw, Colors.A50);
+        this.log.area.render(context.batcher, Colors.A50);
 
         super.render(context);
     }

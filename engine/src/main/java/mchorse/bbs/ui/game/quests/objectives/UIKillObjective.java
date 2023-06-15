@@ -69,8 +69,8 @@ public class UIKillObjective extends UIObjective<KillObjective>
     {
         super.render(context);
 
-        context.font.renderWithShadow(context.render, UIKeys.QUESTS_OBJECTIVE_KILL_ENTITY.get(), this.entity.area.x, this.entity.area.y - 12);
-        context.font.renderWithShadow(context.render, UIKeys.QUESTS_OBJECTIVE_KILL_COUNT.get(), this.count.area.x, this.count.area.y - 12);
-        context.font.renderWithShadow(context.render, UIKeys.QUESTS_OBJECTIVE_KILL_DATA.get(), this.data.area.x, this.data.area.y - 12);
+        context.batcher.textShadow(UIKeys.QUESTS_OBJECTIVE_KILL_ENTITY.get(), this.entity.area.x, this.entity.area.y - 12);
+        context.batcher.textShadow(UIKeys.QUESTS_OBJECTIVE_KILL_COUNT.get(), this.count.area.x, this.count.area.y - 12);
+        context.batcher.textShadow(UIKeys.QUESTS_OBJECTIVE_KILL_DATA.get(), this.data.area.x, this.data.area.y - 12);
     }
 }

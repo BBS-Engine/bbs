@@ -1,6 +1,7 @@
 package mchorse.bbs.game.scripts.ui.graphics;
 
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.Area;
@@ -29,11 +30,11 @@ public class ImageGraphic extends Graphic
     {
         if (this.picture != null)
         {
+            Texture texture = context.render.getTextures().getTexture(this.picture);
             int left = area.x;
             int top = area.y;
 
-            context.render.getTextures().bind(this.picture);
-            context.draw.scaledTexturedBox(this.primary, left, top, 0, 0, area.w, area.h, this.width, this.height);
+            context.batcher.texturedBox(texture, this.primary, left, top, area.w, area.h, 0, 0, texture.width, texture.height, texture.width, texture.height);
         }
     }
 

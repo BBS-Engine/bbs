@@ -2,10 +2,6 @@ package mchorse.bbs.ui.framework.elements.input.keyframes;
 
 import mchorse.bbs.graphics.line.LineBuilder;
 import mchorse.bbs.graphics.line.SolidColorLineRenderer;
-import mchorse.bbs.graphics.shaders.Shader;
-import mchorse.bbs.graphics.vao.VAO;
-import mchorse.bbs.graphics.vao.VAOBuilder;
-import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.Area;
@@ -475,36 +471,31 @@ public class UIDopeSheet extends UIKeyframes
 
         for (UISheet sheet : this.sheets)
         {
-            Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_RGBA_2D);
-            VAOBuilder builder = context.render.getVAO().setup(shader, VAO.DATA);
-
             COLOR.set(sheet.color, false);
 
             LineBuilder line = new LineBuilder(0.75F);
 
             line.add(this.area.x, y + h / 2);
             line.add(this.area.ex(), y + h / 2);
-            line.render(builder, SolidColorLineRenderer.get(COLOR.r, COLOR.g, COLOR.b, 0.65F));
+            line.render(context.batcher, SolidColorLineRenderer.get(COLOR.r, COLOR.g, COLOR.b, 0.65F));
 
             /* Draw points */
-            builder.begin();
-
             int index = 0;
             int count = sheet.channel.getKeyframes().size();
             Keyframe prev = null;
 
             for (Keyframe frame : sheet.channel.getKeyframes())
             {
-                this.renderRect(context, builder, this.toGraphX(frame.tick), y + h / 2, 3, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
+                this.renderRect(context, this.toGraphX(frame.tick), y + h / 2, 3, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
 
                 if (frame.interp == KeyframeInterpolation.BEZIER && sheet.handles && index != count - 1)
                 {
-                    this.renderRect(context, builder, this.toGraphX(frame.tick + frame.rx), y + h / 2, 2, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
+                    this.renderRect(context, this.toGraphX(frame.tick + frame.rx), y + h / 2, 2, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
                 }
 
                 if (prev != null && prev.interp == KeyframeInterpolation.BEZIER && sheet.handles)
                 {
-                    this.renderRect(context, builder, this.toGraphX(frame.tick - frame.lx), y + h / 2, 2, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
+                    this.renderRect(context, this.toGraphX(frame.tick - frame.lx), y + h / 2, 2, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
                 }
 
                 prev = frame;
@@ -516,27 +507,27 @@ public class UIDopeSheet extends UIKeyframes
 
             for (Keyframe frame : sheet.channel.getKeyframes())
             {
-                this.renderRect(context, builder, this.toGraphX(frame.tick), y + h / 2, 2, this.which == Selection.KEYFRAME && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
+                this.renderRect(context, this.toGraphX(frame.tick), y + h / 2, 2, this.which == Selection.KEYFRAME && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
 
                 if (frame.interp == KeyframeInterpolation.BEZIER && sheet.handles && index != count - 1)
                 {
-                    this.renderRect(context, builder, this.toGraphX(frame.tick + frame.rx), y + h / 2, 1, this.which == Selection.RIGHT_HANDLE && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
+                    this.renderRect(context, this.toGraphX(frame.tick + frame.rx), y + h / 2, 1, this.which == Selection.RIGHT_HANDLE && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
                 }
 
                 if (prev != null && prev.interp == KeyframeInterpolation.BEZIER && sheet.handles)
                 {
-                    this.renderRect(context, builder, this.toGraphX(frame.tick - frame.lx), y + h / 2, 1, this.which == Selection.LEFT_HANDLE && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
+                    this.renderRect(context, this.toGraphX(frame.tick - frame.lx), y + h / 2, 1, this.which == Selection.LEFT_HANDLE && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
                 }
 
                 prev = frame;
                 index++;
             }
 
-            builder.render();
+            context.batcher.render();
 
             int lw = context.font.getWidth(sheet.title.get()) + 10;
-            context.draw.gradientHBox(this.area.ex() - lw - 10, y, this.area.ex(), y + h, sheet.color, Colors.A75 | sheet.color);
-            context.font.renderWithShadow(context.render, sheet.title.get(), this.area.ex() - lw + 5, y + (h - context.font.getHeight()) / 2);
+            context.batcher.gradientHBox(this.area.ex() - lw - 10, y, this.area.ex(), y + h, sheet.color, Colors.A75 | sheet.color);
+            context.batcher.textShadow(sheet.title.get(), this.area.ex() - lw + 5, y + (h - context.font.getHeight()) / 2);
 
             y += h;
         }

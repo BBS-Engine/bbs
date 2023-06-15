@@ -33,9 +33,9 @@ public class UITextureRect extends UIElement
             int highlight = hover ? Colors.A100 | BBSSettings.primaryColor.get() : Colors.WHITE;
 
             texture.bind();
-            context.draw.dropShadow(this.area.x + offset, this.area.y + offset, this.area.ex() - offset, this.area.ey() - offset, 6, color, 0);
-            context.draw.customTexturedBox(highlight, this.area.x, this.area.y, this.rect.x, this.rect.y, this.rect.w, this.rect.h, texture.width, texture.height, this.rect.ex(), this.rect.ey());
-            context.font.renderWithShadow(context.render, this.label, this.area.mx() - (context.font.getWidth(this.label) - 1) / 2, this.area.my() - context.font.getHeight() / 2);
+            context.batcher.dropShadow(this.area.x + offset, this.area.y + offset, this.area.ex() - offset, this.area.ey() - offset, 6, color, 0);
+            context.batcher.texturedBox(texture, highlight, this.area.x, this.area.y, this.rect.w, this.rect.h, this.rect.x, this.rect.y);
+            context.batcher.textShadow(this.label, this.area.mx() - (context.font.getWidth(this.label) - 1) / 2, this.area.my() - context.font.getHeight() / 2);
         }
 
         super.render(context);
