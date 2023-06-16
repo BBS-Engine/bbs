@@ -14,7 +14,7 @@ public class ScriptClient implements IScriptClient
 
         if (all || component.equals("textures"))
         {
-            BBS.getTextures().delete();
+            BBS.getTextures().reload();
         }
 
         if (all || component.equals("language"))

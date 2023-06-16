@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class TextureManager implements IDisposable, IWatchDogListener
@@ -183,8 +184,12 @@ public class TextureManager implements IDisposable, IWatchDogListener
         return video != null;
     }
 
-    @Override
-    public void delete()
+    public void reload()
+    {
+        this.reload(false);
+    }
+
+    public void reload(boolean delete)
     {
         for (VideoPlaybackThread video : this.videos.values())
         {
@@ -193,12 +198,27 @@ public class TextureManager implements IDisposable, IWatchDogListener
 
         this.videos.clear();
 
-        for (Texture texture : this.textures.values())
+        Iterator<Texture> it = this.textures.values().iterator();
+
+        while (it.hasNext())
         {
-            texture.delete();
+            Texture texture = it.next();
+
+            if (texture.isRefreshable() || delete)
+            {
+                texture.delete();
+
+                it.remove();
+            }
         }
 
         this.textures.clear();
+    }
+
+    @Override
+    public void delete()
+    {
+        this.reload(true);
     }
 
     /**

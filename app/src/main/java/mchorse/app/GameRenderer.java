@@ -132,29 +132,29 @@ public class GameRenderer implements IComponent
 
         this.gbufferFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("gbuffer"), (framebuffer) ->
         {
-            Texture albedo = BBS.getTextures().createTexture(Link.create("app:albedo"));
+            Texture albedo = BBS.getTextures().createTexture(Link.create("app:albedo")).notRefreshable();
 
             albedo.setFilter(GL11.GL_NEAREST);
             albedo.setWrap(GL13.GL_CLAMP_TO_EDGE);
 
-            Texture position = BBS.getTextures().createTexture(Link.create("app:position"));
+            Texture position = BBS.getTextures().createTexture(Link.create("app:position")).notRefreshable();
 
             position.setFilter(GL11.GL_NEAREST);
             position.setWrap(GL13.GL_CLAMP_TO_EDGE);
             position.setFormat(GL30.GL_RGBA16F, GL11.GL_RGBA, GL11.GL_FLOAT);
 
-            Texture normal = BBS.getTextures().createTexture(Link.create("app:normal"));
+            Texture normal = BBS.getTextures().createTexture(Link.create("app:normal")).notRefreshable();
 
             normal.setFilter(GL11.GL_NEAREST);
             normal.setWrap(GL13.GL_CLAMP_TO_EDGE);
             normal.setFormat(GL30.GL_RGBA16F, GL11.GL_RGBA, GL11.GL_FLOAT);
 
-            Texture lighting = BBS.getTextures().createTexture(Link.create("app:lighting"));
+            Texture lighting = BBS.getTextures().createTexture(Link.create("app:lighting")).notRefreshable();
 
             lighting.setFilter(GL11.GL_NEAREST);
             lighting.setWrap(GL13.GL_CLAMP_TO_EDGE);
 
-            Texture depth = BBS.getTextures().createTexture(Link.create("app:depth"));
+            Texture depth = BBS.getTextures().createTexture(Link.create("app:depth")).notRefreshable();
 
             depth.setFilter(GL11.GL_NEAREST);
             depth.setWrap(GL13.GL_CLAMP_TO_EDGE);

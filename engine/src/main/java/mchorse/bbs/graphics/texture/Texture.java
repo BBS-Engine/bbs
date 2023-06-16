@@ -22,6 +22,7 @@ public class Texture implements IDisposable
     public int height;
 
     private boolean mipmap;
+    private boolean refreshable = true;
 
     private int internalFormat = GL11.GL_RGBA8;
     private int format = GL11.GL_RGBA;
@@ -35,9 +36,21 @@ public class Texture implements IDisposable
         this.bind();
     }
 
+    public Texture notRefreshable()
+    {
+        this.refreshable = false;
+
+        return this;
+    }
+
     public boolean isMipmap()
     {
         return this.mipmap;
+    }
+
+    public boolean isRefreshable()
+    {
+        return this.refreshable;
     }
 
     public boolean isValid()

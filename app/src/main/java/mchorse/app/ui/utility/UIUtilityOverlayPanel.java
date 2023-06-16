@@ -45,7 +45,7 @@ public class UIUtilityOverlayPanel extends UIOverlayPanel
         UIButton textures = new UIButton(UIKeysApp.UTILITY_RELOAD_TEXTURES, (b) ->
         {
             this.print("Reloading textures!");
-            BBS.getTextures().delete();
+            BBS.getTextures().reload();
             this.close();
         });
         UIButton language = new UIButton(UIKeysApp.UTILITY_RELOAD_LANG, (b) ->
