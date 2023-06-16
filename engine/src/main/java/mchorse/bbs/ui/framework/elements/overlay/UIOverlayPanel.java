@@ -7,6 +7,7 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.events.UIOverlayCloseEvent;
+import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.ui.framework.elements.utils.UILabel;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -44,7 +45,7 @@ public class UIOverlayPanel extends UIElement
 
         this.add(this.title, this.icons, this.content);
 
-        this.blockInsideEvents();
+        this.mouseEventPropagataion(EventPropagation.BLOCK_INSIDE);
     }
 
     public void onClose(Consumer<UIOverlayCloseEvent> callback)

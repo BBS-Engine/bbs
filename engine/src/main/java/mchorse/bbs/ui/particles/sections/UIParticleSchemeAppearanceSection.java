@@ -45,7 +45,7 @@ public class UIParticleSchemeAppearanceSection extends UIParticleSchemeComponent
         });
         this.mode.addLabel(UIKeys.SNOWSTORM_APPEARANCE_REGULAR);
         this.mode.addLabel(UIKeys.SNOWSTORM_APPEARANCE_ANIMATED);
-        this.modeLabel = UI.label(UIKeys.SNOWSTORM_MODE, 20).anchor(0, 0.5F);
+        this.modeLabel = UI.label(UIKeys.SNOWSTORM_MODE, 20).labelAnchor(0, 0.5F);
 
         this.sizeW = new UIButton(UIKeys.SNOWSTORM_APPEARANCE_WIDTH, (b) -> this.editMoLang("appearance.width", (str) -> this.component.sizeW = this.parse(str, this.component.sizeW), this.component.sizeW));
         this.sizeH = new UIButton(UIKeys.SNOWSTORM_APPEARANCE_HEIGHT, (b) -> this.editMoLang("appearance.height", (str) -> this.component.sizeH = this.parse(str, this.component.sizeH), this.component.sizeH));
@@ -95,15 +95,15 @@ public class UIParticleSchemeAppearanceSection extends UIParticleSchemeComponent
 
         this.flipbook = new UIElement();
         this.flipbook.column().vertical().stretch();
-        this.flipbook.add(UI.label(UIKeys.SNOWSTORM_APPEARANCE_ANIMATED, 20).anchor(0, 1F));
+        this.flipbook.add(UI.label(UIKeys.SNOWSTORM_APPEARANCE_ANIMATED, 20).labelAnchor(0, 1F));
         this.flipbook.add(UI.row(5, 0, 20, this.stepX, this.stepY));
         this.flipbook.add(UI.row(5, 0, 20, this.fps, this.max));
         this.flipbook.add(UI.row(5, 0, 20, this.stretch, this.loop));
 
         this.fields.add(UI.row(5, 0, 20, this.modeLabel, this.mode));
-        this.fields.add(UI.label(UIKeys.SNOWSTORM_APPEARANCE_SIZE, 20).anchor(0, 1F));
+        this.fields.add(UI.label(UIKeys.SNOWSTORM_APPEARANCE_SIZE, 20).labelAnchor(0, 1F));
         this.fields.add(UI.row(this.sizeW, this.sizeH));
-        this.fields.add(UI.label(UIKeys.SNOWSTORM_APPEARANCE_MAPPING, 20).anchor(0, 1F));
+        this.fields.add(UI.label(UIKeys.SNOWSTORM_APPEARANCE_MAPPING, 20).labelAnchor(0, 1F));
         this.fields.add(UI.row(this.uvX, this.uvY), UI.row(this.uvW, this.uvH));
     }
 

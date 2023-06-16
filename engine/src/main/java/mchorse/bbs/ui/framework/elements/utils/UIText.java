@@ -106,7 +106,7 @@ public class UIText extends UIElement implements ITextColoring
         return this;
     }
 
-    public UIText anchorX(float anchor)
+    public UIText textAnchorX(float anchor)
     {
         this.anchorX = anchor;
 

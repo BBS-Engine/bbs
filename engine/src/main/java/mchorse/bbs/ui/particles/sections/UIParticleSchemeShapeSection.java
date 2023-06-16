@@ -60,7 +60,7 @@ public class UIParticleSchemeShapeSection extends UIParticleSchemeModeSection<Pa
         });
         this.surface.tooltip(UIKeys.SNOWSTORM_SHAPE_SURFACE_TOOLTIP);
 
-        this.radiusLabel = UI.label(UIKeys.SNOWSTORM_SHAPE_RADIUS, 20).anchor(0, 1F);
+        this.radiusLabel = UI.label(UIKeys.SNOWSTORM_SHAPE_RADIUS, 20).labelAnchor(0, 1F);
         this.radius = new UIButton(UIKeys.SNOWSTORM_SHAPE_RADIUS, (b) ->
         {
             ParticleComponentShapeSphere sphere = (ParticleComponentShapeSphere) this.component;
@@ -68,7 +68,7 @@ public class UIParticleSchemeShapeSection extends UIParticleSchemeModeSection<Pa
             this.editMoLang("shape.radius", (str) -> sphere.radius = this.parse(str, sphere.radius), sphere.radius);
         });
 
-        this.label = UI.label(IKey.EMPTY, 20).anchor(0, 1F);
+        this.label = UI.label(IKey.EMPTY, 20).labelAnchor(0, 1F);
         this.x = new UIButton(UIKeys.X, (str) -> this.updateNormalDimension(0));
         this.y = new UIButton(UIKeys.Y, (str) -> this.updateNormalDimension(1));
         this.z = new UIButton(UIKeys.Z, (str) -> this.updateNormalDimension(2));
@@ -76,7 +76,7 @@ public class UIParticleSchemeShapeSection extends UIParticleSchemeModeSection<Pa
 
         this.modeLabel.label = UIKeys.SNOWSTORM_SHAPE_SHAPE;
 
-        this.fields.add(UI.label(UIKeys.SNOWSTORM_SHAPE_OFFSET, 20).anchor(0, 1F));
+        this.fields.add(UI.label(UIKeys.SNOWSTORM_SHAPE_OFFSET, 20).labelAnchor(0, 1F));
         this.fields.add(UI.row(this.offsetX, this.offsetY, this.offsetZ));
         this.fields.add(this.direction, this.surface);
     }
@@ -253,7 +253,7 @@ public class UIParticleSchemeShapeSection extends UIParticleSchemeModeSection<Pa
             this.xyz = UI.row(this.x, this.y, this.z);
 
             this.column().vertical().stretch().height(20);
-            this.add(UI.row(5, 0, 20, UI.label(UIKeys.SNOWSTORM_SHAPE_DIRECTION, 20).anchor(0, 0.5F), this.mode));
+            this.add(UI.row(5, 0, 20, UI.label(UIKeys.SNOWSTORM_SHAPE_DIRECTION, 20).labelAnchor(0, 0.5F), this.mode));
         }
 
         private ShapeDirectionVector getVector()

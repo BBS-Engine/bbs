@@ -53,7 +53,7 @@ public class UISchematicOverlayPanel extends UIOverlayPanel
 
         for (Integer integer : this.schematic.getUniqueBlocks())
         {
-            UILabel label = UI.label(UIKeys.WORLD_EDITOR_SCHEMATIC_BLOCK.format(i)).anchor(0, 0.5F);
+            UILabel label = UI.label(UIKeys.WORLD_EDITOR_SCHEMATIC_BLOCK.format(i)).labelAnchor(0, 0.5F);
             UIBlockVariant variant = new UIBlockVariant((b) -> this.replace(integer, b)).allowEmpty();
             UIElement row = UI.row(label, variant);
 

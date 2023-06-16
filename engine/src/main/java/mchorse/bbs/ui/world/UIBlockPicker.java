@@ -7,6 +7,7 @@ import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
+import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.ScrollArea;
 import mchorse.bbs.utils.colors.Colors;
@@ -31,7 +32,7 @@ public class UIBlockPicker extends UIElement
         this.blocks = blockSet;
         this.callback = callback;
 
-        this.blockInsideEvents();
+        this.eventPropagataion(EventPropagation.BLOCK_INSIDE);
     }
 
     @Override

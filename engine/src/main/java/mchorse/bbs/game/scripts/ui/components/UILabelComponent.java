@@ -107,7 +107,7 @@ public class UILabelComponent extends UILabelBaseComponent
             label.background(this.background);
         }
 
-        label.anchor(this.anchorX, this.anchorY);
+        label.labelAnchor(this.anchorX, this.anchorY);
 
         return this.apply(label, context);
     }

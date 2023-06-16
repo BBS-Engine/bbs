@@ -30,7 +30,7 @@ public class UIKernings extends UIElement
         this.editor = UI.column();
 
         this.column().vertical().stretch();
-        this.add(UI.row(UI.label(UIKeys.FONT_EDITOR_KERNING_TITLE, 20).background().anchor(0, 0.5F), this.add));
+        this.add(UI.row(UI.label(UIKeys.FONT_EDITOR_KERNING_TITLE, 20).background().labelAnchor(0, 0.5F), this.add));
         this.add(this.editor);
     }
 

@@ -113,7 +113,7 @@ public class UIParticleSchemeLightingSection extends UIParticleSchemeSection
         });
         this.gradient = UI.row(this.gradientColor, this.gradientInterpolant);
 
-        UILabel label = UI.label(UIKeys.SNOWSTORM_MODE, 20).anchor(0, 0.5F);
+        UILabel label = UI.label(UIKeys.SNOWSTORM_MODE, 20).labelAnchor(0, 0.5F);
 
         this.channels = UI.row(5, 0, 20, this.r, this.g, this.b, this.a);
 

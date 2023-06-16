@@ -71,7 +71,7 @@ public class UIWelcomeMenu extends UIBaseMenu
     {
         super(bridge);
 
-        this.title = UI.label(IKey.EMPTY).background().anchor(0.5F, 0.5F);
+        this.title = UI.label(IKey.EMPTY).background().labelAnchor(0.5F, 0.5F);
         this.previous = new UIIcon(Icons.MOVE_LEFT, this::previous);
         this.next = new UIIcon(Icons.MOVE_RIGHT, this::next);
 
@@ -157,7 +157,7 @@ public class UIWelcomeMenu extends UIBaseMenu
 
         /* External resources */
         this.discord = new UIButton(UIKeysApp.WELCOME_DISCORD, (b) -> UIUtils.openWebLink("https://discord.gg/N7ZZyNd4UC"));
-        this.wiki = new UIButton(UIKeysApp.WELCOME_WIKI, (b) -> UIUtils.openWebLink("https://github.com/mchorse/bbs/wiki"));
+        this.wiki = new UIButton(UIKeysApp.WELCOME_WIKI, (b) -> UIUtils.openWebLink("https://github.com/BBS-Engine/bbs/wiki"));
         this.resources = UI.row(this.wiki, this.discord);
         this.resources.relative(this.main).x(0.5F).y(0.5F, 75).wh(300, 20).anchorX(0.5F);
 

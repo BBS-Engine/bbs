@@ -176,7 +176,7 @@ public class UIValueFactory
 
     public static UILabel label(IValue value)
     {
-        return UI.label(IKey.lang(UIValueFactory.getValueLabelKey(value)), 0).anchor(0, 0.5F);
+        return UI.label(IKey.lang(UIValueFactory.getValueLabelKey(value)), 0).labelAnchor(0, 0.5F);
     }
 
     public static UIElement commetTooltip(UIElement element, IValue value)

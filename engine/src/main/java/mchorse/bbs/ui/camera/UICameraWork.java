@@ -900,7 +900,7 @@ public class UICameraWork extends UIElement
     }
 
     @Override
-    public boolean mouseClicked(UIContext context)
+    protected boolean subMouseClicked(UIContext context)
     {
         if (this.vertical.mouseClicked(context))
         {
@@ -917,28 +917,19 @@ public class UICameraWork extends UIElement
 
             if (context.mouseButton == 0)
             {
-                if (this.handleLeftClick(mouseX, mouseY, ctrl, shift, alt))
-                {
-                    return true;
-                }
+                if (this.handleLeftClick(mouseX, mouseY, ctrl, shift, alt)) return true;
             }
             else if (context.mouseButton == 1)
             {
-                if (this.handleRightClick(mouseX, mouseY, ctrl, shift, alt))
-                {
-                    return true;
-                }
+                if (this.handleRightClick(mouseX, mouseY, ctrl, shift, alt)) return true;
             }
             else if (context.mouseButton == 2)
             {
-                if (this.handleMiddleClick(mouseX, mouseY, ctrl, shift, alt))
-                {
-                    return true;
-                }
+                if (this.handleMiddleClick(mouseX, mouseY, ctrl, shift, alt)) return true;
             }
         }
 
-        return super.mouseClicked(context);
+        return super.subMouseClicked(context);
     }
 
     private boolean handleLeftClick(int mouseX, int mouseY, boolean ctrl, boolean shift, boolean alt)

@@ -39,13 +39,8 @@ public class UIPlayerSlot extends UIElement implements IUIInventory
     }
 
     @Override
-    public boolean mouseClicked(UIContext context)
+    protected boolean subMouseClicked(UIContext context)
     {
-        if (super.mouseClicked(context))
-        {
-            return true;
-        }
-
         if (this.area.isInside(context))
         {
             if (this.handler.isHolding())

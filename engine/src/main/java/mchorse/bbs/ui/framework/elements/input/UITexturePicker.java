@@ -18,6 +18,7 @@ import mchorse.bbs.ui.framework.elements.input.list.UIFilteredLinkList;
 import mchorse.bbs.ui.framework.elements.input.list.UIFolderEntryList;
 import mchorse.bbs.ui.framework.elements.input.multilink.UIMultiLinkEditor;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
+import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -170,7 +171,7 @@ public class UITexturePicker extends UIElement implements IFileDropListener
         this.callback = callback;
 
         this.fill(null);
-        this.markContainer().blockInsideEvents();
+        this.markContainer().eventPropagataion(EventPropagation.BLOCK);
     }
 
     private Link parseLink()

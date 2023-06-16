@@ -19,7 +19,7 @@ public class UIBaseFontFormat <T extends BaseFontFormat> extends UIElement
     {
         super();
 
-        this.name = new UILabel(IKey.EMPTY).anchor(0F, 0.5F);
+        this.name = new UILabel(IKey.EMPTY).labelAnchor(0F, 0.5F);
         this.control = new UITextbox(1, (t) -> this.format.setControlCharacter(t));
 
         this.name.w(80);

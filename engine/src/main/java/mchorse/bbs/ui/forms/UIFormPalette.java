@@ -5,6 +5,7 @@ import mchorse.bbs.ui.forms.categories.UIFormCategory;
 import mchorse.bbs.ui.forms.editors.UIFormEditor;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
+import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.utils.colors.Colors;
 import org.lwjgl.glfw.GLFW;
 
@@ -56,7 +57,7 @@ public class UIFormPalette extends UIElement implements IUIFormList
 
         this.add(this.list, this.editor);
 
-        this.blockInsideEvents().markContainer();
+        this.eventPropagataion(EventPropagation.BLOCK_INSIDE).markContainer();
     }
 
     public UIFormPalette updatable()

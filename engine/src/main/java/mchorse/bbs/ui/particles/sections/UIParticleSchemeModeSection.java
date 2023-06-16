@@ -19,7 +19,7 @@ public abstract class UIParticleSchemeModeSection <T extends ParticleComponentBa
 
         this.mode = new UICirculate((b) -> this.updateMode(this.mode.getValue()));
         this.fillModes(this.mode);
-        this.modeLabel = UI.label(UIKeys.SNOWSTORM_MODE, 20).anchor(0, 0.5F);
+        this.modeLabel = UI.label(UIKeys.SNOWSTORM_MODE, 20).labelAnchor(0, 0.5F);
 
         this.fields.add(UI.row(5, 0, 20, this.modeLabel, this.mode));
     }

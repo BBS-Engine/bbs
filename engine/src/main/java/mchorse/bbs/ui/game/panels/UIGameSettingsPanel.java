@@ -56,7 +56,7 @@ public class UIGameSettingsPanel extends UIDashboardPanel
 
         this.statesEditor = new UIStatesEditor();
         this.statesEditor.relative(this.states).y(25).w(1F).h(1F, -25);
-        this.statesTitle = UI.label(IKey.EMPTY).anchor(0, 0.5F).background();
+        this.statesTitle = UI.label(IKey.EMPTY).labelAnchor(0, 0.5F).background();
         this.statesTitle.relative(this.states).xy(10, 10).wh(120, 20);
         this.statesAdd = new UIIcon(Icons.ADD, this::addState);
         this.statesAdd.relative(this.states).x(1F, -30).y(10);
@@ -78,7 +78,7 @@ public class UIGameSettingsPanel extends UIDashboardPanel
         this.propertiesEditor = UI.scrollView(5, 10);
         this.propertiesEditor.relative(this).x(0.5F).y(25).w(0.5F).h(1F, -25);
 
-        this.title = UI.label(UIKeys.SETTINGS_TITLE).anchor(0, 0.5F).background();
+        this.title = UI.label(UIKeys.SETTINGS_TITLE).labelAnchor(0, 0.5F).background();
         this.title.relative(this).x(0.5F, 10).y(10).wh(120, 20);
 
         this.states.add(this.statesTitle, this.statesAdd, this.statesEditor);

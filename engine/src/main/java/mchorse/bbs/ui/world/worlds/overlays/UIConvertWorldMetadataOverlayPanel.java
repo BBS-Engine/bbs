@@ -31,8 +31,8 @@ public class UIConvertWorldMetadataOverlayPanel extends UIWorldMetadataOverlayPa
         if (this.column.getValue())
         {
             this.view.add(UI.label(UIKeys.WORLDS_OPTIONS_COLUMN_OPTIONS).background(color));
-            this.view.add(UI.row(UI.label(UIKeys.WORLDS_OPTIONS_COLUMN_BASE, 20).anchor(0, 0.5F), this.columnBase));
-            this.view.add(UI.row(UI.label(UIKeys.WORLDS_OPTIONS_COLUMN_HEIGHT, 20).anchor(0, 0.5F), this.columnHeight).marginBottom(12));
+            this.view.add(UI.row(UI.label(UIKeys.WORLDS_OPTIONS_COLUMN_BASE, 20).labelAnchor(0, 0.5F), this.columnBase));
+            this.view.add(UI.row(UI.label(UIKeys.WORLDS_OPTIONS_COLUMN_HEIGHT, 20).labelAnchor(0, 0.5F), this.columnHeight).marginBottom(12));
         }
 
         this.view.add(this.submit);

@@ -123,18 +123,9 @@ public class UIReplPanel extends UIWorldPanel
     {}
 
     @Override
-    public boolean mouseClicked(UIContext context)
+    protected boolean subMouseClicked(UIContext context)
     {
-        if (super.mouseClicked(context) || this.log.area.isInside(context))
-        {
-            return true;
-        }
-        else if (!this.result.type.isMissed() && this.handlePicking(context))
-        {
-            return true;
-        }
-
-        return false;
+        return this.log.area.isInside(context) || (!this.result.type.isMissed() && this.handlePicking(context));
     }
 
     private boolean handlePicking(UIContext context)
@@ -199,7 +190,7 @@ public class UIReplPanel extends UIWorldPanel
     }
 
     @Override
-    public boolean keyPressed(UIContext context)
+    protected boolean childrenKeyPressed(UIContext context)
     {
         if (this.repl.isFocused())
         {
@@ -213,7 +204,7 @@ public class UIReplPanel extends UIWorldPanel
             }
         }
 
-        return super.keyPressed(context);
+        return super.childrenKeyPressed(context);
     }
 
     private boolean submit()

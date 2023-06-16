@@ -86,7 +86,7 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
         this.paste = new UIIcon(Icons.PASTE, (b) -> this.paste());
         this.paste.tooltip(UIKeysApp.LANGUAGE_EDITOR_PASTE).wh(16, 16);
         this.completion = UI.label(IKey.EMPTY);
-        this.completion.background(Colors.A50 | BBSSettings.primaryColor.get()).anchor(1F, 0.5F);
+        this.completion.background(Colors.A50 | BBSSettings.primaryColor.get()).labelAnchor(1F, 0.5F);
         this.completion.relative(this.icons).x(-4).wh(160, 16).anchorX(1F);
 
         this.missing = new UIIcon(Icons.SEARCH, (b) -> this.viewOnlyMissing());

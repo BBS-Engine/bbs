@@ -25,7 +25,7 @@ public class ValueKeyCombo extends BaseValueBasic<KeyCombo> implements IValueUIP
     @Override
     public List<UIElement> getFields(UIElement ui)
     {
-        UILabel label = UI.label(this.value.label, 0).anchor(0, 0.5F);
+        UILabel label = UI.label(this.value.label, 0).labelAnchor(0, 0.5F);
         UIKeybind keybind = new UIKeybind((k) ->
         {
             this.value.copy(k);

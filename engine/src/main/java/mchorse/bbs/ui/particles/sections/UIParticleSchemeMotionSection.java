@@ -81,12 +81,12 @@ public class UIParticleSchemeMotionSection extends UIParticleSchemeModeSection<P
 
         this.position = new UIElement();
         this.position.column(5).vertical().stretch();
-        this.position.add(UI.label(UIKeys.SNOWSTORM_MOTION_POSITION, 20).anchor(0, 1F), this.positionSpeed);
+        this.position.add(UI.label(UIKeys.SNOWSTORM_MOTION_POSITION, 20).labelAnchor(0, 1F), this.positionSpeed);
         this.position.add(UI.row(this.positionX, this.positionY, this.positionZ));
 
         this.rotation = new UIElement();
         this.rotation.column(5).vertical().stretch();
-        this.rotation.add(UI.label(UIKeys.SNOWSTORM_MOTION_ROTATION, 20).anchor(0, 1F), this.rotationAngle, this.rotationRate);
+        this.rotation.add(UI.label(UIKeys.SNOWSTORM_MOTION_ROTATION, 20).labelAnchor(0, 1F), this.rotationAngle, this.rotationRate);
         this.rotation.add(this.rotationAcceleration);
 
         this.fields.add(this.position, this.rotation);

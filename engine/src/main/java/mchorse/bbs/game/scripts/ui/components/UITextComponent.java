@@ -59,7 +59,7 @@ public class UITextComponent extends UILabelBaseComponent
     @DiscardMethod
     protected UIElement subCreate(UserInterfaceContext context)
     {
-        return this.apply(new UIText(this.getLabel()).anchorX(this.textAnchor), context);
+        return this.apply(new UIText(this.getLabel()).textAnchorX(this.textAnchor), context);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class UITextComponent extends UILabelBaseComponent
         }
         else if (key.equals("textAnchor"))
         {
-            ((UIText) element).anchorX(this.textAnchor);
+            ((UIText) element).textAnchorX(this.textAnchor);
         }
     }
 

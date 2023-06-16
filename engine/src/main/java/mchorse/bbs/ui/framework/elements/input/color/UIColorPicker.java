@@ -8,6 +8,7 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
+import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Color;
@@ -107,9 +108,7 @@ public class UIColorPicker extends UIElement
         this.favorite.relative(this).xy(5, 95).w(1F, -10);
         this.recent.relative(this.favorite).w(1F);
 
-        this.add(this.input, this.favorite, this.recent);
-
-        this.blockInsideEvents();
+        this.eventPropagataion(EventPropagation.BLOCK_INSIDE).add(this.input, this.favorite, this.recent);
     }
 
     public UIColorPicker editAlpha()

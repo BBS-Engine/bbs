@@ -37,7 +37,7 @@ public class UICurveEditor extends UIElement
     {
         this.section = section;
 
-        this.name = UI.label(IKey.EMPTY, 20).anchor(0, 0.5F).background();
+        this.name = UI.label(IKey.EMPTY, 20).labelAnchor(0, 0.5F).background();
         this.rename = new UIIcon(Icons.EDIT, this::rename);
         this.rename.tooltip(UIKeys.SNOWSTORM_CURVES_RENAME);
         this.delete = new UIIcon(Icons.REMOVE, this::remove);
@@ -57,7 +57,7 @@ public class UICurveEditor extends UIElement
 
         this.column().vertical().stretch();
         this.add(UI.row(0, this.name, this.rename, this.delete));
-        this.add(UI.row(UI.label(UIKeys.SNOWSTORM_CURVES_TYPE, 20).anchor(0, 0.5F), this.type));
+        this.add(UI.row(UI.label(UIKeys.SNOWSTORM_CURVES_TYPE, 20).labelAnchor(0, 0.5F), this.type));
         this.add(this.curve, UI.row(this.input, this.range));
     }
 

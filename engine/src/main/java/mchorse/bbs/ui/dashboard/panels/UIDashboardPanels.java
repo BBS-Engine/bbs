@@ -36,7 +36,7 @@ public class UIDashboardPanels extends UIElement
         this.panelButtons.relative(this.pinned).x(1F, 5).h(20).wTo(this.taskBar.area, 1F).column(0).scroll();
         this.panelButtons.scroll.cancelScrolling().noScrollbar();
         this.panelButtons.scroll.scrollSpeed = 5;
-        this.panelButtons.preRenderDraw((context) ->
+        this.panelButtons.preRender((context) ->
         {
             for (int i = 0, c = this.panels.size(); i < c; i++)
             {

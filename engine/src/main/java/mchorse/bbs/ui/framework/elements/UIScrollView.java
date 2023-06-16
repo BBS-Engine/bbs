@@ -16,7 +16,7 @@ public class UIScrollView extends UIElement implements IViewport
 {
     public ScrollArea scroll;
 
-    public Consumer<UIContext> preRenderDraw;
+    public Consumer<UIContext> preRenderCallback;
 
     public UIScrollView()
     {
@@ -32,9 +32,9 @@ public class UIScrollView extends UIElement implements IViewport
         this.scroll.scrollSpeed = 20;
     }
 
-    public UIScrollView preRenderDraw(Consumer<UIContext> callback)
+    public UIScrollView preRender(Consumer<UIContext> callback)
     {
-        this.preRenderDraw = callback;
+        this.preRenderCallback = callback;
 
         return this;
     }
@@ -78,7 +78,7 @@ public class UIScrollView extends UIElement implements IViewport
     }
 
     @Override
-    public boolean mouseClicked(UIContext context)
+    protected boolean childrenMouseClicked(UIContext context)
     {
         if (!this.area.isInside(context))
         {
@@ -96,14 +96,14 @@ public class UIScrollView extends UIElement implements IViewport
         }
 
         this.apply(context);
-        boolean result = super.mouseClicked(context);
+        boolean result = super.childrenMouseClicked(context);
         this.unapply(context);
 
         return result;
     }
 
     @Override
-    public boolean mouseScrolled(UIContext context)
+    protected boolean childrenMouseScrolled(UIContext context)
     {
         if (!this.area.isInside(context))
         {
@@ -116,7 +116,7 @@ public class UIScrollView extends UIElement implements IViewport
         }
 
         this.apply(context);
-        boolean result = super.mouseScrolled(context);
+        boolean result = super.childrenMouseScrolled(context);
         this.unapply(context);
 
         if (result)
@@ -128,12 +128,12 @@ public class UIScrollView extends UIElement implements IViewport
     }
 
     @Override
-    public boolean mouseReleased(UIContext context)
+    protected boolean childrenMouseReleased(UIContext context)
     {
         this.scroll.mouseReleased(context);
 
         this.apply(context);
-        boolean result = super.mouseReleased(context);
+        boolean result = super.childrenMouseReleased(context);
         this.unapply(context);
 
         return result;
@@ -169,9 +169,9 @@ public class UIScrollView extends UIElement implements IViewport
 
     protected void preRender(UIContext context)
     {
-        if (this.preRenderDraw != null)
+        if (this.preRenderCallback != null)
         {
-            this.preRenderDraw.accept(context);
+            this.preRenderCallback.accept(context);
         }
     }
 

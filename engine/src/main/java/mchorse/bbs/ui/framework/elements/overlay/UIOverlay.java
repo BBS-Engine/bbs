@@ -2,6 +2,7 @@ package mchorse.bbs.ui.framework.elements.overlay;
 
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
+import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.utils.colors.Colors;
 import org.lwjgl.glfw.GLFW;
@@ -70,7 +71,7 @@ public class UIOverlay extends UIElement
 
     public UIOverlay()
     {
-        this.blockEvents().markContainer();
+        this.eventPropagataion(EventPropagation.BLOCK).markContainer();
     }
 
     public UIOverlay background(int background)

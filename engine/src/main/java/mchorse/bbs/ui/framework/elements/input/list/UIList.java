@@ -61,8 +61,7 @@ public abstract class UIList <T> extends UIElement
      */
     public boolean sorting;
 
-    public boolean background;
-    public int color = Colors.A50;
+    public int background;
     protected boolean postDraw;
 
     private String filter = "";
@@ -83,20 +82,12 @@ public abstract class UIList <T> extends UIElement
 
     public UIList<T> background()
     {
-        this.background = true;
-
-        return this;
+        return this.background(Colors.A50);
     }
 
     public UIList<T> background(int color)
     {
-        return this.background(true, color);
-    }
-
-    public UIList<T> background(boolean background, int color)
-    {
-        this.background = background;
-        this.color = color;
+        this.background = color;
 
         return this;
     }
@@ -598,9 +589,9 @@ public abstract class UIList <T> extends UIElement
     {
         this.scroll.drag(context);
 
-        if (this.background)
+        if (Colors.getAlpha(this.background) > 0)
         {
-            this.area.render(context.batcher, this.color);
+            this.area.render(context.batcher, this.background);
         }
 
         context.batcher.clip(this.scroll, context);

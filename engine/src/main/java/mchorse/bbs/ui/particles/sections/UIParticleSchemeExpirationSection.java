@@ -72,9 +72,9 @@ public class UIParticleSchemeExpirationSection extends UIParticleSchemeSection
         });
         this.d.tooltip(IKey.str("D"));
 
-        this.fields.add(UI.row(5, 0, 20, UI.label(UIKeys.SNOWSTORM_MODE, 20).anchor(0, 0.5F), this.mode));
+        this.fields.add(UI.row(5, 0, 20, UI.label(UIKeys.SNOWSTORM_MODE, 20).labelAnchor(0, 0.5F), this.mode));
         this.fields.add(this.expression);
-        this.fields.add(UI.label(UIKeys.SNOWSTORM_EXPIRATION_KILL_PLANE, 20).anchor(0, 1F)
+        this.fields.add(UI.label(UIKeys.SNOWSTORM_EXPIRATION_KILL_PLANE, 20).labelAnchor(0, 1F)
             .tooltip(UIKeys.SNOWSTORM_EXPIRATION_KILL_PLANE_TOOLTIP));
         this.fields.add(UI.row(5, 0, 20, this.a, this.b));
         this.fields.add(UI.row(5, 0, 20, this.c, this.d));

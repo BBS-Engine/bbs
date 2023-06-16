@@ -11,7 +11,7 @@ public class UIMessageOverlayPanel extends UIOverlayPanel
     {
         super(title);
 
-        this.message = new UIText().text(message).anchorX(0.5F);
+        this.message = new UIText().text(message).textAnchorX(0.5F);
         this.message.relative(this.content).x(0.5F).y(12).w(0.7F).anchorX(0.5F);
 
         this.content.add(this.message);

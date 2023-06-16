@@ -99,7 +99,7 @@ public class UISettingsPanel extends UIDashboardPanel
             String catTitleKey = UIValueFactory.getCategoryTitleKey(category);
             String catTooltipKey = UIValueFactory.getCategoryTooltipKey(category);
 
-            UILabel label = UI.label(IKey.lang(catTitleKey)).anchor(0, 1).background();
+            UILabel label = UI.label(IKey.lang(catTitleKey)).labelAnchor(0, 1).background();
             List<UIElement> options = new ArrayList<UIElement>();
 
             label.tooltip(IKey.lang(catTooltipKey), Direction.BOTTOM);

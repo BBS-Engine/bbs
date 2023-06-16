@@ -15,11 +15,11 @@ import mchorse.bbs.graphics.Draw;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.MatrixStack;
-import mchorse.bbs.graphics.Renderbuffer;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
+import mchorse.bbs.graphics.shaders.uniforms.UniformVector2;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector3;
 import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.graphics.text.builders.ITextBuilder;
@@ -109,6 +109,7 @@ public class GameRenderer implements IComponent
             shader.getUniform("u_position", UniformInt.class).set(1);
             shader.getUniform("u_normal", UniformInt.class).set(2);
             shader.getUniform("u_lighting", UniformInt.class).set(3);
+            shader.getUniform("u_depth", UniformInt.class).set(4);
             shader.getUniform("u_lightmap", UniformInt.class).set(7);
         });
         this.finalShader = new Shader(Link.create("app:shaders/world/vertex_2d-final.glsl"), VBOAttributes.VERTEX_2D).onInitialize((shader) ->
@@ -131,35 +132,40 @@ public class GameRenderer implements IComponent
 
         this.gbufferFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("gbuffer"), (framebuffer) ->
         {
-            Texture albedo = new Texture();
+            Texture albedo = BBS.getTextures().createTexture(Link.create("app:albedo"));
 
             albedo.setFilter(GL11.GL_NEAREST);
             albedo.setWrap(GL13.GL_CLAMP_TO_EDGE);
 
-            Texture position = new Texture();
+            Texture position = BBS.getTextures().createTexture(Link.create("app:position"));
 
             position.setFilter(GL11.GL_NEAREST);
             position.setWrap(GL13.GL_CLAMP_TO_EDGE);
             position.setFormat(GL30.GL_RGBA16F, GL11.GL_RGBA, GL11.GL_FLOAT);
 
-            Texture normal = new Texture();
+            Texture normal = BBS.getTextures().createTexture(Link.create("app:normal"));
 
             normal.setFilter(GL11.GL_NEAREST);
             normal.setWrap(GL13.GL_CLAMP_TO_EDGE);
             normal.setFormat(GL30.GL_RGBA16F, GL11.GL_RGBA, GL11.GL_FLOAT);
 
-            Texture lighting = new Texture();
+            Texture lighting = BBS.getTextures().createTexture(Link.create("app:lighting"));
 
             lighting.setFilter(GL11.GL_NEAREST);
             lighting.setWrap(GL13.GL_CLAMP_TO_EDGE);
 
-            Renderbuffer depth = new Renderbuffer();
+            Texture depth = BBS.getTextures().createTexture(Link.create("app:depth"));
 
-            framebuffer.deleteTextures().attach(albedo, GL30.GL_COLOR_ATTACHMENT0);
+            depth.setFilter(GL11.GL_NEAREST);
+            depth.setWrap(GL13.GL_CLAMP_TO_EDGE);
+            depth.setFormat(GL30.GL_DEPTH_COMPONENT24, GL30.GL_DEPTH_COMPONENT, GL30.GL_FLOAT);
+
+            framebuffer.deleteTextures();
+            framebuffer.attach(albedo, GL30.GL_COLOR_ATTACHMENT0);
             framebuffer.attach(position, GL30.GL_COLOR_ATTACHMENT1);
             framebuffer.attach(normal, GL30.GL_COLOR_ATTACHMENT2);
             framebuffer.attach(lighting, GL30.GL_COLOR_ATTACHMENT3);
-            framebuffer.attach(depth);
+            framebuffer.attach(depth, GL30.GL_DEPTH_ATTACHMENT);
 
             GL30.glDrawBuffers(new int[] {GL30.GL_COLOR_ATTACHMENT0, GL30.GL_COLOR_ATTACHMENT1, GL30.GL_COLOR_ATTACHMENT2, GL30.GL_COLOR_ATTACHMENT3});
 
@@ -291,6 +297,7 @@ public class GameRenderer implements IComponent
             texture.setWrap(GL12.GL_CLAMP_TO_EDGE);
         }
 
+        this.gbufferFramebuffer.textures.get(4).bind(4);
         this.gbufferFramebuffer.textures.get(3).bind(3);
         this.gbufferFramebuffer.textures.get(2).bind(2);
         this.gbufferFramebuffer.textures.get(1).bind(1);
@@ -571,5 +578,12 @@ public class GameRenderer implements IComponent
 
         this.gbufferFramebuffer.resize(width, height);
         this.finalFramebuffer.resize(width, height);
+
+        UniformVector2 screenSize = this.compositeShader.getUniform("u_screen_size", UniformVector2.class);
+
+        if (screenSize != null)
+        {
+            screenSize.set(width, height);
+        }
     }
 }

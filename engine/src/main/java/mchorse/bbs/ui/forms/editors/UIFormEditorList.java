@@ -3,6 +3,7 @@ package mchorse.bbs.ui.forms.editors;
 import mchorse.bbs.ui.forms.IUIFormList;
 import mchorse.bbs.ui.forms.UIFormList;
 import mchorse.bbs.ui.framework.UIContext;
+import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.utils.colors.Colors;
 import org.lwjgl.glfw.GLFW;
 
@@ -13,7 +14,7 @@ public class UIFormEditorList extends UIFormList
         super(palette);
 
         this.edit.removeFromParent();
-        this.blockInsideEvents().markContainer();
+        this.eventPropagataion(EventPropagation.BLOCK_INSIDE).markContainer();
     }
 
     @Override

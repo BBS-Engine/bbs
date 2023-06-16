@@ -7,6 +7,7 @@ import mchorse.bbs.ui.framework.elements.context.UIContextMenu;
 import mchorse.bbs.ui.framework.elements.events.EventManager;
 import mchorse.bbs.ui.framework.elements.events.UIAddedEvent;
 import mchorse.bbs.ui.framework.elements.events.UIRemovedEvent;
+import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.ui.framework.tooltips.ITooltip;
 import mchorse.bbs.ui.framework.tooltips.LabelTooltip;
 import mchorse.bbs.ui.utils.Area;
@@ -77,9 +78,14 @@ public class UIElement implements IUIElement
     protected boolean container;
 
     /**
-     * Determines how events will be propagated
+     * Determines how mouse events will be propagated
      */
-    protected EventPropagation propagation = EventPropagation.PASS;
+    protected EventPropagation mousePropagation = EventPropagation.PASS;
+
+    /**
+     * Determines how keyboard events will be propagated
+     */
+    protected EventPropagation keyboardPropagation = EventPropagation.PASS;
 
     /**
      * Parent GUI element
@@ -281,11 +287,6 @@ public class UIElement implements IUIElement
 
     public void removeAll()
     {
-        if (this.children == null)
-        {
-            return;
-        }
-
         for (IUIElement uiElement : this.children)
         {
             if (uiElement instanceof UIElement)
@@ -350,6 +351,25 @@ public class UIElement implements IUIElement
         {
             listener.onRemovedFromTree(this);
         }
+    }
+
+    public UIElement eventPropagataion(EventPropagation propagation)
+    {
+        return this.mouseEventPropagataion(propagation).keyboardEventPropagataion(propagation);
+    }
+
+    public UIElement mouseEventPropagataion(EventPropagation propagation)
+    {
+        this.mousePropagation = propagation;
+
+        return this;
+    }
+
+    public UIElement keyboardEventPropagataion(EventPropagation propagation)
+    {
+        this.keyboardPropagation = propagation;
+
+        return this;
     }
 
     /* Custom data */
@@ -443,20 +463,6 @@ public class UIElement implements IUIElement
         }
 
         return element;
-    }
-
-    public UIElement blockEvents()
-    {
-        this.propagation = EventPropagation.BLOCK;
-
-        return this;
-    }
-
-    public UIElement blockInsideEvents()
-    {
-        this.propagation = EventPropagation.BLOCK_INSIDE;
-
-        return this;
     }
 
     public void resetContext()
@@ -1019,162 +1025,92 @@ public class UIElement implements IUIElement
         context.mouseButton = button;
     }
 
+    /* Handling input events
+     *
+     * These methods are final to prevent changing the pipeline. You're free to
+     * subclass children*, sub* or misc. event handling methods! */
+
     @Override
-    public boolean mouseClicked(UIContext context)
+    public final boolean mouseClicked(UIContext context)
     {
-        if ((this.children != null && this.childrenMouseClicked(context)) || this.subMouseClicked(context))
-        {
-            return true;
-        }
-
-        if (this.area.isInside(context) && context.mouseButton == 1)
-        {
-            if (!context.hasContextMenu())
-            {
-                UIContextMenu menu = this.createContextMenu(context);
-
-                if (menu != null && !menu.isEmpty())
-                {
-                    context.setContextMenu(menu);
-
-                    return true;
-                }
-            }
-        }
-
-        return this.cantPropagate(context);
+        return this.childrenMouseClicked(context) || this.subMouseClicked(context) || this.mouseClickedContextMenu(context) || this.cantPropagate(this.mousePropagation, context);
     }
 
-    private boolean childrenMouseClicked(UIContext context)
+    @Override
+    public final boolean mouseScrolled(UIContext context)
+    {
+        return this.childrenMouseScrolled(context) || this.subMouseScrolled(context) || this.cantPropagate(this.mousePropagation, context);
+    }
+
+    @Override
+    public final boolean mouseReleased(UIContext context)
+    {
+        return this.childrenMouseReleased(context) || this.subMouseReleased(context) || this.cantPropagate(this.mousePropagation, context);
+    }
+
+    @Override
+    public final boolean keyPressed(UIContext context)
+    {
+        return this.childrenKeyPressed(context) || this.subKeyPressed(context) || this.keybindsKeyPressed(context) || this.cantPropagate(this.keyboardPropagation, context);
+    }
+
+    @Override
+    public final boolean textInput(UIContext context)
+    {
+        return this.childrenTextInput(context) || this.subTextInput(context) || this.cantPropagate(this.keyboardPropagation, context);
+    }
+
+    /* Handling children input events */
+
+    protected boolean childrenMouseClicked(UIContext context)
     {
         for (int i = this.children.size() - 1; i >= 0; i--)
         {
             IUIElement element = this.children.get(i);
 
-            if (element.isEnabled() && element.mouseClicked(context))
-            {
-                return true;
-            }
+            if (element.isEnabled() && element.mouseClicked(context)) return true;
         }
 
         return false;
     }
 
-    protected boolean subMouseClicked(UIContext context)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean mouseScrolled(UIContext context)
-    {
-        if ((this.children != null && this.childrenMouseScrolled(context)) || this.subMouseScrolled(context))
-        {
-            return true;
-        }
-
-        return this.cantPropagate(context);
-    }
-
-    private boolean childrenMouseScrolled(UIContext context)
+    protected boolean childrenMouseScrolled(UIContext context)
     {
         for (int i = this.children.size() - 1; i >= 0; i--)
         {
             IUIElement element = this.children.get(i);
 
-            if (element.isEnabled() && element.mouseScrolled(context))
-            {
-                return true;
-            }
+            if (element.isEnabled() && element.mouseScrolled(context)) return true;
         }
 
         return false;
     }
 
-    protected boolean subMouseScrolled(UIContext context)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean mouseReleased(UIContext context)
-    {
-        if ((this.children != null && this.childrenMouseReleased(context)) || this.subMouseReleased(context))
-        {
-            return true;
-        }
-
-        return this.cantPropagate(context);
-    }
-
-    private boolean childrenMouseReleased(UIContext context)
+    protected boolean childrenMouseReleased(UIContext context)
     {
         for (int i = this.children.size() - 1; i >= 0; i--)
         {
             IUIElement element = this.children.get(i);
 
-            if (element.isEnabled() && element.mouseReleased(context))
-            {
-                return true;
-            }
+            if (element.isEnabled() && element.mouseReleased(context)) return true;
         }
 
         return false;
     }
 
-    protected boolean subMouseReleased(UIContext context)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean keyPressed(UIContext context)
-    {
-        if ((this.children != null && this.childrenKeyPressed(context)) || this.subKeyPressed(context))
-        {
-            return true;
-        }
-
-        if (this.keybinds != null && this.keybinds.check(context, this.area.isInside(context)))
-        {
-            return true;
-        }
-
-        return this.cantPropagate(context);
-    }
-
-    private boolean childrenKeyPressed(UIContext context)
+    protected boolean childrenKeyPressed(UIContext context)
     {
         for (int i = this.children.size() - 1; i >= 0; i--)
         {
             IUIElement element = this.children.get(i);
 
-            if (element.isEnabled() && element.keyPressed(context))
-            {
-                return true;
-            }
+            if (element.isEnabled() && element.keyPressed(context)) return true;
         }
 
         return false;
     }
 
-    protected boolean subKeyPressed(UIContext context)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean textInput(UIContext context)
-    {
-        if ((this.children != null && this.childrenTextInput(context)) || this.subTextInput(context))
-        {
-            return true;
-        }
-
-        return this.cantPropagate(context);
-    }
-
-    private boolean childrenTextInput(UIContext context)
+    protected boolean childrenTextInput(UIContext context)
     {
         for (int i = this.children.size() - 1; i >= 0; i--)
         {
@@ -1189,24 +1125,78 @@ public class UIElement implements IUIElement
         return false;
     }
 
+    /* Subclasses' input event handling */
+
+    protected boolean subMouseClicked(UIContext context)
+    {
+        return false;
+    }
+
+    protected boolean subMouseScrolled(UIContext context)
+    {
+        return false;
+    }
+
+    protected boolean subMouseReleased(UIContext context)
+    {
+        return false;
+    }
+
+    protected boolean subKeyPressed(UIContext context)
+    {
+        return false;
+    }
+
     protected boolean subTextInput(UIContext context)
     {
         return false;
     }
 
-    protected boolean cantPropagate(UIContext context)
+    /* Misc. input event handling */
+
+    /**
+     * Handle creating a context menu (when right clicked in the area, a context
+     * menu may appear, if configured)
+     */
+    protected boolean mouseClickedContextMenu(UIContext context)
     {
-        if (this.propagation == EventPropagation.BLOCK)
+        if (this.area.isInside(context) && context.mouseButton == 1 && !context.hasContextMenu())
         {
-             return true;
-        }
-        else if (this.propagation == EventPropagation.BLOCK_INSIDE && this.area.isInside(context))
-        {
-            return true;
+            UIContextMenu menu = this.createContextMenu(context);
+
+            if (menu != null && !menu.isEmpty())
+            {
+                context.setContextMenu(menu);
+
+                return true;
+            }
         }
 
         return false;
     }
+
+    /**
+     * Handle keybind manager's keybinds
+     */
+    protected boolean keybindsKeyPressed(UIContext context)
+    {
+        return this.keybinds != null && this.keybinds.check(context, this.area.isInside(context));
+    }
+
+    /**
+     * Checks whether an input event can be propagated
+     */
+    protected boolean cantPropagate(EventPropagation propagation, UIContext context)
+    {
+        if (propagation == EventPropagation.BLOCK)
+        {
+             return true;
+        }
+
+        return propagation == EventPropagation.BLOCK_INSIDE && this.area.isInside(context);
+    }
+
+    /* Rendering */
 
     @Override
     public boolean canBeRendered(Area viewport)
@@ -1226,7 +1216,7 @@ public class UIElement implements IUIElement
         {
             context.tooltip.set(context, this);
         }
-        else if ((this.container || this.propagation != EventPropagation.PASS) && this.area.isInside(context))
+        else if ((this.container || this.mousePropagation != EventPropagation.PASS) && this.area.isInside(context))
         {
             context.resetTooltip();
         }
@@ -1256,10 +1246,5 @@ public class UIElement implements IUIElement
 
             context.batcher.outlinedIcon(Icons.LOCKED, this.area.mx(), this.area.my(), 0.5F, 0.5F);
         }
-    }
-
-    public static enum EventPropagation
-    {
-        PASS, BLOCK, BLOCK_INSIDE;
     }
 }

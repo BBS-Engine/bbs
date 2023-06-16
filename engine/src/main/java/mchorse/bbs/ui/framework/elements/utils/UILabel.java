@@ -68,17 +68,12 @@ public class UILabel extends UIElement implements ITextColoring
         return this;
     }
 
-    public UILabel anchor(float x, float y)
+    public UILabel labelAnchor(float x, float y)
     {
         this.anchorX = x;
         this.anchorY = y;
 
         return this;
-    }
-
-    public int getColor()
-    {
-        return this.backgroundColor == null ? this.background : this.backgroundColor.get();
     }
 
     @Override
@@ -87,8 +82,9 @@ public class UILabel extends UIElement implements ITextColoring
         String label = context.font.limitToWidth(this.label.get(), this.area.w - 4);
         int x = this.area.x(this.anchorX, context.font.getWidth(label));
         int y = this.area.y(this.anchorY, context.font.getHeight());
+        int background = this.backgroundColor == null ? this.background : this.backgroundColor.get();
 
-        context.batcher.textCard(context.font, label, x, y, this.color, this.getColor(), 3, this.textShadow);
+        context.batcher.textCard(context.font, label, x, y, this.color, background, 3, this.textShadow);
 
         super.render(context);
     }

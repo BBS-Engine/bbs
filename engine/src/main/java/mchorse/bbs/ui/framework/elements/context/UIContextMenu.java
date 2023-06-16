@@ -2,6 +2,7 @@ package mchorse.bbs.ui.framework.elements.context;
 
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
+import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.utils.colors.Colors;
 import org.lwjgl.glfw.GLFW;
 
@@ -11,7 +12,7 @@ public abstract class UIContextMenu extends UIElement
     {
         super();
 
-        this.blockInsideEvents();
+        this.eventPropagataion(EventPropagation.BLOCK_INSIDE);
     }
 
     public abstract boolean isEmpty();

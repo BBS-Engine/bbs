@@ -21,6 +21,9 @@ uniform sampler2D u_position;
 uniform sampler2D u_normal;
 uniform sampler2D u_lighting;
 uniform sampler2D u_lightmap;
+uniform sampler2D u_depth;
+
+uniform vec2 u_screen_size;
 
 uniform int u_fog;
 uniform vec3 u_shading;

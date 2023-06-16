@@ -40,7 +40,7 @@ public class UIPanelBase <T extends UIElement> extends UIElement
         this.buttons = new UIScrollView();
         this.buttons.scroll.cancelScrolling().noScrollbar();
         this.buttons.scroll.scrollSpeed = 5;
-        this.buttons.preRenderDraw((context) ->
+        this.buttons.preRender((context) ->
         {
             for (int i = 0, c = this.panels.size(); i < c; i++)
             {

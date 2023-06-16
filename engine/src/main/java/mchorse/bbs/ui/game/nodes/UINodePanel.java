@@ -5,6 +5,7 @@ import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
+import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.utils.colors.Colors;
 
@@ -23,7 +24,7 @@ public abstract class UINodePanel <T extends Node> extends UIElement
         this.column().vertical().stretch().padding(10);
         this.add(UI.label(UIKeys.NODES_NODE_TITLE), this.title);
 
-        this.blockInsideEvents();
+        this.mouseEventPropagataion(EventPropagation.BLOCK_INSIDE);
     }
 
     public void set(T node)

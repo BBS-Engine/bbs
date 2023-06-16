@@ -10,6 +10,7 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
+import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.ScrollArea;
 import mchorse.bbs.utils.colors.Colors;
@@ -94,7 +95,7 @@ public class UIInventory extends UIElement
 
         this.inventory.scrollSpeed = TILE_SIZE;
         this.updateList();
-        this.blockInsideEvents();
+        this.eventPropagataion(EventPropagation.BLOCK_INSIDE);
     }
 
     private void setCount(int count)
