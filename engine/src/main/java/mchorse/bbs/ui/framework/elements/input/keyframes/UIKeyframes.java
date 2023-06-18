@@ -112,7 +112,7 @@ public abstract class UIKeyframes extends UIElement
 
     public int toGraphX(double tick)
     {
-        return (int) (this.scaleX.to(tick));
+        return (int) this.scaleX.to(tick);
     }
 
     public double fromGraphX(int mouseX)

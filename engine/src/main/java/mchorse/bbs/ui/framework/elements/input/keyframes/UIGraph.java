@@ -212,7 +212,7 @@ public class UIGraph extends UIKeyframes
     @Override
     public void addCurrent(int mouseX, int mouseY)
     {
-        long tick = (long) this.fromGraphX(mouseX);
+        long tick = Math.round(this.fromGraphX(mouseX));
         double value = this.fromGraphY(mouseY);
 
         KeyframeEasing easing = KeyframeEasing.IN;
@@ -653,7 +653,7 @@ public class UIGraph extends UIKeyframes
 
             boolean altPressed = Window.isAltPressed();
 
-            this.setTick(x, !altPressed);
+            this.setTick(Math.round(x), !altPressed);
             this.setValue(y, !altPressed);
         }
 

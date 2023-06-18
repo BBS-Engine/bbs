@@ -234,7 +234,7 @@ public class UIDopeSheet extends UIKeyframes
         KeyframeEasing easing = KeyframeEasing.IN;
         KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
         Keyframe frame = this.getCurrent();
-        long tick = (long) this.fromGraphX(mouseX);
+        long tick = Math.round(this.fromGraphX(mouseX));
         long oldTick = tick;
 
         if (frame != null)
