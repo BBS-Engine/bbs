@@ -1374,7 +1374,7 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
             this.renderSelectionBar(font, context, x, y, min, max);
         }
 
-        context.batcher.render();
+        context.batcher.flush();
 
         Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_UV_RGBA_2D);
         VAOBuilder builder = context.render.getVAO().setup(shader, VAO.INDICES);

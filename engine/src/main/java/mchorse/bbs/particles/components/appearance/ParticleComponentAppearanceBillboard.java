@@ -340,29 +340,6 @@ public class ParticleComponentAppearanceBillboard extends ParticleComponentBase 
         this.build(builder, particle);
     }
 
-    @Override
-    public void renderUI(Particle particle, VAOBuilder builder, float transition)
-    {
-        this.calculateUVs(particle, null, transition);
-
-        this.w = this.h = 0.5F;
-        float angle = Interpolations.lerp(particle.prevRotation, particle.rotation, transition);
-
-        /* Calculate the geometry for billboards using cool matrix math */
-        this.vertices[0].set(-this.w / 2, -this.h / 2, 0, 1);
-        this.vertices[1].set(this.w / 2, -this.h / 2, 0, 1);
-        this.vertices[2].set(this.w / 2, this.h / 2, 0, 1);
-        this.vertices[3].set(-this.w / 2, this.h / 2, 0, 1);
-        this.transform.identity();
-        this.transform.scale(2.5F);
-
-        this.rotation.identity();
-        this.rotation.rotateZ(angle / 180 * (float) Math.PI);
-        this.transform.mul(this.rotation);
-
-        this.build(builder, particle);
-    }
-
     private void build(VAOBuilder builder, Particle particle)
     {
         float u1 = this.u1 / (float) this.textureWidth;
@@ -389,6 +366,56 @@ public class ParticleComponentAppearanceBillboard extends ParticleComponentBase 
             .normal(0, 1F, 0)
             .uv(u, v)
             .xy(this.lx, this.ly)
+            .rgba(particle.r, particle.g, particle.b, particle.a);
+    }
+
+    @Override
+    public void renderUI(Particle particle, VAOBuilder builder, float transition)
+    {
+        this.calculateUVs(particle, null, transition);
+
+        this.w = this.h = 0.5F;
+        float angle = Interpolations.lerp(particle.prevRotation, particle.rotation, transition);
+
+        /* Calculate the geometry for billboards using cool matrix math */
+        this.vertices[0].set(-this.w / 2, -this.h / 2, 0, 1);
+        this.vertices[1].set(this.w / 2, -this.h / 2, 0, 1);
+        this.vertices[2].set(this.w / 2, this.h / 2, 0, 1);
+        this.vertices[3].set(-this.w / 2, this.h / 2, 0, 1);
+        this.transform.identity();
+        this.transform.scale(2.5F);
+
+        this.rotation.identity();
+        this.rotation.rotateZ(angle / 180 * (float) Math.PI);
+        this.transform.mul(this.rotation);
+
+        this.buildUI(builder, particle);
+    }
+
+    private void buildUI(VAOBuilder builder, Particle particle)
+    {
+        float u1 = this.u1 / (float) this.textureWidth;
+        float u2 = this.u2 / (float) this.textureWidth;
+        float v1 = this.v1 / (float) this.textureHeight;
+        float v2 = this.v2 / (float) this.textureHeight;
+
+        for (Vector4f vertex : this.vertices)
+        {
+            this.transform.transform(vertex);
+        }
+
+        this.writeVertexUI(builder, this.vertices[2], u2, v2, particle);
+        this.writeVertexUI(builder, this.vertices[1], u2, v1, particle);
+        this.writeVertexUI(builder, this.vertices[0], u1, v1, particle);
+        this.writeVertexUI(builder, this.vertices[0], u1, v1, particle);
+        this.writeVertexUI(builder, this.vertices[3], u1, v2, particle);
+        this.writeVertexUI(builder, this.vertices[2], u2, v2, particle);
+    }
+
+    private void writeVertexUI(VAOBuilder builder, Vector4f vertex, float u, float v, Particle particle)
+    {
+        builder.xy(vertex.x, vertex.y)
+            .uv(u, v)
             .rgba(particle.r, particle.g, particle.b, particle.a);
     }
 

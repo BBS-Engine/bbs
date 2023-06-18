@@ -6,6 +6,7 @@ import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.vao.VAOBuilder;
+import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.math.IExpression;
 import mchorse.bbs.math.Variable;
 import mchorse.bbs.particles.ParticleScheme;
@@ -14,6 +15,7 @@ import mchorse.bbs.particles.components.IComponentEmitterUpdate;
 import mchorse.bbs.particles.components.IComponentParticleInitialize;
 import mchorse.bbs.particles.components.IComponentParticleRender;
 import mchorse.bbs.particles.components.IComponentParticleUpdate;
+import mchorse.bbs.ui.framework.UIRenderingContext;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
@@ -353,7 +355,7 @@ public class ParticleEmitter
     /**
      * Render the particle on screen
      */
-    public void renderUI(RenderingContext context, Shader shader)
+    public void renderUI(UIRenderingContext context)
     {
         if (this.scheme == null)
         {
@@ -377,18 +379,12 @@ public class ParticleEmitter
             this.setEmitterVariables(transition);
             this.setParticleVariables(this.uiParticle, transition);
 
-            VAOBuilder builder = context.getVAO().setup(shader);
-
-            builder.begin();
+            VAOBuilder builder = context.batcher.begin(VBOAttributes.VERTEX_UV_RGBA_2D, context.getTextures().getTexture(this.scheme.texture));
 
             for (IComponentParticleRender render : list)
             {
                 render.renderUI(this.uiParticle, builder, transition);
             }
-
-            GLStates.cullFaces(false);
-            builder.render();
-            GLStates.cullFaces(true);
         }
     }
 

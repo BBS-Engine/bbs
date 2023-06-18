@@ -268,7 +268,7 @@ public class ChunkBuilder
 
     public void renderInUI(UIContext context, IBlockVariant variant, int x, int y, int scale)
     {
-        context.batcher.render();
+        context.batcher.flush();
 
         Shader shader = context.render.getShaders().get(this.getAttributes());
         VAOBuilder builder = context.render.getVAO().setup(shader, VAO.INDICES);

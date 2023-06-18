@@ -14,7 +14,6 @@ import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.UIRenderingContext;
-import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.world.entities.Entity;
 import org.joml.Matrix4f;
@@ -43,6 +42,8 @@ public class ModelFormRenderer extends FormRenderer<ModelForm>
     @Override
     public void renderUI(UIContext context, int x1, int y1, int x2, int y2)
     {
+        context.batcher.flush();
+
         this.form.ensureAnimator();
 
         CubicModel model = this.form.getModel();

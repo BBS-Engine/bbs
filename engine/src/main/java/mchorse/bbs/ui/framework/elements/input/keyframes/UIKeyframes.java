@@ -374,7 +374,7 @@ public abstract class UIKeyframes extends UIElement
     {
         c = Colors.A100 | c;
 
-        context.batcher.box(x - offset, y - offset, x + offset, y + offset, c, c, c, c);
+        context.batcher.box(x - offset, y - offset, x + offset, y + offset, c);
     }
 
     /* Handling dragging */

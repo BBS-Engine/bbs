@@ -2,7 +2,6 @@ package mchorse.bbs.ui.framework.elements.utils;
 
 import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.RenderingContext;
-import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.graphics.texture.Texture;
@@ -76,7 +75,7 @@ public class Batcher2D
             h = MathUtils.clamp(h, 0, scissor.ey() - y);
         }
 
-        this.render();
+        this.flush();
 
         scissor = new Area(x, y, w, h);
         this.scissorArea(x, y, w, h, sw, sh);
@@ -113,7 +112,7 @@ public class Batcher2D
 
     public void unclip(int sw, int sh)
     {
-        this.render();
+        this.flush();
         this.scissors.pop();
 
         if (this.scissors.isEmpty())
@@ -240,7 +239,7 @@ public class Batcher2D
         c1.set(opaque);
         c2.set(shadow);
 
-        this.render();
+        this.flush();
 
         VAOBuilder builder = this.begin(GL11.GL_TRIANGLE_FAN, VBOAttributes.VERTEX_RGBA_2D, null);
 
@@ -266,7 +265,7 @@ public class Batcher2D
         c1.set(opaque);
         c2.set(shadow);
 
-        this.render();
+        this.flush();
 
         VAOBuilder builder = this.begin(GL11.GL_TRIANGLE_FAN, VBOAttributes.VERTEX_RGBA_2D, null);
 
@@ -611,7 +610,7 @@ public class Batcher2D
             return this.builder;
         }
 
-        this.render();
+        this.flush();
 
         this.builder = this.context.getVAO().setup(shader).stack(this.context.stack);
         this.mode = mode;
@@ -623,7 +622,7 @@ public class Batcher2D
         return this.builder;
     }
 
-    public void render()
+    public void flush()
     {
         if (this.shader == null)
         {

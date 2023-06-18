@@ -127,7 +127,7 @@ public class UIBlockPicker extends UIElement
         }
 
         /* Render blocks */
-        context.batcher.render();
+        context.batcher.flush();
 
         ChunkBuilder blockBuilder = context.menu.bridge.get(IBridgeWorld.class).getChunkBuilder();
 

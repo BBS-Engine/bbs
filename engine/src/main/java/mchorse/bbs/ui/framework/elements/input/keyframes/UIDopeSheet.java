@@ -523,8 +523,6 @@ public class UIDopeSheet extends UIKeyframes
                 index++;
             }
 
-            context.batcher.render();
-
             int lw = context.font.getWidth(sheet.title.get()) + 10;
             context.batcher.gradientHBox(this.area.ex() - lw - 10, y, this.area.ex(), y + h, sheet.color, Colors.A75 | sheet.color);
             context.batcher.textShadow(sheet.title.get(), this.area.ex() - lw + 5, y + (h - context.font.getHeight()) / 2);

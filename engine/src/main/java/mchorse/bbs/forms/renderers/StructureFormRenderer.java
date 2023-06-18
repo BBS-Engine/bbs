@@ -27,6 +27,8 @@ public class StructureFormRenderer extends FormRenderer<StructureForm>
     @Override
     public void renderUI(UIContext context, int x1, int y1, int x2, int y2)
     {
+        context.batcher.flush();
+
         ChunkBuilder chunkBuilder = context.menu.bridge.get(IBridgeWorld.class).getChunkBuilder();
         ChunkDisplay display = BBS.getStructures().getCachedChunk(this.form.structure.get(), context.render, chunkBuilder);
         int x = (x2 + x1) / 2;

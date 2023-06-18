@@ -126,7 +126,7 @@ public class UIFolderEntryList extends UIList<AbstractEntry>
     @Override
     protected void renderElementPart(UIContext context, AbstractEntry element, int i, int x, int y, boolean hover, boolean selected)
     {
-        context.batcher.icon(element instanceof FolderEntry ? Icons.FOLDER : Icons.SERVER, x + 2, y, Colors.setA(Colors.WHITE, hover ? 0.75F : 0.6F));
+        context.batcher.icon(element instanceof FolderEntry ? Icons.FOLDER : Icons.IMAGE, Colors.setA(Colors.WHITE, hover ? 0.75F : 0.6F), x + 2, y);
         context.batcher.textShadow(context.font, element.title, x + 20, y + 4, hover ? Colors.HIGHLIGHT : Colors.WHITE);
     }
 }

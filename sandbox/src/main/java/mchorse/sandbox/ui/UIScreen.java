@@ -321,7 +321,7 @@ public class UIScreen implements IEngine, IFileDropListener
         this.chalkboard.render(transition);
 
         /* Flush the last operation */
-        this.context.batcher.render();
+        this.context.batcher.flush();
 
         GLStates.setupDepthFunction3D();
     }

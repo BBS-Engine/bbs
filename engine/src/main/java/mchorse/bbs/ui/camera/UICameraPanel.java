@@ -857,6 +857,8 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             return;
         }
 
+        context.batcher.flush();
+
         Area viewport = this.getViewportArea();
 
         /* Setup framebuffer */
@@ -880,8 +882,6 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         GLStates.setupDepthFunction3D();
         this.dashboard.bridge.get(IBridgeRender.class).renderSceneTo(this.camera, framebuffer, 0, true, 0);
         GLStates.setupDepthFunction2D();
-
-        context.batcher.reset();
 
         viewport.render(context.batcher, Colors.A75);
         context.batcher.texturedBox(texture, Colors.WHITE, area.x, area.y, area.w, area.h, 0, height, width, 0, width, height);
