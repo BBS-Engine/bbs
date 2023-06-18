@@ -96,7 +96,6 @@ public class GameRenderer implements IComponent
         this.context.setCamera(this.engine.cameraController.camera);
         this.context.setUBO(this.shaders.ubo);
 
-        this.context.getMainShaders().register(this.shaders.vertex);
         this.context.getMainShaders().register(this.shaders.vertexRGBA);
         this.context.getMainShaders().register(this.shaders.vertexUVRGBA);
         this.context.getMainShaders().register(this.shaders.vertexNormalUVRGBA);

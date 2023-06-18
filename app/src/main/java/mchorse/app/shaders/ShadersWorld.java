@@ -15,11 +15,6 @@ public class ShadersWorld
     public ProjectionViewUBO ubo;
 
     /**
-     * Basic 3D shader that supports {@link VBOAttributes#VERTEX} layout
-     */
-    public Shader vertex;
-
-    /**
      * Colored 3D shader that supports {@link VBOAttributes#VERTEX_RGBA} layout
      */
     public Shader vertexRGBA;
@@ -50,14 +45,12 @@ public class ShadersWorld
         this.ubo.init();
         this.ubo.bind();
 
-        this.vertex = new Shader(Link.create("app:shaders/world/vertex.glsl"), VBOAttributes.VERTEX);
         this.vertexRGBA = new Shader(Link.create("app:shaders/world/vertex_rgba.glsl"), VBOAttributes.VERTEX_RGBA);
         this.vertexUVRGBA = new Shader(Link.create("app:shaders/world/vertex_uv_rgba.glsl"), VBOAttributes.VERTEX_UV_RGBA);
         this.vertexNormalUVRGBA = new Shader(Link.create("app:shaders/world/vertex_normal_uv_rgba.glsl"), VBOAttributes.VERTEX_NORMAL_UV_RGBA);
         this.vertexNormalUVLightRGBA = new Shader(Link.create("app:shaders/world/vertex_normal_uv_light_rgba.glsl"), VBOAttributes.VERTEX_NORMAL_UV_LIGHT_RGBA);
         this.vertexNormalUVRGBABones = new Shader(Link.create("app:shaders/world/vertex_normal_uv_rgba_bones.glsl"), VBOAttributes.VERTEX_NORMAL_UV_RGBA_BONES);
 
-        this.vertex.attachUBO(this.ubo, "u_matrices");
         this.vertexRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
         this.vertexUVRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
         this.vertexNormalUVRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");

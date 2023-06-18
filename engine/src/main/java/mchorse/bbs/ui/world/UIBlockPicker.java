@@ -2,9 +2,6 @@ package mchorse.bbs.ui.world;
 
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.graphics.GLStates;
-import mchorse.bbs.graphics.shaders.CommonShaderAccess;
-import mchorse.bbs.graphics.shaders.Shader;
-import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
@@ -99,6 +96,7 @@ public class UIBlockPicker extends UIElement
     {
         this.scroll.drag(context);
 
+        /* Render background */
         context.batcher.box(this.area.x, this.area.y, this.area.ex(), this.area.ey(), Colors.WHITE);
         context.batcher.box(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, Colors.LIGHTEST_GRAY);
 
@@ -128,16 +126,14 @@ public class UIBlockPicker extends UIElement
             }
         }
 
+        /* Render blocks */
         context.batcher.render();
 
-        Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_NORMAL_UV_RGBA);
         ChunkBuilder blockBuilder = context.menu.bridge.get(IBridgeWorld.class).getChunkBuilder();
 
         GLStates.setupDepthFunction3D();
 
         context.render.getTextures().bind(blockBuilder.models.atlas);
-
-        CommonShaderAccess.setColor(shader, 1.15F, 1.15F, 1.15F, 1);
 
         for (int i = 1; i < this.blocks.variants.size() + 1; i++)
         {
@@ -151,14 +147,13 @@ public class UIBlockPicker extends UIElement
             context.batcher.unclip(context);
         }
 
-        CommonShaderAccess.resetColor(shader);
-
         GLStates.setupDepthFunction2D();
 
         this.scroll.renderScrollbar(context.batcher);
 
         context.batcher.unclip(context);
 
+        /* Render tooltip of highlighted block picker */
         if (hovered >= -1)
         {
             IBlockVariant variant = hovered < 0 ? this.blocks.air : this.blocks.variants.get(hovered);
