@@ -7,10 +7,10 @@ printf "Building...\n\n"
 FOLDER="release"
 
 if [ "$#" -lt 1 ]; then
-    gradle :app:build :engine:build :engine:copyRuntimeLibs
+    gradle :sandbox:build :engine:build :engine:copyRuntimeLibs
 else
     FOLDER="release-$1"
-    gradle :app:build :engine:build :engine:copyRuntimeLibs -Pos="$1"
+    gradle :sandbox:build :engine:build :engine:copyRuntimeLibs -Pos="$1"
 fi
 
 # Copy assets

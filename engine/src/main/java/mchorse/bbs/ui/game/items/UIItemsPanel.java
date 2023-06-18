@@ -9,6 +9,7 @@ import mchorse.bbs.game.items.ItemEntry;
 import mchorse.bbs.game.items.ItemManager;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.UISidebarDashboardPanel;
@@ -128,6 +129,8 @@ public class UIItemsPanel extends UISidebarDashboardPanel
         this.fields.add(UI.label(UIKeys.ITEM_PANEL_MAX_STACK).marginTop(8), this.maxStack, this.changeType);
 
         this.fill(null, true);
+
+        this.keys().register(Keys.OPEN_DATA_MANAGER, this.open::clickItself);
     }
 
     public ItemManager getItems()
