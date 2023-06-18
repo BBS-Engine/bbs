@@ -14,8 +14,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DataSourcePack implements ISourcePack
@@ -138,6 +138,6 @@ public class DataSourcePack implements ISourcePack
     }
 
     @Override
-    public void getLinksFromPath(List<Link> links, Link link, boolean recursive)
+    public void getLinksFromPath(Collection<Link> links, Link link, boolean recursive)
     {}
 }

@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+import java.util.Collection;
 
 public class ExternalAssetsSourcePack implements ISourcePack
 {
@@ -17,7 +17,7 @@ public class ExternalAssetsSourcePack implements ISourcePack
 
     private boolean providesFiles;
 
-    public static void getLinksFromPathRecursively(File folder, List<Link> links, Link link, String prefix, int i)
+    public static void getLinksFromPathRecursively(File folder, Collection<Link> links, Link link, String prefix, int i)
     {
         i -= 1;
 
@@ -30,16 +30,14 @@ public class ExternalAssetsSourcePack implements ISourcePack
 
         for (File file : files)
         {
+            String path = StringUtils.combinePaths(prefix, file.getName());
+
             if (file.isDirectory() && i > 0)
             {
                 getLinksFromPathRecursively(folder, links, link, prefix, i);
+            }
 
-                links.add(new Link(link.source, StringUtils.combinePaths(prefix, file.getName() + "/")));
-            }
-            else
-            {
-                links.add(new Link(link.source, StringUtils.combinePaths(prefix, file.getName())));
-            }
+            links.add(new Link(link.source, path + (file.isDirectory() ? "/" : "")));
         }
     }
 
@@ -86,7 +84,7 @@ public class ExternalAssetsSourcePack implements ISourcePack
     }
 
     @Override
-    public void getLinksFromPath(List<Link> links, Link link, boolean recursive)
+    public void getLinksFromPath(Collection<Link> links, Link link, boolean recursive)
     {
         File folder = this.getFileInternal(link);
 

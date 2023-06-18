@@ -5,10 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AssetProvider
 {
@@ -22,6 +25,11 @@ public class AssetProvider
     public void register(ISourcePack pack)
     {
         this.sourcePacks.computeIfAbsent(pack.getPrefix(), (k) -> new ArrayList<ISourcePack>()).add(pack);
+    }
+
+    public Collection<String> getSourceKeys()
+    {
+        return this.sourcePacks.keySet();
     }
 
     private List<ISourcePack> getPacks(String source)
@@ -63,14 +71,14 @@ public class AssetProvider
         return null;
     }
 
-    public List<Link> getLinksFromPath(Link link)
+    public Collection<Link> getLinksFromPath(Link link)
     {
         return this.getLinksFromPath(link, true);
     }
 
-    public List<Link> getLinksFromPath(Link link, boolean recursive)
+    public Collection<Link> getLinksFromPath(Link link, boolean recursive)
     {
-        List<Link> links = new ArrayList<Link>();
+        Set<Link> links = new HashSet<Link>();
         List<ISourcePack> packs = this.getPacks(link.source);
 
         for (ISourcePack pack : packs)

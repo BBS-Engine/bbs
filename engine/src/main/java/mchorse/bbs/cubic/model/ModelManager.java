@@ -12,6 +12,7 @@ import mchorse.bbs.vox.VoxModelLoader;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class ModelManager implements IDisposable, IWatchDogListener
 
         CubicModel model = null;
         Link modelLink = Link.assets("models/" + name);
-        List<Link> links = this.provider.getLinksFromPath(modelLink, false);
+        Collection<Link> links = this.provider.getLinksFromPath(modelLink, false);
 
         for (IModelLoader loader : this.loaders)
         {

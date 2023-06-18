@@ -14,7 +14,7 @@ public class StringUtils
 
     public static String combinePaths(String a, String b, String delimeter)
     {
-        return a.isEmpty() ? b : a + delimeter + b;
+        return a.isEmpty() ? b : (a.endsWith(delimeter) ? a : a + delimeter) + b;
     }
 
     /**
@@ -151,9 +151,16 @@ public class StringUtils
 
     public static String fileName(String path)
     {
-        int lastSlash = path.lastIndexOf('/');
+        int lastSlash = path.endsWith("/") ? path.lastIndexOf('/', path.length() - 2) : path.lastIndexOf('/');
 
         return lastSlash >= 0 ? path.substring(lastSlash + 1) : path;
+    }
+
+    public static String parentPath(String path)
+    {
+        int lastSlash = path.endsWith("/") ? path.lastIndexOf('/', path.length() - 2) : path.lastIndexOf('/');
+
+        return lastSlash >= 0 ? path.substring(0, lastSlash) : "";
     }
 
     /* Stringify vectors */

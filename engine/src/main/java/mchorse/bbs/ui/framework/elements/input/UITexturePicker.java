@@ -14,8 +14,8 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
+import mchorse.bbs.ui.framework.elements.input.list.UIFileLinkList;
 import mchorse.bbs.ui.framework.elements.input.list.UIFilteredLinkList;
-import mchorse.bbs.ui.framework.elements.input.list.UIFolderEntryList;
 import mchorse.bbs.ui.framework.elements.input.multilink.UIMultiLinkEditor;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
@@ -26,11 +26,6 @@ import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.IOUtils;
 import mchorse.bbs.utils.Timer;
 import mchorse.bbs.utils.colors.Colors;
-import mchorse.bbs.utils.files.FileTree;
-import mchorse.bbs.utils.files.GlobalTree;
-import mchorse.bbs.utils.files.entries.AbstractEntry;
-import mchorse.bbs.utils.files.entries.FileEntry;
-import mchorse.bbs.utils.files.entries.FolderEntry;
 import mchorse.bbs.utils.resources.FilteredLink;
 import mchorse.bbs.utils.resources.LinkUtils;
 import mchorse.bbs.utils.resources.MultiLink;
@@ -56,7 +51,7 @@ public class UITexturePicker extends UIElement implements IFileDropListener
     public UIIcon close;
     public UIIcon folder;
     public UIIcon pixelEdit;
-    public UIFolderEntryList picker;
+    public UIFileLinkList picker;
 
     public UIButton multi;
     public UIFilteredLinkList multiList;
@@ -73,7 +68,6 @@ public class UITexturePicker extends UIElement implements IFileDropListener
     public MultiLink multiLink;
     public FilteredLink currentFiltered;
     public Link current;
-    public FileTree tree = GlobalTree.TREE;
 
     private Timer lastTyped = new Timer(1000);
     private Timer lastChecked = new Timer(1000);
@@ -118,22 +112,16 @@ public class UITexturePicker extends UIElement implements IFileDropListener
         this.folder = new UIIcon(Icons.FOLDER, (b) -> this.openFolder());
         this.folder.tooltip(UIKeys.TEXTURE_OPEN_FOLDER, Direction.BOTTOM);
         this.pixelEdit = new UIIcon(Icons.EDIT, (b) -> this.togglePixelEditor());
-        this.picker = new UIFolderEntryList((entry) ->
-        {
-            Link link = entry.resource;
-
-            this.selectCurrent(link);
-            this.text.setText(link == null ? "" : link.toString());
-        }) {
+        this.picker = new UIFileLinkList(this::selectCurrent) {
             @Override
-            public void setFolder(FolderEntry folder)
+            public void setPath(Link folder)
             {
-                super.setFolder(folder);
+                super.setPath(folder);
 
                 UITexturePicker.this.updateFolderButton();
             }
         };
-        this.picker.cancelScrollEdge();
+        this.picker.filter((l) -> l.path.endsWith("/") || l.path.endsWith(".png")).cancelScrollEdge();
 
         this.multi = new UIButton(UIKeys.TEXTURE_MULTISKIN, (b) -> this.toggleMulti());
         this.multiList = new UIFilteredLinkList((list) -> this.setFilteredLink(list.get(0)));
@@ -225,9 +213,9 @@ public class UITexturePicker extends UIElement implements IFileDropListener
     @Override
     public void acceptFilePaths(String[] paths)
     {
-        FolderEntry entry = this.picker.parent;
+        File target = BBS.getProvider().getFile(this.picker.path);
 
-        if (entry == null || entry.file == null || !entry.file.isDirectory())
+        if (target == null || !target.isDirectory())
         {
             return;
         }
@@ -239,7 +227,7 @@ public class UITexturePicker extends UIElement implements IFileDropListener
             if (file.isFile())
             {
                 String name = file.getName();
-                File copy = IOUtils.findNonExistingFile(new File(entry.file.getAbsolutePath(), name));
+                File copy = IOUtils.findNonExistingFile(new File(target, name));
 
                 try
                 {
@@ -252,14 +240,7 @@ public class UITexturePicker extends UIElement implements IFileDropListener
             }
         }
 
-        AbstractEntry current = this.picker.getCurrentFirst();
-
         this.refresh();
-
-        if (current != null)
-        {
-            this.picker.setCurrent(current);
-        }
     }
 
     public void refresh()
@@ -270,9 +251,11 @@ public class UITexturePicker extends UIElement implements IFileDropListener
 
     public void openFolder()
     {
-        if (this.picker.parent != null && this.picker.parent.file != null)
+        File target = BBS.getProvider().getFile(this.picker.path);
+
+        if (target != null && target.isDirectory())
         {
-            UIUtils.openFolder(this.picker.parent.file);
+            UIUtils.openFolder(target);
         }
     }
 
@@ -310,7 +293,9 @@ public class UITexturePicker extends UIElement implements IFileDropListener
 
     public void updateFolderButton()
     {
-        this.folder.setEnabled(this.picker.parent != null && this.picker.parent.file != null);
+        File target = BBS.getProvider().getFile(this.picker.path);
+
+        this.folder.setEnabled(target != null && target.isDirectory());
     }
 
     public void fill(Link link)
@@ -375,24 +360,12 @@ public class UITexturePicker extends UIElement implements IFileDropListener
     protected void displayCurrent(Link link)
     {
         this.current = link;
-        this.picker.link = link;
+
         this.text.setText(link == null ? "" : link.toString());
         this.text.textbox.moveCursorToStart();
 
-        if (this.tree != null)
-        {
-            FolderEntry folder = this.tree.getByPath(link == null ? "" : link.source + "/" + link.path);
-
-            if (folder != this.tree.root || this.picker.getList().isEmpty())
-            {
-                this.picker.setList(folder.getEntries());
-                this.picker.parent = folder;
-                this.picker.setCurrent(link);
-                this.picker.update();
-
-                this.updateFolderButton();
-            }
-        }
+        this.picker.setPath(link == null ? null : link.parent());
+        this.picker.setCurrent(link);
     }
 
     /**
@@ -424,7 +397,8 @@ public class UITexturePicker extends UIElement implements IFileDropListener
             this.callback.accept(link);
         }
 
-        this.picker.link = link;
+        this.picker.setCurrent(link);
+        this.text.setText(link.toString());
     }
 
     protected void toggleMulti()
@@ -439,11 +413,11 @@ public class UITexturePicker extends UIElement implements IFileDropListener
         }
         else
         {
-            Link link = this.picker.getCurrentLink();
+            UIFileLinkList.FileLink link = this.picker.getCurrentFirst();
 
             if (link != null)
             {
-                this.setMulti(link, true);
+                this.setMulti(link.link, true);
             }
         }
     }
@@ -505,16 +479,15 @@ public class UITexturePicker extends UIElement implements IFileDropListener
     {
         if (context.isPressed(GLFW.GLFW_KEY_ENTER))
         {
-            List<AbstractEntry> selected = this.picker.getCurrent();
-            AbstractEntry entry = selected.isEmpty() ? null : selected.get(0);
+            UIFileLinkList.FileLink link = this.picker.getCurrentFirst();
 
-            if (entry instanceof FolderEntry)
+            if (link != null && link.folder)
             {
-                this.picker.setFolder((FolderEntry) entry);
+                this.picker.setPath(link.link);
             }
-            else if (entry instanceof FileEntry)
+            else if (link != null)
             {
-                this.selectCurrent(((FileEntry) entry).resource);
+                this.selectCurrent(link.link);
             }
 
             this.typed = "";
@@ -577,9 +550,11 @@ public class UITexturePicker extends UIElement implements IFileDropListener
         this.typed += Character.toString(inputChar);
         this.lastTyped.mark();
 
-        for (AbstractEntry entry : this.picker.getList())
+        for (UIFileLinkList.FileLink entry : this.picker.getList())
         {
-            if (entry.title.startsWith(this.typed))
+            String name = entry.title;
+
+            if (name.startsWith(this.typed))
             {
                 this.picker.setCurrentScroll(entry);
 
@@ -596,16 +571,18 @@ public class UITexturePicker extends UIElement implements IFileDropListener
         /* Refresh the list */
         if (this.lastChecked.checkRepeat())
         {
-            FolderEntry folder = this.picker.parent;
+            File file = BBS.getProvider().getFile(this.picker.path);
 
-            if (folder != null && folder.isTop())
+            if (file != null)
             {
-                folder = folder.top;
-            }
+                UIFileLinkList.FileLink selected = this.picker.getCurrentFirst();
 
-            if (folder != null && folder.hasChanged())
-            {
-                this.picker.setDirectFolder(folder);
+                this.picker.setPath(this.picker.path);
+
+                if (selected != null)
+                {
+                    this.picker.setCurrent(selected.link);
+                }
             }
         }
 

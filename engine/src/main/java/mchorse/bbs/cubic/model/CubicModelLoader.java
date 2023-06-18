@@ -13,12 +13,13 @@ import mchorse.bbs.utils.IOUtils;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class CubicModelLoader implements IModelLoader
 {
     @Override
-    public CubicModel load(ModelManager models, Link model, List<Link> links) throws Exception
+    public CubicModel load(ModelManager models, Link model, Collection<Link> links) throws Exception
     {
         List<Link> modelBBS = IModelLoader.getLinks(links, ".bbs.json");
         Link modelTexture = IModelLoader.getLink(model.combine("model.png"), links, ".png");

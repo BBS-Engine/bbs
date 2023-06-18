@@ -3,7 +3,7 @@ package mchorse.bbs.resources;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+import java.util.Collection;
 
 public interface ISourcePack
 {
@@ -15,5 +15,5 @@ public interface ISourcePack
 
     public File getFile(Link link);
 
-    public void getLinksFromPath(List<Link> links, Link link, boolean recursive);
+    public void getLinksFromPath(Collection<Link> links, Link link, boolean recursive);
 }

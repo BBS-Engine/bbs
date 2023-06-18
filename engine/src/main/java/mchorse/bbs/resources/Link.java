@@ -46,6 +46,15 @@ public class Link
         return new Link(this.source, StringUtils.combinePaths(this.path, path));
     }
 
+    public Link parent()
+    {
+        String parent = StringUtils.parentPath(this.path);
+
+        return parent.isEmpty()
+            ? new Link("", "")
+            : new Link(this.source, parent);
+    }
+
     @Override
     public int hashCode()
     {

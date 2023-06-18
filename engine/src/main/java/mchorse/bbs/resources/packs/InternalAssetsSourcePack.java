@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -55,7 +55,7 @@ public class InternalAssetsSourcePack implements ISourcePack
     }
 
     @Override
-    public void getLinksFromPath(List<Link> links, Link link, boolean recursive)
+    public void getLinksFromPath(Collection<Link> links, Link link, boolean recursive)
     {
         URL url = this.clazz.getProtectionDomain().getCodeSource().getLocation();
 
@@ -100,7 +100,7 @@ public class InternalAssetsSourcePack implements ISourcePack
         return file;
     }
 
-    private void getLinksFromFolder(File folder, Link link, List<Link> links, boolean recursive)
+    private void getLinksFromFolder(File folder, Link link, Collection<Link> links, boolean recursive)
     {
         File file = new File(folder, this.prefix + "/" + link.path);
 
@@ -109,7 +109,7 @@ public class InternalAssetsSourcePack implements ISourcePack
 
     /* Zip handling */
 
-    private void getLinksFromZipFile(File file, Link link, List<Link> links, boolean recursive)
+    private void getLinksFromZipFile(File file, Link link, Collection<Link> links, boolean recursive)
     {
         try (ZipFile zipFile = new ZipFile(file))
         {
@@ -121,7 +121,7 @@ public class InternalAssetsSourcePack implements ISourcePack
         }
     }
 
-    private void handleLinksFromZipFile(Link link, ZipFile file, List<Link> links, boolean recursive)
+    private void handleLinksFromZipFile(Link link, ZipFile file, Collection<Link> links, boolean recursive)
     {
         Enumeration<? extends ZipEntry> it = file.entries();
 

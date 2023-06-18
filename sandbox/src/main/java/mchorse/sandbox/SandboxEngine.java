@@ -1,21 +1,5 @@
 package mchorse.sandbox;
 
-import mchorse.sandbox.bridge.BridgeAnimations;
-import mchorse.sandbox.bridge.BridgeCamera;
-import mchorse.sandbox.bridge.BridgeHUD;
-import mchorse.sandbox.bridge.BridgeMenu;
-import mchorse.sandbox.bridge.BridgePlayer;
-import mchorse.sandbox.bridge.BridgeRender;
-import mchorse.sandbox.bridge.BridgeVideoRecorder;
-import mchorse.sandbox.bridge.BridgeWorld;
-import mchorse.sandbox.settings.SandboxSettings;
-import mchorse.sandbox.ui.KeysApp;
-import mchorse.sandbox.ui.UIKeysApp;
-import mchorse.sandbox.ui.UIScreen;
-import mchorse.sandbox.ui.l10n.UILanguageEditorOverlayPanel;
-import mchorse.sandbox.ui.utility.UIUtilityMenu;
-import mchorse.sandbox.ui.utility.UIUtilityOverlayPanel;
-import mchorse.sandbox.utils.AssetFileTree;
 import mchorse.bbs.BBS;
 import mchorse.bbs.BBSData;
 import mchorse.bbs.BBSSettings;
@@ -57,12 +41,26 @@ import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.utils.keys.KeybindSettings;
 import mchorse.bbs.utils.IOUtils;
 import mchorse.bbs.utils.OS;
-import mchorse.bbs.utils.files.GlobalTree;
 import mchorse.bbs.utils.recording.ScreenshotRecorder;
 import mchorse.bbs.utils.recording.VideoRecorder;
 import mchorse.bbs.utils.resources.Pixels;
 import mchorse.bbs.utils.watchdog.WatchDog;
 import mchorse.bbs.world.World;
+import mchorse.sandbox.bridge.BridgeAnimations;
+import mchorse.sandbox.bridge.BridgeCamera;
+import mchorse.sandbox.bridge.BridgeHUD;
+import mchorse.sandbox.bridge.BridgeMenu;
+import mchorse.sandbox.bridge.BridgePlayer;
+import mchorse.sandbox.bridge.BridgeRender;
+import mchorse.sandbox.bridge.BridgeVideoRecorder;
+import mchorse.sandbox.bridge.BridgeWorld;
+import mchorse.sandbox.settings.SandboxSettings;
+import mchorse.sandbox.ui.KeysApp;
+import mchorse.sandbox.ui.UIKeysApp;
+import mchorse.sandbox.ui.UIScreen;
+import mchorse.sandbox.ui.l10n.UILanguageEditorOverlayPanel;
+import mchorse.sandbox.ui.utility.UIUtilityMenu;
+import mchorse.sandbox.ui.utility.UIUtilityOverlayPanel;
 import net.fabricmc.loader.impl.game.minecraft.Hooks;
 import org.greenrobot.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
@@ -223,8 +221,6 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
     private void registerMiscellaneous()
     {
         BBS.getProvider().register(new InternalAssetsSourcePack("sandbox", SandboxEngine.class));
-
-        GlobalTree.TREE.register(new AssetFileTree(BBS.getAssetsFolder()));
 
         /* Recording */
         this.video = new VideoRecorder(BBS.getGamePath("movies"), this);

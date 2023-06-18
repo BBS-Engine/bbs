@@ -16,12 +16,12 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.List;
+import java.util.Collection;
 
 public class VoxModelLoader implements IModelLoader
 {
     @Override
-    public CubicModel load(ModelManager models, Link model, List<Link> links) throws Exception
+    public CubicModel load(ModelManager models, Link model, Collection<Link> links) throws Exception
     {
         Link modelVox = IModelLoader.getLink(model.combine("model.vox"), links, ".vox");
         Link pallete = IModelLoader.getLink(model.combine("palette.png"), links, ".palette");
