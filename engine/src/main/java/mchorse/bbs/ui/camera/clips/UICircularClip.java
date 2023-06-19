@@ -18,7 +18,7 @@ public class UICircularClip extends UIClip<CircularClip>
         this.point = new UIPointModule(editor).contextMenu();
         this.circular = new UICircularModule(editor);
 
-        this.right.add(this.point, this.circular);
+        this.left.add(this.point, this.circular);
     }
 
     @Override

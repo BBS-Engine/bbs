@@ -25,8 +25,8 @@ public class UIIdleClip extends UIClip<IdleClip>
         this.point = new UIPointModule(editor);
         this.angle = new UIAngleModule(editor);
 
-        this.right.add(this.point, this.angle);
-        this.right.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, clip.position));
+        this.left.add(this.point, this.angle);
+        this.left.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, clip.position));
     }
 
     @Override

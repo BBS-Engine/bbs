@@ -56,8 +56,8 @@ public class UIDollyClip extends UIClip<DollyClip>
         });
         this.interp.tooltip(new InterpolationTooltip(1F, 0.5F, () -> this.clip.interp.get()));
 
-        this.right.add(this.point, this.angle);
-        this.right.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, clip.position));
+        this.left.add(this.point, this.angle);
+        this.left.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, clip.position));
         this.left.add(UI.label(UIKeys.CAMERA_PANELS_DOLLY_TITLE).background().marginTop(12));
         this.left.add(UI.row(0, 0, 20, this.distance, this.reverse), this.yaw, this.pitch, this.interp);
     }

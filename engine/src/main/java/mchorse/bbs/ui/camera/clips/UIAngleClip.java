@@ -18,7 +18,7 @@ public class UIAngleClip extends UIClip<AngleClip>
         this.angle = new UIAngleModule(editor).contextMenu();
         this.active = new UIBitToggle((value) -> editor.postUndo(this.undo(this.clip.active, new IntType(value)))).angles();
 
-        this.right.add(this.angle, this.active);
+        this.left.add(this.angle, this.active);
     }
 
     @Override

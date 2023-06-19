@@ -28,7 +28,7 @@ public class UIMathClip extends UIClip<MathClip>
 
         this.active = new UIBitToggle((value) -> this.editor.postUndo(this.undo(this.clip.active, new IntType(value)))).all();
 
-        this.right.add(UI.label(UIKeys.CAMERA_PANELS_EXPRESSION).background(), this.expression, this.active);
+        this.left.add(UI.label(UIKeys.CAMERA_PANELS_EXPRESSION).background(), this.expression, this.active);
     }
 
     @Override

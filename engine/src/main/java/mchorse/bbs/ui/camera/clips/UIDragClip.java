@@ -41,7 +41,7 @@ public class UIDragClip extends UIClip<DragClip>
             this.clip.resetCache();
         }).all();
 
-        this.right.add(this.deterministic, UI.label(UIKeys.CAMERA_PANELS_FACTOR).background(), this.factor, this.rate, this.active);
+        this.left.add(this.deterministic, UI.label(UIKeys.CAMERA_PANELS_FACTOR).background(), this.factor, this.rate, this.active);
     }
 
     @Override

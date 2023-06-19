@@ -27,6 +27,6 @@ public class UIAudioClip extends UIClip<AudioClip>
             UIOverlay.addOverlay(this.getContext(), panel.set(this.clip.audio.get()));
         });
 
-        this.right.add(this.pickAudio);
+        this.left.add(this.pickAudio);
     }
 }

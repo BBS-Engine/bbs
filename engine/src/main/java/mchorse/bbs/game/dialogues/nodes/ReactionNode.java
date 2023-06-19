@@ -5,11 +5,13 @@ import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.game.dialogues.DialogueContext;
 import mchorse.bbs.game.events.EventContext;
+import mchorse.bbs.resources.Link;
+import mchorse.bbs.utils.resources.LinkUtils;
 
 public class ReactionNode extends DialogueNode
 {
     public Form form;
-    public String sound = "";
+    public Link sound;
     public boolean read;
     public String marker = "";
 
@@ -42,7 +44,7 @@ public class ReactionNode extends DialogueNode
             data.put("form", FormUtils.toData(this.form));
         }
 
-        data.putString("sound", this.sound);
+        data.put("sound", LinkUtils.toData(this.sound));
         data.putBool("read", this.read);
         data.putString("marker", this.marker);
     }
@@ -57,7 +59,7 @@ public class ReactionNode extends DialogueNode
             this.form = FormUtils.fromData(data.getMap("form"));
         }
 
-        this.sound = data.getString("sound");
+        this.sound = LinkUtils.create(data.get("sound"));
         this.read = data.getBool("read");
         this.marker = data.getString("marker");
     }

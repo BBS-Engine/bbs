@@ -55,7 +55,7 @@ public class UIReactionNodePanel extends UIDialogueNodePanel
 
     private void setSound(Link sound)
     {
-        this.get().sound = sound == null ? "" : sound.toString();
+        this.get().sound = sound;
     }
 
     private void openFormMenu(boolean editing)

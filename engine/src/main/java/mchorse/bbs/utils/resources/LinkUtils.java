@@ -49,7 +49,7 @@ public class LinkUtils
 
     public static Link create(String path)
     {
-        return Link.create(path);
+        return path.isEmpty() ? null : Link.create(path);
     }
 
     public static Link create(String domain, String path)
@@ -68,7 +68,7 @@ public class LinkUtils
 
         if (BaseType.isString(data))
         {
-            return create(((StringType) data).value);
+            return create(data.asString());
         }
 
         return null;

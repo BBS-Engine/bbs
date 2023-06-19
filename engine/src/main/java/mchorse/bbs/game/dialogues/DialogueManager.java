@@ -18,7 +18,6 @@ import mchorse.bbs.game.quests.chains.QuestInfo;
 import mchorse.bbs.game.quests.chains.QuestStatus;
 import mchorse.bbs.game.utils.DataContext;
 import mchorse.bbs.game.utils.manager.BaseManager;
-import mchorse.bbs.utils.resources.LinkUtils;
 import mchorse.bbs.world.entities.Entity;
 
 import java.io.File;
@@ -89,9 +88,9 @@ public class DialogueManager extends BaseManager<Dialogue>
     {
         DialogueFragment reaction = context.reactionNode == null ? new DialogueFragment() : context.reactionNode.message.copy();
 
-        if (last != null && !last.sound.isEmpty())
+        if (last != null && last.sound != null)
         {
-            BBS.getSounds().stop(LinkUtils.create(last.sound));
+            BBS.getSounds().stop(last.sound);
         }
 
         reaction.process(context.data);
@@ -162,9 +161,9 @@ public class DialogueManager extends BaseManager<Dialogue>
                 character.states.readDialogue(dialogue.getId(), context.reactionNode.marker);
             }
 
-            if (!context.reactionNode.sound.isEmpty())
+            if (context.reactionNode.sound != null)
             {
-                BBS.getSounds().play(LinkUtils.create(context.reactionNode.sound));
+                BBS.getSounds().play(context.reactionNode.sound);
             }
         }
 
@@ -253,9 +252,9 @@ public class DialogueManager extends BaseManager<Dialogue>
         {
             ReactionNode node = character.getDialogueContext().reactionNode;
 
-            if (node != null && !node.sound.isEmpty())
+            if (node != null && node.sound != null)
             {
-                BBS.getSounds().stop(LinkUtils.create(node.sound));
+                BBS.getSounds().stop(node.sound);
             }
 
             character.setDialogue(null, null);

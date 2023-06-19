@@ -56,18 +56,20 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
         this.roll = new UIButton(UIKeys.CAMERA_PANELS_ROLL, (b) -> this.selectChannel(this.clip.roll, 6));
         this.fov = new UIButton(UIKeys.CAMERA_PANELS_FOV, (b) -> this.selectChannel(this.clip.fov, 7));
 
-        this.right.add(UI.label(UIKeys.CAMERA_PANELS_KEYFRAMES).background());
-        this.right.add(UI.row(this.all));
-        this.right.add(UI.row(this.x, this.y, this.z));
-        this.right.add(UI.row(this.yaw, this.pitch));
-        this.right.add(UI.row(this.roll, this.fov));
+        this.left.add(UI.label(UIKeys.CAMERA_PANELS_KEYFRAMES).background());
+        this.left.add(UI.row(this.all));
+        this.left.add(UI.row(this.x, this.y, this.z));
+        this.left.add(UI.row(this.yaw, this.pitch));
+        this.left.add(UI.row(this.roll, this.fov));
 
-        List<UIButton> buttons = this.right.getChildren(UIButton.class);
-
-        for (int i = 0; i < this.titles.length; i++)
-        {
-            this.titles[i] = buttons.get(buttons.size() - this.titles.length + i).label;
-        }
+        this.titles[0] = this.all.label;
+        this.titles[1] = this.x.label;
+        this.titles[2] = this.y.label;
+        this.titles[3] = this.z.label;
+        this.titles[4] = this.yaw.label;
+        this.titles[5] = this.pitch.label;
+        this.titles[6] = this.roll.label;
+        this.titles[7] = this.fov.label;
     }
 
     @Override

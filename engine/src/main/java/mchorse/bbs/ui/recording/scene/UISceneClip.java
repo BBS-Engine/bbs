@@ -90,7 +90,7 @@ public class UISceneClip extends UIClip<SceneClip>
             UIOverlay.addOverlay(this.getContext(), panel);
         });
 
-        this.right.add(this.pickScene, this.offset, this.editRecord);
+        this.left.add(this.pickScene, this.offset, this.editRecord);
     }
 
     @Override

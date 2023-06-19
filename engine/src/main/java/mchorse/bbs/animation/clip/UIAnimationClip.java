@@ -27,6 +27,6 @@ public class UIAnimationClip extends UIClip<AnimationClip>
             });
         });
 
-        this.right.add(this.pick);
+        this.left.add(this.pick);
     }
 }

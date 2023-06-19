@@ -46,12 +46,12 @@ public class UIOrbitClip extends UIClip<OrbitClip>
 
         this.distance = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.distance, new FloatType(value.floatValue()))));
 
-        this.right.add(UI.label(UIKeys.CAMERA_PANELS_SELECTOR).background(), this.selector);
-        this.right.add(this.copy.marginBottom(12));
-        this.right.add(UI.label(UIKeys.CAMERA_PANELS_DISTANCE).background(), this.distance);
-        this.right.add(UI.label(UIKeys.CAMERA_PANELS_ANGLE).background());
-        this.right.add(UI.row(5, 0, 20, this.yaw, this.pitch));
-        this.right.add(this.offset);
+        this.left.add(UI.label(UIKeys.CAMERA_PANELS_SELECTOR).background(), this.selector);
+        this.left.add(this.copy.marginBottom(12));
+        this.left.add(UI.label(UIKeys.CAMERA_PANELS_DISTANCE).background(), this.distance);
+        this.left.add(UI.label(UIKeys.CAMERA_PANELS_ANGLE).background());
+        this.left.add(UI.row(5, 0, 20, this.yaw, this.pitch));
+        this.left.add(this.offset);
     }
 
     @Override

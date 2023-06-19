@@ -42,7 +42,6 @@ public abstract class UIClip <T extends Clip> extends UIElement
     public UIEnvelope envelope;
 
     protected UIScrollView left;
-    protected UIScrollView right;
 
     public static CameraWorkUndo undo(UICameraPanel editor, BaseValue property, BaseType newValue)
     {
@@ -79,10 +78,8 @@ public abstract class UIClip <T extends Clip> extends UIElement
         this.left = UI.scrollView(5, 10);
         this.left.scroll.opposite = true;
         this.left.relative(this).w(140).h(1F);
-        this.right = UI.scrollView(5, 10);
-        this.right.relative(this).x(1F, -140).w(140).h(1F);
 
-        this.add(this.left, this.right);
+        this.add(this.left);
         this.left.add(UI.label(UIKeys.CAMERA_PANELS_TITLE).background(), this.title);
         this.left.add(this.enabled.marginBottom(6));
         this.left.add(UI.label(UIKeys.CAMERA_PANELS_COLOR).background(), this.color);

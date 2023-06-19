@@ -71,12 +71,12 @@ public class UILookClip extends UIClip<LookClip>
         });
         this.forward.tooltip(UIKeys.CAMERA_PANELS_FORWARD_TOOLTIP);
 
-        this.right.add(UI.label(UIKeys.CAMERA_PANELS_SELECTOR).background(), this.selector);
-        this.right.add(this.relative);
-        this.right.add(this.offset.marginTop(12));
-        this.right.add(this.atBlock.marginTop(12));
-        this.right.add(this.block);
-        this.right.add(this.forward);
+        this.left.add(UI.label(UIKeys.CAMERA_PANELS_SELECTOR).background(), this.selector);
+        this.left.add(this.relative);
+        this.left.add(this.offset.marginTop(12));
+        this.left.add(this.atBlock.marginTop(12));
+        this.left.add(this.block);
+        this.left.add(this.forward);
     }
 
     @Override

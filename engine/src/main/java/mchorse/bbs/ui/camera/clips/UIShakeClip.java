@@ -28,7 +28,7 @@ public class UIShakeClip extends UIClip<ShakeClip>
 
         this.active = new UIBitToggle((value) -> this.editor.postUndo(this.undo(this.clip.active, new IntType(value)))).all();
 
-        this.right.add(UI.row(5, 0, 20, this.shake, this.shakeAmount), this.active);
+        this.left.add(UI.row(5, 0, 20, this.shake, this.shakeAmount), this.active);
     }
 
     @Override

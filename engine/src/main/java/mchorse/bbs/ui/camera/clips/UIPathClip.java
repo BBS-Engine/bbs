@@ -131,12 +131,12 @@ public class UIPathClip extends UIClip<PathClip>
         this.circular.add(UI.label(UIKeys.CAMERA_PANELS_CIRCULAR).background(), this.autoCenter);
 
         this.points = new UIPointsModule(editor, this::pickPoint);
-        this.points.relative(this.left.getFlex()).x(1F, 40).y(1F, -30).wTo(this.right.getFlex(), -80).h(20);
+        this.points.relative(this.left.getFlex()).x(1F, 40).y(1F, -30).wTo(this.getFlex(), 1F, -50).h(20);
 
         this.left.add(UI.label(UIKeys.CAMERA_PANELS_USE_SPEED).background().marginTop(12), this.useSpeed);
-        this.right.add(this.point, this.angle);
-        this.right.add(UI.row(this.interpPoint, this.interpAngle));
-        this.right.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, this.position));
+        this.left.add(this.point, this.angle);
+        this.left.add(UI.row(this.interpPoint, this.interpAngle));
+        this.left.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, this.position));
 
         this.add(this.points);
 
