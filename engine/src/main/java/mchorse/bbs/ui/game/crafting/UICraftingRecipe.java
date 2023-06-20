@@ -38,7 +38,7 @@ public class UICraftingRecipe extends UIElement
         out.disabledColor = Colors.WHITE;
 
         UIElement output = this.createItems(recipe.output);
-        UIElement column = UI.column(UI.label(IKey.str(TextUtils.processColoredText(recipe.title))));
+        UIElement column = UI.column(UI.label(IKey.raw(TextUtils.processColoredText(recipe.title))));
 
         if (!recipe.description.trim().isEmpty())
         {

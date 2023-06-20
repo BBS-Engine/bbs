@@ -138,7 +138,7 @@ public class UIModelBlockFactory <T extends BlockModelFactory> extends UIElement
     {
         IKey type = UIKeys.C_BLOCK_MODEL.get(BBS.getFactoryBlockModels().getType(this.model));
 
-        this.title.label = IKey.str("%s (%s)").format(type, this.model.blockId.toString());
+        this.title.label = IKey.raw("%s (%s)").format(type, this.model.blockId.toString());
     }
 
     private void showRename()

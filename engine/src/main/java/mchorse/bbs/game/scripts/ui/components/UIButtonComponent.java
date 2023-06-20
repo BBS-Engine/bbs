@@ -88,7 +88,7 @@ public class UIButtonComponent extends UILabelBaseComponent
 
         if (key.equals("label"))
         {
-            button.label = IKey.str(this.getLabel());
+            button.label = IKey.raw(this.getLabel());
         }
         else if (key.equals("background"))
         {
@@ -107,7 +107,7 @@ public class UIButtonComponent extends UILabelBaseComponent
     @DiscardMethod
     protected UIElement subCreate(UserInterfaceContext context)
     {
-        UIButton button = new UIButton(IKey.str(this.getLabel()), (b) ->
+        UIButton button = new UIButton(IKey.raw(this.getLabel()), (b) ->
         {
             if (!this.id.isEmpty())
             {

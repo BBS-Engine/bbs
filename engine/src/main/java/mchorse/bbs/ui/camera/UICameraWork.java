@@ -292,7 +292,8 @@ public class UICameraWork extends UIElement
             for (Link type : BBS.getFactoryClips().getKeys())
             {
                 IKey typeKey = UIKeys.CAMERA_TIMELINE_CONTEXT_ADD_CLIP_TYPE.format(UIKeys.C_CLIP.get(type));
-                ContextAction action = add.action(Icons.ADD, typeKey, BBS.getFactoryClips().getData(type).color, () -> this.addClip(type, tick, layer, duration));
+                ClipFactoryData data = BBS.getFactoryClips().getData(type);
+                ContextAction action = add.action(data.icon, typeKey, data.color, () -> this.addClip(type, tick, layer, duration));
 
                 if (i < 30)
                 {

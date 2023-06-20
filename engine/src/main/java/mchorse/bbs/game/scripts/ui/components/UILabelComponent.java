@@ -100,7 +100,7 @@ public class UILabelComponent extends UILabelBaseComponent
     @DiscardMethod
     protected UIElement subCreate(UserInterfaceContext context)
     {
-        UILabel label = UI.label(IKey.str(this.getLabel()));
+        UILabel label = UI.label(IKey.raw(this.getLabel()));
 
         if (this.background != null)
         {
@@ -122,7 +122,7 @@ public class UILabelComponent extends UILabelBaseComponent
 
         if (key.equals("label"))
         {
-            label.label = IKey.str(this.getLabel());
+            label.label = IKey.raw(this.getLabel());
         }
         else if (key.equals("background"))
         {

@@ -217,7 +217,7 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
 
         String percentage = UITrackpad.format(p * 100) + "% (" + i + "/" + this.keys.size() + ")";
 
-        this.completion.label = IKey.str(percentage);
+        this.completion.label = IKey.raw(percentage);
         this.updateCompletion = 0;
     }
 

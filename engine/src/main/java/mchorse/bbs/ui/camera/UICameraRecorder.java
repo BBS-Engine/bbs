@@ -72,7 +72,7 @@ public class UICameraRecorder extends UIElement
         {
             UIMessageOverlayPanel panel = new UIMessageOverlayPanel(
                 UIKeys.ERROR,
-                IKey.str(e.getMessage())
+                IKey.raw(e.getMessage())
             );
 
             UIOverlay.addOverlay(this.editor.getContext(), panel);

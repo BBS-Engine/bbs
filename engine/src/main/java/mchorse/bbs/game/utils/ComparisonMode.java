@@ -81,6 +81,6 @@ public enum ComparisonMode
 
     public IKey stringify()
     {
-        return IKey.str(this.operation.sign);
+        return IKey.raw(this.operation.sign);
     }
 }

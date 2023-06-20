@@ -98,7 +98,7 @@ public class UIWorldMetadataOverlayPanel extends UIOverlayPanel
 
         for (Link generator : this.generators)
         {
-            this.generator.addLabel(IKey.str(generator.toString()));
+            this.generator.addLabel(IKey.raw(generator.toString()));
         }
 
         this.generatorOptions = UI.column().marginBottom(12);

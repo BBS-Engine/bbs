@@ -72,7 +72,7 @@ public class UIToggleComponent extends UILabelBaseComponent
 
         if (key.equals("label"))
         {
-            toggle.label = IKey.str(this.getLabel());
+            toggle.label = IKey.raw(this.getLabel());
         }
         else if (key.equals("state"))
         {
@@ -84,7 +84,7 @@ public class UIToggleComponent extends UILabelBaseComponent
     @DiscardMethod
     protected UIElement subCreate(UserInterfaceContext context)
     {
-        UIToggle toggle = new UIToggle(IKey.str(this.getLabel()), (b) ->
+        UIToggle toggle = new UIToggle(IKey.raw(this.getLabel()), (b) ->
         {
             if (!this.id.isEmpty())
             {

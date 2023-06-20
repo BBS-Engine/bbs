@@ -699,11 +699,6 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         this.renderEditorsBackground(context);
 
         super.render(context);
-
-        if (!this.timeline.canBeSeen())
-        {
-            return;
-        }
     }
 
     /**

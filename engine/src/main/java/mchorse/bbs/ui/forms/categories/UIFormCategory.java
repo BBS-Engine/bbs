@@ -48,7 +48,7 @@ public class UIFormCategory extends UIElement
                     UIKeys.FORMS_CATEGORIES_ADD_CATEGORY_DESCRIPTION,
                     (str) ->
                     {
-                        BBS.getForms().addUserCategory(new UserFormCategory(IKey.str(str)));
+                        BBS.getForms().addUserCategory(new UserFormCategory(IKey.raw(str)));
                         list.setupForms(BBS.getForms());
                     }
                 ));

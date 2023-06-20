@@ -223,11 +223,11 @@ public class UIReplPanel extends UIWorldPanel
         {
             try
             {
-                this.log(IKey.str(BBSData.getScripts().repl(text).getPrint()));
+                this.log(IKey.raw(BBSData.getScripts().repl(text).getPrint()));
             }
             catch (Exception e)
             {
-                this.log(IKey.str(e.getMessage()));
+                this.log(IKey.raw(e.getMessage()));
             }
 
             this.repl.clear();

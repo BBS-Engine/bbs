@@ -11,14 +11,14 @@ import mchorse.bbs.ui.camera.utils.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.camera.utils.UICameraGraphEditor;
 import mchorse.bbs.ui.camera.utils.UICameraKeyframesEditor;
 import mchorse.bbs.ui.framework.UIContext;
+import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.utils.UI;
+import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.undo.CompoundUndo;
 import mchorse.bbs.utils.undo.IUndo;
-
-import java.util.List;
 
 public class UIKeyframeClip extends UIClip<KeyframeClip>
 {
@@ -34,7 +34,7 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     public UICameraGraphEditor graph;
     public UICameraDopeSheetEditor dope;
 
-    public IKey[] titles = new IKey[8];
+    public IKey[] titles;
     public int[] colors = {Colors.RED, Colors.GREEN, Colors.BLUE, Colors.CYAN, Colors.MAGENTA, Colors.YELLOW, Colors.LIGHTEST_GRAY};
 
     private IKey title = IKey.EMPTY;
@@ -43,6 +43,12 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     public UIKeyframeClip(KeyframeClip clip, UICameraPanel editor)
     {
         super(clip, editor);
+    }
+
+    @Override
+    protected void registerUI()
+    {
+        super.registerUI();
 
         this.graph = new UICameraGraphEditor(editor);
         this.dope = new UICameraDopeSheetEditor(editor);
@@ -56,20 +62,33 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
         this.roll = new UIButton(UIKeys.CAMERA_PANELS_ROLL, (b) -> this.selectChannel(this.clip.roll, 6));
         this.fov = new UIButton(UIKeys.CAMERA_PANELS_FOV, (b) -> this.selectChannel(this.clip.fov, 7));
 
-        this.left.add(UI.label(UIKeys.CAMERA_PANELS_KEYFRAMES).background());
-        this.left.add(UI.row(this.all));
-        this.left.add(UI.row(this.x, this.y, this.z));
-        this.left.add(UI.row(this.yaw, this.pitch));
-        this.left.add(UI.row(this.roll, this.fov));
+        this.titles = new IKey[] {
+            this.all.label,
+            this.x.label,
+            this.y.label,
+            this.z.label,
+            this.yaw.label,
+            this.pitch.label,
+            this.roll.label,
+            this.fov.label
+        };
+    }
 
-        this.titles[0] = this.all.label;
-        this.titles[1] = this.x.label;
-        this.titles[2] = this.y.label;
-        this.titles[3] = this.z.label;
-        this.titles[4] = this.yaw.label;
-        this.titles[5] = this.pitch.label;
-        this.titles[6] = this.roll.label;
-        this.titles[7] = this.fov.label;
+    @Override
+    protected void registerPanels()
+    {
+        UIScrollView keyframes = this.createScroll();
+
+        keyframes.add(UI.label(UIKeys.CAMERA_PANELS_KEYFRAMES).background());
+        keyframes.add(UI.row(this.all));
+        keyframes.add(UI.row(this.x, this.y, this.z));
+        keyframes.add(UI.row(this.yaw, this.pitch));
+        keyframes.add(UI.row(this.roll, this.fov));
+
+        this.panels.registerPanel(keyframes, UIKeys.CAMERA_PANELS_KEYFRAMES, Icons.CURVES);
+        this.panels.setPanel(keyframes);
+
+        super.registerPanels();
     }
 
     @Override

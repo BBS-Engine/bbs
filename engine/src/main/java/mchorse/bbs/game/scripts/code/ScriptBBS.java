@@ -143,7 +143,7 @@ public class ScriptBBS implements IScriptBBS
     @Override
     public void send(String message)
     {
-        this.bridge.get(IBridgeWorld.class).sendMessage(IKey.str(message));
+        this.bridge.get(IBridgeWorld.class).sendMessage(IKey.raw(message));
     }
 
     @Override

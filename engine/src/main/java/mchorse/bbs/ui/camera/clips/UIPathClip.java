@@ -19,12 +19,13 @@ import mchorse.bbs.ui.camera.clips.modules.UIPointsModule;
 import mchorse.bbs.ui.camera.utils.UICameraGraphEditor;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.UIElement;
+import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.tooltips.InterpolationTooltip;
 import mchorse.bbs.ui.utils.UI;
+import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.KeyframeInterpolations;
 import mchorse.bbs.utils.math.IInterpolation;
@@ -51,7 +52,6 @@ public class UIPathClip extends UIClip<PathClip>
     public UIToggle useSpeed;
     public UICameraGraphEditor speed;
 
-    public UIElement circular;
     public UIToggle autoCenter;
     public UITrackpad circularX;
     public UITrackpad circularZ;
@@ -66,6 +66,14 @@ public class UIPathClip extends UIClip<PathClip>
     {
         super(clip, editor);
 
+        this.keys().register(Keys.PATH_VELOCITY, () -> this.useSpeed.clickItself()).active(editor::isFlightDisabled).category(CATEGORY);
+    }
+
+    @Override
+    protected void registerUI()
+    {
+        super.registerUI();
+
         this.point = new UIPointModule(editor);
         this.angle = new UIAngleModule(editor);
         this.interpPoint = new UIButton(UIKeys.CAMERA_PANELS_POINT, (b) ->
@@ -75,7 +83,7 @@ public class UIPathClip extends UIClip<PathClip>
                 this.editor.postUndo(this.undo(this.clip.interpolationPoint, new StringType(i.toString())));
             });
         });
-        this.interpPoint.tooltip(new InterpolationTooltip(0, 0.5F, () -> this.getInterp(this.clip.interpolationPoint.get())));
+        this.interpPoint.tooltip(new InterpolationTooltip(1F, 0.5F, () -> this.getInterp(this.clip.interpolationPoint.get())));
         this.interpAngle = new UIButton(UIKeys.CAMERA_PANELS_ANGLE, (b) ->
         {
             UICameraUtils.interpTypes(this.getContext(), this.clip.interpolationAngle.get(), (i) ->
@@ -83,7 +91,7 @@ public class UIPathClip extends UIClip<PathClip>
                 this.editor.postUndo(this.undo(this.clip.interpolationAngle, new StringType(i.toString())));
             });
         });
-        this.interpAngle.tooltip(new InterpolationTooltip(0, 0.5F, () -> this.getInterp(this.clip.interpolationAngle.get())));
+        this.interpAngle.tooltip(new InterpolationTooltip(1F, 0.5F, () -> this.getInterp(this.clip.interpolationAngle.get())));
         this.useSpeed = new UIToggle(UIKeys.CAMERA_PANELS_USE_SPEED_ENABLE, false, (b) ->
         {
             this.editor.postUndo(this.undo(this.clip.useSpeed, new ByteType(b.getValue())));
@@ -117,8 +125,6 @@ public class UIPathClip extends UIClip<PathClip>
             {
                 this.editor.postUndo(undo);
             }
-
-            this.updateCircular();
         });
 
         this.circularX = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.circularX, new DoubleType(value))));
@@ -126,21 +132,26 @@ public class UIPathClip extends UIClip<PathClip>
         this.circularZ = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.circularZ, new DoubleType(value))));
         this.circularZ.tooltip(UIKeys.CAMERA_PANELS_CIRCULAR_Z);
 
-        this.circular = new UIElement();
-        this.circular.column().vertical().stretch().height(20);
-        this.circular.add(UI.label(UIKeys.CAMERA_PANELS_CIRCULAR).background(), this.autoCenter);
-
         this.points = new UIPointsModule(editor, this::pickPoint);
-        this.points.relative(this.left.getFlex()).x(1F, 40).y(1F, -30).wTo(this.getFlex(), 1F, -50).h(20);
+        this.points.h(20);
+    }
 
-        this.left.add(UI.label(UIKeys.CAMERA_PANELS_USE_SPEED).background().marginTop(12), this.useSpeed);
-        this.left.add(this.point, this.angle);
-        this.left.add(UI.row(this.interpPoint, this.interpAngle));
-        this.left.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, this.position));
+    @Override
+    protected void registerPanels()
+    {
+        UIScrollView path = this.createScroll();
 
-        this.add(this.points);
+        path.add(UI.label(UIKeys.CAMERA_PANELS_PATH_POINTS).background());
+        path.add(this.points, UI.row(this.interpPoint, this.interpAngle).marginBottom(6));
+        path.add(this.point, this.angle);
+        path.add(UI.label(UIKeys.CAMERA_PANELS_USE_SPEED).background().marginTop(12), this.useSpeed);
+        path.add(UI.label(UIKeys.CAMERA_PANELS_CIRCULAR).background().marginTop(12), this.autoCenter, this.circularX, this.circularZ);
+        path.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, this.position));
 
-        this.keys().register(Keys.PATH_VELOCITY, () -> this.useSpeed.clickItself()).active(editor::isFlightDisabled).category(CATEGORY);
+        this.panels.registerPanel(path, UIKeys.CAMERA_PANELS_PATH_POINTS, Icons.GALLERY);
+        this.panels.setPanel(path);
+
+        super.registerPanels();
     }
 
     private IInterpolation getInterp(InterpolationType type)
@@ -157,26 +168,6 @@ public class UIPathClip extends UIClip<PathClip>
         }
 
         return function;
-    }
-
-    private void updateCircular()
-    {
-        this.circular.removeFromParent();
-        this.circularX.removeFromParent();
-        this.circularZ.removeFromParent();
-
-        if (!this.autoCenter.getValue())
-        {
-            this.circular.add(this.circularX);
-            this.circular.add(this.circularZ);
-        }
-
-        if (this.clip.interpolationPoint.get() == InterpolationType.CIRCULAR)
-        {
-            this.add(this.circular);
-        }
-
-        this.resize();
     }
 
     private void updateSpeedPanel()
@@ -260,7 +251,6 @@ public class UIPathClip extends UIClip<PathClip>
         this.autoCenter.setValue(this.clip.circularAutoCenter.get());
         this.circularX.setValue(this.clip.circularX.get());
         this.circularZ.setValue(this.clip.circularZ.get());
-        this.updateCircular();
 
         this.points.index = index;
     }

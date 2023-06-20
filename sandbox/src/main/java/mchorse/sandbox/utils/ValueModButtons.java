@@ -47,12 +47,12 @@ public class ValueModButtons extends ValueUI
 
         if (homepage.isPresent())
         {
-            contact.add(new UIButton(UIKeysApp.MOD_BUTTONS_HOMEPAGE, (b) -> UIUtils.openWebLink(homepage.get())).tooltip(IKey.str(homepage.get())));
+            contact.add(new UIButton(UIKeysApp.MOD_BUTTONS_HOMEPAGE, (b) -> UIUtils.openWebLink(homepage.get())).tooltip(IKey.raw(homepage.get())));
         }
 
         if (sources.isPresent())
         {
-            contact.add(new UIButton(UIKeysApp.MOD_BUTTONS_SOURCE, (b) -> UIUtils.openWebLink(sources.get())).tooltip(IKey.str(sources.get())));
+            contact.add(new UIButton(UIKeysApp.MOD_BUTTONS_SOURCE, (b) -> UIUtils.openWebLink(sources.get())).tooltip(IKey.raw(sources.get())));
         }
 
         label.marginTop(6);

@@ -8,6 +8,7 @@ import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.ScrollDirection;
 import mchorse.bbs.ui.utils.icons.Icon;
+import mchorse.bbs.ui.utils.resizers.Flex;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.colors.Colors;
 
@@ -105,7 +106,15 @@ public class UIPanelBase <T extends UIElement> extends UIElement
 
     private void setPanelPlacement(UIElement panel)
     {
-        panel.resetFlex();
+        Flex flex = panel.getFlex();
+
+        /* Reset the panel's flex without resetting the post resizer */
+        flex.relative = null;
+
+        flex.x.reset();
+        flex.y.reset();
+        flex.w.reset();
+        flex.h.reset();
 
         if (this.direction == Direction.TOP)
         {

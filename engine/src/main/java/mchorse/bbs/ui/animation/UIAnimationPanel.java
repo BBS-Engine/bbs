@@ -247,7 +247,7 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
         {
             int dot = k.lastIndexOf('.');
 
-            sheets.add(new UISheet(k, IKey.str(dot == - 1 ? k : k.substring(dot + 1)), this.getColor(k), this.getChannel(k)));
+            sheets.add(new UISheet(k, IKey.raw(dot == - 1 ? k : k.substring(dot + 1)), this.getColor(k), this.getChannel(k)));
         }
 
         this.graph.setSheets(sheets);
@@ -261,7 +261,7 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
             UITrackpad trackpad = new UITrackpad((v) -> sheet.channel.insert(this.tick, v));
 
             trackpad.h(16);
-            trackpad.tooltip(IKey.str(sheet.id));
+            trackpad.tooltip(IKey.raw(sheet.id));
             trackpad.textbox.setColor(this.getColor(sheet.id));
             this.quick.put(trackpad, sheet.channel);
             this.quickArea.add(trackpad);

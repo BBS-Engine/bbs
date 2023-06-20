@@ -25,7 +25,21 @@ public interface IKey
         return langKey;
     }
 
-    public static IKey str(String string)
+    /**
+     * This method is used to create an IKey that contains raw string data.
+     */
+    public static IKey raw(String string)
+    {
+        return new StringKey(string);
+    }
+
+    /**
+     * This method is used for referencing lazy language strings before they
+     * are extracted to the language file.
+     *
+     * Ideally, this method should have no references in the release version!
+     */
+    public static IKey lazy(String string)
     {
         return new StringKey(string);
     }

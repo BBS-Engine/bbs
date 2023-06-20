@@ -109,7 +109,7 @@ public class FormArchitect extends MapFactory<Form, Void>
 
             for (String key : data.keys())
             {
-                UserFormCategory category = new UserFormCategory(IKey.str(key));
+                UserFormCategory category = new UserFormCategory(IKey.raw(key));
 
                 category.fromData(data.getMap(key));
                 this.categories.add(category);

@@ -20,7 +20,7 @@ public abstract class UIObjective <T extends Objective> extends UIElement
         this.objective = objective;
 
         this.message = new UITextbox(1000, (t) -> this.objective.message = t);
-        this.message.tooltip(IKey.str("%s %s").format(UIKeys.QUESTS_OBJECTIVES_MESSAGE_TOOLTIP, this.getMessageTooltip()));
+        this.message.tooltip(IKey.raw("%s %s").format(UIKeys.QUESTS_OBJECTIVES_MESSAGE_TOOLTIP, this.getMessageTooltip()));
         this.message.setText(objective.message);
     }
 

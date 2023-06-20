@@ -19,6 +19,8 @@ import java.util.List;
 
 public class InterpolationRenderer
 {
+    private static Color color = new Color();
+
     public static void renderInterpolationPreview(IInterpolation interp, UIContext context, int x, int y, float anchorX, float anchorY, int duration)
     {
         if (interp == null)
@@ -42,10 +44,13 @@ public class InterpolationRenderer
         x -= (int) (w * anchorX);
         y -= (int) (h * anchorY);
 
+        x = MathUtils.clamp(x, 0, context.menu.width - w);
+        y = MathUtils.clamp(y, 0, context.menu.height - h);
+
         Area.SHARED.set(x, y, w, h + ah);
         style.renderBackground(context, Area.SHARED);
 
-        Color fg = Colors.COLOR.set(style.getForegroundColor(), false);
+        Color fg = color.set(style.getForegroundColor(), false);
         int font = style.getTextColor();
 
         fg.a = 0.2F;

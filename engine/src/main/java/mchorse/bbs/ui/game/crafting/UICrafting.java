@@ -48,7 +48,7 @@ public class UICrafting extends UIElement implements ICraftingScreen
     public void set(CraftingTable table)
     {
         this.table = table;
-        this.craft.label = table.action.trim().isEmpty() ? CRAFT_LABEL : IKey.str(TextUtils.processColoredText(table.action));
+        this.craft.label = table.action.trim().isEmpty() ? CRAFT_LABEL : IKey.raw(TextUtils.processColoredText(table.action));
 
         this.recipes.setTable(this.table);
         this.pickRecipe(this.table.recipes.get(0));

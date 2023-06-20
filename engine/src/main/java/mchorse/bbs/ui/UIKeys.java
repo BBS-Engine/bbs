@@ -36,9 +36,9 @@ public class UIKeys
     public static final IKey SEARCH = IKey.lang("bbs.ui.search");
     public static final IKey SUCCESS = IKey.lang("bbs.ui.success");
     public static final IKey WARNING = IKey.lang("bbs.ui.warning");
-    public static final IKey X = IKey.str("X");
-    public static final IKey Y = IKey.str("Y");
-    public static final IKey Z = IKey.str("Z");
+    public static final IKey X = IKey.raw("X");
+    public static final IKey Y = IKey.raw("Y");
+    public static final IKey Z = IKey.raw("Z");
 
     public static final IKey NONE = IKey.lang("bbs.ui.none");
     public static final IKey RIGHT_CLICK = IKey.lang("bbs.ui.right_click");
@@ -85,12 +85,12 @@ public class UIKeys
     public static final IKey CAMERA_EDITOR_KEYS_MODES_FLIGHT = IKey.lang("bbs.ui.camera.editor.keys.modes.flight");
     public static final IKey CAMERA_EDITOR_KEYS_MODES_LOOPING = IKey.lang("bbs.ui.camera.editor.keys.modes.looping");
     public static final IKey CAMERA_EDITOR_KEYS_MODES_TITLE = IKey.lang("bbs.ui.camera.editor.keys.modes.title");
-    public static final IKey CAMERA_EDITOR_SPEED = IKey.lang("bbs.ui.camera.editor.speed");
     public static final IKey CAMERA_PANELS_ALL = IKey.lang("bbs.ui.camera.panels.all");
     public static final IKey CAMERA_PANELS_ANGLE = IKey.lang("bbs.ui.camera.panels.angle");
     public static final IKey CAMERA_PANELS_AT_BLOCK = IKey.lang("bbs.ui.camera.panels.at_block");
     public static final IKey CAMERA_PANELS_AUDIO_PICK_AUDIO = IKey.lang("bbs.ui.camera.panels.audio.pick_audio");
     public static final IKey CAMERA_PANELS_AUTO_CENTER = IKey.lang("bbs.ui.camera.panels.auto_center");
+    public static final IKey CAMERA_PANELS_BASIC_OPTIONS = IKey.lang("bbs.ui.camera.panels.basic_options", "Basic options", CAMERA_PANELS_ALL);
     public static final IKey CAMERA_PANELS_BLOCK = IKey.lang("bbs.ui.camera.panels.block");
     public static final IKey CAMERA_PANELS_CIRCLE = IKey.lang("bbs.ui.camera.panels.circle");
     public static final IKey CAMERA_PANELS_CIRCLES = IKey.lang("bbs.ui.camera.panels.circles");
@@ -118,8 +118,10 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_DOLLY_SPEED = IKey.lang("bbs.ui.camera.panels.dolly.speed");
     public static final IKey CAMERA_PANELS_DOLLY_TITLE = IKey.lang("bbs.ui.camera.panels.dolly.title");
     public static final IKey CAMERA_PANELS_DOLLY_YAW = IKey.lang("bbs.ui.camera.panels.dolly.yaw");
+    public static final IKey CAMERA_PANELS_DRAG = IKey.lang("bbs.ui.camera.panels.drag", "Drag", CAMERA_PANELS_ALL);
     public static final IKey CAMERA_PANELS_DURATION = IKey.lang("bbs.ui.camera.panels.duration");
     public static final IKey CAMERA_PANELS_EDIT_KEYFRAMES = IKey.lang("bbs.ui.camera.panels.edit_keyframes");
+    public static final IKey CAMERA_PANELS_EDIT_PLAYER_RECORDING = IKey.lang("bbs.ui.camera.panels.edit_player_recording");
     public static final IKey CAMERA_PANELS_ENABLED = IKey.lang("bbs.ui.camera.panels.enabled");
     public static final IKey CAMERA_PANELS_ENVELOPES_END_D = IKey.lang("bbs.ui.camera.panels.envelopes.end_d");
     public static final IKey CAMERA_PANELS_ENVELOPES_START_D = IKey.lang("bbs.ui.camera.panels.envelopes.start_d");
@@ -138,14 +140,21 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_MATH = IKey.lang("bbs.ui.camera.panels.math");
     public static final IKey CAMERA_PANELS_METRICS = IKey.lang("bbs.ui.camera.panels.metrics");
     public static final IKey CAMERA_PANELS_OFFSET = IKey.lang("bbs.ui.camera.panels.offset");
+    public static final IKey CAMERA_PANELS_ORBIT = IKey.lang("bbs.ui.camera.panels.orbit", "Orbit", CAMERA_PANELS_ALL);
     public static final IKey CAMERA_PANELS_PATH_POINTS = IKey.lang("bbs.ui.camera.panels.path_points");
     public static final IKey CAMERA_PANELS_PITCH = IKey.lang("bbs.ui.camera.panels.pitch");
     public static final IKey CAMERA_PANELS_POINT = IKey.lang("bbs.ui.camera.panels.point");
+    public static final IKey CAMERA_PANELS_POINTS_CONTEXT_ADD = IKey.lang("bbs.ui.camera.panels.points.context.add", "Add a point", CAMERA_PANELS_ALL);
+    public static final IKey CAMERA_PANELS_POINTS_CONTEXT_MOVE_BACK = IKey.lang("bbs.ui.camera.panels.points.context.move_back", "Move back", CAMERA_PANELS_ALL);
+    public static final IKey CAMERA_PANELS_POINTS_CONTEXT_MOVE_FORWARD = IKey.lang("bbs.ui.camera.panels.points.context.move_forward", "Move forward", CAMERA_PANELS_ALL);
+    public static final IKey CAMERA_PANELS_POINTS_CONTEXT_REMOVE = IKey.lang("bbs.ui.camera.panels.points.context.remove", "Remove a point", CAMERA_PANELS_ALL);
     public static final IKey CAMERA_PANELS_POSITION = IKey.lang("bbs.ui.camera.panels.position");
     public static final IKey CAMERA_PANELS_RATE_TOOLTIP = IKey.lang("bbs.ui.camera.panels.rate_tooltip");
     public static final IKey CAMERA_PANELS_RELATIVE = IKey.lang("bbs.ui.camera.panels.relative");
     public static final IKey CAMERA_PANELS_RELATIVE_TOOLTIP = IKey.lang("bbs.ui.camera.panels.relative_tooltip");
+    public static final IKey CAMERA_PANELS_REMAPPER = IKey.lang("bbs.ui.camera.panels.remapper", "Remapper", CAMERA_PANELS_ALL);
     public static final IKey CAMERA_PANELS_ROLL = IKey.lang("bbs.ui.camera.panels.roll");
+    public static final IKey CAMERA_PANELS_SCENE = IKey.lang("bbs.ui.camera.panels.scene", "Scene", CAMERA_PANELS_ALL);
     public static final IKey CAMERA_PANELS_SELECTOR = IKey.lang("bbs.ui.camera.panels.selector");
     public static final IKey CAMERA_PANELS_SELECTOR_TOOLTIP = IKey.lang("bbs.ui.camera.panels.selector_tooltip");
     public static final IKey CAMERA_PANELS_SHAKE = IKey.lang("bbs.ui.camera.panels.shake");
@@ -153,10 +162,10 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_TICK = IKey.lang("bbs.ui.camera.panels.tick");
     public static final IKey CAMERA_PANELS_TITLE = IKey.lang("bbs.ui.camera.panels.title");
     public static final IKey CAMERA_PANELS_TITLE_TOOLTIP = IKey.lang("bbs.ui.camera.panels.title_tooltip");
+    public static final IKey CAMERA_PANELS_TRANSLATE = IKey.lang("bbs.ui.camera.panels.translate", "Translate", CAMERA_PANELS_ALL);
     public static final IKey CAMERA_PANELS_USE_SPEED = IKey.lang("bbs.ui.camera.panels.use_speed");
     public static final IKey CAMERA_PANELS_USE_SPEED_ENABLE = IKey.lang("bbs.ui.camera.panels.use_speed_enable");
     public static final IKey CAMERA_PANELS_YAW = IKey.lang("bbs.ui.camera.panels.yaw");
-    public static final IKey CAMERA_PANELS_EDIT_PLAYER_RECORDING = IKey.lang("bbs.ui.camera.panels.edit_player_recording");
     public static final IKey CAMERA_RECORDING_PREMATURE_STOP = IKey.lang("bbs.ui.camera.recording.premature_stop");
     public static final IKey CAMERA_TIMELINE_CONTEXT_ADD = IKey.lang("bbs.ui.camera.timeline.context.add");
     public static final IKey CAMERA_TIMELINE_CONTEXT_ADD_AT_CURSOR = IKey.lang("bbs.ui.camera.timeline.context.add_at_cursor");
@@ -551,6 +560,7 @@ public class UIKeys
     public static final IKey PANELS_SCRIPTS = IKey.lang("bbs.ui.panels.scripts");
     public static final IKey PANELS_SETTINGS = IKey.lang("bbs.ui.panels.settings");
     public static final IKey PANELS_UIS = IKey.lang("bbs.ui.panels.uis");
+    public static final IKey PANELS_OPTIONS_TITLE = IKey.lang("bbs.ui.panels.options-title", "Options", PANELS_ANIMATIONS);
 
     public static final IKey PLAYER_DATA_TITLE = IKey.lang("bbs.ui.player_data.title");
     public static final IKey PLAYER_DATA_FIRST_PERSON = IKey.lang("bbs.ui.player_data.first_person");

@@ -9,9 +9,11 @@ import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UITextboxHelp;
+import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.utils.UI;
+import mchorse.bbs.ui.utils.icons.Icons;
 
 public class UIOrbitClip extends UIClip<OrbitClip>
 {
@@ -25,6 +27,12 @@ public class UIOrbitClip extends UIClip<OrbitClip>
     public UIOrbitClip(OrbitClip clip, UICameraPanel editor)
     {
         super(clip, editor);
+    }
+
+    @Override
+    protected void registerUI()
+    {
+        super.registerUI();
 
         this.selector = new UITextboxHelp(500, (str) ->
         {
@@ -45,13 +53,24 @@ public class UIOrbitClip extends UIClip<OrbitClip>
         this.offset = new UIPointModule(editor, UIKeys.CAMERA_PANELS_OFFSET).contextMenu();
 
         this.distance = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.distance, new FloatType(value.floatValue()))));
+    }
 
-        this.left.add(UI.label(UIKeys.CAMERA_PANELS_SELECTOR).background(), this.selector);
-        this.left.add(this.copy.marginBottom(12));
-        this.left.add(UI.label(UIKeys.CAMERA_PANELS_DISTANCE).background(), this.distance);
-        this.left.add(UI.label(UIKeys.CAMERA_PANELS_ANGLE).background());
-        this.left.add(UI.row(5, 0, 20, this.yaw, this.pitch));
-        this.left.add(this.offset);
+    @Override
+    protected void registerPanels()
+    {
+        UIScrollView orbit = this.createScroll();
+
+        orbit.add(UI.label(UIKeys.CAMERA_PANELS_SELECTOR).background(), this.selector);
+        orbit.add(this.copy.marginBottom(12));
+        orbit.add(UI.label(UIKeys.CAMERA_PANELS_DISTANCE).background(), this.distance);
+        orbit.add(UI.label(UIKeys.CAMERA_PANELS_ANGLE).background());
+        orbit.add(UI.row(5, 0, 20, this.yaw, this.pitch));
+        orbit.add(this.offset);
+
+        this.panels.registerPanel(orbit, UIKeys.CAMERA_PANELS_ORBIT, Icons.GLOBE);
+        this.panels.setPanel(orbit);
+
+        super.registerPanels();
     }
 
     @Override

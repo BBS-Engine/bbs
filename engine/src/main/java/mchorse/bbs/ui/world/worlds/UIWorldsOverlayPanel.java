@@ -211,7 +211,7 @@ public class UIWorldsOverlayPanel extends UIOverlayPanel
 
             new ConversionThread(this.bridge, oldMetadata, newMetadata, (progress) ->
             {
-                message.setMessage(IKey.str(progress.message));
+                message.setMessage(IKey.raw(progress.message));
 
                 if (progress.finished)
                 {

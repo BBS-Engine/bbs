@@ -6,11 +6,13 @@ import mchorse.bbs.camera.clips.modifiers.LookClip;
 import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.data.types.ByteType;
 import mchorse.bbs.data.types.StringType;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UITextboxHelp;
 import mchorse.bbs.ui.framework.elements.UIElement;
+import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -38,6 +40,12 @@ public class UILookClip extends UIClip<LookClip>
     public UILookClip(LookClip clip, UICameraPanel editor)
     {
         super(clip, editor);
+    }
+
+    @Override
+    protected void registerUI()
+    {
+        super.registerUI();
 
         this.selector = new UITextboxHelp(500, (str) ->
         {
@@ -70,13 +78,25 @@ public class UILookClip extends UIClip<LookClip>
             this.editor.postUndo(this.undo(this.clip.forward, new ByteType(b.getValue())));
         });
         this.forward.tooltip(UIKeys.CAMERA_PANELS_FORWARD_TOOLTIP);
+    }
 
-        this.left.add(UI.label(UIKeys.CAMERA_PANELS_SELECTOR).background(), this.selector);
-        this.left.add(this.relative);
-        this.left.add(this.offset.marginTop(12));
-        this.left.add(this.atBlock.marginTop(12));
-        this.left.add(this.block);
-        this.left.add(this.forward);
+    @Override
+    protected void registerPanels()
+    {
+        UIScrollView look = this.createScroll();
+
+        look.add(UI.label(UIKeys.CAMERA_PANELS_SELECTOR).background(), this.selector);
+        look.add(this.relative);
+        look.add(this.offset.marginTop(6));
+        look.add(this.atBlock.marginTop(6));
+        look.add(this.block.marginTop(6));
+        look.add(this.forward);
+
+        this.panels.registerPanel(look, UIKeys.CAMERA_PANELS_POSITION, Icons.VISIBLE);
+
+        super.registerPanels();
+
+        this.panels.setPanel(look);
     }
 
     @Override

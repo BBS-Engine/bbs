@@ -28,13 +28,13 @@ public class UIQuestCard
             title += Font.FORMAT_LIGHT_GRAY + " (" + quest.getId() + ")";
         }
 
-        element.add(UI.label(IKey.str(title)).background().marginBottom(12));
+        element.add(UI.label(IKey.raw(title)).background().marginBottom(12));
         element.add(new UIText(DialogueFragment.process(quest.story)).color(Colors.LIGHTER_GRAY, true).marginBottom(12));
         element.add(UI.label(UIKeys.QUESTS_OBJECTIVES_TITLE));
 
         for (Objective objective : quest.objectives)
         {
-            element.add(UI.label(IKey.str("- " + objective.stringify(player))).color(Colors.LIGHTER_GRAY));
+            element.add(UI.label(IKey.raw("- " + objective.stringify(player))).color(Colors.LIGHTER_GRAY));
         }
 
         if (!BBSSettings.questsPreviewRewards.get() && !forceReward)

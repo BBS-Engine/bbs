@@ -84,7 +84,7 @@ public class UICurveEditor extends UIElement
 
                 curves.put(newName, curves.remove(oldName));
                 this.particleCurve.variable = parser.variables.get(newName);
-                this.name.label = IKey.str(newName);
+                this.name.label = IKey.raw(newName);
                 this.section.dirty();
             }
         );
@@ -112,7 +112,7 @@ public class UICurveEditor extends UIElement
     {
         this.particleCurve = curve;
 
-        this.name.label = IKey.str(curve.variable.getName());
+        this.name.label = IKey.raw(curve.variable.getName());
         this.type.setValue(curve.type.ordinal());
         this.curve.fill(curve);
     }

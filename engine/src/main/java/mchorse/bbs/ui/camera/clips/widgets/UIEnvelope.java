@@ -98,7 +98,7 @@ public class UIEnvelope extends UIElement
 
         if (this.hasParent())
         {
-            this.getParent().getParent().resize();
+            this.getParent().resize();
 
             if (toggled)
             {

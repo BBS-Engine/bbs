@@ -72,7 +72,7 @@ public class Keybind
      */
     public Keybind keys(int... keyCodes)
     {
-        this.combo = new KeyCombo(IKey.str(this.id), keyCodes);
+        this.combo = new KeyCombo(IKey.raw(this.id), keyCodes);
 
         return this;
     }

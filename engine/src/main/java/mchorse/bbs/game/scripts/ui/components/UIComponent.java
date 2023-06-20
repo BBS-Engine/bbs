@@ -676,7 +676,7 @@ public abstract class UIComponent implements IMapSerializable
             if (keybind.isShift()) keys.add(GLFW.GLFW_KEY_LEFT_SHIFT);
             if (keybind.isAlt()) keys.add(GLFW.GLFW_KEY_LEFT_ALT);
 
-            KeyCombo combo = new KeyCombo(IKey.str(keybind.label), keys.stream().mapToInt(Integer::intValue).toArray());
+            KeyCombo combo = new KeyCombo(IKey.raw(keybind.label), keys.stream().mapToInt(Integer::intValue).toArray());
 
             element.keys().register(combo, () -> context.sendKey(keybind.action));
         }
@@ -714,7 +714,7 @@ public abstract class UIComponent implements IMapSerializable
         }
         else
         {
-            element.tooltip(IKey.str(TextUtils.processColoredText(this.tooltip)), direction);
+            element.tooltip(IKey.raw(TextUtils.processColoredText(this.tooltip)), direction);
         }
     }
 
@@ -750,11 +750,11 @@ public abstract class UIComponent implements IMapSerializable
 
             if (item.color > 0)
             {
-                menu.action(icon, IKey.str(item.label), item.color, runnable);
+                menu.action(icon, IKey.raw(item.label), item.color, runnable);
             }
             else
             {
-                menu.action(icon, IKey.str(item.label), runnable);
+                menu.action(icon, IKey.raw(item.label), runnable);
             }
         }
     }

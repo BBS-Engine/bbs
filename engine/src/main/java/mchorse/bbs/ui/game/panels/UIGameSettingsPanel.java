@@ -101,7 +101,7 @@ public class UIGameSettingsPanel extends UIDashboardPanel
             return title;
         }
 
-        return IKey.str("%s %s").format(title, "§2(§8"+ trigger.blocks.size() + "§2)§r");
+        return IKey.raw("%s %s").format(title, "§2(§8"+ trigger.blocks.size() + "§2)§r");
     }
 
     private void addState(UIIcon element)

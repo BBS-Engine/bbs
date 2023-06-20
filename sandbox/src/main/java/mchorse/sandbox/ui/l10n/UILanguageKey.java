@@ -36,9 +36,9 @@ public class UILanguageKey extends UIElement
         this.original = base;
         this.callback = callback;
 
-        this.key = UI.label(IKey.str(langKey.key));
+        this.key = UI.label(IKey.raw(langKey.key));
         this.key.labelAnchor(0, 0.5F).h(20);
-        this.key.tooltip(IKey.str(langKey.key), Direction.BOTTOM);
+        this.key.tooltip(IKey.raw(langKey.key), Direction.BOTTOM);
 
         if (langKey.content.length() >= 60)
         {

@@ -15,6 +15,7 @@ public class ChildResizer extends DecoratedResizer
     public ChildResizer(IParentResizer parent, UIElement element)
     {
         super(element.getFlex());
+
         this.parent = parent;
         this.element = element;
     }

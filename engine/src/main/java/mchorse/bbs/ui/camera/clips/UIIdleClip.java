@@ -2,10 +2,14 @@ package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.overwrite.IdleClip;
 import mchorse.bbs.camera.data.Position;
+import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
+import mchorse.bbs.ui.framework.elements.UIScrollView;
+import mchorse.bbs.ui.utils.icons.Icons;
 
 /**
  * Idle clip panel
@@ -21,12 +25,29 @@ public class UIIdleClip extends UIClip<IdleClip>
     public UIIdleClip(IdleClip clip, UICameraPanel editor)
     {
         super(clip, editor);
+    }
+
+    @Override
+    protected void registerUI()
+    {
+        super.registerUI();
 
         this.point = new UIPointModule(editor);
         this.angle = new UIAngleModule(editor);
+    }
 
-        this.left.add(this.point, this.angle);
-        this.left.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, clip.position));
+    @Override
+    protected void registerPanels()
+    {
+        UIScrollView idle = this.createScroll();
+
+        idle.add(this.point, this.angle);
+        idle.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, clip.position));
+
+        this.panels.registerPanel(idle, UIKeys.CAMERA_PANELS_POSITION, Icons.FRUSTUM);
+        this.panels.setPanel(idle);
+
+        super.registerPanels();
     }
 
     @Override

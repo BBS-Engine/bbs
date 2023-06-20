@@ -74,7 +74,7 @@ public class L10n
 
         for (Pair<String, String> pair : this.supportedLanguages)
         {
-            labels.add(new Label<String>(IKey.str(pair.a), pair.b));
+            labels.add(new Label<String>(IKey.raw(pair.a), pair.b));
         }
 
         return labels;

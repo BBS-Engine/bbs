@@ -4,6 +4,7 @@ import mchorse.bbs.camera.clips.converters.IClipConverter;
 import mchorse.bbs.game.utils.factory.UIFactoryData;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.camera.clips.UIClip;
+import mchorse.bbs.ui.utils.icons.Icon;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +12,13 @@ import java.util.Map;
 public class ClipFactoryData extends UIFactoryData<UIClip>
 {
     public final Map<Link, IClipConverter<? extends Clip, ? extends Clip>> converters = new HashMap<Link, IClipConverter<? extends Clip, ? extends Clip>>();
+    public final Icon icon;
 
-    public ClipFactoryData(int color, Class<? extends UIClip> panelUI)
+    public ClipFactoryData(Icon icon, int color, Class<? extends UIClip> panelUI)
     {
         super(color, panelUI);
+
+        this.icon = icon;
     }
 
     public ClipFactoryData withConverter(Link to, IClipConverter<? extends Clip, ? extends Clip> converter)

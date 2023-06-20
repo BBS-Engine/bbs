@@ -125,7 +125,7 @@ public class SandboxRenderer implements IComponent
             texture.setFilter(GL11.GL_LINEAR);
             texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
 
-            framebuffer.attach(texture, GL30.GL_COLOR_ATTACHMENT0);
+            framebuffer.deleteTextures().attach(texture, GL30.GL_COLOR_ATTACHMENT0);
             framebuffer.unbind();
         });
 

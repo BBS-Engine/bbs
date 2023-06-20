@@ -4,11 +4,11 @@ import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.clips.overwrite.PathClip;
 import mchorse.bbs.camera.values.ValuePositions;
 import mchorse.bbs.data.types.BaseType;
+import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.utils.ScrollArea;
 import mchorse.bbs.ui.utils.ScrollDirection;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -44,18 +44,16 @@ public class UIPointsModule extends UIAbstractModule
 
         this.picker = picker;
 
-        UIIcon back = new UIIcon(Icons.SHIFT_BACKWARD, (b) -> this.moveBack());
-        UIIcon forward = new UIIcon(Icons.SHIFT_FORWARD, (b) -> this.moveForward());
-        UIIcon add = new UIIcon(Icons.ADD, (b) -> this.addPoint());
-        UIIcon remove = new UIIcon(Icons.REMOVE, (b) -> this.removePoint());
-
-        back.relative(this).x(-40);
-        remove.relative(this).x(-20);
-        add.relative(this).x(1F);
-        forward.relative(this).x(1F, 20);
-
-        this.add(back, add, remove, forward);
         this.scroll.direction = ScrollDirection.HORIZONTAL;
+        this.scroll.cancelScrolling();
+
+        this.context((menu) ->
+        {
+            menu.shadow().action(Icons.ADD, UIKeys.CAMERA_PANELS_POINTS_CONTEXT_ADD, this::addPoint);
+            menu.action(Icons.REMOVE, UIKeys.CAMERA_PANELS_POINTS_CONTEXT_REMOVE, this::removePoint);
+            menu.action(Icons.SHIFT_BACKWARD, UIKeys.CAMERA_PANELS_POINTS_CONTEXT_MOVE_BACK, this::moveBack);
+            menu.action(Icons.SHIFT_FORWARD, UIKeys.CAMERA_PANELS_POINTS_CONTEXT_MOVE_FORWARD, this::moveForward);
+        });
     }
 
     private IUndo<CameraWork> undo(UICameraPanel editor, int index, int nextIndex, BaseType positions)
@@ -203,7 +201,7 @@ public class UIPointsModule extends UIAbstractModule
 
         if (this.scroll.isInside(context))
         {
-            if (context.mouseButton == 1)
+            if (context.mouseButton == 2 || (context.mouseButton == 0 && Window.isCtrlPressed()))
             {
                 this.scroll.dragging = true;
 
@@ -224,9 +222,9 @@ public class UIPointsModule extends UIAbstractModule
                         this.picker.accept(index);
                     }
                 }
-            }
 
-            return true;
+                return true;
+            }
         }
 
         return super.subMouseClicked(context);
@@ -310,10 +308,5 @@ public class UIPointsModule extends UIAbstractModule
         }
 
         super.render(context);
-
-        String label = UIKeys.CAMERA_PANELS_PATH_POINTS.get();
-        int w = context.font.getWidth(label);
-
-        context.batcher.textShadow(label, this.scroll.mx(w), this.scroll.y - 14);
     }
 }
