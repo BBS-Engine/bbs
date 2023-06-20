@@ -28,7 +28,6 @@ public class Keys
     public static final KeyCombo LOOPING_SET_MAX = new KeyCombo(UIKeys.CAMERA_EDITOR_KEYS_LOOPING_SET_MAX, GLFW.GLFW_KEY_RIGHT_BRACKET).categoryKey("camera");
     public static final KeyCombo LOOPING_SET_MIN = new KeyCombo(UIKeys.CAMERA_EDITOR_KEYS_LOOPING_SET_MIN, GLFW.GLFW_KEY_LEFT_BRACKET).categoryKey("camera");
     public static final KeyCombo NEXT_CLIP = new KeyCombo(UIKeys.CAMERA_EDITOR_KEYS_EDITOR_NEXT_CLIP, GLFW.GLFW_KEY_RIGHT, GLFW.GLFW_KEY_LEFT_SHIFT).repeatable().categoryKey("camera");
-    public static final KeyCombo PATH_VELOCITY = new KeyCombo(UIKeys.CAMERA_PANELS_KEYS_VELOCITY, GLFW.GLFW_KEY_E, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("camera");
     public static final KeyCombo PREV_CLIP = new KeyCombo(UIKeys.CAMERA_EDITOR_KEYS_EDITOR_PREV_CLIP, GLFW.GLFW_KEY_LEFT, GLFW.GLFW_KEY_LEFT_SHIFT).repeatable().categoryKey("camera");
     public static final KeyCombo JUMP_FORWARD = new KeyCombo(UIKeys.CAMERA_EDITOR_KEYS_EDITOR_JUMP_FORWARD, GLFW.GLFW_KEY_UP).repeatable().categoryKey("camera");
     public static final KeyCombo JUMP_BACKWARD = new KeyCombo(UIKeys.CAMERA_EDITOR_KEYS_EDITOR_JUMP_BACKWARD, GLFW.GLFW_KEY_DOWN).repeatable().categoryKey("camera");

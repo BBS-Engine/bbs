@@ -135,7 +135,6 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_INTERPOLATION = IKey.lang("bbs.ui.camera.panels.interpolation");
     public static final IKey CAMERA_PANELS_KEYFRAMES = IKey.lang("bbs.ui.camera.panels.keyframes");
     public static final IKey CAMERA_PANELS_KEYS_TITLE = IKey.lang("bbs.ui.camera.panels.keys.title");
-    public static final IKey CAMERA_PANELS_KEYS_VELOCITY = IKey.lang("bbs.ui.camera.panels.keys.velocity");
     public static final IKey CAMERA_PANELS_LAYER = IKey.lang("bbs.ui.camera.panels.layer");
     public static final IKey CAMERA_PANELS_MATH = IKey.lang("bbs.ui.camera.panels.math");
     public static final IKey CAMERA_PANELS_METRICS = IKey.lang("bbs.ui.camera.panels.metrics");
@@ -163,8 +162,6 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_TITLE = IKey.lang("bbs.ui.camera.panels.title");
     public static final IKey CAMERA_PANELS_TITLE_TOOLTIP = IKey.lang("bbs.ui.camera.panels.title_tooltip");
     public static final IKey CAMERA_PANELS_TRANSLATE = IKey.lang("bbs.ui.camera.panels.translate", "Translate", CAMERA_PANELS_ALL);
-    public static final IKey CAMERA_PANELS_USE_SPEED = IKey.lang("bbs.ui.camera.panels.use_speed");
-    public static final IKey CAMERA_PANELS_USE_SPEED_ENABLE = IKey.lang("bbs.ui.camera.panels.use_speed_enable");
     public static final IKey CAMERA_PANELS_YAW = IKey.lang("bbs.ui.camera.panels.yaw");
     public static final IKey CAMERA_RECORDING_PREMATURE_STOP = IKey.lang("bbs.ui.camera.recording.premature_stop");
     public static final IKey CAMERA_TIMELINE_CONTEXT_ADD = IKey.lang("bbs.ui.camera.timeline.context.add");
@@ -183,7 +180,6 @@ public class UIKeys
     public static final IKey CAMERA_TIMELINE_CONTEXT_SHIFT_DURATION = IKey.lang("bbs.ui.camera.timeline.context.shift_duration");
     public static final IKey CAMERA_TIMELINE_KEYS_CLIPS = IKey.lang("bbs.ui.camera.timeline.keys.clips");
     public static final IKey CAMERA_TIMELINE_KEYS_ENABLED = IKey.lang("bbs.ui.camera.timeline.keys.enabled");
-    public static final IKey CAMERA_TOOLTIPS_CONFIG = IKey.lang("bbs.ui.camera.tooltips.config");
     public static final IKey CAMERA_TOOLTIPS_OPEN_VIDEOS = IKey.lang("bbs.ui.camera.tooltips.open_videos");
     public static final IKey CAMERA_TOOLTIPS_RECORD = IKey.lang("bbs.ui.camera.tooltips.record");
 

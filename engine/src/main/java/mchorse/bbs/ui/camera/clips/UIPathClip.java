@@ -10,15 +10,12 @@ import mchorse.bbs.data.types.DoubleType;
 import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointsModule;
-import mchorse.bbs.ui.camera.utils.UICameraGraphEditor;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
-import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
@@ -26,7 +23,6 @@ import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.tooltips.InterpolationTooltip;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.KeyframeInterpolations;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.utils.math.Interpolation;
@@ -49,8 +45,6 @@ public class UIPathClip extends UIClip<PathClip>
     public UIAngleModule angle;
     public UIButton interpPoint;
     public UIButton interpAngle;
-    public UIToggle useSpeed;
-    public UICameraGraphEditor speed;
 
     public UIToggle autoCenter;
     public UITrackpad circularX;
@@ -60,13 +54,9 @@ public class UIPathClip extends UIClip<PathClip>
 
     public ValuePosition position;
 
-    private long update;
-
     public UIPathClip(PathClip clip, UICameraPanel editor)
     {
         super(clip, editor);
-
-        this.keys().register(Keys.PATH_VELOCITY, () -> this.useSpeed.clickItself()).active(editor::isFlightDisabled).category(CATEGORY);
     }
 
     @Override
@@ -92,18 +82,6 @@ public class UIPathClip extends UIClip<PathClip>
             });
         });
         this.interpAngle.tooltip(new InterpolationTooltip(1F, 0.5F, () -> this.getInterp(this.clip.interpolationAngle.get())));
-        this.useSpeed = new UIToggle(UIKeys.CAMERA_PANELS_USE_SPEED_ENABLE, false, (b) ->
-        {
-            this.editor.postUndo(this.undo(this.clip.useSpeed, new ByteType(b.getValue())));
-
-            boolean useSpeed = this.clip.useSpeed.get();
-
-            if (useSpeed)
-            {
-                this.clip.updateSpeedCache();
-            }
-        });
-        this.speed = new UICameraGraphEditor(editor);
 
         this.autoCenter = new UIToggle(UIKeys.CAMERA_PANELS_AUTO_CENTER, (b) ->
         {
@@ -144,7 +122,6 @@ public class UIPathClip extends UIClip<PathClip>
         path.add(UI.label(UIKeys.CAMERA_PANELS_PATH_POINTS).background());
         path.add(this.points, UI.row(this.interpPoint, this.interpAngle).marginBottom(6));
         path.add(this.point, this.angle);
-        path.add(UI.label(UIKeys.CAMERA_PANELS_USE_SPEED).background().marginTop(12), this.useSpeed);
         path.add(UI.label(UIKeys.CAMERA_PANELS_CIRCULAR).background().marginTop(12), this.autoCenter, this.circularX, this.circularZ);
         path.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, this.position));
 
@@ -204,15 +181,6 @@ public class UIPathClip extends UIClip<PathClip>
     }
 
     @Override
-    protected void updateDuration(int duration)
-    {
-        super.updateDuration(duration);
-
-        this.speed.updateConverter();
-        this.speed.keyframes.setDuration(duration);
-    }
-
-    @Override
     public void editClip(Position position)
     {
         if (this.position != null)
@@ -241,29 +209,12 @@ public class UIPathClip extends UIClip<PathClip>
         this.point.fill(this.position.getPoint());
         this.angle.fill(this.position.getAngle());
         this.points.fill(this.clip);
-        this.useSpeed.setValue(this.clip.useSpeed.get());
         this.updateSpeedPanel();
-
-        this.speed.keyframes.setDuration(duration);
-        this.speed.setChannel(this.clip.speed, Colors.ACTIVE);
-        this.speed.setVisible(this.clip.useSpeed.get());
 
         this.autoCenter.setValue(this.clip.circularAutoCenter.get());
         this.circularX.setValue(this.clip.circularX.get());
         this.circularZ.setValue(this.clip.circularZ.get());
 
         this.points.index = index;
-    }
-
-    @Override
-    public void render(UIContext context)
-    {
-        if (this.clip.useSpeed.get() && this.update > 0 && System.currentTimeMillis() >= this.update)
-        {
-            this.clip.updateSpeedCache();
-            this.update = 0;
-        }
-
-        super.render(context);
     }
 }
