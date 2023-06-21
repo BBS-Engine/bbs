@@ -7,6 +7,7 @@ import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
+import mchorse.bbs.ui.framework.elements.input.list.UISearchList;
 import mchorse.bbs.ui.framework.elements.overlay.UIConfirmOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class UIBlockModelFactoriesOverlayPanel extends UIOverlayPanel
 {
+    public UISearchList<BlockModelFactory> searchList;
     public UIBlockModelFactoryList list;
 
     public UIIcon add;
@@ -60,8 +62,10 @@ public class UIBlockModelFactoriesOverlayPanel extends UIOverlayPanel
                 });
             }
         });
-        this.list.background();
-        this.list.relative(this.content).full();
+
+        this.searchList = new UISearchList<BlockModelFactory>(this.list);
+        this.searchList.label(UIKeys.SEARCH);
+        this.searchList.relative(this.content).full().x(6).w(1F, -12);
 
         if (this.menu.panel != null)
         {
@@ -69,7 +73,7 @@ public class UIBlockModelFactoriesOverlayPanel extends UIOverlayPanel
         }
 
         this.icons.add(this.add, this.replace, this.remove);
-        this.content.add(this.list);
+        this.content.add(this.searchList);
     }
 
     private void addModel(UIIcon b)

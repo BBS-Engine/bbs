@@ -15,10 +15,7 @@ public abstract class UIDataTriggerBlockPanel <T extends DataTriggerBlock> exten
     {
         super(overlay, block);
 
-        this.data = UIDataUtils.fullWindowContext(
-            new UITextbox(100000, (text) -> this.block.customData = text),
-            UIKeys.NODES_EVENT_DATA
-        );
+        this.data = new UITextbox(100000, (text) -> this.block.customData = text);
         this.data.tooltip(UIKeys.NODES_EVENT_DATA_TOOLTIP);
         this.data.setText(block.customData);
         this.add(UI.label(UIKeys.NODES_EVENT_DATA).marginTop(12), this.data);

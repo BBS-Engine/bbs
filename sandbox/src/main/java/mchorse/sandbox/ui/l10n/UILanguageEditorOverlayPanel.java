@@ -1,5 +1,6 @@
 package mchorse.sandbox.ui.l10n;
 
+import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
 import mchorse.sandbox.ui.UIKeysApp;
 import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
@@ -86,21 +87,21 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
         this.paste = new UIIcon(Icons.PASTE, (b) -> this.paste());
         this.paste.tooltip(UIKeysApp.LANGUAGE_EDITOR_PASTE);
         this.completion = UI.label(IKey.EMPTY);
-        this.completion.background(Colors.A50 | BBSSettings.primaryColor.get()).labelAnchor(1F, 0.5F);
-        this.completion.relative(this.icons).x(-4).wh(160, 16).anchorX(1F);
+        this.completion.background(Colors.A50 | BBSSettings.primaryColor.get()).labelAnchor(1F, 0.55F);
+        this.completion.relative(this.icons).x(-8).wh(160, 20).anchorX(1F);
 
         this.missing = new UIIcon(Icons.SEARCH, (b) -> this.viewOnlyMissing());
         this.missing.tooltip(UIKeysApp.LANGUAGE_EDITOR_MISSING);
         this.search = new UITextbox(this::search);
         this.search.placeholder(UIKeys.SEARCH);
-        this.keysView = UI.scrollView(10, 5);
+        this.keysView = UI.scrollView(10, 6);
 
-        this.missing.relative(this.content).x(1F, -20);
-        this.search.relative(this.content).w(1F, -20);
+        this.missing.relative(this.content).x(1F, -26);
+        this.search.relative(this.content).x(6).w(1F, -12);
         this.keysView.relative(this.content).y(20).w(1F).h(1F, -20);
 
         this.icons.add(this.save, this.folder, this.changeReference, this.paste, this.copy);
-        this.content.add(this.search, this.missing, this.keysView);
+        this.content.add(this.search, new UIRenderable(this::renderMissingBackground), this.missing, this.keysView);
         this.add(this.completion);
 
         this.buildEditor();
@@ -342,6 +343,14 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
         this.keysView.resize();
     }
 
+    private void renderMissingBackground(UIContext context)
+    {
+        if (this.viewMissing)
+        {
+            this.missing.area.render(context.batcher, Colors.A50 | BBSSettings.primaryColor.get(), 1);
+        }
+    }
+
     @Override
     protected void renderBackground(UIContext context)
     {
@@ -351,10 +360,5 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
         }
 
         super.renderBackground(context);
-
-        if (this.viewMissing)
-        {
-            this.missing.area.render(context.batcher, Colors.A50 | BBSSettings.primaryColor.get());
-        }
     }
 }

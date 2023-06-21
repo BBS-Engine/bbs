@@ -38,6 +38,7 @@ public abstract class UIEditorOverlayPanel <T> extends UIOverlayPanel
         this.editor.relative(this.content).x(120).w(1F, -120).h(1F);
 
         this.content.add(this.editor, this.list);
+        this.content.x(6).y(26).w(1F, -32);
     }
 
     protected abstract UIList<T> createList();

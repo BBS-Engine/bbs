@@ -33,7 +33,7 @@ public class UIItemStackOverlayPanel extends UIOverlayPanel
 
         UIElement row = UI.row(this.pick, this.insert);
 
-        row.relative(this.content).y(1F, -30).w(1F).h(20).row(0).preferred(1);
+        row.relative(this.content).x(6).w(1F, -12).h(20);
         this.content.add(row);
     }
 

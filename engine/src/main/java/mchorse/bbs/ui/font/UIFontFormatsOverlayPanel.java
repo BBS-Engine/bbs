@@ -12,6 +12,7 @@ import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.colors.Colors;
 
 public class UIFontFormatsOverlayPanel extends UIOverlayPanel
@@ -49,7 +50,7 @@ public class UIFontFormatsOverlayPanel extends UIOverlayPanel
                 }
             });
         });
-        this.add.tooltip(UIKeys.FONT_EDITOR_CODES_ADD);
+        this.add.tooltip(UIKeys.FONT_EDITOR_CODES_ADD, Direction.LEFT);
 
         this.icons.add(this.add);
         this.content.add(this.list);

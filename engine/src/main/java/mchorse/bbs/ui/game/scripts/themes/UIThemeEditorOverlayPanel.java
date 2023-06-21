@@ -122,7 +122,7 @@ public class UIThemeEditorOverlayPanel extends UIEditorOverlayPanel<UIThemeEdito
         this.editor.add(UI.row(this.lineNumbers, this.background));
 
         this.content.h(0.5F);
-        this.preview.relative(this.content).y(1F).w(1F).hTo(this.area, 1F);
+        this.preview.relative(this.content).x(-6).y(1F).w(1F, 12).hTo(this.area, 1F);
         this.preview.setText(CODE_SAMPLE);
 
         this.add(this.preview.background());

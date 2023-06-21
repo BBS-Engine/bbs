@@ -24,7 +24,7 @@ public class UILabelOverlayPanel <T> extends UIOverlayPanel
 
         this.labels = new UISearchList<Label<T>>(new UILabelList<T>((list) -> this.accept(list.get(0))));
         this.labels.label(UIKeys.SEARCH);
-        this.labels.relative(this.content).full();
+        this.labels.relative(this.content).full().x(6).w(1F, -12);
 
         for (Label<T> location : keys)
         {

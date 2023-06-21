@@ -19,7 +19,7 @@ public abstract class UIMessageBarOverlayPanel extends UIMessageOverlayPanel
         this.bar = UI.row(this.confirm);
 
         this.confirm.w(80);
-        this.bar.relative(this.content).x(10).y(1F, -10).w(1F, -20).anchor(0, 1F);
+        this.bar.relative(this.content).x(6).y(1F, -6).w(1F, -12).anchor(0, 1F);
 
         this.content.add(this.bar);
     }

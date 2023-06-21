@@ -21,10 +21,7 @@ public class UITriggerNodePanel extends UIEventBaseNodePanel<TriggerNode>
         super();
 
         this.trigger = new UITrigger();
-        this.customData = UIDataUtils.fullWindowContext(
-            new UITextbox(100000, (text) -> this.node.customData = text),
-            UIKeys.NODES_EVENT_DATA
-        );
+        this.customData = new UITextbox(100000, (text) -> this.node.customData = text);
         this.customData.tooltip(UIKeys.NODES_EVENT_DATA_TOOLTIP);
         this.cancel = new UIToggle(UIKeys.NODES_EVENT_CANCEL, (b) -> this.node.cancel = b.getValue());
         this.cancel.tooltip(UIKeys.NODES_EVENT_CANCEL_TOOLTIP, Direction.TOP);

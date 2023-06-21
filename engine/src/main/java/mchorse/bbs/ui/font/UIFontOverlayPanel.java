@@ -66,7 +66,7 @@ public class UIFontOverlayPanel extends UIOverlayPanel
         this.searchList = new UISearchList<Integer>(this.glyphsList);
         this.searchList.label(UIKeys.SEARCH);
 
-        this.column.relative(this.content).xy(10, 10).w(1F, -20);
+        this.column.relative(this.content).xy(6, 6).w(1F, -12);
         this.searchList.relative(this.column).y(1F, 5).w(1F).hTo(this.content.getFlex(), 1F);
 
         this.content.add(this.column, this.searchList);

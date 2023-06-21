@@ -69,6 +69,7 @@ public class UITriggerHotkeysOverlayPanel extends UIOverlayPanel
         this.editor.add(UI.label(UIKeys.NODES_EVENT_HOTKEYS_ENABLED).marginTop(12), this.enabled);
 
         this.content.add(this.editor, this.list);
+        this.content.x(6).y(26).w(1F, -26);
 
         this.pickHotkey(hotkeys.isEmpty() ? null : hotkeys.get(0), true);
     }

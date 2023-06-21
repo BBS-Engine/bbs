@@ -3,16 +3,12 @@ package mchorse.bbs.ui.game.utils;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.game.utils.TargetMode;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.buttons.UICirculate;
-import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
-import mchorse.bbs.ui.framework.elements.overlay.UITextboxOverlayPanel;
 import mchorse.bbs.ui.game.utils.overlays.UIContentNamesOverlayPanel;
 import mchorse.bbs.ui.utils.Area;
-import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.renderers.InputRenderer;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.Interpolation;
@@ -25,20 +21,6 @@ import java.util.function.Consumer;
 
 public class UIDataUtils
 {
-    public static UITextbox fullWindowContext(UITextbox text, IKey title)
-    {
-        text.context((menu) -> menu.action(Icons.EDIT, UIKeys.OVERLAYS_TEXT_FULLSCREEN, () ->
-        {
-            UITextboxOverlayPanel panel = new UITextboxOverlayPanel(title, text);
-            UIOverlay overlay = new UIOverlay();
-
-            panel.w(1F, -30).h(54);
-            UIOverlay.addOverlay(text.getContext(), overlay, panel);
-        }));
-
-        return text;
-    }
-
     public static void requestNames(ContentType type, Consumer<List<String>> consumer)
     {
         consumer.accept(new ArrayList<String>(type.getManager().getKeys()));

@@ -44,7 +44,7 @@ public class UIItemsOverlayPanel extends UIOverlayPanel
                 menu.action(Icons.REMOVE, UIKeys.ITEM_PANEL_CONTEXT_REMOVE, this::removeItem);
             }
         });
-        this.itemList.relative(this.content).full();
+        this.itemList.relative(this.content).full().x(6).w(1F, -12);
 
         this.add = new UIIcon(Icons.ADD, (b) -> this.addItem());
         this.rename = new UIIcon(Icons.EDIT, (b) -> this.renameItem());

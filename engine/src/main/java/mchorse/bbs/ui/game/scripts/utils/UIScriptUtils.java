@@ -76,7 +76,7 @@ public class UIScriptUtils
             form = FormUtils.fromData(data);
         }
 
-        UIOverlay.addOverlay(editor.getContext(), new UIFormOverlayPanel(UIKeys.SCRIPTS_OVERLAY_TITLE_FORM, editor, form), 240, 54);
+        UIOverlay.addOverlay(editor.getContext(), new UIFormOverlayPanel(UIKeys.SCRIPTS_OVERLAY_TITLE_FORM, editor, form), 240, 46);
     }
 
     private static void openItemPicker(UITextEditor editor)
@@ -89,7 +89,7 @@ public class UIScriptUtils
             stack = ItemStack.create(data);
         }
 
-        UIOverlay.addOverlay(editor.getContext(), new UIItemStackOverlayPanel(UIKeys.SCRIPTS_OVERLAY_TITLE_ITEM, editor, stack), 240, 54);
+        UIOverlay.addOverlay(editor.getContext(), new UIItemStackOverlayPanel(UIKeys.SCRIPTS_OVERLAY_TITLE_ITEM, editor, stack), 240, 46);
     }
 
     private static MapType readFromSelected(UITextEditor editor)

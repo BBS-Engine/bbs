@@ -36,8 +36,8 @@ public class UIFontPanel extends UISidebarDashboardPanel
     public UIFontOverlayPanel overlay;
     public UIGlyphPixelsEditor pixelsEditor;
 
-    public UIIcon open;
     public UIIcon load;
+    public UIIcon open;
     public UIIcon save;
     public UIIcon codes;
 
@@ -52,12 +52,12 @@ public class UIFontPanel extends UISidebarDashboardPanel
         this.overlay = new UIFontOverlayPanel(UIKeys.FONT_EDITOR_TITLE, this);
         this.pixelsEditor = new UIGlyphPixelsEditor();
 
-        this.open = new UIIcon(Icons.MORE, (b) ->
-        {
-            UIOverlay.addOverlay(this.getContext(), this.overlay, 0.4F, 0.9F);
-        });
-        this.load = new UIIcon(Icons.DOWNLOAD, (b) -> this.loadFont());
+        this.load = new UIIcon(Icons.MORE, (b) -> this.loadFont());
         this.load.tooltip(UIKeys.FONT_EDITOR_LOAD, Direction.LEFT);
+        this.open = new UIIcon(Icons.GEAR, (b) ->
+        {
+            UIOverlay.addOverlayRight(this.getContext(), this.overlay, 200, 20);
+        });
         this.save = new UIIcon(Icons.SAVED, (b) -> this.saveFont());
         this.save.tooltip(UIKeys.FONT_EDITOR_SAVE, Direction.LEFT);
         this.codes = new UIIcon(Icons.PROPERTIES, (b) -> this.openFormattingCodesEditor());
@@ -66,7 +66,7 @@ public class UIFontPanel extends UISidebarDashboardPanel
         this.pixelsEditor.relative(this.editor).full();
 
         this.editor.add(this.pixelsEditor);
-        this.iconBar.add(this.open, this.load, this.save, this.codes);
+        this.iconBar.add(this.load, this.open, this.save, this.codes);
 
         this.loadFont(Link.create("assets:fonts/bbs_round.json"));
 

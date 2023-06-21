@@ -18,6 +18,7 @@ import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.PNGEncoder;
 import mchorse.bbs.utils.StringUtils;
 import mchorse.bbs.utils.colors.Colors;
@@ -80,13 +81,13 @@ public class UITextureManagerOverlayPanel extends UIOverlayPanel
         this.textures.relative(this.content).full().x(6).w(1F, -12);
 
         this.linear = new UIIcon(Icons.GRAPH, (b) -> this.toggleLinear());
-        this.linear.tooltip(UIKeys.TEXTURES_LINEAR);
+        this.linear.tooltip(UIKeys.TEXTURES_LINEAR, Direction.LEFT);
         this.copy = new UIIcon(Icons.COPY, (b) -> this.copy());
-        this.copy.tooltip(UIKeys.TEXTURES_COPY);
+        this.copy.tooltip(UIKeys.TEXTURES_COPY, Direction.LEFT);
         this.export = new UIIcon(Icons.EXTERNAL, (b) -> this.export());
-        this.export.tooltip(UIKeys.TEXTURES_EXPORT);
+        this.export.tooltip(UIKeys.TEXTURES_EXPORT, Direction.LEFT);
         this.refresh = new UIIcon(Icons.REFRESH, (b) -> this.remove());
-        this.refresh.tooltip(UIKeys.TEXTURES_REFRESH);
+        this.refresh.tooltip(UIKeys.TEXTURES_REFRESH, Direction.LEFT);
 
         this.icons.add(this.linear, this.copy, this.export, this.refresh);
         this.content.add(this.textures);

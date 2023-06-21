@@ -13,7 +13,7 @@ public class UIOptionsOverlayPanel extends UIOverlayPanel
     {
         super(UIKeys.PANELS_OPTIONS_TITLE);
 
-        this.fields = UI.scrollView(5, 10);
+        this.fields = UI.scrollView(5, 6);
         this.fields.relative(this.content).full();
 
         this.content.add(this.fields);

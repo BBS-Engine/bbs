@@ -37,7 +37,7 @@ public class UIWorldSettingsPanel extends UIWorldPanel
                 this.reloadSettings(this.settings);
             });
 
-            UIOverlay.addOverlay(this.getContext(), panel);
+            UIOverlay.addOverlay(this.getContext(), panel, 0.35F, 0.7F);
         });
 
         this.settings = dashboard.bridge.get(IBridgeWorld.class).getWorld().settings;
