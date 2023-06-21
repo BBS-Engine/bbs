@@ -19,37 +19,37 @@ ext.gitHash = { ->
 switch (OperatingSystem.current()) {
     case OperatingSystem.LINUX:
         project.ext.lwjglNatives = "natives-linux"
-        project.ext.commonDependencies.add("org.bytedeco:javacpp:1.5.8:linux-x86_64")
-        project.ext.commonDependencies.add("org.bytedeco:ffmpeg:1.5.8:linux-x86_64")
+        project.ext.javacvNatives = "linux-x86_64"
 
         break
     case OperatingSystem.MAC_OS:
         def isArm = System.getProperty("os.arch").startsWith("aarch64")
 
         project.ext.lwjglNatives = isArm ? "natives-macos-arm64" : "natives-macos"
-
-        if (isArm)
-        {
-            project.ext.commonDependencies.add("org.bytedeco:javacpp:1.5.8:macosx-arm64")
-            project.ext.commonDependencies.add("org.bytedeco:ffmpeg:1.5.8:macosx-arm64")
-        }
-        else
-        {
-            project.ext.commonDependencies.add("org.bytedeco:javacpp:1.5.8:macosx-x86_64")
-            project.ext.commonDependencies.add("org.bytedeco:ffmpeg:1.5.8:macosx-x86_64")
-        }
+        project.ext.javacvNatives = isArm ? "macosx-arm64" : "macosx-x86_64"
 
         break
     case OperatingSystem.WINDOWS:
         project.ext.lwjglNatives = "natives-windows"
-        project.ext.commonDependencies.add("org.bytedeco:javacpp:1.5.8:windows-x86_64")
-        project.ext.commonDependencies.add("org.bytedeco:ffmpeg:1.5.8:windows-x86_64")
+        project.ext.javacvNatives = "windows-x86_64"
 
         break
 }
 
 if (project.hasProperty("os")) {
-    ext.lwjglNatives = "natives-" + project.getProperties().get("os")
+    def os = project.getProperties().get("os")
+
+    ext.lwjglNatives = "natives-" + os
+
+    if (os.equals("linux")) {
+        project.ext.javacvNatives = "linux-x86_64"
+    } else if (os.equals("macos")) {
+        project.ext.javacvNatives = "macosx-x86_64"
+    } else if (os.equals("macos-arm64")) {
+        project.ext.javacvNatives = "macosx-arm64"
+    } else if (os.equals("windows")) {
+        project.ext.javacvNatives = "windows-x86_64"
+    }
 }
 
 ext.commonDependencies.addAll([
@@ -79,5 +79,7 @@ ext.commonDependencies.addAll([
     "org.ow2.asm:asm-util:9.2",
     "org.bytedeco:javacv:1.5.8",
     "org.bytedeco:javacpp:1.5.8",
-    "org.bytedeco:ffmpeg:5.1.2-1.5.8"
+    "org.bytedeco:ffmpeg:5.1.2-1.5.8",
+    "org.bytedeco:javacpp:1.5.8:$javacvNatives",
+    "org.bytedeco:ffmpeg:1.5.8:$javacvNatives"
 ])
