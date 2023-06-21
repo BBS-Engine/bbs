@@ -129,7 +129,7 @@ public class UIHUDScenePanel extends UIDataDashboardPanel<HUDScene>
     {
         this.current = current;
 
-        this.transformations.setVisible(current != null);
+        this.optionsIcon.setEnabled(data != null && this.current != null);
 
         for (IUIElement element : this.options.getChildren())
         {
