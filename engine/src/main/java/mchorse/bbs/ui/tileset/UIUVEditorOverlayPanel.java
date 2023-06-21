@@ -14,7 +14,7 @@ public class UIUVEditorOverlayPanel extends UIOverlayPanel
 
         this.uv = new UIUVEditor(atlas, callback);
 
-        this.uv.relative(this).y(28).w(1F).h(1F, -28);
+        this.uv.relative(this.content).full();
         this.add(this.uv);
     }
 }

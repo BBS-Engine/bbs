@@ -54,7 +54,7 @@ public class UIThemeEditorOverlayPanel extends UIEditorOverlayPanel<UIThemeEdito
         super(UIKeys.SYNTAX_THEME_MAIN);
 
         this.open = new UIIcon(Icons.FOLDER, (b) -> Themes.open());
-        this.open.tooltip(UIKeys.SYNTAX_THEME_FOLDER).wh(16, 16);
+        this.open.tooltip(UIKeys.SYNTAX_THEME_FOLDER);
 
         this.title = new UITextbox(100, (s) -> this.item.style.title = s);
         this.shadow = new UIToggle(UIKeys.SYNTAX_THEME_SHADOW, (b) -> this.item.style.shadow = b.getValue());
@@ -122,7 +122,7 @@ public class UIThemeEditorOverlayPanel extends UIEditorOverlayPanel<UIThemeEdito
         this.editor.add(UI.row(this.lineNumbers, this.background));
 
         this.content.h(0.5F);
-        this.preview.relative(this).y(0.5F, 28).w(1F).hTo(this.area, 1F);
+        this.preview.relative(this.content).y(1F).w(1F).hTo(this.area, 1F);
         this.preview.setText(CODE_SAMPLE);
 
         this.add(this.preview.background());

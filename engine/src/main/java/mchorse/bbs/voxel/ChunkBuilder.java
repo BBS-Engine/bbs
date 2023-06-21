@@ -18,6 +18,7 @@ import mchorse.bbs.voxel.storage.data.ChunkDisplay;
 import mchorse.bbs.voxel.tilesets.BlockSet;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 /**
@@ -275,10 +276,11 @@ public class ChunkBuilder
 
         Matrix4f model = new Matrix4f();
         Matrix3f normal = new Matrix3f();
+        Vector3f translate = context.render.stack.getModelMatrix().getTranslation(new Vector3f());
 
         model.scale(scale, -scale, scale);
         model.rotateX(MathUtils.PI / 5).rotateY(MathUtils.PI / 4);
-        model.setTranslation(x, y, scale);
+        model.setTranslation(x + translate.x, y + translate.y, scale);
         normal.rotateX(MathUtils.PI / 5);
 
         CommonShaderAccess.setModelView(shader, model, normal);

@@ -30,6 +30,7 @@ public class Colors
     public static final int MAGENTA = 0xff66ff;
 
     /* General purpose colors */
+    public static final int CONTROL_BAR = 0xff141417;
     public static final int ACTIVE = 0x0088ff;
     public static final int POSITIVE = GREEN;
     public static final int NEGATIVE = RED;

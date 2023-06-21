@@ -261,7 +261,7 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
                         return;
                     }
 
-                    UIOverlay.addOverlay(currentMenu.context, new UIUtilityOverlayPanel(UIKeysApp.UTILITY_TITLE, null));
+                    UIOverlay.addOverlay(currentMenu.context, new UIUtilityOverlayPanel(UIKeysApp.UTILITY_TITLE, null), 240, 160);
                 }
             });
 

@@ -1377,7 +1377,7 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
         context.batcher.flush();
 
         Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_UV_RGBA_2D);
-        VAOBuilder builder = context.render.getVAO().setup(shader, VAO.INDICES);
+        VAOBuilder builder = context.render.getVAO().setup(shader, VAO.INDICES).stack(context.render.stack);
 
         builder.begin();
 

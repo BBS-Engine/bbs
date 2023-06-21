@@ -36,10 +36,9 @@ public class UIOverlayPanel extends UIElement
         this.content = new UIElement();
         this.icons = new UIElement();
 
-        this.title.relative(this).xy(10, 10).w(0.6F);
-        this.close.wh(16, 16);
-        this.icons.relative(this).x(1F, -7).y(6).anchorX(1F).row(0).reverse().resize().width(16).height(16);
-        this.content.relative(this).xy(10, 28).w(1F, -20).h(1F, -28);
+        this.title.labelAnchor(0, 0.5F).relative(this).xy(6, 0).w(0.6F).h(20);
+        this.icons.relative(this).x(1F, -20).y(0).w(20).h(1F).column(0).stretch();
+        this.content.relative(this).xy(0, 20).w(1F, -20).h(1F, -20);
 
         this.icons.add(this.close);
 
@@ -137,9 +136,16 @@ public class UIOverlayPanel extends UIElement
         context.batcher.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
         this.area.render(context.batcher, Colors.A100);
 
+        this.icons.area.render(context.batcher, Colors.CONTROL_BAR);
+
+        if (this.close.area.isInside(context))
+        {
+            this.close.area.render(context.batcher, Colors.RED | Colors.A100);
+        }
+
         if (this.title.area.isInside(context))
         {
-            context.batcher.icon(Icons.ALL_DIRECTIONS, Colors.GRAY, this.area.mx(), this.area.y + 14, 0.5F, 0.5F);
+            context.batcher.icon(Icons.ALL_DIRECTIONS, Colors.GRAY, this.area.mx(), this.title.area.my(), 0.5F, 0.5F);
         }
     }
 

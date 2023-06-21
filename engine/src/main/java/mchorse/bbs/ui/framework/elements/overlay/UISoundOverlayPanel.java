@@ -39,7 +39,6 @@ public class UISoundOverlayPanel extends UIStringOverlayPanel
 
         UIIcon edit = new UIIcon(Icons.SOUND, (b) -> this.playSound());
 
-        edit.wh(16, 16);
         this.icons.add(edit);
     }
 

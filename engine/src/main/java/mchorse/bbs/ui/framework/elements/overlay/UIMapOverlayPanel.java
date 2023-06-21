@@ -187,7 +187,7 @@ public abstract class UIMapOverlayPanel <T extends IMapSerializable> extends UIS
 
         if (this.map.size() <= 1)
         {
-            UIDataUtils.renderRightClickHere(context, this.area);
+            UIDataUtils.renderRightClickHere(context, this.content.area);
         }
     }
 }

@@ -45,7 +45,7 @@ public class UISchematicOverlayPanel extends UIOverlayPanel
 
         this.display = new ChunkDisplay(null, this.schematic.getChunk(), 0, 0, 0);
         this.renderer = new UISchematicRenderer(this.display, this::handleRenderCallback);
-        this.renderer.relative(this.content).x(-10).w(1F, 20).h(1F);
+        this.renderer.relative(this.content).full();
         this.blocks = UI.scrollView(5, 10);
         this.blocks.relative(this.renderer).x(1F).w(120).h(1F).anchorX(1F);
 
@@ -125,6 +125,8 @@ public class UISchematicOverlayPanel extends UIOverlayPanel
         if (this.first)
         {
             this.first = false;
+
+            context.batcher.flush();
 
             this.updateDisplay();
         }

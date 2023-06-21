@@ -76,15 +76,15 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
         this.markedFile = new File(getLangEditorFolder(), "marked.json");
 
         this.save = new UIIcon(Icons.SAVED, (b) -> this.save());
-        this.save.tooltip(UIKeysApp.LANGUAGE_EDITOR_SAVE).wh(16, 16);
+        this.save.tooltip(UIKeysApp.LANGUAGE_EDITOR_SAVE);
         this.folder = new UIIcon(Icons.FOLDER, (b) -> UIUtils.openFolder(this.target));
-        this.folder.tooltip(UIKeysApp.LANGUAGE_EDITOR_FOLDER).wh(16, 16);
+        this.folder.tooltip(UIKeysApp.LANGUAGE_EDITOR_FOLDER);
         this.changeReference = new UIIcon(Icons.REFRESH, (b) -> this.changeReference());
-        this.changeReference.tooltip(UIKeysApp.LANGUAGE_EDITOR_REFERENCE).wh(16, 16);
+        this.changeReference.tooltip(UIKeysApp.LANGUAGE_EDITOR_REFERENCE);
         this.copy = new UIIcon(Icons.COPY, (b) -> this.copy());
-        this.copy.tooltip(UIKeysApp.LANGUAGE_EDITOR_COPY).wh(16, 16);
+        this.copy.tooltip(UIKeysApp.LANGUAGE_EDITOR_COPY);
         this.paste = new UIIcon(Icons.PASTE, (b) -> this.paste());
-        this.paste.tooltip(UIKeysApp.LANGUAGE_EDITOR_PASTE).wh(16, 16);
+        this.paste.tooltip(UIKeysApp.LANGUAGE_EDITOR_PASTE);
         this.completion = UI.label(IKey.EMPTY);
         this.completion.background(Colors.A50 | BBSSettings.primaryColor.get()).labelAnchor(1F, 0.5F);
         this.completion.relative(this.icons).x(-4).wh(160, 16).anchorX(1F);

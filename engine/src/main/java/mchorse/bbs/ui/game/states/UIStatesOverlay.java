@@ -16,7 +16,6 @@ public class UIStatesOverlay extends UIOverlayPanel
         super(title);
 
         this.add = new UIIcon(Icons.ADD, (b) -> this.states.addNew());
-        this.add.wh(16, 16);
 
         this.states = new UIStatesEditor();
         this.states.set(states);

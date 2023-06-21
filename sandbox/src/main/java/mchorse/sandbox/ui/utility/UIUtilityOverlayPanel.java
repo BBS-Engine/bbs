@@ -34,7 +34,7 @@ public class UIUtilityOverlayPanel extends UIOverlayPanel
         this.callback = callback;
 
         this.view = UI.scrollView(5, 10, 140);
-        this.view.relative(this.content).x(0.15F).wh(0.7F, 1F);
+        this.view.relative(this.content).full();
 
         UIButton shaders = new UIButton(UIKeysApp.UTILITY_RELOAD_SHADERS, (b) ->
         {

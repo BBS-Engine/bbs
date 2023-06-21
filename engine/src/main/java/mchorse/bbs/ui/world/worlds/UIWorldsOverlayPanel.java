@@ -54,19 +54,19 @@ public class UIWorldsOverlayPanel extends UIOverlayPanel
         this.worlds.background(Colors.A75).relative(this.content).full();
 
         this.create = new UIIcon(Icons.ADD, this::createWorld);
-        this.create.tooltip(UIKeys.WORLDS_CREATE, Direction.LEFT).wh(16, 16);
+        this.create.tooltip(UIKeys.WORLDS_CREATE, Direction.LEFT);
         this.openFolder = new UIIcon(Icons.FOLDER, this::openWorldFolder);
-        this.openFolder.tooltip(UIKeys.WORLDS_OPEN, Direction.LEFT).wh(16, 16);
+        this.openFolder.tooltip(UIKeys.WORLDS_OPEN, Direction.LEFT);
         this.load = new UIIcon(Icons.DOWNLOAD, this::loadWorld);
-        this.load.tooltip(UIKeys.WORLDS_LOAD, Direction.LEFT).wh(16, 16);
+        this.load.tooltip(UIKeys.WORLDS_LOAD, Direction.LEFT);
         this.edit = new UIIcon(Icons.EDIT, this::editWorld);
-        this.edit.tooltip(UIKeys.WORLDS_EDIT, Direction.LEFT).wh(16, 16);
+        this.edit.tooltip(UIKeys.WORLDS_EDIT, Direction.LEFT);
         this.convert = new UIIcon(Icons.CONVERT, this::convertWorld);
-        this.convert.tooltip(UIKeys.WORLDS_CONVERT, Direction.LEFT).wh(16, 16);
+        this.convert.tooltip(UIKeys.WORLDS_CONVERT, Direction.LEFT);
         this.remove = new UIIcon(Icons.TRASH, this::removeWorld);
-        this.remove.tooltip(UIKeys.WORLDS_REMOVE, Direction.LEFT).wh(16, 16);
+        this.remove.tooltip(UIKeys.WORLDS_REMOVE, Direction.LEFT);
 
-        this.icons.add(this.remove.marginRight(8), this.convert, this.edit, this.load, this.openFolder, this.create);
+        this.icons.add(this.create, this.openFolder, this.load, this.edit, this.convert, this.remove);
         this.content.add(this.worlds);
 
         this.rebuild();

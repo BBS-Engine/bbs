@@ -135,7 +135,7 @@ public class UIDashboardPanels extends UIElement
         Area area = this.taskBar.area;
         Area a = this.pinned.area;
 
-        context.batcher.box(area.x, area.y, area.ex(), area.ey(), 0xff141417);
+        context.batcher.box(area.x, area.y, area.ex(), area.ey(), Colors.CONTROL_BAR);
         context.batcher.box(a.ex() + 2, a.y + 3, a.ex() + 3, a.ey() - 3, 0x44ffffff);
     }
 

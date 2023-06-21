@@ -77,21 +77,16 @@ public class UITextureManagerOverlayPanel extends UIOverlayPanel
             }
         }));
         this.textures.label(UIKeys.SEARCH);
-        this.textures.relative(this.content).full();
+        this.textures.relative(this.content).full().x(6).w(1F, -12);
 
         this.linear = new UIIcon(Icons.GRAPH, (b) -> this.toggleLinear());
         this.linear.tooltip(UIKeys.TEXTURES_LINEAR);
         this.copy = new UIIcon(Icons.COPY, (b) -> this.copy());
-        this.copy.tooltip(UIKeys.TEXTURES_COPY).wh(20, 20);
+        this.copy.tooltip(UIKeys.TEXTURES_COPY);
         this.export = new UIIcon(Icons.EXTERNAL, (b) -> this.export());
         this.export.tooltip(UIKeys.TEXTURES_EXPORT);
         this.refresh = new UIIcon(Icons.REFRESH, (b) -> this.remove());
         this.refresh.tooltip(UIKeys.TEXTURES_REFRESH);
-
-        this.linear.wh(16, 16);
-        this.copy.wh(16, 16);
-        this.export.wh(16, 16);
-        this.refresh.wh(16, 16);
 
         this.icons.add(this.linear, this.copy, this.export, this.refresh);
         this.content.add(this.textures);

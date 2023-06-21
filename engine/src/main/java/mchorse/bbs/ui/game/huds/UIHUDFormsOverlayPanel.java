@@ -3,13 +3,13 @@ package mchorse.bbs.ui.game.huds;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.game.huds.HUDForm;
 import mchorse.bbs.game.huds.HUDScene;
-import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
 import mchorse.bbs.ui.game.utils.UIDataUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.colors.Colors;
 
 import java.util.function.Consumer;
 
@@ -49,7 +49,7 @@ public class UIHUDFormsOverlayPanel extends UIOverlayPanel
                 menu.action(Icons.REMOVE, UIKeys.HUDS_CONTEXT_REMOVE, Colors.NEGATIVE, this::removeForm);
             }
         });
-        this.forms.relative(this.content).full();
+        this.forms.relative(this.content).full().x(6).w(1F, -12);
 
         this.forms.setList(this.scene.forms);
         this.forms.scroll.scrollSpeed *= 2;
@@ -109,7 +109,7 @@ public class UIHUDFormsOverlayPanel extends UIOverlayPanel
 
         if (this.scene.forms.size() <= 1)
         {
-            UIDataUtils.renderRightClickHere(context, this.area);
+            UIDataUtils.renderRightClickHere(context, this.content.area);
         }
     }
 }

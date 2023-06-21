@@ -23,7 +23,7 @@ public class UICropOverlayPanel extends UIOverlayPanel
         this.cropEditor = new UICropEditor();
         this.cropEditor.fill(texture, crop);
         this.cropEditor.setSize(w, h);
-        this.cropEditor.relative(this.content).x(-10).w(1F, 20).h(1F);
+        this.cropEditor.relative(this.content).full();
         this.cropEditor.scaleX.setZoom(1F / (Math.max(w, h) / 128F));
         this.cropEditor.scaleY.setZoom(1F / (Math.max(w, h) / 128F));
         this.content.add(this.cropEditor);

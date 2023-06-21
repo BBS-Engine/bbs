@@ -35,11 +35,11 @@ public class UIBlockModelFactoriesOverlayPanel extends UIOverlayPanel
         this.menu = menu;
 
         this.add = new UIIcon(Icons.BLOCK, this::addModel);
-        this.add.tooltip(UIKeys.TILE_SET_LIST_ADD_MODEL).wh(16, 16);
+        this.add.tooltip(UIKeys.TILE_SET_LIST_ADD_MODEL);
         this.replace = new UIIcon(Icons.REFRESH, this::replaceModel);
-        this.replace.tooltip(UIKeys.TILE_SET_LIST_REPLACE_MODEL).wh(16, 16);
+        this.replace.tooltip(UIKeys.TILE_SET_LIST_REPLACE_MODEL);
         this.remove = new UIIcon(Icons.TRASH, this::removeModel);
-        this.remove.tooltip(UIKeys.TILE_SET_LIST_REMOVE_MODEL).wh(16, 16);
+        this.remove.tooltip(UIKeys.TILE_SET_LIST_REMOVE_MODEL);
 
         this.list = new UIBlockModelFactoryList((l) -> this.menu.selectBlock(l.get(0)));
         this.list.sorting().afterDrop((l) -> this.menu.dirty()).setList(menu.getBlockSet().factories);
@@ -68,7 +68,7 @@ public class UIBlockModelFactoriesOverlayPanel extends UIOverlayPanel
             this.list.setCurrentScroll(menu.panel.model);
         }
 
-        this.icons.add(this.remove.marginRight(4), this.replace, this.add);
+        this.icons.add(this.add, this.replace, this.remove);
         this.content.add(this.list);
     }
 

@@ -37,11 +37,6 @@ public abstract class UICRUDOverlayPanel extends UIOverlayPanel
         this.rename = new UIIcon(Icons.EDIT, this::renameData);
         this.remove = new UIIcon(Icons.REMOVE, this::removeData);
 
-        this.add.wh(16, 16);
-        this.dupe.wh(16, 16);
-        this.rename.wh(16, 16);
-        this.remove.marginRight(8).wh(16, 16);
-
         this.names = new UISearchList<DataPath>(new UIDataPathList((list) ->
         {
             if (this.callback != null)
@@ -49,12 +44,12 @@ public abstract class UICRUDOverlayPanel extends UIOverlayPanel
                 this.callback.accept(list.get(0).toString());
             }
         }));
-        this.names.relative(this.content).full();
+        this.names.relative(this.content).full().x(6).w(1F, -12);
         this.namesList = (UIDataPathList) this.names.list;
         this.names.label(UIKeys.SEARCH);
         this.content.add(this.names);
 
-        this.icons.add(this.remove, this.rename, this.dupe, this.add);
+        this.icons.add(this.add, this.dupe, this.rename, this.remove);
     }
 
     /* CRUD */

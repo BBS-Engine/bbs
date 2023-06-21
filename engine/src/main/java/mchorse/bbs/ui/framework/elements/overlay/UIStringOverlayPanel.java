@@ -50,7 +50,7 @@ public class UIStringOverlayPanel extends UIOverlayPanel
 
         this.strings = new UISearchList<String>(new UIStringList((list) -> this.accept(list.get(0))));
         this.strings.label(UIKeys.SEARCH);
-        this.strings.relative(this.content).full();
+        this.strings.relative(this.content).full().x(6).w(1F, -12);
 
         this.strings.list.add(strings);
         this.strings.list.sort();

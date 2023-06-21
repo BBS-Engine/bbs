@@ -1,7 +1,6 @@
 package mchorse.bbs.ui.font;
 
 import mchorse.bbs.BBS;
-import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.graphics.text.Font;
 import mchorse.bbs.graphics.text.format.BaseFontFormat;
 import mchorse.bbs.graphics.text.format.IFontFormat;
@@ -13,6 +12,7 @@ import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.colors.Colors;
 
 public class UIFontFormatsOverlayPanel extends UIOverlayPanel
 {
@@ -28,7 +28,7 @@ public class UIFontFormatsOverlayPanel extends UIOverlayPanel
         this.font = font;
 
         this.list = UI.scrollView(5, 10);
-        this.list.relative(this.content).x(-10).w(1F, 20).h(1F);
+        this.list.relative(this.content).full();
 
         this.add = new UIIcon(Icons.ADD, (b) ->
         {
@@ -50,9 +50,8 @@ public class UIFontFormatsOverlayPanel extends UIOverlayPanel
             });
         });
         this.add.tooltip(UIKeys.FONT_EDITOR_CODES_ADD);
-        this.add.wh(16, 16);
 
-        this.icons.add(this.add.marginRight(4));
+        this.icons.add(this.add);
         this.content.add(this.list);
 
         for (IFontFormat format : font.formats.values())

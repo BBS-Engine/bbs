@@ -538,7 +538,7 @@ public class Batcher2D
 
         for (String string : list)
         {
-            this.text(font, text, (int) (x + (width - font.getWidth(string)) * ax), y, color, true);
+            this.text(font, string, (int) (x + (width - font.getWidth(string)) * ax), y, color, true);
 
             y += lineHeight;
         }

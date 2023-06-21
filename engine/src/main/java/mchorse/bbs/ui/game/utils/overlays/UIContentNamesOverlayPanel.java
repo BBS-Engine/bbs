@@ -25,9 +25,7 @@ public class UIContentNamesOverlayPanel extends UIStringOverlayPanel
         super(title, strings, callback);
 
         this.type = type;
-
         this.edit = new UIIcon(Icons.EDIT, (b) -> this.edit(this.getValue()));
-        this.edit.wh(16, 16);
 
         this.icons.add(this.edit);
     }

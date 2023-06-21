@@ -26,6 +26,7 @@ import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
+import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.undo.IUndo;
 
 public abstract class UIClip <T extends Clip> extends UIElement
@@ -83,7 +84,7 @@ public abstract class UIClip <T extends Clip> extends UIElement
             @Override
             protected void renderBackground(UIContext context, int x, int y, int w, int h)
             {
-                context.batcher.box(x, y, x + w, y + h, 0xff141417);
+                context.batcher.box(x, y, x + w, y + h, Colors.CONTROL_BAR);
             }
         };
         this.panels.relative(this).w(160).h(1F);
