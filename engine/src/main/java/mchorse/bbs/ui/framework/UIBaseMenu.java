@@ -245,8 +245,6 @@ public abstract class UIBaseMenu implements ITickable, IKeyHandler
 
     public void renderMenu(UIRenderingContext context, int mouseX, int mouseY)
     {
-        this.context.setup(context);
-
         this.context.resetMatrix();
         this.context.setMouse(mouseX, mouseY);
 

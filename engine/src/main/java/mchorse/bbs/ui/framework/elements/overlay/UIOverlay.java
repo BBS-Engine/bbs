@@ -22,7 +22,7 @@ public class UIOverlay extends UIElement
         UIOverlay overlay = new UIOverlay();
 
         panel.relative(overlay).xy(0.5F, 0.5F).wh(0.5F, 0.5F).anchor(0.5F);
-        addOverlay(context, overlay, panel);
+        setupPanel(context, overlay, panel);
 
         return overlay;
     }
@@ -32,7 +32,7 @@ public class UIOverlay extends UIElement
         UIOverlay overlay = new UIOverlay();
 
         panel.relative(overlay).xy(0.5F, 0.5F).wh(w, h).anchor(0.5F);
-        addOverlay(context, overlay, panel);
+        setupPanel(context, overlay, panel);
 
         return overlay;
     }
@@ -42,7 +42,7 @@ public class UIOverlay extends UIElement
         UIOverlay overlay = new UIOverlay();
 
         panel.relative(overlay).xy(0.5F, 0.5F).wh(w, h).anchor(0.5F);
-        addOverlay(context, overlay, panel);
+        setupPanel(context, overlay, panel);
 
         return overlay;
     }
@@ -57,22 +57,12 @@ public class UIOverlay extends UIElement
         UIOverlay overlay = new UIOverlay();
 
         panel.relative(overlay).x(1F, -padding).y(padding).w(w).h(1F, -padding * 2).anchor(1F, 0F);
-        addOverlay(context, overlay, panel);
+        setupPanel(context, overlay, panel);
 
         return overlay;
     }
 
-    public static void addOverlay(UIContext context, UIOverlay overlay, UIOverlayPanel panel)
-    {
-        setupPanel(panel);
-
-        overlay.relative(context.menu.overlay).full();
-        context.menu.overlay.add(overlay);
-        overlay.add(panel);
-        context.menu.overlay.resize();
-    }
-
-    private static void setupPanel(UIOverlayPanel panel)
+    public static void setupPanel(UIContext context, UIOverlay overlay, UIOverlayPanel panel)
     {
         Vector2i offset = offsets.get(panel.getClass().getSimpleName());
 
@@ -81,6 +71,11 @@ public class UIOverlay extends UIElement
             panel.getFlex().x.offset = offset.x;
             panel.getFlex().y.offset = offset.y;
         }
+
+        overlay.relative(context.menu.overlay).full();
+        context.menu.overlay.add(overlay);
+        overlay.add(panel);
+        context.menu.overlay.resize();
     }
 
     public static boolean has(UIContext context)

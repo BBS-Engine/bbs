@@ -1,9 +1,5 @@
 package mchorse.sandbox.ui;
 
-import mchorse.sandbox.SandboxEngine;
-import mchorse.sandbox.settings.SandboxSettings;
-import mchorse.sandbox.shaders.ShadersUI;
-import mchorse.sandbox.ui.welcome.UIWelcomeMenu;
 import mchorse.bbs.BBS;
 import mchorse.bbs.BBSData;
 import mchorse.bbs.BBSSettings;
@@ -24,6 +20,10 @@ import mchorse.bbs.ui.ui.UIUserInterfaceMenu;
 import mchorse.bbs.ui.utils.UIChalkboard;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.world.World;
+import mchorse.sandbox.SandboxEngine;
+import mchorse.sandbox.settings.SandboxSettings;
+import mchorse.sandbox.shaders.ShadersUI;
+import mchorse.sandbox.ui.welcome.UIWelcomeMenu;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Locale;
@@ -174,6 +174,7 @@ public class UIScreen implements IEngine, IFileDropListener
         {
             int scale = BBSSettings.getScale();
 
+            this.menu.context.setup(this.context);
             this.menu.onOpen(old);
             this.menu.resize(Window.width / scale, Window.height / scale);
         }
