@@ -33,3 +33,7 @@ The code is written entirely by me. While localization files were made by:
 | Portuguese `pt_BR` | Draacoun, Aloan |
 | Russian `ru_RU`    | Kirkus, McHorse |
 | Ukrainian `uk_UA`  | Kirkus          |
+
+## License
+
+The source code (`engine/`, `sandbox/`) is licensed under MIT. See [LICENSE.txt](./LICENSE.txt). 
