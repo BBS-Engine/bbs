@@ -1,7 +1,5 @@
 package mchorse.sandbox;
 
-import mchorse.sandbox.settings.SandboxSettings;
-import mchorse.sandbox.shaders.ShadersWorld;
 import mchorse.bbs.BBS;
 import mchorse.bbs.animation.AnimationPlayer;
 import mchorse.bbs.animation.Animations;
@@ -40,6 +38,8 @@ import mchorse.bbs.world.WorldSettings;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.architect.EntityArchitect;
 import mchorse.bbs.world.objects.WorldObject;
+import mchorse.sandbox.settings.SandboxSettings;
+import mchorse.sandbox.shaders.ShadersWorld;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -71,6 +71,7 @@ public class SandboxRenderer implements IComponent
     public ChunkRenderer renderer = new ChunkRenderer();
     public Framebuffer gbufferFramebuffer;
     public Framebuffer finalFramebuffer;
+    public Framebuffer tmpFramebuffer;
 
     private RenderWorldEvent renderWorld;
 
@@ -120,6 +121,17 @@ public class SandboxRenderer implements IComponent
 
         this.finalFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("final"), (framebuffer) ->
         {
+            Texture texture = BBS.getTextures().createTexture(Sandbox.link("final"));
+
+            texture.setFilter(GL11.GL_LINEAR);
+            texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
+
+            framebuffer.attach(texture, GL30.GL_COLOR_ATTACHMENT0);
+            framebuffer.unbind();
+        });
+
+        this.tmpFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("tmp"), (framebuffer) ->
+        {
             Texture texture = new Texture();
 
             texture.setFilter(GL11.GL_LINEAR);
@@ -159,7 +171,6 @@ public class SandboxRenderer implements IComponent
             depth.setWrap(GL13.GL_CLAMP_TO_EDGE);
             depth.setFormat(GL30.GL_DEPTH_COMPONENT24, GL30.GL_DEPTH_COMPONENT, GL30.GL_FLOAT);
 
-            framebuffer.deleteTextures();
             framebuffer.attach(albedo, GL30.GL_COLOR_ATTACHMENT0);
             framebuffer.attach(position, GL30.GL_COLOR_ATTACHMENT1);
             framebuffer.attach(normal, GL30.GL_COLOR_ATTACHMENT2);
@@ -305,7 +316,6 @@ public class SandboxRenderer implements IComponent
         Framebuffer.renderToQuad(this.context, this.compositeShader);
 
         framebuffer.unbind();
-
         GLStates.resetViewport();
     }
 
@@ -339,10 +349,19 @@ public class SandboxRenderer implements IComponent
         if (lastW != w || lastH != h)
         {
             this.gbufferFramebuffer.resize(w, h);
+            this.tmpFramebuffer.resize(w, h);
         }
 
         this.renderFrameTo(camera, this.gbufferFramebuffer, pass, renderScreen);
-        this.renderFinal(framebuffer);
+        this.renderFinal(this.tmpFramebuffer);
+
+        framebuffer.apply();
+
+        this.tmpFramebuffer.getMainTexture().bind(0);
+        Framebuffer.renderToQuad(this.context, this.finalShader);
+
+        framebuffer.unbind();
+        GLStates.resetViewport();
 
         if (lastW != w || lastH != h)
         {
