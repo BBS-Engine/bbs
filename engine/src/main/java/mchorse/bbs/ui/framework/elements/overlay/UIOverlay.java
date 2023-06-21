@@ -5,10 +5,16 @@ import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.utils.colors.Colors;
+import org.joml.Vector2i;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class UIOverlay extends UIElement
 {
+    private static final Map<String, Vector2i> offsets = new HashMap<String, Vector2i>();
+
     private int background = Colors.A50;
 
     public static UIOverlay addOverlay(UIContext context, UIOverlayPanel panel)
@@ -58,10 +64,23 @@ public class UIOverlay extends UIElement
 
     public static void addOverlay(UIContext context, UIOverlay overlay, UIOverlayPanel panel)
     {
+        setupPanel(panel);
+
         overlay.relative(context.menu.overlay).full();
         context.menu.overlay.add(overlay);
         overlay.add(panel);
         context.menu.overlay.resize();
+    }
+
+    private static void setupPanel(UIOverlayPanel panel)
+    {
+        Vector2i offset = offsets.get(panel.getClass().getSimpleName());
+
+        if (offset != null)
+        {
+            panel.getFlex().x.offset = offset.x;
+            panel.getFlex().y.offset = offset.y;
+        }
     }
 
     public static boolean has(UIContext context)
@@ -95,6 +114,11 @@ public class UIOverlay extends UIElement
         {
             element.removeFromParent();
             element.onClose();
+
+            /* Save offset */
+            Vector2i offset = new Vector2i(element.getFlex().x.offset, element.getFlex().y.offset);
+
+            offsets.put(element.getClass().getSimpleName(), offset);
         }
     }
 
