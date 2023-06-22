@@ -17,6 +17,8 @@ import mchorse.bbs.game.states.States;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.resources.LinkUtils;
+import mchorse.bbs.voxel.Chunk;
+import mchorse.bbs.voxel.blocks.IBlockVariant;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.objects.WorldObject;
@@ -55,6 +57,42 @@ public class ScriptWorld implements IScriptWorld
     public IScriptBlockVariant getBlock(int x, int y, int z)
     {
         return new ScriptBlockVariant(this.world.chunks.getBlock(x, y, z));
+    }
+
+    @Override
+    public boolean placeStructure(String id, int x, int y, int z, float ax, float ay, float az)
+    {
+        Chunk chunk = BBS.getStructures().load(id, this.world.chunks.builder.models);
+
+        if (chunk == null)
+        {
+            return false;
+        }
+
+        int w = chunk.w;
+        int h = chunk.h;
+        int d = chunk.d;
+
+        for (int i = 0; i < w; i++)
+        {
+            for (int j = 0; j < h; j++)
+            {
+                for (int k = 0; k < d; k++)
+                {
+                    int xx = (int) (x + i - ax * w);
+                    int yy = (int) (y + j - ay * h);
+                    int zz = (int) (z + k - az * d);
+                    IBlockVariant variant = chunk.getBlock(i, j, k);
+
+                    if (this.world.chunks.getBlock(xx, yy, zz).isAir())
+                    {
+                        this.world.chunks.setBlock(xx, yy, zz, variant);
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override

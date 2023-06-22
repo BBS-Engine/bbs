@@ -49,6 +49,35 @@ public interface IScriptWorld
      */
     public IScriptBlockVariant getBlock(int x, int y, int z);
 
+    /**
+     * Place a structure in the world at given coordinates. See the same method
+     * with anchor for more information.
+     */
+    public default boolean placeStructure(String id, int x, int y, int z)
+    {
+        return this.placeStructure(id, x, y, z, 0F, 0F, 0F);
+    }
+
+    /**
+     * Place a structure in the world at given coordinates with given anchor.
+     *
+     * <pre>{@code
+     *    // Assuming that cool_tree structure is 5, 7, 5 blocks, it will get placed
+     *    // at -2, 0, -2 due to anchor point
+     *    bbs.worlds.getCurrent().placeStructure("cool_tree", 0, 0, 0, 0.5, 0, 0.5);
+     * }</pre>
+     *
+     * @param id Structure filename (in game/config/structures/) without extension.
+     * @param x X coordinate of the point to place the structure at.
+     * @param y Y coordinate of the point to place the structure at.
+     * @param z Z coordinate of the point to place the structure at.
+     * @param ax Anchor (X coordinate) that will offset the origin point where structure will be placed.
+     * @param ay Anchor (Y coordinate) that will offset the origin point where structure will be placed.
+     * @param az Anchor (Z coordinate) that will offset the origin point where structure will be placed.
+     * @return whether the structure was placed in the world.
+     */
+    public boolean placeStructure(String id, int x, int y, int z, float ax, float ay, float az);
+
     /* Ray tracing */
 
     /**
