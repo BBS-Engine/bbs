@@ -34,7 +34,7 @@ public class UIFileLinkList extends UIList<UIFileLinkList.FileLink>
             }
             else
             {
-                this.setPath(fileLink.link);
+                this.setPath(fileLink.link, !fileLink.title.equals(".."));
             }
         };
         this.fileCallback = fileCallback;
@@ -49,10 +49,15 @@ public class UIFileLinkList extends UIList<UIFileLinkList.FileLink>
         return this;
     }
 
+    public void setPath(Link link)
+    {
+        this.setPath(link, true);
+    }
+
     /**
      * Set current link
      */
-    public void setPath(Link link)
+    public void setPath(Link link, boolean fastForward)
     {
         if (link == null || link.source.isEmpty())
         {
@@ -71,7 +76,7 @@ public class UIFileLinkList extends UIList<UIFileLinkList.FileLink>
         {
             Collection<Link> links = BBS.getProvider().getLinksFromPath(link, false);
 
-            if (links.size() == 1)
+            if (fastForward && links.size() == 1)
             {
                 Link first = links.iterator().next();
 

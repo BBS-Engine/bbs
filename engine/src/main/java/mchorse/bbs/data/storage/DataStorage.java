@@ -65,7 +65,19 @@ public abstract class DataStorage implements IDataStorage
     @Override
     public BaseType read() throws IOException
     {
-        return readFromStream(this.getInputStream());
+        InputStream inputStream = this.getInputStream();
+        BaseType type = null;
+
+        try
+        {
+            type = readFromStream(inputStream);
+        }
+        finally
+        {
+            inputStream.close();
+        }
+
+        return type;
     }
 
     protected abstract InputStream getInputStream() throws IOException;
@@ -73,7 +85,10 @@ public abstract class DataStorage implements IDataStorage
     @Override
     public void write(BaseType type) throws IOException
     {
-        writeToStream(this.getOutputStream(), type);
+        try (OutputStream outputStream = this.getOutputStream())
+        {
+            writeToStream(outputStream, type);
+        }
     }
 
     protected abstract OutputStream getOutputStream() throws IOException;

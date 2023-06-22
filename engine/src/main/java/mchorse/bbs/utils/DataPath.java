@@ -20,6 +20,11 @@ public class DataPath
         this.folder = folder;
     }
 
+    public int size()
+    {
+        return this.strings.size();
+    }
+
     public void set(String path)
     {
         this.strings.clear();

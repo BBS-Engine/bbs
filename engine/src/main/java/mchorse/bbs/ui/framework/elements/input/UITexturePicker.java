@@ -113,9 +113,9 @@ public class UITexturePicker extends UIElement implements IFileDropListener
         this.pixelEdit = new UIIcon(Icons.EDIT, (b) -> this.togglePixelEditor());
         this.picker = new UIFileLinkList(this::selectCurrent) {
             @Override
-            public void setPath(Link folder)
+            public void setPath(Link folder, boolean fastForward)
             {
-                super.setPath(folder);
+                super.setPath(folder, fastForward);
 
                 UITexturePicker.this.updateFolderButton();
             }
@@ -576,7 +576,7 @@ public class UITexturePicker extends UIElement implements IFileDropListener
             {
                 UIFileLinkList.FileLink selected = this.picker.getCurrentFirst();
 
-                this.picker.setPath(this.picker.path);
+                this.picker.setPath(this.picker.path, false);
 
                 if (selected != null)
                 {

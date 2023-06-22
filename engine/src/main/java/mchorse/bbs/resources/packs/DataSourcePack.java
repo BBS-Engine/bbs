@@ -6,6 +6,7 @@ import mchorse.bbs.data.types.ByteArrayType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.resources.ISourcePack;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.utils.DataPath;
 import mchorse.bbs.utils.IOUtils;
 
 import java.io.ByteArrayInputStream;
@@ -16,11 +17,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class DataSourcePack implements ISourcePack
 {
-    public Map<Link, byte[]> resources = new HashMap<Link, byte[]>();
+    private Map<Link, byte[]> resources = new HashMap<Link, byte[]>();
+    private Set<Link> keys = new HashSet<Link>();
 
     private URL url;
 
@@ -72,6 +76,8 @@ public class DataSourcePack implements ISourcePack
         this.url = url;
 
         this.read(url);
+
+        this.keys.addAll(this.resources.keySet());
     }
 
     private void read(URL url)
@@ -107,7 +113,7 @@ public class DataSourcePack implements ISourcePack
     @Override
     public boolean hasAsset(Link link)
     {
-        return this.resources.containsKey(link);
+        return this.keys.contains(link);
     }
 
     @Override
@@ -139,5 +145,43 @@ public class DataSourcePack implements ISourcePack
 
     @Override
     public void getLinksFromPath(Collection<Link> links, Link link, boolean recursive)
-    {}
+    {
+        DataPath linkPath = new DataPath(link.path);
+
+        for (Link key : this.keys)
+        {
+            if (!key.source.equals(link.source))
+            {
+                continue;
+            }
+
+            DataPath keyPath = new DataPath(key.path);
+            boolean startsWith = keyPath.startsWith(linkPath);
+
+            if (!recursive && startsWith)
+            {
+                if (keyPath.size() - linkPath.size() == 1)
+                {
+                    links.add(new Link(key.source, keyPath.toString()));
+                }
+                else
+                {
+                    links.add(new Link(key.source, keyPath.getTo(linkPath.size() + 1) + "/"));
+                }
+            }
+            else if (recursive && startsWith)
+            {
+                links.add(key);
+
+                keyPath = keyPath.getParent();
+
+                while (keyPath.size() > linkPath.size())
+                {
+                    links.add(new Link(key.source, keyPath + "/"));
+
+                    keyPath = keyPath.getParent();
+                }
+            }
+        }
+    }
 }

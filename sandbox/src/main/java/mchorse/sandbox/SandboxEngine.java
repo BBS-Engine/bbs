@@ -32,6 +32,7 @@ import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.L10n;
 import mchorse.bbs.l10n.L10nUtils;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.resources.packs.DataSourcePack;
 import mchorse.bbs.resources.packs.InternalAssetsSourcePack;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueInt;
@@ -68,6 +69,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -221,6 +223,23 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
     private void registerMiscellaneous()
     {
         BBS.getProvider().register(new InternalAssetsSourcePack("sandbox", SandboxEngine.class));
+
+        File file = BBS.getGamePath("assets.dat");
+
+        if (file.isFile())
+        {
+            try
+            {
+                BBS.getProvider().register(new DataSourcePack(file.toURI().toURL()));
+                System.out.println("Loaded packed assets from assets.dat!");
+            }
+            catch (MalformedURLException e)
+            {
+                System.err.println("Failed to load packed assets.dat!");
+                e.printStackTrace();
+            }
+        }
+
 
         /* Recording */
         this.video = new VideoRecorder(BBS.getGamePath("movies"), this);

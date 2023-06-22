@@ -34,7 +34,7 @@ public class ExternalAssetsSourcePack implements ISourcePack
 
             if (file.isDirectory() && i > 0)
             {
-                getLinksFromPathRecursively(folder, links, link, prefix, i);
+                getLinksFromPathRecursively(file, links, link, path, i);
             }
 
             links.add(new Link(link.source, path + (file.isDirectory() ? "/" : "")));
