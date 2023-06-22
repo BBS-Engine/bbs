@@ -8,10 +8,13 @@ import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.framework.UIBaseMenu;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
+import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIStringOverlayPanel;
 import mchorse.bbs.ui.utils.icons.Icons;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class UIContentNamesOverlayPanel extends UIStringOverlayPanel
@@ -54,6 +57,16 @@ public class UIContentNamesOverlayPanel extends UIStringOverlayPanel
             dashboard.setPanel(panel);
             panel.pickData(text);
             panel.overlay.namesList.setCurrentFile(text);
+
+            /* Close all overlay panels */
+            List<UIOverlay> children = this.getRoot().getChildren(UIOverlay.class);
+
+            Collections.reverse(children);
+
+            for (UIOverlay overlay : children)
+            {
+                overlay.closeItself();
+            }
         }
     }
 }
