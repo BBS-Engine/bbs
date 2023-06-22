@@ -239,7 +239,7 @@ public class UIMultiLinkEditor extends UICanvasEditor
                 context.render.getTextures().bind(Icons.ATLAS, 5);
                 texture.bind(0);
 
-                context.batcher.texturedBox(shader, texture, child.color, area.x, area.y, area.w, area.h, 0, 0);
+                context.batcher.texturedBox(shader, texture, child.color, area.x, area.y, area.w, area.h, 0, 0, texture.width, texture.height);
             }
         }
     }
@@ -249,7 +249,7 @@ public class UIMultiLinkEditor extends UICanvasEditor
         if (multiLinkShader == null)
         {
             multiLinkShader = new Shader(Link.assets("shaders/ui/vertex_uv_rgba_2d-multilink.glsl"), VBOAttributes.VERTEX_UV_RGBA_2D);
-            multiLinkShader.attachUBO(context.getUBO(), "u_matrices");
+            multiLinkShader.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(context.getUBO(), "u_matrices");
         }
     }
 }
