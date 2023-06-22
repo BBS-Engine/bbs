@@ -441,6 +441,8 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
 
         if (this.model != null && this.editor.area.isInside(context))
         {
+            context.batcher.flush();
+
             Camera camera = this.dashboard.bridge.get(IBridgeCamera.class).getCamera();
             Camera oldCamera = context.render.getCamera();
             float currentTime = this.tick + (this.playing ? context.getTransition() : 0);
