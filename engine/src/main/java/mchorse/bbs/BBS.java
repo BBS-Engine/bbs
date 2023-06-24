@@ -44,6 +44,7 @@ import mchorse.bbs.forms.forms.BillboardForm;
 import mchorse.bbs.forms.forms.BlockForm;
 import mchorse.bbs.forms.forms.ItemForm;
 import mchorse.bbs.forms.forms.LabelForm;
+import mchorse.bbs.forms.forms.LightForm;
 import mchorse.bbs.forms.forms.ModelForm;
 import mchorse.bbs.forms.forms.ParticleForm;
 import mchorse.bbs.forms.forms.StructureForm;
@@ -169,6 +170,7 @@ import mchorse.bbs.ui.forms.editors.forms.UIBillboardForm;
 import mchorse.bbs.ui.forms.editors.forms.UIBlockForm;
 import mchorse.bbs.ui.forms.editors.forms.UIItemForm;
 import mchorse.bbs.ui.forms.editors.forms.UILabelForm;
+import mchorse.bbs.ui.forms.editors.forms.UILightForm;
 import mchorse.bbs.ui.forms.editors.forms.UIModelForm;
 import mchorse.bbs.ui.forms.editors.forms.UIParticleForm;
 import mchorse.bbs.ui.forms.editors.forms.UIStructureForm;
@@ -635,6 +637,7 @@ public class BBS
         BlockForm block = new BlockForm();
         StructureForm structure = new StructureForm();
         ItemForm item = new ItemForm();
+        LightForm light = new LightForm();
 
         billboard.texture.set(Link.assets("textures/error.png"));
 
@@ -643,6 +646,7 @@ public class BBS
         extra.forms.add(block);
         extra.forms.add(structure);
         extra.forms.add(item);
+        extra.forms.add(light);
 
         forms.categories.add(new RecentFormCategory());
         forms.readUserCategories();
@@ -805,13 +809,15 @@ public class BBS
             .registerEditor(Link.bbs("block"), (f) -> new UIBlockForm())
             .registerEditor(Link.bbs("structure"), (f) -> new UIStructureForm())
             .registerEditor(Link.bbs("item"), (f) -> new UIItemForm())
+            .registerEditor(Link.bbs("light"), (f) -> new UILightForm())
             .register(Link.bbs("billboard"), BillboardForm.class)
             .register(Link.bbs("label"), LabelForm.class)
             .register(Link.bbs("model"), ModelForm.class)
             .register(Link.bbs("particle"), ParticleForm.class)
             .register(Link.bbs("block"), BlockForm.class)
             .register(Link.bbs("structure"), StructureForm.class)
-            .register(Link.bbs("item"), ItemForm.class);
+            .register(Link.bbs("item"), ItemForm.class)
+            .register(Link.bbs("light"), LightForm.class);
 
         /* Register block models */
         factoryBlockModels = new MapFactory<BlockModelFactory, BlockModelFactoryData>()

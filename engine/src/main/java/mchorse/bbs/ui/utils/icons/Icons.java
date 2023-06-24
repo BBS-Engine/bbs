@@ -143,6 +143,7 @@ public class Icons
     public static final Icon CAMERA = register(new Icon(ATLAS, "camera", 96, 112));
     public static final Icon FADING = register(new Icon(ATLAS, "fading", 112, 112));
     public static final Icon TIME = register(new Icon(ATLAS, "time", 128, 112));
+    public static final Icon LIGHT = register(new Icon(ATLAS, "light", 144, 112));
 
     public static final Icon CHECKBOARD = register(new Icon(ATLAS, "checkboard", 0, 240));
     public static final Icon DISABLED = register(new Icon(ATLAS, "disabled", 16, 240));

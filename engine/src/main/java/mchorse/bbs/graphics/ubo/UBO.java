@@ -27,12 +27,12 @@ public abstract class UBO implements IDisposable
 
     public void bind()
     {
-        this.bind(this.unit);
+        GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, this.id);
     }
 
-    public void bind(int unit)
+    public void bindUnit()
     {
-        GL31.glBindBufferBase(GL31.GL_UNIFORM_BUFFER, unit, this.id);
+        GL31.glBindBufferBase(GL31.GL_UNIFORM_BUFFER, this.unit, this.id);
     }
 
     @Override

@@ -13,7 +13,7 @@ public class DoubleProperty extends BaseTweenProperty<Double>
     @Override
     protected Double getTweened(float transition)
     {
-        return this.interpolation.interpolate(this.value, this.lastValue, this.getTweenFactor(transition));
+        return this.interpolation.interpolate(this.lastValue, this.value, this.getTweenFactor(transition));
     }
 
     @Override

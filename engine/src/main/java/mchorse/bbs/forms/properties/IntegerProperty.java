@@ -13,7 +13,7 @@ public class IntegerProperty extends BaseTweenProperty<Integer>
     @Override
     protected Integer getTweened(float transition)
     {
-        return (int) this.interpolation.interpolate(this.value, this.lastValue, this.getTweenFactor(transition));
+        return (int) this.interpolation.interpolate(this.lastValue, this.value, this.getTweenFactor(transition));
     }
 
     @Override

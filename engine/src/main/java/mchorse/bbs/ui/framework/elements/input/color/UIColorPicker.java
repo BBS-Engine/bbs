@@ -14,6 +14,7 @@ import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.MathUtils;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -291,6 +292,20 @@ public class UIColorPicker extends UIElement
         this.dragging = -1;
 
         return super.subMouseReleased(context);
+    }
+
+    @Override
+    protected boolean subKeyPressed(UIContext context)
+    {
+        if (context.isPressed(GLFW.GLFW_KEY_ESCAPE))
+        {
+            this.removeFromParent();
+            this.addToRecent();
+
+            return true;
+        }
+
+        return super.subKeyPressed(context);
     }
 
     @Override

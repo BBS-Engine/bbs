@@ -43,7 +43,7 @@ public class ShadersWorld
     {
         this.ubo = new ProjectionViewUBO(0);
         this.ubo.init();
-        this.ubo.bind();
+        this.ubo.bindUnit();
 
         this.vertexRGBA = new Shader(Sandbox.link("shaders/world/vertex_rgba.glsl"), VBOAttributes.VERTEX_RGBA);
         this.vertexUVRGBA = new Shader(Sandbox.link("shaders/world/vertex_uv_rgba.glsl"), VBOAttributes.VERTEX_UV_RGBA);

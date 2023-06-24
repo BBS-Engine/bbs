@@ -16,6 +16,7 @@ import mchorse.bbs.graphics.MatrixStack;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
+import mchorse.bbs.graphics.shaders.lighting.LightsUBO;
 import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector2;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector3;
@@ -112,6 +113,7 @@ public class SandboxRenderer implements IComponent
             shader.getUniform("u_depth", UniformInt.class).set(4);
             shader.getUniform("u_lightmap", UniformInt.class).set(7);
         });
+
         this.finalShader = new Shader(Sandbox.link("shaders/world/vertex_2d-final.glsl"), VBOAttributes.VERTEX_2D).onInitialize((shader) ->
         {
             shader.getUniform("u_texture", UniformInt.class).set(0);
@@ -185,6 +187,12 @@ public class SandboxRenderer implements IComponent
         this.createSkybox();
 
         this.renderWorld = new RenderWorldEvent(this.context);
+
+        LightsUBO lights = this.context.getLights();
+
+        lights.init();
+        lights.bindUnit();
+        this.compositeShader.attachUBO(lights, "u_lights_block");
     }
 
     private void createSkybox()
@@ -402,6 +410,8 @@ public class SandboxRenderer implements IComponent
         }
 
         this.renderScene(context);
+
+        context.getLights().submitLights();
     }
 
     private void renderSkybox()

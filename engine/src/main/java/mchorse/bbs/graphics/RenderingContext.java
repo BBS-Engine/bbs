@@ -2,6 +2,7 @@ package mchorse.bbs.graphics;
 
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.graphics.shaders.ShaderRepository;
+import mchorse.bbs.graphics.shaders.lighting.LightsUBO;
 import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.graphics.texture.TextureManager;
 import mchorse.bbs.graphics.ubo.ProjectionViewUBO;
@@ -32,6 +33,8 @@ public class RenderingContext
 
     private ShaderRepository shaders = new ShaderRepository();
     private ShaderRepository active;
+
+    private LightsUBO lights = new LightsUBO(2);
 
     private List<Runnable> scheduledRunnables = new ArrayList<Runnable>();
 
@@ -141,6 +144,11 @@ public class RenderingContext
     public ShaderRepository getMainShaders()
     {
         return this.shaders;
+    }
+
+    public LightsUBO getLights()
+    {
+        return this.lights;
     }
 
     public void postRunnable(Runnable runnable)
