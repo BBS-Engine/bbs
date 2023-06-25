@@ -14,10 +14,10 @@ As for IDE, BBS was developed in IntelliJ **2022.3.1** (Community Edition). Buil
 
 ## Developing
 
-To launch Core Survivor in IntelliJ, you need to create an Application run configuration with following options:
+To launch BBS in IntelliJ, you need to create an Application run configuration with following options:
 
-* Module: `BBS.app.main`
-* JVM arguments: `-Dfile.encoding=UTF-8 -Dfabric.development=true`
+* Module: `BBS.sandbox.main`
+* JVM arguments: `-Dfile.encoding=UTF-8 -Dfabric.development=true` (add `-XstartOnFirstThread` if you're on macOS)
 * Prorgram arguments: `--gameDirectory $ProjectFileDir$\game\ --development --width 1280 --height 720`
 * Main class: `net.fabricmc.loader.impl.launch.knot.KnotClient`
 
