@@ -16,6 +16,7 @@ import mchorse.bbs.graphics.MatrixStack;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
+import mchorse.bbs.graphics.shaders.ShaderRepository;
 import mchorse.bbs.graphics.shaders.lighting.LightsUBO;
 import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector2;
@@ -91,20 +92,19 @@ public class SandboxRenderer implements IComponent
         this.shaders = new ShadersWorld();
         this.context = BBS.getRender();
 
-        FontRenderer fontDefault = BBS.getFonts().getRenderer(Link.assets("fonts/bbs_round.json"));
-        FontRenderer fontMonoDefault = BBS.getFonts().getRenderer(Link.assets("fonts/bbs_round_mono.json"));
-
-        this.context.setup(fontDefault, fontMonoDefault, BBS.getVAOs(), BBS.getTextures());
+        this.context.setup(BBS.getFonts().getRenderer(Link.assets("fonts/bbs_round.json")), BBS.getVAOs(), BBS.getTextures());
         this.context.setCamera(this.engine.cameraController.camera);
         this.context.setUBO(this.shaders.ubo);
 
-        this.context.getMainShaders().register(this.shaders.vertexRGBA);
-        this.context.getMainShaders().register(this.shaders.vertexUVRGBA);
-        this.context.getMainShaders().register(this.shaders.vertexNormalUVRGBA);
-        this.context.getMainShaders().register(this.shaders.vertexNormalUVLightRGBA);
-        this.context.getMainShaders().register(this.shaders.vertexNormalUVRGBABones);
+        ShaderRepository mainShaders = this.context.getMainShaders();
 
-        this.compositeShader = new Shader(Sandbox.link("shaders/world/vertex_2d-composite.glsl"), VBOAttributes.VERTEX_2D).onInitialize((shader) ->
+        mainShaders.register(this.shaders.vertexRGBA);
+        mainShaders.register(this.shaders.vertexUVRGBA);
+        mainShaders.register(this.shaders.vertexNormalUVRGBA);
+        mainShaders.register(this.shaders.vertexNormalUVLightRGBA);
+        mainShaders.register(this.shaders.vertexNormalUVRGBABones);
+
+        this.compositeShader = new Shader(Sandbox.link("shaders/deferred/vertex_2d-composite.glsl"), VBOAttributes.VERTEX_2D).onInitialize((shader) ->
         {
             shader.getUniform("u_texture", UniformInt.class).set(0);
             shader.getUniform("u_position", UniformInt.class).set(1);
@@ -114,7 +114,7 @@ public class SandboxRenderer implements IComponent
             shader.getUniform("u_lightmap", UniformInt.class).set(7);
         });
 
-        this.finalShader = new Shader(Sandbox.link("shaders/world/vertex_2d-final.glsl"), VBOAttributes.VERTEX_2D).onInitialize((shader) ->
+        this.finalShader = new Shader(Sandbox.link("shaders/deferred/vertex_2d-final.glsl"), VBOAttributes.VERTEX_2D).onInitialize((shader) ->
         {
             shader.getUniform("u_texture", UniformInt.class).set(0);
         });
@@ -123,12 +123,12 @@ public class SandboxRenderer implements IComponent
 
         this.finalFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("final"), (framebuffer) ->
         {
-            Texture texture = BBS.getTextures().createTexture(Sandbox.link("final"));
+            Texture texture = new Texture();
 
             texture.setFilter(GL11.GL_LINEAR);
             texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
 
-            framebuffer.attach(texture, GL30.GL_COLOR_ATTACHMENT0);
+            framebuffer.deleteTextures().attach(texture, GL30.GL_COLOR_ATTACHMENT0);
             framebuffer.unbind();
         });
 
@@ -145,35 +145,35 @@ public class SandboxRenderer implements IComponent
 
         this.gbufferFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("gbuffer"), (framebuffer) ->
         {
-            Texture albedo = BBS.getTextures().createTexture(Sandbox.link("albedo")).notRefreshable();
+            Texture albedo = new Texture();
 
             albedo.setFilter(GL11.GL_NEAREST);
             albedo.setWrap(GL13.GL_CLAMP_TO_EDGE);
 
-            Texture position = BBS.getTextures().createTexture(Sandbox.link("position")).notRefreshable();
+            Texture position = new Texture();
 
             position.setFilter(GL11.GL_NEAREST);
             position.setWrap(GL13.GL_CLAMP_TO_EDGE);
             position.setFormat(GL30.GL_RGBA16F, GL11.GL_RGBA, GL11.GL_FLOAT);
 
-            Texture normal = BBS.getTextures().createTexture(Sandbox.link("normal")).notRefreshable();
+            Texture normal = new Texture();
 
             normal.setFilter(GL11.GL_NEAREST);
             normal.setWrap(GL13.GL_CLAMP_TO_EDGE);
             normal.setFormat(GL30.GL_RGBA16F, GL11.GL_RGBA, GL11.GL_FLOAT);
 
-            Texture lighting = BBS.getTextures().createTexture(Sandbox.link("lighting")).notRefreshable();
+            Texture lighting = new Texture();
 
             lighting.setFilter(GL11.GL_NEAREST);
             lighting.setWrap(GL13.GL_CLAMP_TO_EDGE);
 
-            Texture depth = BBS.getTextures().createTexture(Sandbox.link("depth")).notRefreshable();
+            Texture depth = new Texture();
 
             depth.setFilter(GL11.GL_NEAREST);
             depth.setWrap(GL13.GL_CLAMP_TO_EDGE);
             depth.setFormat(GL30.GL_DEPTH_COMPONENT24, GL30.GL_DEPTH_COMPONENT, GL30.GL_FLOAT);
 
-            framebuffer.attach(albedo, GL30.GL_COLOR_ATTACHMENT0);
+            framebuffer.deleteTextures().attach(albedo, GL30.GL_COLOR_ATTACHMENT0);
             framebuffer.attach(position, GL30.GL_COLOR_ATTACHMENT1);
             framebuffer.attach(normal, GL30.GL_COLOR_ATTACHMENT2);
             framebuffer.attach(lighting, GL30.GL_COLOR_ATTACHMENT3);

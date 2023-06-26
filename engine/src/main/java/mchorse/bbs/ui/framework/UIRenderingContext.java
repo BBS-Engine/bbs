@@ -61,12 +61,6 @@ public class UIRenderingContext extends RenderingContext
     }
 
     @Override
-    public FontRenderer getFontMono()
-    {
-        return this.render.getFontMono();
-    }
-
-    @Override
     public VAOBuilder getVAO()
     {
         return this.render.getVAO();

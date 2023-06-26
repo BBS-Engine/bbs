@@ -44,7 +44,7 @@ public final class Shader implements IDisposable
     private Set<Uniform> dirtyUniforms = new HashSet<Uniform>();
 
     /**
-     * Shader uniforms that were attached outside of the subclasses
+     * Shader uniforms that were attached outside the subclasses
      */
     private Map<String, Uniform> uniforms = new HashMap<String, Uniform>();
 

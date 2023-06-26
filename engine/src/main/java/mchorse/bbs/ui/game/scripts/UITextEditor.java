@@ -4,6 +4,7 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.graphics.vao.VAOBuilder;
+import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.text.UITextarea;
 import mchorse.bbs.ui.framework.elements.input.text.undo.TextEditUndo;
@@ -39,7 +40,7 @@ public class UITextEditor extends UITextarea<HighlightedTextLine>
     @Override
     protected FontRenderer getFont()
     {
-        return BBS.getRender().getFontMono();
+        return BBS.getFonts().getRenderer(Link.assets("fonts/bbs_round_mono.json"));
     }
 
     public UITextEditor highlighter(ISyntaxHighlighter highlighter)

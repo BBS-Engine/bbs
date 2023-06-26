@@ -26,7 +26,6 @@ public class RenderingContext
     private ProjectionViewUBO ubo;
 
     private FontRenderer font;
-    private FontRenderer fontMono;
 
     private VAOBuilder vao;
     private TextureManager textures;
@@ -38,10 +37,9 @@ public class RenderingContext
 
     private List<Runnable> scheduledRunnables = new ArrayList<Runnable>();
 
-    public void setup(FontRenderer font, FontRenderer fontMono, VAOManager vaos, TextureManager textures)
+    public void setup(FontRenderer font, VAOManager vaos, TextureManager textures)
     {
         this.font = font;
-        this.fontMono = fontMono;
         this.vao = new VAOBuilder(vaos);
         this.textures = textures;
     }
@@ -114,11 +112,6 @@ public class RenderingContext
     public FontRenderer getFont()
     {
         return this.font;
-    }
-
-    public FontRenderer getFontMono()
-    {
-        return this.fontMono;
     }
 
     public VAOBuilder getVAO()
