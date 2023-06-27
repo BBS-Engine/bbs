@@ -1,18 +1,10 @@
 package mchorse;
 
-import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.utils.CrashReport;
-import mchorse.bbs.utils.OS;
+import mchorse.bbs.utils.JavaLauncher;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
 /**
  * Launcher.
@@ -24,22 +16,22 @@ public class Launcher
 {
     public static void main(String[] strings)
     {
-        List<String> args = new ArrayList<String>();
-        MapType settings = readSettings();
-        String java = new File(System.getProperty("java.home"), "bin/java").getAbsolutePath();
+        JavaLauncher launcher = new JavaLauncher();
+        MapType defaultSettings = new MapType();
+
+        defaultSettings.putInt("game.width", 1280);
+        defaultSettings.putInt("game.height", 720);
+        defaultSettings.putString("game.world", "hello");
+        defaultSettings.putBool("game.development", true);
+        defaultSettings.putString("game.directory", "game");
+
+        List<String> args = launcher.getArguments("net.fabricmc.loader.impl.launch.knot.KnotClient");
+        MapType settings = launcher.readSettings(new File("launcher.json"), defaultSettings);
+
+        System.out.println(settings);
+
         String gameDirectory = settings.getString("game.directory");
 
-        args.add(java);
-
-        if (OS.CURRENT == OS.MACOS)
-        {
-            args.add("-XstartOnFirstThread");
-        }
-
-        args.add("-Dfile.encoding=UTF-8");
-        args.add("-classpath");
-        args.add(getClasspath());
-        args.add("net.fabricmc.loader.impl.launch.knot.KnotClient");
         args.add("--gameDirectory");
         args.add(gameDirectory);
 
@@ -68,88 +60,15 @@ public class Launcher
 
         try
         {
-            ProcessBuilder process = new ProcessBuilder(args);
-            File logs = new File(gameDirectory, "logs/launcher.log");
+            File logFile = launcher.getLogFile(gameDirectory);
 
-            if (!logs.getParentFile().isDirectory())
-            {
-                logs.getParentFile().mkdirs();
-            }
+            launcher.launch(args, logFile);
 
-            if (logs.isFile())
-            {
-                Path path = logs.toPath();
-                BasicFileAttributes attributes = Files.readAttributes(path, BasicFileAttributes.class);
-                String name = CrashReport.FORMATTER.format(attributes.lastModifiedTime().toInstant()) + ".log";
-
-                logs.renameTo(new File(gameDirectory, "logs/" + name));
-            }
-
-            process.redirectErrorStream(true);
-            process.redirectOutput(logs);
-            process.start();
+            System.out.println(String.join(" ", args));
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            ex.printStackTrace();
+            e.printStackTrace();
         }
-
-        System.out.println(String.join(" ", args));
-    }
-
-    private static MapType readSettings()
-    {
-        File launcher = new File("launcher.json");
-
-        try
-        {
-            return (MapType) DataToString.read(launcher);
-        }
-        catch (IOException e)
-        {}
-
-        MapType map = new MapType();
-
-        map.putInt("game.width", 1280);
-        map.putInt("game.height", 720);
-        map.putString("game.world", "hello");
-        map.putBool("game.development", true);
-        map.putString("game.directory", "game");
-
-        DataToString.writeSilently(launcher, map, true);
-
-        return map;
-    }
-
-    private static String getClasspath()
-    {
-        File folder = new File(System.getProperty("user.dir"));
-        StringJoiner joiner = new StringJoiner(File.pathSeparator);
-        String slash = File.separator;
-
-        /* Nashorn (for scripting) */
-        joiner.add(System.getProperty("java.home") + slash + "lib" + slash + "ext" + slash + "nashorn.jar");
-
-        for (File file : folder.listFiles())
-        {
-            String name = file.getName();
-
-            if (name.equals("launcher.jar"))
-            {
-                joiner.add(name);
-            }
-            else if (name.equals("dependencies") && file.isDirectory())
-            {
-                for (File dep : file.listFiles())
-                {
-                    if (dep.getName().endsWith(".jar"))
-                    {
-                        joiner.add(new File("dependencies" + slash + dep.getName()).getAbsolutePath());
-                    }
-                }
-            }
-        }
-
-        return joiner.toString();
     }
 }
