@@ -8,15 +8,14 @@ import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.list.UILinkList;
 import mchorse.bbs.ui.framework.elements.input.list.UISearchList;
 import mchorse.bbs.ui.framework.elements.overlay.UIConfirmOverlayPanel;
+import mchorse.bbs.ui.framework.elements.overlay.UIMessageFolderOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
-import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.PNGEncoder;
@@ -135,19 +134,13 @@ public class UITextureManagerOverlayPanel extends UIOverlayPanel
         try
         {
             PNGEncoder.writeToFile(pixels, file);
-            UIMessageOverlayPanel panel = new UIMessageOverlayPanel(
+            UIMessageFolderOverlayPanel panel = new UIMessageFolderOverlayPanel(
                 UIKeys.TEXTURES_EXPORT_OVERLAY_TITLE,
-                UIKeys.TEXTURES_EXPORT_OVERLAY_SUCCESS.format(file.getName())
+                UIKeys.TEXTURES_EXPORT_OVERLAY_SUCCESS.format(file.getName()),
+                this.exportFolder
             );
 
-            UIButton open = new UIButton(UIKeys.TEXTURES_EXPORT_OVERLAY_OPEN_FOLDER, (b) ->
-            {
-                panel.close();
-                UIUtils.openFolder(this.exportFolder);
-            });
-
-            open.relative(panel).x(0.5F).y(1F, -10).w(100).anchor(0.5F, 1F);
-            panel.content.add(open);
+            panel.folder.tooltip(UIKeys.TEXTURES_EXPORT_OVERLAY_OPEN_FOLDER, Direction.LEFT);
 
             UIOverlay.addOverlay(this.getContext(), panel);
         }

@@ -10,6 +10,7 @@ import mchorse.bbs.ui.dashboard.panels.UISidebarDashboardPanel;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.Direction;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Collections;
@@ -68,7 +69,7 @@ public class UITextureManagerPanel extends UISidebarDashboardPanel
         this.edit.setEnabled(link != null && !forbidden);
         this.overlay.export.tooltip(forbidden
             ? UIKeys.TEXTURES_EXPORT_FORBIDDEN
-            : UIKeys.TEXTURES_EXPORT);
+            : UIKeys.TEXTURES_EXPORT, Direction.LEFT);
         this.edit.tooltip(forbidden
             ? UIKeys.TEXTURES_EDIT_FORBIDDEN
             : UIKeys.TEXTURES_EDIT);

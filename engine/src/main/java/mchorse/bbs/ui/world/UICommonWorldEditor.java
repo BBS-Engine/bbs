@@ -43,6 +43,7 @@ public abstract class UICommonWorldEditor <T> extends UIWorldPanel
         super(dashboard);
 
         this.objects = this.createSearchList((l) -> this.fill(l.get(0), false));
+        this.objects.list.cancelScrollEdge();
         this.objects.label(UIKeys.SEARCH);
         this.objects.context((m) ->
         {
