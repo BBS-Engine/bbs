@@ -159,7 +159,6 @@ public class BillboardFormRenderer extends FormRenderer<BillboardForm>
         }
 
         CommonShaderAccess.setModelView(shader, context.stack);
-        CommonShaderAccess.resetColor(shader);
 
         context.getTextures().bind(this.form.texture.get(context.getTransition()));
 

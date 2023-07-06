@@ -28,8 +28,6 @@ public class Launcher
         List<String> args = launcher.getArguments("net.fabricmc.loader.impl.launch.knot.KnotClient");
         MapType settings = launcher.readSettings(new File("launcher.json"), defaultSettings);
 
-        System.out.println(settings);
-
         String gameDirectory = settings.getString("game.directory");
 
         args.add("--gameDirectory");

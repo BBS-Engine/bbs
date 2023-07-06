@@ -22,7 +22,6 @@ import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.world.World;
 import mchorse.sandbox.SandboxEngine;
 import mchorse.sandbox.settings.SandboxSettings;
-import mchorse.sandbox.shaders.ShadersUI;
 import mchorse.sandbox.ui.welcome.UIWelcomeMenu;
 import org.lwjgl.glfw.GLFW;
 
@@ -33,7 +32,7 @@ public class UIScreen implements IEngine, IFileDropListener
     public SandboxEngine engine;
 
     public UIRenderingContext context;
-    public ShadersUI shaders;
+    public UIShaders shaders;
 
     public UIBaseMenu menu;
     private UIDashboard dashboard;
@@ -203,7 +202,7 @@ public class UIScreen implements IEngine, IFileDropListener
     @Override
     public void init() throws Exception
     {
-        this.shaders = new ShadersUI();
+        this.shaders = new UIShaders();
         this.context = new UIRenderingContext(this.engine.renderer.context, this.shaders.ortho);
         this.chalkboard = new UIChalkboard(this.engine, this.context);
 

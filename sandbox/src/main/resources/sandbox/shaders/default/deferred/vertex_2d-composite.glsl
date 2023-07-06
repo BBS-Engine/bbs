@@ -41,7 +41,7 @@ uniform vec2 u_screen_size;
 uniform int u_fog;
 uniform vec3 u_shading;
 
-#import "sandbox:shaders/sky.glsl"
+#import "sandbox:shaders/default/sky.glsl"
 
 void apply_lightmap(inout vec4 result, vec2 coords)
 {

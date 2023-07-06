@@ -4,7 +4,6 @@
 #import "assets:shaders/formats/vertex_rgba.glsl"
 
 out vec4 pass_rgba;
-out vec4 pass_vertex;
 
 uniform mat4 u_model;
 
@@ -21,19 +20,16 @@ void main()
     gl_Position = u_projection * u_view * u_model * vertex;
 
     pass_rgba = in_rgba;
-    pass_vertex = u_model * vertex;
 }
 
 //@fragment
 in vec4 pass_rgba;
-in vec4 pass_vertex;
 
-#import "sandbox:shaders/gbuffer_format.glsl"
+out vec4 out_color;
 
 uniform vec4 u_color;
 
 void main()
 {
     out_color = pass_rgba * u_color;
-    out_vertex = vec4(pass_vertex.xyz, 1);
 }

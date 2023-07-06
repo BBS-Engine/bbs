@@ -10,6 +10,11 @@ public class ShaderRepository
 {
     private Map<VBOAttributes, Shader> shaders = new HashMap<VBOAttributes, Shader>();
 
+    public void clear()
+    {
+        this.shaders.clear();
+    }
+
     public void register(Shader shader)
     {
         this.shaders.put(shader.attributes, shader);

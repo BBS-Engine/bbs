@@ -5,6 +5,8 @@ import mchorse.bbs.animation.AnimationPlayer;
 import mchorse.bbs.animation.Animations;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.core.IComponent;
+import mchorse.bbs.data.DataToString;
+import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.events.RenderWorldEvent;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.game.huds.HUDStage;
@@ -13,21 +15,25 @@ import mchorse.bbs.graphics.Draw;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.MatrixStack;
+import mchorse.bbs.graphics.Renderbuffer;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.shaders.ShaderRepository;
-import mchorse.bbs.graphics.shaders.lighting.LightsUBO;
+import mchorse.bbs.graphics.shaders.pipeline.ShaderFramebufferTexture;
+import mchorse.bbs.graphics.shaders.pipeline.ShaderPipeline;
 import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector2;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector3;
 import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.graphics.text.builders.ITextBuilder;
 import mchorse.bbs.graphics.texture.Texture;
+import mchorse.bbs.graphics.ubo.ProjectionViewUBO;
 import mchorse.bbs.graphics.vao.VAO;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.utils.IOUtils;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.utils.math.MathUtils;
@@ -41,13 +47,14 @@ import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.architect.EntityArchitect;
 import mchorse.bbs.world.objects.WorldObject;
 import mchorse.sandbox.settings.SandboxSettings;
-import mchorse.sandbox.shaders.ShadersWorld;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
@@ -62,7 +69,11 @@ public class SandboxRenderer implements IComponent
     public RenderingContext context;
 
     /* Shaders */
-    public ShadersWorld shaders;
+
+    /**
+     * Projection view UBO (32 bits, projection and view matrices)
+     */
+    public ProjectionViewUBO ubo;
 
     /* VAOs */
     public VAO sky;
@@ -75,6 +86,7 @@ public class SandboxRenderer implements IComponent
     public Framebuffer finalFramebuffer;
     public Framebuffer tmpFramebuffer;
 
+    private ShaderPipeline pipeline;
     private RenderWorldEvent renderWorld;
 
     private int ticks;
@@ -89,22 +101,61 @@ public class SandboxRenderer implements IComponent
     @Override
     public void init() throws Exception
     {
-        this.shaders = new ShadersWorld();
         this.context = BBS.getRender();
+
+        this.ubo = new ProjectionViewUBO(0);
+        this.ubo.init();
+        this.ubo.bindUnit();
+
+        this.context.getLights().init();
+        this.context.getLights().bindUnit();
 
         this.context.setup(BBS.getFonts().getRenderer(Link.assets("fonts/bbs_round.json")), BBS.getVAOs(), BBS.getTextures());
         this.context.setCamera(this.engine.cameraController.camera);
-        this.context.setUBO(this.shaders.ubo);
+        this.context.setUBO(this.ubo);
+
+        this.createSkybox();
+        this.setupShaderPipeline();
+
+        this.renderWorld = new RenderWorldEvent(this.context);
+    }
+
+    private void setupShaderPipeline()
+    {
+        this.pipeline = new ShaderPipeline();
+
+        try
+        {
+            InputStream asset = BBS.getProvider().getAsset(Sandbox.link("shaders/default/default.shader.json"));
+            MapType data = DataToString.mapFromString(IOUtils.readText(asset));
+
+            this.pipeline.fromData(data);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 
         ShaderRepository mainShaders = this.context.getMainShaders();
 
-        mainShaders.register(this.shaders.vertexRGBA);
-        mainShaders.register(this.shaders.vertexUVRGBA);
-        mainShaders.register(this.shaders.vertexNormalUVRGBA);
-        mainShaders.register(this.shaders.vertexNormalUVLightRGBA);
-        mainShaders.register(this.shaders.vertexNormalUVRGBABones);
+        Shader skyboxShader = new Shader(this.pipeline.shaders.get("skybox"), VBOAttributes.VERTEX);
+        Shader vertexRGBA = new Shader(this.pipeline.shaders.get("solid"), VBOAttributes.VERTEX_RGBA);
+        Shader vertexUVRGBA = new Shader(this.pipeline.shaders.get("textured"), VBOAttributes.VERTEX_UV_RGBA);
+        Shader vertexNormalUVRGBA = new Shader(this.pipeline.shaders.get("model"), VBOAttributes.VERTEX_NORMAL_UV_RGBA);
+        Shader vertexNormalUVLightRGBA = new Shader(this.pipeline.shaders.get("terrain"), VBOAttributes.VERTEX_NORMAL_UV_LIGHT_RGBA);
+        Shader vertexNormalUVRGBABones = new Shader(this.pipeline.shaders.get("model_animated"), VBOAttributes.VERTEX_NORMAL_UV_RGBA_BONES);
 
-        this.compositeShader = new Shader(Sandbox.link("shaders/deferred/vertex_2d-composite.glsl"), VBOAttributes.VERTEX_2D).onInitialize((shader) ->
+        Shader compositeShader = new Shader(this.pipeline.shaders.get("composite"), VBOAttributes.VERTEX_2D);
+        Shader finalShader = new Shader(this.pipeline.shaders.get("final"), VBOAttributes.VERTEX_2D);
+
+        skyboxShader.attachUBO(this.context.getUBO(), "u_matrices");
+        vertexRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
+        vertexUVRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
+        vertexNormalUVRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
+        vertexNormalUVLightRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
+        vertexNormalUVRGBABones.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
+
+        compositeShader.onInitialize((shader) ->
         {
             shader.getUniform("u_texture", UniformInt.class).set(0);
             shader.getUniform("u_position", UniformInt.class).set(1);
@@ -113,13 +164,19 @@ public class SandboxRenderer implements IComponent
             shader.getUniform("u_depth", UniformInt.class).set(4);
             shader.getUniform("u_lightmap", UniformInt.class).set(7);
         });
+        compositeShader.attachUBO(this.context.getLights(), "u_lights_block");
+        finalShader.onInitialize(CommonShaderAccess::initializeTexture);
 
-        this.finalShader = new Shader(Sandbox.link("shaders/deferred/vertex_2d-final.glsl"), VBOAttributes.VERTEX_2D).onInitialize((shader) ->
-        {
-            shader.getUniform("u_texture", UniformInt.class).set(0);
-        });
-        this.skyboxShader = new Shader(Sandbox.link("shaders/world/vertex-skybox.glsl"), VBOAttributes.VERTEX);
-        this.skyboxShader.attachUBO(this.context.getUBO(), "u_matrices");
+        mainShaders.clear();
+        mainShaders.register(vertexRGBA);
+        mainShaders.register(vertexUVRGBA);
+        mainShaders.register(vertexNormalUVRGBA);
+        mainShaders.register(vertexNormalUVLightRGBA);
+        mainShaders.register(vertexNormalUVRGBABones);
+
+        this.skyboxShader = skyboxShader;
+        this.compositeShader = compositeShader;
+        this.finalShader = finalShader;
 
         this.finalFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("final"), (framebuffer) ->
         {
@@ -145,54 +202,58 @@ public class SandboxRenderer implements IComponent
 
         this.gbufferFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("gbuffer"), (framebuffer) ->
         {
-            Texture albedo = new Texture();
+            int colors = 0;
+            boolean hasDepth = false;
 
-            albedo.setFilter(GL11.GL_NEAREST);
-            albedo.setWrap(GL13.GL_CLAMP_TO_EDGE);
+            for (ShaderFramebufferTexture t : this.pipeline.gbuffer.textures)
+            {
+                if (t.format.isDepth())
+                {
+                    hasDepth = true;
+                }
+                else
+                {
+                    colors += 1;
+                }
+            }
 
-            Texture position = new Texture();
+            int color = 0;
+            int[] colorAttachments = new int[colors];
 
-            position.setFilter(GL11.GL_NEAREST);
-            position.setWrap(GL13.GL_CLAMP_TO_EDGE);
-            position.setFormat(GL30.GL_RGBA16F, GL11.GL_RGBA, GL11.GL_FLOAT);
+            for (ShaderFramebufferTexture t : this.pipeline.gbuffer.textures)
+            {
+                Texture texture = new Texture();
 
-            Texture normal = new Texture();
+                texture.setFilter(GL11.GL_NEAREST);
+                texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
+                texture.setFormat(t.format);
 
-            normal.setFilter(GL11.GL_NEAREST);
-            normal.setWrap(GL13.GL_CLAMP_TO_EDGE);
-            normal.setFormat(GL30.GL_RGBA16F, GL11.GL_RGBA, GL11.GL_FLOAT);
+                if (t.format.isDepth())
+                {
+                    framebuffer.attach(texture, t.format.attachment);
+                }
+                else
+                {
+                    framebuffer.attach(texture, t.format.attachment + color);
 
-            Texture lighting = new Texture();
+                    colorAttachments[color] = t.format.attachment + color;
+                    color += 1;
+                }
+            }
 
-            lighting.setFilter(GL11.GL_NEAREST);
-            lighting.setWrap(GL13.GL_CLAMP_TO_EDGE);
+            if (!hasDepth)
+            {
+                Renderbuffer renderbuffer = new Renderbuffer();
 
-            Texture depth = new Texture();
+                framebuffer.attach(renderbuffer);
+            }
 
-            depth.setFilter(GL11.GL_NEAREST);
-            depth.setWrap(GL13.GL_CLAMP_TO_EDGE);
-            depth.setFormat(GL30.GL_DEPTH_COMPONENT24, GL30.GL_DEPTH_COMPONENT, GL30.GL_FLOAT);
+            framebuffer.deleteTextures();
 
-            framebuffer.deleteTextures().attach(albedo, GL30.GL_COLOR_ATTACHMENT0);
-            framebuffer.attach(position, GL30.GL_COLOR_ATTACHMENT1);
-            framebuffer.attach(normal, GL30.GL_COLOR_ATTACHMENT2);
-            framebuffer.attach(lighting, GL30.GL_COLOR_ATTACHMENT3);
-            framebuffer.attach(depth, GL30.GL_DEPTH_ATTACHMENT);
-
-            GL30.glDrawBuffers(new int[] {GL30.GL_COLOR_ATTACHMENT0, GL30.GL_COLOR_ATTACHMENT1, GL30.GL_COLOR_ATTACHMENT2, GL30.GL_COLOR_ATTACHMENT3});
+            GL30.glDrawBuffers(colorAttachments);
 
             framebuffer.unbind();
         });
-
-        this.createSkybox();
-
-        this.renderWorld = new RenderWorldEvent(this.context);
-
-        LightsUBO lights = this.context.getLights();
-
-        lights.init();
-        lights.bindUnit();
-        this.compositeShader.attachUBO(lights, "u_lights_block");
     }
 
     private void createSkybox()
@@ -234,7 +295,7 @@ public class SandboxRenderer implements IComponent
     @Override
     public void delete()
     {
-        this.shaders.ubo.delete();
+        this.ubo.delete();
     }
 
     @Override
@@ -315,11 +376,10 @@ public class SandboxRenderer implements IComponent
             texture.setWrap(GL12.GL_CLAMP_TO_EDGE);
         }
 
-        this.gbufferFramebuffer.textures.get(4).bind(4);
-        this.gbufferFramebuffer.textures.get(3).bind(3);
-        this.gbufferFramebuffer.textures.get(2).bind(2);
-        this.gbufferFramebuffer.textures.get(1).bind(1);
-        this.gbufferFramebuffer.textures.get(0).bind(0);
+        for (int i = this.gbufferFramebuffer.textures.size() - 1; i >= 0; i--)
+        {
+            this.gbufferFramebuffer.textures.get(i).bind(i);
+        }
 
         Framebuffer.renderToQuad(this.context, this.compositeShader);
 
@@ -571,7 +631,8 @@ public class SandboxRenderer implements IComponent
         Draw.renderBox(this.context, x, y, z, w, h, d, 1, display.parent.generated ? 1 : 0, display.dirty ? 0 : 1);
 
         MatrixStack stack = this.context.stack;
-        VAOBuilder builder = this.context.getVAO().setup(this.shaders.vertexUVRGBA);
+        Shader shader = this.context.getShaders().get(VBOAttributes.VERTEX_UV_RGBA);
+        VAOBuilder builder = this.context.getVAO().setup(shader);
         String label = "(" + MathUtils.toChunk(x, s) + ", " + MathUtils.toChunk(y, s) + ", " + MathUtils.toChunk(z, s) + ")";
         float scale = 1 / 16F;
 
@@ -580,8 +641,6 @@ public class SandboxRenderer implements IComponent
         stack.scale(scale, -scale, scale);
         stack.rotateY(-camera.rotation.y);
         stack.rotateX(camera.rotation.x);
-
-        Shader shader = this.shaders.vertexUVRGBA;
 
         CommonShaderAccess.setModelView(shader, stack);
 

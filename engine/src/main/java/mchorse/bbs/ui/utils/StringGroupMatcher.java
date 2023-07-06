@@ -1,6 +1,5 @@
 package mchorse.bbs.ui.utils;
 
-import mchorse.bbs.ui.framework.elements.input.text.utils.Cursor;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.math.MathUtils;
 

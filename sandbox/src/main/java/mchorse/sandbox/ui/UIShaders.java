@@ -1,4 +1,4 @@
-package mchorse.sandbox.shaders;
+package mchorse.sandbox.ui;
 
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
@@ -9,7 +9,7 @@ import mchorse.bbs.resources.Link;
 import mchorse.sandbox.Sandbox;
 import org.joml.Matrix4f;
 
-public class ShadersUI
+public class UIShaders
 {
     /**
      * Projection view UBO (32 bits, projection and view matrices)
@@ -88,14 +88,14 @@ public class ShadersUI
      */
     public Shader pickingPreview;
 
-    public ShadersUI()
+    public UIShaders()
     {
         this.ubo = new ProjectionViewUBO(1);
         this.ubo.init();
         this.ubo.bindUnit();
 
         this.vertexRGBA2D = new Shader(Link.assets("shaders/ui/vertex_rgba_2d.glsl"), VBOAttributes.VERTEX_RGBA_2D);
-        this.vertexRGBA = new Shader(Sandbox.link("shaders/world/vertex_rgba.glsl"), VBOAttributes.VERTEX_RGBA);
+        this.vertexRGBA = new Shader(Link.assets("shaders/ui/vertex_rgba.glsl"), VBOAttributes.VERTEX_RGBA);
         this.vertexUVRGBA2D = new Shader(Link.assets("shaders/ui/vertex_uv_rgba_2d.glsl"), VBOAttributes.VERTEX_UV_RGBA_2D);
         this.vertexUVRGBA = new Shader(Link.assets("shaders/ui/vertex_uv_rgba.glsl"), VBOAttributes.VERTEX_UV_RGBA);
         this.vertexNormalUVRGBA = new Shader(Link.assets("shaders/ui/vertex_normal_uv_rgba.glsl"), VBOAttributes.VERTEX_NORMAL_UV_RGBA);

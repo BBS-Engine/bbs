@@ -320,13 +320,6 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
         this.forceLoadJS();
         Sandbox.PROFILER.endBegin("init_callbacks");
         this.registerSettingsCallbacks();
-
-        /* FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(new File("C:\\Users\\Admin\\Documents\\Studio\\Footage\\bbs_27.mp4"));
-        Texture texture = BBS.getTextures().createTexture(Link.create("test:test"));
-
-        grabber.start();
-
-        new VideoPlaybackThread(grabber, texture); */
     }
 
     private void updateWindowIcon()

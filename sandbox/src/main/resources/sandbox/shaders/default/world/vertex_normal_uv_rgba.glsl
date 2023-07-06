@@ -1,12 +1,11 @@
 #version 330
 
 //@vertex
-#import "assets:shaders/formats/vertex_normal_uv_light_rgba.glsl"
+#import "assets:shaders/formats/vertex_normal_uv_rgba.glsl"
 
 out vec4 pass_vertex;
 out vec3 pass_normal;
 out vec2 pass_uv;
-out vec2 pass_light;
 out vec4 pass_rgba;
 
 uniform mat4 u_model;
@@ -27,7 +26,6 @@ void main()
     pass_vertex = u_model * vertex;
     pass_normal = normalize(u_normal * in_normal);
     pass_uv = in_uv;
-    pass_light = in_light;
     pass_rgba = in_rgba;
 }
 
@@ -35,13 +33,13 @@ void main()
 in vec4 pass_vertex;
 in vec3 pass_normal;
 in vec2 pass_uv;
-in vec2 pass_light;
 in vec4 pass_rgba;
 
-#import "sandbox:shaders/gbuffer_format.glsl"
+#import "sandbox:shaders/default/gbuffer_format.glsl"
 
 uniform vec4 u_color;
 uniform sampler2D u_texture;
+uniform vec2 u_lightmap_coords;
 
 void main()
 {
@@ -51,9 +49,9 @@ void main()
     {
         discard;
     }
-    
+
     out_color = albedo * pass_rgba;
     out_vertex = vec4(pass_vertex.xyz, 1);
     out_normal = vec4(pass_normal, 1);
-    out_lighting = vec4(pass_light, 0, 1);
+    out_lighting = vec4(u_lightmap_coords, 0, 1);
 }

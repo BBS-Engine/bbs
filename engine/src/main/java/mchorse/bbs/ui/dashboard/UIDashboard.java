@@ -479,7 +479,6 @@ public class UIDashboard extends UIBaseMenu
         Shader shader = context.getShaders().get(VBOAttributes.VERTEX_RGBA);
 
         CommonShaderAccess.setModelView(shader, context.stack);
-        CommonShaderAccess.resetColor(shader);
 
         context.stack.pop();
 

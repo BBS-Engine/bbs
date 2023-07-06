@@ -24,9 +24,7 @@ public class Texture implements IDisposable
     private boolean mipmap;
     private boolean refreshable = true;
 
-    private int internalFormat = GL11.GL_RGBA8;
-    private int format = GL11.GL_RGBA;
-    private int type = GL11.GL_UNSIGNED_BYTE;
+    private TextureFormat format = TextureFormat.RGBA_U8;
 
     public Texture()
     {
@@ -80,11 +78,9 @@ public class Texture implements IDisposable
         GL11.glBindTexture(this.target, 0);
     }
 
-    public void setFormat(int internalFormat, int format, int type)
+    public void setFormat(TextureFormat format)
     {
-        this.internalFormat = internalFormat;
         this.format = format;
-        this.type = type;
     }
 
     public int getFilter()
@@ -126,7 +122,7 @@ public class Texture implements IDisposable
         this.width = width;
         this.height = height;
 
-        GL11.glTexImage2D(this.target, 0, this.internalFormat, width, height, 0, this.format, this.type, 0);
+        GL11.glTexImage2D(this.target, 0, this.format.internal, width, height, 0, this.format.format, this.format.type, 0);
     }
 
     public void updateTexture(Pixels pixels)
@@ -151,10 +147,7 @@ public class Texture implements IDisposable
 
     public void uploadTexture(int target, int level, Pixels pixels)
     {
-        int internal = pixels.bits == 4 ? GL11.GL_RGBA8 : GL11.GL_RGB8;
-        int format = pixels.bits == 4 ? GL11.GL_RGBA : GL11.GL_RGB;
-
-        this.setFormat(internal, format, GL11.GL_UNSIGNED_BYTE);
+        this.setFormat(pixels.bits == 4 ? TextureFormat.RGBA_U8 : TextureFormat.RGB_U8);
         this.uploadTexture(target, level, pixels.width, pixels.height, pixels.getBuffer());
 
         pixels.delete();
@@ -162,7 +155,7 @@ public class Texture implements IDisposable
 
     public void uploadTexture(int target, int level, int w, int h, ByteBuffer buffer)
     {
-        GL11.glTexImage2D(target, level, this.internalFormat, w, h, 0, this.format, this.type, buffer);
+        GL11.glTexImage2D(target, level, this.format.internal, w, h, 0, this.format.format, this.format.type, buffer);
 
         if (level == 0)
         {
