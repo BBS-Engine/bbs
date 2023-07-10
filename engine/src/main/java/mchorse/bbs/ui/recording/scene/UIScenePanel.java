@@ -13,7 +13,6 @@ import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.recording.data.Frame;
 import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.recording.scene.Replay;
-import mchorse.bbs.recording.scene.ReplayGroup;
 import mchorse.bbs.recording.scene.Scene;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.UIKeys;
@@ -22,7 +21,6 @@ import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.forms.UIFormPalette;
 import mchorse.bbs.ui.forms.UINestedEdit;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
@@ -44,8 +42,7 @@ import java.util.List;
 
 public class UIScenePanel extends UIDataDashboardPanel<Scene>
 {
-    private UIElement groups;
-    private UIElement replays;
+    private UIReplayList replays;
     private UIScrollView replayEditor;
 
     /* Settings fields */
@@ -60,7 +57,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
     public UIToggle invisible;
     public UIToggle enabled;
 
-    public UIIcon add;
     public UIIcon record;
     public UIIcon edit;
     public UIIcon rename;
@@ -75,13 +71,12 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
     {
         super(dashboard);
 
-        this.groups = UI.scrollView(5, 10);
-        this.groups.relative(this.editor).w(1F, -140).h(1F);
-        this.replays = new UIElement().noCulling();
+        this.replays = new UIReplayList((l) -> this.setReplay(l.get(0)), this);
+        this.replays.background(0x44000000).relative(this.editor).y(1F, -80).w(1F).h(80);
         this.replayEditor = UI.scrollView(5, 10);
-        this.replayEditor.relative(this.editor).x(1F, -140).w(140).h(1F);
+        this.replayEditor.relative(this.editor).x(1F, -140).w(140).h(1F, -80);
 
-        this.editor.add(this.replays);
+        this.editor.add(this.replayEditor, this.replays);
 
         /* Settings options */
         this.onStart = new UITrigger();
@@ -119,15 +114,8 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
         this.replayEditor.add(this.pickMorph, this.recordingId, this.id);
         this.replayEditor.add(UI.label(UIKeys.SCENE_NAME).color(Colors.LIGHTEST_GRAY), this.name);
         this.replayEditor.add(this.invisible, this.enabled);
-        this.replays.add(this.groups, this.replayEditor);
+        this.replays.add(this.replayEditor);
 
-        this.add = new UIIcon(Icons.ADD, (b) ->
-        {
-            this.data.groups.add(new ReplayGroup(this.data));
-
-            this.fillGroups();
-        });
-        this.add.tooltip(UIKeys.SCENE_ADD_GROUP, Direction.LEFT);
         this.record = new UIIcon(Icons.SPHERE, (b) ->
         {
             this.record();
@@ -147,7 +135,7 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
         this.options.fields.add(UI.label(UIKeys.SCENE_START_COMMAND).marginTop(8), this.onStart);
         this.options.fields.add(UI.label(UIKeys.SCENE_STOP_COMMAND).marginTop(8), this.onStop);
 
-        this.iconBar.add(this.add, this.record, this.edit, this.rename, this.teleport);
+        this.iconBar.add(this.record, this.edit, this.rename, this.teleport);
         this.overlay.namesList.setFileIcon(Icons.SCENE);
 
         this.fill(null);
@@ -252,7 +240,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
         super.fill(data);
 
         this.editor.setVisible(data != null);
-        this.add.setEnabled(data != null);
         this.record.setEnabled(data != null);
         this.edit.setEnabled(data != null);
         this.rename.setEnabled(data != null);
@@ -260,8 +247,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
 
         if (this.data != null)
         {
-            this.fillGroups();
-
             List<Replay> replays = this.data.getAllReplays();
 
             if (!replays.isEmpty())
@@ -295,25 +280,11 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
                 this.setReplay(null);
             }
 
+            this.replays.setList(replays);
             this.onStart.set(this.data.onStart);
             this.onStop.set(this.data.onStop);
             this.loops.setValue(this.data.loops);
         }
-    }
-
-    private void fillGroups()
-    {
-        this.groups.removeAll();
-
-        for (ReplayGroup group : this.data.groups)
-        {
-            UIReplayGroup element = new UIReplayGroup(this);
-
-            element.setGroup(group);
-            this.groups.add(element);
-        }
-
-        this.resize();
     }
 
     public void setReplay(Replay replay)
@@ -329,12 +300,9 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
 
         this.replay = replay;
 
-        this.fillReplayData();
+        this.replays.setCurrentScroll(replay);
 
-        for (UIReplayGroup group : this.groups.getChildren(UIReplayGroup.class))
-        {
-            group.select(replay);
-        }
+        this.fillReplayData();
     }
 
     private void fillReplayData()

@@ -237,7 +237,7 @@ public class UITrackpadComponent extends UIComponent
     @DiscardMethod
     protected UIElement subCreate(UserInterfaceContext context)
     {
-        UITrackpad element = new UITrackpad((Consumer<Double>) null);
+        UITrackpad element = new UITrackpad();
 
         element.callback = (v) ->
         {

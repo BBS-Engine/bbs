@@ -17,7 +17,7 @@ public class UINumberOverlayPanel extends UIMessageBarOverlayPanel
         super(title, message);
 
         this.callback = callback;
-        this.value = new UITrackpad((Consumer<Double>) null);
+        this.value = new UITrackpad();
 
         this.bar.prepend(this.value);
     }

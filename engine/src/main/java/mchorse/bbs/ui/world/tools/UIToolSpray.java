@@ -19,7 +19,7 @@ public class UIToolSpray extends UIToolProcessorPainter
     {
         super(editor);
 
-        this.chance = new UITrackpad(null);
+        this.chance = new UITrackpad();
         this.chance.setValue(30);
         this.chance.limit(0D, 100D);
 

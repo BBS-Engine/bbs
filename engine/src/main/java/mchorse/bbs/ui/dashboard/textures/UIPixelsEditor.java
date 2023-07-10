@@ -58,7 +58,7 @@ public class UIPixelsEditor extends UICanvasEditor
     {
         super();
 
-        this.brightness = new UITrackpad(null);
+        this.brightness = new UITrackpad();
         this.brightness.limit(0, 1).setValue(0.7);
         this.brightness.tooltip(UIKeys.TEXTURES_VIEWER_BRIGHTNESS, Direction.TOP);
 

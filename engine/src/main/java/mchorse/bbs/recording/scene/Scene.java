@@ -28,7 +28,7 @@ public class Scene extends AbstractData
     public static final Pattern NUMBERED_SUFFIX = Pattern.compile("_(\\d+)$");
     public static final Pattern PREFIX = Pattern.compile("^(.+)_([^_]+)$");
 
-    public List<ReplayGroup> groups = new ArrayList<ReplayGroup>();
+    public List<Replay> replays = new ArrayList<Replay>();
     public Trigger onStart = new Trigger();
     public Trigger onStop = new Trigger();
     public boolean loops;
@@ -71,15 +71,6 @@ public class Scene extends AbstractData
      */
     private World world;
 
-    public Scene()
-    {
-        ReplayGroup first = new ReplayGroup(this);
-
-        first.title = "Default";
-
-        this.groups.add(first);
-    }
-
     public Scene recording()
     {
         this.recording = true;
@@ -89,33 +80,18 @@ public class Scene extends AbstractData
 
     public List<Replay> getAllReplays()
     {
-        List<Replay> replays = new ArrayList<Replay>();
-
-        for (ReplayGroup group : this.groups)
-        {
-            replays.addAll(group.replays);
-        }
-
-        return replays;
+        return this.replays;
     }
 
     public List<Replay> getAllEnabledReplays()
     {
         List<Replay> replays = new ArrayList<Replay>();
 
-        for (ReplayGroup group : this.groups)
+        for (Replay replay : this.replays)
         {
-            if (!group.enabled)
+            if (replay.enabled)
             {
-                continue;
-            }
-
-            for (Replay replay : group.replays)
-            {
-                if (replay.enabled)
-                {
-                    replays.add(replay);
-                }
+                replays.add(replay);
             }
         }
 
@@ -259,21 +235,18 @@ public class Scene extends AbstractData
      */
     public void startPlayback(int tick)
     {
-        if (this.playing || this.groups.isEmpty())
+        if (this.playing || this.replays.isEmpty())
         {
             return;
         }
 
-        for (ReplayGroup group : this.groups)
+        for (Replay replay : this.replays)
         {
-            for (Replay replay : group.replays)
+            if (replay.id.isEmpty())
             {
-                if (replay.id.isEmpty())
-                {
-                    this.world.bridge.get(IBridgeWorld.class).sendMessage(RecordManager.EMPTY_FILENAME);
+                this.world.bridge.get(IBridgeWorld.class).sendMessage(RecordManager.EMPTY_FILENAME);
 
-                    return;
-                }
+                return;
             }
         }
 
@@ -335,7 +308,7 @@ public class Scene extends AbstractData
      */
     public boolean spawn(int tick)
     {
-        if (this.groups.isEmpty())
+        if (this.replays.isEmpty())
         {
             return false;
         }
@@ -657,8 +630,8 @@ public class Scene extends AbstractData
             return;
         }
 
-        this.groups.clear();
-        this.groups.addAll(scene.groups);
+        this.replays.clear();
+        this.replays.addAll(scene.replays);
 
         this.loops = scene.loops;
         this.onStart.copy(scene.onStart);
@@ -668,14 +641,14 @@ public class Scene extends AbstractData
     @Override
     public void toData(MapType data)
     {
-        ListType groups = new ListType();
+        ListType replays = new ListType();
 
-        for (ReplayGroup group : this.groups)
+        for (Replay replay : this.replays)
         {
-            groups.add(group.toData());
+            replays.add(replay.toData());
         }
 
-        data.put("groups", groups);
+        data.put("replays", replays);
         data.putBool("loops", this.loops);
         data.put("onStart", this.onStart.toData());
         data.put("onStop", this.onStop.toData());
@@ -684,16 +657,16 @@ public class Scene extends AbstractData
     @Override
     public void fromData(MapType data)
     {
-        this.groups.clear();
+        this.replays.clear();
 
-        ListType replays = data.getList("groups");
+        ListType replays = data.getList("replays");
 
         for (int i = 0; i < replays.size(); i++)
         {
-            ReplayGroup group = new ReplayGroup(this);
+            Replay replay = new Replay("");
 
-            group.fromData(replays.getMap(i));
-            this.groups.add(group);
+            replay.fromData(replays.getMap(i));
+            this.replays.add(replay);
         }
 
         this.loops = data.getBool("loops");
