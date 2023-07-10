@@ -32,7 +32,6 @@ import mchorse.bbs.cubic.model.ModelManager;
 import mchorse.bbs.events.register.RegisterCoreEvent;
 import mchorse.bbs.events.register.RegisterFactoriesEvent;
 import mchorse.bbs.events.register.RegisterFormsEvent;
-import mchorse.bbs.events.register.RegisterItemsEvent;
 import mchorse.bbs.events.register.RegisterL10nEvent;
 import mchorse.bbs.events.register.RegisterSettingsEvent;
 import mchorse.bbs.forms.FormArchitect;
@@ -42,87 +41,11 @@ import mchorse.bbs.forms.categories.ParticleFormCategory;
 import mchorse.bbs.forms.categories.RecentFormCategory;
 import mchorse.bbs.forms.forms.BillboardForm;
 import mchorse.bbs.forms.forms.BlockForm;
-import mchorse.bbs.forms.forms.ItemForm;
 import mchorse.bbs.forms.forms.LabelForm;
 import mchorse.bbs.forms.forms.LightForm;
 import mchorse.bbs.forms.forms.ModelForm;
 import mchorse.bbs.forms.forms.ParticleForm;
 import mchorse.bbs.forms.forms.StructureForm;
-import mchorse.bbs.game.conditions.ConditionFactoryData;
-import mchorse.bbs.game.conditions.blocks.ConditionBlock;
-import mchorse.bbs.game.conditions.blocks.ConditionConditionBlock;
-import mchorse.bbs.game.conditions.blocks.DialogueConditionBlock;
-import mchorse.bbs.game.conditions.blocks.EntityConditionBlock;
-import mchorse.bbs.game.conditions.blocks.FormConditionBlock;
-import mchorse.bbs.game.conditions.blocks.ItemConditionBlock;
-import mchorse.bbs.game.conditions.blocks.QuestConditionBlock;
-import mchorse.bbs.game.conditions.blocks.ScriptConditionBlock;
-import mchorse.bbs.game.conditions.blocks.StateConditionBlock;
-import mchorse.bbs.game.controllers.IGameController;
-import mchorse.bbs.game.controllers.SideScrollerGameController;
-import mchorse.bbs.game.controllers.ThirdPersonGameController;
-import mchorse.bbs.game.controllers.TopDownGameController;
-import mchorse.bbs.game.dialogues.DialogueFactoryData;
-import mchorse.bbs.game.dialogues.nodes.CraftingNode;
-import mchorse.bbs.game.dialogues.nodes.QuestChainNode;
-import mchorse.bbs.game.dialogues.nodes.QuestNode;
-import mchorse.bbs.game.dialogues.nodes.ReactionNode;
-import mchorse.bbs.game.dialogues.nodes.ReplyNode;
-import mchorse.bbs.game.entities.components.NpcComponent;
-import mchorse.bbs.game.entities.components.PlayerComponent;
-import mchorse.bbs.game.events.nodes.CancelNode;
-import mchorse.bbs.game.events.nodes.ConditionNode;
-import mchorse.bbs.game.events.nodes.EventBaseNode;
-import mchorse.bbs.game.events.nodes.SwitchNode;
-import mchorse.bbs.game.events.nodes.TriggerNode;
-import mchorse.bbs.game.items.Item;
-import mchorse.bbs.game.items.ItemManager;
-import mchorse.bbs.game.items.ItemTrigger;
-import mchorse.bbs.game.quests.objectives.CollectObjective;
-import mchorse.bbs.game.quests.objectives.KillObjective;
-import mchorse.bbs.game.quests.objectives.Objective;
-import mchorse.bbs.game.quests.objectives.StateObjective;
-import mchorse.bbs.game.quests.rewards.ItemStackReward;
-import mchorse.bbs.game.quests.rewards.Reward;
-import mchorse.bbs.game.regions.shapes.BoxShape;
-import mchorse.bbs.game.regions.shapes.CylinderShape;
-import mchorse.bbs.game.regions.shapes.Shape;
-import mchorse.bbs.game.regions.shapes.SphereShape;
-import mchorse.bbs.game.scripts.ui.UserInterfaceTriggerBlock;
-import mchorse.bbs.game.scripts.ui.components.UIButtonComponent;
-import mchorse.bbs.game.scripts.ui.components.UIClickComponent;
-import mchorse.bbs.game.scripts.ui.components.UIComponent;
-import mchorse.bbs.game.scripts.ui.components.UIFormComponent;
-import mchorse.bbs.game.scripts.ui.components.UIGraphicsComponent;
-import mchorse.bbs.game.scripts.ui.components.UIIconButtonComponent;
-import mchorse.bbs.game.scripts.ui.components.UILabelComponent;
-import mchorse.bbs.game.scripts.ui.components.UILayoutComponent;
-import mchorse.bbs.game.scripts.ui.components.UISlotComponent;
-import mchorse.bbs.game.scripts.ui.components.UIStringListComponent;
-import mchorse.bbs.game.scripts.ui.components.UITextComponent;
-import mchorse.bbs.game.scripts.ui.components.UITextareaComponent;
-import mchorse.bbs.game.scripts.ui.components.UITextboxComponent;
-import mchorse.bbs.game.scripts.ui.components.UIToggleComponent;
-import mchorse.bbs.game.scripts.ui.components.UITrackpadComponent;
-import mchorse.bbs.game.scripts.ui.graphics.GradientGraphic;
-import mchorse.bbs.game.scripts.ui.graphics.Graphic;
-import mchorse.bbs.game.scripts.ui.graphics.IconGraphic;
-import mchorse.bbs.game.scripts.ui.graphics.ImageGraphic;
-import mchorse.bbs.game.scripts.ui.graphics.RectGraphic;
-import mchorse.bbs.game.scripts.ui.graphics.ShadowGraphic;
-import mchorse.bbs.game.scripts.ui.graphics.TextGraphic;
-import mchorse.bbs.game.triggers.TriggerFactoryData;
-import mchorse.bbs.game.triggers.blocks.AnimationTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.CameraTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.DialogueTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.FormTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.HUDSceneTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.ItemTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.ScriptTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.SoundTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.StateTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.TriggerBlock;
-import mchorse.bbs.game.utils.factory.MapFactory;
 import mchorse.bbs.graphics.FramebufferManager;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.ShaderManager;
@@ -168,51 +91,11 @@ import mchorse.bbs.ui.font.format.UIBaseFontFormat;
 import mchorse.bbs.ui.font.format.UIColorFontFormat;
 import mchorse.bbs.ui.forms.editors.forms.UIBillboardForm;
 import mchorse.bbs.ui.forms.editors.forms.UIBlockForm;
-import mchorse.bbs.ui.forms.editors.forms.UIItemForm;
 import mchorse.bbs.ui.forms.editors.forms.UILabelForm;
 import mchorse.bbs.ui.forms.editors.forms.UILightForm;
 import mchorse.bbs.ui.forms.editors.forms.UIModelForm;
 import mchorse.bbs.ui.forms.editors.forms.UIParticleForm;
 import mchorse.bbs.ui.forms.editors.forms.UIStructureForm;
-import mchorse.bbs.ui.game.conditions.blocks.UIConditionConditionBlockPanel;
-import mchorse.bbs.ui.game.conditions.blocks.UIDialogueConditionBlockPanel;
-import mchorse.bbs.ui.game.conditions.blocks.UIEntityConditionBlockPanel;
-import mchorse.bbs.ui.game.conditions.blocks.UIFormConditionBlockPanel;
-import mchorse.bbs.ui.game.conditions.blocks.UIItemConditionBlockPanel;
-import mchorse.bbs.ui.game.conditions.blocks.UIQuestConditionBlockPanel;
-import mchorse.bbs.ui.game.conditions.blocks.UIScriptConditionBlockPanel;
-import mchorse.bbs.ui.game.conditions.blocks.UIStateConditionBlockPanel;
-import mchorse.bbs.ui.game.controllers.UIBaseGameControllerPanel;
-import mchorse.bbs.ui.game.controllers.UIThirdPersonGameControllerPanel;
-import mchorse.bbs.ui.game.controllers.UITopDownGameControllerPanel;
-import mchorse.bbs.ui.game.items.UIItemEditor;
-import mchorse.bbs.ui.game.items.UIItemTriggerEditor;
-import mchorse.bbs.ui.game.nodes.dialogues.UICraftingNodePanel;
-import mchorse.bbs.ui.game.nodes.dialogues.UIDialogueNodePanel;
-import mchorse.bbs.ui.game.nodes.dialogues.UIQuestChainNodePanel;
-import mchorse.bbs.ui.game.nodes.dialogues.UIQuestDialogueNodePanel;
-import mchorse.bbs.ui.game.nodes.dialogues.UIReactionNodePanel;
-import mchorse.bbs.ui.game.nodes.events.UICancelNodePanel;
-import mchorse.bbs.ui.game.nodes.events.UIConditionNodePanel;
-import mchorse.bbs.ui.game.nodes.events.UISwitchNodePanel;
-import mchorse.bbs.ui.game.nodes.events.UITriggerNodePanel;
-import mchorse.bbs.ui.game.quests.objectives.UICollectObjective;
-import mchorse.bbs.ui.game.quests.objectives.UIKillObjective;
-import mchorse.bbs.ui.game.quests.objectives.UIObjective;
-import mchorse.bbs.ui.game.quests.objectives.UIStateObjective;
-import mchorse.bbs.ui.game.quests.rewards.UIItemStackReward;
-import mchorse.bbs.ui.game.quests.rewards.UIReward;
-import mchorse.bbs.ui.game.scripts.themes.Themes;
-import mchorse.bbs.ui.game.triggers.panels.UIAnimationTriggerBlockPanel;
-import mchorse.bbs.ui.game.triggers.panels.UICameraTriggerBlockPanel;
-import mchorse.bbs.ui.game.triggers.panels.UIDialogueTriggerBlockPanel;
-import mchorse.bbs.ui.game.triggers.panels.UIFormTriggerBlockPanel;
-import mchorse.bbs.ui.game.triggers.panels.UIHUDSceneTriggerBlockPanel;
-import mchorse.bbs.ui.game.triggers.panels.UIItemTriggerBlockPanel;
-import mchorse.bbs.ui.game.triggers.panels.UIScriptTriggerBlockPanel;
-import mchorse.bbs.ui.game.triggers.panels.UISoundTriggerBlockPanel;
-import mchorse.bbs.ui.game.triggers.panels.UIStateTriggerBlockPanel;
-import mchorse.bbs.ui.game.triggers.panels.UIUserInterfaceTriggerBlockPanel;
 import mchorse.bbs.ui.recording.editor.actions.UIFormActionPanel;
 import mchorse.bbs.ui.recording.scene.UIAudioClip;
 import mchorse.bbs.ui.recording.scene.UISceneClip;
@@ -221,38 +104,15 @@ import mchorse.bbs.ui.tileset.panels.UIModelBlockEach;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockFactory;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockVertical;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockWithCollision;
-import mchorse.bbs.ui.ui.components.UIButtonComponentPanel;
-import mchorse.bbs.ui.ui.components.UIComponentPanel;
-import mchorse.bbs.ui.ui.components.UIFormComponentPanel;
-import mchorse.bbs.ui.ui.components.UIGraphicsComponentPanel;
-import mchorse.bbs.ui.ui.components.UIIconButtonComponentPanel;
-import mchorse.bbs.ui.ui.components.UILabelBaseComponentPanel;
-import mchorse.bbs.ui.ui.components.UILabelComponentPanel;
-import mchorse.bbs.ui.ui.components.UILayoutComponentPanel;
-import mchorse.bbs.ui.ui.components.UISlotComponentPanel;
-import mchorse.bbs.ui.ui.components.UIStringListComponentPanel;
-import mchorse.bbs.ui.ui.components.UITextComponentPanel;
-import mchorse.bbs.ui.ui.components.UITextboxComponentPanel;
-import mchorse.bbs.ui.ui.components.UIToggleComponentPanel;
-import mchorse.bbs.ui.ui.components.UITrackpadComponentPanel;
-import mchorse.bbs.ui.ui.graphics.UIGradientGraphicPanel;
-import mchorse.bbs.ui.ui.graphics.UIGraphicPanel;
-import mchorse.bbs.ui.ui.graphics.UIIconGraphicPanel;
-import mchorse.bbs.ui.ui.graphics.UIImageGraphicPanel;
-import mchorse.bbs.ui.ui.graphics.UIShadowGraphicPanel;
-import mchorse.bbs.ui.ui.graphics.UITextGraphicPanel;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.keys.KeybindSettings;
 import mchorse.bbs.ui.world.entities.components.UIBasicEntityComponent;
 import mchorse.bbs.ui.world.entities.components.UIEntityComponent;
 import mchorse.bbs.ui.world.entities.components.UIFormEntityComponent;
-import mchorse.bbs.ui.world.entities.components.UIItemEntityComponent;
 import mchorse.bbs.ui.world.objects.objects.UICameraWorldObject;
 import mchorse.bbs.ui.world.objects.objects.UIPropWorldObject;
-import mchorse.bbs.ui.world.objects.objects.UIRegionWorldObject;
-import mchorse.bbs.ui.world.objects.objects.UITriggerWorldObject;
 import mchorse.bbs.ui.world.objects.objects.UIWorldObject;
-import mchorse.bbs.utils.colors.Colors;
+import mchorse.bbs.utils.factory.MapFactory;
 import mchorse.bbs.voxel.StructureManager;
 import mchorse.bbs.voxel.generation.Generator;
 import mchorse.bbs.voxel.generation.GeneratorDefault;
@@ -272,11 +132,8 @@ import mchorse.bbs.world.entities.components.BasicComponent;
 import mchorse.bbs.world.entities.components.CollisionComponent;
 import mchorse.bbs.world.entities.components.Component;
 import mchorse.bbs.world.entities.components.FormComponent;
-import mchorse.bbs.world.entities.components.ItemComponent;
 import mchorse.bbs.world.objects.CameraObject;
 import mchorse.bbs.world.objects.PropObject;
-import mchorse.bbs.world.objects.RegionObject;
-import mchorse.bbs.world.objects.TriggerObject;
 import mchorse.bbs.world.objects.WorldObject;
 import org.greenrobot.eventbus.EventBus;
 
@@ -312,29 +169,18 @@ public class BBS
     private static SettingsManager configs;
     private static FormArchitect forms;
     private static ModelManager models;
-    private static ItemManager items;
     private static RenderingContext render = new RenderingContext();
     private static L10n l10n;
     private static StructureManager structures;
 
     /* Data factories */
-    private static MapFactory<EventBaseNode, DialogueFactoryData> factoryDialogues;
-    private static MapFactory<ConditionBlock, ConditionFactoryData> factoryConditions;
-    private static MapFactory<TriggerBlock, TriggerFactoryData> factoryTriggers;
-    private static MapFactory<UIComponent, Class<? extends UIComponentPanel>> factoryUIComponents;
-    private static MapFactory<Shape, Void> factoryShapes;
-    private static MapFactory<Graphic, Class<? extends UIGraphicPanel>> factoryGraphics;
-    private static MapFactory<Objective, Class<? extends UIObjective>> factoryObjectives;
-    private static MapFactory<Reward, Class<? extends UIReward>> factoryRewards;
     private static MapFactory<WorldObject, Class<? extends UIWorldObject>> factoryWorldObjects;
     private static MapFactory<Clip, ClipFactoryData> factoryClips;
     private static MapFactory<Action, ActionFactoryData> factoryActions;
-    private static MapFactory<Item, Class<? extends UIItemEditor>> factoryItems;
     private static MapFactory<BlockModelFactory, BlockModelFactoryData> factoryBlockModels;
     private static MapFactory<Generator, Void> factoryGenerators;
     private static MapFactory<Component, Class<? extends UIEntityComponent>> factoryEntityComponents;
     private static MapFactory<IFontFormat, Class<? extends UIBaseFontFormat>> factoryFontFormats;
-    private static MapFactory<IGameController, Class<? extends UIBaseGameControllerPanel>> factoryGameControllers;
 
     /* Getters */
 
@@ -459,11 +305,6 @@ public class BBS
         return models;
     }
 
-    public static ItemManager getItems()
-    {
-        return items;
-    }
-
     public static RenderingContext getRender()
     {
         return render;
@@ -479,46 +320,6 @@ public class BBS
         return structures;
     }
 
-    public static MapFactory<EventBaseNode, DialogueFactoryData> getFactoryDialogues()
-    {
-        return factoryDialogues;
-    }
-
-    public static MapFactory<ConditionBlock, ConditionFactoryData> getFactoryConditions()
-    {
-        return factoryConditions;
-    }
-
-    public static MapFactory<TriggerBlock, TriggerFactoryData> getFactoryTriggers()
-    {
-        return factoryTriggers;
-    }
-
-    public static MapFactory<UIComponent, Class<? extends UIComponentPanel>> getFactoryUIComponents()
-    {
-        return factoryUIComponents;
-    }
-
-    public static MapFactory<Shape, Void> getFactoryShapes()
-    {
-        return factoryShapes;
-    }
-
-    public static MapFactory<Graphic, Class<? extends UIGraphicPanel>> getFactoryGraphics()
-    {
-        return factoryGraphics;
-    }
-
-    public static MapFactory<Objective, Class<? extends UIObjective>> getFactoryObjectives()
-    {
-        return factoryObjectives;
-    }
-
-    public static MapFactory<Reward, Class<? extends UIReward>> getFactoryRewards()
-    {
-        return factoryRewards;
-    }
-
     public static MapFactory<WorldObject, Class<? extends UIWorldObject>> getFactoryWorldObjects()
     {
         return factoryWorldObjects;
@@ -532,11 +333,6 @@ public class BBS
     public static MapFactory<Action, ActionFactoryData> getFactoryActions()
     {
         return factoryActions;
-    }
-
-    public static MapFactory<Item, Class<? extends UIItemEditor>> getFactoryItems()
-    {
-        return factoryItems;
     }
 
     public static MapFactory<BlockModelFactory, BlockModelFactoryData> getFactoryBlockModels()
@@ -557,11 +353,6 @@ public class BBS
     public static MapFactory<IFontFormat, Class<? extends UIBaseFontFormat>> getFactoryFontFormats()
     {
         return factoryFontFormats;
-    }
-
-    public static MapFactory<IGameController, Class<? extends UIBaseGameControllerPanel>> getFactoryGameControllers()
-    {
-        return factoryGameControllers;
     }
 
     /**
@@ -595,12 +386,10 @@ public class BBS
     {
         configs = new SettingsManager();
         models = new ModelManager(provider);
-        items = new ItemManager();
         l10n = new L10n();
         structures = new StructureManager(BBS.getConfigPath("structures"));
 
         setupForms(forms);
-        setupItems(items);
         setupL10n(l10n);
         setupConfigs(configFolder);
     }
@@ -609,7 +398,6 @@ public class BBS
     {
         destination.mkdirs();
 
-        Themes.initiate(BBS.configFolder);
         KeybindSettings.registerClasses();
 
         setupConfig("bbs", new File(destination, "bbs.json"), BBSSettings::register);
@@ -636,7 +424,6 @@ public class BBS
         LabelForm label = new LabelForm();
         BlockForm block = new BlockForm();
         StructureForm structure = new StructureForm();
-        ItemForm item = new ItemForm();
         LightForm light = new LightForm();
 
         billboard.texture.set(Link.assets("textures/error.png"));
@@ -645,7 +432,6 @@ public class BBS
         extra.forms.add(label);
         extra.forms.add(block);
         extra.forms.add(structure);
-        extra.forms.add(item);
         extra.forms.add(light);
 
         forms.categories.add(new RecentFormCategory());
@@ -655,11 +441,6 @@ public class BBS
         forms.categories.add(extra);
 
         events.post(new RegisterFormsEvent(forms));
-    }
-
-    private static void setupItems(ItemManager items)
-    {
-        events.post(new RegisterItemsEvent(items));
     }
 
     private static void setupL10n(L10n l10n)
@@ -674,89 +455,9 @@ public class BBS
      */
     public static void registerFactories()
     {
-        /* Register dialogue nodes */
-        factoryDialogues = new MapFactory<EventBaseNode, DialogueFactoryData>()
-            .register(Link.bbs("condition"), ConditionNode.class, new DialogueFactoryData(Colors.CONDITION, UIConditionNodePanel.class))
-            .register(Link.bbs("switch"), SwitchNode.class, new DialogueFactoryData(Colors.FACTION, UISwitchNodePanel.class))
-            .register(Link.bbs("trigger"), TriggerNode.class, new DialogueFactoryData(Colors.STATE, UITriggerNodePanel.class))
-            .register(Link.bbs("cancel"), CancelNode.class, new DialogueFactoryData(Colors.CANCEL, UICancelNodePanel.class))
-            .register(Link.bbs("reply"), ReplyNode.class, new DialogueFactoryData(Colors.REPLY, UIDialogueNodePanel.class))
-            .register(Link.bbs("reaction"), ReactionNode.class, new DialogueFactoryData(Colors.STATE, UIReactionNodePanel.class))
-            .register(Link.bbs("crafting"), CraftingNode.class, new DialogueFactoryData(Colors.CRAFTING, UICraftingNodePanel.class))
-            .register(Link.bbs("quest_chain"), QuestChainNode.class, new DialogueFactoryData(Colors.QUEST, UIQuestChainNodePanel.class))
-            .register(Link.bbs("quest"), QuestNode.class, new DialogueFactoryData(Colors.QUEST, UIQuestDialogueNodePanel.class));
-
-        /* Register condition blocks */
-        factoryConditions = new MapFactory<ConditionBlock, ConditionFactoryData>()
-            .register(Link.bbs("quest"), QuestConditionBlock.class, new ConditionFactoryData(Colors.QUEST, UIQuestConditionBlockPanel.class))
-            .register(Link.bbs("state"), StateConditionBlock.class, new ConditionFactoryData(Colors.STATE, UIStateConditionBlockPanel.class))
-            .register(Link.bbs("dialogue"), DialogueConditionBlock.class, new ConditionFactoryData(Colors.DIALOGUE, UIDialogueConditionBlockPanel.class))
-            .register(Link.bbs("item"), ItemConditionBlock.class, new ConditionFactoryData(Colors.CRAFTING, UIItemConditionBlockPanel.class))
-            .register(Link.bbs("entity"), EntityConditionBlock.class, new ConditionFactoryData(Colors.ENTITY, UIEntityConditionBlockPanel.class))
-            .register(Link.bbs("condition"), ConditionConditionBlock.class, new ConditionFactoryData(Colors.CONDITION, UIConditionConditionBlockPanel.class))
-            .register(Link.bbs("form"), FormConditionBlock.class, new ConditionFactoryData(Colors.FORM, UIFormConditionBlockPanel.class))
-            .register(Link.bbs("script"), ScriptConditionBlock.class, new ConditionFactoryData(Colors.REPLY, UIScriptConditionBlockPanel.class));
-
-        /* Register condition blocks */
-        factoryTriggers = new MapFactory<TriggerBlock, TriggerFactoryData>()
-            .register(Link.bbs("sound"), SoundTriggerBlock.class, new TriggerFactoryData(Colors.REPLY, UISoundTriggerBlockPanel.class))
-            .register(Link.bbs("dialogue"), DialogueTriggerBlock.class, new TriggerFactoryData(Colors.DIALOGUE, UIDialogueTriggerBlockPanel.class))
-            .register(Link.bbs("script"), ScriptTriggerBlock.class, new TriggerFactoryData(Colors.ENTITY, UIScriptTriggerBlockPanel.class))
-            .register(Link.bbs("item"), ItemTriggerBlock.class, new TriggerFactoryData(Colors.CRAFTING, UIItemTriggerBlockPanel.class))
-            .register(Link.bbs("state"), StateTriggerBlock.class, new TriggerFactoryData(Colors.STATE, UIStateTriggerBlockPanel.class))
-            .register(Link.bbs("form"), FormTriggerBlock.class, new TriggerFactoryData(Colors.FORM, UIFormTriggerBlockPanel.class))
-            .register(Link.bbs("camera"), CameraTriggerBlock.class, new TriggerFactoryData(0x159e64, UICameraTriggerBlockPanel.class))
-            .register(Link.bbs("animation"), AnimationTriggerBlock.class, new TriggerFactoryData(0x99e65f, UIAnimationTriggerBlockPanel.class))
-            .register(Link.bbs("hud"), HUDSceneTriggerBlock.class, new TriggerFactoryData(0xc42430, UIHUDSceneTriggerBlockPanel.class))
-            .register(Link.bbs("ui"), UserInterfaceTriggerBlock.class, new TriggerFactoryData(0xfff540, UIUserInterfaceTriggerBlockPanel.class));
-
-        /* Register UI components */
-        factoryUIComponents = new MapFactory<UIComponent, Class<? extends UIComponentPanel>>()
-            .register(Link.bbs("graphics"), UIGraphicsComponent.class, UIGraphicsComponentPanel.class)
-            .register(Link.bbs("button"), UIButtonComponent.class, UIButtonComponentPanel.class)
-            .register(Link.bbs("icon"), UIIconButtonComponent.class, UIIconButtonComponentPanel.class)
-            .register(Link.bbs("label"), UILabelComponent.class, UILabelComponentPanel.class)
-            .register(Link.bbs("text"), UITextComponent.class, UITextComponentPanel.class)
-            .register(Link.bbs("textbox"), UITextboxComponent.class, UITextboxComponentPanel.class)
-            .register(Link.bbs("textarea"), UITextareaComponent.class, UILabelBaseComponentPanel.class)
-            .register(Link.bbs("toggle"), UIToggleComponent.class, UIToggleComponentPanel.class)
-            .register(Link.bbs("trackpad"), UITrackpadComponent.class, UITrackpadComponentPanel.class)
-            .register(Link.bbs("strings"), UIStringListComponent.class, UIStringListComponentPanel.class)
-            .register(Link.bbs("slot"), UISlotComponent.class, UISlotComponentPanel.class)
-            .register(Link.bbs("layout"), UILayoutComponent.class, UILayoutComponentPanel.class)
-            .register(Link.bbs("form"), UIFormComponent.class, UIFormComponentPanel.class)
-            .register(Link.bbs("clickarea"), UIClickComponent.class, UIComponentPanel.class);
-
-        /* Register region shapes */
-        factoryShapes = new MapFactory<Shape, Void>()
-            .register(Link.bbs("box"), BoxShape.class)
-            .register(Link.bbs("sphere"), SphereShape.class)
-            .register(Link.bbs("cylinder"), CylinderShape.class);
-
-        /* Register UI graphics */
-        factoryGraphics = new MapFactory<Graphic, Class<? extends UIGraphicPanel>>()
-            .register(Link.bbs("rect"), RectGraphic.class, UIGraphicPanel.class)
-            .register(Link.bbs("gradient"), GradientGraphic.class, UIGradientGraphicPanel.class)
-            .register(Link.bbs("image"), ImageGraphic.class, UIImageGraphicPanel.class)
-            .register(Link.bbs("text"), TextGraphic.class, UITextGraphicPanel.class)
-            .register(Link.bbs("icon"), IconGraphic.class, UIIconGraphicPanel.class)
-            .register(Link.bbs("shadow"), ShadowGraphic.class, UIShadowGraphicPanel.class);
-
-        /* Register quest objectives */
-        factoryObjectives = new MapFactory<Objective, Class<? extends UIObjective>>()
-            .register(Link.bbs("collect"), CollectObjective.class, UICollectObjective.class)
-            .register(Link.bbs("kill"), KillObjective.class, UIKillObjective.class)
-            .register(Link.bbs("state"), StateObjective.class, UIStateObjective.class);
-
-        /* Register quest rewards */
-        factoryRewards = new MapFactory<Reward, Class<? extends UIReward>>()
-            .register(Link.bbs("items"), ItemStackReward.class, UIItemStackReward.class);
-
         /* Register world objects */
         factoryWorldObjects = new MapFactory<WorldObject, Class<? extends UIWorldObject>>()
             .register(Link.bbs("prop"), PropObject.class, UIPropWorldObject.class)
-            .register(Link.bbs("region"), RegionObject.class, UIRegionWorldObject.class)
-            .register(Link.bbs("trigger"), TriggerObject.class, UITriggerWorldObject.class)
             .register(Link.bbs("camera"), CameraObject.class, UICameraWorldObject.class);
 
         /* Register camera clips */
@@ -795,10 +496,6 @@ public class BBS
         factoryActions = new MapFactory<Action, ActionFactoryData>()
             .register(Link.bbs("form"), FormAction.class, new ActionFactoryData(0xde2e9f, UIFormActionPanel.class));
 
-        /* Register items */
-        factoryItems = new MapFactory<Item, Class<? extends UIItemEditor>>()
-            .register(Link.bbs("trigger"), ItemTrigger.class, UIItemTriggerEditor.class);
-
         /* Register forms */
         forms = new FormArchitect();
         forms
@@ -808,7 +505,6 @@ public class BBS
             .registerEditor(Link.bbs("particle"), (f) -> new UIParticleForm())
             .registerEditor(Link.bbs("block"), (f) -> new UIBlockForm())
             .registerEditor(Link.bbs("structure"), (f) -> new UIStructureForm())
-            .registerEditor(Link.bbs("item"), (f) -> new UIItemForm())
             .registerEditor(Link.bbs("light"), (f) -> new UILightForm())
             .register(Link.bbs("billboard"), BillboardForm.class)
             .register(Link.bbs("label"), LabelForm.class)
@@ -816,7 +512,6 @@ public class BBS
             .register(Link.bbs("particle"), ParticleForm.class)
             .register(Link.bbs("block"), BlockForm.class)
             .register(Link.bbs("structure"), StructureForm.class)
-            .register(Link.bbs("item"), ItemForm.class)
             .register(Link.bbs("light"), LightForm.class);
 
         /* Register block models */
@@ -841,9 +536,6 @@ public class BBS
             .register(Link.bbs("basic"), BasicComponent.class, UIBasicEntityComponent.class)
             .register(Link.bbs("collision"), CollisionComponent.class, null)
             .register(Link.bbs("form"), FormComponent.class, UIFormEntityComponent.class)
-            .register(Link.bbs("item"), ItemComponent.class, UIItemEntityComponent.class)
-            .register(Link.bbs("npc"), NpcComponent.class, null)
-            .register(Link.bbs("player"), PlayerComponent.class, null)
             .register(Link.bbs("record"), RecordComponent.class, null);
 
         /* Register entity components */
@@ -854,12 +546,6 @@ public class BBS
             .register(Link.bbs("rainbow"), RainbowFontFormat.class, UIBaseFontFormat.class)
             .register(Link.bbs("shake"), ShakeFontFormat.class, UIBaseFontFormat.class)
             .register(Link.bbs("wave"), WaveFontFormat.class, UIBaseFontFormat.class);
-
-        /* Register game controllers */
-        factoryGameControllers = new MapFactory<IGameController, Class<? extends UIBaseGameControllerPanel>>()
-            .register(Link.bbs("third_person"), ThirdPersonGameController.class, UIThirdPersonGameControllerPanel.class)
-            .register(Link.bbs("side_scroller"), SideScrollerGameController.class, UIBaseGameControllerPanel.class)
-            .register(Link.bbs("top_down"), TopDownGameController.class, UITopDownGameControllerPanel.class);
 
         events.post(new RegisterFactoriesEvent());
     }
@@ -879,7 +565,6 @@ public class BBS
         shaders.delete();
         textures.delete();
         sounds.delete();
-        items.delete();
         framebuffers.delete();
 
         models.delete();

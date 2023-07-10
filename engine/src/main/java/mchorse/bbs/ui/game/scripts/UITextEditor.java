@@ -1,7 +1,6 @@
 package mchorse.bbs.ui.game.scripts;
 
 import mchorse.bbs.BBS;
-import mchorse.bbs.BBSSettings;
 import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.resources.Link;
@@ -78,7 +77,7 @@ public class UITextEditor extends UITextarea<HighlightedTextLine>
 
     public void updateHighlighter()
     {
-        SyntaxStyle style = BBSSettings.scriptEditorSyntaxStyle.get();
+        SyntaxStyle style = new SyntaxStyle();
 
         if (this.highlighter.getStyle() != style)
         {

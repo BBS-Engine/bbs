@@ -7,7 +7,7 @@ import mchorse.bbs.forms.categories.FormCategory;
 import mchorse.bbs.forms.categories.RecentFormCategory;
 import mchorse.bbs.forms.categories.UserFormCategory;
 import mchorse.bbs.forms.forms.Form;
-import mchorse.bbs.game.utils.factory.MapFactory;
+import mchorse.bbs.utils.factory.MapFactory;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.forms.editors.forms.UIForm;

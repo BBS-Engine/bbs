@@ -1,9 +1,8 @@
 package mchorse.sandbox.bridge;
 
-import mchorse.sandbox.SandboxEngine;
 import mchorse.bbs.bridge.IBridgePlayer;
-import mchorse.bbs.game.player.PlayerData;
 import mchorse.bbs.world.entities.Entity;
+import mchorse.sandbox.SandboxEngine;
 
 public class BridgePlayer extends BaseBridge implements IBridgePlayer
 {
@@ -28,12 +27,6 @@ public class BridgePlayer extends BaseBridge implements IBridgePlayer
     public void setCreative(boolean creative)
     {
         this.engine.controller.setCreative(creative);
-    }
-
-    @Override
-    public PlayerData getPlayerData()
-    {
-        return this.engine.playerData;
     }
 
     @Override

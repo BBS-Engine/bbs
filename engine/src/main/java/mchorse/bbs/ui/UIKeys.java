@@ -1,20 +1,10 @@
 package mchorse.bbs.ui;
 
 import mchorse.bbs.BBS;
-import mchorse.bbs.game.conditions.blocks.ItemConditionBlock;
-import mchorse.bbs.game.conditions.blocks.QuestConditionBlock;
-import mchorse.bbs.game.scripts.ui.utils.LayoutType;
-import mchorse.bbs.game.triggers.blocks.CameraTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.HUDSceneTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.ItemTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.SoundTriggerBlock;
-import mchorse.bbs.game.triggers.blocks.StateTriggerBlock;
-import mchorse.bbs.game.utils.EntityUtils;
-import mchorse.bbs.game.utils.EnumUtils;
-import mchorse.bbs.game.utils.TargetMode;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.l10n.keys.KeyCollection;
 import mchorse.bbs.particles.ParticleCurveType;
+import mchorse.bbs.utils.EnumUtils;
 import mchorse.bbs.utils.keyframes.KeyframeEasing;
 import mchorse.bbs.utils.keyframes.KeyframeInterpolation;
 import mchorse.bbs.utils.math.Interpolation;
@@ -1226,58 +1216,24 @@ public class UIKeys
         .load(BBS.getFactoryActions().getStringKeys());
     public static final KeyCollection C_CLIP = new KeyCollection("bbs.ui.camera.clips.^")
         .load(BBS.getFactoryClips().getStringKeys());
-    public static final KeyCollection C_CONDITION = new KeyCollection("bbs.condition_types.^")
-        .load(BBS.getFactoryConditions().getStringKeys());
     public static final KeyCollection C_ENTITY_COMPONENT = new KeyCollection("bbs.entity_components.^")
         .load(BBS.getFactoryEntityComponents().getStringKeys());
-    public static final KeyCollection C_TRIGGER = new KeyCollection("bbs.trigger_types.^")
-        .load(BBS.getFactoryTriggers().getStringKeys());
-    public static final KeyCollection C_SHAPE = new KeyCollection("bbs.ui.shapes.^")
-        .load(BBS.getFactoryShapes().getStringKeys());
-    public static final KeyCollection C_ITEM = new KeyCollection("bbs.item_types.^")
-        .load(BBS.getFactoryItems().getStringKeys());
     public static final KeyCollection C_BLOCK_MODEL = new KeyCollection("bbs.ui.tile_set.models.^")
         .load(BBS.getFactoryBlockModels().getStringKeys());
-    public static final KeyCollection C_NODE = new KeyCollection("bbs.node_types.^")
-        .load(BBS.getFactoryDialogues().getStringKeys());
     public static final KeyCollection C_WORLD_OBJECT = new KeyCollection("bbs.world_objects.^")
         .load(BBS.getFactoryWorldObjects().getStringKeys());
     public static final KeyCollection C_ENTITIES = new KeyCollection("bbs.entities.^");
     public static final KeyCollection C_FONT_FORMAT = new KeyCollection("bbs.font_format.^")
         .load(BBS.getFactoryFontFormats().getStringKeys());
-    public static final KeyCollection C_UI_COMPONENTS = new KeyCollection("bbs.ui_components.^")
-        .load(BBS.getFactoryUIComponents().getStringKeys());
-    public static final KeyCollection C_GRAPHICS = new KeyCollection("bbs.graphics.^")
-        .load(BBS.getFactoryGraphics().getStringKeys());
 
-    public static final KeyCollection C_CAMERA_MODE = new KeyCollection("bbs.camera_mode.^")
-        .load(EnumUtils.getKeys(CameraTriggerBlock.CameraMode.class));
     public static final KeyCollection C_CURVE_TYPE = new KeyCollection("bbs.ui.snowstorm.curves.types.^")
         .load(EnumUtils.getKeys(ParticleCurveType.class, (c) -> c.id));
     public static final KeyCollection C_EASING = new KeyCollection("easing.^")
         .load(EnumUtils.getKeys(KeyframeEasing.class));
-    public static final KeyCollection C_ENTITY_PROPERTY = new KeyCollection("bbs.entity_property.^")
-        .load(EntityUtils.ENTITY_PROPERTIES);
     public static final KeyCollection C_INTERPOLATION = new KeyCollection("interpolations.^")
         .load(EnumUtils.getKeys(Interpolation.class, (i) -> i.key))
         .load(EnumUtils.getKeys(KeyframeInterpolation.class, (i) -> i.key));
     public static final KeyCollection C_INTERPOLATION_TIPS = new KeyCollection("interpolations.^-tooltip")
         .load(EnumUtils.getKeys(Interpolation.class, (i) -> i.key))
         .load(EnumUtils.getKeys(KeyframeInterpolation.class, (i) -> i.key));
-    public static final KeyCollection C_ITEM_CONDITION = new KeyCollection("bbs.item_condition_mode.^")
-        .load(EnumUtils.getKeys(ItemConditionBlock.ItemCheck.class));
-    public static final KeyCollection C_ITEM_TRIGGER = new KeyCollection("bbs.item_trigger_mode.^")
-        .load(EnumUtils.getKeys(ItemTriggerBlock.ItemMode.class));
-    public static final KeyCollection C_QUEST_CHECK = new KeyCollection("bbs.quest_condition_mode.^")
-        .load(EnumUtils.getKeys(QuestConditionBlock.QuestCheck.class));
-    public static final KeyCollection C_STATE_MODE = new KeyCollection("bbs.state_trigger_mode.^")
-        .load(EnumUtils.getKeys(StateTriggerBlock.StateMode.class));
-    public static final KeyCollection C_TARGET = new KeyCollection("bbs.target_type.^")
-        .load(EnumUtils.getKeys(TargetMode.class));
-    public static final KeyCollection C_HUD_MODE = new KeyCollection("bbs.hud_scene_mode.^")
-        .load(EnumUtils.getKeys(HUDSceneTriggerBlock.HUDMode.class));
-    public static final KeyCollection C_LAYOUT_TYPE = new KeyCollection("bbs.layout_type.^")
-        .load(EnumUtils.getKeys(LayoutType.class));
-    public static final KeyCollection C_PLAY_MODE = new KeyCollection("bbs.sound_play_mode.^")
-        .load(EnumUtils.getKeys(SoundTriggerBlock.PlayMode.class));
 }

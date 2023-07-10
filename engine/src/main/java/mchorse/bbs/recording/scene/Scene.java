@@ -4,14 +4,12 @@ import mchorse.bbs.BBSData;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.game.triggers.Trigger;
-import mchorse.bbs.game.utils.DataContext;
-import mchorse.bbs.game.utils.manager.data.AbstractData;
 import mchorse.bbs.recording.RecordManager;
 import mchorse.bbs.recording.RecordPlayer;
 import mchorse.bbs.recording.data.Mode;
 import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
 
@@ -29,8 +27,6 @@ public class Scene extends AbstractData
     public static final Pattern PREFIX = Pattern.compile("^(.+)_([^_]+)$");
 
     public List<Replay> replays = new ArrayList<Replay>();
-    public Trigger onStart = new Trigger();
-    public Trigger onStop = new Trigger();
     public boolean loops;
 
     /* Runtime properties */
@@ -265,7 +261,6 @@ public class Scene extends AbstractData
         }
 
         this.setPlaying(true);
-        this.onStart.trigger(new DataContext(this.getWorld()));
 
         if (firstActor != null)
         {
@@ -297,7 +292,6 @@ public class Scene extends AbstractData
         }
 
         this.setPlaying(true);
-        this.onStart.trigger(new DataContext(this.getWorld()));
         this.paused = false;
         this.tick = tick;
     }
@@ -384,7 +378,6 @@ public class Scene extends AbstractData
 
         this.actors.clear();
         this.setPlaying(false);
-        this.onStop.trigger(new DataContext(this.getWorld()));
     }
 
     /**
@@ -634,8 +627,6 @@ public class Scene extends AbstractData
         this.replays.addAll(scene.replays);
 
         this.loops = scene.loops;
-        this.onStart.copy(scene.onStart);
-        this.onStop.copy(scene.onStop);
     }
 
     @Override
@@ -650,8 +641,6 @@ public class Scene extends AbstractData
 
         data.put("replays", replays);
         data.putBool("loops", this.loops);
-        data.put("onStart", this.onStart.toData());
-        data.put("onStop", this.onStop.toData());
     }
 
     @Override
@@ -670,7 +659,5 @@ public class Scene extends AbstractData
         }
 
         this.loops = data.getBool("loops");
-        this.onStart.fromData(data.getMap("onStart"));
-        this.onStop.fromData(data.getMap("onStop"));
     }
 }

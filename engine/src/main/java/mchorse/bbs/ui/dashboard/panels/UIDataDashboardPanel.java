@@ -1,7 +1,7 @@
 package mchorse.bbs.ui.dashboard.panels;
 
 import mchorse.bbs.game.utils.ContentType;
-import mchorse.bbs.game.utils.manager.data.AbstractData;
+import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.UIDashboard;

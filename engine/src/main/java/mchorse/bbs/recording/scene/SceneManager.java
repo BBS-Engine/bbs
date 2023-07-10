@@ -2,7 +2,7 @@ package mchorse.bbs.recording.scene;
 
 import mchorse.bbs.BBSData;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.game.utils.manager.BaseManager;
+import mchorse.bbs.utils.manager.BaseManager;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
 

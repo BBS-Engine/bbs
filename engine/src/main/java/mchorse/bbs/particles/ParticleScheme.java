@@ -2,8 +2,7 @@ package mchorse.bbs.particles;
 
 import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.game.utils.manager.data.AbstractData;
-import mchorse.bbs.math.Variable;
+import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.math.molang.MolangParser;
 import mchorse.bbs.particles.components.IComponentBase;
 import mchorse.bbs.particles.components.IComponentEmitterInitialize;

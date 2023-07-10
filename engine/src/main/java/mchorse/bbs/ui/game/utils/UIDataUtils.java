@@ -2,10 +2,8 @@ package mchorse.bbs.ui.game.utils;
 
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.game.utils.ContentType;
-import mchorse.bbs.game.utils.TargetMode;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.buttons.UICirculate;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.game.utils.overlays.UIContentNamesOverlayPanel;
 import mchorse.bbs.ui.utils.Area;
@@ -77,25 +75,5 @@ public class UIDataUtils
 
         context.batcher.gradientVBox(area.x, area.my() + 20, area.ex(), area.my() + 40, 0, Colors.A100);
         context.batcher.box(area.x, area.my() + 40, area.ex(), area.my() + 90, Colors.A100);
-    }
-
-    public static UICirculate createTargetCirculate(TargetMode defaultTarget, Consumer<TargetMode> callback)
-    {
-        UICirculate button = new UICirculate((b) ->
-        {
-            if (callback != null)
-            {
-                callback.accept(TargetMode.values()[b.getValue()]);
-            }
-        });
-
-        for (TargetMode target : TargetMode.values())
-        {
-            button.addLabel(UIKeys.C_TARGET.get(target));
-        }
-
-        button.setValue(defaultTarget.ordinal());
-
-        return button;
     }
 }

@@ -1,15 +1,8 @@
 package mchorse.sandbox.ui;
 
-import mchorse.sandbox.SandboxRenderer;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.audio.AudioRenderer;
-import mchorse.bbs.game.entities.components.PlayerComponent;
-import mchorse.bbs.game.quests.Quest;
-import mchorse.bbs.game.quests.Quests;
-import mchorse.bbs.game.quests.objectives.Objective;
-import mchorse.bbs.game.utils.EntityUtils;
 import mchorse.bbs.graphics.text.FontRenderer;
-import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.recording.events.IconLabelEvent;
 import mchorse.bbs.ui.framework.UIRenderingContext;
@@ -17,12 +10,10 @@ import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.Interpolations;
 import mchorse.bbs.utils.math.MathUtils;
-import mchorse.bbs.world.entities.Entity;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class UIHUD
 {
@@ -56,23 +47,6 @@ public class UIHUD
 
     /* Rendering */
 
-    public void renderHUDStage(UIRenderingContext context)
-    {
-        int scale = BBSSettings.getScale();
-        SandboxRenderer renderer = this.screen.engine.renderer;
-
-        renderer.getStage().render(context, Window.width / scale, Window.height / scale);
-    }
-
-    public void renderHUD(UIRenderingContext context, int w, int h)
-    {
-        this.screen.engine.playerData.getGameController().renderHUD(context, w, h);
-        this.renderCurrentQuests(context, w, h);
-    }
-
-    /**
-     * Render messages sent from scripts via {@link mchorse.bbs.game.scripts.user.IScriptBBS#send(String)}.
-     */
     public void renderMessages(UIRenderingContext context, int w, int h)
     {
         FontRenderer font = context.getFont();
@@ -98,84 +72,6 @@ public class UIHUD
 
             y += 12;
         }
-    }
-
-    public void renderCurrentQuests(UIRenderingContext context, int sw, int sh)
-    {
-        Entity controller = this.screen.engine.controller.getController();
-
-        if (controller == null || !EntityUtils.isPlayer(controller) || !this.screen.engine.controller.canControl())
-        {
-            return;
-        }
-
-        PlayerComponent character = controller.get(PlayerComponent.class);
-
-        if (character != null && !character.quests.quests.isEmpty())
-        {
-            Quests quests = character.quests;
-
-            int i = 0;
-            int c = Math.min(quests.quests.size(), 3);
-            int w = 160;
-            int x = sw - w;
-            int y = 60;
-
-            for (Map.Entry<String, Quest> entry : quests.quests.entrySet())
-            {
-                if (i >= c)
-                {
-                    break;
-                }
-
-                y += this.renderQuest(controller, context, entry.getValue(), x, y, w);
-                i += 1;
-            }
-        }
-    }
-
-    private int renderQuest(Entity player, UIRenderingContext context, Quest value, int x, int y, int w)
-    {
-        /* TODO: optimize */
-        boolean questComplete = value.isComplete(player);
-        String title = value.getProcessedTitle();
-
-        if (questComplete)
-        {
-            title = "\u00A77" + title;
-        }
-
-        FontRenderer font = context.getFont();
-
-        context.batcher.gradientHBox(x, y, x + w, y + 16, Colors.A6, Colors.A75);
-        context.batcher.textShadow(font, title, x + 4, y + 4);
-
-        if (this.screen.engine.development)
-        {
-            int lw = font.getWidth(value.getId());
-
-            context.batcher.textCard(font, value.getId(), x - 4 - lw, y + 4, Colors.LIGHTER_GRAY, Colors.A50, 2);
-        }
-
-        int original = y;
-
-        y += 16;
-
-        for (Objective objective : value.objectives)
-        {
-            String description = "- " + objective.stringify(player);
-            List<String> lines = font.split(description, w - 6);
-            boolean complete = questComplete || objective.isComplete(player);
-
-            for (String line : lines)
-            {
-                context.batcher.textShadow(font, line, x + 4, y + 2, complete ? Colors.WHITE : Colors.LIGHTER_GRAY);
-
-                y += 12;
-            }
-        }
-
-        return (y - original) + 6;
     }
 
     private void renderRecordingOverlay(UIRenderingContext context)

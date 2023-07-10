@@ -1,7 +1,6 @@
 package mchorse.bbs.ui.world.tools;
 
 import mchorse.bbs.BBS;
-import mchorse.bbs.bridge.IBridgeHUD;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.graphics.Draw;
 import mchorse.bbs.graphics.MatrixStack;

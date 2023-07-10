@@ -4,8 +4,6 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.game.items.Item;
-import mchorse.bbs.game.items.ItemManager;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.CrashReport;
@@ -110,8 +108,6 @@ public class Sandbox
 
             id = Window.getWindow();
 
-            PROFILER.endBegin("clean_items");
-            this.createCleanItems();
             PROFILER.endBegin("clean_world");
             this.createCleanWorld();
             PROFILER.endBegin("init_engine");
@@ -186,40 +182,5 @@ public class Sandbox
 
         defaultWorld.mkdirs();
         DataToString.write(new File(defaultWorld, "metadata.json"), metadata.toData(), true);
-    }
-
-    private void createCleanItems()
-    {
-        File itemSet = new File(this.gameDirectory, "assets/items.json");
-
-        if (!itemSet.exists())
-        {
-            try
-            {
-                this.createItems(itemSet);
-            }
-            catch (IOException e)
-            {
-                System.err.println("Failed to create default items!");
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void createItems(File itemSet) throws IOException
-    {
-        itemSet.getParentFile().mkdirs();
-
-        ItemManager manager = new ItemManager();
-        Item cheese = new Item(Link.bbs("cheese"));
-        Item cookie = new Item(Link.bbs("cookie"));
-
-        manager.setAtlas(Sandbox.link("textures/iconset.png"));
-        cheese.setDisplayName("Cheese");
-        cookie.setDisplayName("Cookie");
-        manager.register(cheese, 16, 96);
-        manager.register(cookie, 0, 0);
-
-        DataToString.write(itemSet, manager.toData(), true);
     }
 }

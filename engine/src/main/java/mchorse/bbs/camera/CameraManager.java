@@ -1,7 +1,7 @@
 package mchorse.bbs.camera;
 
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.game.utils.manager.BaseManager;
+import mchorse.bbs.utils.manager.BaseManager;
 
 import java.io.File;
 

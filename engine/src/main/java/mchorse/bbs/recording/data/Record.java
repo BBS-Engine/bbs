@@ -2,7 +2,7 @@ package mchorse.bbs.recording.data;
 
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.game.utils.manager.data.AbstractData;
+import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.recording.actions.Action;
 import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.world.entities.Entity;

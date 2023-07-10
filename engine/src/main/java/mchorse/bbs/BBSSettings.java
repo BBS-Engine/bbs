@@ -1,6 +1,5 @@
 package mchorse.bbs;
 
-import mchorse.bbs.game.utils.config.ValueSyntaxStyle;
 import mchorse.bbs.settings.SettingsBuilder;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueColors;
@@ -10,7 +9,6 @@ import mchorse.bbs.settings.values.ValueLanguage;
 import mchorse.bbs.settings.values.ValueLink;
 import mchorse.bbs.settings.values.ValueString;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.game.utils.ValueAudioButtons;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.MathUtils;
 
@@ -63,10 +61,6 @@ public class BBSSettings
     public static ValueBoolean nodePulseBackgroundPrimaryColor;
     public static ValueInt nodeThickness;
     public static ValueBoolean questsPreviewRewards;
-
-    public static ValueSyntaxStyle scriptEditorSyntaxStyle;
-    public static ValueBoolean scriptEditorSounds;
-    public static ValueBoolean scriptUIDebug;
 
     public static ValueBoolean damageControl;
     public static ValueInt damageControlDistance;
@@ -179,16 +173,12 @@ public class BBSSettings
         nodeThickness = builder.getInt("node_thickness", 3, 0, 20);
         questsPreviewRewards = builder.getBoolean("quest_preview_rewards", true);
 
-        builder.category("script_editor").register(scriptEditorSyntaxStyle = new ValueSyntaxStyle("syntax_style"));
-        scriptEditorSounds = builder.getBoolean("sounds", true);
-        scriptUIDebug = builder.getBoolean("ui_debug", false);
-
         damageControl = builder.category("damage_control").getBoolean("damage_control", true);
         damageControlDistance = builder.getInt("damage_control_distance", 64, 1, 1024);
 
         recordingCountdown = builder.category("recording").getFloat("countdown", 1.5F, 0F, 30F);
 
-        builder.category("audio").register(new ValueAudioButtons("buttons"));
+        builder.category("audio");
         audioWaveformVisible = builder.getBoolean("waveform_visible", true);
         audioWaveformDensity = builder.getInt("waveform_density", 20, 10, 100);
         audioWaveformWidth = builder.getFloat("waveform_width", 0.5F, 0F, 1F);

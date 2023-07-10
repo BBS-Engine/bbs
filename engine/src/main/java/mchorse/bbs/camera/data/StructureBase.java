@@ -3,7 +3,7 @@ package mchorse.bbs.camera.data;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.game.utils.manager.data.AbstractData;
+import mchorse.bbs.utils.manager.data.AbstractData;
 
 import java.util.Collection;
 

@@ -1,8 +1,8 @@
 package mchorse.bbs.ui.dashboard.panels.overlay;
 
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.game.utils.manager.FolderManager;
-import mchorse.bbs.game.utils.manager.data.AbstractData;
+import mchorse.bbs.utils.manager.FolderManager;
+import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;

@@ -1,7 +1,6 @@
 package mchorse.bbs.world;
 
 import mchorse.bbs.BBS;
-import mchorse.bbs.BBSData;
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.camera.Camera;
@@ -12,10 +11,6 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.events.register.RegisterArchitectBlueprintsEvent;
-import mchorse.bbs.game.items.ItemStack;
-import mchorse.bbs.game.misc.WorldForm;
-import mchorse.bbs.game.utils.DataContext;
-import mchorse.bbs.game.utils.executables.Executables;
 import mchorse.bbs.recording.capturing.DamageControlManager;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.AABB;
@@ -34,9 +29,7 @@ import mchorse.bbs.voxel.storage.data.ChunkCell;
 import mchorse.bbs.voxel.tilesets.models.BlockModel;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.architect.EntityArchitect;
-import mchorse.bbs.world.entities.architect.blueprints.ItemEntityBlueprint;
 import mchorse.bbs.world.entities.architect.blueprints.PlayerEntityBlueprint;
-import mchorse.bbs.world.entities.components.ItemComponent;
 import mchorse.bbs.world.objects.WorldObject;
 import org.greenrobot.eventbus.EventBus;
 import org.joml.Vector2f;
@@ -52,7 +45,6 @@ import java.util.UUID;
 
 public class World implements ITickable, IDisposable
 {
-    public List<WorldForm> worldForms = new ArrayList<WorldForm>();
     public List<WorldObject> objects = new ArrayList<WorldObject>();
     public List<Entity> entities = new ArrayList<Entity>();
     public Set<Entity> toAdd = new HashSet<Entity>();
@@ -70,7 +62,6 @@ public class World implements ITickable, IDisposable
     public final IBridge bridge;
 
     public final EntityArchitect architect;
-    public final Executables executables = new Executables();
     public final WorldSettings settings = new WorldSettings();
 
     private EventBus eventBus;
@@ -98,7 +89,6 @@ public class World implements ITickable, IDisposable
         EntityArchitect architect = new EntityArchitect();
 
         architect.register(Link.bbs("player"), new PlayerEntityBlueprint());
-        architect.register(Link.bbs("item"), new ItemEntityBlueprint());
 
         BBS.events.post(new RegisterArchitectBlueprintsEvent(this));
 
@@ -249,27 +239,11 @@ public class World implements ITickable, IDisposable
         }
     }
 
-    public Entity dropItem(ItemStack stack, double x, double y, double z)
-    {
-        Entity item = this.architect.create(Link.bbs("item"));
-
-        item.setPosition(x, y, z);
-        item.get(ItemComponent.class).stack = stack.copy();
-
-        this.addEntitySafe(item);
-
-        return item;
-    }
-
     @Override
     public void update()
     {
-        BBSData.getSettings().worldTick.trigger(new DataContext(this));
-
         this.updateEntities();
         this.updateCleanUp();
-
-        this.executables.update();
     }
 
     private void updateEntities()
@@ -306,8 +280,6 @@ public class World implements ITickable, IDisposable
         {
             object.update(this);
         }
-
-        this.worldForms.removeIf(worldForm -> worldForm.update(this));
     }
 
     private void updateCleanUp()

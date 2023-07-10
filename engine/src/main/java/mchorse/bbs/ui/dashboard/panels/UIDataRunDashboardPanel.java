@@ -1,6 +1,6 @@
 package mchorse.bbs.ui.dashboard.panels;
 
-import mchorse.bbs.game.utils.manager.data.AbstractData;
+import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.utils.icons.Icons;

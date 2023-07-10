@@ -9,8 +9,6 @@ import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.events.RenderWorldEvent;
 import mchorse.bbs.forms.forms.Form;
-import mchorse.bbs.game.huds.HUDStage;
-import mchorse.bbs.game.misc.WorldForm;
 import mchorse.bbs.graphics.Draw;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
@@ -62,17 +60,11 @@ public class SandboxRenderer implements IComponent
 {
     public SandboxEngine engine;
 
-    public HUDStage mainStage = new HUDStage();
-    public HUDStage currentStage;
     public Animations animations = new Animations();
 
     public RenderingContext context;
 
     /* Shaders */
-
-    /**
-     * Projection view UBO (32 bits, projection and view matrices)
-     */
     public ProjectionViewUBO ubo;
 
     /* VAOs */
@@ -287,11 +279,6 @@ public class SandboxRenderer implements IComponent
         this.sky.unbind();
     }
 
-    public HUDStage getStage()
-    {
-        return this.currentStage == null ? this.mainStage : this.currentStage;
-    }
-
     @Override
     public void delete()
     {
@@ -301,10 +288,6 @@ public class SandboxRenderer implements IComponent
     @Override
     public void update()
     {
-        HUDStage stage = this.getStage();
-
-        stage.update(stage == this.mainStage);
-
         Iterator<AnimationPlayer> it = this.animations.animations.values().iterator();
 
         while (it.hasNext())
@@ -570,11 +553,6 @@ public class SandboxRenderer implements IComponent
             object.render(this.context);
         }
 
-        for (WorldForm form : world.worldForms)
-        {
-            form.render(this.context);
-        }
-
         for (AnimationPlayer animation : this.animations.animations.values())
         {
             if (animation != null)
@@ -583,14 +561,12 @@ public class SandboxRenderer implements IComponent
             }
         }
 
-        this.engine.playerData.getGameController().renderInWorld(context);
-
         BBS.events.post(this.renderWorld);
     }
 
     private boolean canRenderEntity(Entity entity)
     {
-        return this.engine.playerData.getGameController().canRenderEntity(entity, this.context);
+        return true;
     }
 
     private void renderDebugChunks(Camera camera, ChunkManager chunks)

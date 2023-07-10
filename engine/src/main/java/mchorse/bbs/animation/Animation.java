@@ -1,7 +1,7 @@
 package mchorse.bbs.animation;
 
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.game.utils.manager.data.AbstractData;
+import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.graphics.RenderingContext;
 
 import java.util.HashMap;

@@ -28,7 +28,6 @@ import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIPromptOverlayPanel;
 import mchorse.bbs.ui.framework.elements.utils.UILabel;
-import mchorse.bbs.ui.game.triggers.UITrigger;
 import mchorse.bbs.ui.recording.editor.UIRecordPanel;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -46,8 +45,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
     private UIScrollView replayEditor;
 
     /* Settings fields */
-    public UITrigger onStart;
-    public UITrigger onStop;
     public UIToggle loops;
 
     /* Replay fields */
@@ -79,8 +76,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
         this.editor.add(this.replayEditor, this.replays);
 
         /* Settings options */
-        this.onStart = new UITrigger();
-        this.onStop = new UITrigger();
         this.loops = new UIToggle(UIKeys.SCENE_LOOPS, false, (b) -> this.data.loops = b.getValue());
 
         /* Replay options */
@@ -132,8 +127,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
 
         this.addOptions();
         this.options.fields.add(this.loops);
-        this.options.fields.add(UI.label(UIKeys.SCENE_START_COMMAND).marginTop(8), this.onStart);
-        this.options.fields.add(UI.label(UIKeys.SCENE_STOP_COMMAND).marginTop(8), this.onStop);
 
         this.iconBar.add(this.record, this.edit, this.rename, this.teleport);
         this.overlay.namesList.setFileIcon(Icons.SCENE);
@@ -281,8 +274,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
             }
 
             this.replays.setList(replays);
-            this.onStart.set(this.data.onStart);
-            this.onStop.set(this.data.onStop);
             this.loops.setValue(this.data.loops);
         }
     }

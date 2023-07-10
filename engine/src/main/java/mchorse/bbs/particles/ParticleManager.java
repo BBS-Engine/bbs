@@ -1,8 +1,8 @@
 package mchorse.bbs.particles;
 
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.game.utils.manager.BaseManager;
-import mchorse.bbs.game.utils.manager.storage.JSONLikeStorage;
+import mchorse.bbs.utils.manager.BaseManager;
+import mchorse.bbs.utils.manager.storage.JSONLikeStorage;
 
 import java.io.File;
 

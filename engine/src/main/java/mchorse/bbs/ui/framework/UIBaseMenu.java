@@ -1,6 +1,5 @@
 package mchorse.bbs.ui.framework;
 
-import mchorse.bbs.BBSData;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.bridge.IBridgeCamera;
@@ -9,9 +8,6 @@ import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.core.Engine;
 import mchorse.bbs.core.ITickable;
 import mchorse.bbs.core.input.IKeyHandler;
-import mchorse.bbs.game.misc.GameSettings;
-import mchorse.bbs.game.triggers.Trigger;
-import mchorse.bbs.game.utils.DataContext;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.resources.Link;
@@ -22,7 +18,6 @@ import mchorse.bbs.ui.framework.elements.utils.IViewportStack;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.renderers.InputRenderer;
 import mchorse.bbs.utils.colors.Colors;
-import mchorse.bbs.world.World;
 import org.joml.Vector3d;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
@@ -86,38 +81,10 @@ public abstract class UIBaseMenu implements ITickable, IKeyHandler
     }
 
     public void onOpen(UIBaseMenu oldMenu)
-    {
-        GameSettings settings = BBSData.getSettings();
-
-        if (settings == null)
-        {
-            return;
-        }
-
-        Trigger trigger = settings.uiMenuOpen;
-
-        if (!trigger.isEmpty())
-        {
-            trigger.trigger(new DataContext((World) null).set("id", this.getMenuId().toString()));
-        }
-    }
+    {}
 
     public void onClose(UIBaseMenu nextMenu)
-    {
-        GameSettings settings = BBSData.getSettings();
-
-        if (settings == null)
-        {
-            return;
-        }
-
-        Trigger trigger = settings.uiMenuClose;
-
-        if (!trigger.isEmpty())
-        {
-            trigger.trigger(new DataContext((World) null).set("id", this.getMenuId().toString()));
-        }
-    }
+    {}
 
     @Override
     public void update()

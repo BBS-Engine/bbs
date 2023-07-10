@@ -1,15 +1,13 @@
 package mchorse.sandbox.bridge;
 
-import mchorse.sandbox.SandboxEngine;
 import mchorse.bbs.BBS;
-import mchorse.bbs.BBSData;
 import mchorse.bbs.bridge.IBridgeWorld;
-import mchorse.bbs.game.utils.DataContext;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.voxel.storage.ChunkFactory;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.WorldMetadata;
+import mchorse.sandbox.SandboxEngine;
 
 import java.io.File;
 
@@ -47,11 +45,6 @@ public class BridgeWorld extends BaseBridge implements IBridgeWorld
         ChunkFactory factory = metadata.createFactory();
 
         this.engine.world = new World(this.engine, factory, metadata.createGenerator());
-
-        if (!BBSData.getSettings().worldLoad.isEmpty())
-        {
-            BBSData.getSettings().worldLoad.trigger(new DataContext(world));
-        }
 
         this.engine.world.initialize(factory);
         this.engine.world.readExtraData(metadata.save);

@@ -38,26 +38,15 @@ import mchorse.bbs.ui.framework.UIBaseMenu;
 import mchorse.bbs.ui.framework.UIRenderingContext;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
-import mchorse.bbs.ui.game.items.UIItemsPanel;
-import mchorse.bbs.ui.game.panels.UICraftingTablePanel;
-import mchorse.bbs.ui.game.panels.UIDialoguePanel;
-import mchorse.bbs.ui.game.panels.UIGameSettingsPanel;
-import mchorse.bbs.ui.game.panels.UIHUDScenePanel;
-import mchorse.bbs.ui.game.panels.UIQuestChainPanel;
-import mchorse.bbs.ui.game.panels.UIQuestPanel;
-import mchorse.bbs.ui.game.panels.UIScriptPanel;
 import mchorse.bbs.ui.particles.UIParticleSchemePanel;
 import mchorse.bbs.ui.recording.editor.UIRecordPanel;
 import mchorse.bbs.ui.recording.scene.UIScenePanel;
 import mchorse.bbs.ui.tileset.UITileSetEditorPanel;
-import mchorse.bbs.ui.ui.UIUserInterfacePanel;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.world.UIWorldEditorPanel;
 import mchorse.bbs.ui.world.entities.UIEntitiesPanel;
 import mchorse.bbs.ui.world.objects.UIWorldObjectsPanel;
-import mchorse.bbs.ui.world.player.UIPlayerDataPanel;
-import mchorse.bbs.ui.world.repl.UIReplPanel;
 import mchorse.bbs.ui.world.settings.UIWorldSettingsPanel;
 import mchorse.bbs.ui.world.worlds.UIWorldsOverlayPanel;
 import mchorse.bbs.utils.Direction;
@@ -80,7 +69,6 @@ public class UIDashboard extends UIBaseMenu
 {
     private UIDashboardPanels panels;
 
-    public UIIcon play;
     public UIIcon worlds;
 
     /* Camera data */
@@ -119,26 +107,13 @@ public class UIDashboard extends UIBaseMenu
 
         this.main.add(this.panels);
 
-        this.play = new UIIcon(Icons.PLAY, (b) ->
-        {
-            IBridgePlayer playerBridge = bridge.get(IBridgePlayer.class);
-
-            if (playerBridge.isCreative())
-            {
-                this.panels.getPanel(UIPlayerDataPanel.class).save();
-            }
-
-            playerBridge.setCreative(!playerBridge.isCreative());
-            this.updateGameButtons();
-        });
-
         this.worlds = new UIIcon(Icons.GLOBE, (b) ->
         {
             UIOverlay.addOverlay(this.context, new UIWorldsOverlayPanel(this.bridge));
         });
         this.worlds.tooltip(UIKeys.WORLD_WORLDS, Direction.TOP);
 
-        this.panels.pinned.add(this.play, this.worlds);
+        this.panels.pinned.add(this.worlds);
         this.getRoot().prepend(this.orbitUI);
 
         /* Register keys */
@@ -147,22 +122,11 @@ public class UIDashboard extends UIBaseMenu
         this.overlay.keys().register(Keys.TOGGLE_VISIBILITY, this.main::toggleVisible).category(category);
         this.overlay.keys().register(Keys.WORLD_RECORD_REPLAY, () -> this.getPanel(UIScenePanel.class).record()).category(category);
         this.overlay.keys().register(Keys.WORLD_PLAYBACK_SCENE, () -> this.getPanel(UIScenePanel.class).plause()).category(category);
-        this.overlay.keys().register(Keys.WORLD_TOGGLE_PLAYER, () -> this.play.clickItself()).category(category);
         this.overlay.keys().register(Keys.WORLD_SAVE, this::saveWorld).category(category);
         this.overlay.keys().register(Keys.WORLD_TOGGLE_WALK, this::toggleWalkMode).category(category);
         this.overlay.keys().register(Keys.WORLD_TOGGLE_AXES, () -> this.displayAxes = !this.displayAxes).category(category);
         this.overlay.keys().register(Keys.WORLD_CYCLE_PANELS, this::cyclePanels).category(category);
         this.overlay.keys().register(Keys.DASHBOARD_WORLD_EDITOR, () -> this.panels.setPanel(this.panels.getPanel(UIWorldEditorPanel.class))).category(category);
-
-        this.updateGameButtons();
-    }
-
-    private void updateGameButtons()
-    {
-        IBridgePlayer playerBridge = this.bridge.get(IBridgePlayer.class);
-
-        this.play.tooltip(playerBridge.isCreative() ? UIKeys.WORLD_PLAY : UIKeys.WORLD_STOP, Direction.TOP);
-        this.play.both(playerBridge.isCreative() ? Icons.PLAY : Icons.STOP);
     }
 
     private void saveWorld()
@@ -287,7 +251,6 @@ public class UIDashboard extends UIBaseMenu
         if (playerBridge.isCreative())
         {
             playerBridge.setCreative(false);
-            this.updateGameButtons();
         }
 
         super.closeMenu();
@@ -296,24 +259,13 @@ public class UIDashboard extends UIBaseMenu
     protected void registerPanels()
     {
         this.panels.registerPanel(new UISettingsPanel(this), UIKeys.CONFIG_TITLE, Icons.SETTINGS);
-        this.panels.registerPanel(new UIGameSettingsPanel(this), UIKeys.PANELS_SETTINGS, Icons.FILE);
         this.panels.registerPanel(new UIWorldSettingsPanel(this), UIKeys.WORLD_SETTINGS, Icons.GEAR);
 
         this.panels.registerPanel(new UIWorldEditorPanel(this), UIKeys.WORLD_WORLD_EDITOR, Icons.BLOCK).marginLeft(10);
-        this.panels.registerPanel(new UIPlayerDataPanel(this), UIKeys.WORLD_PLAYER_DATA_EDITOR, Icons.JOYSTICK);
         this.panels.registerPanel(new UIWorldObjectsPanel(this), UIKeys.WORLD_OBJECT_EDITOR, Icons.SPHERE);
         this.panels.registerPanel(new UIEntitiesPanel(this), UIKeys.WORLD_ENTITY_EDITOR, Icons.POSE);
-        this.panels.registerPanel(new UIReplPanel(this), UIKeys.PANELS_SANDBOX, Icons.CONSOLE);
 
-        this.panels.registerPanel(new UIItemsPanel(this), UIKeys.PANELS_ITEMS, Icons.CUP).marginLeft(10);
         this.panels.registerPanel(new UITileSetEditorPanel(this), UIKeys.TILE_SET_TITLE, Icons.STAIR);
-        this.panels.registerPanel(new UICraftingTablePanel(this), UIKeys.PANELS_CRAFTING, Icons.WRENCH);
-        this.panels.registerPanel(new UIQuestPanel(this), UIKeys.PANELS_QUESTS, Icons.EXCLAMATION);
-        this.panels.registerPanel(new UIDialoguePanel(this), UIKeys.PANELS_DIALOGUES, Icons.BUBBLE);
-        this.panels.registerPanel(new UIQuestChainPanel(this), UIKeys.PANELS_CHAINS, Icons.LIST);
-        this.panels.registerPanel(new UIScriptPanel(this), UIKeys.PANELS_SCRIPTS, Icons.PROPERTIES);
-        this.panels.registerPanel(new UIHUDScenePanel(this), UIKeys.PANELS_HUDS, Icons.FULLSCREEN);
-        this.panels.registerPanel(new UIUserInterfacePanel(this), UIKeys.PANELS_UIS, Icons.MORE);
 
         this.panels.registerPanel(new UIAnimationPanel(this), UIKeys.PANELS_ANIMATIONS, Icons.CURVES).marginLeft(10);
         this.panels.registerPanel(new UIScenePanel(this), UIKeys.PANELS_SCENES, Icons.SCENE);

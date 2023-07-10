@@ -6,7 +6,6 @@ import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.bridge.IBridgeAnimations;
 import mchorse.bbs.bridge.IBridgeCamera;
-import mchorse.bbs.bridge.IBridgeHUD;
 import mchorse.bbs.bridge.IBridgeMenu;
 import mchorse.bbs.bridge.IBridgePlayer;
 import mchorse.bbs.bridge.IBridgeRender;
@@ -20,12 +19,9 @@ import mchorse.bbs.core.keybinds.KeybindCategory;
 import mchorse.bbs.data.DataToString;
 import mchorse.bbs.events.L10nReloadEvent;
 import mchorse.bbs.events.UpdateEvent;
-import mchorse.bbs.events.register.RegisterItemsEvent;
 import mchorse.bbs.events.register.RegisterKeybindsClassesEvent;
 import mchorse.bbs.events.register.RegisterL10nEvent;
 import mchorse.bbs.events.register.RegisterSettingsEvent;
-import mchorse.bbs.game.player.PlayerData;
-import mchorse.bbs.game.scripts.ScriptUtils;
 import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.window.IFileDropListener;
 import mchorse.bbs.graphics.window.Window;
@@ -49,7 +45,6 @@ import mchorse.bbs.utils.watchdog.WatchDog;
 import mchorse.bbs.world.World;
 import mchorse.sandbox.bridge.BridgeAnimations;
 import mchorse.sandbox.bridge.BridgeCamera;
-import mchorse.sandbox.bridge.BridgeHUD;
 import mchorse.sandbox.bridge.BridgeMenu;
 import mchorse.sandbox.bridge.BridgePlayer;
 import mchorse.sandbox.bridge.BridgeRender;
@@ -68,7 +63,6 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +74,6 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
     public SandboxController controller;
     public UIScreen screen;
     public World world;
-    public PlayerData playerData;
 
     public CameraController cameraController = new CameraController();
 
@@ -102,7 +95,6 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
 
         this.apis.put(IBridgeAnimations.class, new BridgeAnimations(this));
         this.apis.put(IBridgeCamera.class, new BridgeCamera(this));
-        this.apis.put(IBridgeHUD.class, new BridgeHUD(this));
         this.apis.put(IBridgeMenu.class, new BridgeMenu(this));
         this.apis.put(IBridgePlayer.class, new BridgePlayer(this));
         this.apis.put(IBridgeRender.class, new BridgeRender(this));
@@ -126,8 +118,6 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
         this.screen = new UIScreen(this);
         this.renderer = new SandboxRenderer(this);
         this.controller = new SandboxController(this);
-        this.playerData = new PlayerData(this, BBS.getDataPath("player.json"));
-        this.playerData.load();
         this.cameraController.camera.position.set(0, 0.5, 0);
 
         if (this.development)
@@ -138,24 +128,6 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
             this.watchDog.register(BBS.getSounds());
             this.watchDog.register(BBS.getFonts());
             this.watchDog.start();
-        }
-    }
-
-    @Subscribe
-    public void registerItems(RegisterItemsEvent event)
-    {
-        File itemsFile = BBS.getAssetsPath("items.json");
-
-        if (itemsFile.isFile())
-        {
-            try
-            {
-                event.items.fromData(DataToString.read(itemsFile).asMap());
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -316,8 +288,6 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
 
         this.controller.init();
 
-        Sandbox.PROFILER.endBegin("init_js");
-        this.forceLoadJS();
         Sandbox.PROFILER.endBegin("init_callbacks");
         this.registerSettingsCallbacks();
     }
@@ -367,22 +337,6 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
         BBS.getL10n().reloadSupportedLanguages(L10nUtils.readAdditionalLanguages(BBS.getAssetsPath("lang_editor/languages.json")));
     }
 
-    private void forceLoadJS()
-    {
-        try
-        {
-            if (ScriptUtils.tryCreatingEngine().eval("true") instanceof Boolean)
-            {
-                System.out.println("JS scripting engine was successfully launched!");
-            }
-        }
-        catch (Exception e)
-        {
-            System.err.println("JS scripting engine failed to launch!");
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void delete()
     {
@@ -390,7 +344,6 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
 
         this.screen.delete();
         this.world.delete();
-        this.playerData.save();
 
         if (this.development)
         {
@@ -448,7 +401,7 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
     @Override
     public boolean handleGamepad(int button, int action)
     {
-        return this.playerData.getGameController().handleGamepad(button, action);
+        return false;
     }
 
     @Override
@@ -481,8 +434,6 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
     public void render(float transition)
     {
         super.render(transition);
-
-        this.playerData.getGameController().render(transition);
 
         float worldTransition = this.screen.isPaused() ? 0 : transition;
 

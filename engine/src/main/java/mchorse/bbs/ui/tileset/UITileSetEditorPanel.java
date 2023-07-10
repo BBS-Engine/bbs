@@ -4,7 +4,7 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.game.utils.factory.MapFactory;
+import mchorse.bbs.utils.factory.MapFactory;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.Keys;

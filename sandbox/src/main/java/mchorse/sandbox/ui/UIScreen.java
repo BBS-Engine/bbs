@@ -1,12 +1,10 @@
 package mchorse.sandbox.ui;
 
 import mchorse.bbs.BBS;
-import mchorse.bbs.BBSData;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.core.IEngine;
 import mchorse.bbs.core.input.MouseInput;
 import mchorse.bbs.events.RenderHUDEvent;
-import mchorse.bbs.game.scripts.ui.UserInterface;
 import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.ShaderRepository;
@@ -16,7 +14,6 @@ import mchorse.bbs.l10n.L10n;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.framework.UIBaseMenu;
 import mchorse.bbs.ui.framework.UIRenderingContext;
-import mchorse.bbs.ui.ui.UIUserInterfaceMenu;
 import mchorse.bbs.ui.utils.UIChalkboard;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.world.World;
@@ -134,28 +131,7 @@ public class UIScreen implements IEngine, IFileDropListener
 
     public void pause()
     {
-        if (this.engine.development)
-        {
-            this.showMenu(this.getDashboard());
-        }
-        else
-        {
-            String pauseUI = BBSData.getSettings().pauseUI.get();
-
-            if (!pauseUI.isEmpty())
-            {
-                UserInterface ui = BBSData.getUIs().load(pauseUI);
-
-                if (ui != null)
-                {
-                    this.showMenu(UIUserInterfaceMenu.create(this.engine, ui));
-
-                    return;
-                }
-            }
-
-            this.showMenu(new UIPauseMenu(this.engine));
-        }
+        this.showMenu(this.getDashboard());
     }
 
     public void showMenu(UIBaseMenu menu)
@@ -308,7 +284,6 @@ public class UIScreen implements IEngine, IFileDropListener
     public void render(float transition)
     {
         this.context.setTransition(transition);
-        this.hud.renderHUDStage(this.context);
         this.context.getUBO().update(this.shaders.ortho, Matrices.EMPTY_4F);
 
         GLStates.setupDepthFunction2D();
@@ -329,11 +304,6 @@ public class UIScreen implements IEngine, IFileDropListener
     private void renderHUD(int w, int h)
     {
         this.hud.renderMessages(this.context, w, h);
-
-        if (!this.hasMenu())
-        {
-            this.hud.renderHUD(this.context, w, h);
-        }
 
         BBS.events.post(new RenderHUDEvent(this.context, w, h));
 
