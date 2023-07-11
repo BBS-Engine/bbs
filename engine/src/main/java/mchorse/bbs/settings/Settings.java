@@ -1,10 +1,11 @@
 package mchorse.bbs.settings;
 
-import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.settings.values.ValueGroup;
+import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.ui.utils.icons.Icon;
 import mchorse.bbs.utils.IOUtils;
 
 import java.io.File;
@@ -14,19 +15,16 @@ import java.util.Map;
 
 public class Settings extends BaseValue
 {
+    public final Icon icon;
     public final File file;
 
     public final Map<String, ValueGroup> categories = new LinkedHashMap<String, ValueGroup>();
 
-    public Settings(String id)
-    {
-        this(id, null);
-    }
-
-    public Settings(String id, File file)
+    public Settings(Icon icon, String id, File file)
     {
         super(id);
 
+        this.icon = icon;
         this.file = file;
     }
 

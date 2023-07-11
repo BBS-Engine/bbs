@@ -23,7 +23,7 @@ import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
-import mchorse.bbs.settings.ui.UISettingsPanel;
+import mchorse.bbs.settings.ui.UISettingsOverlayPanel;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.animation.UIAnimationPanel;
@@ -69,6 +69,7 @@ public class UIDashboard extends UIBaseMenu
 {
     private UIDashboardPanels panels;
 
+    public UIIcon settings;
     public UIIcon worlds;
 
     /* Camera data */
@@ -107,13 +108,18 @@ public class UIDashboard extends UIBaseMenu
 
         this.main.add(this.panels);
 
+        this.settings = new UIIcon(Icons.SETTINGS, (b) ->
+        {
+            UIOverlay.addOverlayRight(this.context, new UISettingsOverlayPanel(), 300);
+        });
+        this.settings.tooltip(UIKeys.CONFIG_TITLE, Direction.TOP);
         this.worlds = new UIIcon(Icons.GLOBE, (b) ->
         {
             UIOverlay.addOverlay(this.context, new UIWorldsOverlayPanel(this.bridge));
         });
         this.worlds.tooltip(UIKeys.WORLD_WORLDS, Direction.TOP);
 
-        this.panels.pinned.add(this.worlds);
+        this.panels.pinned.add(this.settings, this.worlds);
         this.getRoot().prepend(this.orbitUI);
 
         /* Register keys */
@@ -258,7 +264,6 @@ public class UIDashboard extends UIBaseMenu
 
     protected void registerPanels()
     {
-        this.panels.registerPanel(new UISettingsPanel(this), UIKeys.CONFIG_TITLE, Icons.SETTINGS);
         this.panels.registerPanel(new UIWorldSettingsPanel(this), UIKeys.WORLD_SETTINGS, Icons.GEAR);
 
         this.panels.registerPanel(new UIWorldEditorPanel(this), UIKeys.WORLD_WORLD_EDITOR, Icons.BLOCK).marginLeft(10);

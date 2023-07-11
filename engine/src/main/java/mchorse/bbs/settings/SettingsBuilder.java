@@ -1,6 +1,6 @@
 package mchorse.bbs.settings;
 
-import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueDouble;
 import mchorse.bbs.settings.values.ValueFloat;
@@ -8,7 +8,8 @@ import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.ValueLink;
 import mchorse.bbs.settings.values.ValueString;
-import mchorse.bbs.resources.Link;
+import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.ui.utils.icons.Icon;
 
 import java.io.File;
 
@@ -17,9 +18,9 @@ public class SettingsBuilder
     private Settings settings;
     private ValueGroup category;
 
-    public SettingsBuilder(String id, File file)
+    public SettingsBuilder(Icon icon, String id, File file)
     {
-        this.settings = new Settings(id, file);
+        this.settings = new Settings(icon, id, file);
     }
 
     public Settings getConfig()

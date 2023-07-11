@@ -35,7 +35,7 @@ import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.ValueLanguage;
 import mchorse.bbs.ui.framework.UIBaseMenu;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
-import mchorse.bbs.ui.utils.keys.KeybindSettings;
+import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.IOUtils;
 import mchorse.bbs.utils.OS;
 import mchorse.bbs.utils.recording.ScreenshotRecorder;
@@ -134,8 +134,7 @@ public class SandboxEngine extends Engine implements IBridge, IFileDropListener
     @Subscribe
     public void registerSettings(RegisterSettingsEvent event)
     {
-        event.register("sandbox", SandboxSettings::register);
-        event.register("keybinds", KeybindSettings::register);
+        event.register(Icons.BUCKET, "sandbox", SandboxSettings::register);
     }
 
     @Subscribe

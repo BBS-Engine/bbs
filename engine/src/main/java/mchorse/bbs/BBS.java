@@ -104,6 +104,7 @@ import mchorse.bbs.ui.tileset.panels.UIModelBlockEach;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockFactory;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockVertical;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockWithCollision;
+import mchorse.bbs.ui.utils.icons.Icon;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.keys.KeybindSettings;
 import mchorse.bbs.ui.world.entities.components.UIBasicEntityComponent;
@@ -400,16 +401,16 @@ public class BBS
 
         KeybindSettings.registerClasses();
 
-        setupConfig("bbs", new File(destination, "bbs.json"), BBSSettings::register);
-        setupConfig("keybinds", new File(destination, "keybinds.json"), KeybindSettings::register);
+        setupConfig(Icons.PROCESSOR, "bbs", new File(destination, "bbs.json"), BBSSettings::register);
+        setupConfig(Icons.KEY, "keybinds", new File(destination, "keybinds.json"), KeybindSettings::register);
 
         events.post(new RegisterSettingsEvent());
         configs.reload();
     }
 
-    public static void setupConfig(String id, File destination, Consumer<SettingsBuilder> registerer)
+    public static void setupConfig(Icon icon, String id, File destination, Consumer<SettingsBuilder> registerer)
     {
-        SettingsBuilder builder = new SettingsBuilder(id, destination);
+        SettingsBuilder builder = new SettingsBuilder(icon, id, destination);
         Settings settings = builder.getConfig();
 
         registerer.accept(builder);
