@@ -19,13 +19,6 @@ import java.util.Map;
 
 public class Font implements IMapSerializable
 {
-    /* Hardcoded formats */
-    public static final String FORMAT_RESET = FontRenderer.FORMATTING_STRING + 'r';
-    public static final String FORMAT_ITALIC = FontRenderer.FORMATTING_STRING + 'i';
-    public static final String FORMAT_LIGHT_GRAY = FontRenderer.FORMATTING_STRING + '2';
-    public static final String FORMAT_ORANGE = FontRenderer.FORMATTING_STRING + '7';
-    public static final String FORMAT_YELLOW = FontRenderer.FORMATTING_STRING + '8';
-
     public String name;
     public int height;
     public Glyph[] glyphs;

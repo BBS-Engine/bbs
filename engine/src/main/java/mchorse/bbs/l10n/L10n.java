@@ -43,10 +43,10 @@ public class L10n
         this.supportedLanguages = new ArrayList<Pair<String, String>>();
         this.supportedLanguages.addAll(Arrays.asList(
             // new Pair<String, String>("Deutsch (de_DE)", "de_DE"),
-            new Pair<String, String>("English (en_US)", "en_US"),
-            new Pair<String, String>("Português (pt_BR)", "pt_BR"),
-            new Pair<String, String>("Русский (ru_RU)", "ru_RU"),
-            new Pair<String, String>("Українська (uk_UA)", "uk_UA")
+            new Pair<String, String>("English (en_US)", "en_US")
+            // new Pair<String, String>("Português (pt_BR)", "pt_BR"),
+            // new Pair<String, String>("Русский (ru_RU)", "ru_RU"),
+            // new Pair<String, String>("Українська (uk_UA)", "uk_UA")
         ));
         this.supportedLanguages.addAll(additionalLanguages);
     }

@@ -7,10 +7,10 @@ printf "Building...\n\n"
 FOLDER="release"
 
 if [ "$#" -lt 1 ]; then
-    gradle :sandbox:build :engine:build :engine:copyRuntimeLibs
+    gradle :studio:build :engine:build :engine:copyRuntimeLibs
 else
     FOLDER="release-$1"
-    gradle :sandbox:build :engine:build :engine:copyRuntimeLibs -Pos="$1"
+    gradle :studio:build :engine:build :engine:copyRuntimeLibs -Pos="$1"
 fi
 
 # Copy assets
@@ -18,7 +18,7 @@ printf "\nCopying assets..."
 
 mkdir -p "$FOLDER"
 mkdir -p "$FOLDER/game"
-cp sandbox/build/libs/launcher.jar "$FOLDER/"
+cp studio/build/libs/launcher.jar "$FOLDER/"
 cp -r engine/build/dependencies/ "$FOLDER/dependencies/"
 cp engine/build/libs/bbs-engine-0.1.jar "$FOLDER/dependencies/"
 cp -r licenses/ "$FOLDER/licenses/"
