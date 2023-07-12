@@ -25,7 +25,7 @@ public class Launcher
         defaultSettings.putBool("game.development", true);
         defaultSettings.putString("game.directory", "game");
 
-        List<String> args = launcher.getArguments("net.fabricmc.loader.impl.launch.knot.KnotClient");
+        List<String> args = launcher.getArguments("mchorse.studio.Studio");
         MapType settings = launcher.readSettings(new File("launcher.json"), defaultSettings);
 
         String gameDirectory = settings.getString("game.directory");

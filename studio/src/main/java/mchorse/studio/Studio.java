@@ -38,7 +38,6 @@ public class Studio
     public int windowHeight = 720;
     public boolean openGLDebug;
     public boolean development;
-    public boolean fabric;
 
     public static Link link(String path)
     {
@@ -83,7 +82,6 @@ public class Studio
         this.windowHeight = data.getInt("height", this.windowHeight);
         this.openGLDebug = data.getBool("glDebug", this.openGLDebug);
         this.development = data.getBool("development", this.development);
-        this.fabric = data.getBool("fabric", this.fabric);
     }
 
     public void launch()

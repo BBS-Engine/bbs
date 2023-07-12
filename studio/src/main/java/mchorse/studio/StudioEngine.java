@@ -57,7 +57,6 @@ import mchorse.studio.ui.UIScreen;
 import mchorse.studio.ui.l10n.UILanguageEditorOverlayPanel;
 import mchorse.studio.ui.utility.UIUtilityMenu;
 import mchorse.studio.ui.utility.UIUtilityOverlayPanel;
-import net.fabricmc.loader.impl.game.minecraft.Hooks;
 import org.greenrobot.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -102,11 +101,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         this.apis.put(IBridgeWorld.class, new BridgeWorld(this));
 
         BBS.events.register(this);
-
-        if (game.fabric)
-        {
-            Hooks.startClient(game.gameDirectory, game);
-        }
 
         BBS.registerCore(this, game.gameDirectory);
         BBS.registerFactories();
