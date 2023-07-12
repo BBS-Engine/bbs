@@ -394,7 +394,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
     @Override
     public boolean handleGamepad(int button, int action)
     {
-        return false;
+        return this.controller.handleGamepad(button, action);
     }
 
     @Override
@@ -434,6 +434,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
+        this.controller.render();
         this.renderer.render(worldTransition);
         this.screen.render(transition);
 
