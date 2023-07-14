@@ -352,12 +352,12 @@ public class ParticleComponentAppearanceBillboard extends ParticleComponentBase 
             this.transform.transform(vertex);
         }
 
-        this.writeVertex(builder, this.vertices[0], u1, v1, particle);
-        this.writeVertex(builder, this.vertices[1], u2, v1, particle);
-        this.writeVertex(builder, this.vertices[2], u2, v2, particle);
-        this.writeVertex(builder, this.vertices[2], u2, v2, particle);
-        this.writeVertex(builder, this.vertices[3], u1, v2, particle);
-        this.writeVertex(builder, this.vertices[0], u1, v1, particle);
+        this.writeVertex(builder, this.vertices[0], u2, v2, particle);
+        this.writeVertex(builder, this.vertices[1], u1, v2, particle);
+        this.writeVertex(builder, this.vertices[2], u1, v1, particle);
+        this.writeVertex(builder, this.vertices[2], u1, v1, particle);
+        this.writeVertex(builder, this.vertices[3], u2, v1, particle);
+        this.writeVertex(builder, this.vertices[0], u2, v2, particle);
     }
 
     private void writeVertex(VAOBuilder builder, Vector4f vertex, float u, float v, Particle particle)

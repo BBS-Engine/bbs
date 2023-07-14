@@ -134,7 +134,7 @@ public class UIOverlayPanel extends UIElement
         int color = BBSSettings.primaryColor.get();
 
         context.batcher.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
-        this.area.render(context.batcher, Colors.A100);
+        this.area.render(context.batcher, Colors.mulRGB(color | Colors.A100, 0.1F));
 
         this.icons.area.render(context.batcher, Colors.CONTROL_BAR);
 

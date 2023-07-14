@@ -193,7 +193,7 @@ public class Animator
         BasicComponent basic = target.basic;
         double dx = basic.position.x - this.prevX;
         double dz = basic.position.z - this.prevZ;
-        final float threshold = 0.01F;
+        final float threshold = 0.05F;
         boolean moves = Math.abs(dx) > threshold || Math.abs(dz) > threshold;
 
         /* if (target.getHealth() <= 0)

@@ -35,7 +35,7 @@ public class ValueKeyCombo extends BaseValueBasic<KeyCombo> implements IValueUIP
         keybind.setKeyCombo(this.value);
         keybind.w(100);
 
-        return Arrays.asList(UI.row(label, keybind));
+        return Arrays.asList(UI.row(label, keybind).tooltip(this.value.label));
     }
 
     @Override

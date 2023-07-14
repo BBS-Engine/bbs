@@ -110,7 +110,7 @@ public class UIDashboard extends UIBaseMenu
 
         this.settings = new UIIcon(Icons.SETTINGS, (b) ->
         {
-            UIOverlay.addOverlayRight(this.context, new UISettingsOverlayPanel(), 300);
+            UIOverlay.addOverlayRight(this.context, new UISettingsOverlayPanel(), 240);
         });
         this.settings.tooltip(UIKeys.CONFIG_TITLE, Direction.TOP);
         this.worlds = new UIIcon(Icons.GLOBE, (b) ->
