@@ -22,11 +22,13 @@ import mchorse.bbs.ui.forms.UIFormPalette;
 import mchorse.bbs.ui.forms.UINestedEdit;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
+import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIPromptOverlayPanel;
+import mchorse.bbs.ui.framework.elements.overlay.UISoundOverlayPanel;
 import mchorse.bbs.ui.framework.elements.utils.UILabel;
 import mchorse.bbs.ui.recording.editor.UIRecordPanel;
 import mchorse.bbs.ui.utils.UI;
@@ -46,6 +48,7 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
 
     /* Settings fields */
     public UIToggle loops;
+    public UIButton audio;
 
     /* Replay fields */
     public UITextbox id;
@@ -77,6 +80,13 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
 
         /* Settings options */
         this.loops = new UIToggle(UIKeys.SCENE_LOOPS, false, (b) -> this.data.loops = b.getValue());
+        this.audio = new UIButton(IKey.lazy("Pick audio..."), (b) ->
+        {
+            UIOverlay.addOverlay(this.getContext(), new UISoundOverlayPanel((l) ->
+            {
+                this.data.audio = l;
+            }).set(this.data.audio));
+        });
 
         /* Replay options */
         this.id = new UITextbox(120, (str) ->
@@ -126,7 +136,7 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
         this.replayEditor.add(UI.label(UIKeys.SCENE_TARGET).color(Colors.LIGHTEST_GRAY).marginTop(12), this.target);
 
         this.addOptions();
-        this.options.fields.add(this.loops);
+        this.options.fields.add(this.loops, this.audio);
 
         this.iconBar.add(this.record, this.edit, this.rename, this.teleport);
         this.overlay.namesList.setFileIcon(Icons.SCENE);

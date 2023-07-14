@@ -161,8 +161,7 @@ public class Waveform
 
         for (Texture sprite : this.sprites)
         {
-            int sw = sprite.width;
-            float spriteTime = sw / (float) this.pixelsPerSecond;
+            float spriteTime = sprite.width / (float) this.pixelsPerSecond;
             float spriteStart = offset;
             float spriteEnd = offset + spriteTime;
 
@@ -171,8 +170,8 @@ public class Waveform
                 break;
             }
 
-            int u1 = (int) ((Math.max(spriteStart, startTime) - spriteStart) * this.pixelsPerSecond);
-            int u2 = (int) ((Math.min(spriteEnd, endTime) - spriteStart) * this.pixelsPerSecond);
+            int u1 = (int) ((startTime - spriteStart) * this.pixelsPerSecond);
+            int u2 = (int) ((endTime - spriteStart) * this.pixelsPerSecond);
             int w2 = w;
 
             if (endTime > spriteEnd)
@@ -184,60 +183,6 @@ public class Waveform
 
             offset = spriteEnd;
             x += u2 - u1;
-        }
-    }
-
-    public void render2(Batcher2D batcher, int x, int y, int u, int v, int w, int h)
-    {
-        this.render2(batcher, Colors.WHITE, x, y, u, v, w, h, this.h);
-    }
-
-    public void render2(Batcher2D batcher, int color, int x, int y, int u, int v, int w, int h)
-    {
-        this.render2(batcher, color, x, y, u, v, w, h, this.h);
-    }
-
-    /**
-     * Draw the waveform out of multiple sprites of desired cropped region
-     */
-    public void render2(Batcher2D batcher, int color, int x, int y, int u, int v, int w, int h, int height)
-    {
-        int offset = 0;
-
-        for (Texture sprite : this.sprites)
-        {
-            int sw = sprite.width;
-            offset += sw;
-
-            if (w <= 0)
-            {
-                break;
-            }
-
-            if (u >= offset)
-            {
-                continue;
-            }
-
-            int so = offset - u;
-
-            batcher.texturedBox(sprite, color, x, y, Math.min(w, so), h, u, v, sw, height, sprite.width, sprite.height);
-
-            x += so;
-            u += so;
-            w -= so;
-        }
-    }
-
-    public static class WaveformSprite
-    {
-        public final Texture texture;
-        public final int width;
-
-        public WaveformSprite(Texture texture, int width)
-        {
-            this.texture = texture;
-            this.width = width;
         }
     }
 }

@@ -1,6 +1,8 @@
 package mchorse.bbs.recording.scene;
 
+import mchorse.bbs.BBS;
 import mchorse.bbs.BBSData;
+import mchorse.bbs.audio.SoundPlayer;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
@@ -28,6 +30,7 @@ public class Scene extends AbstractData
 
     public List<Replay> replays = new ArrayList<Replay>();
     public boolean loops;
+    public Link audio;
 
     /* Runtime properties */
 
@@ -267,6 +270,8 @@ public class Scene extends AbstractData
             this.world.damageManager.addDamageControl(this, firstActor);
         }
 
+        this.playAudio();
+
         this.paused = false;
         this.tick = tick;
     }
@@ -292,8 +297,21 @@ public class Scene extends AbstractData
         }
 
         this.setPlaying(true);
+        this.playAudio();
+
         this.paused = false;
         this.tick = tick;
+    }
+
+    private void playAudio()
+    {
+        if (this.audio != null)
+        {
+            SoundPlayer player = BBS.getSounds().playUnique(this.audio);
+
+            player.setRelative(true);
+            player.play();
+        }
     }
 
     /**
@@ -375,6 +393,11 @@ public class Scene extends AbstractData
         }
 
         this.world.damageManager.restoreDamageControl(this, this.getWorld());
+
+        if (this.audio != null)
+        {
+            BBS.getSounds().stop(this.audio);
+        }
 
         this.actors.clear();
         this.setPlaying(false);
@@ -641,6 +664,11 @@ public class Scene extends AbstractData
 
         data.put("replays", replays);
         data.putBool("loops", this.loops);
+
+        if (this.audio != null)
+        {
+            data.putString("audio", this.audio.toString());
+        }
     }
 
     @Override
@@ -659,5 +687,10 @@ public class Scene extends AbstractData
         }
 
         this.loops = data.getBool("loops");
+
+        if (data.has("audio"))
+        {
+            this.audio = Link.create(data.getString("audio"));
+        }
     }
 }

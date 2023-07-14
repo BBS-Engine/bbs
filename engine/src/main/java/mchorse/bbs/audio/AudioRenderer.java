@@ -52,6 +52,7 @@ public class AudioRenderer
             wave.render();
         }
 
+        float duration = w / (float) wave.getPixelsPerSecond();
         float playback = file.getPlaybackPosition();
         int offset = (int) (playback * wave.getPixelsPerSecond());
         int waveW = wave.getWidth();
@@ -61,18 +62,15 @@ public class AudioRenderer
 
         if (runningOffset > 0)
         {
-            wave.render2(batcher, Colors.WHITE, x + half, y, offset, 0, Math.min(runningOffset, half), h, h);
+            wave.render(batcher, Colors.WHITE, x + half, y, half, h, playback, playback + duration / 2);
         }
 
         /* Draw the passed waveform */
         if (offset > 0)
         {
-            int xx = offset > half ? x : x + half - offset;
-            int oo = offset > half ? offset - half : 0;
-            int ww = offset > half ? half : offset;
             int color = Colors.COLOR.set(brightness, brightness, brightness, 1F).getARGBColor();
 
-            wave.render2(batcher, color, xx, y, oo, 0, ww, h, h);
+            wave.render(batcher, color, x, y, half, h, playback - duration / 2, playback);
         }
 
         batcher.unclip(sw, sh);
