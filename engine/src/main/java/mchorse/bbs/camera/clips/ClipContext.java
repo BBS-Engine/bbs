@@ -1,8 +1,11 @@
 package mchorse.bbs.camera.clips;
 
+import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.bridge.IBridge;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ClipContext
 {
@@ -35,6 +38,8 @@ public class ClipContext
      * Whether currently camera is played or paused
      */
     public boolean playing = true;
+
+    public Map<String, Object> clipData = new HashMap<String, Object>();
 
     public IBridge bridge;
 

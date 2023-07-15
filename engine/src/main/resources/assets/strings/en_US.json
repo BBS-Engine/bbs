@@ -310,6 +310,7 @@
     "bbs.ui.camera.clips.bbs:scene": "Scene",
     "bbs.ui.camera.clips.bbs:shake": "Shake",
     "bbs.ui.camera.clips.bbs:translate": "Translate",
+    "bbs.ui.camera.clips.bbs:subtitle": "Subtitle",
     "bbs.ui.camera.config.flight": "Flight",
     "bbs.ui.camera.config.flight_tooltip": "Flight mode allows to control the camera and edit selected clip",
     "bbs.ui.camera.config.title": "Camera Options",

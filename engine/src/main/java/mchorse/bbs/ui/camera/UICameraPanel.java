@@ -8,6 +8,8 @@ import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipContext;
+import mchorse.bbs.camera.clips.misc.Subtitle;
+import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.game.utils.ContentType;
@@ -15,6 +17,7 @@ import mchorse.bbs.graphics.Draw;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.RenderingContext;
+import mchorse.bbs.graphics.text.TextUtils;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.recording.RecordComponent;
@@ -40,11 +43,13 @@ import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.VectorUtils;
 import mchorse.bbs.utils.colors.Colors;
+import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.utils.undo.CompoundUndo;
 import mchorse.bbs.utils.undo.IUndo;
 import mchorse.bbs.utils.undo.UndoManager;
 import mchorse.bbs.world.entities.Entity;
+import org.joml.Matrix4f;
 import org.joml.Vector2i;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -875,7 +880,10 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
         /* Render the scene to framebuffer */
         GLStates.setupDepthFunction3D();
-        this.dashboard.bridge.get(IBridgeRender.class).renderSceneTo(this.camera, framebuffer, 0, true, 0);
+        this.dashboard.bridge.get(IBridgeRender.class).renderSceneTo(this.camera, framebuffer, 0, true, 0, () ->
+        {
+            this.renderSubtitles(context, width, height);
+        });
         GLStates.setupDepthFunction2D();
 
         viewport.render(context.batcher, Colors.A75);
@@ -911,5 +919,48 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             context.batcher.box(x - 4, y - 1, x + 3, y, Colors.setA(Colors.WHITE, 0.5F));
             context.batcher.box(x - 1, y - 4, x, y + 3, Colors.setA(Colors.WHITE, 0.5F));
         }
+    }
+
+    private void renderSubtitles(UIContext context, int width, int height)
+    {
+        width /= 2;
+        height /= 2;
+
+        List<Subtitle> subtitles = SubtitleClip.getSubtitles(this.runner.getContext());
+
+        if (subtitles.isEmpty())
+        {
+            return;
+        }
+
+        Matrix4f ortho = new Matrix4f().ortho(0, width, height, 0, -100, 100);
+
+        context.render.getUBO().update(ortho, Matrices.EMPTY_4F);
+
+        for (Subtitle subtitle : subtitles)
+        {
+            float alpha = Colors.getAlpha(subtitle.color);
+
+            if (alpha <= 0)
+            {
+                continue;
+            }
+
+            String label = TextUtils.processColoredText(subtitle.label);
+            int w = context.font.getWidth(label);
+            int h = context.font.getHeight();
+            int x = (int) (width * subtitle.windowX + subtitle.x);
+            int y = (int) (height * subtitle.windowY + subtitle.y);
+            float scale = subtitle.size;
+
+            context.render.stack.push();
+            context.render.stack.translate(x, y, 0);
+            context.render.stack.scale(scale, scale, 1F);
+            context.batcher.textShadow(context.font, label, -w * subtitle.anchorX, -h * subtitle.anchorY, subtitle.color);
+            context.render.stack.pop();
+        }
+
+        context.batcher.flush();
+        context.render.getUBO().update(context.render.projection, Matrices.EMPTY_4F);
     }
 }

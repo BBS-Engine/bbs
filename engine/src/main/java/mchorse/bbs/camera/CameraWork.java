@@ -28,6 +28,7 @@ public class CameraWork extends StructureBase
 
     public void apply(ClipContext context, int ticks, float transition, Position position)
     {
+        context.clipData.clear();
         context.work = this;
         context.ticks = ticks;
         context.transition = transition;

@@ -17,5 +17,10 @@ public interface IBridgeRender
         this.renderSceneTo(camera, framebuffer, pass, false, quality);
     }
 
-    public void renderSceneTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality);
+    public default void renderSceneTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality)
+    {
+        this.renderSceneTo(camera, framebuffer, pass, renderScreen, quality, null);
+    }
+
+    public void renderSceneTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality, Runnable rendering);
 }

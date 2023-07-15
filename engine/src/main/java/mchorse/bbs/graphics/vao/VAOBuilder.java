@@ -257,6 +257,7 @@ public class VAOBuilder
 
         this.vao.bind();
         this.vao.uploadData(this.buffer);
+        this.buffer.clear();
 
         if (this.indices != null)
         {

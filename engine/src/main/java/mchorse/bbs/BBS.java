@@ -14,6 +14,7 @@ import mchorse.bbs.camera.clips.converters.IdleToKeyframeConverter;
 import mchorse.bbs.camera.clips.converters.IdleToPathConverter;
 import mchorse.bbs.camera.clips.converters.PathToDollyConverter;
 import mchorse.bbs.camera.clips.converters.PathToKeyframeConverter;
+import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.camera.clips.modifiers.AngleClip;
 import mchorse.bbs.camera.clips.modifiers.DragClip;
 import mchorse.bbs.camera.clips.modifiers.LookClip;
@@ -86,6 +87,7 @@ import mchorse.bbs.ui.camera.clips.UIOrbitClip;
 import mchorse.bbs.ui.camera.clips.UIPathClip;
 import mchorse.bbs.ui.camera.clips.UIRemapperClip;
 import mchorse.bbs.ui.camera.clips.UIShakeClip;
+import mchorse.bbs.ui.camera.clips.UISubtitleClip;
 import mchorse.bbs.ui.camera.clips.UITranslateClip;
 import mchorse.bbs.ui.font.format.UIBaseFontFormat;
 import mchorse.bbs.ui.font.format.UIColorFontFormat;
@@ -490,8 +492,10 @@ public class BBS
             .register(Link.bbs("remapper"), RemapperClip.class, new ClipFactoryData(Icons.TIME, 0x222222, UIRemapperClip.class))
 
             .register(Link.bbs("scene"), SceneClip.class, new ClipFactoryData(Icons.SCENE, 0xff1493, UISceneClip.class))
-            .register(Link.bbs("audio"), AudioClip.class, new ClipFactoryData(Icons.SOUND, 0xffffc825, UIAudioClip.class))
-            .register(Link.bbs("animation"), AnimationClip.class, new ClipFactoryData(Icons.CURVES, 0xeeeeee, UIAnimationClip.class));
+            .register(Link.bbs("audio"), AudioClip.class, new ClipFactoryData(Icons.SOUND, 0xffc825, UIAudioClip.class))
+            .register(Link.bbs("animation"), AnimationClip.class, new ClipFactoryData(Icons.CURVES, 0xeeeeee, UIAnimationClip.class))
+
+            .register(Link.bbs("subtitle"), SubtitleClip.class, new ClipFactoryData(Icons.FONT, 0x888899, UISubtitleClip.class));
 
         /* Register actions */
         factoryActions = new MapFactory<Action, ActionFactoryData>()

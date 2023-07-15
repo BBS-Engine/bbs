@@ -174,11 +174,6 @@ public class Waveform
             int u2 = (int) ((endTime - spriteStart) * this.pixelsPerSecond);
             int w2 = w;
 
-            if (endTime > spriteEnd)
-            {
-                w2 = (int) (w2 * (spriteEnd / endTime));
-            }
-
             batcher.texturedBox(sprite, color, x, y, w2, h, u1, 0, u2, sprite.height, sprite.width, sprite.height);
 
             offset = spriteEnd;

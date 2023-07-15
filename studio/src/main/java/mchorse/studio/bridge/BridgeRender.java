@@ -1,9 +1,9 @@
 package mchorse.studio.bridge;
 
-import mchorse.studio.StudioEngine;
 import mchorse.bbs.bridge.IBridgeRender;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.graphics.Framebuffer;
+import mchorse.studio.StudioEngine;
 
 public class BridgeRender extends BaseBridge implements IBridgeRender
 {
@@ -19,8 +19,8 @@ public class BridgeRender extends BaseBridge implements IBridgeRender
     }
 
     @Override
-    public void renderSceneTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality)
+    public void renderSceneTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality, Runnable rendering)
     {
-        this.engine.renderer.renderFrameToQuality(camera, framebuffer, pass, renderScreen, quality);
+        this.engine.renderer.renderFrameToQuality(camera, framebuffer, pass, renderScreen, quality, rendering);
     }
 }

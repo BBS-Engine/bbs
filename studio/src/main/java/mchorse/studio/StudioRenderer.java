@@ -380,7 +380,7 @@ public class StudioRenderer implements IComponent
         GLStates.depthMask(true);
     }
 
-    public void renderFrameToQuality(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality)
+    public void renderFrameToQuality(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality, Runnable rendering)
     {
         if (quality <= 0)
         {
@@ -410,6 +410,11 @@ public class StudioRenderer implements IComponent
 
         this.tmpFramebuffer.getMainTexture().bind(0);
         Framebuffer.renderToQuad(this.context, this.finalShader);
+
+        if (rendering != null)
+        {
+            rendering.run();
+        }
 
         framebuffer.unbind();
         GLStates.resetViewport();
