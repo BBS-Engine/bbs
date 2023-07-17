@@ -140,6 +140,26 @@ public class UIScrollView extends UIElement implements IViewport
     }
 
     @Override
+    protected boolean childrenKeyPressed(UIContext context)
+    {
+        this.apply(context);
+        boolean result = super.childrenKeyPressed(context);
+        this.unapply(context);
+
+        return result;
+    }
+
+    @Override
+    protected boolean childrenTextInput(UIContext context)
+    {
+        this.apply(context);
+        boolean result = super.childrenTextInput(context);
+        this.unapply(context);
+
+        return result;
+    }
+
+    @Override
     public void render(UIContext context)
     {
         UIElement lastTooltip = context.tooltip.element;

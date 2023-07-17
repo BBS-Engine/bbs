@@ -393,6 +393,15 @@ public class UITrackpad extends UIBaseTextbox
                 context.focus(null);
             }
         }
+        else if (this.area.isInside(context))
+        {
+            if (!context.isFocused() && context.isPressed(GLFW.GLFW_KEY_MINUS))
+            {
+                this.setValueAndNotify(-this.value);
+
+                return true;
+            }
+        }
 
         String old = this.textbox.getText();
         boolean result = this.textbox.keyPressed(context);
