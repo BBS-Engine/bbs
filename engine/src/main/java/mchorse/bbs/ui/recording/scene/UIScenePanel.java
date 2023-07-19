@@ -35,6 +35,7 @@ import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.colors.Colors;
+import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
 
@@ -177,9 +178,10 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
                         World world = bridge.get(IBridgeWorld.class).getWorld();
                         Entity entity = world.architect.create(Link.bbs("player"));
                         Camera camera = bridge.get(IBridgeCamera.class).getCamera();
+                        float yaw = camera.rotation.y;
 
                         entity.setPosition(camera.position.x, camera.position.y, camera.position.z);
-                        entity.basic.rotation.set(camera.rotation.x, camera.rotation.y, camera.rotation.y);
+                        entity.basic.rotation.set(camera.rotation.x, yaw, yaw);
                         entity.basic.prevRotation.set(entity.basic.rotation);
                         entity.setWorld(world);
                         entity.canBeSaved = false;

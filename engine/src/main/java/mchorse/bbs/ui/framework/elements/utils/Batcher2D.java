@@ -546,7 +546,7 @@ public class Batcher2D
         return h;
     }
 
-    public void textCard(FontRenderer font, String text, int x, int y)
+    public void textCard(FontRenderer font, String text, float x, float y)
     {
         this.textCard(font, text, x, y, Colors.WHITE, Colors.A50);
     }
@@ -554,17 +554,17 @@ public class Batcher2D
     /**
      * In this context, text card is a text with some background behind it
      */
-    public void textCard(FontRenderer font, String text, int x, int y, int color, int background)
+    public void textCard(FontRenderer font, String text, float x, float y, int color, int background)
     {
         this.textCard(font, text, x, y, color, background, 3);
     }
 
-    public void textCard(FontRenderer font, String text, int x, int y, int color, int background, int offset)
+    public void textCard(FontRenderer font, String text, float x, float y, int color, int background, float offset)
     {
         this.textCard(font, text, x, y, color, background, offset, true);
     }
 
-    public void textCard(FontRenderer font, String text, int x, int y, int color, int background, int offset, boolean shadow)
+    public void textCard(FontRenderer font, String text, float x, float y, int color, int background, float offset, boolean shadow)
     {
         int a = background >> 24 & 0xff;
 

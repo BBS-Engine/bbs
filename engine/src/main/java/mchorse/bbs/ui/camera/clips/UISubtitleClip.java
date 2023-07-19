@@ -24,6 +24,8 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
     public UIColor color;
     public UITrackpad windowX;
     public UITrackpad windowY;
+    public UIColor background;
+    public UITrackpad backgroundOffset;
 
     public UISubtitleClip(SubtitleClip clip, UICameraPanel editor)
     {
@@ -48,6 +50,9 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
 
         this.windowX = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.windowX, new FloatType(v.floatValue()))));
         this.windowY = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.windowY, new FloatType(v.floatValue()))));
+
+        this.background = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.background, new IntType(c)))).withAlpha();
+        this.backgroundOffset = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.backgroundOffset, new FloatType(v.floatValue()))));
     }
 
     @Override
@@ -60,6 +65,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         subtitle.add(UI.label(IKey.lazy("Size")).background(), this.size, this.color);
         subtitle.add(UI.label(IKey.lazy("Anchor")).background(), UI.row(this.anchorX, this.anchorY));
         subtitle.add(UI.label(IKey.lazy("Window")).background(), UI.row(this.windowX, this.windowY));
+        subtitle.add(UI.label(IKey.lazy("Background")).background(), this.background, this.backgroundOffset);
 
         this.panels.registerPanel(subtitle, IKey.lazy("Subtitle"), Icons.FONT);
         this.panels.setPanel(subtitle);
@@ -81,5 +87,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         this.color.setColor(this.clip.color.get());
         this.windowX.setValue(this.clip.windowX.get());
         this.windowY.setValue(this.clip.windowY.get());
+        this.background.setColor(this.clip.background.get());
+        this.backgroundOffset.setValue(this.clip.backgroundOffset.get());
     }
 }

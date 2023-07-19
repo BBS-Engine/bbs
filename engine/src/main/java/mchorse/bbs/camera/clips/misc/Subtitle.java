@@ -11,6 +11,8 @@ public class Subtitle
     public float windowX;
     public float windowY;
     public int color;
+    public int backgroundColor;
+    public float backgroundOffset;
 
     public void update(String label, int x, int y, float size, float anchorX, float anchorY, int color)
     {
@@ -27,5 +29,11 @@ public class Subtitle
     {
         this.windowX = x;
         this.windowY = y;
+    }
+
+    public void updateBackground(int backgroundColor, float backgroundOffset)
+    {
+        this.backgroundColor = backgroundColor;
+        this.backgroundOffset = backgroundOffset;
     }
 }

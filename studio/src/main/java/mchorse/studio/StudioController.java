@@ -168,7 +168,12 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
     }
 
     public void reset()
-    {}
+    {
+        MouseInput input = this.engine.mouse;
+
+        this.lastX = input.x;
+        this.lastY = input.y;
+    }
 
     @Override
     public void update()
@@ -364,6 +369,5 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
         if (Math.abs(this.joystickDirection.y) < 0.05F) this.joystickDirection.y = 0F;
         if (Math.abs(this.joystickLooking.x) < 0.05F) this.joystickLooking.x = 0F;
         if (Math.abs(this.joystickLooking.y) < 0.05F) this.joystickLooking.y = 0F;
-
     }
 }

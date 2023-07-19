@@ -22,6 +22,8 @@ public class SubtitleClip extends Clip
     public ValueInt color = new ValueInt("color", 0xffffff);
     public ValueFloat windowX = new ValueFloat("windowX", 0F);
     public ValueFloat windowY = new ValueFloat("windowY", 0F);
+    public ValueInt background = new ValueInt("background", 0);
+    public ValueFloat backgroundOffset = new ValueFloat("backgroundOffset", 3F);
 
     private Subtitle subtitle = new Subtitle();
 
@@ -55,6 +57,8 @@ public class SubtitleClip extends Clip
         this.register(this.color);
         this.register(this.windowX);
         this.register(this.windowY);
+        this.register(this.background);
+        this.register(this.backgroundOffset);
     }
 
     @Override
@@ -65,6 +69,7 @@ public class SubtitleClip extends Clip
 
         this.subtitle.update(this.label.get(), this.x.get(), this.y.get(), this.size.get(), this.anchorX.get(), this.anchorY.get(), color);
         this.subtitle.updateWindow(this.windowX.get(), this.windowY.get());
+        this.subtitle.updateBackground(this.background.get(), this.backgroundOffset.get());
         subtitles.add(this.subtitle);
     }
 

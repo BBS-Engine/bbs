@@ -956,7 +956,16 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             context.render.stack.push();
             context.render.stack.translate(x, y, 0);
             context.render.stack.scale(scale, scale, 1F);
-            context.batcher.textShadow(context.font, label, -w * subtitle.anchorX, -h * subtitle.anchorY, subtitle.color);
+
+            if (Colors.getAlpha(subtitle.backgroundColor) > 0)
+            {
+                context.batcher.textCard(context.font, label, (int) (-w * subtitle.anchorX), (int) (-h * subtitle.anchorY), subtitle.color, Colors.mulA(subtitle.backgroundColor, alpha), subtitle.backgroundOffset);
+            }
+            else
+            {
+                context.batcher.textShadow(context.font, label, (int) (-w * subtitle.anchorX), (int) (-h * subtitle.anchorY), subtitle.color);
+            }
+
             context.render.stack.pop();
         }
 
