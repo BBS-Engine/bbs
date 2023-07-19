@@ -6,6 +6,8 @@ import mchorse.bbs.camera.CameraManager;
 import mchorse.bbs.particles.ParticleManager;
 import mchorse.bbs.recording.RecordManager;
 import mchorse.bbs.recording.scene.SceneManager;
+import mchorse.bbs.screenplay.Screenplay;
+import mchorse.bbs.screenplay.ScreenplayManager;
 
 import java.io.File;
 
@@ -16,6 +18,7 @@ public class BBSData
     private static RecordManager records;
     private static AnimationManager animations;
     private static ParticleManager particles;
+    private static ScreenplayManager screenplays;
 
     public static CameraManager getCameras()
     {
@@ -42,6 +45,11 @@ public class BBSData
         return particles;
     }
 
+    public static ScreenplayManager getScreenplays()
+    {
+        return screenplays;
+    }
+
     public static void load(File folder, IBridge bridge)
     {
         cameras = new CameraManager(new File(folder, "cameras"));
@@ -49,6 +57,7 @@ public class BBSData
         records = new RecordManager(new File(folder, "records"), bridge);
         animations = new AnimationManager(new File(folder, "animations"));
         particles = new ParticleManager(new File(folder, "particles"));
+        screenplays = new ScreenplayManager(new File(folder, "screenplays"));
     }
 
     public static void delete()
@@ -56,6 +65,8 @@ public class BBSData
         cameras = null;
         scenes = null;
         records = null;
+        animations = null;
         particles = null;
+        screenplays = null;
     }
 }

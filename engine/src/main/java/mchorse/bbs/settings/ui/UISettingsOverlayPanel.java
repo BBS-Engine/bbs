@@ -52,7 +52,7 @@ public class UISettingsOverlayPanel extends UIOverlayPanel
         }
 
         this.add(this.options);
-        this.selectConfig("bbs", this.icons.getChildren(UIIcon.class).get(1));
+        this.selectConfig("bbs", this.icons.getChildren(UIIcon.class).get(2));
         this.markContainer();
     }
 

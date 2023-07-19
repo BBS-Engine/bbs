@@ -1,6 +1,6 @@
 package mchorse.bbs.ui.particles.utils;
 
-import mchorse.bbs.ui.game.scripts.highlighting.BaseSyntaxHighlighter;
+import mchorse.bbs.ui.framework.elements.input.text.highlighting.BaseSyntaxHighlighter;
 
 import java.util.Arrays;
 import java.util.HashSet;

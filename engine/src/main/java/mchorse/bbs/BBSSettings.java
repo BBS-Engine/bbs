@@ -74,6 +74,8 @@ public class BBSSettings
     public static ValueBoolean audioWaveformFilename;
     public static ValueBoolean audioWaveformTime;
 
+    public static ValueString elevenLabsToken;
+
     public static int primaryColor()
     {
         return primaryColor(Colors.A50);
@@ -185,5 +187,8 @@ public class BBSSettings
         audioWaveformHeight = builder.getInt("waveform_height", 24, 10, 40);
         audioWaveformFilename = builder.getBoolean("waveform_filename", true);
         audioWaveformTime = builder.getBoolean("waveform_time", true);
+
+        builder.category("elevenlabs");
+        elevenLabsToken = builder.getString("token", "");
     }
 }

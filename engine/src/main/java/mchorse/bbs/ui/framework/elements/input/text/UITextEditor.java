@@ -1,19 +1,18 @@
-package mchorse.bbs.ui.game.scripts;
+package mchorse.bbs.ui.framework.elements.input.text;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.input.text.UITextarea;
 import mchorse.bbs.ui.framework.elements.input.text.undo.TextEditUndo;
 import mchorse.bbs.ui.framework.elements.input.text.utils.Cursor;
-import mchorse.bbs.ui.game.scripts.highlighting.HighlightedTextLine;
-import mchorse.bbs.ui.game.scripts.highlighting.ISyntaxHighlighter;
-import mchorse.bbs.ui.game.scripts.highlighting.JSSyntaxHighlighter;
-import mchorse.bbs.ui.game.scripts.highlighting.SyntaxStyle;
-import mchorse.bbs.ui.game.scripts.highlighting.TextLineNumber;
-import mchorse.bbs.ui.game.scripts.highlighting.TextSegment;
+import mchorse.bbs.ui.framework.elements.input.text.highlighting.HighlightedTextLine;
+import mchorse.bbs.ui.framework.elements.input.text.highlighting.ISyntaxHighlighter;
+import mchorse.bbs.ui.framework.elements.input.text.highlighting.JSSyntaxHighlighter;
+import mchorse.bbs.ui.framework.elements.input.text.highlighting.SyntaxStyle;
+import mchorse.bbs.ui.framework.elements.input.text.highlighting.TextLineNumber;
+import mchorse.bbs.ui.framework.elements.input.text.highlighting.TextSegment;
 import mchorse.bbs.utils.colors.Colors;
 
 import java.util.ArrayList;

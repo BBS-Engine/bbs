@@ -41,6 +41,7 @@ import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.particles.UIParticleSchemePanel;
 import mchorse.bbs.ui.recording.editor.UIRecordPanel;
 import mchorse.bbs.ui.recording.scene.UIScenePanel;
+import mchorse.bbs.ui.screenplay.UIScreenplayPanel;
 import mchorse.bbs.ui.tileset.UITileSetEditorPanel;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -276,6 +277,7 @@ public class UIDashboard extends UIBaseMenu
         this.panels.registerPanel(new UIScenePanel(this), UIKeys.PANELS_SCENES, Icons.SCENE);
         this.panels.registerPanel(new UIRecordPanel(this), UIKeys.PANELS_RECORDS, Icons.EDITOR);
         this.panels.registerPanel(new UICameraPanel(this), UIKeys.PANELS_CAMERAS, Icons.FRUSTUM);
+        this.panels.registerPanel(new UIScreenplayPanel(this), IKey.lazy("Screenplays"), Icons.LIST);
 
         this.panels.registerPanel(new UIParticleSchemePanel(this), UIKeys.PANELS_PARTICLES, Icons.PARTICLE).marginLeft(10);
         this.panels.registerPanel(new UIFontPanel(this), UIKeys.FONT_EDITOR_TITLE, Icons.FONT);

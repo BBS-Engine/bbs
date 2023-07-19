@@ -16,7 +16,7 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
-import mchorse.bbs.ui.game.scripts.UITextEditor;
+import mchorse.bbs.ui.framework.elements.input.text.UITextEditor;
 import mchorse.bbs.ui.particles.sections.UIParticleSchemeAppearanceSection;
 import mchorse.bbs.ui.particles.sections.UIParticleSchemeCollisionSection;
 import mchorse.bbs.ui.particles.sections.UIParticleSchemeCurvesSection;

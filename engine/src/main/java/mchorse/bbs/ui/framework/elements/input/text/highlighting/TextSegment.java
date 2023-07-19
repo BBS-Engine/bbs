@@ -1,4 +1,4 @@
-package mchorse.bbs.ui.game.scripts.highlighting;
+package mchorse.bbs.ui.framework.elements.input.text.highlighting;
 
 public class TextSegment
 {

@@ -10,6 +10,7 @@ import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.particles.UIParticleSchemePanel;
 import mchorse.bbs.ui.recording.editor.UIRecordPanel;
 import mchorse.bbs.ui.recording.scene.UIScenePanel;
+import mchorse.bbs.ui.screenplay.UIScreenplayPanel;
 import mchorse.bbs.utils.manager.IManager;
 import mchorse.bbs.utils.manager.data.AbstractData;
 
@@ -23,6 +24,7 @@ public class ContentType
     public static final ContentType RECORDS = new ContentType("records", UIKeys.OVERLAYS_RECORD, BBSData::getRecords, (dashboard) -> dashboard.getPanel(UIRecordPanel.class));
     public static final ContentType ANIMATIONS = new ContentType("animations", UIKeys.OVERLAYS_ANIMATION, BBSData::getAnimations, (dashboard) -> dashboard.getPanel(UIAnimationPanel.class));
     public static final ContentType PARTICLES = new ContentType("particles", UIKeys.OVERLAYS_PARTICLE_EFFECT, BBSData::getParticles, (dashboard) -> dashboard.getPanel(UIParticleSchemePanel.class));
+    public static final ContentType SCREENPLAY = new ContentType("screenplay", UIKeys.OVERLAYS_PARTICLE_EFFECT, BBSData::getScreenplays, (dashboard) -> dashboard.getPanel(UIScreenplayPanel.class));
 
     private final String id;
     private IKey label;

@@ -1,4 +1,4 @@
-package mchorse.bbs.ui.game.scripts.highlighting;
+package mchorse.bbs.ui.framework.elements.input.text.highlighting;
 
 import mchorse.bbs.graphics.text.FontRenderer;
 
@@ -231,7 +231,7 @@ public abstract class BaseSyntaxHighlighter implements ISyntaxHighlighter
         return list;
     }
 
-        private boolean isLegalName(char character)
+    private boolean isLegalName(char character)
     {
         return Character.isLetterOrDigit(character) || character == '_';
     }
