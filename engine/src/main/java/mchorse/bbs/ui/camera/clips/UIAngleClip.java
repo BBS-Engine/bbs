@@ -2,13 +2,10 @@ package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.modifiers.AngleClip;
 import mchorse.bbs.data.types.IntType;
-import mchorse.bbs.resources.Link;
-import mchorse.bbs.ui.UIKeys;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.camera.clips.widgets.UIBitToggle;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
-import mchorse.bbs.ui.utils.icons.Icons;
 
 public class UIAngleClip extends UIClip<AngleClip>
 {
@@ -32,14 +29,9 @@ public class UIAngleClip extends UIClip<AngleClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView angle = this.createScroll();
-
-        angle.add(this.angle, this.active);
-
-        this.panels.registerPanel(angle, UIKeys.CAMERA_PANELS_ANGLE, Icons.ARC);
-        this.panels.setPanel(angle);
-
         super.registerPanels();
+
+        this.panels.add(this.angle.marginTop(12), this.active);
     }
 
     @Override

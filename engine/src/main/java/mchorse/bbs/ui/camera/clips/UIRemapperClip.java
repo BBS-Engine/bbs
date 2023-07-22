@@ -1,12 +1,11 @@
 package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.modifiers.RemapperClip;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.utils.UICameraGraphEditor;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
-import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
 
 public class UIRemapperClip extends UIClip<RemapperClip>
@@ -36,14 +35,9 @@ public class UIRemapperClip extends UIClip<RemapperClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView remapper = this.createScroll();
-
-        remapper.add(this.editChannel);
-
-        this.panels.registerPanel(remapper, UIKeys.CAMERA_PANELS_REMAPPER, Icons.TIME);
-        this.panels.setPanel(remapper);
-
         super.registerPanels();
+
+        this.panels.add(UIClip.label(IKey.lazy("Remapper")).marginTop(12), this.editChannel);
     }
 
     @Override

@@ -4,14 +4,12 @@ import mchorse.bbs.camera.clips.modifiers.DragClip;
 import mchorse.bbs.data.types.ByteType;
 import mchorse.bbs.data.types.FloatType;
 import mchorse.bbs.data.types.IntType;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.widgets.UIBitToggle;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
-import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.ui.utils.icons.Icons;
 
 public class UIDragClip extends UIClip<DragClip>
 {
@@ -53,14 +51,10 @@ public class UIDragClip extends UIClip<DragClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView drag = this.createScroll();
-
-        drag.add(this.deterministic, UI.label(UIKeys.CAMERA_PANELS_FACTOR).background(), this.factor, this.rate, this.active);
-
-        this.panels.registerPanel(drag, UIKeys.CAMERA_PANELS_DRAG, Icons.FADING);
-        this.panels.setPanel(drag);
-
         super.registerPanels();
+
+        this.panels.add(UIClip.label(IKey.lazy("Drag")).marginTop(12), this.deterministic);
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_FACTOR).marginTop(6), this.factor, this.rate, this.active);
     }
 
     @Override

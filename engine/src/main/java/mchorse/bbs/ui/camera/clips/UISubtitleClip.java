@@ -3,19 +3,14 @@ package mchorse.bbs.ui.camera.clips;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.data.types.FloatType;
 import mchorse.bbs.data.types.IntType;
-import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.camera.UICameraPanel;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
-import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.ui.utils.icons.Icons;
 
 public class UISubtitleClip extends UIClip<SubtitleClip>
 {
-    public UITextbox label;
     public UITrackpad x;
     public UITrackpad y;
     public UITrackpad size;
@@ -37,7 +32,6 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
     {
         super.registerUI();
 
-        this.label = new UITextbox(1000, (t) -> this.editor.postUndo(this.undo(this.clip.label, new StringType(t))));
         this.x = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.x, new IntType(v.intValue()))));
         this.x.integer();
         this.y = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.y, new IntType(v.intValue()))));
@@ -58,27 +52,20 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView subtitle = this.createScroll();
-
-        subtitle.add(UI.label(IKey.lazy("Label")).background(), this.label);
-        subtitle.add(UI.label(IKey.lazy("Offset")).background(), UI.row(this.x, this.y));
-        subtitle.add(UI.label(IKey.lazy("Size")).background(), this.size, this.color);
-        subtitle.add(UI.label(IKey.lazy("Anchor")).background(), UI.row(this.anchorX, this.anchorY));
-        subtitle.add(UI.label(IKey.lazy("Window")).background(), UI.row(this.windowX, this.windowY));
-        subtitle.add(UI.label(IKey.lazy("Background")).background(), this.background, this.backgroundOffset);
-
-        this.panels.registerPanel(subtitle, IKey.lazy("Subtitle"), Icons.FONT);
-        this.panels.setPanel(subtitle);
-
         super.registerPanels();
+
+        this.panels.add(UIClip.label(IKey.lazy("Offset")).marginTop(6), UI.row(this.x, this.y));
+        this.panels.add(UIClip.label(IKey.lazy("Size")).marginTop(6), this.size, this.color);
+        this.panels.add(UIClip.label(IKey.lazy("Anchor")).marginTop(6), UI.row(this.anchorX, this.anchorY));
+        this.panels.add(UIClip.label(IKey.lazy("Window")).marginTop(6), UI.row(this.windowX, this.windowY));
+        this.panels.add(UIClip.label(IKey.lazy("Background")).marginTop(6), this.background, this.backgroundOffset);
     }
 
     @Override
     public void fillData()
     {
         super.fillData();
-
-        this.label.setText(this.clip.label.get());
+        
         this.x.setValue(this.clip.x.get());
         this.y.setValue(this.clip.y.get());
         this.size.setValue(this.clip.size.get());

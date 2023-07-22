@@ -11,10 +11,8 @@ import mchorse.bbs.ui.camera.utils.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.camera.utils.UICameraGraphEditor;
 import mchorse.bbs.ui.camera.utils.UICameraKeyframesEditor;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.undo.CompoundUndo;
@@ -77,18 +75,13 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView keyframes = this.createScroll();
-
-        keyframes.add(UI.label(UIKeys.CAMERA_PANELS_KEYFRAMES).background());
-        keyframes.add(UI.row(this.all));
-        keyframes.add(UI.row(this.x, this.y, this.z));
-        keyframes.add(UI.row(this.yaw, this.pitch));
-        keyframes.add(UI.row(this.roll, this.fov));
-
-        this.panels.registerPanel(keyframes, UIKeys.CAMERA_PANELS_KEYFRAMES, Icons.CURVES);
-        this.panels.setPanel(keyframes);
-
         super.registerPanels();
+
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_KEYFRAMES).marginTop(12));
+        this.panels.add(UI.row(this.all));
+        this.panels.add(UI.row(this.x, this.y, this.z));
+        this.panels.add(UI.row(this.yaw, this.pitch));
+        this.panels.add(UI.row(this.roll, this.fov));
     }
 
     @Override

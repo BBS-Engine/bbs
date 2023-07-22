@@ -2,13 +2,9 @@ package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.modifiers.TranslateClip;
 import mchorse.bbs.data.types.IntType;
-import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.clips.widgets.UIBitToggle;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
-import mchorse.bbs.ui.utils.icons.Icons;
 
 public class UITranslateClip extends UIClip<TranslateClip>
 {
@@ -32,14 +28,9 @@ public class UITranslateClip extends UIClip<TranslateClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView translate = this.createScroll();
-
-        translate.add(this.point, this.active);
-
-        this.panels.registerPanel(translate, UIKeys.CAMERA_PANELS_TRANSLATE, Icons.UPLOAD);
-        this.panels.setPanel(translate);
-
         super.registerPanels();
+
+        this.panels.add(this.point.marginTop(12), this.active);
     }
 
     @Override

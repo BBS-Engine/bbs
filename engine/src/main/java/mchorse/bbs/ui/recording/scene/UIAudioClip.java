@@ -3,15 +3,12 @@ package mchorse.bbs.ui.recording.scene;
 import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.recording.scene.AudioClip;
-import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.UIClip;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UISoundOverlayPanel;
-import mchorse.bbs.ui.utils.icons.Icons;
 
 public class UIAudioClip extends UIClip<AudioClip>
 {
@@ -41,13 +38,8 @@ public class UIAudioClip extends UIClip<AudioClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView audio = this.createScroll();
-
-        audio.add(this.pickAudio);
-
-        this.panels.registerPanel(audio, UIKeys.C_CLIP.get(Link.bbs("audio")), Icons.SOUND);
-        this.panels.setPanel(audio);
-
         super.registerPanels();
+
+        this.panels.add(UIClip.label(IKey.lazy("Audio")).marginTop(12), this.pickAudio);
     }
 }

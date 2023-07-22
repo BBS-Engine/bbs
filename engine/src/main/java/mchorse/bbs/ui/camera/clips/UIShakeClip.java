@@ -3,13 +3,12 @@ package mchorse.bbs.ui.camera.clips;
 import mchorse.bbs.camera.clips.modifiers.ShakeClip;
 import mchorse.bbs.data.types.FloatType;
 import mchorse.bbs.data.types.IntType;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.widgets.UIBitToggle;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
 
 public class UIShakeClip extends UIClip<ShakeClip>
@@ -40,14 +39,9 @@ public class UIShakeClip extends UIClip<ShakeClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView shake = this.createScroll();
-
-        shake.add(UI.row(5, 0, 20, this.shake, this.shakeAmount), this.active);
-
-        this.panels.registerPanel(shake, UIKeys.CAMERA_PANELS_SHAKE, Icons.EXCHANGE);
-        this.panels.setPanel(shake);
-
         super.registerPanels();
+
+        this.panels.add(UIClip.label(IKey.lazy("Shake")).marginTop(12), UI.row(5, 0, 20, this.shake, this.shakeAmount), this.active);
     }
 
     @Override

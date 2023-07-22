@@ -8,7 +8,6 @@ import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
-import mchorse.bbs.ui.utils.UI;
 
 /**
  * Point GUI module
@@ -65,7 +64,7 @@ public class UIPointModule extends UIAbstractModule
         this.z.values(0.1F);
 
         this.column().vertical().stretch().height(20);
-        this.add(UI.label(title).background(), this.x, this.y, this.z);
+        this.add(UIClip.label(title), this.x, this.y, this.z);
     }
 
     public UIPointModule contextMenu()

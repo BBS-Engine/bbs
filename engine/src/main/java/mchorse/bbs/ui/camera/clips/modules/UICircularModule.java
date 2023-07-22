@@ -6,7 +6,6 @@ import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
-import mchorse.bbs.ui.utils.UI;
 
 /**
  * Circular GUI module
@@ -45,7 +44,7 @@ public class UICircularModule extends UIAbstractModule
         this.fov.tooltip(UIKeys.CAMERA_PANELS_FOV);
 
         this.column().vertical().stretch().height(20);
-        this.add(UI.label(UIKeys.CAMERA_PANELS_CIRCLE).background(), this.offset, this.circles, this.distance, this.pitch, this.fov);
+        this.add(UIClip.label(UIKeys.CAMERA_PANELS_CIRCLE), this.offset, this.circles, this.distance, this.pitch, this.fov);
     }
 
     public void fill(CircularClip clip)

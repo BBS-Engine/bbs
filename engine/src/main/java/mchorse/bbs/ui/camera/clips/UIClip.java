@@ -1,5 +1,6 @@
 package mchorse.bbs.ui.camera.clips;
 
+import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.data.Position;
@@ -17,15 +18,13 @@ import mchorse.bbs.ui.camera.utils.undo.CameraWorkUndo;
 import mchorse.bbs.ui.camera.utils.undo.ValueChangeUndo;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
-import mchorse.bbs.ui.framework.elements.UIPanelBase;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
+import mchorse.bbs.ui.framework.elements.utils.UILabel;
 import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.undo.IUndo;
 
@@ -45,7 +44,12 @@ public abstract class UIClip <T extends Clip> extends UIElement
 
     public UIEnvelope envelope;
 
-    protected UIPanelBase<UIScrollView> panels;
+    public UIScrollView panels;
+
+    public static UILabel label(IKey key)
+    {
+        return UI.label(key).background(() -> BBSSettings.primaryColor(Colors.A50));
+    }
 
     public static CameraWorkUndo undo(UICameraPanel editor, BaseValue property, BaseType newValue)
     {
@@ -79,14 +83,8 @@ public abstract class UIClip <T extends Clip> extends UIElement
         this.duration.limit(1, Integer.MAX_VALUE, true).tooltip(UIKeys.CAMERA_PANELS_DURATION);
         this.envelope = new UIEnvelope(this);
 
-        this.panels = new UIPanelBase<UIScrollView>(Direction.LEFT)
-        {
-            @Override
-            protected void renderBackground(UIContext context, int x, int y, int w, int h)
-            {
-                context.batcher.box(x, y, x + w, y + h, Colors.CONTROL_BAR);
-            }
-        };
+        this.panels = UI.scrollView(5, 10);
+        this.panels.scroll.opposite();
         this.panels.relative(this).w(160).h(1F);
 
         this.registerUI();
@@ -100,28 +98,12 @@ public abstract class UIClip <T extends Clip> extends UIElement
 
     protected void registerPanels()
     {
-        UIScrollView basics = this.createScroll();
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_TITLE), this.title);
+        this.panels.add(this.enabled.marginBottom(6));
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_COLOR), this.color.marginBottom(6));
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_METRICS), UI.row(this.layer, this.tick), this.duration);
 
-        basics.add(UI.label(UIKeys.CAMERA_PANELS_TITLE).background(), this.title);
-        basics.add(this.enabled.marginBottom(6));
-        basics.add(UI.label(UIKeys.CAMERA_PANELS_COLOR).background(), this.color.marginBottom(6));
-        basics.add(UI.label(UIKeys.CAMERA_PANELS_METRICS).background(), UI.row(this.layer, this.tick), this.duration);
-
-        UIScrollView envelope = this.createScroll();
-
-        envelope.add(UI.label(UIKeys.CAMERA_PANELS_ENVELOPES_TITLE).background(), this.envelope);
-
-        this.panels.registerPanel(basics, UIKeys.CAMERA_PANELS_BASIC_OPTIONS, Icons.GEAR);
-        this.panels.registerPanel(envelope, UIKeys.CAMERA_PANELS_ENVELOPES_TITLE, Icons.ENVELOPE);
-    }
-
-    protected UIScrollView createScroll()
-    {
-        UIScrollView scrollView = UI.scrollView(5, 10);
-
-        scrollView.scroll.opposite();
-
-        return scrollView;
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_ENVELOPES_TITLE).marginTop(12), this.envelope);
     }
 
     public void handleUndo(IUndo<CameraWork> undo, boolean redo)

@@ -181,6 +181,7 @@ public class UIScreen implements IEngine, IFileDropListener
         this.shaders = new UIShaders();
         this.context = new UIRenderingContext(this.engine.renderer.context, this.shaders.ortho);
         this.chalkboard = new UIChalkboard(this.engine, this.context);
+        this.chalkboard.context.setup(this.context);
 
         this.context.setUBO(this.shaders.ubo);
 

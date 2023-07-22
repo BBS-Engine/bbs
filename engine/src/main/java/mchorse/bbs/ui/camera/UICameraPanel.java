@@ -56,7 +56,9 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 /**
@@ -66,6 +68,8 @@ import java.util.function.Supplier;
  */
 public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements IFlightSupported
 {
+    private static Map<Class, Integer> scrolls = new HashMap<Class, Integer>();
+
     /**
      * Profile runner
      */
@@ -264,6 +268,11 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
         try
         {
+            if (this.panel != null)
+            {
+                scrolls.put(this.panel.getClass(), this.panel.panels.scroll.scroll);
+            }
+
             this.timeline.embedView(null);
 
             UIClip panel = (UIClip) BBS.getFactoryClips().getData(clip).panelUI.getConstructors()[0].newInstance(clip, this);
@@ -274,6 +283,14 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
             this.panel.fillData();
             this.panel.resize();
+
+            Integer scroll = scrolls.get(this.panel.getClass());
+
+            if (scroll != null)
+            {
+                this.panel.panels.scroll.scroll = scroll;
+                this.panel.panels.scroll.clamp();
+            }
 
             if (this.isFlightEnabled())
             {

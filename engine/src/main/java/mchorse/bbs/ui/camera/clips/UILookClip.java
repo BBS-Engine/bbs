@@ -6,15 +6,12 @@ import mchorse.bbs.camera.clips.modifiers.LookClip;
 import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.data.types.ByteType;
 import mchorse.bbs.data.types.StringType;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UITextboxHelp;
 import mchorse.bbs.ui.framework.elements.UIElement;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
-import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.voxel.raytracing.RayTraceResult;
 import mchorse.bbs.voxel.raytracing.RayTraceType;
@@ -83,20 +80,14 @@ public class UILookClip extends UIClip<LookClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView look = this.createScroll();
-
-        look.add(UI.label(UIKeys.CAMERA_PANELS_SELECTOR).background(), this.selector);
-        look.add(this.relative);
-        look.add(this.offset.marginTop(6));
-        look.add(this.atBlock.marginTop(6));
-        look.add(this.block.marginTop(6));
-        look.add(this.forward);
-
-        this.panels.registerPanel(look, UIKeys.CAMERA_PANELS_POSITION, Icons.VISIBLE);
-
         super.registerPanels();
 
-        this.panels.setPanel(look);
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_SELECTOR).marginTop(12), this.selector);
+        this.panels.add(this.relative);
+        this.panels.add(this.offset.marginTop(6));
+        this.panels.add(this.atBlock.marginTop(6));
+        this.panels.add(this.block.marginTop(6));
+        this.panels.add(this.forward);
     }
 
     @Override

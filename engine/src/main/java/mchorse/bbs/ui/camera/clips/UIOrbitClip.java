@@ -9,11 +9,9 @@ import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UITextboxHelp;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.ui.utils.icons.Icons;
 
 public class UIOrbitClip extends UIClip<OrbitClip>
 {
@@ -58,19 +56,14 @@ public class UIOrbitClip extends UIClip<OrbitClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView orbit = this.createScroll();
-
-        orbit.add(UI.label(UIKeys.CAMERA_PANELS_SELECTOR).background(), this.selector);
-        orbit.add(this.copy.marginBottom(12));
-        orbit.add(UI.label(UIKeys.CAMERA_PANELS_DISTANCE).background(), this.distance);
-        orbit.add(UI.label(UIKeys.CAMERA_PANELS_ANGLE).background());
-        orbit.add(UI.row(5, 0, 20, this.yaw, this.pitch));
-        orbit.add(this.offset);
-
-        this.panels.registerPanel(orbit, UIKeys.CAMERA_PANELS_ORBIT, Icons.GLOBE);
-        this.panels.setPanel(orbit);
-
         super.registerPanels();
+
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_SELECTOR), this.selector);
+        this.panels.add(this.copy.marginBottom(12));
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_DISTANCE), this.distance);
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_ANGLE));
+        this.panels.add(UI.row(5, 0, 20, this.yaw, this.pitch));
+        this.panels.add(this.offset);
     }
 
     @Override

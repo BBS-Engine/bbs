@@ -16,13 +16,11 @@ import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointsModule;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.tooltips.InterpolationTooltip;
 import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.keyframes.KeyframeInterpolations;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.utils.math.Interpolation;
@@ -117,18 +115,13 @@ public class UIPathClip extends UIClip<PathClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView path = this.createScroll();
-
-        path.add(UI.label(UIKeys.CAMERA_PANELS_PATH_POINTS).background());
-        path.add(this.points, UI.row(this.interpPoint, this.interpAngle).marginBottom(6));
-        path.add(this.point, this.angle);
-        path.add(UI.label(UIKeys.CAMERA_PANELS_CIRCULAR).background().marginTop(12), this.autoCenter, this.circularX, this.circularZ);
-        path.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, this.position));
-
-        this.panels.registerPanel(path, UIKeys.CAMERA_PANELS_PATH_POINTS, Icons.GALLERY);
-        this.panels.setPanel(path);
-
         super.registerPanels();
+
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_PATH_POINTS).marginTop(12));
+        this.panels.add(this.points, UI.row(this.interpPoint, this.interpAngle).marginBottom(6));
+        this.panels.add(this.point.marginTop(12), this.angle.marginTop(6));
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_CIRCULAR).marginTop(6), this.autoCenter, UI.row(this.circularX, this.circularZ));
+        this.panels.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, this.position));
     }
 
     private IInterpolation getInterp(InterpolationType type)

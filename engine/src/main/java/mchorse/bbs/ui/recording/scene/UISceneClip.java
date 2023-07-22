@@ -5,6 +5,7 @@ import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.game.utils.ContentType;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.recording.scene.Replay;
 import mchorse.bbs.recording.scene.Scene;
@@ -12,14 +13,12 @@ import mchorse.bbs.recording.scene.SceneClip;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.UIClip;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIStringOverlayPanel;
 import mchorse.bbs.ui.game.utils.UIDataUtils;
 import mchorse.bbs.ui.recording.editor.UIDedicatedRecordEditor;
-import mchorse.bbs.ui.utils.icons.Icons;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -102,14 +101,9 @@ public class UISceneClip extends UIClip<SceneClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView scene = this.createScroll();
-
-        scene.add(this.pickScene, this.offset, this.editRecord);
-
-        this.panels.registerPanel(scene, UIKeys.CAMERA_PANELS_SCENE, Icons.SCENE);
-        this.panels.setPanel(scene);
-
         super.registerPanels();
+
+        this.panels.add(UIClip.label(IKey.lazy("Scene")).marginTop(12), this.pickScene, this.offset, this.editRecord);
     }
 
     @Override

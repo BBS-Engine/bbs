@@ -6,14 +6,12 @@ import mchorse.bbs.camera.clips.overwrite.DollyClip;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.data.types.FloatType;
 import mchorse.bbs.data.types.StringType;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
@@ -68,21 +66,13 @@ public class UIDollyClip extends UIClip<DollyClip>
     @Override
     protected void registerPanels()
     {
-        UIScrollView dolly = this.createScroll();
-
-        dolly.add(UI.label(UIKeys.CAMERA_PANELS_DOLLY_TITLE).background());
-        dolly.add(UI.row(0, 0, 20, this.distance, this.reverse), this.yaw, this.pitch, this.interp);
-
-        UIScrollView position = this.createScroll();
-
-        position.add(this.point, this.angle);
-        position.context((menu) -> UICameraUtils.positionContextMenu(menu, editor, clip.position));
-
-        this.panels.registerPanel(position, UIKeys.CAMERA_PANELS_POSITION, Icons.FRUSTUM);
-        this.panels.registerPanel(dolly, UIKeys.CAMERA_PANELS_DOLLY_TITLE, Icons.CAMERA);
-        this.panels.setPanel(position);
-
         super.registerPanels();
+
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_DOLLY_TITLE).marginTop(12));
+        this.panels.add(UI.row(0, 0, 20, this.distance, this.reverse), this.yaw, this.pitch, this.interp);
+
+        this.panels.add(this.point.marginTop(12), this.angle.marginTop(6));
+        this.panels.context((menu) -> UICameraUtils.positionContextMenu(menu, this.editor, this.clip.position));
     }
 
     private void reverse()
