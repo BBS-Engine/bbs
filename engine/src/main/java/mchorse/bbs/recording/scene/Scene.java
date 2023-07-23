@@ -34,9 +34,6 @@ public class Scene extends AbstractData
 
     /* Runtime properties */
 
-    /**
-     * Whether this director block is playing
-     */
     public boolean playing;
 
     /**

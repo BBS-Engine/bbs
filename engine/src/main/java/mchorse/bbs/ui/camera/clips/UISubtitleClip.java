@@ -65,7 +65,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
     public void fillData()
     {
         super.fillData();
-        
+
         this.x.setValue(this.clip.x.get());
         this.y.setValue(this.clip.y.get());
         this.size.setValue(this.clip.size.get());

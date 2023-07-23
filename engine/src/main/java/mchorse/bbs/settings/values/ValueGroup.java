@@ -1,8 +1,8 @@
 package mchorse.bbs.settings.values;
 
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.settings.values.base.BaseValue;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -37,9 +37,52 @@ public class ValueGroup extends BaseValue
         }
     }
 
-    public BaseValue add(String key)
+    public BaseValue get(String key)
     {
         return this.children.get(key);
+    }
+
+    public BaseValue getRecursively(String path)
+    {
+        BaseValue value = this.children.get(path);
+
+        if (value == null && path.contains("."))
+        {
+            value = this.searchRecursively(path.split("\\."), path);
+        }
+
+        if (value == null)
+        {
+            throw new IllegalStateException("Property by path " + path + " can't be found!");
+        }
+
+        return value;
+    }
+
+    private BaseValue searchRecursively(String[] splits, String name)
+    {
+        int i = 0;
+        BaseValue current = this.children.get(splits[i]);
+
+        while (current != null && i < splits.length - 1)
+        {
+            if (current instanceof ValueGroup)
+            {
+                i += 1;
+                current = ((ValueGroup) current).get(splits[i]);
+            }
+            else
+            {
+                current = null;
+            }
+        }
+
+        if (current == null)
+        {
+            return null;
+        }
+
+        return current.getPath().equals(name) ? current : null;
     }
 
     @Override

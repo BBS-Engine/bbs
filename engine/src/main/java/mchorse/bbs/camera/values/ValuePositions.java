@@ -1,9 +1,9 @@
 package mchorse.bbs.camera.values;
 
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
+import mchorse.bbs.settings.values.ValueGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,20 +36,6 @@ public class ValuePositions extends ValueGroup
     public int size()
     {
         return this.positions.size();
-    }
-
-    public void sync()
-    {
-        this.removeAll();
-
-        int i = 0;
-
-        for (Position position : this.positions)
-        {
-            this.add(new ValuePosition(String.valueOf(i), position));
-
-            i += 1;
-        }
     }
 
     public void set(List<Position> positions)

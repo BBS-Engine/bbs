@@ -43,7 +43,7 @@ public class Settings extends BaseValue
 
         if (cat != null)
         {
-            return cat.add(value);
+            return cat.get(value);
         }
 
         return null;
