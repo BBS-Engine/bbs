@@ -232,6 +232,11 @@ public class Colors
 
         color.r /= 360F;
 
+        if (color.r < 0)
+        {
+            color.r += 1F;
+        }
+
         /* Saturation */
         color.g = max == 0 ? 0 : delta / max;
 
