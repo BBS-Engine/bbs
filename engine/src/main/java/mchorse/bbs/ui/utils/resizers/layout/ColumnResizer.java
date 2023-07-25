@@ -142,9 +142,9 @@ public class ColumnResizer extends AutomaticResizer
     @Override
     public void postApply(Area area)
     {
-        if (this.scroll && this.parent.area instanceof ScrollArea)
+        if (this.scroll && this.parent.area.scroll != null)
         {
-            ScrollArea scroll = (ScrollArea) this.parent.area;
+            ScrollArea scroll = this.parent.area.scroll;
 
             if (this.vertical && scroll.direction == ScrollDirection.VERTICAL)
             {

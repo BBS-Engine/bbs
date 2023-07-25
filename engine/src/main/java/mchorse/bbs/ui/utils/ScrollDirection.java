@@ -20,9 +20,9 @@ public enum ScrollDirection
         }
 
         @Override
-        public int getScroll(ScrollArea area, int x, int y)
+        public int getScroll(Area area, ScrollArea scroll, int x, int y)
         {
-            return y - area.y + area.scroll;
+            return y - area.y + scroll.scroll;
         }
 
         @Override
@@ -46,9 +46,9 @@ public enum ScrollDirection
         }
 
         @Override
-        public int getScroll(ScrollArea area, int x, int y)
+        public int getScroll(Area area, ScrollArea scroll, int x, int y)
         {
-            return x - area.x + area.scroll;
+            return x - area.x + scroll.scroll;
         }
 
         @Override
@@ -71,7 +71,7 @@ public enum ScrollDirection
     /**
      * Get scrolled amount for given mouse position
      */
-    public abstract int getScroll(ScrollArea area, int x, int y);
+    public abstract int getScroll(Area area, ScrollArea scroll, int x, int y);
 
     /**
      * Get progress scalar between 0 and 1 which identifies how much

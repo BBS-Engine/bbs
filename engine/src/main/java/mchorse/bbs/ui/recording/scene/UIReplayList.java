@@ -123,7 +123,7 @@ public class UIReplayList extends UIList<Replay>
     public void renderElementPart(UIContext context, Replay replay, int i, int x, int y, boolean hover, boolean selected)
     {
         int w = this.scroll.scrollItemSize;
-        int h = this.scroll.h;
+        int h = this.area.h;
         boolean isDragging = this.isDragging() && this.getDraggingIndex() == i;
 
         if (selected && !isDragging)
@@ -134,11 +134,11 @@ public class UIReplayList extends UIList<Replay>
 
         if (replay.form != null)
         {
-            replay.form.getRenderer().renderUI(context, x, y, x + w, y + this.scroll.h);
+            replay.form.getRenderer().renderUI(context, x, y, x + w, y + this.area.h);
         }
         else
         {
-            context.batcher.icon(Icons.POSE, x + w / 2 - 8, y + this.scroll.h / 2 - 8);
+            context.batcher.icon(Icons.POSE, x + w / 2 - 8, y + this.area.h / 2 - 8);
         }
 
         if (selected && !isDragging)
@@ -151,7 +151,7 @@ public class UIReplayList extends UIList<Replay>
         {
             this.hovered = replay.id;
             this.hoverX = x;
-            this.hoverY = y + this.scroll.h / 2;
+            this.hoverY = y + this.area.h / 2;
         }
     }
 }

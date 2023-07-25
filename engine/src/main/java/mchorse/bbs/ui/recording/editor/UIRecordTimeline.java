@@ -76,9 +76,9 @@ public class UIRecordTimeline extends UIElement
         this.context = new ToolContext(this);
 
         this.frames = new Area();
-        this.scroll = new ScrollArea(defaultSize, ScrollDirection.HORIZONTAL);
+        this.scroll = new ScrollArea(this.area, defaultSize, ScrollDirection.HORIZONTAL);
         this.scroll.scrollSpeed = defaultSize * 4;
-        this.vertical = new ScrollArea(20);
+        this.vertical = new ScrollArea(new Area(), 20);
 
         this.tools.add(new AddTool());
         this.tools.add(new ApplyTool());
@@ -135,7 +135,7 @@ public class UIRecordTimeline extends UIElement
             {
                 this.selectAction(tick, 0);
                 this.openAction(frame.actions.get(0));
-                this.scroll.scrollTo(this.scroll.scrollItemSize * tick - this.scroll.w / 2);
+                this.scroll.scrollTo(this.scroll.scrollItemSize * tick - this.area.w / 2);
 
                 return;
             }
@@ -310,10 +310,9 @@ public class UIRecordTimeline extends UIElement
 
         this.frames.copy(this.area);
         this.frames.h = 20;
-        this.scroll.copy(this.area);
-        this.vertical.copy(this.area);
-        this.vertical.y += 20;
-        this.vertical.h -= 20;
+        this.vertical.area.copy(this.area);
+        this.vertical.area.y += 20;
+        this.vertical.area.h -= 20;
     }
 
     public void update()
@@ -483,21 +482,21 @@ public class UIRecordTimeline extends UIElement
         /* Draw cursor (tick indicator) */
         if (this.cursor >= 0 && this.cursor < this.record.frames.size())
         {
-            int x = this.scroll.x - this.scroll.scroll + this.cursor * w;
+            int x = this.area.x - this.scroll.scroll + this.cursor * w;
             int cursorX = x + 2;
 
             String label = this.cursor + "/" + this.record.frames.size();
             int width = context.font.getWidth(label);
             int height = 4 + context.font.getHeight();
-            int offsetY = this.scroll.ey() - height;
+            int offsetY = this.area.ey() - height;
 
-            if (cursorX + width + 4 > this.scroll.ex())
+            if (cursorX + width + 4 > this.area.ex())
             {
                 cursorX -= width + 4 + 2;
             }
 
             context.batcher.clip(this.area, context);
-            context.batcher.box(x, this.scroll.y, x + 2, this.scroll.ey(), Colors.CURSOR);
+            context.batcher.box(x, this.area.y, x + 2, this.area.ey(), Colors.CURSOR);
             context.batcher.box(cursorX, offsetY, cursorX + width + 4, offsetY + height, Colors.setA(Colors.CURSOR, 0.75F));
             context.batcher.textShadow(label, cursorX + 2, offsetY + 2);
             context.batcher.unclip(context);
@@ -540,7 +539,7 @@ public class UIRecordTimeline extends UIElement
     {
         Range range = this.calculateRange();
         int count = this.record.frames.size();
-        int max = this.scroll.x + this.scroll.scrollItemSize * count;
+        int max = this.area.x + this.scroll.scrollItemSize * count;
 
         if (max < this.area.ex())
         {
@@ -561,7 +560,7 @@ public class UIRecordTimeline extends UIElement
 
         for (int i = index, c = i + this.area.w / w + 2 + diff; i < c; i++)
         {
-            int x = this.scroll.x - this.scroll.scroll + i * w;
+            int x = this.area.x - this.scroll.scroll + i * w;
 
             if (i < count)
             {
@@ -612,8 +611,8 @@ public class UIRecordTimeline extends UIElement
         {
             if (i % divisor == 0 && i < count && i != this.cursor)
             {
-                int x = this.scroll.x - this.scroll.scroll + i * w;
-                int y = this.scroll.ey() - 12;
+                int x = this.area.x - this.scroll.scroll + i * w;
+                int y = this.area.ey() - 12;
 
                 String str = String.valueOf(i);
                 int bottomColor = Colors.mulRGB(Colors.A50 | BBSSettings.primaryColor.get(), 0.5F);

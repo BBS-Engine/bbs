@@ -12,7 +12,7 @@ import mchorse.bbs.utils.math.MathUtils;
  * This class is responsible for storing information for scrollable one 
  * directional objects. 
  */
-public class ScrollArea extends Area
+public class ScrollArea
 {
     /**
      * Size of an element/item in the scroll area
@@ -51,11 +51,6 @@ public class ScrollArea extends Area
     public boolean opposite;
 
     /**
-     * Width of scroll bar
-     */
-    public int scrollbarWidth = -1;
-
-    /**
      * Whether this scroll area should cancel mouse events when mouse scroll
      * reaches the end
      */
@@ -65,6 +60,8 @@ public class ScrollArea extends Area
      * Whether scrollbars should be rendered
      */
     public boolean drawScrollbars = true;
+
+    public final Area area;
 
     public static void bar(Batcher2D batcher, int x1, int y1, int x2, int y2, int color)
     {
@@ -100,22 +97,22 @@ public class ScrollArea extends Area
         }
     }
 
-    public ScrollArea(int x, int y, int w, int h)
+    public ScrollArea(Area area)
     {
-        super(x, y, w, h);
+        this.area = area;
+        this.area.scroll = this;
     }
 
-    public ScrollArea()
-    {}
-
-    public ScrollArea(int itemSize)
+    public ScrollArea(Area area, int itemSize)
     {
+        this(area);
+
         this.scrollItemSize = itemSize;
     }
 
-    public ScrollArea(int itemSize, ScrollDirection direction)
+    public ScrollArea(Area area, int itemSize, ScrollDirection direction)
     {
-        this(itemSize);
+        this(area, itemSize);
 
         this.direction = direction;
     }
@@ -143,7 +140,7 @@ public class ScrollArea extends Area
 
     public int getScrollbarWidth()
     {
-        return this.scrollbarWidth <= 0 ? BBSSettings.scrollbarWidth.get() : this.scrollbarWidth;
+        return BBSSettings.scrollbarWidth.get();
     }
 
     public void setSize(int items)
@@ -190,9 +187,9 @@ public class ScrollArea extends Area
         {
             this.scrollTo(x - topOffset);
         }
-        else if (x > this.scroll + this.direction.getSide(this) - bottomOffset)
+        else if (x > this.scroll + this.direction.getSide(this.area) - bottomOffset)
         {
-            this.scrollTo(x - this.direction.getSide(this) + bottomOffset);
+            this.scrollTo(x - this.direction.getSide(this.area) + bottomOffset);
         }
     }
 
@@ -201,7 +198,7 @@ public class ScrollArea extends Area
      */
     public void clamp()
     {
-        int size = this.direction.getSide(this);
+        int size = this.direction.getSide(this.area);
 
         if (this.scrollSize <= size)
         {
@@ -218,7 +215,7 @@ public class ScrollArea extends Area
      */
     public int getIndex(int x, int y)
     {
-        int axis = this.direction.getScroll(this, x, y);
+        int axis = this.direction.getScroll(this.area, this, x, y);
         int index = axis / this.scrollItemSize;
 
         if (axis < 0)
@@ -238,7 +235,7 @@ public class ScrollArea extends Area
      */
     public int getScrollBar(int size)
     {
-        int maxSize = this.direction.getSide(this);
+        int maxSize = this.direction.getSide(this.area);
 
         if (this.scrollSize < size)
         {
@@ -260,7 +257,7 @@ public class ScrollArea extends Area
      */
     public boolean mouseClicked(int x, int y)
     {
-        boolean isInside = this.isInside(x, y) && this.scrollSize > this.h;
+        boolean isInside = this.area.isInside(x, y) && this.scrollSize > this.area.h;
 
         if (!this.drawScrollbars)
         {
@@ -273,11 +270,11 @@ public class ScrollArea extends Area
 
             if (this.opposite)
             {
-                isInside = this.direction == ScrollDirection.VERTICAL ? x <= this.x + scrollbar : y <= this.y + scrollbar;
+                isInside = this.direction == ScrollDirection.VERTICAL ? x <= this.area.x + scrollbar : y <= this.area.y + scrollbar;
             }
             else
             {
-                isInside = this.direction == ScrollDirection.VERTICAL ? x >= this.ex() - scrollbar : y >= this.ey() - scrollbar;
+                isInside = this.direction == ScrollDirection.VERTICAL ? x >= this.area.ex() - scrollbar : y >= this.area.ey() - scrollbar;
             }
         }
 
@@ -301,7 +298,7 @@ public class ScrollArea extends Area
     {
         scroll = -scroll;
 
-        boolean isInside = this.isInside(x, y);
+        boolean isInside = this.area.isInside(x, y);
         int lastScroll = this.scroll;
 
         if (isInside)
@@ -338,9 +335,9 @@ public class ScrollArea extends Area
     {
         if (this.dragging)
         {
-            float progress = this.direction.getProgress(this, x, y);
+            float progress = this.direction.getProgress(this.area, x, y);
 
-            this.scrollTo((int) (progress * (this.scrollSize - this.direction.getSide(this) + this.getScrollbarWidth())));
+            this.scrollTo((int) (progress * (this.scrollSize - this.direction.getSide(this.area) + this.getScrollbarWidth())));
         }
     }
 
@@ -349,7 +346,7 @@ public class ScrollArea extends Area
      */
     public void renderScrollbar(Batcher2D batcher)
     {
-        int side = this.direction.getSide(this);
+        int side = this.direction.getSide(this.area);
 
         if (this.scrollSize <= side)
         {
@@ -362,17 +359,17 @@ public class ScrollArea extends Area
         {
             int scrollbar = this.getScrollbarWidth();
             int h = Math.max(this.getScrollBar(side / 2), 4);
-            int x = this.opposite ? this.x : this.ex() - scrollbar;
+            int x = this.opposite ? this.area.x : this.area.ex() - scrollbar;
             /* Sometimes I don't understand how I come up with such clever
              * formulas, but it's all ratios, y'all */
-            int y = this.y + (int) ((this.scroll / (float) (this.scrollSize - this.h)) * (this.h - h));
+            int y = this.area.y + (int) ((this.scroll / (float) (this.scrollSize - this.area.h)) * (this.area.h - h));
             int rx = x + scrollbar;
             int ry = y + h;
 
             if (this.direction == ScrollDirection.HORIZONTAL)
             {
-                y = this.opposite ? this.y : this.ey() - scrollbar;
-                x = this.x + (int) ((this.scroll / (float) (this.scrollSize - this.w)) * (this.w - h));
+                y = this.opposite ? this.area.y : this.area.ey() - scrollbar;
+                x = this.area.x + (int) ((this.scroll / (float) (this.scrollSize - this.area.w)) * (this.area.w - h));
                 rx = x + h;
                 ry = y + scrollbar;
             }
@@ -385,24 +382,24 @@ public class ScrollArea extends Area
         {
             if (this.scroll > 0)
             {
-                batcher.gradientVBox(this.x, this.y, this.ex(), this.y + 20, shadow, 0);
+                batcher.gradientVBox(this.area.x, this.area.y, this.area.ex(), this.area.y + 20, shadow, 0);
             }
 
             if (this.scroll < this.scrollSize - side)
             {
-                batcher.gradientVBox(this.x, this.ey() - 20, this.ex(), this.ey(), 0, shadow);
+                batcher.gradientVBox(this.area.x, this.area.ey() - 20, this.area.ex(), this.area.ey(), 0, shadow);
             }
         }
         else if (this.direction == ScrollDirection.HORIZONTAL)
         {
             if (this.scroll > 0)
             {
-                batcher.gradientHBox(this.x, this.y, this.x + 20, this.ey(), shadow, 0);
+                batcher.gradientHBox(this.area.x, this.area.y, this.area.x + 20, this.area.ey(), shadow, 0);
             }
 
             if (this.scroll < this.scrollSize - side)
             {
-                batcher.gradientHBox(this.ex() - 20, this.y, this.ex(), this.ey(), 0, shadow);
+                batcher.gradientHBox(this.area.ex() - 20, this.area.y, this.area.ex(), this.area.ey(), 0, shadow);
             }
         }
     }

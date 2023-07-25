@@ -72,7 +72,7 @@ public class UICameraWork extends UIElement
     /* Navigation */
     public int tick;
     public Scale scale = new Scale(this.area, ScrollDirection.HORIZONTAL, false);
-    public ScrollArea vertical = new ScrollArea();
+    public ScrollArea vertical = new ScrollArea(new Area());
 
     private boolean grabbing;
     private boolean scrubbing;
@@ -765,12 +765,12 @@ public class UICameraWork extends UIElement
 
     private int getScroll()
     {
-        if (this.vertical.scrollSize < this.vertical.h)
+        if (this.vertical.scrollSize < this.vertical.area.h)
         {
             return 0;
         }
 
-        return this.vertical.scrollSize - this.vertical.h - this.vertical.scroll;
+        return this.vertical.scrollSize - this.vertical.area.h - this.vertical.scroll;
     }
 
     public int fromGraphX(int mouseX)
@@ -879,8 +879,8 @@ public class UICameraWork extends UIElement
 
     public void updateScrollArea()
     {
-        this.vertical.copy(this.isCompact() ? this.compactArea : this.area);
-        this.vertical.h -= MARGIN;
+        this.vertical.area.copy(this.isCompact() ? this.compactArea : this.area);
+        this.vertical.area.h -= MARGIN;
 
         this.vertical.scrollSize = this.work == null ? 0 : LAYERS * (this.isCompact() ? LAYER_COMPACT_HEIGHT : LAYER_HEIGHT);
         this.vertical.clamp();
@@ -1217,7 +1217,7 @@ public class UICameraWork extends UIElement
         }
 
         area.render(batcher, Colors.A50);
-        batcher.clip(this.vertical, context);
+        batcher.clip(this.vertical.area, context);
 
         for (int i = 0; i < LAYERS; i++)
         {
@@ -1235,7 +1235,7 @@ public class UICameraWork extends UIElement
         this.renderTickMarkers(context, area.y, area.h);
 
         batcher.unclip(context);
-        batcher.clip(this.vertical, context);
+        batcher.clip(this.vertical.area, context);
 
         List<Clip> clips = this.work.clips.get();
 
@@ -1270,7 +1270,7 @@ public class UICameraWork extends UIElement
         this.renderSelection(context);
 
         batcher.unclip(context);
-        batcher.clip(this.vertical, context);
+        batcher.clip(this.vertical.area, context);
 
         this.vertical.renderScrollbar(batcher);
 

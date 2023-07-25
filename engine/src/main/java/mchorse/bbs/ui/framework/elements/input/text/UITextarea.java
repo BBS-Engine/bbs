@@ -15,6 +15,7 @@ import mchorse.bbs.ui.framework.elements.input.text.undo.TextEditUndo;
 import mchorse.bbs.ui.framework.elements.input.text.utils.Cursor;
 import mchorse.bbs.ui.framework.elements.input.text.utils.TextLine;
 import mchorse.bbs.ui.framework.elements.utils.ITextColoring;
+import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.ScrollArea;
 import mchorse.bbs.ui.utils.ScrollDirection;
 import mchorse.bbs.ui.utils.StringGroupMatcher;
@@ -34,8 +35,8 @@ import java.util.stream.Collectors;
 
 public class UITextarea <T extends TextLine> extends UIElement implements IFocusedUIElement, ITextColoring
 {
-    public ScrollArea horizontal = new ScrollArea();
-    public ScrollArea vertical = new ScrollArea();
+    public ScrollArea horizontal = new ScrollArea(new Area());
+    public ScrollArea vertical = new ScrollArea(this.area);
 
     public Consumer<String> callback;
 
@@ -992,12 +993,11 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
 
         int offset = this.getShiftX();
 
-        this.horizontal.copy(this.area);
-        this.horizontal.x += offset;
-        this.horizontal.w -= offset;
+        this.horizontal.area.copy(this.area);
+        this.horizontal.area.x += offset;
+        this.horizontal.area.w -= offset;
         this.horizontal.scrollSize = this.wrapping ? w : this.getHorizontalSize(w);
 
-        this.vertical.copy(this.area);
         this.vertical.scrollSize = h - (this.lineHeight - this.getFont().getHeight()) + this.padding * 2;
     }
 

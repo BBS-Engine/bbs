@@ -36,6 +36,7 @@ import mchorse.bbs.ui.framework.elements.utils.UIDraggable;
 import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
 import mchorse.bbs.ui.recording.scene.UISceneClip;
 import mchorse.bbs.ui.utils.Area;
+import mchorse.bbs.ui.utils.ScrollArea;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.resizers.IResizer;
@@ -135,15 +136,16 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
             if (max != h)
             {
-                int bottom = this.timeline.vertical.scroll + this.timeline.vertical.h;
+                ScrollArea vertical = this.timeline.vertical;
+                int bottom = vertical.scroll + vertical.area.h;
 
                 this.timeline.h(max);
                 this.resize();
 
                 if (!this.timeline.isCompact())
                 {
-                    this.timeline.vertical.scroll = bottom - this.timeline.vertical.h;
-                    this.timeline.vertical.clamp();
+                    vertical.scroll = bottom - vertical.area.h;
+                    vertical.clamp();
                 }
             }
         });

@@ -9,7 +9,7 @@ import mchorse.bbs.utils.math.MathUtils;
 /**
  * Utility class for boxes
  *
- * Used in GUI for rendering and locating cursor inside of the box purposes.
+ * Used in GUI for rendering and locating cursor inside the box purposes.
  */
 public class Area implements IResizer
 {
@@ -38,6 +38,8 @@ public class Area implements IResizer
      * Height of the box
      */
     public int h;
+
+    public ScrollArea scroll;
 
     public Area()
     {}

@@ -31,7 +31,7 @@ public class UIPointsModule extends UIAbstractModule
     public Consumer<Integer> picker;
 
     /* GUI */
-    public ScrollArea scroll = new ScrollArea(20);
+    public ScrollArea scroll = new ScrollArea(this.area, 20);
 
     /**
      * Currently selected button (shouldn't be deselected, i.e. can't be -1)
@@ -179,14 +179,6 @@ public class UIPointsModule extends UIAbstractModule
         this.scroll.clamp();
     }
 
-    @Override
-    public void resize()
-    {
-        super.resize();
-
-        this.scroll.copy(this.area);
-    }
-
     /**
      * Mouse was clicked
      *
@@ -199,7 +191,7 @@ public class UIPointsModule extends UIAbstractModule
         int mouseX = context.mouseX;
         int mouseY = context.mouseY;
 
-        if (this.scroll.isInside(context))
+        if (this.area.isInside(context))
         {
             if (context.mouseButton == 2 || (context.mouseButton == 0 && Window.isCtrlPressed()))
             {
@@ -263,18 +255,18 @@ public class UIPointsModule extends UIAbstractModule
         /* Scroll this view */
         this.scroll.drag(context);
 
-        int x = this.scroll.x;
-        int y = this.scroll.y;
+        int x = this.area.x;
+        int y = this.area.y;
         int c = this.path.size();
 
         /* Draw background and buttons */
-        context.batcher.box(x, y, x + this.scroll.w, y + this.scroll.h, Colors.A50);
-        context.batcher.clip(this.scroll, context);
+        context.batcher.box(x, y, x + this.area.w, y + this.area.h, Colors.A50);
+        context.batcher.clip(this.area, context);
 
         for (int i = 0; i < c; i++)
         {
             String label = String.valueOf(i);
-            int xx = this.scroll.x + i * this.scroll.scrollItemSize - this.scroll.scroll;
+            int xx = this.area.x + i * this.scroll.scrollItemSize - this.scroll.scroll;
             int w = context.font.getWidth(label);
 
             context.batcher.box(xx, y, xx + 20, y + 20, this.index == i ? 0xffcc1170 : 0xffff2280);
@@ -285,26 +277,26 @@ public class UIPointsModule extends UIAbstractModule
         context.batcher.unclip(context);
 
         /* Display scroll bar */
-        int mw = this.scroll.w;
+        int mw = this.area.w;
         int scroll = this.scroll.getScrollBar(mw);
 
         if (scroll != 0)
         {
-            int bx = this.scroll.x + (int) (this.scroll.scroll / (float) (this.scroll.scrollSize - this.scroll.w) * (mw - scroll));
-            int by = y + this.scroll.h + 2;
+            int bx = this.area.x + (int) (this.scroll.scroll / (float) (this.scroll.scrollSize - this.area.w) * (mw - scroll));
+            int by = y + this.area.h + 2;
 
             context.batcher.box(bx, by, bx + scroll, by + 2, Colors.A50);
         }
 
         /* Overlay "shadows" for informing the user that  */
-        if (this.scroll.scroll > 0 && this.scroll.scrollSize >= this.scroll.w - 40)
+        if (this.scroll.scroll > 0 && this.scroll.scrollSize >= this.area.w - 40)
         {
-            context.batcher.gradientHBox(x, y, x + 4, y + this.scroll.h, Colors.A50, 0);
+            context.batcher.gradientHBox(x, y, x + 4, y + this.area.h, Colors.A50, 0);
         }
 
-        if (this.scroll.scroll < this.scroll.scrollSize - this.scroll.w && this.scroll.scrollSize >= this.scroll.w)
+        if (this.scroll.scroll < this.scroll.scrollSize - this.area.w && this.scroll.scrollSize >= this.area.w)
         {
-            context.batcher.gradientHBox(x + this.scroll.w - 4, y, x + this.scroll.w, y + this.scroll.h, 0, Colors.A50);
+            context.batcher.gradientHBox(x + this.area.w - 4, y, x + this.area.w, y + this.area.h, 0, Colors.A50);
         }
 
         super.render(context);

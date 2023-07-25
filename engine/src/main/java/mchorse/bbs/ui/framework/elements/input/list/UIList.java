@@ -75,7 +75,7 @@ public abstract class UIList <T> extends UIElement
         super();
 
         this.callback = callback;
-        this.area = this.scroll = new ScrollArea(20);
+        this.scroll = new ScrollArea(this.area, 20);
     }
 
     /* List element settings */
@@ -503,7 +503,7 @@ public abstract class UIList <T> extends UIElement
             return true;
         }
 
-        if (this.scroll.isInside(context) && context.mouseButton == 0)
+        if (this.area.isInside(context) && context.mouseButton == 0)
         {
             int index = this.scroll.getIndex(context.mouseX, context.mouseY);
             boolean filtering = this.isFiltering();
@@ -594,7 +594,7 @@ public abstract class UIList <T> extends UIElement
             this.area.render(context.batcher, this.background);
         }
 
-        context.batcher.clip(this.scroll, context);
+        context.batcher.clip(this.area, context);
         this.renderList(context);
         this.scroll.renderScrollbar(context.batcher);
         context.batcher.unclip(context);
@@ -675,24 +675,24 @@ public abstract class UIList <T> extends UIElement
         int mouseY = context.mouseY;
         int s = this.scroll.scrollItemSize;
 
-        int xSide = this.isHorizontal() ? this.scroll.scrollItemSize : this.scroll.w;
-        int ySide = this.isHorizontal() ? this.scroll.h : this.scroll.scrollItemSize;
+        int xSide = this.isHorizontal() ? this.scroll.scrollItemSize : this.area.w;
+        int ySide = this.isHorizontal() ? this.area.h : this.scroll.scrollItemSize;
 
-        int x = this.scroll.x;
-        int y = this.scroll.y + i * s - this.scroll.scroll;
+        int x = this.area.x;
+        int y = this.area.y + i * s - this.scroll.scroll;
 
         int axis = y;
-        int low = this.scroll.y;
-        int high = this.scroll.ey();
+        int low = this.area.y;
+        int high = this.area.ey();
 
         if (this.isHorizontal())
         {
-            x = this.scroll.x + i * s - this.scroll.scroll;
-            y = this.scroll.y;
+            x = this.area.x + i * s - this.scroll.scroll;
+            y = this.area.y;
 
             axis = x;
-            low = this.scroll.x;
-            high = this.scroll.ex();
+            low = this.area.x;
+            high = this.area.ex();
         }
 
         if (axis + s < low || (!this.isFiltering() && this.isDragging() && this.dragging == i))
@@ -735,11 +735,11 @@ public abstract class UIList <T> extends UIElement
         {
             if (this.isHorizontal())
             {
-                context.batcher.box(x, y, x + this.scroll.scrollItemSize, y + this.scroll.h, Colors.A50 | BBSSettings.primaryColor.get());
+                context.batcher.box(x, y, x + this.scroll.scrollItemSize, y + this.area.h, Colors.A50 | BBSSettings.primaryColor.get());
             }
             else
             {
-                context.batcher.box(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, Colors.A50 | BBSSettings.primaryColor.get());
+                context.batcher.box(x, y, x + this.area.w, y + this.scroll.scrollItemSize, Colors.A50 | BBSSettings.primaryColor.get());
             }
         }
 

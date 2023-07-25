@@ -27,7 +27,7 @@ public class UIScrollView extends UIElement implements IViewport
     {
         super();
 
-        this.area = this.scroll = new ScrollArea(0);
+        this.scroll = new ScrollArea(this.area, 0);
         this.scroll.direction = direction;
         this.scroll.scrollSpeed = 20;
     }
@@ -166,7 +166,7 @@ public class UIScrollView extends UIElement implements IViewport
 
         this.scroll.drag(context.mouseX, context.mouseY);
 
-        context.batcher.clip(this.scroll, context);
+        context.batcher.clip(this.area, context);
 
         this.apply(context);
 

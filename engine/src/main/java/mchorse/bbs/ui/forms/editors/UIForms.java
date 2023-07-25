@@ -73,7 +73,7 @@ public class UIForms extends UIList<UIForms.FormEntry>
 
         if (form != null)
         {
-            x += this.scroll.w - 40;
+            x += this.area.w - 40;
 
             context.batcher.clip(x, y, 40, 20, context);
 
