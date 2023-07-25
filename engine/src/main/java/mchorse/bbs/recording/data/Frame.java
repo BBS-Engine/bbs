@@ -25,8 +25,15 @@ import java.util.Set;
  */
 public class Frame implements IMapSerializable
 {
+    public static final String GROUP_POSITION = "position";
+    public static final String GROUP_ROTATION = "rotation";
+    public static final String GROUP_DPAD = "dpad";
+    public static final String GROUP_LEFT_STICK = "lstick";
+    public static final String GROUP_RIGHT_STICK = "rstick";
+    public static final String GROUP_TRIGGERS = "triggers";
+
     public static final Set<String> PROPERTIES = new HashSet<String>(Arrays.asList("x", "y", "z", "yaw", "pitch", "fall", "sprinting", "sneaking", "roll"));
-    public static final Set<String> GROUPS = new HashSet<String>(Arrays.asList("position", "rotation", "joystick"));
+    public static final Set<String> GROUPS = new HashSet<String>(Arrays.asList(GROUP_POSITION, GROUP_ROTATION, GROUP_DPAD, GROUP_LEFT_STICK, GROUP_RIGHT_STICK, GROUP_TRIGGERS));
 
     /* Position */
     public double x;
@@ -157,9 +164,12 @@ public class Frame implements IMapSerializable
     {
         BasicComponent basic = entity.basic;
         boolean empty = groups == null || groups.isEmpty();
-        boolean position = empty || !groups.contains("position");
-        boolean rotation = empty || !groups.contains("rotation");
-        boolean joystick = empty || !groups.contains("joystick");
+        boolean position = empty || !groups.contains(GROUP_POSITION);
+        boolean rotation = empty || !groups.contains(GROUP_ROTATION);
+        boolean dpad = empty || !groups.contains(GROUP_DPAD);
+        boolean leftStick = empty || !groups.contains(GROUP_LEFT_STICK);
+        boolean rightStick = empty || !groups.contains(GROUP_RIGHT_STICK);
+        boolean triggers = empty || !groups.contains(GROUP_TRIGGERS);
 
         if (position)
         {
@@ -176,14 +186,30 @@ public class Frame implements IMapSerializable
 
         PlayerComponent component = entity.get(PlayerComponent.class);
 
-        if (component != null && joystick)
+        if (component != null)
         {
-            for (int i = 0; i < this.sticks.length; i++)
+            if (leftStick)
             {
-                component.sticks[i] = this.sticks[i];
+                component.sticks[0] = this.sticks[0];
+                component.sticks[1] = this.sticks[1];
             }
 
-            component.gamepad = this.gamepad;
+            if (rightStick)
+            {
+                component.sticks[2] = this.sticks[2];
+                component.sticks[3] = this.sticks[3];
+            }
+
+            if (triggers)
+            {
+                component.sticks[4] = this.sticks[4];
+                component.sticks[5] = this.sticks[5];
+            }
+
+            if (dpad)
+            {
+                component.gamepad = this.gamepad;
+            }
         }
     }
 
@@ -202,9 +228,12 @@ public class Frame implements IMapSerializable
     public void copy(Frame oldFrame, List<String> groups)
     {
         boolean empty = groups == null || groups.isEmpty();
-        boolean position = empty || groups.contains("position");
-        boolean rotation = empty || groups.contains("rotation");
-        boolean joystick = empty || groups.contains("joystick");
+        boolean position = empty || groups.contains(GROUP_POSITION);
+        boolean rotation = empty || groups.contains(GROUP_ROTATION);
+        boolean dpad = empty || groups.contains(GROUP_DPAD);
+        boolean leftStick = empty || groups.contains(GROUP_LEFT_STICK);
+        boolean rightStick = empty || groups.contains(GROUP_RIGHT_STICK);
+        boolean triggers = empty || groups.contains(GROUP_TRIGGERS);
 
         if (position)
         {
@@ -232,13 +261,26 @@ public class Frame implements IMapSerializable
         this.color = oldFrame.color;
         this.roll = oldFrame.roll;
 
-        if (joystick)
+        if (leftStick)
         {
-            for (int i = 0; i < this.sticks.length; i++)
-            {
-                this.sticks[i] = oldFrame.sticks[i];
-            }
+            this.sticks[0] = oldFrame.sticks[0];
+            this.sticks[1] = oldFrame.sticks[1];
+        }
 
+        if (rightStick)
+        {
+            this.sticks[2] = oldFrame.sticks[2];
+            this.sticks[3] = oldFrame.sticks[3];
+        }
+
+        if (triggers)
+        {
+            this.sticks[4] = oldFrame.sticks[4];
+            this.sticks[5] = oldFrame.sticks[5];
+        }
+
+        if (dpad)
+        {
             this.gamepad = oldFrame.gamepad;
         }
     }

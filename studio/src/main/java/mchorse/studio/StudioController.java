@@ -50,6 +50,9 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
     private Vector2f joystickDirection = new Vector2f();
     private Vector2f joystickLooking = new Vector2f();
 
+    private int mouseMode;
+    private Vector2f mouseStick = new Vector2f();
+
     public StudioController(StudioEngine engine)
     {
         this.engine = engine;
@@ -71,6 +74,20 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
         Keybind jump = new Keybind("jump").onPress(this::jump);
         Keybind sneak = new Keybind("sneak", this::sneak);
         Keybind back = new Keybind("back", () -> this.back = !this.back);
+        Keybind mouseMode = new Keybind("control_mode", () ->
+        {
+            this.mouseMode += 1;
+
+            Entity controller = this.getController();
+
+            if (this.mouseMode % 4 != 0 && controller != null && controller.has(PlayerComponent.class))
+            {
+                int index = this.mouseMode % 4 - 1;
+                PlayerComponent component = controller.get(PlayerComponent.class);
+
+                this.mouseStick.set(component.sticks[index * 2 + 1], component.sticks[index * 2]);
+            }
+        });
 
         movement.add(this.walkForward = new Keybind("walk_forward").keys(GLFW.GLFW_KEY_W));
         movement.add(this.walkBackward = new Keybind("walk_backward").keys(GLFW.GLFW_KEY_S));
@@ -79,6 +96,7 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
         movement.add(sneak.keys(GLFW.GLFW_KEY_LEFT_SHIFT));
         movement.add(jump.keys(GLFW.GLFW_KEY_SPACE));
         movement.add(back.keys(GLFW.GLFW_KEY_F5));
+        movement.add(mouseMode.keys(GLFW.GLFW_KEY_Q));
 
         engine.keys.keybinds.add(general);
         engine.keys.keybinds.add(movement);
@@ -173,6 +191,8 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
 
         this.lastX = input.x;
         this.lastY = input.y;
+
+        this.mouseStick.set(0, 0);
     }
 
     @Override
@@ -229,9 +249,24 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
 
         JoystickInput joystick = this.engine.joystick;
 
-        if (controller != null && joystick.isPresent())
+        if (controller != null)
         {
-            this.handleJoystick(controller, joystick, joystick.getUpdatedState());
+            if (joystick.isPresent())
+            {
+                this.handleJoystick(controller, joystick, joystick.getUpdatedState());
+            }
+            else if (this.mouseMode % 4 != 0)
+            {
+                PlayerComponent component = controller.get(PlayerComponent.class);
+
+                if (component != null)
+                {
+                    int index = this.mouseMode % 4 - 1;
+
+                    component.sticks[index * 2] = this.mouseStick.y;
+                    component.sticks[index * 2 + 1] = this.mouseStick.x;
+                }
+            }
         }
     }
 
@@ -253,26 +288,42 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
             sensitivity *= 2;
         }
 
+        boolean mouseLook = this.mouseMode % 4 == 0;
+
         if (controller != null && this.canControl())
         {
-            BasicComponent basic = controller.basic;
-
-            float xx = (y - this.lastY) / sensitivity;
-            float yy = (x - this.lastX) / sensitivity;
-
-            if (this.joystickControl)
+            if (mouseLook)
             {
-                xx = this.joystickLooking.y / 25F;
-                yy = this.joystickLooking.x / 25F;
+                BasicComponent basic = controller.basic;
+
+                float xx = (y - this.lastY) / sensitivity;
+                float yy = (x - this.lastX) / sensitivity;
+
+                if (this.joystickControl)
+                {
+                    xx = this.joystickLooking.y / 25F;
+                    yy = this.joystickLooking.x / 25F;
+                }
+
+                if (xx != 0 || yy != 0)
+                {
+                    basic.rotation.x += xx;
+                    basic.rotation.y += yy;
+                    basic.rotation.x = MathUtils.clamp(basic.rotation.x, -MathUtils.PI / 2, MathUtils.PI / 2);
+                    basic.prevRotation.x = basic.rotation.x;
+                    basic.prevRotation.y = basic.rotation.y;
+                }
             }
-
-            if (xx != 0 || yy != 0)
+            else
             {
-                basic.rotation.x += xx;
-                basic.rotation.y += yy;
-                basic.rotation.x = MathUtils.clamp(basic.rotation.x, -MathUtils.PI / 2, MathUtils.PI / 2);
-                basic.prevRotation.x = basic.rotation.x;
-                basic.prevRotation.y = basic.rotation.y;
+                sensitivity = 50F;
+
+                float xx = (y - this.lastY) / sensitivity;
+                float yy = (x - this.lastX) / sensitivity;
+
+                this.mouseStick.add(xx, yy);
+                this.mouseStick.x = MathUtils.clamp(this.mouseStick.x, -1F, 1F);
+                this.mouseStick.y = MathUtils.clamp(this.mouseStick.y, -1F, 1F);
             }
         }
 
