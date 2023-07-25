@@ -26,7 +26,7 @@ public class LinkProperty extends BaseTweenProperty<Link>
 
         if (lastFrame != null && currentFrame != null)
         {
-            int frame = (int) this.interpolation.interpolate(lastFrame, currentFrame, this.getTweenFactor(transition));
+            int frame = Math.round(this.interpolation.interpolate(lastFrame, currentFrame, this.getTweenFactor(transition)));
 
             return new Link(this.value.source, this.replaceFrame(this.value.path, frame));
         }
@@ -52,7 +52,7 @@ public class LinkProperty extends BaseTweenProperty<Link>
     private Integer extractFrame(String path)
     {
         int lastUnderscore = path.lastIndexOf('_');
-        int lastDot = path.lastIndexOf('.', lastUnderscore);
+        int lastDot = path.lastIndexOf('.');
 
         if (lastUnderscore < 0 || lastDot < 0)
         {
@@ -72,7 +72,7 @@ public class LinkProperty extends BaseTweenProperty<Link>
     private String replaceFrame(String path, int frame)
     {
         int lastUnderscore = path.lastIndexOf('_');
-        int lastDot = path.lastIndexOf('.', lastUnderscore);
+        int lastDot = path.lastIndexOf('.');
 
         if (lastUnderscore < 0 || lastDot < 0)
         {

@@ -64,7 +64,7 @@ public class ModelFormRenderer extends FormRenderer<ModelForm>
             this.uiMatrix.rotateY(MathUtils.toRad(context.getTickTransition()));
             this.uiMatrix.mul(this.form.transform.get(context.getTransition()).createMatrix());
 
-            Link link = this.form.texture.get();
+            Link link = this.form.texture.get(context.getTransition());
             Link texture = link == null ? model.texture : link;
 
             CubicModelAnimator.resetPose(model.model);
@@ -105,7 +105,7 @@ public class ModelFormRenderer extends FormRenderer<ModelForm>
 
         if (this.form.getAnimator() != null && model != null)
         {
-            Link link = this.form.texture.get();
+            Link link = this.form.texture.get(context.getTransition());
             Link texture = link == null ? model.texture : link;
 
             CubicModelAnimator.resetPose(model.model);
