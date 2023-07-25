@@ -8,12 +8,12 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageFolderOverlayPanel;
-import mchorse.bbs.ui.framework.elements.overlay.UIMessageOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIPromptOverlayPanel;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.PNGEncoder;
+import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.resources.Pixels;
 
 import java.io.File;
@@ -86,10 +86,7 @@ public class UITextureEditor extends UIPixelsEditor
 
         if (!link.source.equals("assets") || !link.path.endsWith(".png"))
         {
-            UIOverlay.addOverlay(this.getContext(), new UIMessageOverlayPanel(
-                UIKeys.ERROR,
-                UIKeys.TEXTURES_SAVE_WRONG_PATH
-            ));
+            this.getContext().notify(UIKeys.TEXTURES_SAVE_WRONG_PATH, Colors.RED | Colors.A100);
 
             return;
         }
@@ -122,10 +119,7 @@ public class UITextureEditor extends UIPixelsEditor
         {
             e.printStackTrace();
 
-            UIOverlay.addOverlay(this.getContext(), new UIMessageOverlayPanel(
-                UIKeys.TEXTURES_EXPORT_OVERLAY_TITLE,
-                UIKeys.TEXTURES_EXPORT_OVERLAY_ERROR.format(file.getName())
-            ));
+            this.getContext().notify(UIKeys.TEXTURES_EXPORT_OVERLAY_ERROR.format(file.getName()), Colors.RED | Colors.A100);
         }
     }
 

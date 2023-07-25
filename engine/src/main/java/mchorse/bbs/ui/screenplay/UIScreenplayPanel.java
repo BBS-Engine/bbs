@@ -16,6 +16,7 @@ import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
+import mchorse.bbs.utils.colors.Colors;
 
 public class UIScreenplayPanel extends UIDataDashboardPanel<Screenplay>
 {
@@ -43,29 +44,36 @@ public class UIScreenplayPanel extends UIDataDashboardPanel<Screenplay>
     {
         try
         {
-            TTSGenerateResult result = ElevenLabsAPI.generate(this.data);
-            UIOverlayPanel message;
-
-            if (result.status == TTSGenerateResult.Status.ERROR)
+            ElevenLabsAPI.generate(this.data, (result) ->
             {
-                message = new UIMessageOverlayPanel(UIKeys.ERROR, IKey.lazy("An error has occurred when generating a voice line!"));
-            }
-            else if (result.status == TTSGenerateResult.Status.TOKEN_MISSING)
-            {
-                message = new UIMessageOverlayPanel(UIKeys.ERROR, IKey.lazy("You haven't specified a token in BBS' settings!"));
-            }
-            else if (result.status == TTSGenerateResult.Status.VOICE_IS_MISSING)
-            {
-                message = new UIMessageOverlayPanel(UIKeys.ERROR, !result.missingVoices.isEmpty()
-                    ? IKey.lazy("A voice " + result.missingVoices.get(0) + " provided in the screenplay isn't available!")
-                    : IKey.lazy("A list of voices couldn't get loaded!"));
-            }
-            else /* SUCCESS */
-            {
-                message = new UIMessageFolderOverlayPanel(UIKeys.SUCCESS, IKey.lazy("Voice lines were successfully generated!"), result.folder);
-            }
-
-            UIOverlay.addOverlay(this.getContext(), message);
+                if (result.status == TTSGenerateResult.Status.INITIALIZED)
+                {
+                    this.getContext().notify(IKey.lazy("Starting TTS generation!"), Colors.BLUE | Colors.A100);
+                }
+                else if (result.status == TTSGenerateResult.Status.GENERATED)
+                {
+                    this.getContext().notify(IKey.lazy(result.message), Colors.BLUE | Colors.A100);
+                }
+                else if (result.status == TTSGenerateResult.Status.ERROR)
+                {
+                    this.getContext().notify(IKey.lazy("An error has occurred when generating a voice line: " + result.message), Colors.RED | Colors.A100);
+                }
+                else if (result.status == TTSGenerateResult.Status.TOKEN_MISSING)
+                {
+                    this.getContext().notify(IKey.lazy("You haven't specified a token in BBS' settings!"), Colors.RED | Colors.A100);
+                }
+                else if (result.status == TTSGenerateResult.Status.VOICE_IS_MISSING)
+                {
+                    this.getContext().notify(!result.missingVoices.isEmpty()
+                        ? IKey.lazy("A voice " + result.missingVoices.get(0) + " provided in the screenplay isn't available!")
+                        : IKey.lazy("A list of voices couldn't get loaded!"),
+                        Colors.RED | Colors.A100);
+                }
+                else /* SUCCESS */
+                {
+                    UIOverlay.addOverlay(this.getContext(), new UIMessageFolderOverlayPanel(UIKeys.SUCCESS, IKey.lazy("Voice lines were successfully generated!"), result.folder));
+                }
+            });
         }
         catch (Exception e)
         {

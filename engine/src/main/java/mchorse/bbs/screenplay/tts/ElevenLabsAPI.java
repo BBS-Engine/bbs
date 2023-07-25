@@ -21,13 +21,27 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
-public class ElevenLabsAPI
+public class ElevenLabsAPI implements Runnable
 {
     public static final String TTS_URL = "https://api.elevenlabs.io/v1/text-to-speech/";
     public static final String VOICES_URL = "https://api.elevenlabs.io/v1/voices";
 
+    private static Thread thread;
+
     private static Map<String, String> voices = new HashMap<String, String>();
+
+    private final String token;
+    private final Screenplay screenplay;
+    private final Consumer<TTSGenerateResult> callback;
+
+    public ElevenLabsAPI(String token, Screenplay screenplay, Consumer<TTSGenerateResult> callback)
+    {
+        this.token = token;
+        this.screenplay = screenplay;
+        this.callback = callback;
+    }
 
     public static Map<String, String> getVoices()
     {
@@ -94,90 +108,26 @@ public class ElevenLabsAPI
     /**
      * Generate audio voice lines from a screenplay using ElevenLabs API
      */
-    public static TTSGenerateResult generate(Screenplay screenplay)
+    public static void generate(Screenplay screenplay, Consumer<TTSGenerateResult> callback)
     {
         String token = getToken();
 
         if (token.trim().isEmpty())
         {
-            return new TTSGenerateResult(TTSGenerateResult.Status.TOKEN_MISSING);
+            callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.TOKEN_MISSING));
+
+            return;
         }
 
-        List<ScreenplayReply> replies = screenplay.parseReplies();
-        Map<String, String> metadata = screenplay.parseMetadata();
-        Map<String, String> voices = getVoices();
-
-        if (voices.isEmpty())
+        if (thread != null)
         {
-            return new TTSGenerateResult(TTSGenerateResult.Status.VOICE_IS_MISSING);
+            callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.ERROR, "The process is still in progress!"));
+
+            return;
         }
 
-        for (ScreenplayReply reply : replies)
-        {
-            if (!voices.containsKey(reply.name.toLowerCase()))
-            {
-                TTSGenerateResult result = new TTSGenerateResult(TTSGenerateResult.Status.VOICE_IS_MISSING);
-
-                result.missingVoices.add(reply.name);
-
-                return result;
-            }
-        }
-
-        int i = 0;
-        String lastChapter = "";
-        File folder = BBS.getAssetsPath("audio/elevenlabs/" + screenplay.getId());
-
-        for (ScreenplayReply reply : replies)
-        {
-            if (!reply.chapter.equals(lastChapter))
-            {
-                i = 1;
-                lastChapter = reply.chapter;
-            }
-
-            String filename = (reply.chapter + "_" + i + ".mp3").replaceAll("[^\\w\\d. _-]", "_");
-            File file = new File(folder, filename);
-
-            try
-            {
-                String voiceID = voices.get(reply.name.toLowerCase());
-
-                HttpURLConnection connection = (HttpURLConnection) new URL(TTS_URL + voiceID).openConnection();
-
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Accept", "audio/mpeg");
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("xi-api-key", token);
-                connection.setDoOutput(true);
-
-                fillJSONData(connection, reply.reply);
-
-                int responseCode = connection.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK)
-                {
-                    writeToFile(connection, file);
-
-                    i += 1;
-                    lastChapter = reply.chapter;
-
-                    System.out.println("Audio was generated to: " + file.getAbsolutePath());
-                }
-                else
-                {
-                    System.err.println("The server returned " + responseCode);
-
-                    return new TTSGenerateResult(TTSGenerateResult.Status.ERROR);
-                }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        return new TTSGenerateResult(TTSGenerateResult.Status.SUCCESS, folder);
+        thread = new Thread(new ElevenLabsAPI(token, screenplay, callback));
+        thread.start();
     }
 
     /**
@@ -265,5 +215,93 @@ public class ElevenLabsAPI
         }
 
         return bytes.toByteArray();
+    }
+
+    @Override
+    public void run()
+    {
+        List<ScreenplayReply> replies = this.screenplay.parseReplies();
+        Map<String, String> voices = getVoices();
+
+        if (voices.isEmpty())
+        {
+            this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.VOICE_IS_MISSING));
+
+            thread = null;
+
+            return;
+        }
+
+        for (ScreenplayReply reply : replies)
+        {
+            if (!voices.containsKey(reply.name.toLowerCase()))
+            {
+                TTSGenerateResult result = new TTSGenerateResult(TTSGenerateResult.Status.VOICE_IS_MISSING);
+
+                result.missingVoices.add(reply.name);
+                this.callback.accept(result);
+
+                thread = null;
+
+                return;
+            }
+        }
+
+        this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.INITIALIZED));
+
+        int i = 0;
+        String lastChapter = "";
+        File folder = BBS.getAssetsPath("audio/elevenlabs/" + this.screenplay.getId());
+
+        for (ScreenplayReply reply : replies)
+        {
+            if (!reply.chapter.equals(lastChapter))
+            {
+                i = 1;
+                lastChapter = reply.chapter;
+            }
+
+            String filename = (reply.chapter + "_" + i + ".mp3").replaceAll("[^\\w\\d. _-]", "_");
+            File file = new File(folder, filename);
+
+            try
+            {
+                String voiceID = voices.get(reply.name.toLowerCase());
+
+                HttpURLConnection connection = (HttpURLConnection) new URL(TTS_URL + voiceID).openConnection();
+
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Accept", "audio/mpeg");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("xi-api-key", this.token);
+                connection.setDoOutput(true);
+
+                fillJSONData(connection, reply.reply);
+
+                int responseCode = connection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK)
+                {
+                    writeToFile(connection, file);
+
+                    i += 1;
+                    lastChapter = reply.chapter;
+
+                    this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.GENERATED, "Voice line " + filename + " was generated!"));
+                }
+                else
+                {
+                    this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.ERROR, "The server returned status code: " + responseCode));
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.SUCCESS, folder));
+
+        thread = null;
     }
 }

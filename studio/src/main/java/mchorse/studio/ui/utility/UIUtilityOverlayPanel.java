@@ -1,7 +1,5 @@
 package mchorse.studio.ui.utility;
 
-import mchorse.studio.ui.UIKeysApp;
-import mchorse.studio.ui.l10n.UILanguageEditorOverlayPanel;
 import mchorse.bbs.BBS;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.graphics.window.Window;
@@ -12,12 +10,13 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
-import mchorse.bbs.ui.framework.elements.overlay.UIMessageOverlayPanel;
+import mchorse.bbs.ui.framework.elements.overlay.UIMessageFolderOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
 import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.utils.StringUtils;
+import mchorse.studio.ui.UIKeysApp;
+import mchorse.studio.ui.l10n.UILanguageEditorOverlayPanel;
 
 public class UIUtilityOverlayPanel extends UIOverlayPanel
 {
@@ -113,16 +112,7 @@ public class UIUtilityOverlayPanel extends UIOverlayPanel
     {
         L10nUtils.compile(BBS.getExportFolder(), BBS.getL10n().getStrings());
 
-        UIMessageOverlayPanel panel = new UIMessageOverlayPanel(UIKeys.SUCCESS, UIKeysApp.UTILITY_COMPILE_LANG_DESCRIPTION);
-        UIButton open = new UIButton(UIKeysApp.UTILITY_OPEN_EXPORT, (b) ->
-        {
-            panel.close();
-            UIUtils.openFolder(BBS.getExportFolder());
-        });
-
-        open.relative(panel).x(0.5F).y(1F, -10).w(120).anchor(0.5F, 1F);
-        panel.content.add(open);
-
+        UIMessageFolderOverlayPanel panel = new UIMessageFolderOverlayPanel(UIKeys.SUCCESS, UIKeysApp.UTILITY_COMPILE_LANG_DESCRIPTION, BBS.getExportFolder());
         UIOverlay.addOverlay(this.getContext(), panel);
     }
 

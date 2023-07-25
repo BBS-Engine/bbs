@@ -31,7 +31,7 @@ public class UITooltip
         tooltip.renderTooltip(context);
     }
 
-    public void renderTooltip(UIContext context)
+    public void render(UIContext context)
     {
         if (this.element != null)
         {

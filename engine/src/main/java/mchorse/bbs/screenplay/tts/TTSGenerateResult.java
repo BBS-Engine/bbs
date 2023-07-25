@@ -9,10 +9,11 @@ public class TTSGenerateResult
     public Status status;
     public File folder;
     public List<String> missingVoices = new ArrayList<String>();
+    public String message;
 
     public TTSGenerateResult(Status status)
     {
-        this(status, null);
+        this.status = status;
     }
 
     public TTSGenerateResult(Status status, File folder)
@@ -21,8 +22,14 @@ public class TTSGenerateResult
         this.folder = folder;
     }
 
+    public TTSGenerateResult(Status status, String message)
+    {
+        this.status = status;
+        this.message = message;
+    }
+
     public static enum Status
     {
-        SUCCESS, VOICE_IS_MISSING, TOKEN_MISSING, ERROR;
+        INITIALIZED, SUCCESS, VOICE_IS_MISSING, TOKEN_MISSING, GENERATED, ERROR;
     }
 }

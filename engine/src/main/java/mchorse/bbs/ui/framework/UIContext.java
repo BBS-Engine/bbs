@@ -1,6 +1,7 @@
 package mchorse.bbs.ui.framework;
 
 import mchorse.bbs.graphics.text.FontRenderer;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.framework.elements.IFocusedUIElement;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
@@ -9,6 +10,7 @@ import mchorse.bbs.ui.framework.elements.input.UIKeybinds;
 import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.ui.framework.elements.utils.IViewportStack;
 import mchorse.bbs.ui.framework.elements.utils.UIViewportStack;
+import mchorse.bbs.ui.framework.notifications.UINotifications;
 import mchorse.bbs.ui.framework.tooltips.UITooltip;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.ScrollDirection;
@@ -29,6 +31,7 @@ public class UIContext implements IViewportStack
     public final UIBaseMenu menu;
     public final UITooltip tooltip;
     public final UIKeybinds keybinds;
+    public final UINotifications notifications;
     public IFocusedUIElement activeElement;
     public UIContextMenu contextMenu;
 
@@ -55,6 +58,7 @@ public class UIContext implements IViewportStack
         this.menu = menu;
         this.tooltip = new UITooltip();
         this.keybinds = new UIKeybinds();
+        this.notifications = new UINotifications();
     }
 
     public long getTick()
@@ -179,9 +183,20 @@ public class UIContext implements IViewportStack
 
     /* Tooltip */
 
-    public void renderTooltip()
+    public void notify(IKey message, int background)
     {
-        this.tooltip.renderTooltip(this);
+        this.notifications.post(message, background);
+    }
+
+    public void notify(IKey message, int background, int color)
+    {
+        this.notifications.post(message, background, color);
+    }
+
+    public void postRender()
+    {
+        this.tooltip.render(this);
+        this.notifications.render(this);
     }
 
     /* Element focusing */
@@ -437,5 +452,7 @@ public class UIContext implements IViewportStack
     public void update()
     {
         this.tick += 1;
+
+        this.notifications.update();
     }
 }

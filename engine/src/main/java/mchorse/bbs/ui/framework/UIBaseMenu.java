@@ -225,7 +225,7 @@ public abstract class UIBaseMenu implements ITickable, IKeyHandler
             this.root.render(this.context);
 
             this.context.popViewport();
-            this.context.renderTooltip();
+            this.context.postRender();
         }
 
         if (this.main.isVisible())
