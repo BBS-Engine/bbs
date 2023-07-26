@@ -16,6 +16,7 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.UIRenderingContext;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.world.entities.Entity;
+import mchorse.bbs.world.entities.architect.EntityArchitect;
 import org.joml.Matrix4f;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public class ModelFormRenderer extends FormRenderer<ModelForm>
 {
     private Matrix4f uiMatrix = new Matrix4f();
     private Map<String, Matrix4f> bones = new HashMap<String, Matrix4f>();
+
+    private Entity entity = EntityArchitect.createDummy();
 
     public ModelFormRenderer(ModelForm form)
     {
@@ -88,7 +91,7 @@ public class ModelFormRenderer extends FormRenderer<ModelForm>
 
             /* Render body parts */
             this.captureMatrices(model);
-            this.renderBodyParts(null, context.render);
+            this.renderBodyParts(this.entity, context.render);
 
             GLStates.setupDepthFunction2D();
 
