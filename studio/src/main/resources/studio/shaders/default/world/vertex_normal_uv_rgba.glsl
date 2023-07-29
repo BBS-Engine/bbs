@@ -44,11 +44,6 @@ uniform vec2 u_lightmap_coords;
 void main()
 {
     vec4 albedo = texture(u_texture, pass_uv) * u_color;
-    
-    if (albedo.a < 0.9)
-    {
-        discard;
-    }
 
     out_color = albedo * pass_rgba;
     out_vertex = vec4(pass_vertex.xyz, 1);

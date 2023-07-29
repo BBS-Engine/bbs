@@ -1,5 +1,6 @@
 package mchorse.studio;
 
+import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridgeMenu;
 import mchorse.bbs.bridge.IBridgePlayer;
 import mchorse.bbs.core.ITickable;
@@ -11,6 +12,8 @@ import mchorse.bbs.core.input.MouseInput;
 import mchorse.bbs.core.keybinds.Keybind;
 import mchorse.bbs.core.keybinds.KeybindCategory;
 import mchorse.bbs.game.entities.components.PlayerComponent;
+import mchorse.bbs.ui.framework.UIRenderingContext;
+import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.world.entities.Entity;
@@ -80,9 +83,9 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
 
             Entity controller = this.getController();
 
-            if (this.mouseMode % 4 != 0 && controller != null && controller.has(PlayerComponent.class))
+            if (!this.isMouseLookMode() && controller != null && controller.has(PlayerComponent.class))
             {
-                int index = this.mouseMode % 4 - 1;
+                int index = this.getMouseMode() - 1;
                 PlayerComponent component = controller.get(PlayerComponent.class);
 
                 this.mouseStick.set(component.sticks[index * 2 + 1], component.sticks[index * 2]);
@@ -101,6 +104,16 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
         engine.keys.keybinds.add(general);
         engine.keys.keybinds.add(movement);
         engine.cameraController.add(this.camera);
+    }
+
+    private int getMouseMode()
+    {
+        return this.mouseMode % 4;
+    }
+
+    private boolean isMouseLookMode()
+    {
+        return this.getMouseMode() == 0;
     }
 
     /* Callbacks */
@@ -255,13 +268,13 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
             {
                 this.handleJoystick(controller, joystick, joystick.getUpdatedState());
             }
-            else if (this.mouseMode % 4 != 0)
+            else if (!this.isMouseLookMode())
             {
                 PlayerComponent component = controller.get(PlayerComponent.class);
 
                 if (component != null)
                 {
-                    int index = this.mouseMode % 4 - 1;
+                    int index = this.getMouseMode() - 1;
 
                     component.sticks[index * 2] = this.mouseStick.y;
                     component.sticks[index * 2 + 1] = this.mouseStick.x;
@@ -288,11 +301,9 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
             sensitivity *= 2;
         }
 
-        boolean mouseLook = this.mouseMode % 4 == 0;
-
         if (controller != null && this.canControl())
         {
-            if (mouseLook)
+            if (this.isMouseLookMode())
             {
                 BasicComponent basic = controller.basic;
 
@@ -329,6 +340,40 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
 
         this.lastY = y;
         this.lastX = x;
+    }
+
+    public void renderHUD(UIRenderingContext context, int w, int h)
+    {
+        int mode = this.getMouseMode();
+
+        if (mode > 0 && !this.engine.screen.hasMenu())
+        {
+            String label = "Left stick";
+
+            if (mode == 2)
+            {
+                label = "Right stick";
+            }
+            else if (mode == 3)
+            {
+                label = "Triggers";
+            }
+
+            context.batcher.textCard(context.getFont(), label, 5, h - 5 - context.getFont().getHeight(), Colors.WHITE, BBSSettings.primaryColor(Colors.A100));
+
+            int ww = 200;
+            int hh = 200;
+            int x = (w - ww) / 2;
+            int y = (h - hh) / 2;
+            int color = Colors.setA(Colors.WHITE, 0.5F);
+
+            context.batcher.outline(x, y, x + ww, y + hh, color);
+
+            int bx = w / 2 + (int) ((this.mouseStick.y) * ww / 2);
+            int by = h / 2 + (int) ((this.mouseStick.x) * hh / 2);
+
+            context.batcher.box(bx - 4, by - 4, bx + 4, by + 4, color);
+        }
     }
 
     /* IMouseHandler */

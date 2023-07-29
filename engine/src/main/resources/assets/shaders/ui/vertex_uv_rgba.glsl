@@ -40,10 +40,5 @@ void main()
 {
     vec4 albedo = texture(u_texture, pass_uv) * u_color * pass_rgba;
 
-    if (albedo.a < 0.9)
-    {
-        discard;
-    }
-
     out_color = albedo;
 }
