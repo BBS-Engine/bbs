@@ -20,6 +20,8 @@ public class UIColor extends UIElement
     public boolean label = true;
     public Direction direction;
 
+    private UIElement target;
+
     public UIColor(Consumer<Integer> callback)
     {
         super();
@@ -28,6 +30,13 @@ public class UIColor extends UIElement
         this.picker.wh(200, 85).bounds(this, 2);
 
         this.direction(Direction.BOTTOM).h(20);
+    }
+
+    public UIColor withTarget(UIElement target)
+    {
+        this.target = target;
+
+        return this;
     }
 
     public UIColor withAlpha()
@@ -72,7 +81,9 @@ public class UIColor extends UIElement
                 int x = context.globalX(this.area.x(this.direction.anchorX) + 2 * this.direction.factorX);
                 int y = context.globalY(this.area.y(this.direction.anchorY) + 2 * this.direction.factorY);
 
-                context.menu.overlay.add(this.picker);
+                UIElement target = this.target == null ? context.menu.overlay : this.target;
+
+                target.add(this.picker);
                 this.picker.setup(x, y);
                 this.picker.resize();
             }

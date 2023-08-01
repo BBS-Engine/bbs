@@ -12,24 +12,6 @@ public class BridgePlayer extends BaseBridge implements IBridgePlayer
     }
 
     @Override
-    public boolean isDevelopment()
-    {
-        return this.engine.development;
-    }
-
-    @Override
-    public boolean isCreative()
-    {
-        return this.engine.controller.creative;
-    }
-
-    @Override
-    public void setCreative(boolean creative)
-    {
-        this.engine.controller.setCreative(creative);
-    }
-
-    @Override
     public Entity getController()
     {
         return this.engine.controller.getController();

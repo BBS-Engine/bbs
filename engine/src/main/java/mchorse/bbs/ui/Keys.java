@@ -97,6 +97,7 @@ public class Keys
     public static final KeyCombo SCRIPT_WORD_WRAP = new KeyCombo(UIKeys.SCRIPTS_KEYS_WORD_WRAP, GLFW.GLFW_KEY_P, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("scripts");
 
     /* Chalkboard */
+    public static final KeyCombo CHALKBOARD_TOGGLE = new KeyCombo(UIKeys.CHALKBOARD_KEYS_TOGGLE, GLFW.GLFW_KEY_F8).categoryKey("chalkboard");
     public static final KeyCombo CHALKBOARD_CLEAR = new KeyCombo(UIKeys.CHALKBOARD_KEYS_CLEAR, GLFW.GLFW_KEY_DELETE).categoryKey("chalkboard");
 
     /* World menu */

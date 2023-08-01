@@ -32,7 +32,6 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
 
     public Entity controller;
     public Entity player;
-    public boolean creative;
 
     /* ... */
     public Keybind walkForward;
@@ -171,22 +170,6 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
         this.controller = entity;
     }
 
-    public void setCreative(boolean creative)
-    {
-        this.creative = creative;
-
-        if (creative)
-        {
-            /* If it's creative, then player should be removed from the world */
-            if (this.player != null)
-            {
-                this.engine.world.removeEntitySafe(this.player);
-
-                this.player = null;
-            }
-        }
-    }
-
     public void init()
     {
         this.reset();
@@ -194,7 +177,6 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
 
     public void reload()
     {
-        this.creative = this.engine.development;
         this.player = null;
     }
 

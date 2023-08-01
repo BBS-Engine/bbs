@@ -14,7 +14,6 @@ import mchorse.bbs.l10n.L10n;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.framework.UIBaseMenu;
 import mchorse.bbs.ui.framework.UIRenderingContext;
-import mchorse.bbs.ui.utils.UIChalkboard;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.world.World;
 import mchorse.studio.StudioEngine;
@@ -34,7 +33,6 @@ public class UIScreen implements IEngine, IFileDropListener
     public UIBaseMenu menu;
     private UIDashboard dashboard;
     private UIHUD hud;
-    private UIChalkboard chalkboard;
 
     private boolean refresh;
 
@@ -52,23 +50,20 @@ public class UIScreen implements IEngine, IFileDropListener
             this.dashboard.reloadWorld(world);
         }
 
-        if (this.engine.development)
+        if (StudioSettings.welcome.get())
         {
-            if (StudioSettings.welcome.get())
-            {
-                this.showMenu(this.getDashboard());
-            }
-            else
-            {
-                String id = this.getLanguageCode();
+            this.showMenu(this.getDashboard());
+        }
+        else
+        {
+            String id = this.getLanguageCode();
 
-                if (!BBSSettings.language.get().equals(id))
-                {
-                    BBSSettings.language.set(id);
-                }
-
-                this.showMenu(new UIWelcomeMenu(this.engine));
+            if (!BBSSettings.language.get().equals(id))
+            {
+                BBSSettings.language.set(id);
             }
+
+            this.showMenu(new UIWelcomeMenu(this.engine));
         }
 
         world.getEventBus().register(this.hud);
@@ -89,11 +84,6 @@ public class UIScreen implements IEngine, IFileDropListener
         return this.hud;
     }
 
-    public UIChalkboard getChalkboard()
-    {
-        return this.chalkboard;
-    }
-
     /* UIBaseMenu related code */
 
     public boolean hasMenu()
@@ -103,7 +93,7 @@ public class UIScreen implements IEngine, IFileDropListener
 
     public boolean isPaused()
     {
-        return this.chalkboard.isEnabled() || (this.hasMenu() && this.menu.canPause());
+        return this.hasMenu() && this.menu.canPause();
     }
 
     public boolean canRefresh()
@@ -164,7 +154,6 @@ public class UIScreen implements IEngine, IFileDropListener
     {
         this.refresh = true;
 
-        this.chalkboard.resize(width, height);
         this.shaders.resize(width, height);
 
         if (this.menu != null)
@@ -180,8 +169,6 @@ public class UIScreen implements IEngine, IFileDropListener
     {
         this.shaders = new UIShaders();
         this.context = new UIRenderingContext(this.engine.renderer.context, this.shaders.ortho);
-        this.chalkboard = new UIChalkboard(this.engine, this.context);
-        this.chalkboard.context.setup(this.context);
 
         this.context.setUBO(this.shaders.ubo);
 
@@ -208,7 +195,6 @@ public class UIScreen implements IEngine, IFileDropListener
     public void delete()
     {
         this.shaders.ubo.delete();
-        this.chalkboard.delete();
     }
 
     @Override
@@ -247,7 +233,7 @@ public class UIScreen implements IEngine, IFileDropListener
     @Override
     public void handleScroll(double x, double y)
     {
-        if (this.menu == null || this.chalkboard.isEnabled())
+        if (this.menu == null)
         {
             return;
         }
@@ -294,7 +280,6 @@ public class UIScreen implements IEngine, IFileDropListener
         int h = Window.height / scale;
 
         this.renderHUD(w, h);
-        this.chalkboard.render(transition);
 
         /* Flush the last operation */
         this.context.batcher.flush();

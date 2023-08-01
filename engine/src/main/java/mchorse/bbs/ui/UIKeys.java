@@ -185,6 +185,7 @@ public class UIKeys
     public static final IKey CAMERA_FLIGHT_FLIGHT_PAN_RIGHT = IKey.lang("bbs.ui.camera.flight.camera_right");
 
     public static final IKey CHALKBOARD_KEYS_CLEAR = IKey.lang("bbs.ui.chalkboard.keys.clear");
+    public static final IKey CHALKBOARD_KEYS_TOGGLE = IKey.lang("bbs.ui.chalkboard.keys.toggle", "Toggle chalkboard", CHALKBOARD_KEYS_CLEAR);
 
     public static final IKey COLOR_CONTEXT_FAVORITES_ADD = IKey.lang("bbs.ui.color.context.favorites.add");
     public static final IKey COLOR_CONTEXT_FAVORITES_REMOVE = IKey.lang("bbs.ui.color.context.favorites.remove");

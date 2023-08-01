@@ -37,7 +37,6 @@ public class Studio
     public int windowWidth = 1280;
     public int windowHeight = 720;
     public boolean openGLDebug;
-    public boolean development;
 
     public static Link link(String path)
     {
@@ -61,7 +60,6 @@ public class Studio
             .register("glDebug", "gld", ArgumentType.NUMBER)
             .register("width", "ww", ArgumentType.NUMBER)
             .register("height", "wh", ArgumentType.NUMBER)
-            .register("development", "dev", ArgumentType.NUMBER)
             .register("fabric", ArgumentType.NUMBER);
 
         Studio game = new Studio();
@@ -81,7 +79,6 @@ public class Studio
         this.windowWidth = data.getInt("width", this.windowWidth);
         this.windowHeight = data.getInt("height", this.windowHeight);
         this.openGLDebug = data.getBool("glDebug", this.openGLDebug);
-        this.development = data.getBool("development", this.development);
     }
 
     public void launch()

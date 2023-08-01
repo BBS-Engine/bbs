@@ -82,15 +82,11 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
 
     private WatchDog watchDog;
 
-    public final boolean development;
-
     private Map<Class, Object> apis = new HashMap<Class, Object>();
 
     public StudioEngine(Studio game)
     {
         super();
-
-        this.development = game.development;
 
         this.apis.put(IBridgeAnimations.class, new BridgeAnimations(this));
         this.apis.put(IBridgeCamera.class, new BridgeCamera(this));
@@ -114,15 +110,12 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         this.controller = new StudioController(this);
         this.cameraController.camera.position.set(0, 0.5, 0);
 
-        if (this.development)
-        {
-            this.watchDog = new WatchDog(BBS.getAssetsFolder());
-            this.watchDog.register(BBS.getTextures());
-            this.watchDog.register(BBS.getModels());
-            this.watchDog.register(BBS.getSounds());
-            this.watchDog.register(BBS.getFonts());
-            this.watchDog.start();
-        }
+        this.watchDog = new WatchDog(BBS.getAssetsFolder());
+        this.watchDog.register(BBS.getTextures());
+        this.watchDog.register(BBS.getModels());
+        this.watchDog.register(BBS.getSounds());
+        this.watchDog.register(BBS.getFonts());
+        this.watchDog.start();
     }
 
     @Subscribe
@@ -142,11 +135,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
     @Subscribe
     public void reloadL10n(L10nReloadEvent event)
     {
-        if (!this.development)
-        {
-            return;
-        }
-
         File export = UILanguageEditorOverlayPanel.getLangEditorFolder();
         File[] files = export.listFiles();
 
@@ -227,31 +215,28 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         global.add(debug.keys(GLFW.GLFW_KEY_F3));
         global.add(fullscreen.keys(GLFW.GLFW_KEY_F11));
 
-        if (this.development)
+        Keybind video = new Keybind("video", () -> this.video.toggleRecording(this.renderer.finalFramebuffer));
+        Keybind utilities = new Keybind("utilities", () ->
         {
-            Keybind video = new Keybind("video", () -> this.video.toggleRecording(this.renderer.finalFramebuffer));
-            Keybind utilities = new Keybind("utilities", () ->
+            UIBaseMenu currentMenu = this.screen.menu;
+
+            if (currentMenu == null)
             {
-                UIBaseMenu currentMenu = this.screen.menu;
-
-                if (currentMenu == null)
+                this.screen.showMenu(new UIUtilityMenu(this));
+            }
+            else
+            {
+                if (UIOverlay.has(currentMenu.context))
                 {
-                    this.screen.showMenu(new UIUtilityMenu(this));
+                    return;
                 }
-                else
-                {
-                    if (UIOverlay.has(currentMenu.context))
-                    {
-                        return;
-                    }
 
-                    UIOverlay.addOverlay(currentMenu.context, new UIUtilityOverlayPanel(UIKeysApp.UTILITY_TITLE, null), 240, 160);
-                }
-            });
+                UIOverlay.addOverlay(currentMenu.context, new UIUtilityOverlayPanel(UIKeysApp.UTILITY_TITLE, null), 240, 160);
+            }
+        });
 
-            global.add(video.keys(GLFW.GLFW_KEY_F4));
-            global.add(utilities.keys(GLFW.GLFW_KEY_F6));
-        }
+        global.add(video.keys(GLFW.GLFW_KEY_F4));
+        global.add(utilities.keys(GLFW.GLFW_KEY_F6));
 
         this.keys.keybinds.add(global);
     }
@@ -337,11 +322,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
 
         this.screen.delete();
         this.world.delete();
-
-        if (this.development)
-        {
-            this.watchDog.stop();
-        }
+        this.watchDog.stop();
 
         BBSData.delete();
         BBS.terminate();
@@ -350,8 +331,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
     @Override
     public boolean handleKey(int key, int scancode, int action, int mods)
     {
-        return this.screen.getChalkboard().handleKey(key, scancode, action, mods)
-            || this.keys.keybinds.handleKey(key, scancode, action, mods)
+        return this.keys.keybinds.handleKey(key, scancode, action, mods)
             || this.controller.handleKey(key, scancode, action, mods)
             || this.screen.handleKey(key, scancode, action, mods);
     }
@@ -359,24 +339,12 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
     @Override
     public void handleTextInput(int key)
     {
-        this.screen.getChalkboard().handleTextInput(key);
-
-        if (!this.screen.getChalkboard().isEnabled())
-        {
-            this.screen.handleTextInput(key);
-        }
+        this.screen.handleTextInput(key);
     }
 
     @Override
     public void handleMouse(int button, int action, int mode)
     {
-        if (this.screen.getChalkboard().isEnabled())
-        {
-            this.screen.getChalkboard().handleMouse(button, action, mode);
-
-            return;
-        }
-
         if (!this.screen.hasMenu())
         {
             this.controller.handleMouse(button, action, mode);

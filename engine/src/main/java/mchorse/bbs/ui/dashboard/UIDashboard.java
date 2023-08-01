@@ -4,7 +4,6 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.bridge.IBridgeCamera;
-import mchorse.bbs.bridge.IBridgePlayer;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.OrbitCamera;
 import mchorse.bbs.camera.controller.OrbitCameraController;
@@ -43,6 +42,7 @@ import mchorse.bbs.ui.recording.editor.UIRecordPanel;
 import mchorse.bbs.ui.recording.scene.UIScenePanel;
 import mchorse.bbs.ui.screenplay.UIScreenplayPanel;
 import mchorse.bbs.ui.tileset.UITileSetEditorPanel;
+import mchorse.bbs.ui.utils.UIChalkboard;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.world.UIWorldEditorPanel;
@@ -134,6 +134,14 @@ public class UIDashboard extends UIBaseMenu
         this.overlay.keys().register(Keys.WORLD_TOGGLE_AXES, () -> this.displayAxes = !this.displayAxes).category(category);
         this.overlay.keys().register(Keys.WORLD_CYCLE_PANELS, this::cyclePanels).category(category);
         this.overlay.keys().register(Keys.DASHBOARD_WORLD_EDITOR, () -> this.panels.setPanel(this.panels.getPanel(UIWorldEditorPanel.class))).category(category);
+
+        UIChalkboard chalkboard = new UIChalkboard();
+
+        chalkboard.relative(this.viewport).full();
+        chalkboard.setVisible(false);
+
+        this.getRoot().add(chalkboard);
+        this.getRoot().keys().register(Keys.CHALKBOARD_TOGGLE, chalkboard::toggleVisible);
     }
 
     private void saveWorld()
@@ -251,13 +259,6 @@ public class UIDashboard extends UIBaseMenu
             this.main.setVisible(true);
 
             return;
-        }
-
-        IBridgePlayer playerBridge = this.bridge.get(IBridgePlayer.class);
-
-        if (playerBridge.isCreative())
-        {
-            playerBridge.setCreative(false);
         }
 
         super.closeMenu();
