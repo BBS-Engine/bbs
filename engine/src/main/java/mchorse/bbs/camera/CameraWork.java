@@ -19,14 +19,6 @@ public class CameraWork extends StructureBase
         this.register(this.clips);
     }
 
-    /**
-     * Get clip at given layer and clip index.
-     */
-    public Clip getClip(int i)
-    {
-        return this.clips.get(i);
-    }
-
     public void apply(ClipContext context, int ticks, float transition, Position position)
     {
         context.clipData.clear();
@@ -43,21 +35,6 @@ public class CameraWork extends StructureBase
         }
 
         context.currentLayer = 0;
-    }
-
-    /**
-     * Calculate total duration of this camera work.
-     */
-    public int calculateDuration()
-    {
-        int max = 0;
-
-        for (Clip clip : this.clips.get())
-        {
-            max = Math.max(max, clip.tick.get() + clip.duration.get());
-        }
-
-        return max;
     }
 
     public int findNextTick(int tick)

@@ -1,7 +1,6 @@
 package mchorse.bbs.ui.camera.clips.modules;
 
 import mchorse.bbs.camera.clips.overwrite.CircularClip;
-import mchorse.bbs.data.types.FloatType;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.UIClip;
@@ -28,19 +27,19 @@ public class UICircularModule extends UIAbstractModule
     {
         super(editor);
 
-        this.offset = new UITrackpad((value) -> this.editor.postUndo(UIClip.undo(this.editor, this.clip.offset, new FloatType(value.floatValue()))));
+        this.offset = new UITrackpad((value) -> this.editor.postUndo(UIClip.undo(this.editor, this.clip.offset, (offset) -> offset.set(value.floatValue()))));
         this.offset.tooltip(UIKeys.CAMERA_PANELS_OFFSET);
 
-        this.circles = new UITrackpad((value) -> this.editor.postUndo(UIClip.undo(this.editor, this.clip.circles, new FloatType(value.floatValue()))));
+        this.circles = new UITrackpad((value) -> this.editor.postUndo(UIClip.undo(this.editor, this.clip.circles, (circles) -> circles.set(value.floatValue()))));
         this.circles.tooltip(UIKeys.CAMERA_PANELS_CIRCLES);
 
-        this.distance = new UITrackpad((value) -> this.editor.postUndo(UIClip.undo(this.editor, this.clip.distance, new FloatType(value.floatValue()))));
+        this.distance = new UITrackpad((value) -> this.editor.postUndo(UIClip.undo(this.editor, this.clip.distance, (distance) -> distance.set(value.floatValue()))));
         this.distance.tooltip(UIKeys.CAMERA_PANELS_DISTANCE);
 
-        this.pitch = new UITrackpad((value) -> this.editor.postUndo(UIClip.undo(this.editor, this.clip.pitch, new FloatType(value.floatValue()))));
+        this.pitch = new UITrackpad((value) -> this.editor.postUndo(UIClip.undo(this.editor, this.clip.pitch, (pitch) -> pitch.set(value.floatValue()))));
         this.pitch.tooltip(UIKeys.CAMERA_PANELS_PITCH);
 
-        this.fov = new UITrackpad((value) -> this.editor.postUndo(UIClip.undo(this.editor, this.clip.fov, new FloatType(value.floatValue()))));
+        this.fov = new UITrackpad((value) -> this.editor.postUndo(UIClip.undo(this.editor, this.clip.fov, (fov) -> fov.set(value.floatValue()))));
         this.fov.tooltip(UIKeys.CAMERA_PANELS_FOV);
 
         this.column().vertical().stretch().height(20);

@@ -2,9 +2,9 @@ package mchorse.bbs.camera.values;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
+import mchorse.bbs.settings.values.ValueGroup;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +22,21 @@ public class ValueClips extends ValueGroup
         super(id);
 
         this.assign(new ArrayList<Clip>());
+    }
+
+    /**
+     * Calculate total duration of this camera work.
+     */
+    public int calculateDuration()
+    {
+        int max = 0;
+
+        for (Clip clip : this.clips)
+        {
+            max = Math.max(max, clip.tick.get() + clip.duration.get());
+        }
+
+        return max;
     }
 
     public Clip get(int index)

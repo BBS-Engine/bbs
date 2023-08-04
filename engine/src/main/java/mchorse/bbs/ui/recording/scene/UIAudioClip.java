@@ -28,7 +28,7 @@ public class UIAudioClip extends UIClip<AudioClip>
         {
             UISoundOverlayPanel panel = new UISoundOverlayPanel((l) ->
             {
-                editor.postUndo(this.undo(this.clip.audio, l == null ? null : new StringType(l.toString())));
+                editor.postUndo(this.undo(this.clip.audio, (audio) -> audio.set(l)));
             });
 
             UIOverlay.addOverlay(this.getContext(), panel.set(this.clip.audio.get()));

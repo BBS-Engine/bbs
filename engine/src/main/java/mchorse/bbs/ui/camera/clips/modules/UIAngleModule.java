@@ -29,37 +29,25 @@ public class UIAngleModule extends UIAbstractModule
 
         this.yaw = new UITrackpad((value) ->
         {
-            Angle point = this.angle.get().copy();
-
-            point.yaw = value.floatValue();
-            this.editor.postUndo(UIClip.undo(this.editor, this.angle, point.toData()));
+            this.editor.postUndo(UIClip.undo(this.editor, this.angle, (angle) -> angle.get().yaw = value.floatValue()));
         });
         this.yaw.tooltip(UIKeys.CAMERA_PANELS_YAW);
 
         this.pitch = new UITrackpad((value) ->
         {
-            Angle point = this.angle.get().copy();
-
-            point.pitch = value.floatValue();
-            this.editor.postUndo(UIClip.undo(this.editor, this.angle, point.toData()));
+            this.editor.postUndo(UIClip.undo(this.editor, this.angle, (angle) -> angle.get().pitch = value.floatValue()));
         });
         this.pitch.tooltip(UIKeys.CAMERA_PANELS_PITCH);
 
         this.roll = new UITrackpad((value) ->
         {
-            Angle point = this.angle.get().copy();
-
-            point.roll = value.floatValue();
-            this.editor.postUndo(UIClip.undo(this.editor, this.angle, point.toData()));
+            this.editor.postUndo(UIClip.undo(this.editor, this.angle, (angle) -> angle.get().roll = value.floatValue()));
         });
         this.roll.tooltip(UIKeys.CAMERA_PANELS_ROLL);
 
         this.fov = new UITrackpad((value) ->
         {
-            Angle point = this.angle.get().copy();
-
-            point.fov = value.floatValue();
-            this.editor.postUndo(UIClip.undo(this.editor, this.angle, point.toData()));
+            this.editor.postUndo(UIClip.undo(this.editor, this.angle, (angle) -> angle.get().fov = value.floatValue()));
         });
         this.fov.tooltip(UIKeys.CAMERA_PANELS_FOV);
 

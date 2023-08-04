@@ -12,8 +12,6 @@ import mchorse.bbs.camera.clips.overwrite.KeyframeClip;
 import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.camera.values.ValueClips;
 import mchorse.bbs.data.types.BaseType;
-import mchorse.bbs.data.types.ByteType;
-import mchorse.bbs.data.types.IntType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.game.utils.ContentType;
@@ -67,7 +65,7 @@ public class UICameraWork extends UIElement
 
     /* Main objects */
     private UICameraPanel editor;
-    private CameraWork work;
+    private ValueClips clips;
 
     /* Navigation */
     public int tick;
@@ -179,7 +177,7 @@ public class UICameraWork extends UIElement
         {
             ValueInt clipValue = (ValueInt) clip.getProperty(property.getId());
 
-            undos.add(UIClip.undo(this.editor, clipValue, new IntType(clipValue.get() + difference)));
+            undos.add(UIClip.undo(this.editor, clipValue, (v) -> v.set(clipValue.get() + difference)));
         }
 
         this.editor.postUndo(new CompoundUndo<CameraWork>(undos));
@@ -199,7 +197,7 @@ public class UICameraWork extends UIElement
 
         if (this.cache == null)
         {
-            this.cache = this.work.clips.toData();
+            this.cache = this.clips.toData();
         }
     }
 
@@ -222,9 +220,7 @@ public class UICameraWork extends UIElement
             return null;
         }
 
-        ValueClips clips = this.work.clips;
-
-        return UIClip.undo(this.editor, clips, this.cache, clips.toData()).selectedBefore(this.cachedSelection).noMerging();
+        return UIClip.undo(this.editor, this.clips, this.cache, this.clips.toData()).selectedBefore(this.cachedSelection).noMerging();
     }
 
     /* Tools */
@@ -342,7 +338,7 @@ public class UICameraWork extends UIElement
         clip.duration.set(duration);
 
         this.cache();
-        this.work.clips.add(clip);
+        this.clips.add(clip);
         this.pickClip(clip);
         this.postUndo();
     }
@@ -397,7 +393,7 @@ public class UICameraWork extends UIElement
         for (Clip clip : clips)
         {
             clip.tick.set(tick + (clip.tick.get() - min));
-            this.work.clips.add(clip);
+            this.clips.add(clip);
             this.addSelected(clip);
         }
 
@@ -410,7 +406,7 @@ public class UICameraWork extends UIElement
      */
     private void cut()
     {
-        List<Clip> clips = this.isSelecting() ? this.getClipsFromSelection() : new ArrayList<Clip>(this.work.clips.get());
+        List<Clip> clips = this.isSelecting() ? this.getClipsFromSelection() : new ArrayList<Clip>(this.clips.get());
         Clip original = this.editor.getClip();
         int offset = this.editor.timeline.tick;
 
@@ -427,7 +423,7 @@ public class UICameraWork extends UIElement
 
             clip.duration.set(clip.duration.get() - copy.duration.get());
             copy.tick.set(copy.tick.get() + clip.duration.get());
-            this.work.clips.add(copy);
+            this.clips.add(copy);
             this.addSelected(copy);
         }
 
@@ -478,8 +474,8 @@ public class UICameraWork extends UIElement
         }
 
         this.cache();
-        this.work.clips.remove(original);
-        this.work.clips.add(converted);
+        this.clips.remove(original);
+        this.clips.add(converted);
         this.pickClip(converted);
         this.postUndo();
     }
@@ -540,7 +536,7 @@ public class UICameraWork extends UIElement
 
         for (Clip clip : clips)
         {
-            undos.add(UIClip.undo(this.editor, clip.tick, new IntType(clip.tick.get() + diff)));
+            undos.add(UIClip.undo(this.editor, clip.tick, (tick) -> tick.set(clip.tick.get() + diff)));
         }
 
         this.editor.postUndoCallback(new CompoundUndo<CameraWork>(undos));
@@ -566,13 +562,13 @@ public class UICameraWork extends UIElement
 
             if (this.tick > offset)
             {
-                undos.add(UIClip.undo(this.editor, clip.duration, new IntType(this.tick - offset)));
+                undos.add(UIClip.undo(this.editor, clip.duration, (duration) -> duration.set(this.tick - offset)));
             }
             else if (this.tick < offset + clip.duration.get())
             {
                 undos.add(new CompoundUndo<CameraWork>(
-                    UIClip.undo(this.editor, clip.tick, new IntType(this.tick)),
-                    UIClip.undo(this.editor, clip.duration, new IntType(clip.duration.get() + offset - this.tick))
+                    UIClip.undo(this.editor, clip.tick, (tick) -> tick.set(this.tick)),
+                    UIClip.undo(this.editor, clip.duration, (duration) -> duration.set(clip.duration.get() + offset - this.tick))
                 ));
             }
         }
@@ -593,7 +589,7 @@ public class UICameraWork extends UIElement
 
             for (Clip clip : clips)
             {
-                this.work.clips.remove(clip);
+                this.clips.remove(clip);
             }
 
             this.pickClip(null);
@@ -617,7 +613,7 @@ public class UICameraWork extends UIElement
 
         for (Clip clip : clips)
         {
-            undos.add(UIClip.undo(this.editor, clip.enabled, new ByteType(!clip.enabled.get())));
+            undos.add(UIClip.undo(this.editor, clip.enabled, (enabled) -> enabled.set(!clip.enabled.get())));
         }
 
         this.editor.postUndo(new CompoundUndo<CameraWork>(undos));
@@ -642,7 +638,7 @@ public class UICameraWork extends UIElement
 
         for (int index : this.selection)
         {
-            Clip clip = this.work.clips.get(index);
+            Clip clip = this.clips.get(index);
 
             if (clip != null)
             {
@@ -660,7 +656,7 @@ public class UICameraWork extends UIElement
             return null;
         }
 
-        return this.work.getClip(this.selection.get(this.selection.size() - 1));
+        return this.clips.get(this.selection.get(this.selection.size() - 1));
     }
 
     public void setSelection(List<Integer> selection)
@@ -717,9 +713,9 @@ public class UICameraWork extends UIElement
 
     /* Getters and setters */
 
-    public void setWork(CameraWork work)
+    public void setClips(ValueClips clips)
     {
-        this.work = work;
+        this.clips = clips;
         this.addPreview = null;
 
         this.resetCache();
@@ -727,9 +723,9 @@ public class UICameraWork extends UIElement
         this.clearSelection();
         this.embedView(null);
 
-        if (work != null)
+        if (clips != null)
         {
-            int duration = work.calculateDuration();
+            int duration = clips.calculateDuration();
 
             if (duration > 0)
             {
@@ -963,7 +959,7 @@ public class UICameraWork extends UIElement
             int tick = this.fromGraphX(mouseX);
             int layerIndex = this.fromLayerY(mouseY);
             Clip original = this.editor.getClip();
-            Clip clip = this.work.clips.getClipAt(tick, layerIndex);
+            Clip clip = this.clips.getClipAt(tick, layerIndex);
 
             if (clip != null && clip != original)
             {
@@ -1062,7 +1058,7 @@ public class UICameraWork extends UIElement
     @Override
     public void render(UIContext context)
     {
-        if (this.work != null && !this.hasEmbeddedView())
+        if (this.clips != null && !this.hasEmbeddedView())
         {
             this.vertical.drag(context);
             this.handleInput(context.mouseX, context.mouseY);
@@ -1125,8 +1121,8 @@ public class UICameraWork extends UIElement
                 int newTick = clip.tick.get() + relativeX;
                 int newLayer = clip.layer.get() + relativeY;
 
-                undos.add(UIClip.undo(this.editor, clip.tick, clip.tick.toData(), new IntType(newTick)));
-                undos.add(UIClip.undo(this.editor, clip.layer, clip.layer.toData(), new IntType(newLayer)));
+                undos.add(UIClip.undo(this.editor, clip.tick, (tick) -> tick.set(newTick)));
+                undos.add(UIClip.undo(this.editor, clip.layer, (layer) -> layer.set(newLayer)));
                 clip.tick.set(newTick);
                 clip.layer.set(newLayer);
             }
@@ -1143,7 +1139,7 @@ public class UICameraWork extends UIElement
     {
         this.clearSelection();
 
-        for (Clip clip : this.work.clips.get())
+        for (Clip clip : this.clips.get())
         {
             Area clipArea = new Area();
 
@@ -1212,7 +1208,7 @@ public class UICameraWork extends UIElement
         batcher.unclip(context);
         batcher.clip(this.vertical.area, context);
 
-        List<Clip> clips = this.work.clips.get();
+        List<Clip> clips = this.clips.get();
 
         for (int i = 0, c = clips.size(); i < c; i++)
         {
@@ -1308,7 +1304,7 @@ public class UICameraWork extends UIElement
     private void renderCursor(UIContext context, int y)
     {
         /* Draw the marker */
-        String label = TimeUtils.formatTime(this.tick) + "/" + TimeUtils.formatTime(this.work.calculateDuration());
+        String label = TimeUtils.formatTime(this.tick) + "/" + TimeUtils.formatTime(this.clips.calculateDuration());
         int cursorX = this.toGraphX(this.tick);
         int width = context.font.getWidth(label) + 3;
 

@@ -407,7 +407,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         this.record.setEnabled(data != null);
 
         this.runner.setWork(data);
-        this.timeline.setWork(data);
+        this.timeline.setClips(data == null ? null : data.clips);
         this.pickClip(null);
 
         this.lastSave = System.currentTimeMillis();
@@ -474,7 +474,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             {
                 this.timeline.setSelection(selection);
 
-                Clip last = this.data.getClip(selection.get(selection.size() - 1));
+                Clip last = this.data.clips.get(selection.get(selection.size() - 1));
 
                 this.pickClip(last);
             }
@@ -771,7 +771,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
                 max = this.timeline.loopMax;
             }
 
-            max = Math.min(max, this.data.calculateDuration());
+            max = Math.min(max, this.data.clips.calculateDuration());
 
             if (min >= 0 && max >= 0 && min < max && (this.runner.ticks >= max - 1 || this.runner.ticks < min))
             {

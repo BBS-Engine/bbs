@@ -44,7 +44,7 @@ public class CameraTool extends Tool
         Position position = new Position();
         ClipContext clipContext = new ClipContext();
 
-        int c = camera.calculateDuration();
+        int c = camera.clips.calculateDuration();
         int current = context.timeline.calculateRange().min;
 
         if (current < 0)

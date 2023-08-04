@@ -1,10 +1,10 @@
 package mchorse.bbs.camera.values;
 
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.math.IExpression;
 import mchorse.bbs.math.MathBuilder;
+import mchorse.bbs.settings.values.base.BaseValue;
 
 public class ValueExpression extends BaseValue
 {
@@ -34,7 +34,7 @@ public class ValueExpression extends BaseValue
         this.expression = this.builder.parse(expression);
     }
 
-    private void setExpression(String string)
+    public void setExpression(String string)
     {
         try
         {

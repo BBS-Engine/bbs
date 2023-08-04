@@ -17,7 +17,7 @@ public class PlayCameraController extends CameraWorkCameraController
 
         this.setWork(work);
 
-        this.duration = work.calculateDuration();
+        this.duration = work.clips.calculateDuration();
     }
 
     @Override

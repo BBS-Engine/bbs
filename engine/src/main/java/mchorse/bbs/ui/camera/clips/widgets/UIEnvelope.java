@@ -4,8 +4,6 @@ import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.smooth.Envelope;
 import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.data.types.ByteType;
-import mchorse.bbs.data.types.FloatType;
-import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.camera.utils.UICameraGraphEditor;
@@ -42,31 +40,31 @@ public class UIEnvelope extends UIElement
 
         this.enabled = new UIToggle(UIKeys.CAMERA_PANELS_ENABLED, (b) ->
         {
-            this.panel.editor.postUndo(this.panel.undo(this.get().enabled, new ByteType(b.getValue())));
+            this.panel.editor.postUndo(this.panel.undo(this.get().enabled, (enabled) -> enabled.set(b.getValue())));
         });
         this.pickInterpolation = new UIButton(UIKeys.CAMERA_PANELS_INTERPOLATION, (b) ->
         {
             UICameraUtils.interps(this.getContext(), this.get().interpolation.get(), (i) ->
             {
-                this.panel.editor.postUndo(this.panel.undo(this.get().interpolation, new StringType(i.toString())));
+                this.panel.editor.postUndo(this.panel.undo(this.get().interpolation, (interp) -> interp.set(i)));
             });
         });
         this.pickInterpolation.tooltip(tooltip);
 
         this.fadeIn = new UITrackpad((value) ->
         {
-            this.panel.editor.postUndo(this.panel.undo(this.get().fadeIn, new FloatType(TimeUtils.fromTime(value.floatValue()))));
+            this.panel.editor.postUndo(this.panel.undo(this.get().fadeIn, (fadeIn) -> fadeIn.set((float) TimeUtils.fromTime(value.floatValue()))));
         });
         this.fadeIn.tooltip(UIKeys.CAMERA_PANELS_ENVELOPES_START_D, Direction.TOP);
         this.fadeOut = new UITrackpad((value) ->
         {
-            this.panel.editor.postUndo(this.panel.undo(this.get().fadeOut, new FloatType(TimeUtils.fromTime(value.floatValue()))));
+            this.panel.editor.postUndo(this.panel.undo(this.get().fadeOut, (active) -> active.set((float) TimeUtils.fromTime(value.floatValue()))));
         });
         this.fadeOut.tooltip(UIKeys.CAMERA_PANELS_ENVELOPES_END_D, Direction.TOP);
 
         this.keyframes = new UIToggle(UIKeys.CAMERA_PANELS_KEYFRAMES, (b) ->
         {
-            this.panel.editor.postUndo(this.panel.undo(this.get().keyframes, new ByteType(b.getValue())));
+            this.panel.editor.postUndo(this.panel.undo(this.get().keyframes, (keyframes) -> keyframes.set(b.getValue())));
             this.toggleKeyframes(b.getValue());
         });
         this.editKeyframes = new UIButton(UIKeys.CAMERA_PANELS_EDIT_KEYFRAMES, (b) ->

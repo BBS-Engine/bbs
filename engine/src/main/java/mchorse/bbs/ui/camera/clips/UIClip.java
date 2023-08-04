@@ -6,9 +6,6 @@ import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.data.types.BaseType;
-import mchorse.bbs.data.types.ByteType;
-import mchorse.bbs.data.types.IntType;
-import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
@@ -27,6 +24,8 @@ import mchorse.bbs.ui.framework.elements.utils.UILabel;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.undo.IUndo;
+
+import java.util.function.Consumer;
 
 public abstract class UIClip <T extends Clip> extends UIElement
 {
@@ -51,12 +50,23 @@ public abstract class UIClip <T extends Clip> extends UIElement
         return UI.label(key).background(() -> BBSSettings.primaryColor(Colors.A50));
     }
 
-    public static CameraWorkUndo undo(UICameraPanel editor, BaseValue property, BaseType newValue)
+    public static <T extends BaseValue> CameraWorkUndo undo(UICameraPanel editor, T property, Consumer<T> consumer)
+    {
+        BaseType oldValue = property.toData();
+
+        consumer.accept(property);
+
+        BaseType newValue = property.toData();
+
+        return new ValueChangeUndo(property.getPath(), oldValue, newValue).editor(editor);
+    }
+
+    public static <T extends BaseValue> CameraWorkUndo undo(UICameraPanel editor, T property, BaseType newValue)
     {
         return undo(editor, property, property.toData(), newValue);
     }
 
-    public static CameraWorkUndo undo(UICameraPanel editor, BaseValue property, BaseType oldValue, BaseType newValue)
+    public static <T extends BaseValue> CameraWorkUndo undo(UICameraPanel editor, T property, BaseType oldValue, BaseType newValue)
     {
         return new ValueChangeUndo(property.getPath(), oldValue, newValue).editor(editor);
     }
@@ -66,10 +76,10 @@ public abstract class UIClip <T extends Clip> extends UIElement
         this.clip = clip;
         this.editor = editor;
 
-        this.enabled = new UIToggle(UIKeys.CAMERA_PANELS_ENABLED, (b) -> this.editor.postUndo(this.undo(this.clip.enabled, new ByteType(b.getValue()))));
-        this.title = new UITextbox(1000, (t) -> this.editor.postUndo(this.undo(this.clip.title, new StringType(t))));
+        this.enabled = new UIToggle(UIKeys.CAMERA_PANELS_ENABLED, (b) -> this.editor.postUndo(this.undo(this.clip.enabled, (enabled) -> enabled.set(b.getValue()))));
+        this.title = new UITextbox(1000, (t) -> this.editor.postUndo(this.undo(this.clip.title, (title) -> title.set(t))));
         this.title.tooltip(UIKeys.CAMERA_PANELS_TITLE_TOOLTIP);
-        this.color = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.color, new IntType(c))));
+        this.color = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.color, (color) -> color.set(c))));
         this.color.tooltip(UIKeys.CAMERA_PANELS_COLOR_TOOLTIP);
         this.layer = new UITrackpad((v) -> this.editor.timeline.updateClipProperty(this.clip.layer, v.intValue()));
         this.layer.limit(0, Integer.MAX_VALUE, true).tooltip(UIKeys.CAMERA_PANELS_LAYER);
@@ -111,14 +121,14 @@ public abstract class UIClip <T extends Clip> extends UIElement
         this.fillData();
     }
 
-    public IUndo<CameraWork> undo(BaseValue property, BaseType newValue)
+    public <T extends BaseValue> IUndo<CameraWork> undo(T property, BaseType newValue)
     {
-        return this.undo(property, property.toData(), newValue);
+        return undo(this.editor, property, newValue);
     }
 
-    public IUndo<CameraWork> undo(BaseValue property, BaseType oldValue, BaseType newValue)
+    public <T extends BaseValue> IUndo<CameraWork> undo(T property, Consumer<T> consumer)
     {
-        return undo(this.editor, property, oldValue, newValue);
+        return undo(this.editor, property, consumer);
     }
 
     protected void updateDuration(int duration)

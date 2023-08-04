@@ -57,7 +57,7 @@ public class UICameraRecorder extends UIElement
         }
 
         /* Calculate start and end ticks */
-        this.end = this.editor.getData().calculateDuration();
+        this.end = this.editor.getData().clips.calculateDuration();
 
         if (this.end <= 0)
         {

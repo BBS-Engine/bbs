@@ -1,8 +1,6 @@
 package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
-import mchorse.bbs.data.types.FloatType;
-import mchorse.bbs.data.types.IntType;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
@@ -32,21 +30,21 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
     {
         super.registerUI();
 
-        this.x = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.x, new IntType(v.intValue()))));
+        this.x = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.x, (x) -> x.set(v.intValue()))));
         this.x.integer();
-        this.y = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.y, new IntType(v.intValue()))));
+        this.y = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.y, (y) -> y.set(v.intValue()))));
         this.y.integer();
 
-        this.size = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.size, new FloatType(v.floatValue()))));
-        this.anchorX = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.anchorX, new FloatType(v.floatValue()))));
-        this.anchorY = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.anchorY, new FloatType(v.floatValue()))));
-        this.color = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.color, new IntType(c))));
+        this.size = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.size, (size) -> size.set(v.floatValue()))));
+        this.anchorX = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.anchorX, (anchorX) -> anchorX.set(v.floatValue()))));
+        this.anchorY = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.anchorY, (anchorY) -> anchorY.set(v.floatValue()))));
+        this.color = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.color, (color) -> color.set(c))));
 
-        this.windowX = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.windowX, new FloatType(v.floatValue()))));
-        this.windowY = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.windowY, new FloatType(v.floatValue()))));
+        this.windowX = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.windowX, (windowX) -> windowX.set(v.floatValue()))));
+        this.windowY = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.windowY, (windowY) -> windowY.set(v.floatValue()))));
 
-        this.background = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.background, new IntType(c)))).withAlpha();
-        this.backgroundOffset = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.backgroundOffset, new FloatType(v.floatValue()))));
+        this.background = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.background, (background) -> background.set(c)))).withAlpha();
+        this.backgroundOffset = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.backgroundOffset, (backgroundOffset) -> backgroundOffset.set(v.floatValue()))));
     }
 
     @Override

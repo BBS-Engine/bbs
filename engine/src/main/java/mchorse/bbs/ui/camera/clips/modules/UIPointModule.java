@@ -34,28 +34,19 @@ public class UIPointModule extends UIAbstractModule
 
         this.x = new UITrackpad((value) ->
         {
-            Point point = this.point.get().copy();
-
-            point.x = value;
-            this.editor.postUndo(UIClip.undo(this.editor, this.point, point.toData()));
+            this.editor.postUndo(UIClip.undo(this.editor, this.point, (point) -> point.get().x = value));
         });
         this.x.tooltip(UIKeys.X);
 
         this.y = new UITrackpad((value) ->
         {
-            Point point = this.point.get().copy();
-
-            point.y = value;
-            this.editor.postUndo(UIClip.undo(this.editor, this.point, point.toData()));
+            this.editor.postUndo(UIClip.undo(this.editor, this.point, (point) -> point.get().y = value));
         });
         this.y.tooltip(UIKeys.Y);
 
         this.z = new UITrackpad((value) ->
         {
-            Point point = this.point.get().copy();
-
-            point.z = value;
-            this.editor.postUndo(UIClip.undo(this.editor, this.point, point.toData()));
+            this.editor.postUndo(UIClip.undo(this.editor, this.point, (point) -> point.get().z = value));
         });
         this.z.tooltip(UIKeys.Z);
 

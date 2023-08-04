@@ -1,8 +1,6 @@
 package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.modifiers.ShakeClip;
-import mchorse.bbs.data.types.FloatType;
-import mchorse.bbs.data.types.IntType;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
@@ -27,13 +25,13 @@ public class UIShakeClip extends UIClip<ShakeClip>
     {
         super.registerUI();
 
-        this.shake = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.shake, new FloatType(value.floatValue()))));
+        this.shake = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.shake, (shake) -> shake.set(value.floatValue()))));
         this.shake.tooltip(UIKeys.CAMERA_PANELS_SHAKE, Direction.BOTTOM);
 
-        this.shakeAmount = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.shakeAmount, new FloatType(value.floatValue()))));
+        this.shakeAmount = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.shakeAmount, (shakeAmount) -> shakeAmount.set(value.floatValue()))));
         this.shakeAmount.tooltip(UIKeys.CAMERA_PANELS_SHAKE_AMOUNT, Direction.BOTTOM);
 
-        this.active = new UIBitToggle((value) -> this.editor.postUndo(this.undo(this.clip.active, new IntType(value)))).all();
+        this.active = new UIBitToggle((value) -> this.editor.postUndo(this.undo(this.clip.active, (active) -> active.set(value)))).all();
     }
 
     @Override

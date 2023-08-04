@@ -3,7 +3,6 @@ package mchorse.bbs.ui.recording.scene;
 import mchorse.bbs.BBSData;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.utils.TimeUtils;
-import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.recording.data.Record;
@@ -52,7 +51,7 @@ public class UISceneClip extends UIClip<SceneClip>
         {
             UIDataUtils.openPicker(this.getContext(), ContentType.SCENES, this.clip.scene.get(), (name) ->
             {
-                editor.postUndo(this.undo(this.clip.scene, new StringType(name)));
+                editor.postUndo(this.undo(this.clip.scene, (scene) -> scene.set(name)));
             });
         });
 

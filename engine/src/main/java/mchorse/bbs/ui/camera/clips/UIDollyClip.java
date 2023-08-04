@@ -4,8 +4,6 @@ import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.clips.overwrite.DollyClip;
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.data.types.FloatType;
-import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
@@ -44,20 +42,20 @@ public class UIDollyClip extends UIClip<DollyClip>
 
         this.point = new UIPointModule(editor);
         this.angle = new UIAngleModule(editor);
-        this.distance = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.distance, new FloatType(value.floatValue()))));
+        this.distance = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.distance, (distance) -> distance.set(value.floatValue()))));
         this.distance.tooltip(UIKeys.CAMERA_PANELS_DOLLY_DISTANCE);
         this.reverse = new UIIcon(Icons.REVERSE, (b) -> this.reverse());
         this.reverse.tooltip(UIKeys.CAMERA_PANELS_DOLLY_REVERSE);
-        this.yaw = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.yaw, new FloatType(value.floatValue()))));
+        this.yaw = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.yaw, (yaw) -> yaw.set(value.floatValue()))));
         this.yaw.tooltip(UIKeys.CAMERA_PANELS_DOLLY_YAW);
-        this.pitch = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.pitch, new FloatType(value.floatValue()))));
+        this.pitch = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.pitch, (pitch) -> pitch.set(value.floatValue()))));
         this.pitch.tooltip(UIKeys.CAMERA_PANELS_DOLLY_PITCH);
 
         this.interp = new UIButton(UIKeys.CAMERA_PANELS_INTERPOLATION, (b) ->
         {
             UICameraUtils.interps(this.getContext(), this.clip.interp.get(), (i) ->
             {
-                this.editor.postUndo(this.undo(this.clip.interp, new StringType(i.toString())));
+                this.editor.postUndo(this.undo(this.clip.interp, (interp) -> interp.set(i)));
             });
         });
         this.interp.tooltip(new InterpolationTooltip(1F, 0.5F, () -> this.clip.interp.get()));
@@ -83,7 +81,7 @@ public class UIDollyClip extends UIClip<DollyClip>
 
         this.editor.postUndo(new CompoundUndo<CameraWork>(
             this.undo(this.clip.position, position.toData()),
-            this.undo(this.clip.distance, new FloatType(-this.clip.distance.get()))
+            this.undo(this.clip.distance, (distance) -> distance.set(-this.clip.distance.get()))
         ));
 
         this.fillData();
@@ -94,8 +92,8 @@ public class UIDollyClip extends UIClip<DollyClip>
     {
         this.editor.postUndo(new CompoundUndo<CameraWork>(
             this.undo(this.clip.position, position.toData()),
-            this.undo(this.clip.yaw, new FloatType(position.angle.yaw)),
-            this.undo(this.clip.pitch, new FloatType(position.angle.pitch))
+            this.undo(this.clip.yaw, (yaw) -> yaw.set(position.angle.yaw)),
+            this.undo(this.clip.pitch, (pitch) -> pitch.set(position.angle.pitch))
         ));
 
         super.editClip(position);

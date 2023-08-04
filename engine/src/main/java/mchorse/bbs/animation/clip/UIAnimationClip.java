@@ -1,7 +1,6 @@
 package mchorse.bbs.animation.clip;
 
 import mchorse.bbs.bridge.IBridgeAnimations;
-import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.UICameraPanel;
@@ -29,7 +28,7 @@ public class UIAnimationClip extends UIClip<AnimationClip>
             {
                 this.getContext().menu.bridge.get(IBridgeAnimations.class).getAnimations().remove(this.clip.animation.get());
 
-                this.editor.postUndo(this.undo(this.clip.animation, new StringType(name)));
+                this.editor.postUndo(this.undo(this.clip.animation, (animation) -> animation.set(name)));
             });
         });
     }

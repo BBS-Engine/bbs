@@ -3,7 +3,6 @@ package mchorse.bbs.ui.camera.clips;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.modifiers.LookClip;
-import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.data.types.ByteType;
 import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.ui.UIKeys;
@@ -46,7 +45,7 @@ public class UILookClip extends UIClip<LookClip>
 
         this.selector = new UITextboxHelp(500, (str) ->
         {
-            this.editor.postUndo(this.undo(this.clip.selector, new StringType(str)));
+            this.editor.postUndo(this.undo(this.clip.selector, (selector) -> selector.set(str)));
             this.clip.tryFindingEntity(editor.getContext().menu.bridge.get(IBridgeWorld.class).getWorld());
         });
         this.selector.link(SELECTOR_HELP).tooltip(UIKeys.CAMERA_PANELS_SELECTOR_TOOLTIP);
@@ -61,18 +60,18 @@ public class UILookClip extends UIClip<LookClip>
 
         this.relative = new UIToggle(UIKeys.CAMERA_PANELS_RELATIVE, false, (b) ->
         {
-            this.editor.postUndo(this.undo(this.clip.relative, new ByteType(b.getValue())));
+            this.editor.postUndo(this.undo(this.clip.relative, (relative) -> relative.set(b.getValue())));
         });
         this.relative.tooltip(UIKeys.CAMERA_PANELS_RELATIVE_TOOLTIP);
 
         this.atBlock = new UIToggle(UIKeys.CAMERA_PANELS_AT_BLOCK, false, (b) ->
         {
-            this.editor.postUndo(this.undo(this.clip.atBlock, new ByteType(b.getValue())));
+            this.editor.postUndo(this.undo(this.clip.atBlock, (atBlock) -> atBlock.set(b.getValue())));
         });
 
         this.forward = new UIToggle(UIKeys.CAMERA_PANELS_FORWARD, false, (b) ->
         {
-            this.editor.postUndo(this.undo(this.clip.forward, new ByteType(b.getValue())));
+            this.editor.postUndo(this.undo(this.clip.forward, (forward) -> forward.set(b.getValue())));
         });
         this.forward.tooltip(UIKeys.CAMERA_PANELS_FORWARD_TOOLTIP);
     }
@@ -115,14 +114,14 @@ public class UILookClip extends UIClip<LookClip>
         {
             Vector3i pos = result.block;
 
-            this.editor.postUndo(this.undo(this.clip.block, new Point(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5).toData()));
+            this.editor.postUndo(this.undo(this.clip.block, (block) -> block.get().set(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5)));
             this.fillData();
         }
         else if (!center && !result.type.isMissed())
         {
             Vector3d vec = result.hit;
 
-            this.editor.postUndo(this.undo(this.clip.block, new Point(vec.x, vec.y, vec.z).toData()));
+            this.editor.postUndo(this.undo(this.clip.block, (block) -> block.get().set(vec.x, vec.y, vec.z)));
             this.fillData();
         }
     }
