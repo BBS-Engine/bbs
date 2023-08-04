@@ -2,13 +2,14 @@ package mchorse.bbs.recording.scene;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.audio.SoundPlayer;
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.settings.values.ValueLink;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.settings.values.ValueLink;
 
-public class AudioClip extends Clip
+public class AudioClip extends CameraClip
 {
     public ValueLink audio = new ValueLink("audio", null);
 

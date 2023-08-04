@@ -113,21 +113,6 @@ public class ValueClips extends ValueGroup
         return Collections.unmodifiableList(this.clips);
     }
 
-    public void set(List<Clip> clips)
-    {
-        if (clips != null)
-        {
-            List<Clip> newClips = new ArrayList<Clip>();
-
-            for (Clip clip : clips)
-            {
-                newClips.add(clip.copy());
-            }
-
-            this.assign(newClips);
-        }
-    }
-
     /* Value implementation */
 
     @Override

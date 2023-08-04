@@ -63,7 +63,7 @@ public class ClipContext
         return this;
     }
 
-    public void apply(Clip clip, Position position)
+    public void apply(CameraClip clip, Position position)
     {
         this.currentLayer = clip.layer.get();
         this.relativeTick = this.ticks - clip.tick.get();
@@ -90,9 +90,12 @@ public class ClipContext
 
             for (Clip clip : this.work.clips.getClips(ticks, lastLayer))
             {
-                this.apply(clip, position);
+                if (clip instanceof CameraClip)
+                {
+                    this.apply((CameraClip) clip, position);
 
-                applied = true;
+                    applied = true;
+                }
             }
 
             this.currentLayer = lastLayer;
@@ -115,7 +118,10 @@ public class ClipContext
 
         for (Clip clip : this.work.clips.get())
         {
-            clip.shutdown(this);
+            if (clip instanceof CameraClip)
+            {
+                ((CameraClip) clip).shutdown(this);
+            }
         }
     }
 }

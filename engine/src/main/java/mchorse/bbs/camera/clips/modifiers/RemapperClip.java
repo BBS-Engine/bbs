@@ -1,13 +1,14 @@
 package mchorse.bbs.camera.clips.modifiers;
 
+import mchorse.bbs.BBSSettings;
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
-import mchorse.bbs.BBSSettings;
 import mchorse.bbs.utils.math.MathUtils;
 
-public class RemapperClip extends Clip
+public class RemapperClip extends CameraClip
 {
     public final ValueKeyframeChannel channel = new ValueKeyframeChannel("channel");
 

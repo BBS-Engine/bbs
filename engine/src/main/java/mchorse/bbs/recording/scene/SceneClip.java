@@ -2,13 +2,14 @@ package mchorse.bbs.recording.scene;
 
 import mchorse.bbs.BBSData;
 import mchorse.bbs.bridge.IBridgeWorld;
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.ValueString;
 
-public class SceneClip extends Clip
+public class SceneClip extends CameraClip
 {
     public ValueString scene = new ValueString("scene", "");
     public ValueInt offset = new ValueInt("offset", 0);

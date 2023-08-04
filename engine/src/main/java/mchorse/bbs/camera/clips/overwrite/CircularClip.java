@@ -1,6 +1,7 @@
 package mchorse.bbs.camera.clips.overwrite;
 
 import mchorse.bbs.camera.Camera;
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.data.Point;
@@ -9,7 +10,7 @@ import mchorse.bbs.camera.values.ValuePoint;
 import mchorse.bbs.settings.values.ValueFloat;
 import mchorse.bbs.utils.math.MathUtils;
 
-public class CircularClip extends Clip
+public class CircularClip extends CameraClip
 {
     /**
      * Center point of circular fixture

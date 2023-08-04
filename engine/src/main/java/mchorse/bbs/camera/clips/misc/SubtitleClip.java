@@ -1,5 +1,6 @@
 package mchorse.bbs.camera.clips.misc;
 
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
@@ -10,7 +11,7 @@ import mchorse.bbs.utils.colors.Colors;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubtitleClip extends Clip
+public class SubtitleClip extends CameraClip
 {
     public ValueInt x = new ValueInt("x", 0);
     public ValueInt y = new ValueInt("y", 0);

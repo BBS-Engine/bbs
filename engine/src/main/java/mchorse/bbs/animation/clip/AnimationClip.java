@@ -3,12 +3,13 @@ package mchorse.bbs.animation.clip;
 import mchorse.bbs.animation.AnimationPlayer;
 import mchorse.bbs.animation.Animations;
 import mchorse.bbs.bridge.IBridgeAnimations;
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.settings.values.ValueString;
 
-public class AnimationClip extends Clip
+public class AnimationClip extends CameraClip
 {
     public ValueString animation = new ValueString("animation", "");
 

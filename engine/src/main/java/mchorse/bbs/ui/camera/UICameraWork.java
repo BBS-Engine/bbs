@@ -4,6 +4,7 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.BBSData;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.CameraWork;
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipFactoryData;
 import mchorse.bbs.camera.clips.converters.IClipConverter;
@@ -327,7 +328,11 @@ public class UICameraWork extends UIElement
     {
         Clip clip = BBS.getFactoryClips().create(type);
 
-        clip.fromCamera(this.editor.getCamera());
+        if (clip instanceof CameraClip)
+        {
+            ((CameraClip) clip).fromCamera(this.editor.getCamera());
+        }
+
         this.addClip(clip, tick, layer, duration);
     }
 

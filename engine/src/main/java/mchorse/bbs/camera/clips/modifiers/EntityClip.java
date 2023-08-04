@@ -1,6 +1,6 @@
 package mchorse.bbs.camera.clips.modifiers;
 
-import mchorse.bbs.camera.clips.Clip;
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValuePoint;
@@ -19,7 +19,7 @@ import java.util.List;
  * selector to fetch an entity and apply some modifications to the path 
  * based on the entity.
  */
-public abstract class EntityClip extends Clip
+public abstract class EntityClip extends CameraClip
 {
     /**
      * Position which may be used for calculation of relative

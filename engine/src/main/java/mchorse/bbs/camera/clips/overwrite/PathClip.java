@@ -1,6 +1,7 @@
 package mchorse.bbs.camera.clips.overwrite;
 
 import mchorse.bbs.camera.Camera;
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.data.Angle;
@@ -25,7 +26,7 @@ import java.util.List;
  *
  * This fixture is responsible for making smooth camera movements.
  */
-public class PathClip extends Clip
+public class PathClip extends CameraClip
 {
     public static final Vector2d VECTOR = new Vector2d();
 

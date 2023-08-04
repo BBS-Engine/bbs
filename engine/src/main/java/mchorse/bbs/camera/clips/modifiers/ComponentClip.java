@@ -1,9 +1,9 @@
 package mchorse.bbs.camera.clips.modifiers;
 
-import mchorse.bbs.camera.clips.Clip;
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.settings.values.ValueInt;
 
-public abstract class ComponentClip extends Clip
+public abstract class ComponentClip extends CameraClip
 {
     /**
      * Active value that uses only 7 bits for determining which components

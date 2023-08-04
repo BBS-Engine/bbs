@@ -1,6 +1,7 @@
 package mchorse.bbs.camera.clips.overwrite;
 
 import mchorse.bbs.camera.Camera;
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
@@ -12,7 +13,7 @@ import mchorse.bbs.camera.values.ValueKeyframeChannel;
  * This fixture provides a much flexible control over camera, allowing setting 
  * up different transitions between points with different easing.
  */
-public class KeyframeClip extends Clip
+public class KeyframeClip extends CameraClip
 {
     public final ValueKeyframeChannel x = new ValueKeyframeChannel("x");
     public final ValueKeyframeChannel y = new ValueKeyframeChannel("y");

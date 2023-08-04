@@ -1,5 +1,6 @@
 package mchorse.bbs.camera;
 
+import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
@@ -35,7 +36,10 @@ public class CameraWork extends StructureBase
 
         for (Clip clip : this.clips.getClips(ticks))
         {
-            context.apply(clip, position);
+            if (clip instanceof CameraClip)
+            {
+                context.apply((CameraClip) clip, position);
+            }
         }
 
         context.currentLayer = 0;
