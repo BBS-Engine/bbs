@@ -6,5 +6,5 @@ import mchorse.bbs.ui.utils.Area;
 
 public interface IUIClipRenderer <T extends Clip>
 {
-    public void renderClip(UIContext context, T clip, Area area, boolean compact, boolean selected, boolean current);
+    public void renderClip(UIContext context, T clip, Area area, boolean selected, boolean current);
 }

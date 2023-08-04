@@ -142,7 +142,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
                 this.timeline.h(max);
                 this.resize();
 
-                if (!this.timeline.isCompact())
+                if (!this.timeline.hasEmbeddedView())
                 {
                     vertical.scroll = bottom - vertical.area.h;
                     vertical.clamp();
@@ -481,7 +481,6 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
             this.timeline.scale.view(change.viewMin, change.viewMax);
             this.timeline.setTickAndNotify(change.tick);
-            this.timeline.updateScrollArea();
             this.timeline.vertical.scrollTo(change.scroll);
         }
 

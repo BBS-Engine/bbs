@@ -25,7 +25,7 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
     private static Vector2f previous = new Vector2f();
 
     @Override
-    public void renderClip(UIContext context, T clip, Area area, boolean compact, boolean selected, boolean current)
+    public void renderClip(UIContext context, T clip, Area area, boolean selected, boolean current)
     {
         int y = area.y;
         int h = area.h;
@@ -45,7 +45,7 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
 
         if (clip.enabled.get())
         {
-            this.renderBackground(context, color, clip, area, compact, selected, current);
+            this.renderBackground(context, color, clip, area, selected, current);
         }
         else
         {
@@ -54,25 +54,22 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
 
         context.batcher.outline(left, y, right, y + h, selected ? Colors.WHITE : Colors.A50);
 
-        if (!compact)
+        Envelope envelope = clip.envelope.get();
+
+        if (right - left > 10 && envelope.enabled.get())
         {
-            Envelope envelope = clip.envelope.get();
+            this.renderEnvelope(context, envelope, clip.duration.get(), left + 1, y + 1, right - 1, y + 17);
+        }
 
-            if (right - left > 10 && envelope.enabled.get())
-            {
-                this.renderEnvelope(context, envelope, clip.duration.get(), left + 1, y + 1, right - 1, y + 17);
-            }
+        String label = context.font.limitToWidth(clip.title.get(), right - 5 - left);
 
-            String label = context.font.limitToWidth(clip.title.get(), right - 5 - left);
-
-            if (!label.isEmpty())
-            {
-                context.batcher.textShadow(label, left + 5, y + (h - context.font.getHeight()) / 2);
-            }
+        if (!label.isEmpty())
+        {
+            context.batcher.textShadow(label, left + 5, y + (h - context.font.getHeight()) / 2);
         }
     }
 
-    protected void renderBackground(UIContext context, int color, T clip, Area area, boolean compact, boolean selected, boolean current)
+    protected void renderBackground(UIContext context, int color, T clip, Area area, boolean selected, boolean current)
     {
         context.batcher.box(area.x, area.y, area.ex(), area.ey(), color);
     }

@@ -61,7 +61,6 @@ public class UICameraWork extends UIElement
 
     private static final int MARGIN = 10;
     private static final int LAYER_HEIGHT = 20;
-    private static final int LAYER_COMPACT_HEIGHT = 4;
     private static final int LAYERS = 20;
 
     private static final Area CLIP_AREA = new Area();
@@ -97,7 +96,6 @@ public class UICameraWork extends UIElement
     /* Embedded view */
     private UIIcon embeddedClose;
     private UIElement embedded;
-    private Area compactArea = new Area();
 
     private Vector3i addPreview;
 
@@ -193,8 +191,6 @@ public class UICameraWork extends UIElement
     {
         this.cache = null;
         this.cachedSelection.clear();
-
-        this.updateScrollArea();
     }
 
     private void cache()
@@ -727,7 +723,6 @@ public class UICameraWork extends UIElement
         this.addPreview = null;
 
         this.resetCache();
-        this.updateScrollArea();
         this.vertical.scrollToEnd();
         this.clearSelection();
         this.embedView(null);
@@ -763,7 +758,7 @@ public class UICameraWork extends UIElement
 
     public int toLayerY(int layer)
     {
-        int h = this.isCompact() ? LAYER_COMPACT_HEIGHT : LAYER_HEIGHT;
+        int h = LAYER_HEIGHT;
 
         return this.area.ey() - MARGIN - (layer + 1) * h + this.getScroll();
     }
@@ -831,20 +826,13 @@ public class UICameraWork extends UIElement
 
     /* Embedded view */
 
-    private Area getArea()
-    {
-        return this.isCompact() ? this.compactArea : this.area;
-    }
-
-    public boolean isCompact()
+    public boolean hasEmbeddedView()
     {
         return this.embedded != null;
     }
 
     public void embedView(UIElement element)
     {
-        boolean wasEmpty = this.embedded == null;
-
         this.embeddedClose.removeFromParent();
 
         if (this.embedded != null)
@@ -861,34 +849,13 @@ public class UICameraWork extends UIElement
 
         if (this.embedded != null)
         {
-            this.embedded.resetFlex().relative(this).w(1F).hTo(this.compactArea);
+            this.embedded.resetFlex().relative(this).full();
 
             this.prepend(this.embedded);
             this.add(this.embeddedClose);
             this.embedded.resize();
             this.embeddedClose.resize();
         }
-
-        int scroll = this.vertical.scroll;
-
-        this.updateScrollArea();
-
-        if (wasEmpty != (this.embedded == null))
-        {
-            this.vertical.scroll = (int) (wasEmpty
-                ? scroll / (float) LAYER_HEIGHT * LAYER_COMPACT_HEIGHT
-                : scroll / (float) LAYER_COMPACT_HEIGHT * LAYER_HEIGHT);
-            this.vertical.clamp();
-        }
-    }
-
-    public void updateScrollArea()
-    {
-        this.vertical.area.copy(this.isCompact() ? this.compactArea : this.area);
-        this.vertical.area.h -= MARGIN;
-
-        this.vertical.scrollSize = this.work == null ? 0 : LAYERS * (this.isCompact() ? LAYER_COMPACT_HEIGHT : LAYER_HEIGHT);
-        this.vertical.clamp();
     }
 
     /* Handling user input */
@@ -898,11 +865,9 @@ public class UICameraWork extends UIElement
     {
         super.afterResizeApplied();
 
-        this.compactArea.copy(this.area);
-        this.compactArea.h = 7 * LAYER_COMPACT_HEIGHT;
-        this.compactArea.y += this.area.h - this.compactArea.h;
-
-        this.updateScrollArea();
+        this.vertical.area.copy(this.area);
+        this.vertical.area.h -= MARGIN;
+        this.vertical.clamp();
     }
 
     @Override
@@ -913,7 +878,7 @@ public class UICameraWork extends UIElement
             return true;
         }
 
-        if (this.getArea().isInside(context))
+        if (this.area.isInside(context) && !this.hasEmbeddedView())
         {
             int mouseX = context.mouseX;
             int mouseY = context.mouseY;
@@ -940,7 +905,7 @@ public class UICameraWork extends UIElement
 
     private boolean handleLeftClick(int mouseX, int mouseY, boolean ctrl, boolean shift, boolean alt)
     {
-        if (ctrl && !this.isCompact() && this.isSelecting())
+        if (ctrl && !this.hasEmbeddedView() && this.isSelecting())
         {
             this.grabbing = true;
             this.lastX = mouseX;
@@ -948,7 +913,7 @@ public class UICameraWork extends UIElement
 
             return true;
         }
-        else if (shift && !this.isCompact())
+        else if (shift && !this.hasEmbeddedView())
         {
             this.selecting = true;
             this.lastX = mouseX;
@@ -993,7 +958,7 @@ public class UICameraWork extends UIElement
 
             return true;
         }
-        else if (!this.isCompact())
+        else if (!this.hasEmbeddedView())
         {
             int tick = this.fromGraphX(mouseX);
             int layerIndex = this.fromLayerY(mouseY);
@@ -1048,7 +1013,7 @@ public class UICameraWork extends UIElement
     @Override
     public boolean subMouseScrolled(UIContext context)
     {
-        if (this.getArea().isInside(context) && !this.scrolling)
+        if (this.area.isInside(context) && !this.scrolling && !this.hasEmbeddedView())
         {
             if (Window.isShiftPressed())
             {
@@ -1068,6 +1033,11 @@ public class UICameraWork extends UIElement
     @Override
     public boolean subMouseReleased(UIContext context)
     {
+        if (this.hasEmbeddedView())
+        {
+            return super.subMouseReleased(context);
+        }
+
         this.vertical.mouseReleased(context);
 
         if (this.selecting)
@@ -1092,7 +1062,7 @@ public class UICameraWork extends UIElement
     @Override
     public void render(UIContext context)
     {
-        if (this.work != null)
+        if (this.work != null && !this.hasEmbeddedView())
         {
             this.vertical.drag(context);
             this.handleInput(context.mouseX, context.mouseY);
@@ -1211,10 +1181,10 @@ public class UICameraWork extends UIElement
     private void renderCameraWork(UIContext context)
     {
         Batcher2D batcher = context.batcher;
-        Area area = this.getArea();
-        int h = this.isCompact() ? LAYER_COMPACT_HEIGHT : LAYER_HEIGHT;
+        Area area = this.area;
+        int h = LAYER_HEIGHT;
 
-        if (this.isCompact())
+        if (this.hasEmbeddedView())
         {
             int y = this.embedded.area.ey();
 
@@ -1256,13 +1226,13 @@ public class UICameraWork extends UIElement
 
             CLIP_AREA.set(x, y, w, h);
 
-            if (!this.isCompact())
+            if (!this.hasEmbeddedView())
             {
                 CLIP_AREA.y += 1;
                 CLIP_AREA.h -= 2;
             }
 
-            renderer.renderClip(context, clip, CLIP_AREA, this.isCompact(), this.hasSelected(i), this.editor.getClip() == clip);
+            renderer.renderClip(context, clip, CLIP_AREA, this.hasSelected(i), this.editor.getClip() == clip);
         }
 
         this.renderAddPreview(context, h);
