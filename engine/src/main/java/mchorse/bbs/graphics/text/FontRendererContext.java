@@ -5,6 +5,7 @@ import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.utils.colors.Colors;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public class FontRendererContext
@@ -18,6 +19,7 @@ public class FontRendererContext
     public int skew;
 
     public final Set<IFontFormat> activeFormats = new HashSet<IFontFormat>();
+    public final Random random = new Random();
 
     public void reset()
     {
@@ -36,5 +38,7 @@ public class FontRendererContext
         this.index = index;
         this.x = x;
         this.y = y;
+
+        this.random.setSeed((long) ((index + this.time) * 100000F));
     }
 }

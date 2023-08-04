@@ -15,7 +15,7 @@ public class ShakeFontFormat extends AmountFontFormat
     @Override
     public void process(FontRendererContext context)
     {
-        context.x += Math.random() * this.amount;
-        context.y += Math.random() * this.amount;
+        context.x += (context.random.nextFloat() - 0.5F) * this.amount;
+        context.y += (context.random.nextFloat() - 0.5F) * this.amount;
     }
 }
