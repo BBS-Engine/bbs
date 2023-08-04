@@ -5,16 +5,18 @@ import mchorse.bbs.cubic.data.model.Model;
 import mchorse.bbs.cubic.data.model.ModelGroup;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.forms.forms.ModelForm;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 public class Pose implements IMapSerializable
 {
+    private static Set<String> keys = new HashSet<String>();
+
     public boolean staticPose;
+
     public final Map<String, Transform> transforms = new HashMap<String, Transform>();
 
     public static void getAvailableKeys(String prefix, Set<String> keys)
@@ -28,6 +30,20 @@ public class Pose implements IMapSerializable
         keys.add(IPuppet.combinePaths(prefix, "rx"));
         keys.add(IPuppet.combinePaths(prefix, "ry"));
         keys.add(IPuppet.combinePaths(prefix, "rz"));
+    }
+
+    public Transform get(String name)
+    {
+        Transform transform = this.transforms.get(name);
+
+        if (transform == null)
+        {
+            transform = new Transform();
+
+            this.transforms.put(name, transform);
+        }
+
+        return transform;
     }
 
     public void apply(Model model)
@@ -74,8 +90,21 @@ public class Pose implements IMapSerializable
         {
             Pose pose = (Pose) obj;
 
-            return this.staticPose == pose.staticPose
-                    && Objects.equals(this.transforms, pose.transforms);
+            keys.clear();
+            keys.addAll(this.transforms.keySet());
+            keys.addAll(pose.transforms.keySet());
+
+            for (String key : keys)
+            {
+                Transform a = this.transforms.get(key);
+                Transform b = pose.transforms.get(key);
+
+                if (a != null && b != null && !a.equals(b)) return false;
+                if (a == null && !b.isDefault()) return false;
+                if (b == null && !a.isDefault()) return false;
+            }
+
+            return this.staticPose == pose.staticPose;
         }
 
         return false;
@@ -87,9 +116,14 @@ public class Pose implements IMapSerializable
 
         this.transforms.clear();
 
-        if (!pose.transforms.isEmpty())
+        if (pose.transforms.isEmpty())
         {
-            for (Map.Entry<String, Transform> entry : pose.transforms.entrySet())
+            return;
+        }
+
+        for (Map.Entry<String, Transform> entry : pose.transforms.entrySet())
+        {
+            if (!entry.getValue().isDefault())
             {
                 this.transforms.put(entry.getKey(), entry.getValue().copy());
             }
@@ -101,17 +135,22 @@ public class Pose implements IMapSerializable
     {
         data.putBool("static", this.staticPose);
 
-        if (!this.transforms.isEmpty())
+        if (this.transforms.isEmpty())
         {
-            MapType pose = new MapType();
+            return;
+        }
 
-            for (Map.Entry<String, Transform> entry : this.transforms.entrySet())
+        MapType pose = new MapType();
+
+        for (Map.Entry<String, Transform> entry : this.transforms.entrySet())
+        {
+            if (!entry.getValue().isDefault())
             {
                 pose.put(entry.getKey(), entry.getValue().toData());
             }
-
-            data.put("pose", pose);
         }
+
+        data.put("pose", pose);
     }
 
     @Override
@@ -124,13 +163,14 @@ public class Pose implements IMapSerializable
         {
             MapType pose = data.getMap("pose");
 
-            if (!pose.isEmpty())
+            for (String key : pose.keys())
             {
-                for (String key : pose.keys())
-                {
-                    Transform transform = new Transform();
+                Transform transform = new Transform();
 
-                    transform.fromData(pose.getMap(key));
+                transform.fromData(pose.getMap(key));
+
+                if (!transform.isDefault())
+                {
                     this.transforms.put(key, transform);
                 }
             }

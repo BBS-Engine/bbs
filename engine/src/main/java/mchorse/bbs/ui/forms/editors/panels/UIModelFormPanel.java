@@ -1,7 +1,9 @@
 package mchorse.bbs.ui.forms.editors.panels;
 
 import mchorse.bbs.cubic.CubicModel;
+import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.ModelForm;
+import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.UIKeys;
@@ -11,15 +13,13 @@ import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.input.UITexturePicker;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
+import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.world.objects.objects.UIPropTransforms;
-import mchorse.bbs.utils.Pose;
-import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.colors.Color;
 
 public class UIModelFormPanel extends UIFormPanel<ModelForm>
 {
     public UIPropTransforms pose;
-    public UIButton createPose;
     public UIStringList groups;
     public UIToggle staticPose;
     public UIColor color;
@@ -31,18 +31,42 @@ public class UIModelFormPanel extends UIFormPanel<ModelForm>
         super(editor);
 
         this.pose = new UIPropTransforms();
-        this.createPose = new UIButton(IKey.EMPTY, this::togglePose);
         this.groups = new UIStringList((l) -> this.pickGroup(l.get(0)));
-        this.groups.background();
+        this.groups.background().context((menu) ->
+        {
+            menu.action(Icons.COPY, IKey.lazy("Copy pose"), () ->
+            {
+                Window.setClipboard(this.form.toData(), "_ModelCopyPose");
+            });
+
+            MapType data = Window.getClipboardMap("_ModelCopyPose");
+
+            if (data != null)
+            {
+                menu.shadow().action(Icons.PASTE, IKey.lazy("Paste pose"), () ->
+                {
+                    this.form.pose.fromData(data);
+
+                    this.startEdit(this.form);
+                });
+            }
+
+            menu.action(Icons.REFRESH, IKey.lazy("Reset pose"), () ->
+            {
+                String current = this.groups.getCurrentFirst();
+
+                this.form.pose.get().transforms.clear();
+                this.pickBone(current);
+            });
+        });
         this.staticPose = new UIToggle(UIKeys.FORMS_EDITOR_MODEL_STATIC_POSE, (b) -> this.form.pose.get().staticPose = b.getValue());
 
         int w = this.options.getFlex().getW() - 20;
 
-        this.createPose.relative(this).x(1F, -10).y(10).w(w).anchorX(1F);
-        this.groups.relative(this).x(1F, -10).y(35).w(w).hTo(this.staticPose.area, -5).anchorX(1F);
+        this.groups.relative(this).x(1F, -10).y(10).w(w).hTo(this.staticPose.area, -5).anchorX(1F);
         this.staticPose.relative(this).x(1F, -10).w(w).y(1F, -10).w(w).anchor(1F);
 
-        this.add(this.createPose, this.staticPose, this.groups);
+        this.add(this.staticPose, this.groups);
 
         this.pick = new UIButton(UIKeys.FORMS_EDITOR_MODEL_PICK_TEXTURE, (b) ->
         {
@@ -62,28 +86,9 @@ public class UIModelFormPanel extends UIFormPanel<ModelForm>
         this.options.add(this.pick, this.color, this.pose.verticalCompact().marginTop(8));
     }
 
-    private void togglePose(UIButton b)
-    {
-        Pose pose = this.form.pose.get();
-
-        if (pose.isEmpty())
-        {
-            for (String group : this.groups.getList())
-            {
-                pose.transforms.put(group, new Transform());
-            }
-        }
-        else
-        {
-            pose.transforms.clear();
-        }
-
-        this.updateElements();
-    }
-
     private void pickGroup(String group)
     {
-        this.pose.setTransform(this.form.pose.get().transforms.get(group));
+        this.pose.setTransform(this.form.pose.get().get(group));
     }
 
     @Override
@@ -99,7 +104,10 @@ public class UIModelFormPanel extends UIFormPanel<ModelForm>
 
         this.color.setColor(form.color.get().getARGBColor());
 
-        this.updateElements();
+        String group = this.groups.getList().get(0);
+
+        this.groups.setCurrentScroll(group);
+        this.pickGroup(group);
     }
 
     @Override
@@ -107,33 +115,7 @@ public class UIModelFormPanel extends UIFormPanel<ModelForm>
     {
         super.pickBone(bone);
 
-        Pose pose = this.form.pose.get();
-
-        if (!pose.isEmpty() && pose.transforms.containsKey(bone))
-        {
-            this.pickGroup(bone);
-            this.groups.setCurrentScroll(bone);
-        }
-    }
-
-    private void updateElements()
-    {
-        boolean poseIsPresent = !this.form.pose.get().isEmpty();
-
-        this.pose.setVisible(poseIsPresent);
-        this.groups.setVisible(poseIsPresent);
-        this.staticPose.setVisible(poseIsPresent);
-
-        this.createPose.label = poseIsPresent
-            ? UIKeys.FORMS_EDITOR_MODEL_RESET_POSE
-            : UIKeys.FORMS_EDITOR_MODEL_CREATE_POSE;
-
-        if (poseIsPresent)
-        {
-            String group = this.groups.getList().get(0);
-
-            this.groups.setCurrentScroll(group);
-            this.pickGroup(group);
-        }
+        this.pickGroup(bone);
+        this.groups.setCurrentScroll(bone);
     }
 }

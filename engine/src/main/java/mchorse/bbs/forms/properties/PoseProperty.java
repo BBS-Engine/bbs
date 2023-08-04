@@ -10,8 +10,9 @@ import java.util.Set;
 
 public class PoseProperty extends BaseTweenProperty<Pose>
 {
+    private static Set<String> keys = new HashSet<String>();
+
     private Pose i = new Pose();
-    private Set<String> keys = new HashSet<String>();
 
     public PoseProperty(Form form, String key, Pose value)
     {
@@ -22,36 +23,27 @@ public class PoseProperty extends BaseTweenProperty<Pose>
     protected Pose getTweened(float transition)
     {
         float factor = this.interpolation.interpolate(0, 1, this.getTweenFactor(transition));
-        Transform empty = new Transform();
 
-        this.keys.clear();
+        keys.clear();
 
         if (this.lastValue != null)
         {
-            this.keys.addAll(this.lastValue.transforms.keySet());
+            keys.addAll(this.lastValue.transforms.keySet());
         }
 
         if (this.value != null)
         {
-            this.keys.addAll(this.value.transforms.keySet());
+            keys.addAll(this.value.transforms.keySet());
         }
 
         this.i.copy(this.lastValue);
 
-        for (String key : this.keys)
+        for (String key : keys)
         {
-            Transform transform = this.i.transforms.get(key);
+            Transform transform = this.i.get(key);
+            Transform t = this.value.get(key);
 
-            if (transform == null)
-            {
-                transform = new Transform();
-
-                this.i.transforms.put(key, transform);
-            }
-
-            Transform t = this.value.transforms.get(key);
-
-            transform.lerp(t == null ? empty : t, factor);
+            transform.lerp(t, factor);
         }
 
         return this.i;

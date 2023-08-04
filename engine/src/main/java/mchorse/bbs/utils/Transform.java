@@ -1,9 +1,9 @@
 package mchorse.bbs.utils;
 
-import mchorse.bbs.settings.values.ValueDouble;
 import mchorse.bbs.data.DataStorageUtils;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.settings.values.ValueDouble;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.MathUtils;
@@ -12,8 +12,12 @@ import org.joml.Vector3f;
 
 public class Transform implements IMapSerializable
 {
+    public static final Transform DEFAULT = new Transform();
+
+    private static final Vector3f DEFAULT_SCALE = new Vector3f(1F, 1F, 1F);
+
     public final Vector3f translate = new Vector3f();
-    public final Vector3f scale = new Vector3f(1, 1, 1);
+    public final Vector3f scale = new Vector3f(1F, 1F, 1F);
     public final Vector3f rotate = new Vector3f();
 
     public void lerp(Transform transform, float a)
@@ -171,7 +175,12 @@ public class Transform implements IMapSerializable
         this.identity();
 
         this.translate.set(DataStorageUtils.vector3fFromData(data.getList("t")));
-        this.scale.set(DataStorageUtils.vector3fFromData(data.getList("s"), new Vector3f(1, 1, 1)));
+        this.scale.set(DataStorageUtils.vector3fFromData(data.getList("s"), new Vector3f(DEFAULT_SCALE)));
         this.rotate.set(DataStorageUtils.vector3fFromData(data.getList("r")));
+    }
+
+    public boolean isDefault()
+    {
+        return this.equals(DEFAULT);
     }
 }
