@@ -17,6 +17,7 @@ public class FontRendererContext
     public float x;
     public float y;
     public int skew;
+    public boolean bold;
 
     public final Set<IFontFormat> activeFormats = new HashSet<IFontFormat>();
     public final Random random = new Random();
@@ -31,6 +32,7 @@ public class FontRendererContext
         this.color.set(Colors.WHITE);
         this.skew = 0;
         this.activeFormats.clear();
+        this.bold = false;
     }
 
     public void setup(int index, int x, int y)

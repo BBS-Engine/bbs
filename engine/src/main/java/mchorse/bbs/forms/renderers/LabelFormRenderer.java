@@ -17,6 +17,7 @@ import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.world.entities.Entity;
+import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
@@ -89,7 +90,10 @@ public class LabelFormRenderer extends FormRenderer<LabelForm>
         }
 
         text.buildVAO(x, y, content, builder, textBuilder.setup(this.form.color.get(transition).getARGBColor()));
+
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
         builder.render();
+        GLStates.setupDepthFunction3D();
 
         this.renderShadow(context, x, y, w, h);
     }
@@ -150,7 +154,9 @@ public class LabelFormRenderer extends FormRenderer<LabelForm>
             y2 += 12;
         }
 
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
         builder.render();
+        GLStates.setupDepthFunction3D();
 
         this.renderShadow(context, x, y, w, h);
     }

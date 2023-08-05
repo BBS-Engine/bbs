@@ -3,15 +3,11 @@ package mchorse.bbs.graphics.text;
 import mchorse.bbs.BBS;
 import mchorse.bbs.graphics.MatrixStack;
 import mchorse.bbs.graphics.RenderingContext;
-import mchorse.bbs.graphics.shaders.CommonShaderAccess;
-import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.text.builders.ColoredTextBuilder2D;
 import mchorse.bbs.graphics.text.builders.ITextBuilder;
 import mchorse.bbs.graphics.text.format.IFontFormat;
 import mchorse.bbs.graphics.texture.Texture;
-import mchorse.bbs.graphics.vao.VAO;
 import mchorse.bbs.graphics.vao.VAOBuilder;
-import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.utils.colors.Colors;
@@ -172,7 +168,9 @@ public class FontRenderer
                     }
 
                     /* TL, BL, BR, TR vertices */
-                    Vector2f p = this.process(stack, rx + this.context.skew, ry);
+                    float skew = this.context.skew * (glyph.height / (float) font.height);
+
+                    Vector2f p = this.process(stack, rx + skew, ry);
                     float x1 = p.x;
                     float y1 = p.y;
 
@@ -184,7 +182,7 @@ public class FontRenderer
                     float x3 = p.x;
                     float y3 = p.y;
 
-                    p = this.process(stack, rx + glyph.width + this.context.skew, ry);
+                    p = this.process(stack, rx + glyph.width + skew, ry);
                     float x4 = p.x;
                     float y4 = p.y;
 
@@ -192,6 +190,42 @@ public class FontRenderer
                     textBuilder.put(builder, x2, y2, glyph.x, glyph.y + glyph.height, tw, th, color);
                     textBuilder.put(builder, x3, y3, glyph.x + glyph.width, glyph.y + glyph.height, tw, th, color);
                     textBuilder.put(builder, x4, y4, glyph.x + glyph.width, glyph.y, tw, th, color);
+
+                    if (!builder.hasIndex())
+                    {
+                        textBuilder.put(builder, x1, y1, glyph.x, glyph.y, tw, th, color);
+                        textBuilder.put(builder, x3, y3, glyph.x + glyph.width, glyph.y + glyph.height, tw, th, color);
+                    }
+
+                    if (this.context.bold)
+                    {
+                        p = this.process(stack, rx + skew + 1, ry);
+                        float bx1 = p.x;
+                        float by1 = p.y;
+
+                        p = this.process(stack, rx + 1, ry + glyph.height);
+                        float bx2 = p.x;
+                        float by2 = p.y;
+
+                        p = this.process(stack, rx + glyph.width + 1, ry + glyph.height);
+                        float bx3 = p.x;
+                        float by3 = p.y;
+
+                        p = this.process(stack, rx + glyph.width + skew + 1, ry);
+                        float bx4 = p.x;
+                        float by4 = p.y;
+
+                        textBuilder.put(builder, bx1, by1, glyph.x, glyph.y, tw, th, color);
+                        textBuilder.put(builder, bx2, by2, glyph.x, glyph.y + glyph.height, tw, th, color);
+                        textBuilder.put(builder, bx3, by3, glyph.x + glyph.width, glyph.y + glyph.height, tw, th, color);
+                        textBuilder.put(builder, bx4, by4, glyph.x + glyph.width, glyph.y, tw, th, color);
+
+                        if (!builder.hasIndex())
+                        {
+                            textBuilder.put(builder, bx1, by1, glyph.x, glyph.y, tw, th, color);
+                            textBuilder.put(builder, bx3, by3, glyph.x + glyph.width, glyph.y + glyph.height, tw, th, color);
+                        }
+                    }
 
                     if (builder.hasIndex())
                     {
@@ -201,19 +235,26 @@ public class FontRenderer
                         builder.index(j * VERTICES_PER_QUAD + 3);
                         builder.index(j * VERTICES_PER_QUAD);
                         builder.index(j * VERTICES_PER_QUAD + 2);
-                    }
-                    else
-                    {
-                        textBuilder.put(builder, x1, y1, glyph.x, glyph.y, tw, th, color);
-                        textBuilder.put(builder, x3, y3, glyph.x + glyph.width, glyph.y + glyph.height, tw, th, color);
+
+                        if (this.context.bold)
+                        {
+                            j += 1;
+
+                            builder.index(j * VERTICES_PER_QUAD);
+                            builder.index(j * VERTICES_PER_QUAD + 1);
+                            builder.index(j * VERTICES_PER_QUAD + 2);
+                            builder.index(j * VERTICES_PER_QUAD + 3);
+                            builder.index(j * VERTICES_PER_QUAD);
+                            builder.index(j * VERTICES_PER_QUAD + 2);
+                        }
                     }
 
                     color = this.context.color;
 
-                    j++;
+                    j += 1;
                 }
 
-                x += glyph.advance + 1;
+                x += glyph.advance + 1 + (this.context.bold ? 1 : 0);
             }
 
             prev = letter;
@@ -275,6 +316,7 @@ public class FontRenderer
     {
         char previous = 0;
         int x = 0;
+        boolean bold = false;
 
         for (int i = 0, c = str.length(); i < c; i++)
         {
@@ -283,12 +325,21 @@ public class FontRenderer
 
             if (glyph == null || character == FORMATTING_CHARACTER || previous == FORMATTING_CHARACTER)
             {
+                if (previous == FORMATTING_CHARACTER && character == this.font.boldChar)
+                {
+                    bold = true;
+                }
+                if (previous == FORMATTING_CHARACTER && character == this.font.resetChar)
+                {
+                    bold = false;
+                }
+
                 previous = character;
 
                 continue;
             }
 
-            x += this.font.getKerning(previous, character) + glyph.advance + 1;
+            x += this.font.getKerning(previous, character) + glyph.advance + 1 + (bold ? 1 : 0);
             previous = character;
         }
 

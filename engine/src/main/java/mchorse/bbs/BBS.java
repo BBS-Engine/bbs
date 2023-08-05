@@ -51,6 +51,7 @@ import mchorse.bbs.graphics.FramebufferManager;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.ShaderManager;
 import mchorse.bbs.graphics.text.FontManager;
+import mchorse.bbs.graphics.text.format.BoldFontFormat;
 import mchorse.bbs.graphics.text.format.ColorFontFormat;
 import mchorse.bbs.graphics.text.format.IFontFormat;
 import mchorse.bbs.graphics.text.format.ItalicFontFormat;
@@ -547,6 +548,7 @@ public class BBS
         factoryFontFormats = new MapFactory<IFontFormat, Class<? extends UIBaseFontFormat>>()
             .register(Link.bbs("color"), ColorFontFormat.class, UIColorFontFormat.class)
             .register(Link.bbs("italic"), ItalicFontFormat.class, UIBaseFontFormat.class)
+            .register(Link.bbs("bold"), BoldFontFormat.class, UIBaseFontFormat.class)
             .register(Link.bbs("reset"), ResetFontFormat.class, UIBaseFontFormat.class)
             .register(Link.bbs("rainbow"), RainbowFontFormat.class, UIBaseFontFormat.class)
             .register(Link.bbs("shake"), ShakeFontFormat.class, UIBaseFontFormat.class)

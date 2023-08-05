@@ -4,6 +4,7 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.graphics.text.format.BoldFontFormat;
 import mchorse.bbs.graphics.text.format.ColorFontFormat;
 import mchorse.bbs.graphics.text.format.IFontFormat;
 import mchorse.bbs.graphics.text.format.ItalicFontFormat;
@@ -24,6 +25,9 @@ public class Font implements IMapSerializable
     public Glyph[] glyphs;
 
     public final Map<Integer, IFontFormat> formats = new HashMap<Integer, IFontFormat>();
+
+    public char boldChar;
+    public char resetChar;
 
     public static Font fromMap(MapType map)
     {
@@ -52,6 +56,7 @@ public class Font implements IMapSerializable
         this.registerFontFormat(new ColorFontFormat('d', 0xff7a09fa));
         this.registerFontFormat(new ColorFontFormat('e', 0xfff389f5));
         this.registerFontFormat(new ItalicFontFormat('i'));
+        this.registerFontFormat(new BoldFontFormat('b'));
         this.registerFontFormat(new ShakeFontFormat('s'));
         this.registerFontFormat(new WaveFontFormat('w'));
         this.registerFontFormat(new RainbowFontFormat('n'));
@@ -60,6 +65,15 @@ public class Font implements IMapSerializable
 
     private void registerFontFormat(IFontFormat format)
     {
+        if (format instanceof BoldFontFormat)
+        {
+            this.boldChar = format.getControlCharacter();
+        }
+        else if (format instanceof ResetFontFormat)
+        {
+            this.resetChar = format.getControlCharacter();
+        }
+
         this.formats.put((int) format.getControlCharacter(), format);
     }
 
@@ -122,6 +136,8 @@ public class Font implements IMapSerializable
     public void fromData(MapType map)
     {
         this.formats.clear();
+        this.boldChar = '\0';
+        this.resetChar = '\0';
 
         this.name = map.getString("name");
         this.height = map.getInt("height");

@@ -25,6 +25,9 @@
         "i": {
             "type": "bbs:italic"
         },
+        "l": {
+            "type": "bbs:bold"
+        },
         "n": {
             "type": "bbs:rainbow"
         },
