@@ -26,6 +26,7 @@ public class UIKeys
     public static final IKey SEARCH = IKey.lang("bbs.ui.search");
     public static final IKey SUCCESS = IKey.lang("bbs.ui.success");
     public static final IKey WARNING = IKey.lang("bbs.ui.warning");
+    public static final IKey SAVE = IKey.lang("bbs.ui.save", "Save", ADD);
     public static final IKey X = IKey.raw("X");
     public static final IKey Y = IKey.raw("Y");
     public static final IKey Z = IKey.raw("Z");
