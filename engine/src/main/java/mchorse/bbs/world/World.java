@@ -45,10 +45,10 @@ import java.util.UUID;
 
 public class World implements ITickable, IDisposable
 {
-    public List<WorldObject> objects = new ArrayList<WorldObject>();
-    public List<Entity> entities = new ArrayList<Entity>();
-    public Set<Entity> toAdd = new HashSet<Entity>();
-    public Set<Entity> toRemove = new HashSet<Entity>();
+    public List<WorldObject> objects = new ArrayList<>();
+    public List<Entity> entities = new ArrayList<>();
+    public Set<Entity> toAdd = new HashSet<>();
+    public Set<Entity> toRemove = new HashSet<>();
 
     public String name;
     public final File folder;
@@ -330,7 +330,7 @@ public class World implements ITickable, IDisposable
 
     public List<Entity> getEntitiesInAABB(AABB volume)
     {
-        List<Entity> entities = new ArrayList<Entity>();
+        List<Entity> entities = new ArrayList<>();
 
         for (Entity entity : this.entities)
         {
@@ -355,7 +355,7 @@ public class World implements ITickable, IDisposable
 
     public List<AABB> getCollisionAABBs(double x, double y, double z, double w, double h, double d, double dx, double dy, double dz)
     {
-        List<AABB> boxes = new ArrayList<AABB>();
+        List<AABB> boxes = new ArrayList<>();
 
         int originX = (int) Math.floor(Math.min(x, x + w));
         int originY = (int) Math.floor(Math.min(y, y + h));
@@ -454,7 +454,7 @@ public class World implements ITickable, IDisposable
 
     public <T extends WorldObject> List<T> getObjects(Class<T> type)
     {
-        List<T> objects = new ArrayList<T>();
+        List<T> objects = new ArrayList<>();
 
         for (WorldObject object : this.objects)
         {
@@ -469,7 +469,7 @@ public class World implements ITickable, IDisposable
 
     public List<WorldObject> getObjects(String id)
     {
-        List<WorldObject> worldObjects = new ArrayList<WorldObject>();
+        List<WorldObject> worldObjects = new ArrayList<>();
 
         for (WorldObject object : this.objects)
         {

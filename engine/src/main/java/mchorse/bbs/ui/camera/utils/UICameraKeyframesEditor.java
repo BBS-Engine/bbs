@@ -23,9 +23,9 @@ public abstract class UICameraKeyframesEditor <E extends UIKeyframes> extends UI
     public static final CameraAxisConverter CONVERTER = new CameraAxisConverter();
 
     protected IUICameraWorkDelegate editor;
-    protected List<BaseValue> valueChannels = new ArrayList<BaseValue>();
+    protected List<BaseValue> valueChannels = new ArrayList<>();
 
-    private List<BaseType> cachedData = new ArrayList<BaseType>();
+    private List<BaseType> cachedData = new ArrayList<>();
     private int type = -1;
     private long lastUpdate;
 
@@ -80,7 +80,7 @@ public abstract class UICameraKeyframesEditor <E extends UIKeyframes> extends UI
     {
         this.type = -1;
 
-        List<BaseType> newCachedData = new ArrayList<BaseType>();
+        List<BaseType> newCachedData = new ArrayList<>();
 
         for (BaseValue channel : this.valueChannels)
         {

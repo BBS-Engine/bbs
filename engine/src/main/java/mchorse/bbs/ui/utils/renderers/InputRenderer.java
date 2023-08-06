@@ -25,7 +25,7 @@ public class InputRenderer
 {
     private static boolean disabledForFrame = false;
 
-    private List<PressedKey> pressedKeys = new ArrayList<PressedKey>();
+    private List<PressedKey> pressedKeys = new ArrayList<>();
     private float lastQX = 1;
     private float lastQY = 0;
     private float currentQX = 0;

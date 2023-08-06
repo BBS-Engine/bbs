@@ -18,10 +18,10 @@ public class Screenplay extends AbstractData
 
     public List<ScreenplayReply> parseReplies()
     {
-        List<ScreenplayReply> replies = new ArrayList<ScreenplayReply>();
+        List<ScreenplayReply> replies = new ArrayList<>();
         String name = null;
         String chapter = "";
-        List<String> text = new ArrayList<String>();
+        List<String> text = new ArrayList<>();
 
         for (String line : this.content.split("\n"))
         {
@@ -59,7 +59,7 @@ public class Screenplay extends AbstractData
 
     public Map<String, String> parseMetadata()
     {
-        Map<String, String> metadata = new HashMap<String, String>();
+        Map<String, String> metadata = new HashMap<>();
 
         for (String line : this.content.split("\n"))
         {

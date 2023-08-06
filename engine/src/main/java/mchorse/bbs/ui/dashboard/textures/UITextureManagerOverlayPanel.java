@@ -61,7 +61,7 @@ public class UITextureManagerOverlayPanel extends UIOverlayPanel
         this.panel = panel;
         this.exportFolder = BBS.getExportFolder();
 
-        this.textures = new UISearchList<Link>(new UILinkList((rl) ->
+        this.textures = new UISearchList<>(new UILinkList((rl) ->
         {
             if (this.panel.viewer.isDirty())
             {

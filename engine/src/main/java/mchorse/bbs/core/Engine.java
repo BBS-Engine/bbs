@@ -61,7 +61,7 @@ public abstract class Engine implements IEngine, IJoystickHandler
      * Scheduled runnables that are executed before next render tick.
      * Use these to run code that requires OpenGL context from another thread.
      */
-    public List<Runnable> scheduledRunnables = new ArrayList<Runnable>();
+    public List<Runnable> scheduledRunnables = new ArrayList<>();
 
     private boolean needsToggleFullscreen;
 
@@ -223,7 +223,7 @@ public abstract class Engine implements IEngine, IJoystickHandler
 
         if (!this.scheduledRunnables.isEmpty())
         {
-            List<Runnable> runnables = new ArrayList<Runnable>(this.scheduledRunnables);
+            List<Runnable> runnables = new ArrayList<>(this.scheduledRunnables);
 
             for (Runnable runnable : runnables)
             {

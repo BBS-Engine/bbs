@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ValuePositions extends ValueGroup
 {
-    private List<Position> positions = new ArrayList<Position>();
+    private List<Position> positions = new ArrayList<>();
 
     public ValuePositions(String id)
     {

@@ -23,7 +23,7 @@ public class AnimationModel implements IMapSerializable
     public static final Set<String> KEYS = CollectionUtils.setOf("x", "y", "z", "yaw", "head_yaw", "pitch");
 
     public Form form;
-    public Map<String, KeyframeChannel> keyframes = new HashMap<String, KeyframeChannel>();
+    public Map<String, KeyframeChannel> keyframes = new HashMap<>();
 
     private Entity dummy;
 
@@ -80,7 +80,7 @@ public class AnimationModel implements IMapSerializable
 
     public Set<String> getAvailableKeys()
     {
-        Set<String> set = new HashSet<String>();
+        Set<String> set = new HashSet<>();
 
         set.addAll(KEYS);
 

@@ -109,7 +109,7 @@ public class UIWorldsOverlayPanel extends UIOverlayPanel
 
     private void createWorld(UIIcon b)
     {
-        Set<String> existing = new HashSet<String>();
+        Set<String> existing = new HashSet<>();
         WorldMetadata metadata = new WorldMetadata(null);
 
         for (WorldMetadata m : this.worlds.getList())

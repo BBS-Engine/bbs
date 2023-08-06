@@ -75,7 +75,7 @@ import java.util.function.Supplier;
  */
 public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements IFlightSupported, IUICameraWorkDelegate
 {
-    private static Map<Class, Integer> scrolls = new HashMap<Class, Integer>();
+    private static Map<Class, Integer> scrolls = new HashMap<>();
 
     /**
      * Profile runner
@@ -347,7 +347,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             this.disableContext();
         }
 
-        this.undoManager = data == null ? null : new UndoManager<StructureBase>(30);
+        this.undoManager = data == null ? null : new UndoManager<>(30);
 
         super.fill(data);
 
@@ -558,7 +558,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             return;
         }
 
-        List<Entity> entities = new ArrayList<Entity>();
+        List<Entity> entities = new ArrayList<>();
 
         for (Entity entity : context.getWorld().entities)
         {

@@ -31,7 +31,7 @@ public class UIActionsFormPanel extends UIFormPanel<ModelForm>
         this.actions = new UIStringList((l) -> this.pickAction(l.get(0), false));
         this.actions.background().relative(this).x(1F, -10).y(22).w(this.options.getFlex().getW() - 20).h(1F, -32).anchorX(1F);
 
-        this.pickAction = new UISearchList<String>(new UIStringList((l) ->
+        this.pickAction = new UISearchList<>(new UIStringList((l) ->
         {
             this.action.name = l.get(0);
             this.form.resetAnimator();

@@ -38,7 +38,7 @@ public interface IModelLoader
 
     public static List<Link> getLinks(Collection<Link> links, Predicate<Link> predicate)
     {
-        List<Link> newLinks = new ArrayList<Link>();
+        List<Link> newLinks = new ArrayList<>();
 
         for (Link l : links)
         {

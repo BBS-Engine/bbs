@@ -30,7 +30,7 @@ public class ElevenLabsAPI implements Runnable
 
     private static Thread thread;
 
-    private static Map<String, String> voices = new HashMap<String, String>();
+    private static Map<String, String> voices = new HashMap<>();
 
     private final String token;
     private final Screenplay screenplay;

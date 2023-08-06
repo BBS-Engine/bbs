@@ -17,9 +17,9 @@ public class ChunkProxy
     private ChunkManager chunks;
     private UndoManager<World> undoManager;
     private boolean recording;
-    private Map<Vector3i, BlockDiff> blocks = new HashMap<Vector3i, BlockDiff>();
+    private Map<Vector3i, BlockDiff> blocks = new HashMap<>();
 
-    private List<IBlockVariant> mask = new ArrayList<IBlockVariant>();
+    private List<IBlockVariant> mask = new ArrayList<>();
     private boolean maskEnabled = true;
 
     public ChunkProxy(ChunkManager chunks, UndoManager<World> undoManager)
@@ -70,7 +70,7 @@ public class ChunkProxy
 
     public void end()
     {
-        List<BlockDiff> list = new ArrayList<BlockDiff>();
+        List<BlockDiff> list = new ArrayList<>();
 
         list.addAll(this.blocks.values());
         this.recording = false;

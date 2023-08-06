@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class UndoManager<T>
 {
-    private List<IUndo<T>> undos = new LinkedList<IUndo<T>>();
+    private List<IUndo<T>> undos = new LinkedList<>();
     private int position = -1;
 
     private int limit = 20;

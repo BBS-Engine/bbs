@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UniformMatrix4s extends Uniform
 {
-    private List<Matrix4f> value = new ArrayList<Matrix4f>();
+    private List<Matrix4f> value = new ArrayList<>();
 
     public UniformMatrix4s(String name)
     {

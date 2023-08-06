@@ -34,7 +34,7 @@ public abstract class BlockModelFactory implements IMapSerializable
     public final Vector2i allUV = new Vector2i();
     public AABB collisionBox = new AABB(0, 0, 0, 1, 1, 1);
 
-    public final List<BlockVariant> variants = new ArrayList<BlockVariant>();
+    public final List<BlockVariant> variants = new ArrayList<>();
     public final BlockModels models = new BlockModels(this);
 
     public IBlockVariant getVariantForBuilding(RayTraceResult result)

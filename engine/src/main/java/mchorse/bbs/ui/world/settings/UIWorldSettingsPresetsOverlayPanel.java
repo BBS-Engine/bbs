@@ -43,7 +43,7 @@ public class UIWorldSettingsPresetsOverlayPanel extends UIOverlayPanel
         this.settingsFolder = BBS.getConfigPath("world_settings");
         this.settingsFolder.mkdirs();
 
-        this.settings = new UISearchList<String>(new UIStringList((l) ->
+        this.settings = new UISearchList<>(new UIStringList((l) ->
         {
             try
             {

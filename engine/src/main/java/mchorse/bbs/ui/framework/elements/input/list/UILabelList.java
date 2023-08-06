@@ -18,7 +18,7 @@ public class UILabelList <T> extends UIList<Label<T>>
 
     public void add(IKey title, T value)
     {
-        this.add(new Label<T>(title, value));
+        this.add(new Label<>(title, value));
     }
 
     public void setCurrentTitle(String title)

@@ -19,7 +19,7 @@ public abstract class ChunkCell implements IDisposable
 {
     public ChunkManager manager;
 
-    public final Set<Entity> entities = new HashSet<Entity>();
+    public final Set<Entity> entities = new HashSet<>();
 
     public boolean generated;
     public boolean unsaved;

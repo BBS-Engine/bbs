@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 public class MultiLink extends Link implements IWritableLink
 {
-    public List<FilteredLink> children = new ArrayList<FilteredLink>();
+    public List<FilteredLink> children = new ArrayList<>();
 
     public static MultiLink from(BaseType data)
     {

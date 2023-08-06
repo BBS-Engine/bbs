@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ModelQuad
 {
-    public List<ModelVertex> vertices = new ArrayList<ModelVertex>();
+    public List<ModelVertex> vertices = new ArrayList<>();
     public Vector3f normal = new Vector3f();
 
     public ModelQuad normal(float x, float y, float z)

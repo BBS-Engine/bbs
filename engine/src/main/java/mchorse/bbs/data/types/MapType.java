@@ -24,8 +24,8 @@ public class MapType extends BaseType implements Iterable<Map.Entry<String, Base
     public MapType(boolean hash)
     {
         this.elements = hash
-            ? new HashMap<String, BaseType>()
-            : new LinkedHashMap<String, BaseType>();
+            ? new HashMap<>()
+            : new LinkedHashMap<>();
     }
 
     public boolean isEmpty()

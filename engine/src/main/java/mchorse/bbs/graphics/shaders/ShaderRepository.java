@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class ShaderRepository
 {
-    private Map<VBOAttributes, Shader> shaders = new HashMap<VBOAttributes, Shader>();
+    private Map<VBOAttributes, Shader> shaders = new HashMap<>();
 
     public void clear()
     {

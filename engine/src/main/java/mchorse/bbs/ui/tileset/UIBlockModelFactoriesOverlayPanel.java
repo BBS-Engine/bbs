@@ -63,7 +63,7 @@ public class UIBlockModelFactoriesOverlayPanel extends UIOverlayPanel
             }
         });
 
-        this.searchList = new UISearchList<BlockModelFactory>(this.list);
+        this.searchList = new UISearchList<>(this.list);
         this.searchList.label(UIKeys.SEARCH);
         this.searchList.relative(this.content).full().x(6).w(1F, -12);
 

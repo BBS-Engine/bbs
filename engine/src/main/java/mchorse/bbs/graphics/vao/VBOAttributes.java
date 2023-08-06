@@ -57,7 +57,7 @@ public class VBOAttributes
         .register(new VBOAttribute(4, GL11.GL_UNSIGNED_BYTE, true));
 
     public final Link name;
-    public List<VBOAttribute> elements = new ArrayList<VBOAttribute>();
+    public List<VBOAttribute> elements = new ArrayList<>();
 
     public VBOAttributes(Link name)
     {

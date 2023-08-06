@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Line <T>
 {
-    public List<LinePoint<T>> points = new ArrayList<LinePoint<T>>();
+    public List<LinePoint<T>> points = new ArrayList<>();
 
     public Line<T> add(float x, float y)
     {
@@ -27,14 +27,14 @@ public class Line <T>
             }
         }
 
-        this.points.add(new LinePoint<T>(x, y, user));
+        this.points.add(new LinePoint<>(x, y, user));
 
         return this;
     }
 
     public List<LinePoint<T>> build(float thickness)
     {
-        List<LinePoint<T>> compiled = new ArrayList<LinePoint<T>>();
+        List<LinePoint<T>> compiled = new ArrayList<>();
 
         for (int i = 0, c = points.size(); i < c; i++)
         {
@@ -62,8 +62,8 @@ public class Line <T>
 
             Vector2f perpendicular = new Vector2f(from.x, from.y).sub(to.x, to.y).perpendicular().normalize().mul(thickness);
 
-            compiled.add(new LinePoint<T>(-perpendicular.x + point.x, -perpendicular.y + point.y, point.user));
-            compiled.add(new LinePoint<T>(perpendicular.x + point.x, perpendicular.y + point.y, point.user));
+            compiled.add(new LinePoint<>(-perpendicular.x + point.x, -perpendicular.y + point.y, point.user));
+            compiled.add(new LinePoint<>(perpendicular.x + point.x, perpendicular.y + point.y, point.user));
         }
 
         return compiled;

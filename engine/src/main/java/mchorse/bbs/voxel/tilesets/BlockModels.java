@@ -15,7 +15,7 @@ public class BlockModels
         this.factory = factory;
     }
 
-    public final List<BlockModel> list = new ArrayList<BlockModel>();
+    public final List<BlockModel> list = new ArrayList<>();
 
     public void add(int index, BlockModel model)
     {

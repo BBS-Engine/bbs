@@ -42,7 +42,7 @@ public class DataStorageContext
     {
         if (this.keyMap == null)
         {
-            this.keyMap = new HashMap<String, Integer>();
+            this.keyMap = new HashMap<>();
         }
 
         if (!this.keyMap.containsKey(key))
@@ -54,7 +54,7 @@ public class DataStorageContext
 
     public void read() throws IOException
     {
-        this.intMap = new HashMap<Integer, String>();
+        this.intMap = new HashMap<>();
         this.type = KeyType.from(this.in.readByte());
 
         int c = this.type.read(this.in);
@@ -74,7 +74,7 @@ public class DataStorageContext
     {
         if (this.keyMap == null)
         {
-            this.keyMap = new HashMap<String, Integer>();
+            this.keyMap = new HashMap<>();
         }
 
         if (this.keyMap.size() <= 256)

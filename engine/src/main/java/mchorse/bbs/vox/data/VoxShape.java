@@ -16,7 +16,7 @@ public class VoxShape extends VoxBaseNode
         this.id = reader.readInt(stream);
         this.attrs = reader.readDictionary(stream);
         this.num = reader.readInt(stream);
-        this.modelAttrs = new ArrayList<Attribute>();
+        this.modelAttrs = new ArrayList<>();
 
         for (int i = 0; i < this.num; i ++)
         {

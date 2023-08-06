@@ -28,7 +28,7 @@ public class Scene extends AbstractData
     public static final Pattern NUMBERED_SUFFIX = Pattern.compile("_(\\d+)$");
     public static final Pattern PREFIX = Pattern.compile("^(.+)_([^_]+)$");
 
-    public List<Replay> replays = new ArrayList<Replay>();
+    public List<Replay> replays = new ArrayList<>();
     public boolean loops;
     public Link audio;
 
@@ -39,7 +39,7 @@ public class Scene extends AbstractData
     /**
      * Map of currently playing actors
      */
-    public Map<Replay, RecordPlayer> actors = new HashMap<Replay, RecordPlayer>();
+    public Map<Replay, RecordPlayer> actors = new HashMap<>();
 
     /**
      * Count of actors which were spawned (used to check whether actors
@@ -81,7 +81,7 @@ public class Scene extends AbstractData
 
     public List<Replay> getAllEnabledReplays()
     {
-        List<Replay> replays = new ArrayList<Replay>();
+        List<Replay> replays = new ArrayList<>();
 
         for (Replay replay : this.replays)
         {

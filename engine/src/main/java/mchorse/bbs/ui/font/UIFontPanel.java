@@ -43,7 +43,7 @@ public class UIFontPanel extends UISidebarDashboardPanel
 
     public Font font;
     public Link fontLink;
-    public Map<Integer, GlyphData> glyphs = new HashMap<Integer, GlyphData>();
+    public Map<Integer, GlyphData> glyphs = new HashMap<>();
 
     public UIFontPanel(UIDashboard dashboard)
     {
@@ -168,7 +168,7 @@ public class UIFontPanel extends UISidebarDashboardPanel
 
     private void saveFont(Link link)
     {
-        List<Glyph> glyphs = new ArrayList<Glyph>();
+        List<Glyph> glyphs = new ArrayList<>();
 
         for (Map.Entry<Integer, GlyphData> entry : this.glyphs.entrySet())
         {

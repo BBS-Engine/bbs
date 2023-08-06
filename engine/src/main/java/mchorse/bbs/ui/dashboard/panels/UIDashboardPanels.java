@@ -19,7 +19,7 @@ import java.util.List;
 
 public class UIDashboardPanels extends UIElement
 {
-    public List<UIDashboardPanel> panels = new ArrayList<UIDashboardPanel>();
+    public List<UIDashboardPanel> panels = new ArrayList<>();
     public UIDashboardPanel panel;
 
     public UIElement taskBar;

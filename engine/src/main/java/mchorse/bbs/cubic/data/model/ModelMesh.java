@@ -14,8 +14,8 @@ public class ModelMesh implements IMapSerializable
 {
     public Vector3f origin = new Vector3f();
     public Vector3f rotate = new Vector3f();
-    public List<Vector3f> vertices = new ArrayList<Vector3f>();
-    public List<Vector2f> uvs = new ArrayList<Vector2f>();
+    public List<Vector3f> vertices = new ArrayList<>();
+    public List<Vector2f> uvs = new ArrayList<>();
 
     @Override
     public void fromData(MapType data)

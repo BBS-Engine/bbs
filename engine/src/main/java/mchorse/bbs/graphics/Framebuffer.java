@@ -13,8 +13,8 @@ import java.util.List;
 public class Framebuffer implements IDisposable
 {
     public int id;
-    public List<Texture> textures = new ArrayList<Texture>();
-    public final List<Renderbuffer> renderbuffers = new ArrayList<Renderbuffer>();
+    public List<Texture> textures = new ArrayList<>();
+    public final List<Renderbuffer> renderbuffers = new ArrayList<>();
 
     private boolean deleteTextures;
 

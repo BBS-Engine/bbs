@@ -26,17 +26,17 @@ public class BlockSet implements IMapSerializable
     /**
      * Block variants ordered in a list
      */
-    public List<BlockVariantDelegate> variants = new ArrayList<BlockVariantDelegate>();
+    public List<BlockVariantDelegate> variants = new ArrayList<>();
 
     /**
      * Block variants for query
      */
-    public Map<BlockLink, IBlockVariant> variantMap = new HashMap<BlockLink, IBlockVariant>();
+    public Map<BlockLink, IBlockVariant> variantMap = new HashMap<>();
 
     /**
      * Block model factories (that can be edited and saved)
      */
-    public List<BlockModelFactory> factories = new ArrayList<BlockModelFactory>();
+    public List<BlockModelFactory> factories = new ArrayList<>();
 
     /**
      * Default empty block variant
@@ -63,7 +63,7 @@ public class BlockSet implements IMapSerializable
      */
     public int atlasHeight = 256;
 
-    private Map<Link, Integer> lastIndices = new HashMap<Link, Integer>();
+    private Map<Link, Integer> lastIndices = new HashMap<>();
 
     public BlockSet(Link id)
     {

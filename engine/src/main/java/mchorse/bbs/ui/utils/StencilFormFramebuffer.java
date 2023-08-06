@@ -23,7 +23,7 @@ public class StencilFormFramebuffer
     private Framebuffer framebuffer;
 
     private int index;
-    private Map<Integer, Pair<Form, String>> indexMap = new HashMap<Integer, Pair<Form, String>>();
+    private Map<Integer, Pair<Form, String>> indexMap = new HashMap<>();
 
     public Framebuffer getFramebuffer()
     {

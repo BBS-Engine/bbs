@@ -40,7 +40,7 @@ public class ParticleParser
     /* TODO: Rewrite */
     public static final String PREFIX = new String(Base64.getDecoder().decode("bWluZWNyYWZ0Og=="));
 
-    public Map<String, Class<? extends ParticleComponentBase>> components = new HashMap<String, Class<? extends ParticleComponentBase>>();
+    public Map<String, Class<? extends ParticleComponentBase>> components = new HashMap<>();
 
     public static boolean isEmpty(BaseType element)
     {

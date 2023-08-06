@@ -44,7 +44,7 @@ public abstract class UIToolSelectionBase extends UITool
         }
 
         List<PlaneSelection> planes = getSelectionBoxPlanes(selection);
-        List<PlaneSelection> planeSelections = new ArrayList<PlaneSelection>();
+        List<PlaneSelection> planeSelections = new ArrayList<>();
         Camera camera = this.editor.getBridge().get(IBridgeCamera.class).getCamera();
         AABB aabb = AABB.fromTwoPoints(selection.getMin().x, selection.getMin().y, selection.getMin().z, selection.getMax().x, selection.getMax().y, selection.getMax().z);
 
@@ -83,7 +83,7 @@ public abstract class UIToolSelectionBase extends UITool
 
     protected List<PlaneSelection> getSelectionBoxPlanes(BlockSelection block)
     {
-        List<PlaneSelection> planes = new ArrayList<PlaneSelection>();
+        List<PlaneSelection> planes = new ArrayList<>();
         Vector3d center = block.getCenter();
 
         planes.add(new PlaneSelection(Axis.X, -1, new Vector3d(block.getMin().x, center.y, center.z)));

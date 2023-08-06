@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class Animations
 {
-    public Map<String, Animation> animations = new HashMap<String, Animation>();
+    public Map<String, Animation> animations = new HashMap<>();
 
     public Collection<Animation> getAll()
     {

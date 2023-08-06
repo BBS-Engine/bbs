@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class CombinedGeometry extends BlockGeometry
 {
-    public List<BlockGeometry> geometries = new ArrayList<BlockGeometry>();
+    public List<BlockGeometry> geometries = new ArrayList<>();
 
     public CombinedGeometry(BlockGeometry... geometries)
     {

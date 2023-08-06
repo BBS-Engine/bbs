@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class CompoundUndo <T> implements IUndo<T>
 {
-    private List<IUndo<T>> undos = new ArrayList<IUndo<T>>();
+    private List<IUndo<T>> undos = new ArrayList<>();
     private boolean mergable = true;
 
     public CompoundUndo(List<IUndo<T>> undos)

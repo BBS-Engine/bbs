@@ -45,7 +45,7 @@ public class UIWorldObjectsPanel extends UICommonWorldEditor<WorldObject> implem
     @Override
     protected UISearchList<WorldObject> createSearchList(Consumer<List<WorldObject>> callback)
     {
-        return new UISearchList<WorldObject>(new UIWorldObjectList(callback));
+        return new UISearchList<>(new UIWorldObjectList(callback));
     }
 
     @Override

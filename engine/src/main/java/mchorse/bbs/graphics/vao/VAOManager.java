@@ -10,9 +10,9 @@ import java.util.Map;
 
 public class VAOManager implements IDisposable
 {
-    private List<VAO> vaos = new ArrayList<VAO>();
-    private Map<VBOAttributes, VAO> temporary = new HashMap<VBOAttributes, VAO>();
-    private Map<VBOAttributes, VAO> indexed = new HashMap<VBOAttributes, VAO>();
+    private List<VAO> vaos = new ArrayList<>();
+    private Map<VBOAttributes, VAO> temporary = new HashMap<>();
+    private Map<VBOAttributes, VAO> indexed = new HashMap<>();
 
     public VAO create()
     {

@@ -23,7 +23,7 @@ public class CubicModelLoader implements IModelLoader
     {
         List<Link> modelBBS = IModelLoader.getLinks(links, ".bbs.json");
         Link modelTexture = IModelLoader.getLink(model.combine("model.png"), links, ".png");
-        List<InputStream> modelStreams = new ArrayList<InputStream>();
+        List<InputStream> modelStreams = new ArrayList<>();
         MapType config = null;
 
         try

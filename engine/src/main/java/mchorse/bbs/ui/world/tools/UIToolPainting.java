@@ -28,7 +28,7 @@ public abstract class UIToolPainting extends UITool
     protected UIToggle continuous;
 
     protected Axis limit;
-    protected Set<Vector3i> placedBlocks = new HashSet<Vector3i>();
+    protected Set<Vector3i> placedBlocks = new HashSet<>();
     protected int placeDelay;
     protected boolean painting;
 

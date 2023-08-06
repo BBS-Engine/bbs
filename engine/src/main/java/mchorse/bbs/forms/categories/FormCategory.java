@@ -16,7 +16,7 @@ import java.util.List;
 public class FormCategory implements IMapSerializable
 {
     public IKey title;
-    public final List<Form> forms = new ArrayList<Form>();
+    public final List<Form> forms = new ArrayList<>();
     public boolean hidden;
 
     public FormCategory(IKey title)

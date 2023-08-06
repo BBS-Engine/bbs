@@ -44,7 +44,7 @@ public class UITileSetEditorPanel extends UIDashboardPanel
     private ChunkBuilder blockBuilder;
     private BlockSet blockSet;
 
-    private Map<Class, UIModelBlockFactory> panels = new HashMap<Class, UIModelBlockFactory>();
+    private Map<Class, UIModelBlockFactory> panels = new HashMap<>();
 
     private boolean dirty;
 

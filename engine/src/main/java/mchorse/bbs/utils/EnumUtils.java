@@ -18,7 +18,7 @@ public class EnumUtils
 
     public static List<String> getKeys(Class<? extends Enum> clazz)
     {
-        List<String> keys = new ArrayList<String>();
+        List<String> keys = new ArrayList<>();
 
         for (Enum e : clazz.getEnumConstants())
         {
@@ -30,7 +30,7 @@ public class EnumUtils
 
     public static <T> List<String> getKeys(Class<T> clazz, Function<T, String> function)
     {
-        List<String> keys = new ArrayList<String>();
+        List<String> keys = new ArrayList<>();
 
         if (function == null)
         {

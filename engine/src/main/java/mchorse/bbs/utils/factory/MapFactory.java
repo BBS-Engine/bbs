@@ -13,14 +13,14 @@ import java.util.Map;
  */
 public class MapFactory <T, D> implements IFactory<T, D>
 {
-    protected Map<Link, Class<? extends T>> factory = new LinkedHashMap<Link, Class<? extends T>>();
-    protected Map<Class<? extends T>, Link> factoryInverse = new LinkedHashMap<Class<? extends T>, Link>();
+    protected Map<Link, Class<? extends T>> factory = new LinkedHashMap<>();
+    protected Map<Class<? extends T>, Link> factoryInverse = new LinkedHashMap<>();
 
-    protected Map<Link, D> data = new HashMap<Link, D>();
+    protected Map<Link, D> data = new HashMap<>();
 
     public MapFactory<T, D> copy()
     {
-        MapFactory<T, D> factory = new MapFactory<T, D>();
+        MapFactory<T, D> factory = new MapFactory<>();
 
         for (Map.Entry<Link, Class<? extends T>> entry : this.factory.entrySet())
         {

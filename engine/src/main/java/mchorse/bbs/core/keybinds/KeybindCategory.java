@@ -22,7 +22,7 @@ public class KeybindCategory implements IKeyHandler
     /**
      * List of keybinds 
      */
-    public List<Keybind> keybinds = new ArrayList<Keybind>();
+    public List<Keybind> keybinds = new ArrayList<>();
 
     /**
      * Active supplier, it allows dynamically specify whether the category is active or not

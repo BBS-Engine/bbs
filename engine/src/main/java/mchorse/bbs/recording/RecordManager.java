@@ -38,10 +38,10 @@ public class RecordManager extends BaseManager<Record>
     public static final IKey ERROR_READING = IKey.lang("bbs.record_manager.error_reading");
     public static final IKey RECORDING = IKey.lang("bbs.record_manager.recording");
 
-    public Map<String, Record> records = new HashMap<String, Record>();
-    public Map<Entity, RecordRecorder> recorders = new HashMap<Entity, RecordRecorder>();
-    public Map<Entity, RecordPlayer> players = new HashMap<Entity, RecordPlayer>();
-    public Map<Entity, ScheduledRecording> scheduled = new HashMap<Entity, ScheduledRecording>();
+    public Map<String, Record> records = new HashMap<>();
+    public Map<Entity, RecordRecorder> recorders = new HashMap<>();
+    public Map<Entity, RecordPlayer> players = new HashMap<>();
+    public Map<Entity, ScheduledRecording> scheduled = new HashMap<>();
     public IBridge bridge;
 
     public RecordManager(File folder, IBridge bridge)

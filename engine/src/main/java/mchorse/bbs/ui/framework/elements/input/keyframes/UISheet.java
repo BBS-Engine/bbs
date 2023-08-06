@@ -17,7 +17,7 @@ public class UISheet
     public IKey title;
     public int color;
     public KeyframeChannel channel;
-    public List<Integer> selected = new ArrayList<Integer>();
+    public List<Integer> selected = new ArrayList<>();
     public boolean handles = true;
 
     public UISheet(String id, IKey title, int color, KeyframeChannel channel, boolean handles)
@@ -37,7 +37,7 @@ public class UISheet
 
     public void sort()
     {
-        List<Keyframe> keyframes = new ArrayList<Keyframe>();
+        List<Keyframe> keyframes = new ArrayList<>();
 
         for (int index : this.selected)
         {
@@ -137,7 +137,7 @@ public class UISheet
 
     public void removeSelectedKeyframes()
     {
-        List<Integer> sorted = new ArrayList<Integer>(this.selected);
+        List<Integer> sorted = new ArrayList<>(this.selected);
 
         Collections.sort(sorted);
         Collections.reverse(sorted);
@@ -154,8 +154,8 @@ public class UISheet
 
     public void duplicate(long tick)
     {
-        List<Keyframe> selected = new ArrayList<Keyframe>();
-        List<Keyframe> created = new ArrayList<Keyframe>();
+        List<Keyframe> selected = new ArrayList<>();
+        List<Keyframe> created = new ArrayList<>();
 
         long minTick = Integer.MAX_VALUE;
 

@@ -32,7 +32,7 @@ import java.util.Map;
 public class ParticleEmitter
 {
     public ParticleScheme scheme;
-    public List<Particle> particles = new ArrayList<Particle>();
+    public List<Particle> particles = new ArrayList<>();
     public Map<String, IExpression> variables;
 
     public Entity target;
@@ -177,7 +177,7 @@ public class ParticleEmitter
 
     public void parseVariables(Map<String, String> variables)
     {
-        this.variables = new HashMap<String, IExpression>();
+        this.variables = new HashMap<>();
 
         for (Map.Entry<String, String> entry : variables.entrySet())
         {

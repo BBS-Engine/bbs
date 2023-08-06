@@ -84,7 +84,7 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     {
         long tick = this.editor.getCursor() - this.clip.tick.get();
 
-        CompoundUndo<CameraWork> undo = new CompoundUndo<CameraWork>(
+        CompoundUndo<CameraWork> undo = new CompoundUndo<>(
             this.undoKeyframes(this.clip.x, tick, position.point.x),
             this.undoKeyframes(this.clip.y, tick, position.point.y),
             this.undoKeyframes(this.clip.z, tick, position.point.z),

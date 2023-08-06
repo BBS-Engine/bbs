@@ -29,7 +29,7 @@ public class UIColorPicker extends UIElement
 {
     public static final int COLOR_SLIDER_HEIGHT = 50;
 
-    public static List<Color> recentColors = new ArrayList<Color>();
+    public static List<Color> recentColors = new ArrayList<>();
 
     public Color color = new Color();
     public Consumer<Integer> callback;

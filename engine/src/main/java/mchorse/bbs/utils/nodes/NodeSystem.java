@@ -17,8 +17,8 @@ public class NodeSystem <T extends Node, D> extends AbstractData
 {
     private IFactory<T, D> factory;
 
-    public Map<UUID, T> nodes = new HashMap<UUID, T>();
-    public Map<UUID, List<NodeRelation<T>>> relations = new HashMap<UUID, List<NodeRelation<T>>>();
+    public Map<UUID, T> nodes = new HashMap<>();
+    public Map<UUID, List<NodeRelation<T>>> relations = new HashMap<>();
     public T main;
 
     public NodeSystem(IFactory<T, D> factory)
@@ -73,16 +73,9 @@ public class NodeSystem <T extends Node, D> extends AbstractData
 
         if (this.nodes.containsKey(output.getId()) && this.nodes.containsKey(input.getId()) && !this.hasRelation(output, input))
         {
-            List<NodeRelation<T>> relations = this.relations.get(output.getId());
+            List<NodeRelation<T>> relations = this.relations.computeIfAbsent(output.getId(), k -> new ArrayList<>());
 
-            if (relations == null)
-            {
-                relations = new ArrayList<NodeRelation<T>>();
-
-                this.relations.put(output.getId(), relations);
-            }
-
-            relations.add(new NodeRelation<T>(output, input));
+            relations.add(new NodeRelation<>(output, input));
 
             return true;
         }
@@ -176,7 +169,7 @@ public class NodeSystem <T extends Node, D> extends AbstractData
 
     public List<T> getChildren(T node)
     {
-        List<T> children = new ArrayList<T>();
+        List<T> children = new ArrayList<>();
 
         if (this.relations.containsKey(node.getId()))
         {
@@ -194,7 +187,7 @@ public class NodeSystem <T extends Node, D> extends AbstractData
 
     public List<T> getRoots()
     {
-        List<T> roots = new ArrayList<T>();
+        List<T> roots = new ArrayList<>();
 
         main:
         for (T node : this.nodes.values())
@@ -256,7 +249,7 @@ public class NodeSystem <T extends Node, D> extends AbstractData
     @Override
     public void fromData(MapType data)
     {
-        Map<UUID, List<UUID>> map = new HashMap<UUID, List<UUID>>();
+        Map<UUID, List<UUID>> map = new HashMap<>();
 
         if (data.has("nodes"))
         {
@@ -270,7 +263,7 @@ public class NodeSystem <T extends Node, D> extends AbstractData
                 /* Relations are not serialized by nodes themselves */
                 if (nodeMap.has("relations"))
                 {
-                    List<UUID> uuids = new ArrayList<UUID>();
+                    List<UUID> uuids = new ArrayList<>();
                     ListType relations = nodeMap.getList("relations");
 
                     map.put(node.getId(), uuids);

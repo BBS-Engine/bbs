@@ -19,7 +19,7 @@ public class UIDataPathList extends UIList<DataPath>
     /**
      * A list of paths.
      */
-    private Set<DataPath> hierarchy = new HashSet<DataPath>();
+    private Set<DataPath> hierarchy = new HashSet<>();
 
     /**
      * Path in which current list is located. It's expected to be
@@ -127,7 +127,7 @@ public class UIDataPathList extends UIList<DataPath>
 
     private void updateStrings()
     {
-        Set<DataPath> paths = new HashSet<DataPath>();
+        Set<DataPath> paths = new HashSet<>();
 
         if (!this.path.strings.isEmpty())
         {

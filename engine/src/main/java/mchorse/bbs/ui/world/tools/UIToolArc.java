@@ -19,7 +19,7 @@ import java.util.Set;
 
 public class UIToolArc extends UITool
 {
-    private Set<Vector3i> blocks = new HashSet<Vector3i>();
+    private Set<Vector3i> blocks = new HashSet<>();
 
     private Vector3i initial;
     private Vector3i target;
@@ -34,7 +34,7 @@ public class UIToolArc extends UITool
             new Vector2d(this.target.x, this.target.z),
             new Vector2d(control.x, control.z)
         );
-        Set<Vector2i> rasterized = new HashSet<Vector2i>();
+        Set<Vector2i> rasterized = new HashSet<>();
 
         rasterizer.setupRange(0F, 0.5F, 1F / (float) d);
         rasterizer.solve(rasterized);

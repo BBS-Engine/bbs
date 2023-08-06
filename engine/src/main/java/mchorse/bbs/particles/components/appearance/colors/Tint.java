@@ -81,7 +81,7 @@ public abstract class Tint
         BaseType gradient = color.get("gradient");
 
         MolangExpression expression = MolangParser.ZERO;
-        List<Gradient.ColorStop> colorStops = new ArrayList<Gradient.ColorStop>();
+        List<Gradient.ColorStop> colorStops = new ArrayList<>();
         boolean equal = true;
 
         if (gradient.isMap())

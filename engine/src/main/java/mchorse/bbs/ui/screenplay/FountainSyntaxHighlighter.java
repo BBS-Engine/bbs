@@ -34,7 +34,7 @@ public class FountainSyntaxHighlighter implements ISyntaxHighlighter
     @Override
     public List<TextSegment> parse(FontRenderer font, List<HighlightedTextLine> textLines, String line, int lineIndex)
     {
-        List<TextSegment> list = new ArrayList<TextSegment>();
+        List<TextSegment> list = new ArrayList<>();
 
         if (Screenplay.CHARACTER.matcher(line).matches())
         {

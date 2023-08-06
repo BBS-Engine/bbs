@@ -51,7 +51,7 @@ public class TextLine
      */
     private List<String> splitIntoLines(FontRenderer font, int w)
     {
-        List<String> lines = new ArrayList<String>();
+        List<String> lines = new ArrayList<>();
 
         if (font.getWidth(this.text) < w)
         {

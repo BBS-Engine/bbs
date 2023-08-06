@@ -25,7 +25,7 @@ public class L10nUtils
         StringBuilder builder = new StringBuilder();
 
         /* Calculate per language file count of strings */
-        Map<Link, Integer> perFile = new HashMap<Link, Integer>();
+        Map<Link, Integer> perFile = new HashMap<>();
 
         for (LangKey value : strings.values())
         {
@@ -52,8 +52,8 @@ public class L10nUtils
         }
 
         /* Calculate missing and surplus strings */
-        List<LangKey> missing = new ArrayList<LangKey>();
-        List<LangKey> surplus = new ArrayList<LangKey>();
+        List<LangKey> missing = new ArrayList<>();
+        List<LangKey> surplus = new ArrayList<>();
 
         for (LangKey key : strings.values())
         {
@@ -112,7 +112,7 @@ public class L10nUtils
 
     public static void compile(File export, Map<String, LangKey> strings)
     {
-        Map<Link, List<LangKey>> keysPerFile = new HashMap<Link, List<LangKey>>();
+        Map<Link, List<LangKey>> keysPerFile = new HashMap<>();
 
         export.mkdirs();
 
@@ -120,7 +120,7 @@ public class L10nUtils
         {
             Link origin = key.getOrigin() == null ? LAZY : key.getOrigin();
 
-            keysPerFile.computeIfAbsent(origin, (k) -> new ArrayList<LangKey>()).add(key);
+            keysPerFile.computeIfAbsent(origin, (k) -> new ArrayList<>()).add(key);
         }
 
         for (List<LangKey> list : keysPerFile.values())
@@ -145,8 +145,8 @@ public class L10nUtils
 
     public static void sortList(List<LangKey> list)
     {
-        Map<String, List<LangKey>> prefixes = new HashMap<String, List<LangKey>>();
-        List<String> ordered = new ArrayList<String>();
+        Map<String, List<LangKey>> prefixes = new HashMap<>();
+        List<String> ordered = new ArrayList<>();
 
         for (LangKey key : list)
         {
@@ -158,7 +158,7 @@ public class L10nUtils
 
             if (keys == null)
             {
-                keys = new ArrayList<LangKey>();
+                keys = new ArrayList<>();
 
                 prefixes.put(prefix, keys);
                 ordered.add(prefix);
@@ -205,11 +205,11 @@ public class L10nUtils
             try
             {
                 MapType mapType = DataToString.mapFromString(IOUtils.readText(file));
-                List<Pair<String, String>> additionalLanguages = new ArrayList<Pair<String, String>>();
+                List<Pair<String, String>> additionalLanguages = new ArrayList<>();
 
                 for (String key : mapType.keys())
                 {
-                    additionalLanguages.add(new Pair<String, String>(mapType.getString(key), key));
+                    additionalLanguages.add(new Pair<>(mapType.getString(key), key));
                 }
 
                 return additionalLanguages;

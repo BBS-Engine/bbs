@@ -88,7 +88,7 @@ public class UIPathClip extends UIClip<PathClip>
 
                 this.circularX.setValue(center.x);
                 this.circularZ.setValue(center.y);
-                this.editor.postUndo(new CompoundUndo<CameraWork>(
+                this.editor.postUndo(new CompoundUndo<>(
                     undo,
                     this.undo(this.clip.circularX, (circularX) -> circularX.set(center.x)),
                     this.undo(this.clip.circularZ, (circularZ) -> circularZ.set(center.y))

@@ -12,7 +12,7 @@ public class KeyCombo
     public IKey category = IKey.EMPTY;
     public String categoryKey = "all";
     public boolean repeatable;
-    public List<Integer> keys = new ArrayList<Integer>();
+    public List<Integer> keys = new ArrayList<>();
 
     public KeyCombo(IKey label, int... keys)
     {

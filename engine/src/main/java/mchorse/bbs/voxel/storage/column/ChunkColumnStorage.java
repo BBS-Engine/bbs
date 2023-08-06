@@ -29,7 +29,7 @@ public class ChunkColumnStorage extends ChunkStorage
     @Override
     public List<ChunkCell> getCells(ChunkManager manager)
     {
-        List<ChunkCell> cells = new ArrayList<ChunkCell>();
+        List<ChunkCell> cells = new ArrayList<>();
 
         for (File file : this.folder.listFiles())
         {

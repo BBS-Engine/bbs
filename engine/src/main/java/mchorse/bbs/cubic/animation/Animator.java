@@ -45,7 +45,7 @@ public class Animator
     /* Action pipeline properties */
     public ActionPlayback active;
     public ActionPlayback lastActive;
-    public List<ActionPlayback> actions = new ArrayList<ActionPlayback>();
+    public List<ActionPlayback> actions = new ArrayList<>();
 
     public double prevX = Float.MAX_VALUE;
     public double prevZ = Float.MAX_VALUE;

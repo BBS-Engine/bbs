@@ -15,10 +15,10 @@ import java.util.Map;
  */
 public class ActionsConfig implements IMapSerializable
 {
-    private static Map<String, ActionConfig> a = new HashMap<String, ActionConfig>();
-    private static Map<String, ActionConfig> b = new HashMap<String, ActionConfig>();
+    private static Map<String, ActionConfig> a = new HashMap<>();
+    private static Map<String, ActionConfig> b = new HashMap<>();
 
-    public Map<String, ActionConfig> actions = new HashMap<String, ActionConfig>();
+    public Map<String, ActionConfig> actions = new HashMap<>();
 
     public static void removeDefaultActions(Map<String, ActionConfig> map)
     {

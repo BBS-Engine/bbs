@@ -22,7 +22,7 @@ public class StructureManager implements IDisposable
 
     public File folder;
 
-    private Map<String, ChunkDisplay> cachedStructures = new HashMap<String, ChunkDisplay>();
+    private Map<String, ChunkDisplay> cachedStructures = new HashMap<>();
 
     public StructureManager(File folder)
     {

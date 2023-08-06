@@ -54,7 +54,7 @@ public class ModelUV implements IDataSerializable<ListType>
 
         if (this.rotation != 0)
         {
-            List<Vector3f> points = new ArrayList<Vector3f>();
+            List<Vector3f> points = new ArrayList<>();
 
             for (Vector3f p : quad.points)
             {

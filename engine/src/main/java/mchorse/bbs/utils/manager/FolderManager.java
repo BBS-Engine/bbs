@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public abstract class FolderManager <T extends AbstractData> implements IManager<T>
 {
-    protected Map<String, ManagerCache> cache = new HashMap<String, ManagerCache>();
+    protected Map<String, ManagerCache> cache = new HashMap<>();
     protected File folder;
     protected long lastCheck;
 
@@ -126,7 +126,7 @@ public abstract class FolderManager <T extends AbstractData> implements IManager
             {
                 if (this.canCache())
                 {
-                    Set<String> keys = new HashSet<String>(this.getKeys());
+                    Set<String> keys = new HashSet<>(this.getKeys());
 
                     for (String key : keys)
                     {
@@ -164,7 +164,7 @@ public abstract class FolderManager <T extends AbstractData> implements IManager
             {
                 if (this.canCache())
                 {
-                    Set<String> keys = new HashSet<String>(this.getKeys());
+                    Set<String> keys = new HashSet<>(this.getKeys());
 
                     for (String key : keys)
                     {
@@ -190,7 +190,7 @@ public abstract class FolderManager <T extends AbstractData> implements IManager
     @Override
     public Collection<String> getKeys()
     {
-        Set<String> set = new HashSet<String>();
+        Set<String> set = new HashSet<>();
 
         if (this.folder == null)
         {

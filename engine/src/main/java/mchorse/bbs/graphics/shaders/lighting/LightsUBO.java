@@ -11,7 +11,7 @@ import java.util.List;
 
 public class LightsUBO extends UBO
 {
-    private final List<Light> lights = new ArrayList<Light>();
+    private final List<Light> lights = new ArrayList<>();
     private ByteBuffer buffer = MemoryUtil.memAlloc((int) this.size());
 
     public LightsUBO(int unit)

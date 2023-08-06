@@ -39,7 +39,7 @@ public class ClipContext
      */
     public boolean playing = true;
 
-    public Map<String, Object> clipData = new HashMap<String, Object>();
+    public Map<String, Object> clipData = new HashMap<>();
 
     public IBridge bridge;
 

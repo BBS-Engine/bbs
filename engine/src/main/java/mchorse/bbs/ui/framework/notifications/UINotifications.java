@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UINotifications
 {
-    public List<Notification> notifications = new ArrayList<Notification>();
+    public List<Notification> notifications = new ArrayList<>();
 
     public void post(IKey message, int background)
     {

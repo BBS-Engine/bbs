@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class UIOverlay extends UIElement
 {
-    private static final Map<String, Vector2i> offsets = new HashMap<String, Vector2i>();
+    private static final Map<String, Vector2i> offsets = new HashMap<>();
 
     private int background = Colors.A50;
 

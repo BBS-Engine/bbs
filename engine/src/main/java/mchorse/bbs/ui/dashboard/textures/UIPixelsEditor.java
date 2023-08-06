@@ -123,7 +123,7 @@ public class UIPixelsEditor extends UICanvasEditor
 
         if (editing)
         {
-            this.undoManager = new UndoManager<Pixels>();
+            this.undoManager = new UndoManager<>();
             this.undoManager.setCallback(this::handleUndo);
         }
         else
@@ -259,7 +259,7 @@ public class UIPixelsEditor extends UICanvasEditor
                     new Vector2d(this.lastPixel.x, this.lastPixel.y),
                     new Vector2d(hoverPixel.x, hoverPixel.y)
                 );
-                Set<Vector2i> pixels = new HashSet<Vector2i>();
+                Set<Vector2i> pixels = new HashSet<>();
 
                 rasterizer.setupRange(0F, 1F, 1F / (float) this.lastPixel.distance(hoverPixel));
                 rasterizer.solve(pixels);

@@ -166,7 +166,7 @@ public enum Operation
         }
     };
 
-    public static final Set<String> OPERATORS = new HashSet<String>();
+    public static final Set<String> OPERATORS = new HashSet<>();
 
     public static boolean equals(double a, double b)
     {

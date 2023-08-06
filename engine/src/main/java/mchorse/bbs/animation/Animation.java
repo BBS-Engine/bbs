@@ -10,7 +10,7 @@ import java.util.Map;
 public class Animation extends AbstractData
 {
     public int duration = 30;
-    public Map<String, AnimationModel> models = new HashMap<String, AnimationModel>();
+    public Map<String, AnimationModel> models = new HashMap<>();
 
     public void render(RenderingContext context, float currentTime)
     {

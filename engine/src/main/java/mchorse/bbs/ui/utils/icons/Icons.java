@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Icons
 {
-    public static final Map<String, Icon> ICONS = new HashMap<String, Icon>();
+    public static final Map<String, Icon> ICONS = new HashMap<>();
     public static final Link ATLAS = Link.assets("textures/icons.png");
 
     public static final Icon NONE = new Icon(null, "none", 0, 0);

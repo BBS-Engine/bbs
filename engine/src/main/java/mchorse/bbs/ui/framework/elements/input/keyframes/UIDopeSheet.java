@@ -25,7 +25,7 @@ public class UIDopeSheet extends UIKeyframes
 {
     public static final int TOP_MARGIN = 15;
 
-    public List<UISheet> sheets = new ArrayList<UISheet>();
+    public List<UISheet> sheets = new ArrayList<>();
 
     public UIDopeSheet(Consumer<Keyframe> callback)
     {

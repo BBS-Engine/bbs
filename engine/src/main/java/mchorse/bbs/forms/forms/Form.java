@@ -39,7 +39,7 @@ public abstract class Form implements IMapSerializable, IPuppet
 
     protected FormRenderer renderer;
     protected String cachedID;
-    protected final Map<String, IFormProperty> properties = new HashMap<String, IFormProperty>();
+    protected final Map<String, IFormProperty> properties = new HashMap<>();
 
     protected boolean frozen;
 

@@ -25,7 +25,7 @@ public class VoxTransform extends VoxBaseNode
         this.unusedId = reader.readInt(stream);
         this.layerId = reader.readInt(stream);
         this.num = reader.readInt(stream);
-        this.transforms = new ArrayList<Matrix4f>();
+        this.transforms = new ArrayList<>();
 
         for (int i = 0; i < this.num; i ++)
         {

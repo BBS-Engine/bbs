@@ -15,7 +15,7 @@ import java.util.List;
 
 public abstract class ParticleComponentExpireBlocks extends ParticleComponentBase
 {
-    public List<Byte> blocks = new ArrayList<Byte>();
+    public List<Byte> blocks = new ArrayList<>();
 
     @Override
     public BaseType toData()

@@ -15,7 +15,7 @@ public class Waveform
     public float[] average;
     public float[] maximum;
 
-    private List<Texture> sprites = new ArrayList<Texture>();
+    private List<Texture> sprites = new ArrayList<>();
     private int w;
     private int h;
     private int pixelsPerSecond;

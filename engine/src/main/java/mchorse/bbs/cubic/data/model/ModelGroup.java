@@ -8,9 +8,9 @@ import java.util.List;
 public class ModelGroup
 {
     public final String id;
-    public List<ModelGroup> children = new ArrayList<ModelGroup>();
-    public List<ModelCube> cubes = new ArrayList<ModelCube>();
-    public List<ModelMesh> meshes = new ArrayList<ModelMesh>();
+    public List<ModelGroup> children = new ArrayList<>();
+    public List<ModelCube> cubes = new ArrayList<>();
+    public List<ModelMesh> meshes = new ArrayList<>();
     public boolean visible = true;
     public int index = -1;
 

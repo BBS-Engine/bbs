@@ -24,7 +24,7 @@ public class BlockModelCombined extends BlockModelFactory
 {
     private static Vector4f vector = new Vector4f();
 
-    public List<ModelCube> cubes = new ArrayList<ModelCube>();
+    public List<ModelCube> cubes = new ArrayList<>();
     public Vector3f offset = new Vector3f(0.5F, 0F, 0.5F);
     public boolean rotations;
 

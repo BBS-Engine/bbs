@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 
 public class FramebufferManager implements IDisposable
 {
-    public final Map<Link, Framebuffer> framebuffers = new HashMap<Link, Framebuffer>();
+    public final Map<Link, Framebuffer> framebuffers = new HashMap<>();
 
     public Framebuffer getFramebuffer(Link key, Consumer<Framebuffer> setup)
     {

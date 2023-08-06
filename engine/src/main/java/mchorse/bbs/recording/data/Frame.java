@@ -32,8 +32,8 @@ public class Frame implements IMapSerializable
     public static final String GROUP_RIGHT_STICK = "rstick";
     public static final String GROUP_TRIGGERS = "triggers";
 
-    public static final Set<String> PROPERTIES = new HashSet<String>(Arrays.asList("x", "y", "z", "yaw", "pitch", "fall", "sprinting", "sneaking", "roll"));
-    public static final Set<String> GROUPS = new HashSet<String>(Arrays.asList(GROUP_POSITION, GROUP_ROTATION, GROUP_DPAD, GROUP_LEFT_STICK, GROUP_RIGHT_STICK, GROUP_TRIGGERS));
+    public static final Set<String> PROPERTIES = new HashSet<>(Arrays.asList("x", "y", "z", "yaw", "pitch", "fall", "sprinting", "sneaking", "roll"));
+    public static final Set<String> GROUPS = new HashSet<>(Arrays.asList(GROUP_POSITION, GROUP_ROTATION, GROUP_DPAD, GROUP_LEFT_STICK, GROUP_RIGHT_STICK, GROUP_TRIGGERS));
 
     /* Position */
     public double x;
@@ -65,7 +65,7 @@ public class Frame implements IMapSerializable
     public float[] sticks = new float[6];
     public int gamepad;
 
-    public List<Action> actions = new ArrayList<Action>();
+    public List<Action> actions = new ArrayList<>();
 
     public static double get(String property, Frame frame)
     {

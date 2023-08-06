@@ -85,10 +85,10 @@ public class UICameraWork extends UIElement
 
     /* Selection */
     private boolean selecting;
-    private List<Integer> selection = new ArrayList<Integer>();
+    private List<Integer> selection = new ArrayList<>();
 
     /* Undo/redo cache */
-    private List<Integer> cachedSelection = new ArrayList<Integer>();
+    private List<Integer> cachedSelection = new ArrayList<>();
     private BaseType cache;
 
     /* Embedded view */
@@ -171,7 +171,7 @@ public class UICameraWork extends UIElement
             }
         }
 
-        List<IUndo> undos = new ArrayList<IUndo>();
+        List<IUndo> undos = new ArrayList<>();
 
         for (Clip clip : clips)
         {
@@ -381,7 +381,7 @@ public class UICameraWork extends UIElement
     private void paste(MapType data, int tick)
     {
         ListType clipsList = data.getList("clips");
-        List<Clip> clips = new ArrayList<Clip>();
+        List<Clip> clips = new ArrayList<>();
         int min = Integer.MAX_VALUE;
 
         this.cache();
@@ -413,7 +413,7 @@ public class UICameraWork extends UIElement
      */
     private void cut()
     {
-        List<Clip> clips = this.isSelecting() ? this.getClipsFromSelection() : new ArrayList<Clip>(this.clips.get());
+        List<Clip> clips = this.isSelecting() ? this.getClipsFromSelection() : new ArrayList<>(this.clips.get());
         Clip original = this.editor.getClip();
         int offset = this.editor.getCursor();
 
@@ -531,7 +531,7 @@ public class UICameraWork extends UIElement
             return;
         }
 
-        List<IUndo<CameraWork>> undos = new ArrayList<IUndo<CameraWork>>();
+        List<IUndo<CameraWork>> undos = new ArrayList<>();
         int min = Integer.MAX_VALUE;
 
         for (Clip clip : clips)
@@ -546,7 +546,7 @@ public class UICameraWork extends UIElement
             undos.add(this.editor.createUndo(clip.tick, (tick) -> tick.set(clip.tick.get() + diff)));
         }
 
-        this.editor.postUndoCallback(new CompoundUndo<CameraWork>(undos));
+        this.editor.postUndoCallback(new CompoundUndo<>(undos));
     }
 
     /**
@@ -561,7 +561,7 @@ public class UICameraWork extends UIElement
             return;
         }
 
-        List<IUndo<CameraWork>> undos = new ArrayList<IUndo<CameraWork>>();
+        List<IUndo> undos = new ArrayList<>();
 
         for (Clip clip : clips)
         {
@@ -573,14 +573,14 @@ public class UICameraWork extends UIElement
             }
             else if (this.tick < offset + clip.duration.get())
             {
-                undos.add(new CompoundUndo<CameraWork>(
+                undos.add(new CompoundUndo<>(
                     this.editor.createUndo(clip.tick, (tick) -> tick.set(this.tick)),
                     this.editor.createUndo(clip.duration, (duration) -> duration.set(clip.duration.get() + offset - this.tick))
                 ));
             }
         }
 
-        this.editor.postUndoCallback(new CompoundUndo<CameraWork>(undos));
+        this.editor.postUndoCallback(new CompoundUndo(undos));
     }
 
     /**
@@ -616,14 +616,14 @@ public class UICameraWork extends UIElement
             return;
         }
 
-        List<IUndo<CameraWork>> undos = new ArrayList<IUndo<CameraWork>>();
+        List<IUndo<CameraWork>> undos = new ArrayList<>();
 
         for (Clip clip : clips)
         {
             undos.add(this.editor.createUndo(clip.enabled, (enabled) -> enabled.set(!clip.enabled.get())));
         }
 
-        this.editor.postUndo(new CompoundUndo<CameraWork>(undos));
+        this.editor.postUndo(new CompoundUndo<>(undos));
         this.editor.fillData();
     }
 
@@ -641,7 +641,7 @@ public class UICameraWork extends UIElement
 
     public List<Clip> getClipsFromSelection()
     {
-        List<Clip> clips = new ArrayList<Clip>();
+        List<Clip> clips = new ArrayList<>();
 
         for (int index : this.selection)
         {
@@ -1129,7 +1129,7 @@ public class UICameraWork extends UIElement
             }
 
             /* Move clips */
-            List<IUndo<CameraWork>> undos = new ArrayList<IUndo<CameraWork>>();
+            List<IUndo> undos = new ArrayList<>();
 
             for (Clip clip : clips)
             {
@@ -1142,7 +1142,7 @@ public class UICameraWork extends UIElement
                 clip.layer.set(newLayer);
             }
 
-            this.editor.postUndo(new CompoundUndo<CameraWork>(undos), false);
+            this.editor.postUndo(new CompoundUndo(undos), false);
             this.editor.fillData();
 
             this.lastX = mouseX;

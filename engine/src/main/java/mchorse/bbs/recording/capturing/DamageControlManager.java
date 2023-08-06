@@ -19,7 +19,7 @@ public class DamageControlManager
     /**
      * Damage control objects
      */
-    public Map<Object, DamageControl> damage = new HashMap<Object, DamageControl>();
+    public Map<Object, DamageControl> damage = new HashMap<>();
 
     public void reset()
     {

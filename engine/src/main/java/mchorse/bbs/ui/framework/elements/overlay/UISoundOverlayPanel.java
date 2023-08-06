@@ -14,7 +14,7 @@ public class UISoundOverlayPanel extends UIStringOverlayPanel
 {
     private static Set<String> getSoundEvents()
     {
-        Set<String> locations = new HashSet<String>();
+        Set<String> locations = new HashSet<>();
 
         for (Link link : BBS.getProvider().getLinksFromPath(Link.assets("audio")))
         {

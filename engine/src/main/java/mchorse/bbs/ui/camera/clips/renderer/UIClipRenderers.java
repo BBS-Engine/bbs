@@ -12,7 +12,7 @@ public class UIClipRenderers
 {
     private UIClipRenderer defaultRenderer;
 
-    private Map<Class, IUIClipRenderer> renderers = new HashMap<Class, IUIClipRenderer>();
+    private Map<Class, IUIClipRenderer> renderers = new HashMap<>();
 
     public UIClipRenderers()
     {

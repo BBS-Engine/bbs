@@ -8,7 +8,7 @@ public class Profiler
     private String key;
 
     private long last = -1;
-    private List<Timestamp> timestamps = new ArrayList<Timestamp>();
+    private List<Timestamp> timestamps = new ArrayList<>();
 
     public void reset()
     {

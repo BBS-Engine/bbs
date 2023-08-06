@@ -32,7 +32,7 @@ public class UIFormCategory extends UIElement
 
     private int last;
     private String search = "";
-    private List<Form> searched = new ArrayList<Form>();
+    private List<Form> searched = new ArrayList<>();
 
     public UIFormCategory(FormCategory category, UIFormList list)
     {

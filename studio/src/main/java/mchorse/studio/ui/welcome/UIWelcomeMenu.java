@@ -114,41 +114,41 @@ public class UIWelcomeMenu extends UIBaseMenu
         this.features = new UIElement();
         this.features.relative(this.main).xy(0.5F, 0.5F).wh(400, 212).anchor(0.5F);
 
-        this.featureList = new UILabelList<LinkDescription>((l) -> this.pickDescription(l.get(0)));
-        this.featureList.add(new Label<LinkDescription>(
+        this.featureList = new UILabelList<>((l) -> this.pickDescription(l.get(0)));
+        this.featureList.add(new Label<>(
             UIKeysApp.WELCOME_FEATURES_WORLD_EDITOR,
             new LinkDescription(Studio.link("textures/features/world_editor.png"), UIKeysApp.WELCOME_FEATURES_WORLD_EDITOR_DESCRIPTION)
         ));
-        this.featureList.add(new Label<LinkDescription>(
+        this.featureList.add(new Label<>(
             UIKeysApp.WELCOME_FEATURES_TILE_SETS,
             new LinkDescription(Studio.link("textures/features/tile_sets.png"), UIKeysApp.WELCOME_FEATURES_TILE_SETS_DESCRIPTION)
         ));
-        this.featureList.add(new Label<LinkDescription>(
+        this.featureList.add(new Label<>(
             UIKeysApp.WELCOME_FEATURES_PARTICLES,
             new LinkDescription(Studio.link("textures/features/particles.png"), UIKeysApp.WELCOME_FEATURES_PARTICLES_DESCRIPTION)
         ));
-        this.featureList.add(new Label<LinkDescription>(
+        this.featureList.add(new Label<>(
             UIKeysApp.WELCOME_FEATURES_CAMERA,
             new LinkDescription(Studio.link("textures/features/camera.png"), UIKeysApp.WELCOME_FEATURES_CAMERA_DESCRIPTION)
         ));
-        this.featureList.add(new Label<LinkDescription>(
+        this.featureList.add(new Label<>(
             UIKeysApp.WELCOME_FEATURES_BLOCKBENCH,
             new LinkDescription(Studio.link("textures/features/blockbench.png"), UIKeysApp.WELCOME_FEATURES_BLOCKBENCH_DESCRIPTION)
         ));
-        this.featureList.add(new Label<LinkDescription>(
+        this.featureList.add(new Label<>(
             UIKeysApp.WELCOME_FEATURES_TRIGGERS,
             new LinkDescription(Studio.link("textures/features/triggers.png"), UIKeysApp.WELCOME_FEATURES_TRIGGERS_DESCRIPTION)
         ));
-        this.featureList.add(new Label<LinkDescription>(
+        this.featureList.add(new Label<>(
             UIKeysApp.WELCOME_FEATURES_SCRIPTS,
             new LinkDescription(Studio.link("textures/features/scripts.png"), UIKeysApp.WELCOME_FEATURES_SCRIPTS_DESCRIPTION)
         ));
-        this.featureList.add(new Label<LinkDescription>(
+        this.featureList.add(new Label<>(
             UIKeysApp.WELCOME_FEATURES_DIALOGUES,
             new LinkDescription(Studio.link("textures/features/dialogues.png"), UIKeysApp.WELCOME_FEATURES_DIALOGUES_DESCRIPTION)
         ));
         this.featureList.background(Colors.A25).sort();
-        this.featureList.add(new Label<LinkDescription>(
+        this.featureList.add(new Label<>(
             UIKeysApp.WELCOME_FEATURES_MORE,
             new LinkDescription(Studio.link("textures/features/more.png"), UIKeysApp.WELCOME_FEATURES_MORE_DESCRIPTION)
         ));

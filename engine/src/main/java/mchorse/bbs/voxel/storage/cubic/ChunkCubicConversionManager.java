@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class ChunkCubicConversionManager extends ChunkManager
 {
-    public final Map<Vector3i, ChunkCubicCell> chunks = new HashMap<Vector3i, ChunkCubicCell>(1024);
+    public final Map<Vector3i, ChunkCubicCell> chunks = new HashMap<>(1024);
 
     public ChunkCubicConversionManager(BlockSet blocks)
     {

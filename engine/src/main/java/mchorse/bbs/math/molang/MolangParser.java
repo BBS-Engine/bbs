@@ -186,7 +186,7 @@ public class MolangParser extends MathBuilder
      */
     public MolangExpression parseExpression(String expression) throws MolangException
     {
-        List<String> lines = new ArrayList<String>();
+        List<String> lines = new ArrayList<>();
 
         for (String split : expression.toLowerCase().trim().split(";"))
         {

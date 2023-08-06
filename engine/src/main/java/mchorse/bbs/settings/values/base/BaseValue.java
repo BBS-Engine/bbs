@@ -35,7 +35,7 @@ public abstract class BaseValue implements IValue, IDataSerializable<BaseType>
     {
         if (this.callbacks == null)
         {
-            this.callbacks = new ArrayList<Consumer<BaseValue>>();
+            this.callbacks = new ArrayList<>();
         }
 
         this.callbacks.add(callback);
@@ -109,7 +109,7 @@ public abstract class BaseValue implements IValue, IDataSerializable<BaseType>
     @Override
     public List<String> getPathSegments()
     {
-        List<String> strings = new ArrayList<String>();
+        List<String> strings = new ArrayList<>();
         IValue value = this;
 
         while (value != null)

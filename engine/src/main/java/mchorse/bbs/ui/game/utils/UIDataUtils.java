@@ -21,7 +21,7 @@ public class UIDataUtils
 {
     public static void requestNames(ContentType type, Consumer<List<String>> consumer)
     {
-        consumer.accept(new ArrayList<String>(type.getManager().getKeys()));
+        consumer.accept(new ArrayList<>(type.getManager().getKeys()));
     }
 
     public static void openPicker(UIContext context, ContentType type, String value, Consumer<String> callback)

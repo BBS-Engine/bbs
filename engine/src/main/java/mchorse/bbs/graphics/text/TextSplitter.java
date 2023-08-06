@@ -98,7 +98,7 @@ public class TextSplitter
 
     private void reset()
     {
-        this.lines = new ArrayList<String>();
+        this.lines = new ArrayList<>();
 
         this.width = this.index = 0;
         this.builder = new StringBuilder();

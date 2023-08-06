@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Uniforms
 {
-    private static Map<String, Class<? extends Uniform>> uniforms = new HashMap<String, Class<? extends Uniform>>();
+    private static Map<String, Class<? extends Uniform>> uniforms = new HashMap<>();
 
     static
     {
@@ -32,7 +32,7 @@ public class Uniforms
 
     public static List<Uniform> createFromMap(Map<String, String> map)
     {
-        List<Uniform> uniforms = new ArrayList<Uniform>();
+        List<Uniform> uniforms = new ArrayList<>();
 
         for (Map.Entry<String, String> entry : map.entrySet())
         {

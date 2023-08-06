@@ -11,7 +11,7 @@ import java.util.Map;
 public class ShaderPipeline implements IMapSerializable
 {
     public boolean deferred;
-    public Map<String, Link> shaders = new HashMap<String, Link>();
+    public Map<String, Link> shaders = new HashMap<>();
     public ShaderPipelineFramebuffer gbuffer = new ShaderPipelineFramebuffer();
 
     @Override

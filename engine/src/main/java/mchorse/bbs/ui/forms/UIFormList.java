@@ -32,7 +32,7 @@ public class UIFormList extends UIElement
     public UIIcon close;
 
     private UIFormCategory recent;
-    private List<UIFormCategory> categories = new ArrayList<UIFormCategory>();
+    private List<UIFormCategory> categories = new ArrayList<>();
 
     public UIFormList(IUIFormList palette)
     {

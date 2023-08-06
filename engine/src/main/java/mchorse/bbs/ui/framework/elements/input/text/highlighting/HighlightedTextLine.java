@@ -57,12 +57,12 @@ public class HighlightedTextLine extends TextLine
             return;
         }
 
-        List<TextSegment> segments = new ArrayList<TextSegment>();
+        List<TextSegment> segments = new ArrayList<>();
         int w = 0;
         int i = 0;
         String line = this.wrappedLines.get(i);
 
-        this.wrappedSegments = new ArrayList<List<TextSegment>>();
+        this.wrappedSegments = new ArrayList<>();
 
         for (TextSegment segment : this.segments)
         {
@@ -85,7 +85,7 @@ public class HighlightedTextLine extends TextLine
 
                 this.wrappedSegments.add(segments);
 
-                segments = new ArrayList<TextSegment>();
+                segments = new ArrayList<>();
                 segment = remainder;
                 segment.width = font.getWidth(segment.text);
 

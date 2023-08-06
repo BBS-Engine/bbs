@@ -16,11 +16,11 @@ import java.util.Set;
 
 public class UIToolLine extends UITool
 {
-    private Set<Vector3i> blocks = new HashSet<Vector3i>();
+    private Set<Vector3i> blocks = new HashSet<>();
 
     public static Set<Vector3i> calculate(Vector3i initial, Vector3i target)
     {
-        return calculate(new HashSet<Vector3i>(), initial, target);
+        return calculate(new HashSet<>(), initial, target);
     }
 
     public static Set<Vector3i> calculate(Set<Vector3i> blocks, Vector3i initial, Vector3i target)

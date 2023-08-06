@@ -42,7 +42,7 @@ public class UILanguageKey extends UIElement
 
         if (langKey.content.length() >= 60)
         {
-            UITextarea<TextLine> textarea = new UITextarea<TextLine>(this::setContent);
+            UITextarea<TextLine> textarea = new UITextarea<>(this::setContent);
 
             textarea.setText(langKey.content);
             textarea.background().wrap();

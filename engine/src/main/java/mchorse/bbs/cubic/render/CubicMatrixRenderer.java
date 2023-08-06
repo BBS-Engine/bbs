@@ -15,7 +15,7 @@ public class CubicMatrixRenderer implements ICubicRenderer
 
     public CubicMatrixRenderer(Model model)
     {
-        this.matrices = new ArrayList<Matrix4f>();
+        this.matrices = new ArrayList<>();
 
         for (int i = 0; i < model.getAllGroupKeys().size(); i++)
         {

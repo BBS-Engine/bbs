@@ -11,7 +11,7 @@ public class StencilMap
 {
     public boolean picking;
     public int objectIndex;
-    public Map<Integer, Pair<Form, String>> indexMap = new HashMap<Integer, Pair<Form, String>>();
+    public Map<Integer, Pair<Form, String>> indexMap = new HashMap<>();
 
     /**
      * Sets up the state for picking objects. {@link mchorse.bbs.ui.framework.UIRenderingContext#setShaders(ShaderRepository)}
@@ -33,7 +33,7 @@ public class StencilMap
 
     public void addPicking(Form form, String bone)
     {
-        this.indexMap.put(this.objectIndex, new Pair<Form, String>(form, bone));
+        this.indexMap.put(this.objectIndex, new Pair<>(form, bone));
         this.objectIndex += 1;
     }
 

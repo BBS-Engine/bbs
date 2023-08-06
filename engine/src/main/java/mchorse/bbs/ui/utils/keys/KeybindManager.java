@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class KeybindManager
 {
-    public List<Keybind> keybinds = new ArrayList<Keybind>();
+    public List<Keybind> keybinds = new ArrayList<>();
     public boolean focus = true;
 
     public Keybind register(KeyCombo combo, Runnable callback)

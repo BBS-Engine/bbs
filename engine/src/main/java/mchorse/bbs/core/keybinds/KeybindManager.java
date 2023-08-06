@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class KeybindManager implements IKeyHandler
 {
-    private List<KeybindCategory> categories = new ArrayList<KeybindCategory>();
+    private List<KeybindCategory> categories = new ArrayList<>();
 
     public void add(KeybindCategory category)
     {

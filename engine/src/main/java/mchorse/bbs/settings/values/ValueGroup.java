@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ValueGroup extends BaseValue
 {
-    private Map<String, BaseValue> children = new LinkedHashMap<String, BaseValue>();
+    private Map<String, BaseValue> children = new LinkedHashMap<>();
 
     public ValueGroup(String id)
     {
@@ -25,7 +25,7 @@ public class ValueGroup extends BaseValue
 
     public List<BaseValue> getAll()
     {
-        return new ArrayList<BaseValue>(this.children.values());
+        return new ArrayList<>(this.children.values());
     }
 
     public void add(BaseValue value)

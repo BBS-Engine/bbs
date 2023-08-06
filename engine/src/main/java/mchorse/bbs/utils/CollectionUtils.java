@@ -8,7 +8,7 @@ public class CollectionUtils
 {
     public static <T> Set<T> setOf(T... values)
     {
-        Set<T> set = new HashSet<T>();
+        Set<T> set = new HashSet<>();
 
         for (T value : values)
         {

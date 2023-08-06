@@ -10,7 +10,7 @@ import java.util.Map;
 public class MultiLinkManager
 {
     private static int id = 0;
-    private static Map<Link, List<Pair>> map = new HashMap<Link, List<Pair>>();
+    private static Map<Link, List<Pair>> map = new HashMap<>();
 
     public static int getId(MultiLink location)
     {
@@ -20,7 +20,7 @@ public class MultiLinkManager
         }
 
         Link keyRL = location.children.get(0).path;
-        List<Pair> pairs = map.computeIfAbsent(keyRL, (k) -> new ArrayList<Pair>());
+        List<Pair> pairs = map.computeIfAbsent(keyRL, (k) -> new ArrayList<>());
 
         for (Pair pair : pairs)
         {

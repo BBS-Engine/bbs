@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class KeybindSettings
 {
-    private static final List<Class> classes = new ArrayList<Class>();
+    private static final List<Class> classes = new ArrayList<>();
 
     public static void registerClasses()
     {
@@ -26,14 +26,14 @@ public class KeybindSettings
 
     public static void register(SettingsBuilder builder)
     {
-        Map<String, List<KeyCombo>> combos = new HashMap<String, List<KeyCombo>>();
+        Map<String, List<KeyCombo>> combos = new HashMap<>();
 
         for (Class clazz : classes)
         {
             readKeyCombos(combos, clazz);
         }
 
-        List<String> keys = new ArrayList<String>(combos.keySet());
+        List<String> keys = new ArrayList<>(combos.keySet());
 
         keys.sort(Comparator.comparing((a) -> a));
 
@@ -63,7 +63,7 @@ public class KeybindSettings
             try
             {
                 KeyCombo combo = (KeyCombo) field.get(null);
-                List<KeyCombo> comboList = combos.computeIfAbsent(combo.categoryKey, (k) -> new ArrayList<KeyCombo>());
+                List<KeyCombo> comboList = combos.computeIfAbsent(combo.categoryKey, (k) -> new ArrayList<>());
 
                 comboList.add(combo);
             }

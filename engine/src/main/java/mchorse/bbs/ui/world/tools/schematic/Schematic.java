@@ -33,7 +33,7 @@ public class Schematic
         int d = schematic.getShort("Length");
         IBlockVariant defaultVariant = blockSet.variants.get(0);
         Chunk chunk = new Chunk(w, h, d, blockSet.air);
-        List<Integer> schematicData = new ArrayList<Integer>();
+        List<Integer> schematicData = new ArrayList<>();
 
         for (int i = 0, c = w * h * d; i < c; i++)
         {
@@ -76,7 +76,7 @@ public class Schematic
 
     public Set<Integer> getUniqueBlocks()
     {
-        Set<Integer> unique = new LinkedHashSet<Integer>();
+        Set<Integer> unique = new LinkedHashSet<>();
 
         for (Integer integer : this.data)
         {

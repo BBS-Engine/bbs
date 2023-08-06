@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 public class EventManager
 {
-    protected Map<Class, List<Consumer>> events = new HashMap<Class, List<Consumer>>();
+    protected Map<Class, List<Consumer>> events = new HashMap<>();
 
     public <T extends UIEvent> void register(Class<T> event, Consumer<T> callback)
     {
@@ -17,7 +17,7 @@ public class EventManager
             return;
         }
 
-        List<Consumer> events = this.events.computeIfAbsent(event, (k) -> new ArrayList<Consumer>());
+        List<Consumer> events = this.events.computeIfAbsent(event, (k) -> new ArrayList<>());
 
         events.add(callback);
     }

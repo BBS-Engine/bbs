@@ -10,7 +10,7 @@ import java.util.StringJoiner;
 
 public class ListType extends BaseType implements Iterable<BaseType>
 {
-    public final List<BaseType> elements = new ArrayList<BaseType>();
+    public final List<BaseType> elements = new ArrayList<>();
 
     /* Accessors */
 

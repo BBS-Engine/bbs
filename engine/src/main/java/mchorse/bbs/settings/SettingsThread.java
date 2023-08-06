@@ -14,7 +14,7 @@ public class SettingsThread implements Runnable
 {
     private static SettingsThread instance;
 
-    public Set<Settings> settings = new HashSet<Settings>();
+    public Set<Settings> settings = new HashSet<>();
     public Timer timer = new Timer(2000);
 
     public static synchronized void add(Settings settings)

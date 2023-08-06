@@ -37,7 +37,7 @@ public abstract class UICRUDOverlayPanel extends UIOverlayPanel
         this.rename = new UIIcon(Icons.EDIT, this::renameData);
         this.remove = new UIIcon(Icons.REMOVE, this::removeData);
 
-        this.names = new UISearchList<DataPath>(new UIDataPathList((list) ->
+        this.names = new UISearchList<>(new UIDataPathList((list) ->
         {
             if (this.callback != null)
             {

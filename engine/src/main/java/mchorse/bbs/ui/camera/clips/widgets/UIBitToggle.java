@@ -14,7 +14,7 @@ public class UIBitToggle extends UIElement
 {
     public static final IKey PLUS = IKey.raw(" + ");
     private int value;
-    public List<Bit> bits = new ArrayList<Bit>();
+    public List<Bit> bits = new ArrayList<>();
     public Consumer<Integer> callback;
 
     public UIBitToggle(Consumer<Integer> callback)
@@ -64,7 +64,7 @@ public class UIBitToggle extends UIElement
 
     private void updateTooltip()
     {
-        List<IKey> keys = new ArrayList<IKey>();
+        List<IKey> keys = new ArrayList<>();
 
         for (int i = 0; i < this.bits.size(); i++)
         {

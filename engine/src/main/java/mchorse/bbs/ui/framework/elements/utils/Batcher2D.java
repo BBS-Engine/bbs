@@ -33,7 +33,7 @@ public class Batcher2D
     private Shader shader;
     private Texture texture;
 
-    private Stack<Area> scissors = new Stack<Area>();
+    private Stack<Area> scissors = new Stack<>();
 
     public Batcher2D(RenderingContext context)
     {

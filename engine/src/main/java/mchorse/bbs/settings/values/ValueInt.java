@@ -64,7 +64,7 @@ public class ValueInt extends BaseValueNumber<Integer> implements IParseableValu
 
     public ValueInt modes(IKey... labels)
     {
-        this.labels = new ArrayList<IKey>();
+        this.labels = new ArrayList<>();
         Collections.addAll(this.labels, labels);
 
         return this.subtype(Subtype.MODES);

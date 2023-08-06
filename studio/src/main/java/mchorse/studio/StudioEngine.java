@@ -82,7 +82,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
 
     private WatchDog watchDog;
 
-    private Map<Class, Object> apis = new HashMap<Class, Object>();
+    private Map<Class, Object> apis = new HashMap<>();
 
     public StudioEngine(Studio game)
     {

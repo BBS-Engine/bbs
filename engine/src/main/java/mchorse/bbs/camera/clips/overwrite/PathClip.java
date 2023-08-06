@@ -350,8 +350,8 @@ public class PathClip extends CameraClip
         int originalPoints = (int) Math.ceil(factor);
         int thisPoints = (int) Math.floor(factor);
 
-        List<Position> oP = new ArrayList<Position>();
-        List<Position> tP = new ArrayList<Position>();
+        List<Position> oP = new ArrayList<>();
+        List<Position> tP = new ArrayList<>();
 
         for (int i = 0; i < originalPoints; i++)
         {

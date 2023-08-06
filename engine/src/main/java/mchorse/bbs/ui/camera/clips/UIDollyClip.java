@@ -79,7 +79,7 @@ public class UIDollyClip extends UIClip<DollyClip>
 
         this.clip.applyLast(new ClipContext(), position);
 
-        this.editor.postUndo(new CompoundUndo<CameraWork>(
+        this.editor.postUndo(new CompoundUndo<>(
             this.undo(this.clip.position, position.toData()),
             this.undo(this.clip.distance, (distance) -> distance.set(-this.clip.distance.get()))
         ));
@@ -90,7 +90,7 @@ public class UIDollyClip extends UIClip<DollyClip>
     @Override
     public void editClip(Position position)
     {
-        this.editor.postUndo(new CompoundUndo<CameraWork>(
+        this.editor.postUndo(new CompoundUndo<>(
             this.undo(this.clip.position, position.toData()),
             this.undo(this.clip.yaw, (yaw) -> yaw.set(position.angle.yaw)),
             this.undo(this.clip.pitch, (pitch) -> pitch.set(position.angle.pitch))

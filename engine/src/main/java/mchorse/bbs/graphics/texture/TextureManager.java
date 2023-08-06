@@ -21,8 +21,8 @@ import java.util.Map;
 
 public class TextureManager implements IDisposable, IWatchDogListener
 {
-    public final Map<Link, Texture> textures = new HashMap<Link, Texture>();
-    public final Map<Link, VideoPlaybackThread> videos = new HashMap<Link, VideoPlaybackThread>();
+    public final Map<Link, Texture> textures = new HashMap<>();
+    public final Map<Link, VideoPlaybackThread> videos = new HashMap<>();
     public AssetProvider provider;
 
     private Texture error;

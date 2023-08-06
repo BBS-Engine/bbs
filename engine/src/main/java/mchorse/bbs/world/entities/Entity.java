@@ -69,9 +69,9 @@ public final class Entity implements IMapSerializable, IWorldObject
     {
         this.id = id;
 
-        List<Component> components = new ArrayList<Component>();
-        HashMap<Class, Component> named = new HashMap<Class, Component>();
-        List<IRenderableComponent> renderables = new ArrayList<IRenderableComponent>();
+        List<Component> components = new ArrayList<>();
+        HashMap<Class, Component> named = new HashMap<>();
+        List<IRenderableComponent> renderables = new ArrayList<>();
 
         for (EntityRecord record : records)
         {

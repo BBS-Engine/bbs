@@ -127,14 +127,14 @@ public class UIWorldEditorPanel extends UIWorldPanel
 
     /* Tools */
     private Function<RayTraceResult, Boolean> rayHandle = (result) -> this.currentTool.handleRayTracer(result);
-    private List<UITool> tools = new ArrayList<UITool>();
+    private List<UITool> tools = new ArrayList<>();
     private UITool currentTool;
     private boolean activeTool;
     private int noHitDistance = 5;
     private int hitDistance = 1;
 
     /* Undo-redo */
-    private UndoManager<World> undoManager = new UndoManager<World>();
+    private UndoManager<World> undoManager = new UndoManager<>();
     private ChunkProxy proxy;
 
     public UIWorldEditorPanel(UIDashboard dashboard)
@@ -547,8 +547,8 @@ public class UIWorldEditorPanel extends UIWorldPanel
         Vector3i block = this.result.block;
         Vector3i min = new Vector3i(block);
         Vector3i max = new Vector3i(block);
-        Set<Vector3i> checked = new HashSet<Vector3i>();
-        Stack<Vector3i> toCheck = new Stack<Vector3i>();
+        Set<Vector3i> checked = new HashSet<>();
+        Stack<Vector3i> toCheck = new Stack<>();
 
         toCheck.add(block);
 

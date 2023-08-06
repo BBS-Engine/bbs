@@ -61,7 +61,7 @@ public abstract class AutomaticResizer extends BaseResizer
 
     public List<ChildResizer> getResizers()
     {
-        List<ChildResizer> resizers = new ArrayList<ChildResizer>();
+        List<ChildResizer> resizers = new ArrayList<>();
 
         for (IUIElement element : this.parent.getChildren())
         {

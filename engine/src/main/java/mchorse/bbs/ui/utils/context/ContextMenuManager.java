@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 
 public class ContextMenuManager
 {
-    public List<ContextAction> actions = new ArrayList<ContextAction>();
+    public List<ContextAction> actions = new ArrayList<>();
     public Consumer<UIRemovedEvent> onClose;
     public boolean shadow;
 

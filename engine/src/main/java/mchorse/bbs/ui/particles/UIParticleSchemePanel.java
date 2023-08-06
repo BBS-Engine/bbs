@@ -51,7 +51,7 @@ public class UIParticleSchemePanel extends UIDataDashboardPanel<ParticleScheme>
     public UIParticleSchemeRenderer renderer;
     public UIScrollView sectionsView;
 
-    public List<UIParticleSchemeSection> sections = new ArrayList<UIParticleSchemeSection>();
+    public List<UIParticleSchemeSection> sections = new ArrayList<>();
 
     private String molangId;
 

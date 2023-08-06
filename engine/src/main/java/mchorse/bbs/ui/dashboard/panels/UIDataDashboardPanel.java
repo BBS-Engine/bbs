@@ -65,7 +65,7 @@ public abstract class UIDataDashboardPanel <T extends AbstractData> extends UICR
     @Override
     protected UICRUDOverlayPanel createOverlayPanel()
     {
-        return new UIDataOverlayPanel<T>(this.getTitle(), this, this::pickData);
+        return new UIDataOverlayPanel<>(this.getTitle(), this, this::pickData);
     }
 
     @Override

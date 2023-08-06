@@ -24,7 +24,7 @@ public class Font implements IMapSerializable
     public int height;
     public Glyph[] glyphs;
 
-    public final Map<Integer, IFontFormat> formats = new HashMap<Integer, IFontFormat>();
+    public final Map<Integer, IFontFormat> formats = new HashMap<>();
 
     public char boldChar;
     public char resetChar;
@@ -161,7 +161,7 @@ public class Font implements IMapSerializable
         }
 
         MapType glyphData = map.getMap("glyphs");
-        List<Glyph> glyphs = new ArrayList<Glyph>();
+        List<Glyph> glyphs = new ArrayList<>();
 
         for (String key : glyphData.keys())
         {

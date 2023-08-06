@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class PixelsUndo implements IUndo<Pixels>
 {
-    public Map<Vector2i, Pair<Color, Color>> pixels = new HashMap<Vector2i, Pair<Color, Color>>();
+    public Map<Vector2i, Pair<Color, Color>> pixels = new HashMap<>();
 
     public void setColor(Pixels pixels, int x, int y, Color color)
     {
@@ -21,7 +21,7 @@ public class PixelsUndo implements IUndo<Pixels>
         }
 
         Vector2i key = new Vector2i(x, y);
-        Pair<Color, Color> pair = this.pixels.computeIfAbsent(key, (k) -> new Pair<Color, Color>(pixels.getColor(x, y).copy(), null));
+        Pair<Color, Color> pair = this.pixels.computeIfAbsent(key, (k) -> new Pair<>(pixels.getColor(x, y).copy(), null));
 
         pair.b = color.copy();
         pixels.setColor(x, y, color);

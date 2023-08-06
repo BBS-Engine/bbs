@@ -49,7 +49,7 @@ public class Window
     private static int _pixelDensity;
     private static String _title;
 
-    private final static Set<IFileDropListener> fileListeners = new HashSet<IFileDropListener>();
+    private final static Set<IFileDropListener> fileListeners = new HashSet<>();
 
     /**
      * Window's width 
@@ -473,7 +473,7 @@ public class Window
     public static void updateIcon(Pixels... pixels)
     {
         GLFWImage.Buffer buffer = GLFWImage.malloc(pixels.length);
-        List<ByteBuffer> buffers = new ArrayList<ByteBuffer>();
+        List<ByteBuffer> buffers = new ArrayList<>();
         int i = 0;
 
         for (Pixels p : pixels)

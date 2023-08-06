@@ -20,10 +20,10 @@ public class Model
     /**
      * This list contains only the root groups of the model (and not all of the groups)
      */
-    public List<ModelGroup> topGroups = new ArrayList<ModelGroup>();
+    public List<ModelGroup> topGroups = new ArrayList<>();
 
-    private Map<String, ModelGroup> namedGroups = new HashMap<String, ModelGroup>();
-    private List<ModelGroup> orderedGroups = new ArrayList<ModelGroup>();
+    private Map<String, ModelGroup> namedGroups = new HashMap<>();
+    private List<ModelGroup> orderedGroups = new ArrayList<>();
     private int nextIndex;
 
     public Model(MolangParser parser)

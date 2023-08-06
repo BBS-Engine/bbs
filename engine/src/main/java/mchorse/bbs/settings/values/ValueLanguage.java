@@ -35,7 +35,7 @@ public class ValueLanguage extends ValueString
         UIButton button = new UIButton(UIKeys.LANGUAGE_PICK, (b) ->
         {
             List<Label<String>> labels = BBS.getL10n().getSupportedLanguageLabels();
-            UILabelOverlayPanel<String> panel = new UILabelOverlayPanel<String>(UIKeys.LANGUAGE_PICK_TITLE, labels, (str) -> this.set(str.value));
+            UILabelOverlayPanel<String> panel = new UILabelOverlayPanel<>(UIKeys.LANGUAGE_PICK_TITLE, labels, (str) -> this.set(str.value));
 
             panel.set(this.get());
             UIOverlay.addOverlay(ui.getContext(), panel);

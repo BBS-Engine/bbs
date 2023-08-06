@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ShaderPipelineFramebuffer implements IMapSerializable
 {
-    public List<ShaderFramebufferTexture> textures = new ArrayList<ShaderFramebufferTexture>();
+    public List<ShaderFramebufferTexture> textures = new ArrayList<>();
 
     @Override
     public void fromData(MapType data)

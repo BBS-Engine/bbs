@@ -14,8 +14,8 @@ import java.util.Stack;
  */
 public abstract class ChunkThread implements Runnable
 {
-    protected Stack<Vector3i> load = new Stack<Vector3i>();
-    protected Stack<ChunkCell> save = new Stack<ChunkCell>();
+    protected Stack<Vector3i> load = new Stack<>();
+    protected Stack<ChunkCell> save = new Stack<>();
 
     protected World world;
     private boolean stop;

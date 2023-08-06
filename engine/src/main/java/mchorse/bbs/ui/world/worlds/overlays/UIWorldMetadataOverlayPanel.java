@@ -78,7 +78,7 @@ public class UIWorldMetadataOverlayPanel extends UIOverlayPanel
         this.callback = callback;
         this.existing = existing;
 
-        this.generators = new ArrayList<Link>(BBS.getFactoryGenerators().getKeys());
+        this.generators = new ArrayList<>(BBS.getFactoryGenerators().getKeys());
 
         this.view = UI.scrollView(5, 10);
         this.view.markContainer();
@@ -132,7 +132,7 @@ public class UIWorldMetadataOverlayPanel extends UIOverlayPanel
 
     private void changeTileSet()
     {
-        List<String> strings = new ArrayList<String>();
+        List<String> strings = new ArrayList<>();
 
         for (File file : BBS.getAssetsPath("tilesets").listFiles())
         {

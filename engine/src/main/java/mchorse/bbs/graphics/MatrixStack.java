@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class MatrixStack
 {
-    public final List<Matrix4f> model = new ArrayList<Matrix4f>();
-    public final List<Matrix3f> normal = new ArrayList<Matrix3f>();
+    public final List<Matrix4f> model = new ArrayList<>();
+    public final List<Matrix3f> normal = new ArrayList<>();
 
     public final Matrix4f tempModelMatrix = new Matrix4f();
     public final Matrix3f tempNormalMatrix = new Matrix3f();

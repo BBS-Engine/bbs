@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class KeyframeChannel implements IDataSerializable<ListType>
 {
-    protected final List<Keyframe> keyframes = new ArrayList<Keyframe>();
+    protected final List<Keyframe> keyframes = new ArrayList<>();
 
     protected Keyframe create(long tick, double value)
     {

@@ -69,7 +69,7 @@ public class UISceneClip extends UIClip<SceneClip>
                 return;
             }
 
-            Set<String> ids = new HashSet<String>();
+            Set<String> ids = new HashSet<>();
 
             for (Replay replay : scene.getAllReplays())
             {

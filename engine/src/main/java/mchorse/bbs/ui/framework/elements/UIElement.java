@@ -95,7 +95,7 @@ public class UIElement implements IUIElement
     /**
      * Children elements
      */
-    private List<IUIElement> children = new ArrayList<IUIElement>();
+    private List<IUIElement> children = new ArrayList<>();
 
     /**
      * Whether this element is enabled (can handle any input) 
@@ -177,7 +177,7 @@ public class UIElement implements IUIElement
 
     public <T> List<T> getChildren(Class<T> clazz)
     {
-        return getChildren(clazz, new ArrayList<T>());
+        return getChildren(clazz, new ArrayList<>());
     }
 
     public <T> List<T> getChildren(Class<T> clazz, List<T> list)
@@ -383,7 +383,7 @@ public class UIElement implements IUIElement
     {
         if (this.customData == null)
         {
-            this.customData = new HashMap<String, Object>();
+            this.customData = new HashMap<>();
         }
 
         this.customData.put(key, value);
@@ -476,7 +476,7 @@ public class UIElement implements IUIElement
         {
             if (this.contextOptions == null)
             {
-                this.contextOptions = new ArrayList<Consumer<ContextMenuManager>>();
+                this.contextOptions = new ArrayList<>();
             }
 
             this.contextOptions.add(consumer);

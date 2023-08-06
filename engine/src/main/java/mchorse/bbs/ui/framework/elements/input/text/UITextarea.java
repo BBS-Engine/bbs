@@ -51,7 +51,7 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
     /* Editing */
     private boolean focused;
     private int dragging;
-    protected List<T> text = new ArrayList<T>();
+    protected List<T> text = new ArrayList<>();
     public final Cursor cursor = new Cursor();
     public final Cursor selection = new Cursor(-1, 0);
 
@@ -70,7 +70,7 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
 
     public static List<String> splitNewlineString(String string)
     {
-        List<String> splits = new ArrayList<String>();
+        List<String> splits = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
 
         for (int i = 0, c = string.length(); i < c; i++)
@@ -350,7 +350,7 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
             return null;
         }
 
-        return new Pair<Cursor, Cursor>(new Cursor(cursor.line, group.a), new Cursor(cursor.line, group.b));
+        return new Pair<>(new Cursor(cursor.line, group.a), new Cursor(cursor.line, group.b));
     }
 
     /**

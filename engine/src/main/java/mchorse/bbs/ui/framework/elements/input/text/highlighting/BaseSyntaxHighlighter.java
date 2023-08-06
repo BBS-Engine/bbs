@@ -12,12 +12,12 @@ import java.util.regex.Pattern;
 
 public abstract class BaseSyntaxHighlighter implements ISyntaxHighlighter
 {
-    protected Set<String> operators = new HashSet<String>(Arrays.asList("+", "-", "=", "/", "*", "<", ">", "~", "&", "|", "!", "?", ":"));
-    protected Set<String> primaryKeywords = new HashSet<String>();
-    protected Set<String> secondaryKeywords = new HashSet<String>();
-    protected Set<String> identifierKeywords = new HashSet<String>();
-    protected Set<String> special = new HashSet<String>();
-    protected Set<String> typeKeyswords = new HashSet<String>();
+    protected Set<String> operators = new HashSet<>(Arrays.asList("+", "-", "=", "/", "*", "<", ">", "~", "&", "|", "!", "?", ":"));
+    protected Set<String> primaryKeywords = new HashSet<>();
+    protected Set<String> secondaryKeywords = new HashSet<>();
+    protected Set<String> identifierKeywords = new HashSet<>();
+    protected Set<String> special = new HashSet<>();
+    protected Set<String> typeKeyswords = new HashSet<>();
     protected Pattern functionName = Pattern.compile("[\\w_][\\d\\w_]*", Pattern.CASE_INSENSITIVE);
     protected boolean identifyFunctions = true;
 
@@ -51,7 +51,7 @@ public abstract class BaseSyntaxHighlighter implements ISyntaxHighlighter
     @Override
     public List<TextSegment> parse(FontRenderer font, List<HighlightedTextLine> textLines, String line, int lineIndex)
     {
-        List<TextSegment> list = new ArrayList<TextSegment>();
+        List<TextSegment> list = new ArrayList<>();
         List<TextSegment> prevLine = lineIndex > 0 ? textLines.get(lineIndex - 1).segments : null;
 
         if (prevLine != null && !prevLine.isEmpty())

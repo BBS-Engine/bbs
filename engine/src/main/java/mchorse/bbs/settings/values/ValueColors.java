@@ -13,7 +13,7 @@ import java.util.StringJoiner;
 
 public class ValueColors extends BaseValue implements IParseableValue
 {
-    private List<Color> colors = new ArrayList<Color>();
+    private List<Color> colors = new ArrayList<>();
 
     public ValueColors(String id)
     {
@@ -67,7 +67,7 @@ public class ValueColors extends BaseValue implements IParseableValue
     public boolean parse(String value)
     {
         String[] splits = value.split(",");
-        List<Color> colors = new ArrayList<Color>();
+        List<Color> colors = new ArrayList<>();
 
         for (String split : splits)
         {

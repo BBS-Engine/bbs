@@ -21,7 +21,7 @@ public abstract class Processor
     public Processor collect()
     {
         this.collect = true;
-        this.placed = new HashSet<Vector3i>();
+        this.placed = new HashSet<>();
 
         return this;
     }

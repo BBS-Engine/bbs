@@ -14,7 +14,7 @@ public class CameraController implements ICameraController
 {
     public Camera camera = new Camera();
     private ICameraController current;
-    private List<ICameraController> controllers = new ArrayList<ICameraController>();
+    private List<ICameraController> controllers = new ArrayList<>();
 
     private Vector3d prevPosition = new Vector3d();
 

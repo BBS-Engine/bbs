@@ -10,7 +10,7 @@ public class ShaderParser
 
     public String vertex;
     public String fragment;
-    public Map<String, String> uniforms = new HashMap<String, String>();
+    public Map<String, String> uniforms = new HashMap<>();
 
     /**
      * Parse vertex and fragment shader code out of merged shader code.  
@@ -18,7 +18,7 @@ public class ShaderParser
     public void parse(String code)
     {
         String lastKey = "";
-        Map<String, String> sections = new HashMap<String, String>();
+        Map<String, String> sections = new HashMap<>();
 
         int index = 0;
 

@@ -18,7 +18,7 @@ public class Settings extends BaseValue
     public final Icon icon;
     public final File file;
 
-    public final Map<String, ValueGroup> categories = new LinkedHashMap<String, ValueGroup>();
+    public final Map<String, ValueGroup> categories = new LinkedHashMap<>();
 
     public Settings(Icon icon, String id, File file)
     {

@@ -7,7 +7,7 @@ public class DataPath
 {
     public static final DataPath EMPTY = new DataPath(true);
 
-    public List<String> strings = new ArrayList<String>();
+    public List<String> strings = new ArrayList<>();
     public boolean folder;
 
     public DataPath(String path)

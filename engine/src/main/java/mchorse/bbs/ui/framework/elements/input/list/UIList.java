@@ -24,12 +24,12 @@ public abstract class UIList <T> extends UIElement
     /**
      * List of elements 
      */
-    protected List<T> list = new ArrayList<T>();
+    protected List<T> list = new ArrayList<>();
 
     /**
      * List for copying
      */
-    private List<T> copy = new ArrayList<T>();
+    private List<T> copy = new ArrayList<>();
 
     /**
      * Scrolling area
@@ -49,7 +49,7 @@ public abstract class UIList <T> extends UIElement
     /**
      * Selected elements
      */
-    public List<Integer> current = new ArrayList<Integer>();
+    public List<Integer> current = new ArrayList<>();
 
     /**
      * Whether this list supports multi selection
@@ -65,7 +65,7 @@ public abstract class UIList <T> extends UIElement
     protected boolean postDraw;
 
     private String filter = "";
-    private List<Pair<T, Integer>> filtered = new ArrayList<Pair<T, Integer>>();
+    private List<Pair<T, Integer>> filtered = new ArrayList<>();
 
     private int dragging = -1;
     private long dragTime;
@@ -159,7 +159,7 @@ public abstract class UIList <T> extends UIElement
 
             if (this.elementToString(i, element).toLowerCase().contains(filter))
             {
-                this.filtered.add(new Pair<T, Integer>(element, i));
+                this.filtered.add(new Pair<>(element, i));
             }
         }
 

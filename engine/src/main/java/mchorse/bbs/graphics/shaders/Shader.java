@@ -41,17 +41,17 @@ public final class Shader implements IDisposable
     /**
      * Registered uniform list
      */
-    private Set<Uniform> dirtyUniforms = new HashSet<Uniform>();
+    private Set<Uniform> dirtyUniforms = new HashSet<>();
 
     /**
      * Shader uniforms that were attached outside the subclasses
      */
-    private Map<String, Uniform> uniforms = new HashMap<String, Uniform>();
+    private Map<String, Uniform> uniforms = new HashMap<>();
 
     /**
      * UBOs (Uniform Buffer Object) map
      */
-    private Map<String, UBO> ubos = new HashMap<String, UBO>();
+    private Map<String, UBO> ubos = new HashMap<>();
 
     /**
      * Initialize callback

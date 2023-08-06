@@ -11,7 +11,7 @@ public class GlyphPacker
 {
     public static Vector2i pack(List<Glyph> glyphs, int padding)
     {
-        Stack<Area> areas = new Stack<Area>();
+        Stack<Area> areas = new Stack<>();
         int w = getInitialWidth(glyphs, padding);
         int finalW = 0;
         int finalH = 0;

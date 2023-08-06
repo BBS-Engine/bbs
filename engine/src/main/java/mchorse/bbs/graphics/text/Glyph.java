@@ -18,7 +18,7 @@ public class Glyph implements IMapSerializable
     public int x;
     public int y;
     public boolean emoji;
-    public List<Kerning> kernings = new ArrayList<Kerning>();
+    public List<Kerning> kernings = new ArrayList<>();
 
     private static void parseKernings(MapType data, List<Kerning> kernings)
     {

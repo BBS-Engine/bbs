@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class EntityArchitect
 {
-    private Map<Link, IEntityBlueprint> blueprints = new HashMap<Link, IEntityBlueprint>();
+    private Map<Link, IEntityBlueprint> blueprints = new HashMap<>();
 
     public static Entity createDummy()
     {
@@ -36,7 +36,7 @@ public class EntityArchitect
             return null;
         }
 
-        List<EntityRecord> records = new ArrayList<EntityRecord>();
+        List<EntityRecord> records = new ArrayList<>();
 
         blueprint.fillComponents(records);
         records.sort(Comparator.comparingInt(a -> a.index));

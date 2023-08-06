@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ClipFactoryData extends UIFactoryData<UIClip>
 {
-    public final Map<Link, IClipConverter<? extends Clip, ? extends Clip>> converters = new HashMap<Link, IClipConverter<? extends Clip, ? extends Clip>>();
+    public final Map<Link, IClipConverter<? extends Clip, ? extends Clip>> converters = new HashMap<>();
     public final Icon icon;
 
     public ClipFactoryData(Icon icon, int color, Class<? extends UIClip> panelUI)

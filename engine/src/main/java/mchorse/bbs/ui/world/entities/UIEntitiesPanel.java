@@ -83,7 +83,7 @@ public class UIEntitiesPanel extends UICommonWorldEditor<Entity>
     @Override
     protected UISearchList<Entity> createSearchList(Consumer<List<Entity>> callback)
     {
-        return new UISearchList<Entity>(new UIEntityList(callback));
+        return new UISearchList<>(new UIEntityList(callback));
     }
 
     @Override

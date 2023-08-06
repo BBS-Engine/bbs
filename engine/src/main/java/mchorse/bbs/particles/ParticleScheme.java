@@ -35,10 +35,10 @@ public class ParticleScheme extends AbstractData
     public Link texture = DEFAULT_TEXTURE;
 
     /* Particle's curves */
-    public Map<String, ParticleCurve> curves = new HashMap<String, ParticleCurve>();
+    public Map<String, ParticleCurve> curves = new HashMap<>();
 
     /* Particle's components */
-    public List<ParticleComponentBase> components = new ArrayList<ParticleComponentBase>();
+    public List<ParticleComponentBase> components = new ArrayList<>();
     public List<IComponentEmitterInitialize> emitterInitializes;
     public List<IComponentEmitterUpdate> emitterUpdates;
     public List<IComponentParticleInitialize> particleInitializes;
@@ -126,7 +126,7 @@ public class ParticleScheme extends AbstractData
 
     public <T extends IComponentBase> List<T> getComponents(Class<T> clazz)
     {
-        List<T> list = new ArrayList<T>();
+        List<T> list = new ArrayList<>();
 
         for (ParticleComponentBase component : this.components)
         {

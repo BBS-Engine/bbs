@@ -59,7 +59,7 @@ public interface IFactory <T, D>
 
     public default Collection<String> getStringKeys()
     {
-        Set<String> keys = new HashSet<String>();
+        Set<String> keys = new HashSet<>();
 
         for (Link link : this.getKeys())
         {

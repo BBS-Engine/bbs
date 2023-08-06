@@ -21,7 +21,7 @@ public class ValueClips extends ValueGroup
     {
         super(id);
 
-        this.assign(new ArrayList<Clip>());
+        this.assign(new ArrayList<>());
     }
 
     /**
@@ -64,7 +64,7 @@ public class ValueClips extends ValueGroup
 
     public List<Clip> getClips(int tick, int maxLayer)
     {
-        Map<Integer, Clip> clipMap = new HashMap<Integer, Clip>();
+        Map<Integer, Clip> clipMap = new HashMap<>();
 
         for (Clip clip : this.clips)
         {
@@ -76,7 +76,7 @@ public class ValueClips extends ValueGroup
             }
         }
 
-        List<Clip> clips = new ArrayList<Clip>(clipMap.values());
+        List<Clip> clips = new ArrayList<>(clipMap.values());
 
         clips.sort(Comparator.comparingInt((a) -> a.layer.get()));
 
@@ -143,7 +143,7 @@ public class ValueClips extends ValueGroup
     @Override
     public void reset()
     {
-        this.assign(new ArrayList<Clip>());
+        this.assign(new ArrayList<>());
     }
 
     @Override

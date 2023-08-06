@@ -8,7 +8,7 @@ public class TTSGenerateResult
 {
     public Status status;
     public File folder;
-    public List<String> missingVoices = new ArrayList<String>();
+    public List<String> missingVoices = new ArrayList<>();
     public String message;
 
     public TTSGenerateResult(Status status)

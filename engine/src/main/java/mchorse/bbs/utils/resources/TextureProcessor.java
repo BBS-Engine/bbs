@@ -11,7 +11,7 @@ public class TextureProcessor
 {
     public static Pixels process(MultiLink multi)
     {
-        List<Pixels> images = new ArrayList<Pixels>();
+        List<Pixels> images = new ArrayList<>();
 
         int w = 0;
         int h = 0;

@@ -18,8 +18,8 @@ import java.util.List;
  */
 public class DamageControl
 {
-    public List<BlockEntry> blocks = new ArrayList<BlockEntry>();
-    public List<Entity> entities = new ArrayList<Entity>();
+    public List<BlockEntry> blocks = new ArrayList<>();
+    public List<Entity> entities = new ArrayList<>();
     public Entity target;
 
     public int maxDistance;

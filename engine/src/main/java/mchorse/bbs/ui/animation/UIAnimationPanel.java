@@ -72,8 +72,8 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
     private String lastChannel = "";
 
     private AnimationModel model;
-    private Set<String> channels = new HashSet<String>();
-    private Map<UITrackpad, KeyframeChannel> quick = new HashMap<UITrackpad, KeyframeChannel>();
+    private Set<String> channels = new HashSet<>();
+    private Map<UITrackpad, KeyframeChannel> quick = new HashMap<>();
 
     private StencilFormFramebuffer stencil = new StencilFormFramebuffer();
 
@@ -194,7 +194,7 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
         this.channels.clear();
         this.channels.addAll(this.model.getAvailableKeys());
 
-        Set<String> unique = new HashSet<String>();
+        Set<String> unique = new HashSet<>();
 
         for (String a : this.channels)
         {
@@ -219,7 +219,7 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
     {
         this.lastChannel = key;
 
-        List<String> keys = new ArrayList<String>();
+        List<String> keys = new ArrayList<>();
 
         if (key.equals("general"))
         {
@@ -241,7 +241,7 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
         Collections.sort(keys);
 
         /* Create dope sheets */
-        List<UISheet> sheets = new ArrayList<UISheet>();
+        List<UISheet> sheets = new ArrayList<>();
 
         for (String k : keys)
         {
@@ -392,7 +392,7 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
     {
         Form previous = pair.a;
         Form form = pair.a.getParent();
-        List<String> path = new ArrayList<String>();
+        List<String> path = new ArrayList<>();
 
         if (!pair.b.isEmpty())
         {

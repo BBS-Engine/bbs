@@ -33,7 +33,7 @@ public class UISchematicOverlayPanel extends UIOverlayPanel
 
     private ChunkDisplay display;
     private boolean first = true;
-    private Map<Integer, UIBlockVariant> blockVariants = new HashMap<Integer, UIBlockVariant>();
+    private Map<Integer, UIBlockVariant> blockVariants = new HashMap<>();
 
     public UISchematicOverlayPanel(BlockSet blockSet, CompoundTag schematic, Consumer<Chunk> callback)
     {

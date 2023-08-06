@@ -17,7 +17,7 @@ public class RecordRecorder
      */
     public Record record;
 
-    private List<Action> actions = new ArrayList<Action>();
+    private List<Action> actions = new ArrayList<>();
 
     /**
      * Recording mode (record actions, frames or both)

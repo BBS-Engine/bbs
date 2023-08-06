@@ -13,7 +13,7 @@ public class UIConvertWorldMetadataOverlayPanel extends UIWorldMetadataOverlayPa
 {
     public UIConvertWorldMetadataOverlayPanel(BlockSet blocks, Consumer<UIWorldMetadataOverlayPanel> callback)
     {
-        super(blocks, callback, new HashSet<String>());
+        super(blocks, callback, new HashSet<>());
 
         this.submit.label = UIKeys.WORLDS_METADATA_CONVERT;
     }

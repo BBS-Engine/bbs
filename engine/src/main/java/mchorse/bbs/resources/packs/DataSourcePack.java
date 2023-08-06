@@ -23,8 +23,8 @@ import java.util.Set;
 
 public class DataSourcePack implements ISourcePack
 {
-    private Map<Link, byte[]> resources = new HashMap<Link, byte[]>();
-    private Set<Link> keys = new HashSet<Link>();
+    private Map<Link, byte[]> resources = new HashMap<>();
+    private Set<Link> keys = new HashSet<>();
 
     private URL url;
 

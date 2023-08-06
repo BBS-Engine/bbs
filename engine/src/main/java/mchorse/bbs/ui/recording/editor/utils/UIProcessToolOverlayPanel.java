@@ -20,7 +20,7 @@ public class UIProcessToolOverlayPanel extends UIPromptOverlayPanel
         {
             if (callback != null)
             {
-                callback.accept(new Pair<String, String>(this.properties.getCurrentFirst(), str));
+                callback.accept(new Pair<>(this.properties.getCurrentFirst(), str));
             }
         };
 

@@ -17,7 +17,7 @@ import java.util.List;
 public class LineBuilder <T>
 {
     public float thickness;
-    public List<Line<T>> lines = new ArrayList<Line<T>>();
+    public List<Line<T>> lines = new ArrayList<>();
 
     public LineBuilder(float thickness)
     {
@@ -45,7 +45,7 @@ public class LineBuilder <T>
 
     public LineBuilder<T> push()
     {
-        return this.push(new Line<T>());
+        return this.push(new Line<>());
     }
 
     public LineBuilder<T> push(Line<T> line)
@@ -57,7 +57,7 @@ public class LineBuilder <T>
 
     public List<List<LinePoint<T>>> build()
     {
-        List<List<LinePoint<T>>> output = new ArrayList<List<LinePoint<T>>>();
+        List<List<LinePoint<T>>> output = new ArrayList<>();
 
         for (Line line : this.lines)
         {

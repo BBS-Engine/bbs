@@ -24,7 +24,7 @@ public class BodyPartManager implements IMapSerializable, IPuppet
      */
     Form owner;
 
-    private final List<BodyPart> parts = new ArrayList<BodyPart>();
+    private final List<BodyPart> parts = new ArrayList<>();
 
     public BodyPartManager(Form owner)
     {

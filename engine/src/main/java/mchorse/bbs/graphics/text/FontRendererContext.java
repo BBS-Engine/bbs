@@ -19,7 +19,7 @@ public class FontRendererContext
     public int skew;
     public boolean bold;
 
-    public final Set<IFontFormat> activeFormats = new HashSet<IFontFormat>();
+    public final Set<IFontFormat> activeFormats = new HashSet<>();
     public final Random random = new Random();
 
     public void reset()

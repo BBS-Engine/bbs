@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Animations
 {
-    public Map<String, AnimationPlayer> animations = new HashMap<String, AnimationPlayer>();
+    public Map<String, AnimationPlayer> animations = new HashMap<>();
 
     public AnimationPlayer get(String key)
     {

@@ -27,7 +27,7 @@ import java.util.Map;
 public class ModelFormRenderer extends FormRenderer<ModelForm>
 {
     private Matrix4f uiMatrix = new Matrix4f();
-    private Map<String, Matrix4f> bones = new HashMap<String, Matrix4f>();
+    private Map<String, Matrix4f> bones = new HashMap<>();
 
     private Entity entity = EntityArchitect.createDummy();
 
@@ -39,7 +39,7 @@ public class ModelFormRenderer extends FormRenderer<ModelForm>
     @Override
     public List<String> getBones()
     {
-        return new ArrayList<String>(this.form.getModel().model.getAllGroupKeys());
+        return new ArrayList<>(this.form.getModel().model.getAllGroupKeys());
     }
 
     @Override

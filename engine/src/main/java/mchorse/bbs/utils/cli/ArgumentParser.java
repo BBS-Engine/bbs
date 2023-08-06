@@ -13,7 +13,7 @@ import java.util.StringJoiner;
 
 public class ArgumentParser
 {
-    public Map<String, Argument> arguments = new HashMap<String, Argument>();
+    public Map<String, Argument> arguments = new HashMap<>();
 
     public ArgumentParser register(String name, ArgumentType type)
     {

@@ -24,17 +24,17 @@ public class VoxDocument
     /**
      * List of all chunks
      */
-    public List<Vox> chunks = new ArrayList<Vox>();
+    public List<Vox> chunks = new ArrayList<>();
 
     /**
      * Nodes
      */
-    public List<VoxBaseNode> nodes = new ArrayList<VoxBaseNode>();
+    public List<VoxBaseNode> nodes = new ArrayList<>();
 
     /**
      * Nodes
      */
-    public List<VoxLayer> layers = new ArrayList<VoxLayer>();
+    public List<VoxLayer> layers = new ArrayList<>();
 
     private int index;
 
@@ -43,9 +43,9 @@ public class VoxDocument
      */
     public List<LimbNode> generate()
     {
-        List<LimbNode> nodes = new ArrayList<LimbNode>();
-        Stack<Matrix3f> matStack = new Stack<Matrix3f>();
-        Stack<Vector3f> vecStack = new Stack<Vector3f>();
+        List<LimbNode> nodes = new ArrayList<>();
+        Stack<Matrix3f> matStack = new Stack<>();
+        Stack<Vector3f> vecStack = new Stack<>();
 
         this.index = 0;
 

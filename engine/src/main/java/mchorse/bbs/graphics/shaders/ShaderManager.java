@@ -22,7 +22,7 @@ public class ShaderManager implements IDisposable
     public static final Pattern pattern = Pattern.compile("^[\t ]*#import \\\"([\\w /_.:]+)\\\"\\s*$", Pattern.MULTILINE);
 
     public AssetProvider provider;
-    public Set<Shader> programs = new HashSet<Shader>();
+    public Set<Shader> programs = new HashSet<>();
 
     public ShaderManager(AssetProvider provider)
     {

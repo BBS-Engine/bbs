@@ -34,8 +34,8 @@ public class ModelParser
 
     private static Model parseGroups(Model model, MapType groups)
     {
-        Map<String, List<String>> hierarchy = new HashMap<String, List<String>>();
-        Map<String, ModelGroup> flatGroups = new HashMap<String, ModelGroup>();
+        Map<String, List<String>> hierarchy = new HashMap<>();
+        Map<String, ModelGroup> flatGroups = new HashMap<>();
 
         for (String key : groups.keys())
         {
@@ -44,7 +44,7 @@ public class ModelParser
 
             /* Fill hierarchy information */
             String parent = groupElement.has("parent") ? groupElement.getString("parent") : "";
-            List<String> list = hierarchy.computeIfAbsent(parent, (k) -> new ArrayList<String>());
+            List<String> list = hierarchy.computeIfAbsent(parent, (k) -> new ArrayList<>());
 
             list.add(group.id);
 

@@ -12,7 +12,7 @@ public class Animation
      */
     public double length;
 
-    public Map<String, AnimationPart> parts = new HashMap<String, AnimationPart>();
+    public Map<String, AnimationPart> parts = new HashMap<>();
 
     public Animation(String id)
     {

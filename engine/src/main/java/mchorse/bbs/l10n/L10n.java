@@ -29,8 +29,8 @@ public class L10n
 {
     public static final String DEFAULT_LANGUAGE = "en_US";
 
-    private Map<String, LangKey> strings = new HashMap<String, LangKey>();
-    private Set<Function<String, List<Link>>> langFiles = new LinkedHashSet<Function<String, List<Link>>>();
+    private Map<String, LangKey> strings = new HashMap<>();
+    private Set<Function<String, List<Link>>> langFiles = new LinkedHashSet<>();
     private List<Pair<String, String>> supportedLanguages;
 
     public L10n()
@@ -40,13 +40,13 @@ public class L10n
 
     public void reloadSupportedLanguages(List<Pair<String, String>> additionalLanguages)
     {
-        this.supportedLanguages = new ArrayList<Pair<String, String>>();
+        this.supportedLanguages = new ArrayList<>();
         this.supportedLanguages.addAll(Arrays.asList(
-            // new Pair<String, String>("Deutsch (de_DE)", "de_DE"),
-            new Pair<String, String>("English (en_US)", "en_US")
-            // new Pair<String, String>("Português (pt_BR)", "pt_BR"),
-            // new Pair<String, String>("Русский (ru_RU)", "ru_RU"),
-            // new Pair<String, String>("Українська (uk_UA)", "uk_UA")
+            // new Pair<>("Deutsch (de_DE)", "de_DE"),
+            new Pair<>("English (en_US)", "en_US")
+            // new Pair<>("Português (pt_BR)", "pt_BR"),
+            // new Pair<>("Русский (ru_RU)", "ru_RU"),
+            // new Pair<>("Українська (uk_UA)", "uk_UA")
         ));
         this.supportedLanguages.addAll(additionalLanguages);
     }
@@ -58,7 +58,7 @@ public class L10n
 
     public List<String> getSupportedLanguageCodes()
     {
-        List<String> codes = new ArrayList<String>();
+        List<String> codes = new ArrayList<>();
 
         for (Pair<String, String> pair : this.supportedLanguages)
         {
@@ -70,11 +70,11 @@ public class L10n
 
     public List<Label<String>> getSupportedLanguageLabels()
     {
-        List<Label<String>> labels = new ArrayList<Label<String>>();
+        List<Label<String>> labels = new ArrayList<>();
 
         for (Pair<String, String> pair : this.supportedLanguages)
         {
-            labels.add(new Label<String>(IKey.raw(pair.a), pair.b));
+            labels.add(new Label<>(IKey.raw(pair.a), pair.b));
         }
 
         return labels;
@@ -82,7 +82,7 @@ public class L10n
 
     public List<Link> getAllLinks(String lang)
     {
-        List<Link> links = new ArrayList<Link>();
+        List<Link> links = new ArrayList<>();
 
         for (Function<String, List<Link>> function : this.langFiles)
         {

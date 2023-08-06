@@ -13,11 +13,11 @@ import java.util.Set;
 
 public class Pose implements IMapSerializable
 {
-    private static Set<String> keys = new HashSet<String>();
+    private static Set<String> keys = new HashSet<>();
 
     public boolean staticPose;
 
-    public final Map<String, Transform> transforms = new HashMap<String, Transform>();
+    public final Map<String, Transform> transforms = new HashMap<>();
 
     public static void getAvailableKeys(String prefix, Set<String> keys)
     {

@@ -25,7 +25,7 @@ public class UITextEditor extends UITextarea<HighlightedTextLine>
     private int placements;
     private boolean lines = true;
 
-    private List<TextLineNumber> numbers = new ArrayList<TextLineNumber>(40);
+    private List<TextLineNumber> numbers = new ArrayList<>(40);
     private int lineNumber = 0;
 
     public UITextEditor(Consumer<String> callback)

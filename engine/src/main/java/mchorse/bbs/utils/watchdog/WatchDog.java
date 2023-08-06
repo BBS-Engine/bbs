@@ -24,10 +24,10 @@ import java.util.concurrent.TimeUnit;
 public class WatchDog implements Runnable
 {
     private Path folder;
-    private List<IWatchDogListener> listeners = new ArrayList<IWatchDogListener>();
+    private List<IWatchDogListener> listeners = new ArrayList<>();
 
     private WatchService service;
-    private Map<WatchKey, Path> keys = new HashMap<WatchKey, Path>();
+    private Map<WatchKey, Path> keys = new HashMap<>();
     private Thread thread;
     private boolean stopThread;
 

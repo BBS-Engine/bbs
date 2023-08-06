@@ -56,7 +56,7 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
     public UIScrollView keysView;
 
     private File target;
-    private List<UILanguageKey> keys = new ArrayList<UILanguageKey>();
+    private List<UILanguageKey> keys = new ArrayList<>();
     private boolean viewMissing;
     private long updateCompletion;
 
@@ -157,7 +157,7 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
         MapType base = this.compile(l10n, L10n.DEFAULT_LANGUAGE);
         MapType reference = referenceLanguage.equals(L10n.DEFAULT_LANGUAGE) ? null : this.compile(l10n, referenceLanguage);
 
-        List<LangKey> keys = new ArrayList<LangKey>(l10n.getStrings().values());
+        List<LangKey> keys = new ArrayList<>(l10n.getStrings().values());
 
         L10nUtils.sortList(keys);
 
@@ -224,7 +224,7 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
 
     private void save()
     {
-        Map<String, LangKey> keyMap = new HashMap<String, LangKey>();
+        Map<String, LangKey> keyMap = new HashMap<>();
 
         for (UILanguageKey key : this.keys)
         {
@@ -244,7 +244,7 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
     private void changeReference()
     {
         List<Label<String>> labels = BBS.getL10n().getSupportedLanguageLabels();
-        UILabelOverlayPanel<String> panel = new UILabelOverlayPanel<String>(UIKeysApp.LANGUAGE_EDITOR_REFERENCE_TITLE, labels, (str) ->
+        UILabelOverlayPanel<String> panel = new UILabelOverlayPanel<>(UIKeysApp.LANGUAGE_EDITOR_REFERENCE_TITLE, labels, (str) ->
         {
             referenceLanguage = str.value;
 
@@ -259,7 +259,7 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
 
     private void copy()
     {
-        List<LangKey> keys = new ArrayList<LangKey>();
+        List<LangKey> keys = new ArrayList<>();
         MapType translated = new MapType(false);
 
         for (UILanguageKey key : this.keys)

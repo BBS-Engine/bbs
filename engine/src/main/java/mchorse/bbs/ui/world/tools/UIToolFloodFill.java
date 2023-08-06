@@ -55,8 +55,8 @@ public class UIToolFloodFill extends UITool
     private void floodFill(RayTraceResult result)
     {
         Vector3i block = new Vector3i(result.block);
-        Set<Vector3i> checked = new HashSet<Vector3i>();
-        Stack<Vector3i> toCheck = new Stack<Vector3i>();
+        Set<Vector3i> checked = new HashSet<>();
+        Stack<Vector3i> toCheck = new Stack<>();
         int radius = (int) this.radius.getValue();
         boolean fillUpward = this.up.getValue();
 

@@ -18,8 +18,8 @@ public class UICirculate extends UIClickable<UICirculate>
     public boolean custom;
     public int customColor;
 
-    protected List<IKey> labels = new ArrayList<IKey>();
-    protected Set<Integer> disabled = new HashSet<Integer>();
+    protected List<IKey> labels = new ArrayList<>();
+    protected Set<Integer> disabled = new HashSet<>();
     protected int value = 0;
 
     public UICirculate(Consumer<UICirculate> callback)

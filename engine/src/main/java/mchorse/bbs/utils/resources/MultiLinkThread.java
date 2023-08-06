@@ -10,7 +10,7 @@ public class MultiLinkThread implements Runnable
     private static MultiLinkThread instance;
     private static Thread thread;
 
-    public Stack<MultiLink> links = new Stack<MultiLink>();
+    public Stack<MultiLink> links = new Stack<>();
 
     public static synchronized void add(MultiLink location)
     {

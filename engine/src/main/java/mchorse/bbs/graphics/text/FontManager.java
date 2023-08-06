@@ -19,7 +19,7 @@ import java.util.Set;
 
 public class FontManager implements IWatchDogListener
 {
-    public final Map<Link, FontRenderer> fontRenderers = new HashMap<Link, FontRenderer>();
+    public final Map<Link, FontRenderer> fontRenderers = new HashMap<>();
 
     private AssetProvider provider;
 
@@ -30,7 +30,7 @@ public class FontManager implements IWatchDogListener
 
     public Set<Link> getFontSet()
     {
-        Set<Link> linkSet = new HashSet<Link>();
+        Set<Link> linkSet = new HashSet<>();
         File fonts = BBS.getAssetsPath("fonts");
 
         linkSet.add(Link.assets("fonts/bbs_round.json"));

@@ -38,8 +38,8 @@ public class SoundManager implements IDisposable, IWatchDogListener
     private long context;
 
     private AssetProvider provider;
-    private Map<Link, SoundBuffer> buffers = new HashMap<Link, SoundBuffer>();
-    private List<SoundPlayer> sounds = new ArrayList<SoundPlayer>();
+    private Map<Link, SoundBuffer> buffers = new HashMap<>();
+    private List<SoundPlayer> sounds = new ArrayList<>();
 
     private long lastConnectivityCheck;
 

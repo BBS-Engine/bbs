@@ -54,12 +54,12 @@ public class MathBuilder
      * Named variables that can be used in math expression by this 
      * builder
      */
-    public Map<String, Variable> variables = new HashMap<String, Variable>();
+    public Map<String, Variable> variables = new HashMap<>();
 
     /**
      * Map of functions which can be used in the math expressions
      */
-    public Map<String, Class<? extends Function>> functions = new HashMap<String, Class<? extends Function>>();
+    public Map<String, Class<? extends Function>> functions = new HashMap<>();
 
     /**
      * Whether math expression parser should be strict about which characters
@@ -195,7 +195,7 @@ public class MathBuilder
      */
     public List<Object> breakdownChars(String[] chars)
     {
-        List<Object> symbols = new ArrayList<Object>();
+        List<Object> symbols = new ArrayList<>();
         String buffer = "";
         int len = chars.length;
         boolean string = false;
@@ -310,7 +310,7 @@ public class MathBuilder
      */
     private List<Object> trimSymbols(List<Object> symbols)
     {
-        List<Object> newSymbols = new ArrayList<Object>();
+        List<Object> newSymbols = new ArrayList<>();
 
         for (int i = 0; i < symbols.size(); i++)
         {
@@ -551,8 +551,8 @@ public class MathBuilder
             throw new Exception("Function '" + first + "' couldn't be found!");
         }
 
-        List<IExpression> values = new ArrayList<IExpression>();
-        List<Object> buffer = new ArrayList<Object>();
+        List<IExpression> values = new ArrayList<>();
+        List<Object> buffer = new ArrayList<>();
 
         for (Object o : args)
         {

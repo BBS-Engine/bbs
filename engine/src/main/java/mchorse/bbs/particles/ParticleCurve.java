@@ -15,7 +15,7 @@ import java.util.List;
 public class ParticleCurve
 {
     public ParticleCurveType type = ParticleCurveType.LINEAR;
-    public List<MolangExpression> nodes = new ArrayList<MolangExpression>();
+    public List<MolangExpression> nodes = new ArrayList<>();
     public MolangExpression input = MolangParser.ZERO;
     public MolangExpression range = MolangParser.ZERO;
     public Variable variable;

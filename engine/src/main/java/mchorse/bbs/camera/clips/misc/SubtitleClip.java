@@ -37,7 +37,7 @@ public class SubtitleClip extends CameraClip
         }
         else
         {
-            subtitles = new ArrayList<Subtitle>();
+            subtitles = new ArrayList<>();
 
             context.clipData.put("subtitles", subtitles);
         }

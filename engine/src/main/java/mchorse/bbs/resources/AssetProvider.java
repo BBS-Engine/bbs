@@ -15,16 +15,16 @@ import java.util.Set;
 
 public class AssetProvider
 {
-    private Map<String, List<ISourcePack>> sourcePacks = new HashMap<String, List<ISourcePack>>();
+    private Map<String, List<ISourcePack>> sourcePacks = new HashMap<>();
 
     public void registerFirst(ISourcePack pack)
     {
-        this.sourcePacks.computeIfAbsent(pack.getPrefix(), (k) -> new ArrayList<ISourcePack>()).add(0, pack);
+        this.sourcePacks.computeIfAbsent(pack.getPrefix(), (k) -> new ArrayList<>()).add(0, pack);
     }
 
     public void register(ISourcePack pack)
     {
-        this.sourcePacks.computeIfAbsent(pack.getPrefix(), (k) -> new ArrayList<ISourcePack>()).add(pack);
+        this.sourcePacks.computeIfAbsent(pack.getPrefix(), (k) -> new ArrayList<>()).add(pack);
     }
 
     public Collection<String> getSourceKeys()
@@ -78,7 +78,7 @@ public class AssetProvider
 
     public Collection<Link> getLinksFromPath(Link link, boolean recursive)
     {
-        Set<Link> links = new HashSet<Link>();
+        Set<Link> links = new HashSet<>();
         List<ISourcePack> packs = this.getPacks(link.source);
 
         for (ISourcePack pack : packs)

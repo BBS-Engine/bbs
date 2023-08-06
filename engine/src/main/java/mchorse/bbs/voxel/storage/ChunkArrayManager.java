@@ -17,7 +17,7 @@ import java.util.List;
  */
 public abstract class ChunkArrayManager extends ChunkManager
 {
-    public final List<ChunkCell> render = new ArrayList<ChunkCell>();
+    public final List<ChunkCell> render = new ArrayList<>();
     protected ChunkCell[] chunks;
 
     /* Chunk view position (in terms of chunks, like 16 blocks per unit) */

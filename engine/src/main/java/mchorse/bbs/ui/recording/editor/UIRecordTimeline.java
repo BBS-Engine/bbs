@@ -64,7 +64,7 @@ public class UIRecordTimeline extends UIElement
     private ToolContext context;
     private Range range = new Range(0, 0);
 
-    private List<Tool> tools = new ArrayList<Tool>();
+    private List<Tool> tools = new ArrayList<>();
 
     public UIRecordTimeline(IRecordEditor editor)
     {

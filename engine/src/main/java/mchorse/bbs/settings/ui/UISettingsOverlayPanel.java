@@ -86,7 +86,7 @@ public class UISettingsOverlayPanel extends UIOverlayPanel
             String catTooltipKey = UIValueFactory.getCategoryTooltipKey(category);
 
             UILabel label = UI.label(IKey.lang(catTitleKey)).labelAnchor(0, 1).background(() -> BBSSettings.primaryColor(Colors.A50));
-            List<UIElement> options = new ArrayList<UIElement>();
+            List<UIElement> options = new ArrayList<>();
 
             label.tooltip(IKey.lang(catTooltipKey), Direction.BOTTOM);
             this.options.add(label);

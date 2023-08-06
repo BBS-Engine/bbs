@@ -1,6 +1,6 @@
 package mchorse.bbs.settings;
 
-import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.data.DataToString;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueColors;
 import mchorse.bbs.settings.values.ValueDouble;
@@ -8,7 +8,7 @@ import mchorse.bbs.settings.values.ValueFloat;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.ValueLink;
 import mchorse.bbs.settings.values.ValueString;
-import mchorse.bbs.data.DataToString;
+import mchorse.bbs.settings.values.base.BaseValue;
 
 import java.io.File;
 import java.util.HashMap;
@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class SettingsManager
 {
-    public static final HashMap<String, Class<? extends BaseValue>> TYPES = new HashMap<String, Class<? extends BaseValue>>();
+    public static final HashMap<String, Class<? extends BaseValue>> TYPES = new HashMap<>();
 
-    public final Map<String, Settings> modules = new HashMap<String, Settings>();
+    public final Map<String, Settings> modules = new HashMap<>();
 
     static
     {

@@ -68,7 +68,7 @@ public class UICropEditor extends UICanvasEditor
 
         this.handle = -1;
 
-        Map<Integer, Vector2f> areas = new HashMap<Integer, Vector2f>();
+        Map<Integer, Vector2f> areas = new HashMap<>();
 
         Area area = new Area(this.calculateCropArea());
 

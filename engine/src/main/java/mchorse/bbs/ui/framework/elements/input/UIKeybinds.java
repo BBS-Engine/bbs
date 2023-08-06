@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class UIKeybinds extends UIScrollView
 {
-    public Map<String, KeybindCategory> keybinds = new HashMap<String, KeybindCategory>();
+    public Map<String, KeybindCategory> keybinds = new HashMap<>();
 
     public UIKeybinds()
     {
@@ -79,7 +79,7 @@ public class UIKeybinds extends UIScrollView
     public static class KeybindCategory
     {
         public IKey title;
-        public List<Keybind> keybinds = new ArrayList<Keybind>();
+        public List<Keybind> keybinds = new ArrayList<>();
         public boolean shouldClean;
 
         public KeybindCategory(IKey title)

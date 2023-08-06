@@ -23,7 +23,7 @@ public class Record extends AbstractData
     public static final short SIGNATURE = 1;
 
     public short version = SIGNATURE;
-    public List<Frame> frames = new ArrayList<Frame>();
+    public List<Frame> frames = new ArrayList<>();
     public boolean dirty;
 
     public Record()

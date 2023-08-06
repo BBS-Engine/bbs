@@ -54,7 +54,7 @@ public class JavaLauncher
 
     public List<String> getArguments(String mainClass)
     {
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
         String java = new File(System.getProperty("java.home"), "bin/java").getAbsolutePath();
 
         args.add(java);

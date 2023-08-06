@@ -63,7 +63,7 @@ public class UIFontOverlayPanel extends UIOverlayPanel
                 menu.action(Icons.REMOVE, UIKeys.FONT_EDITOR_CONTEXT_REMOVE, Colors.NEGATIVE, this::removeGlyph);
             }
         });
-        this.searchList = new UISearchList<Integer>(this.glyphsList);
+        this.searchList = new UISearchList<>(this.glyphsList);
         this.searchList.label(UIKeys.SEARCH);
 
         this.column.relative(this.content).xy(6, 6).w(1F, -12);

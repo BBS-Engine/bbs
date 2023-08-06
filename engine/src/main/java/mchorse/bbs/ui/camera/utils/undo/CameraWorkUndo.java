@@ -15,8 +15,8 @@ public abstract class CameraWorkUndo implements IUndo<StructureBase>
     public double viewMax;
     public int scroll;
 
-    private List<Integer> selectedBefore = new ArrayList<Integer>();
-    private List<Integer> selectedAfter = new ArrayList<Integer>();
+    private List<Integer> selectedBefore = new ArrayList<>();
+    private List<Integer> selectedAfter = new ArrayList<>();
 
     public List<Integer> getSelection(boolean redo)
     {

@@ -59,7 +59,7 @@ public class UITileSetRenderer extends UIModelRenderer
         Vector3f p0 = new Vector3f((float) this.camera.position.x, (float) this.camera.position.y, (float) this.camera.position.z);
         Vector3f p1 = new Vector3f(direction).mul(100).add(p0);
 
-        List<Vector4i> intersected = new ArrayList<Vector4i>();
+        List<Vector4i> intersected = new ArrayList<>();
 
         for (int i = 0, c = this.editor.getBlockSet().factories.size(); i < c; i++)
         {

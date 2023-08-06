@@ -163,7 +163,7 @@ public class VoxReader extends BinaryReader
 
     public Map<String, String> readDictionary(InputStream stream) throws Exception
     {
-        Map<String, String> dict = new HashMap<String, String>();
+        Map<String, String> dict = new HashMap<>();
 
         int keys = this.readInt(stream);
 

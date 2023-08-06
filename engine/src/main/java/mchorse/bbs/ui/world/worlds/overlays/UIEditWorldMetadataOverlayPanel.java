@@ -13,7 +13,7 @@ public class UIEditWorldMetadataOverlayPanel extends UIWorldMetadataOverlayPanel
 {
     public UIEditWorldMetadataOverlayPanel(BlockSet blocks, Consumer<UIWorldMetadataOverlayPanel> callback)
     {
-        super(blocks, callback, new HashSet<String>());
+        super(blocks, callback, new HashSet<>());
 
         this.submit.label = UIKeys.EDIT_WORLD_SUBMIT;
     }

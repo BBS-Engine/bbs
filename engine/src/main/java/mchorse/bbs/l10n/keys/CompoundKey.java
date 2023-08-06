@@ -9,7 +9,7 @@ public class CompoundKey implements IKey
 
     public CompoundKey(List<IKey> keys)
     {
-        this.keys = new ArrayList<IKey>(keys);
+        this.keys = new ArrayList<>(keys);
     }
 
     @Override

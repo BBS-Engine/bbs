@@ -40,7 +40,7 @@ public class RayTracer
             result.reset();
         }
 
-        List<IWorldObject> entities = new ArrayList<IWorldObject>();
+        List<IWorldObject> entities = new ArrayList<>();
 
         for (Entity entity : world.entities)
         {

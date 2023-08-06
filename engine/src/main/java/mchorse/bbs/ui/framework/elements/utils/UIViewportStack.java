@@ -16,8 +16,8 @@ import java.util.Stack;
  */
 public class UIViewportStack implements IViewportStack
 {
-    private Stack<Area> viewportStack = new Stack<Area>();
-    private List<Area> viewportAreas = new ArrayList<Area>();
+    private Stack<Area> viewportStack = new Stack<>();
+    private List<Area> viewportAreas = new ArrayList<>();
     private int shiftX;
     private int shiftY;
 
@@ -32,7 +32,7 @@ public class UIViewportStack implements IViewportStack
 
     public void applyFromElement(UIElement element)
     {
-        List<IViewport> elements = new ArrayList<IViewport>();
+        List<IViewport> elements = new ArrayList<>();
 
         while (element != null)
         {

@@ -21,7 +21,7 @@ import java.util.Queue;
 public abstract class ChunkManager implements IDisposable, IBlockAccessor
 {
     public final ChunkBuilder builder;
-    public final List<ChunkDisplay> dirty = new ArrayList<ChunkDisplay>();
+    public final List<ChunkDisplay> dirty = new ArrayList<>();
 
     /**
      * Chunk display size (how many blocks in a chunk display by width, height and depth).
@@ -197,11 +197,11 @@ public abstract class ChunkManager implements IDisposable, IBlockAccessor
      */
     protected void propagateLight(Vector3i block, int light)
     {
-        Queue<Vector3i> addingLight = new LinkedList<Vector3i>();
+        Queue<Vector3i> addingLight = new LinkedList<>();
 
         if (light == 0)
         {
-            Queue<Vector4i> removingLight = new LinkedList<Vector4i>();
+            Queue<Vector4i> removingLight = new LinkedList<>();
             int lighting = this.getLighting(block.x, block.y, block.z);
 
             removingLight.add(new Vector4i(block.x, block.y, block.z, lighting));

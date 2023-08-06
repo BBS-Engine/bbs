@@ -65,7 +65,7 @@ public abstract class EntityClip extends CameraClip
     {
         selector = selector.trim();
 
-        List<Entity> entities = new ArrayList<Entity>();
+        List<Entity> entities = new ArrayList<>();
 
         for (Entity entity : world.entities)
         {

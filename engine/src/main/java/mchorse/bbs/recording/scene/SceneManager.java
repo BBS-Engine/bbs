@@ -22,10 +22,10 @@ public class SceneManager extends BaseManager<Scene>
     /**
      * Currently loaded scenes
      */
-    private Map<String, Scene> scenes = new HashMap<String, Scene>();
+    private Map<String, Scene> scenes = new HashMap<>();
 
-    private List<String> toRemove = new ArrayList<String>();
-    private Map<String, Scene> toPut = new HashMap<String, Scene>();
+    private List<String> toRemove = new ArrayList<>();
+    private Map<String, Scene> toPut = new HashMap<>();
     private boolean ticking;
 
     public SceneManager(File folder)

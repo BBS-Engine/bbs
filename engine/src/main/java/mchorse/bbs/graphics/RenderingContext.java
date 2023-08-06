@@ -35,7 +35,7 @@ public class RenderingContext
 
     private LightsUBO lights = new LightsUBO(2);
 
-    private List<Runnable> scheduledRunnables = new ArrayList<Runnable>();
+    private List<Runnable> scheduledRunnables = new ArrayList<>();
 
     public void setup(FontRenderer font, VAOManager vaos, TextureManager textures)
     {

@@ -19,7 +19,7 @@ public class UIHUD
 {
     public UIScreen screen;
 
-    private List<Message> messages = new LinkedList<Message>();
+    private List<Message> messages = new LinkedList<>();
     private IconLabelEvent event;
 
     private int fade = 20;

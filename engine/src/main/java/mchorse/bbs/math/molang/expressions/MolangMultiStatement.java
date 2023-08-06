@@ -11,8 +11,8 @@ import java.util.StringJoiner;
 
 public class MolangMultiStatement extends MolangExpression
 {
-    public List<MolangExpression> expressions = new ArrayList<MolangExpression>();
-    public Map<String, Variable> locals = new HashMap<String, Variable>();
+    public List<MolangExpression> expressions = new ArrayList<>();
+    public Map<String, Variable> locals = new HashMap<>();
 
     public MolangMultiStatement(MolangParser context)
     {

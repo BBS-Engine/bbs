@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ModelCube implements IMapSerializable
 {
-    public List<ModelQuad> quads = new ArrayList<ModelQuad>();
+    public List<ModelQuad> quads = new ArrayList<>();
     public Vector3f origin = new Vector3f();
     public Vector3f size = new Vector3f();
     public Vector3f pivot = new Vector3f();

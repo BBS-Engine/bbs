@@ -203,7 +203,7 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
             return null;
         }
 
-        Map<String, List<Keyframe>> temp = new HashMap<String, List<Keyframe>>();
+        Map<String, List<Keyframe>> temp = new HashMap<>();
 
         for (String key : data.keys())
         {
@@ -211,7 +211,7 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
 
             for (int i = 0, c = list.size(); i < c; i++)
             {
-                List<Keyframe> keyframes = temp.computeIfAbsent(key, k -> new ArrayList<Keyframe>());
+                List<Keyframe> keyframes = temp.computeIfAbsent(key, k -> new ArrayList<>());
                 Keyframe keyframe = new Keyframe();
 
                 keyframe.fromData(list.getMap(i));
@@ -294,7 +294,7 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
     private void pasteKeyframesTo(UISheet sheet, List<Keyframe> keyframes, long offset)
     {
         long firstX = keyframes.get(0).tick;
-        List<Keyframe> toSelect = new ArrayList<Keyframe>();
+        List<Keyframe> toSelect = new ArrayList<>();
 
         if (Window.isCtrlPressed())
         {

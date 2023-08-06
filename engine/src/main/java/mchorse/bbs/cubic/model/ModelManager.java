@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class ModelManager implements IDisposable, IWatchDogListener
 {
-    public final Map<String, CubicModel> models = new HashMap<String, CubicModel>();
-    public final List<IModelLoader> loaders = new ArrayList<IModelLoader>();
+    public final Map<String, CubicModel> models = new HashMap<>();
+    public final List<IModelLoader> loaders = new ArrayList<>();
     public final AssetProvider provider;
     public final MolangParser parser;
 

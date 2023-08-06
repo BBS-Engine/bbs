@@ -25,7 +25,7 @@ public class UIPanelBase <T extends UIElement> extends UIElement
 {
     public T view;
     public UIScrollView buttons;
-    public List<T> panels = new ArrayList<T>();
+    public List<T> panels = new ArrayList<>();
     public Direction direction;
 
     public UIPanelBase()

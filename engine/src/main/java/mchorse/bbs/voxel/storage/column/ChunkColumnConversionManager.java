@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class ChunkColumnConversionManager extends ChunkManager
 {
-    public final Map<Vector2i, ChunkColumnCell> chunks = new HashMap<Vector2i, ChunkColumnCell>(256);
+    public final Map<Vector2i, ChunkColumnCell> chunks = new HashMap<>(256);
 
     public int y;
     public int h;

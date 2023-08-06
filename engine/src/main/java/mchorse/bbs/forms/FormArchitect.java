@@ -21,8 +21,8 @@ import java.util.function.Function;
 
 public class FormArchitect extends MapFactory<Form, Void>
 {
-    public Map<Link, Function<Form, UIForm>> editors = new HashMap<Link, Function<Form, UIForm>>();
-    public List<FormCategory> categories = new ArrayList<FormCategory>();
+    public Map<Link, Function<Form, UIForm>> editors = new HashMap<>();
+    public List<FormCategory> categories = new ArrayList<>();
 
     public static File getUserCategoriesFile()
     {
@@ -78,7 +78,7 @@ public class FormArchitect extends MapFactory<Form, Void>
 
     public List<UserFormCategory> getUserCategories()
     {
-        List<UserFormCategory> categories = new ArrayList<UserFormCategory>();
+        List<UserFormCategory> categories = new ArrayList<>();
 
         for (FormCategory category : this.categories)
         {

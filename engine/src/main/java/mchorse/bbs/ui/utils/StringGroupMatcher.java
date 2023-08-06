@@ -61,7 +61,7 @@ public class StringGroupMatcher
             }
         }
 
-        return new Pair<Integer, Integer>(min, max);
+        return new Pair<>(min, max);
     }
 
     private boolean matchSelectGroup(StringGroup group, String character)

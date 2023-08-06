@@ -82,7 +82,7 @@ public class UICameraUtils
     {
         menu.action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_POSITION, Colors.NEGATIVE, () ->
         {
-            Map<String, Double> map = new LinkedHashMap<String, Double>();
+            Map<String, Double> map = new LinkedHashMap<>();
 
             copyPoint(map, value.getPoint().get());
             copyAngle(map, value.getAngle().get());
@@ -115,7 +115,7 @@ public class UICameraUtils
     {
         menu.shadow().action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_POINT, Colors.POSITIVE, () ->
         {
-            Map<String, Double> map = new LinkedHashMap<String, Double>();
+            Map<String, Double> map = new LinkedHashMap<>();
 
             copyPoint(map, value.get());
             Window.setClipboard(mapToString(map));
@@ -160,7 +160,7 @@ public class UICameraUtils
     {
         menu.shadow().action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_ANGLE, Colors.INACTIVE, () ->
         {
-            Map<String, Double> map = new LinkedHashMap<String, Double>();
+            Map<String, Double> map = new LinkedHashMap<>();
 
             copyAngle(map, value.get());
             Window.setClipboard(mapToString(map));
@@ -217,7 +217,7 @@ public class UICameraUtils
 
     private static Map<String, Double> stringToMap(String string)
     {
-        Map<String, Double> map = new LinkedHashMap<String, Double>();
+        Map<String, Double> map = new LinkedHashMap<>();
 
         for (String line : string.split("\n"))
         {

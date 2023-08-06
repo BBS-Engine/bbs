@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class PoseProperty extends BaseTweenProperty<Pose>
 {
-    private static Set<String> keys = new HashSet<String>();
+    private static Set<String> keys = new HashSet<>();
 
     private Pose i = new Pose();
 
