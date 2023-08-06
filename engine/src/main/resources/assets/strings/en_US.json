@@ -58,8 +58,6 @@
     "bbs.config.data.tooltip": "Data management options",
     "bbs.config.editor.aspect_ratio": "Aspect ratio",
     "bbs.config.editor.aspect_ratio-comment": "Aspect ratio for camera editor's letterbox feature",
-    "bbs.config.editor.auto_save": "Perioidic auto-save",
-    "bbs.config.editor.auto_save-comment": "This option allows to configure how often will a camera profile save automatically in seconds, 0 means disabled",
     "bbs.config.editor.center_lines": "Center lines",
     "bbs.config.editor.center_lines-comment": "Center lines",
     "bbs.config.editor.crosshair": "Crosshair",

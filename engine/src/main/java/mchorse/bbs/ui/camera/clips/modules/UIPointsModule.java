@@ -1,12 +1,11 @@
 package mchorse.bbs.ui.camera.clips.modules;
 
-import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.clips.overwrite.PathClip;
+import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValuePositions;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.UICameraPanel;
-import mchorse.bbs.ui.camera.clips.UIClip;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.ScrollArea;
 import mchorse.bbs.ui.utils.ScrollDirection;
@@ -37,7 +36,7 @@ public class UIPointsModule extends UIAbstractModule
      */
     public int index = 0;
 
-    public UIPointsModule(UICameraPanel editor, Consumer<Integer> picker)
+    public UIPointsModule(IUICameraWorkDelegate editor, Consumer<Integer> picker)
     {
         super(editor);
 
@@ -55,9 +54,9 @@ public class UIPointsModule extends UIAbstractModule
         });
     }
 
-    private IUndo<CameraWork> undo(Consumer<ValuePositions> consumer)
+    private IUndo undo(Consumer<ValuePositions> consumer)
     {
-        return UIClip.undo(this.editor, this.path.points, consumer).noMerging();
+        return this.editor.createUndo(this.path.points, consumer).noMerging();
     }
 
     public void setIndex(int index)
@@ -100,7 +99,7 @@ public class UIPointsModule extends UIAbstractModule
         {
             this.editor.postUndo(this.undo((positions) ->
             {
-                positions.get().add(this.editor.getPosition());
+                positions.get().add(new Position(this.editor.getCamera()));
             }));
             this.index = MathUtils.clamp(this.index + 1, 0, this.path.points.get().size() - 1);
         }
@@ -108,7 +107,7 @@ public class UIPointsModule extends UIAbstractModule
         {
             this.editor.postUndo(this.undo((positions) ->
             {
-                positions.get().add(this.index + 1, this.editor.getPosition());
+                positions.get().add(this.index + 1, new Position(this.editor.getCamera()));
             }));
             this.index = this.index + 1;
         }

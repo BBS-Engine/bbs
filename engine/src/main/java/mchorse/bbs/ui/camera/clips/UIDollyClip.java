@@ -5,7 +5,7 @@ import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.clips.overwrite.DollyClip;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.UICameraPanel;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
@@ -30,7 +30,7 @@ public class UIDollyClip extends UIClip<DollyClip>
     public UITrackpad yaw;
     public UITrackpad pitch;
 
-    public UIDollyClip(DollyClip clip, UICameraPanel editor)
+    public UIDollyClip(DollyClip clip, IUICameraWorkDelegate editor)
     {
         super(clip, editor);
     }

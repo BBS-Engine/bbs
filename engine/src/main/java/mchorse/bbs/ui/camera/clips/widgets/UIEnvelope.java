@@ -69,7 +69,7 @@ public class UIEnvelope extends UIElement
         });
         this.editKeyframes = new UIButton(UIKeys.CAMERA_PANELS_EDIT_KEYFRAMES, (b) ->
         {
-            this.panel.editor.timeline.embedView(this.channel);
+            this.panel.editor.embedView(this.channel);
             this.channel.resetView();
         });
         this.channel = new UICameraGraphEditor(panel.editor);

@@ -3,7 +3,7 @@ package mchorse.bbs.ui.camera.clips;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.clips.modifiers.OrbitClip;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.UICameraPanel;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UITextboxHelp;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
@@ -19,7 +19,7 @@ public class UIOrbitClip extends UIClip<OrbitClip>
     public UIPointModule offset;
     public UITrackpad distance;
 
-    public UIOrbitClip(OrbitClip clip, UICameraPanel editor)
+    public UIOrbitClip(OrbitClip clip, IUICameraWorkDelegate editor)
     {
         super(clip, editor);
     }
@@ -32,7 +32,7 @@ public class UIOrbitClip extends UIClip<OrbitClip>
         this.selector = new UITextboxHelp(500, (str) ->
         {
             this.editor.postUndo(this.undo(this.clip.selector, (selector) -> selector.set(str)));
-            this.clip.tryFindingEntity(editor.getContext().menu.bridge.get(IBridgeWorld.class).getWorld());
+            this.clip.tryFindingEntity(this.getContext().menu.bridge.get(IBridgeWorld.class).getWorld());
         });
         this.selector.link(UILookClip.SELECTOR_HELP).tooltip(UIKeys.CAMERA_PANELS_SELECTOR_TOOLTIP);
 

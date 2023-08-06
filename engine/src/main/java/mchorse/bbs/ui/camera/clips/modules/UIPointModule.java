@@ -4,7 +4,7 @@ import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.camera.values.ValuePoint;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.UICameraPanel;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
@@ -23,30 +23,30 @@ public class UIPointModule extends UIAbstractModule
 
     public ValuePoint point;
 
-    public UIPointModule(UICameraPanel editor)
+    public UIPointModule(IUICameraWorkDelegate editor)
     {
         this(editor, UIKeys.CAMERA_PANELS_POSITION);
     }
 
-    public UIPointModule(UICameraPanel editor, IKey title)
+    public UIPointModule(IUICameraWorkDelegate editor, IKey title)
     {
         super(editor);
 
         this.x = new UITrackpad((value) ->
         {
-            this.editor.postUndo(UIClip.undo(this.editor, this.point, (point) -> point.get().x = value));
+            this.editor.postUndo(this.editor.createUndo(this.point, (point) -> point.get().x = value));
         });
         this.x.tooltip(UIKeys.X);
 
         this.y = new UITrackpad((value) ->
         {
-            this.editor.postUndo(UIClip.undo(this.editor, this.point, (point) -> point.get().y = value));
+            this.editor.postUndo(this.editor.createUndo(this.point, (point) -> point.get().y = value));
         });
         this.y.tooltip(UIKeys.Y);
 
         this.z = new UITrackpad((value) ->
         {
-            this.editor.postUndo(UIClip.undo(this.editor, this.point, (point) -> point.get().z = value));
+            this.editor.postUndo(this.editor.createUndo(this.point, (point) -> point.get().z = value));
         });
         this.z.tooltip(UIKeys.Z);
 

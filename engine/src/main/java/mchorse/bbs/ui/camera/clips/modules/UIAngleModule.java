@@ -3,7 +3,7 @@ package mchorse.bbs.ui.camera.clips.modules;
 import mchorse.bbs.camera.data.Angle;
 import mchorse.bbs.camera.values.ValueAngle;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.UICameraPanel;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
@@ -23,31 +23,31 @@ public class UIAngleModule extends UIAbstractModule
 
     public ValueAngle angle;
 
-    public UIAngleModule(UICameraPanel editor)
+    public UIAngleModule(IUICameraWorkDelegate editor)
     {
         super(editor);
 
         this.yaw = new UITrackpad((value) ->
         {
-            this.editor.postUndo(UIClip.undo(this.editor, this.angle, (angle) -> angle.get().yaw = value.floatValue()));
+            this.editor.postUndo(this.editor.createUndo(this.angle, (angle) -> angle.get().yaw = value.floatValue()));
         });
         this.yaw.tooltip(UIKeys.CAMERA_PANELS_YAW);
 
         this.pitch = new UITrackpad((value) ->
         {
-            this.editor.postUndo(UIClip.undo(this.editor, this.angle, (angle) -> angle.get().pitch = value.floatValue()));
+            this.editor.postUndo(this.editor.createUndo(this.angle, (angle) -> angle.get().pitch = value.floatValue()));
         });
         this.pitch.tooltip(UIKeys.CAMERA_PANELS_PITCH);
 
         this.roll = new UITrackpad((value) ->
         {
-            this.editor.postUndo(UIClip.undo(this.editor, this.angle, (angle) -> angle.get().roll = value.floatValue()));
+            this.editor.postUndo(this.editor.createUndo(this.angle, (angle) -> angle.get().roll = value.floatValue()));
         });
         this.roll.tooltip(UIKeys.CAMERA_PANELS_ROLL);
 
         this.fov = new UITrackpad((value) ->
         {
-            this.editor.postUndo(UIClip.undo(this.editor, this.angle, (angle) -> angle.get().fov = value.floatValue()));
+            this.editor.postUndo(this.editor.createUndo(this.angle, (angle) -> angle.get().fov = value.floatValue()));
         });
         this.fov.tooltip(UIKeys.CAMERA_PANELS_FOV);
 

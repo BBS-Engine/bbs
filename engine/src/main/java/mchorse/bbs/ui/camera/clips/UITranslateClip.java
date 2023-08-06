@@ -1,7 +1,7 @@
 package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.modifiers.TranslateClip;
-import mchorse.bbs.ui.camera.UICameraPanel;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.clips.widgets.UIBitToggle;
 
@@ -10,7 +10,7 @@ public class UITranslateClip extends UIClip<TranslateClip>
     public UIPointModule point;
     public UIBitToggle active;
 
-    public UITranslateClip(TranslateClip clip, UICameraPanel editor)
+    public UITranslateClip(TranslateClip clip, IUICameraWorkDelegate editor)
     {
         super(clip, editor);
     }
@@ -20,8 +20,8 @@ public class UITranslateClip extends UIClip<TranslateClip>
     {
         super.registerUI();
 
-        this.point = new UIPointModule(editor);
-        this.active = new UIBitToggle((value) -> editor.postUndo(this.undo(this.clip.active, (active) -> active.set(value)))).point();
+        this.point = new UIPointModule(this.editor);
+        this.active = new UIBitToggle((value) -> this.editor.postUndo(this.undo(this.clip.active, (active) -> active.set(value)))).point();
     }
 
     @Override

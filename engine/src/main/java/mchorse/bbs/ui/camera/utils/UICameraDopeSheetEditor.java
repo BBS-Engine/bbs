@@ -1,15 +1,20 @@
 package mchorse.bbs.ui.camera.utils;
 
 import mchorse.bbs.camera.clips.overwrite.KeyframeClip;
-import mchorse.bbs.ui.camera.UICameraPanel;
-import mchorse.bbs.ui.camera.clips.UIKeyframeClip;
+import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.ui.UIKeys;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UISheet;
+import mchorse.bbs.utils.colors.Colors;
 
 import java.util.List;
 
 public class UICameraDopeSheetEditor extends UICameraKeyframesEditor<UIDopeSheetView>
 {
-    public UICameraDopeSheetEditor(UICameraPanel editor)
+    public static final IKey[] TITLES = {UIKeys.CAMERA_PANELS_ALL, UIKeys.X, UIKeys.Y, UIKeys.Z, UIKeys.CAMERA_PANELS_YAW, UIKeys.CAMERA_PANELS_PITCH, UIKeys.CAMERA_PANELS_ROLL, UIKeys.CAMERA_PANELS_FOV};
+    public static final int[] COLORS = {Colors.RED, Colors.GREEN, Colors.BLUE, Colors.CYAN, Colors.MAGENTA, Colors.YELLOW, Colors.LIGHTEST_GRAY};
+
+    public UICameraDopeSheetEditor(IUICameraWorkDelegate editor)
     {
         super(editor);
 
@@ -29,19 +34,12 @@ public class UICameraDopeSheetEditor extends UICameraKeyframesEditor<UIDopeSheet
         sheets.clear();
         this.keyframes.clearSelection();
 
-        if (this.editor.panel == null)
-        {
-            return;
-        }
-
-        UIKeyframeClip panel = (UIKeyframeClip) this.editor.panel;
-
         this.valueChannels.clear();
 
         for (int i = 0; i < clip.channels.length; i++)
         {
             this.valueChannels.add(clip.channels[i]);
-            sheets.add(new UISheet(String.valueOf(i), panel.titles[i + 1], panel.colors[i], clip.channels[i].get()));
+            sheets.add(new UISheet(String.valueOf(i), TITLES[i + 1], COLORS[i], clip.channels[i].get()));
         }
 
         this.frameButtons.setVisible(false);

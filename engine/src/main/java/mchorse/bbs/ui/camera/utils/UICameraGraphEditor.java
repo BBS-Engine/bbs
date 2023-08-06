@@ -2,6 +2,7 @@ package mchorse.bbs.ui.camera.utils;
 
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.camera.UICameraPanel;
 
 /**
@@ -9,7 +10,7 @@ import mchorse.bbs.ui.camera.UICameraPanel;
  */
 public class UICameraGraphEditor extends UICameraKeyframesEditor<UIGraphView>
 {
-    public UICameraGraphEditor(UICameraPanel editor)
+    public UICameraGraphEditor(IUICameraWorkDelegate editor)
     {
         super(editor);
 

@@ -10,7 +10,7 @@ import mchorse.bbs.recording.scene.Replay;
 import mchorse.bbs.recording.scene.Scene;
 import mchorse.bbs.recording.scene.SceneClip;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.UICameraPanel;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
@@ -28,16 +28,16 @@ public class UISceneClip extends UIClip<SceneClip>
     public UITrackpad offset;
     public UIButton editRecord;
 
-    public static void openRecordEditor(UICameraPanel editor, SceneClip clip, Record record)
+    public static void openRecordEditor(IUICameraWorkDelegate editor, SceneClip clip, Record record)
     {
         UIDedicatedRecordEditor recordEditor = new UIDedicatedRecordEditor(editor, clip);
 
         recordEditor.fill(record);
-        recordEditor.setTick(editor.timeline.tick);
-        editor.timeline.embedView(recordEditor);
+        recordEditor.setTick(editor.getCursor());
+        editor.embedView(recordEditor);
     }
 
-    public UISceneClip(SceneClip clip, UICameraPanel editor)
+    public UISceneClip(SceneClip clip, IUICameraWorkDelegate editor)
     {
         super(clip, editor);
     }
@@ -56,13 +56,13 @@ public class UISceneClip extends UIClip<SceneClip>
         });
 
         this.offset = new UITrackpad((v) -> {
-            this.editor.timeline.updateClipProperty(this.clip.offset, TimeUtils.fromTime(v));
+            this.editor.updateClipProperty(this.clip.offset, TimeUtils.fromTime(v));
         });
         this.offset.limit(0);
 
         this.editRecord = new UIButton(ContentType.RECORDS.getPickLabel(), (b) ->
         {
-            Scene scene = BBSData.getScenes().get(this.clip.scene.get(), this.editor.dashboard.bridge.get(IBridgeWorld.class).getWorld());
+            Scene scene = BBSData.getScenes().get(this.clip.scene.get(), this.getContext().menu.bridge.get(IBridgeWorld.class).getWorld());
 
             if (scene == null)
             {

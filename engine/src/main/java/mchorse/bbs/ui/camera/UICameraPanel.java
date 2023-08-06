@@ -12,6 +12,8 @@ import mchorse.bbs.camera.clips.misc.Subtitle;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.camera.data.Position;
+import mchorse.bbs.camera.data.StructureBase;
+import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.graphics.Draw;
 import mchorse.bbs.graphics.Framebuffer;
@@ -23,6 +25,8 @@ import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.recording.RecordComponent;
 import mchorse.bbs.recording.scene.SceneClip;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.settings.values.ValueInt;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.clips.UIClip;
@@ -31,6 +35,7 @@ import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.IFlightSupported;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.framework.UIContext;
+import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.utils.UIDraggable;
 import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
@@ -60,6 +65,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -67,7 +73,7 @@ import java.util.function.Supplier;
  *
  * This GUI provides tools for managing camera profiles.
  */
-public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements IFlightSupported
+public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements IFlightSupported, IUICameraWorkDelegate
 {
     private static Map<Class, Integer> scrolls = new HashMap<Class, Integer>();
 
@@ -77,7 +83,6 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
     private RunnerCameraController runner;
 
     private boolean lastRunning;
-    private long lastSave = 0;
 
     /**
      * Position
@@ -106,6 +111,8 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
     private Camera camera = new Camera();
     private Entity hoveredEntity;
+
+    private UndoManager<StructureBase> undoManager;
 
     /**
      * Initialize the camera editor with a camera profile.
@@ -244,67 +251,6 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         return this.runner;
     }
 
-    public void pickClip(Clip clip)
-    {
-        if (this.panel != null)
-        {
-            if (this.panel.clip == clip)
-            {
-                this.panel.fillData();
-
-                return;
-            }
-            else
-            {
-                this.panel.removeFromParent();
-            }
-        }
-
-        if (clip == null)
-        {
-            this.panel = null;
-            this.timeline.clearSelection();
-
-            return;
-        }
-
-        try
-        {
-            if (this.panel != null)
-            {
-                scrolls.put(this.panel.getClass(), this.panel.panels.scroll.scroll);
-            }
-
-            this.timeline.embedView(null);
-
-            UIClip panel = (UIClip) BBS.getFactoryClips().getData(clip).panelUI.getConstructors()[0].newInstance(clip, this);
-
-            this.panel = panel;
-            this.panel.relative(this.editor).w(1F).hTo(this.timeline.area);
-            this.editor.addAfter(this.timeline, this.panel);
-
-            this.panel.fillData();
-            this.panel.resize();
-
-            Integer scroll = scrolls.get(this.panel.getClass());
-
-            if (scroll != null)
-            {
-                this.panel.panels.scroll.scroll = scroll;
-                this.panel.panels.scroll.clamp();
-            }
-
-            if (this.isFlightEnabled())
-            {
-                this.timeline.setTick(clip.tick.get(), true);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void open()
     {
@@ -401,6 +347,8 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             this.disableContext();
         }
 
+        this.undoManager = data == null ? null : new UndoManager<StructureBase>(30);
+
         super.fill(data);
 
         this.plause.setEnabled(data != null);
@@ -409,56 +357,15 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         this.runner.setWork(data);
         this.timeline.setClips(data == null ? null : data.clips);
         this.pickClip(null);
-
-        this.lastSave = System.currentTimeMillis();
     }
 
-    public void postUndo(IUndo<CameraWork> undo)
+    private void handleUndos(IUndo<StructureBase> undo, boolean redo)
     {
-        this.postUndo(undo, true, false);
-    }
-
-    public void postUndo(IUndo<CameraWork> undo, boolean apply)
-    {
-        this.postUndo(undo, apply, false);
-    }
-
-    public void postUndoCallback(IUndo<CameraWork> undo)
-    {
-        this.postUndo(undo, true, true);
-    }
-
-    public void postUndo(IUndo<CameraWork> undo, boolean apply, boolean callback)
-    {
-        if (undo == null)
-        {
-            throw new RuntimeException("Given undo is null!");
-        }
-
-        CameraWork work = this.data;
-        UndoManager<CameraWork> undoManager = work.undoManager;
-
-        undoManager.setCallback(callback ? this::handleUndos : null);
-
-        if (apply)
-        {
-            undoManager.pushApplyUndo(undo, work);
-        }
-        else
-        {
-            undoManager.pushUndo(undo);
-        }
-
-        undoManager.setCallback(this::handleUndos);
-    }
-
-    private void handleUndos(IUndo<CameraWork> undo, boolean redo)
-    {
-        IUndo<CameraWork> anotherUndo = undo;
+        IUndo<StructureBase> anotherUndo = undo;
 
         if (anotherUndo instanceof CompoundUndo)
         {
-            anotherUndo = ((CompoundUndo<CameraWork>) anotherUndo).getFirst(ValueChangeUndo.class);
+            anotherUndo = ((CompoundUndo<StructureBase>) anotherUndo).getFirst(ValueChangeUndo.class);
         }
 
         if (anotherUndo instanceof ValueChangeUndo)
@@ -497,7 +404,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             return;
         }
 
-        IUndo<CameraWork> undo = this.data.undoManager.getCurrentUndo();
+        IUndo<StructureBase> undo = this.undoManager.getCurrentUndo();
 
         if (undo != null)
         {
@@ -509,7 +416,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
     {
         CameraWork work = this.data;
 
-        if (work != null && work.undoManager.undo(work))
+        if (work != null && this.undoManager.undo(work))
         {
             UIUtils.playClick();
         }
@@ -519,7 +426,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
     {
         CameraWork work = this.data;
 
-        if (work != null && work.undoManager.redo(work))
+        if (work != null && this.undoManager.redo(work))
         {
             UIUtils.playClick();
         }
@@ -546,15 +453,6 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
     }
 
     /**
-     * Teleport player and setup position, motion and angle based on the value
-     * was scrubbed from playback scrubber.
-     */
-    public void scrubbed(int value, boolean notify)
-    {
-        this.runner.ticks = value;
-    }
-
-    /**
      * Set flight mode
      */
     public void setFlight(boolean flight)
@@ -577,27 +475,9 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         }
     }
 
-    public void fillData()
-    {
-        if (this.panel != null)
-        {
-            this.panel.fillData();
-        }
-    }
-
     public int getSelected()
     {
-        return this.panel == null ? -1 : this.data.getIndex(this.panel.clip);
-    }
-
-    public Clip getClip()
-    {
-        return this.panel == null ? null : this.panel.clip;
-    }
-
-    public Camera getCamera()
-    {
-        return this.dashboard.bridge.get(IBridgeCamera.class).getCamera();
+        return this.panel == null ? -1 : this.data.clips.getIndex(this.panel.clip);
     }
 
     /**
@@ -610,7 +490,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
     private void editClip()
     {
-        Position current = this.getPosition();
+        Position current = new Position(this.getCamera());
 
         if (this.panel != null)
         {
@@ -621,11 +501,6 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         }
 
         this.lastPosition.set(current);
-    }
-
-    public Position getPosition()
-    {
-        return new Position(this.getCamera());
     }
 
     private void jumpToNextClip()
@@ -731,27 +606,6 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
     private void updateLogic(UIContext context)
     {
         Clip clip = this.getClip();
-        int autoSave = BBSSettings.editorAutoSave.get();
-
-        if (autoSave > 0)
-        {
-            long current = System.currentTimeMillis();
-
-            if (this.lastSave == 0)
-            {
-                this.lastSave = current;
-            }
-
-            if (current >= this.lastSave + autoSave * 1000)
-            {
-                if (this.isFlightDisabled())
-                {
-                    this.save();
-                }
-
-                this.lastSave = current;
-            }
-        }
 
         /* Loop fixture */
         if (BBSSettings.editorLoop.get() && this.isRunning())
@@ -989,5 +843,176 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
         context.batcher.flush();
         context.render.getUBO().update(context.render.projection, Matrices.EMPTY_4F);
+    }
+
+    /* IUICameraWorkDelegate implementation */
+
+    @Override
+    public Camera getCamera()
+    {
+        return this.dashboard.bridge.get(IBridgeCamera.class).getCamera();
+    }
+
+    @Override
+    public Clip getClip()
+    {
+        return this.panel == null ? null : this.panel.clip;
+    }
+
+    @Override
+    public void pickClip(Clip clip)
+    {
+        if (this.panel != null)
+        {
+            if (this.panel.clip == clip)
+            {
+                this.panel.fillData();
+
+                return;
+            }
+            else
+            {
+                this.panel.removeFromParent();
+            }
+        }
+
+        if (clip == null)
+        {
+            this.panel = null;
+            this.timeline.clearSelection();
+
+            return;
+        }
+
+        try
+        {
+            if (this.panel != null)
+            {
+                scrolls.put(this.panel.getClass(), this.panel.panels.scroll.scroll);
+            }
+
+            this.timeline.embedView(null);
+
+            UIClip panel = (UIClip) BBS.getFactoryClips().getData(clip).panelUI.getConstructors()[0].newInstance(clip, this);
+
+            this.panel = panel;
+            this.panel.relative(this.editor).w(1F).hTo(this.timeline.area);
+            this.editor.addAfter(this.timeline, this.panel);
+
+            this.panel.fillData();
+            this.panel.resize();
+
+            Integer scroll = scrolls.get(this.panel.getClass());
+
+            if (scroll != null)
+            {
+                this.panel.panels.scroll.scroll = scroll;
+                this.panel.panels.scroll.clamp();
+            }
+
+            if (this.isFlightEnabled())
+            {
+                this.timeline.setTick(clip.tick.get(), true);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public int getCursor()
+    {
+        return this.timeline.tick;
+    }
+
+    @Override
+    public void setCursor(int value, boolean notify)
+    {
+        this.runner.ticks = value;
+    }
+
+    @Override
+    public void setTickAndNotify(int tick)
+    {
+        this.timeline.setTickAndNotify(tick);
+    }
+
+    @Override
+    public boolean canUseKeybinds()
+    {
+        return this.isFlightDisabled();
+    }
+
+    @Override
+    public void fillData()
+    {
+        if (this.panel != null)
+        {
+            this.panel.fillData();
+        }
+    }
+
+    @Override
+    public void embedView(UIElement element)
+    {
+        this.timeline.embedView(element);
+    }
+
+    @Override
+    public <T extends BaseValue> IUndo createUndo(T property, Consumer<T> consumer)
+    {
+        BaseType oldValue = property.toData();
+
+        consumer.accept(property);
+
+        BaseType newValue = property.toData();
+        ValueChangeUndo undo = new ValueChangeUndo(property.getPath(), oldValue, newValue);
+
+        undo.editor(this);
+
+        return undo;
+    }
+
+    @Override
+    public <T extends BaseValue> IUndo createUndo(T property, BaseType oldValue, BaseType newValue)
+    {
+        ValueChangeUndo undo = new ValueChangeUndo(property.getPath(), oldValue, newValue);
+
+        undo.editor(this);
+
+        return undo;
+    }
+
+    @Override
+    public void postUndo(IUndo undo, boolean apply, boolean callback)
+    {
+        if (undo == null)
+        {
+            throw new RuntimeException("Given undo is null!");
+        }
+
+        CameraWork work = this.data;
+        UndoManager<StructureBase> undoManager = this.undoManager;
+
+        undoManager.setCallback(callback ? this::handleUndos : null);
+
+        if (apply)
+        {
+            undoManager.pushApplyUndo(undo, work);
+        }
+        else
+        {
+            undoManager.pushUndo(undo);
+        }
+
+        undoManager.setCallback(this::handleUndos);
+    }
+
+    @Override
+    public void updateClipProperty(ValueInt property, int value)
+    {
+        this.timeline.updateClipProperty(property, value);
     }
 }

@@ -6,14 +6,13 @@ import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.UICameraPanel;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.camera.utils.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.camera.utils.UICameraGraphEditor;
 import mchorse.bbs.ui.camera.utils.UICameraKeyframesEditor;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.undo.CompoundUndo;
 import mchorse.bbs.utils.undo.IUndo;
@@ -32,13 +31,10 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     public UICameraGraphEditor graph;
     public UICameraDopeSheetEditor dope;
 
-    public IKey[] titles;
-    public int[] colors = {Colors.RED, Colors.GREEN, Colors.BLUE, Colors.CYAN, Colors.MAGENTA, Colors.YELLOW, Colors.LIGHTEST_GRAY};
-
     private IKey title = IKey.EMPTY;
     private UICameraKeyframesEditor current;
 
-    public UIKeyframeClip(KeyframeClip clip, UICameraPanel editor)
+    public UIKeyframeClip(KeyframeClip clip, IUICameraWorkDelegate editor)
     {
         super(clip, editor);
     }
@@ -48,8 +44,8 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     {
         super.registerUI();
 
-        this.graph = new UICameraGraphEditor(editor);
-        this.dope = new UICameraDopeSheetEditor(editor);
+        this.graph = new UICameraGraphEditor(this.editor);
+        this.dope = new UICameraDopeSheetEditor(this.editor);
 
         this.all = new UIButton(UIKeys.CAMERA_PANELS_ALL, (b) -> this.selectChannel(null, 0));
         this.x = new UIButton(UIKeys.X, (b) -> this.selectChannel(this.clip.x, 1));
@@ -59,17 +55,6 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
         this.pitch = new UIButton(UIKeys.CAMERA_PANELS_PITCH, (b) -> this.selectChannel(this.clip.pitch, 5));
         this.roll = new UIButton(UIKeys.CAMERA_PANELS_ROLL, (b) -> this.selectChannel(this.clip.roll, 6));
         this.fov = new UIButton(UIKeys.CAMERA_PANELS_FOV, (b) -> this.selectChannel(this.clip.fov, 7));
-
-        this.titles = new IKey[] {
-            this.all.label,
-            this.x.label,
-            this.y.label,
-            this.z.label,
-            this.yaw.label,
-            this.pitch.label,
-            this.roll.label,
-            this.fov.label
-        };
     }
 
     @Override
@@ -97,7 +82,7 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     @Override
     public void editClip(Position position)
     {
-        long tick = this.editor.timeline.tick - this.clip.tick.get();
+        long tick = this.editor.getCursor() - this.clip.tick.get();
 
         CompoundUndo<CameraWork> undo = new CompoundUndo<CameraWork>(
             this.undoKeyframes(this.clip.x, tick, position.point.x),
@@ -141,7 +126,7 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
 
     public void selectChannel(ValueKeyframeChannel channel, int id)
     {
-        this.title = this.titles[id];
+        this.title = UICameraDopeSheetEditor.TITLES[id];
         this.dope.setVisible(id == 0);
         this.graph.setVisible(id != 0);
 
@@ -149,10 +134,10 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
 
         if (channel != null)
         {
-            this.graph.setChannel(channel, this.colors[id - 1]);
+            this.graph.setChannel(channel, UICameraDopeSheetEditor.COLORS[id - 1]);
         }
 
-        this.editor.timeline.embedView(this.current);
+        this.editor.embedView(this.current);
         this.current.resetView();
     }
 

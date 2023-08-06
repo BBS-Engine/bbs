@@ -1,6 +1,7 @@
 package mchorse.bbs.ui.camera.utils.undo;
 
 import mchorse.bbs.camera.CameraWork;
+import mchorse.bbs.camera.data.StructureBase;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.utils.undo.IUndo;
@@ -26,7 +27,7 @@ public class ValueChangeUndo extends CameraWorkUndo
     }
 
     @Override
-    public IUndo<CameraWork> noMerging()
+    public IUndo<StructureBase> noMerging()
     {
         this.mergable = false;
 
@@ -34,7 +35,7 @@ public class ValueChangeUndo extends CameraWorkUndo
     }
 
     @Override
-    public boolean isMergeable(IUndo<CameraWork> undo)
+    public boolean isMergeable(IUndo<StructureBase> undo)
     {
         if (!this.mergable)
         {
@@ -52,7 +53,7 @@ public class ValueChangeUndo extends CameraWorkUndo
     }
 
     @Override
-    public void merge(IUndo<CameraWork> undo)
+    public void merge(IUndo<StructureBase> undo)
     {
         if (undo instanceof ValueChangeUndo)
         {
@@ -63,7 +64,7 @@ public class ValueChangeUndo extends CameraWorkUndo
     }
 
     @Override
-    public void undo(CameraWork context)
+    public void undo(StructureBase context)
     {
         BaseValue value = context.getProperty(this.name);
 
@@ -71,7 +72,7 @@ public class ValueChangeUndo extends CameraWorkUndo
     }
 
     @Override
-    public void redo(CameraWork context)
+    public void redo(StructureBase context)
     {
         BaseValue value = context.getProperty(this.name);
 

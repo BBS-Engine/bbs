@@ -6,8 +6,8 @@ import mchorse.bbs.recording.actions.Action;
 import mchorse.bbs.recording.data.Frame;
 import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.recording.scene.SceneClip;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.camera.IUIEmbeddedView;
-import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.recording.editor.actions.UIActionPanel;
@@ -22,11 +22,11 @@ public class UIDedicatedRecordEditor extends UIElement implements IRecordEditor,
     public UIActionPanel actionPanel;
     public UIFrame framePanel;
 
-    private UICameraPanel editor;
+    private IUICameraWorkDelegate editor;
     private SceneClip clip;
     private Record record;
 
-    public UIDedicatedRecordEditor(UICameraPanel editor, SceneClip clip)
+    public UIDedicatedRecordEditor(IUICameraWorkDelegate editor, SceneClip clip)
     {
         super();
 
@@ -54,7 +54,7 @@ public class UIDedicatedRecordEditor extends UIElement implements IRecordEditor,
     @Override
     public void clickTick(int tick)
     {
-        this.editor.timeline.setTickAndNotify(tick + this.clip.tick.get());
+        this.editor.setTickAndNotify(tick + this.clip.tick.get());
     }
 
     @Override

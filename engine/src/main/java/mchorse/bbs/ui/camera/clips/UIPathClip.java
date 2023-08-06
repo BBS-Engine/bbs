@@ -8,7 +8,7 @@ import mchorse.bbs.camera.values.ValuePosition;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.UICameraPanel;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointsModule;
@@ -49,7 +49,7 @@ public class UIPathClip extends UIClip<PathClip>
 
     public ValuePosition position;
 
-    public UIPathClip(PathClip clip, UICameraPanel editor)
+    public UIPathClip(PathClip clip, IUICameraWorkDelegate editor)
     {
         super(clip, editor);
     }
@@ -105,7 +105,7 @@ public class UIPathClip extends UIClip<PathClip>
         this.circularZ = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.circularZ, (circularZ) -> circularZ.set(value))));
         this.circularZ.tooltip(UIKeys.CAMERA_PANELS_CIRCULAR_Z);
 
-        this.points = new UIPointsModule(editor, this::pickPoint);
+        this.points = new UIPointsModule(this.editor, this::pickPoint);
         this.points.h(20);
     }
 
@@ -166,7 +166,7 @@ public class UIPathClip extends UIClip<PathClip>
                 offset -= 1;
             }
 
-            this.editor.timeline.setTickAndNotify(this.clip.tick.get() + offset);
+            this.editor.setTickAndNotify(this.clip.tick.get() + offset);
         }
     }
 
@@ -187,7 +187,7 @@ public class UIPathClip extends UIClip<PathClip>
         super.fillData();
 
         int duration = this.clip.duration.get();
-        int offset = MathUtils.clamp(this.editor.timeline.tick - this.clip.tick.get(), 0, duration);
+        int offset = MathUtils.clamp(this.editor.getCursor() - this.clip.tick.get(), 0, duration);
         int points = this.clip.size();
         int index = (int) ((offset / (float) duration) * points);
 

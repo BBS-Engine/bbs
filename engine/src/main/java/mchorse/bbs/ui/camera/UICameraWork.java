@@ -23,9 +23,9 @@ import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.camera.clips.renderer.IUIClipRenderer;
 import mchorse.bbs.ui.camera.clips.renderer.UIClipRenderers;
+import mchorse.bbs.ui.camera.utils.undo.IUndoSelection;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
@@ -64,7 +64,7 @@ public class UICameraWork extends UIElement
     private static final Area CLIP_AREA = new Area();
 
     /* Main objects */
-    private UICameraPanel editor;
+    private IUICameraWorkDelegate editor;
     private ValueClips clips;
 
     /* Navigation */
@@ -99,7 +99,7 @@ public class UICameraWork extends UIElement
 
     private UIClipRenderers renderers = new UIClipRenderers();
 
-    public UICameraWork(UICameraPanel editor)
+    public UICameraWork(IUICameraWorkDelegate editor)
     {
         super();
 
@@ -115,7 +115,7 @@ public class UICameraWork extends UIElement
             UIContext context = this.getContext();
             int mouseX = context.mouseX;
             int mouseY = context.mouseY;
-            boolean hasSelected = this.editor.panel != null;
+            boolean hasSelected = this.editor.getClip() != null;
 
             if (this.fromLayerY(mouseY) < 0)
             {
@@ -141,9 +141,9 @@ public class UICameraWork extends UIElement
             }
         });
 
-        Supplier<Boolean> isFlightDisabled = this.editor::isFlightDisabled;
+        Supplier<Boolean> isFlightDisabled = this.editor::canUseKeybinds;
 
-        this.keys().register(Keys.ADD_ON_TOP, this::showAddsOnTop).category(KEYS_CATEGORY).active(() -> this.editor.panel != null && this.editor.isFlightDisabled());
+        this.keys().register(Keys.ADD_ON_TOP, this::showAddsOnTop).category(KEYS_CATEGORY).active(() -> this.editor.getClip() != null && this.editor.canUseKeybinds());
         this.keys().register(Keys.ADD_AT_CURSOR, this::showAddsAtCursor).category(KEYS_CATEGORY).active(isFlightDisabled);
         this.keys().register(Keys.ADD_AT_TICK, this::showAddsAtTick).category(KEYS_CATEGORY).active(isFlightDisabled);
         this.keys().register(Keys.CLIP_CUT, this::cut).category(KEYS_CATEGORY).active(isFlightDisabled);
@@ -171,16 +171,16 @@ public class UICameraWork extends UIElement
             }
         }
 
-        List<IUndo<CameraWork>> undos = new ArrayList<IUndo<CameraWork>>();
+        List<IUndo> undos = new ArrayList<IUndo>();
 
         for (Clip clip : clips)
         {
             ValueInt clipValue = (ValueInt) clip.getProperty(property.getId());
 
-            undos.add(UIClip.undo(this.editor, clipValue, (v) -> v.set(clipValue.get() + difference)));
+            undos.add(this.editor.createUndo(clipValue, (v) -> v.set(clipValue.get() + difference)));
         }
 
-        this.editor.postUndo(new CompoundUndo<CameraWork>(undos));
+        this.editor.postUndo(new CompoundUndo(undos));
     }
 
     /* Undo/redo helpers */
@@ -203,7 +203,7 @@ public class UICameraWork extends UIElement
 
     private void postUndo()
     {
-        IUndo<CameraWork> undo = this.createCachedUndo();
+        IUndo undo = this.createCachedUndo();
 
         if (undo != null)
         {
@@ -213,14 +213,21 @@ public class UICameraWork extends UIElement
         }
     }
 
-    private IUndo<CameraWork> createCachedUndo()
+    private IUndo createCachedUndo()
     {
         if (this.cache == null)
         {
             return null;
         }
 
-        return UIClip.undo(this.editor, this.clips, this.cache, this.clips.toData()).selectedBefore(this.cachedSelection).noMerging();
+        IUndo undo = this.editor.createUndo(this.clips, this.cache, this.clips.toData()).noMerging();
+
+        if (undo instanceof IUndoSelection)
+        {
+            ((IUndoSelection) undo).selectedBefore(this.cachedSelection);
+        }
+
+        return undo;
     }
 
     /* Tools */
@@ -234,7 +241,7 @@ public class UICameraWork extends UIElement
             add.action(Icons.CURSOR, UIKeys.CAMERA_TIMELINE_CONTEXT_ADD_AT_CURSOR, () -> this.showAddsAtCursor(context, mouseX, mouseY));
             add.action(Icons.SHIFT_TO, UIKeys.CAMERA_TIMELINE_CONTEXT_ADD_AT_TICK, () -> this.showAddsAtTick(context, mouseX, mouseY));
 
-            if (this.editor.panel != null)
+            if (this.editor.getClip() != null)
             {
                 add.action(Icons.UPLOAD, UIKeys.CAMERA_TIMELINE_CONTEXT_ADD_ON_TOP, this::showAddsOnTop);
             }
@@ -408,7 +415,7 @@ public class UICameraWork extends UIElement
     {
         List<Clip> clips = this.isSelecting() ? this.getClipsFromSelection() : new ArrayList<Clip>(this.clips.get());
         Clip original = this.editor.getClip();
-        int offset = this.editor.timeline.tick;
+        int offset = this.editor.getCursor();
 
         for (Clip clip : clips)
         {
@@ -536,7 +543,7 @@ public class UICameraWork extends UIElement
 
         for (Clip clip : clips)
         {
-            undos.add(UIClip.undo(this.editor, clip.tick, (tick) -> tick.set(clip.tick.get() + diff)));
+            undos.add(this.editor.createUndo(clip.tick, (tick) -> tick.set(clip.tick.get() + diff)));
         }
 
         this.editor.postUndoCallback(new CompoundUndo<CameraWork>(undos));
@@ -562,13 +569,13 @@ public class UICameraWork extends UIElement
 
             if (this.tick > offset)
             {
-                undos.add(UIClip.undo(this.editor, clip.duration, (duration) -> duration.set(this.tick - offset)));
+                undos.add(this.editor.createUndo(clip.duration, (duration) -> duration.set(this.tick - offset)));
             }
             else if (this.tick < offset + clip.duration.get())
             {
                 undos.add(new CompoundUndo<CameraWork>(
-                    UIClip.undo(this.editor, clip.tick, (tick) -> tick.set(this.tick)),
-                    UIClip.undo(this.editor, clip.duration, (duration) -> duration.set(clip.duration.get() + offset - this.tick))
+                    this.editor.createUndo(clip.tick, (tick) -> tick.set(this.tick)),
+                    this.editor.createUndo(clip.duration, (duration) -> duration.set(clip.duration.get() + offset - this.tick))
                 ));
             }
         }
@@ -613,7 +620,7 @@ public class UICameraWork extends UIElement
 
         for (Clip clip : clips)
         {
-            undos.add(UIClip.undo(this.editor, clip.enabled, (enabled) -> enabled.set(!clip.enabled.get())));
+            undos.add(this.editor.createUndo(clip.enabled, (enabled) -> enabled.set(!clip.enabled.get())));
         }
 
         this.editor.postUndo(new CompoundUndo<CameraWork>(undos));
@@ -697,7 +704,7 @@ public class UICameraWork extends UIElement
 
     public void addSelected(Clip clip)
     {
-        int index = this.editor.getWork().getIndex(clip);
+        int index = this.clips.getIndex(clip);
 
         if (index >= 0)
         {
@@ -719,6 +726,7 @@ public class UICameraWork extends UIElement
         this.addPreview = null;
 
         this.resetCache();
+        this.updateScrollSize();
         this.vertical.scrollToEnd();
         this.clearSelection();
         this.embedView(null);
@@ -793,7 +801,7 @@ public class UICameraWork extends UIElement
     {
         this.tick = Math.max(tick, 0);
 
-        this.editor.scrubbed(this.tick, notify);
+        this.editor.setCursor(this.tick, notify);
 
         if (this.embedded != null && this.embedded instanceof IUIEmbeddedView)
         {
@@ -863,6 +871,13 @@ public class UICameraWork extends UIElement
 
         this.vertical.area.copy(this.area);
         this.vertical.area.h -= MARGIN;
+
+        this.updateScrollSize();
+    }
+
+    private void updateScrollSize()
+    {
+        this.vertical.scrollSize = this.clips == null ? 0 : LAYERS * LAYER_HEIGHT;
         this.vertical.clamp();
     }
 
@@ -1121,8 +1136,8 @@ public class UICameraWork extends UIElement
                 int newTick = clip.tick.get() + relativeX;
                 int newLayer = clip.layer.get() + relativeY;
 
-                undos.add(UIClip.undo(this.editor, clip.tick, (tick) -> tick.set(newTick)));
-                undos.add(UIClip.undo(this.editor, clip.layer, (layer) -> layer.set(newLayer)));
+                undos.add(this.editor.createUndo(clip.tick, (tick) -> tick.set(newTick)));
+                undos.add(this.editor.createUndo(clip.layer, (layer) -> layer.set(newLayer)));
                 clip.tick.set(newTick);
                 clip.layer.set(newLayer);
             }

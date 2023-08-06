@@ -83,6 +83,16 @@ public class ValueClips extends ValueGroup
         return clips;
     }
 
+    /**
+     * Get index of a given clip.
+     *
+     * @return index of a clip in the thing
+     */
+    public int getIndex(Clip clip)
+    {
+        return this.clips.indexOf(clip);
+    }
+
     public void add(Clip clip)
     {
         this.clips.add(clip);

@@ -3,10 +3,8 @@ package mchorse.bbs.ui.camera.clips;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.modifiers.LookClip;
-import mchorse.bbs.data.types.ByteType;
-import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.UICameraPanel;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UITextboxHelp;
 import mchorse.bbs.ui.framework.elements.UIElement;
@@ -33,7 +31,7 @@ public class UILookClip extends UIClip<LookClip>
 
     public UIElement row;
 
-    public UILookClip(LookClip clip, UICameraPanel editor)
+    public UILookClip(LookClip clip, IUICameraWorkDelegate editor)
     {
         super(clip, editor);
     }
@@ -46,7 +44,7 @@ public class UILookClip extends UIClip<LookClip>
         this.selector = new UITextboxHelp(500, (str) ->
         {
             this.editor.postUndo(this.undo(this.clip.selector, (selector) -> selector.set(str)));
-            this.clip.tryFindingEntity(editor.getContext().menu.bridge.get(IBridgeWorld.class).getWorld());
+            this.clip.tryFindingEntity(this.getContext().menu.bridge.get(IBridgeWorld.class).getWorld());
         });
         this.selector.link(SELECTOR_HELP).tooltip(UIKeys.CAMERA_PANELS_SELECTOR_TOOLTIP);
 

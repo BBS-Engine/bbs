@@ -52,7 +52,6 @@ public class BBSSettings
     public static ValueBoolean editorCenterLines;
     public static ValueBoolean editorCrosshair;
     public static ValueBoolean editorSeconds;
-    public static ValueInt editorAutoSave;
 
     /* Settings */
     public static ValueBoolean generalDataCaching;
@@ -166,7 +165,6 @@ public class BBSSettings
         editorCenterLines = builder.getBoolean("center_lines", false);
         editorCrosshair = builder.getBoolean("crosshair", false);
         editorSeconds = builder.getBoolean("seconds", false);
-        editorAutoSave = builder.getInt("auto_save", 0, 0, 600);
 
         generalDataCaching = builder.category("data").getBoolean("data_caching", true);
 

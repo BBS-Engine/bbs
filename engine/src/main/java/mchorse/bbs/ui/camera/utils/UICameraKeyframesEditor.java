@@ -1,11 +1,9 @@
 package mchorse.bbs.ui.camera.utils;
 
-import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.data.types.BaseType;
-import mchorse.bbs.ui.camera.UICameraPanel;
-import mchorse.bbs.ui.camera.clips.UIClip;
+import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframes;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframesEditor;
@@ -24,14 +22,14 @@ public abstract class UICameraKeyframesEditor <E extends UIKeyframes> extends UI
 {
     public static final CameraAxisConverter CONVERTER = new CameraAxisConverter();
 
-    protected UICameraPanel editor;
+    protected IUICameraWorkDelegate editor;
     protected List<BaseValue> valueChannels = new ArrayList<BaseValue>();
 
     private List<BaseType> cachedData = new ArrayList<BaseType>();
     private int type = -1;
     private long lastUpdate;
 
-    public UICameraKeyframesEditor(UICameraPanel editor)
+    public UICameraKeyframesEditor(IUICameraWorkDelegate editor)
     {
         super();
 
@@ -91,18 +89,18 @@ public abstract class UICameraKeyframesEditor <E extends UIKeyframes> extends UI
 
         if (newCachedData.size() > 1)
         {
-            IUndo<CameraWork>[] undos = new IUndo[newCachedData.size()];
+            IUndo[] undos = new IUndo[newCachedData.size()];
 
             for (int i = 0; i < undos.length; i++)
             {
-                undos[i] = UIClip.undo(this.editor, this.valueChannels.get(i), this.cachedData.get(i), newCachedData.get(i));
+                undos[i] = this.editor.createUndo(this.valueChannels.get(i), this.cachedData.get(i), newCachedData.get(i));
             }
 
-            this.editor.postUndo(new CompoundUndo<CameraWork>(undos).noMerging(), false);
+            this.editor.postUndo(new CompoundUndo(undos).noMerging(), false);
         }
         else
         {
-            this.editor.postUndo(UIClip.undo(this.editor, this.valueChannels.get(0), this.cachedData.get(0), newCachedData.get(0)).noMerging(), false);
+            this.editor.postUndo(this.editor.createUndo(this.valueChannels.get(0), this.cachedData.get(0), newCachedData.get(0)).noMerging(), false);
         }
 
         this.cachedData.clear();

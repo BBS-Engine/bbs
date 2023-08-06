@@ -1,6 +1,6 @@
 package mchorse.bbs.ui.camera.utils;
 
-import mchorse.bbs.ui.camera.UICameraPanel;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.keyframes.Selection;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIDopeSheet;
@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 public class UIDopeSheetView extends UIDopeSheet
 {
-    public UICameraPanel editor;
+    public IUICameraWorkDelegate editor;
 
     private UICameraDopeSheetEditor keyframeEditor;
 
@@ -24,12 +24,12 @@ public class UIDopeSheetView extends UIDopeSheet
 
     public long getFixtureOffset()
     {
-        if (this.editor == null || this.editor.panel == null)
+        if (this.editor == null || this.editor.getClip() == null)
         {
             return 0;
         }
 
-        return this.editor.panel.clip.tick.get();
+        return this.editor.getClip().tick.get();
     }
 
     public int getOffset()
@@ -39,7 +39,7 @@ public class UIDopeSheetView extends UIDopeSheet
             return 0;
         }
 
-        return (int) (this.editor.timeline.tick - this.getFixtureOffset());
+        return (int) (this.editor.getCursor() - this.getFixtureOffset());
     }
 
     @Override
@@ -67,7 +67,7 @@ public class UIDopeSheetView extends UIDopeSheet
         {
             long offset = this.getFixtureOffset();
 
-            this.editor.timeline.setTickAndNotify((int) (x + offset));
+            this.editor.setTickAndNotify((int) (x + offset));
         }
     }
 

@@ -6,13 +6,10 @@ import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.data.StructureBase;
 import mchorse.bbs.camera.values.ValueClips;
-import mchorse.bbs.utils.undo.UndoManager;
 
 public class CameraWork extends StructureBase
 {
     public ValueClips clips = new ValueClips("clips");
-
-    public UndoManager<CameraWork> undoManager = new UndoManager<CameraWork>(30);
 
     public CameraWork()
     {
@@ -85,15 +82,5 @@ public class CameraWork extends StructureBase
         }
 
         return tick + (output != Integer.MIN_VALUE ? output : 0);
-    }
-
-    /**
-     * Get index of a given clip.
-     *
-     * @return index of a clip in the thing
-     */
-    public int getIndex(Clip clip)
-    {
-        return this.clips.get().indexOf(clip);
     }
 }

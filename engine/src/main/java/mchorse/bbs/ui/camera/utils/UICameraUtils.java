@@ -8,16 +8,15 @@ import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueAngle;
 import mchorse.bbs.camera.values.ValuePoint;
 import mchorse.bbs.camera.values.ValuePosition;
-import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.UICameraPanel;
-import mchorse.bbs.ui.camera.clips.UIClip;
+import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.context.ContextAction;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.Interpolation;
 
 import java.util.LinkedHashMap;
@@ -79,7 +78,7 @@ public class UICameraUtils
 
     /* Position UX context menu */
 
-    public static void positionContextMenu(ContextMenuManager menu, UICameraPanel editor, ValuePosition value)
+    public static void positionContextMenu(ContextMenuManager menu, IUICameraWorkDelegate editor, ValuePosition value)
     {
         menu.action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_POSITION, Colors.NEGATIVE, () ->
         {
@@ -103,7 +102,7 @@ public class UICameraUtils
                 position.point.set(point);
                 position.angle.set(angle);
 
-                editor.postUndo(UIClip.undo(editor, value, position.toData()));
+                editor.postUndo(editor.createUndo(value, value.toData(), position.toData()));
                 editor.fillData();
             }
         });
@@ -112,7 +111,7 @@ public class UICameraUtils
         angleContextMenu(menu, editor, value.getAngle());
     }
 
-    public static void pointContextMenu(ContextMenuManager menu, UICameraPanel editor, ValuePoint value)
+    public static void pointContextMenu(ContextMenuManager menu, IUICameraWorkDelegate editor, ValuePoint value)
     {
         menu.shadow().action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_POINT, Colors.POSITIVE, () ->
         {
@@ -128,7 +127,7 @@ public class UICameraUtils
 
             if (point != null)
             {
-                editor.postUndo(UIClip.undo(editor, value, point.toData()));
+                editor.postUndo(editor.createUndo(value, value.toData(), point.toData()));
                 editor.fillData();
             }
         });
@@ -157,7 +156,7 @@ public class UICameraUtils
         return null;
     }
 
-    public static void angleContextMenu(ContextMenuManager menu, UICameraPanel editor, ValueAngle value)
+    public static void angleContextMenu(ContextMenuManager menu, IUICameraWorkDelegate editor, ValueAngle value)
     {
         menu.shadow().action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_ANGLE, Colors.INACTIVE, () ->
         {
@@ -173,7 +172,7 @@ public class UICameraUtils
 
             if (angle != null)
             {
-                editor.postUndo(UIClip.undo(editor, value, angle.toData()));
+                editor.postUndo(editor.createUndo(value, value.toData(), angle.toData()));
                 editor.fillData();
             }
         });

@@ -1,6 +1,6 @@
 package mchorse.bbs.ui.camera.utils.undo;
 
-import mchorse.bbs.camera.CameraWork;
+import mchorse.bbs.camera.data.StructureBase;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.camera.UICameraWork;
 import mchorse.bbs.utils.undo.IUndo;
@@ -8,7 +8,7 @@ import mchorse.bbs.utils.undo.IUndo;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CameraWorkUndo implements IUndo<CameraWork>
+public abstract class CameraWorkUndo implements IUndo<StructureBase>
 {
     public int tick;
     public double viewMin;
@@ -23,7 +23,7 @@ public abstract class CameraWorkUndo implements IUndo<CameraWork>
         return redo ? this.selectedAfter : this.selectedBefore;
     }
 
-    public CameraWorkUndo editor(UICameraPanel editor)
+    public void editor(UICameraPanel editor)
     {
         UICameraWork timeline = editor.timeline;
 
@@ -34,15 +34,11 @@ public abstract class CameraWorkUndo implements IUndo<CameraWork>
 
         this.selectedAfter.addAll(timeline.getSelection());
         this.selectedBefore.addAll(this.selectedAfter);
-
-        return this;
     }
 
-    public CameraWorkUndo selectedBefore(List<Integer> selection)
+    public void selectedBefore(List<Integer> selection)
     {
         this.selectedBefore.clear();
         this.selectedBefore.addAll(selection);
-
-        return this;
     }
 }
