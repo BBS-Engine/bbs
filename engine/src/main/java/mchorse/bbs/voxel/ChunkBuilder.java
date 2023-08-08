@@ -77,9 +77,9 @@ public class ChunkBuilder
         return this;
     }
 
-    public ChunkBuilder buildBlock(IBlockVariant block, int nx, int ny, int nz, VAOBuilder builder)
+    public ChunkBuilder buildBlock(IBlockVariant block, int nx, int ny, int nz, VAOBuilder builder, VBOAttributes attributes)
     {
-        this.generateBlock(block, nx, ny, nz, builder, Vectors.EMPTY_3I);
+        this.generateBlock(block, nx, ny, nz, builder, attributes, Vectors.EMPTY_3I);
 
         return this;
     }
@@ -164,7 +164,7 @@ public class ChunkBuilder
             {
                 MathUtils.toBlock(i, chunk.w, chunk.h, tmp);
 
-                this.generateBlock(block, tmp.x, tmp.y, tmp.z, builder, this.getEdge(tmp));
+                this.generateBlock(block, tmp.x, tmp.y, tmp.z, builder, getAttributes(), this.getEdge(tmp));
             }
         }
     }
@@ -199,9 +199,9 @@ public class ChunkBuilder
     /**
      * Generate faces for given block 
      */
-    protected void generateBlock(IBlockVariant block, int nx, int ny, int nz, VAOBuilder builder, Vector3i edge)
+    protected void generateBlock(IBlockVariant block, int nx, int ny, int nz, VAOBuilder builder, VBOAttributes attributes, Vector3i edge)
     {
-        this.index = block.getModel().build(builder, this, block, this.index, nx, ny, nz, edge);
+        this.index = block.getModel().build(builder, attributes, this, block, this.index, nx, ny, nz, edge);
     }
 
     /* API methods for model things */
@@ -290,7 +290,7 @@ public class ChunkBuilder
         GLStates.setupDepthFunction3D();
 
         builder.begin(-0.5F, -0.5F, -0.5F);
-        this.resetIndex().buildBlock(variant, 0, 0, 0, builder);
+        this.resetIndex().buildBlock(variant, 0, 0, 0, builder, this.getAttributes());
         builder.render();
 
         GLStates.setupDepthFunction2D();

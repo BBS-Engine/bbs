@@ -1,6 +1,7 @@
 package mchorse.bbs.voxel.tilesets.geometry;
 
 import mchorse.bbs.graphics.vao.VAOBuilder;
+import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.voxel.ChunkBuilder;
 import mchorse.bbs.voxel.blocks.IBlockVariant;
 
@@ -33,11 +34,11 @@ public class CombinedGeometry extends BlockGeometry
     }
 
     @Override
-    public int build(int nx, int ny, int nz, int index, IBlockVariant block, ChunkBuilder builder, VAOBuilder vao)
+    public int build(int nx, int ny, int nz, int index, IBlockVariant block, ChunkBuilder builder, VAOBuilder vao, VBOAttributes attributes)
     {
         for (BlockGeometry geometry : this.geometries)
         {
-            index = geometry.build(nx, ny, nz, index, block, builder, vao);
+            index = geometry.build(nx, ny, nz, index, block, builder, vao, attributes);
         }
 
         return index;

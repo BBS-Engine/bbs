@@ -1,6 +1,7 @@
 package mchorse.bbs.voxel.tilesets.geometry;
 
 import mchorse.bbs.graphics.vao.VAOBuilder;
+import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.voxel.ChunkBuilder;
 import mchorse.bbs.voxel.blocks.IBlockVariant;
 
@@ -9,7 +10,7 @@ public class BlockGeometry
     public void complete()
     {}
 
-    public int build(int nx, int ny, int nz, int index, IBlockVariant block, ChunkBuilder builder, VAOBuilder vao)
+    public int build(int nx, int ny, int nz, int index, IBlockVariant block, ChunkBuilder builder, VAOBuilder vao, VBOAttributes attributes)
     {
         return index;
     }

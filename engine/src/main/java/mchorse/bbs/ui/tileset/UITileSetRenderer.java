@@ -150,7 +150,7 @@ public class UITileSetRenderer extends UIModelRenderer
 
             for (int j = 0, jc = block.variants.size(); j < jc; j++)
             {
-                blockBuilder.buildBlock(block.variants.get(j), p.x, p.y, p.z - j * 2, builder);
+                blockBuilder.buildBlock(block.variants.get(j), p.x, p.y, p.z - j * 2, builder, blockBuilder.getAttributes());
             }
 
             blockBuilder.color.set(1, 1, 1, 1);

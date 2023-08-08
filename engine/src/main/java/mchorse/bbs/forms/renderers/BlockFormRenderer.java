@@ -7,6 +7,7 @@ import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.vao.VAO;
 import mchorse.bbs.graphics.vao.VAOBuilder;
+import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.voxel.ChunkBuilder;
 import mchorse.bbs.voxel.blocks.BlockLink;
@@ -56,7 +57,7 @@ public class BlockFormRenderer extends FormRenderer<BlockForm>
 
         if (variant != null)
         {
-            Shader shader = context.getShaders().get(chunkBuilder.getAttributes());
+            Shader shader = context.getShaders().get(VBOAttributes.VERTEX_NORMAL_UV_RGBA);
             VAOBuilder builder = context.getVAO().setup(shader, VAO.INDICES);
 
             context.getTextures().bind(chunkBuilder.models.atlas);
@@ -64,7 +65,7 @@ public class BlockFormRenderer extends FormRenderer<BlockForm>
             CommonShaderAccess.setModelView(shader, context.stack);
 
             builder.begin(-0.5F, 0, -0.5F);
-            chunkBuilder.resetIndex().buildBlock(variant, 0, 0, 0, builder);
+            chunkBuilder.resetIndex().buildBlock(variant, 0, 0, 0, builder, VBOAttributes.VERTEX_NORMAL_UV_RGBA);
             builder.render();
         }
     }

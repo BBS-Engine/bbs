@@ -1,8 +1,8 @@
 package mchorse.bbs.voxel.tilesets.geometry;
 
 import mchorse.bbs.graphics.vao.VAOBuilder;
+import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.utils.math.Interpolations;
-import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.voxel.ChunkBuilder;
 import mchorse.bbs.voxel.blocks.IBlockVariant;
 import org.joml.Vector2f;
@@ -67,7 +67,7 @@ public class QuadGeometry extends BlockGeometry
     }
 
     @Override
-    public int build(int nx, int ny, int nz, int index, IBlockVariant block, ChunkBuilder builder, VAOBuilder vao)
+    public int build(int nx, int ny, int nz, int index, IBlockVariant block, ChunkBuilder builder, VAOBuilder vao, VBOAttributes attributes)
     {
         float tw = builder.models.atlasWidth;
         float th = builder.models.atlasHeight;
@@ -89,34 +89,43 @@ public class QuadGeometry extends BlockGeometry
         float g = builder.color.g;
         float b = builder.color.b;
         float a = builder.color.a;
+        boolean ao = attributes == VBOAttributes.VERTEX_NORMAL_UV_LIGHT_RGBA;
 
         /* |_ - bottom left */
         vao.xyz(nx + this.p1.x, ny + this.p1.y, nz + this.p1.z)
             .normal(this.n.x, this.n.y, this.n.z)
-            .uv(this.t2.x, this.t2.y, tw, th)
-            .xy(f1, 0)
-            .rgba(ao1 * r, ao1 * g, ao1 * b, a);
+            .uv(this.t2.x, this.t2.y, tw, th);
+
+        if (ao) vao.xy(f1, 0);
+
+        vao.rgba(ao1 * r, ao1 * g, ao1 * b, a);
 
         /* _| - bottom right */
         vao.xyz(nx + this.p2.x, ny + this.p2.y, nz + this.p2.z)
             .normal(this.n.x, this.n.y, this.n.z)
-            .uv(this.t1.x, this.t2.y, tw, th)
-            .xy(f2, 0)
-            .rgba(ao2 * r, ao2 * g, ao2 * b, a);
+            .uv(this.t1.x, this.t2.y, tw, th);
+
+        if (ao) vao.xy(f2, 0);
+
+        vao.rgba(ao2 * r, ao2 * g, ao2 * b, a);
 
         /* |\ - top left */
         vao.xyz(nx + this.p3.x, ny + this.p3.y, nz + this.p3.z)
             .normal(this.n.x, this.n.y, this.n.z)
-            .uv(this.t2.x, this.t1.y, tw, th)
-            .xy(f3, 0)
-            .rgba(ao3 * r, ao3 * g, ao3 * b, a);
+            .uv(this.t2.x, this.t1.y, tw, th);
+
+        if (ao) vao.xy(f3, 0);
+
+        vao.rgba(ao3 * r, ao3 * g, ao3 * b, a);
 
         /* /| - top right */
         vao.xyz(nx + this.p4.x, ny + this.p4.y, nz + this.p4.z)
             .normal(this.n.x, this.n.y, this.n.z)
-            .uv(this.t1.x, this.t1.y, tw, th)
-            .xy(f4, 0)
-            .rgba(ao4 * r, ao4 * g, ao4 * b, a);
+            .uv(this.t1.x, this.t1.y, tw, th);
+
+        if (ao) vao.xy(f4, 0);
+
+        vao.rgba(ao4 * r, ao4 * g, ao4 * b, a);
 
         if (this.both)
         {

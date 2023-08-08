@@ -1,6 +1,7 @@
 package mchorse.bbs.voxel.tilesets.models;
 
 import mchorse.bbs.graphics.vao.VAOBuilder;
+import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.voxel.ChunkBuilder;
@@ -73,7 +74,7 @@ public class BlockModel
         this.collisionBox = model.collisionBox;
     }
 
-    public int build(VAOBuilder vao, ChunkBuilder builder, IBlockVariant block, int index, int nx, int ny, int nz, Vector3i edge)
+    public int build(VAOBuilder vao, VBOAttributes attributes, ChunkBuilder builder, IBlockVariant block, int index, int nx, int ny, int nz, Vector3i edge)
     {
         temporary.copy(builder.color);
         builder.color.r *= this.color.r;
@@ -86,7 +87,7 @@ public class BlockModel
 
             if (!model.opaque || !this.isOverlapping(model.bottom, this.top, 0, -1, 0))
             {
-                index = this.top.build(nx, ny, nz, index, block, builder, vao);
+                index = this.top.build(nx, ny, nz, index, block, builder, vao, attributes);
             }
         }
 
@@ -96,7 +97,7 @@ public class BlockModel
 
             if (!model.opaque || !this.isOverlapping(model.top, this.bottom, 0, 1, 0))
             {
-                index = this.bottom.build(nx, ny, nz, index, block, builder, vao);
+                index = this.bottom.build(nx, ny, nz, index, block, builder, vao, attributes);
             }
         }
 
@@ -106,7 +107,7 @@ public class BlockModel
 
             if (!model.opaque || !this.isOverlapping(model.left, this.right, -1, 0, 0))
             {
-                index = this.right.build(nx, ny, nz, index, block, builder, vao);
+                index = this.right.build(nx, ny, nz, index, block, builder, vao, attributes);
             }
         }
 
@@ -116,7 +117,7 @@ public class BlockModel
 
             if (!model.opaque || !this.isOverlapping(model.right, this.left, 1, 0, 0))
             {
-                index = this.left.build(nx, ny, nz, index, block, builder, vao);
+                index = this.left.build(nx, ny, nz, index, block, builder, vao, attributes);
             }
         }
 
@@ -126,7 +127,7 @@ public class BlockModel
 
             if (!model.opaque || !this.isOverlapping(model.back, this.front, 0, 0, -1))
             {
-                index = this.front.build(nx, ny, nz, index, block, builder, vao);
+                index = this.front.build(nx, ny, nz, index, block, builder, vao, attributes);
             }
         }
 
@@ -136,11 +137,11 @@ public class BlockModel
 
             if (!model.opaque || !this.isOverlapping(model.front, this.back, 0, 0, 1))
             {
-                index = this.back.build(nx, ny, nz, index, block, builder, vao);
+                index = this.back.build(nx, ny, nz, index, block, builder, vao, attributes);
             }
         }
 
-        index = this.all == null ? index : this.all.build(nx, ny, nz, index, block, builder, vao);
+        index = this.all == null ? index : this.all.build(nx, ny, nz, index, block, builder, vao, attributes);
 
         builder.color.copy(temporary);
 
