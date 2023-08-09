@@ -1,10 +1,13 @@
 package mchorse.bbs.recording;
 
+import mchorse.bbs.BBSData;
 import mchorse.bbs.recording.data.Mode;
 import mchorse.bbs.recording.data.Record;
+import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.world.entities.Entity;
 
 import java.util.List;
+import java.util.Map;
 
 public class RecordRecorder
 {
@@ -53,5 +56,29 @@ public class RecordRecorder
     public void stop(Entity player)
     {
         this.record.length = this.tick;
+
+        if (this.groups == null || this.groups.isEmpty())
+        {
+            return;
+        }
+
+        Record oldRecord = BBSData.getRecords().load(this.record.getId());
+
+        if (oldRecord == null)
+        {
+            return;
+        }
+
+        Map<String, KeyframeChannel> map = this.record.keyframes.getMap();
+
+        for (String key : map.keySet())
+        {
+            KeyframeChannel channel = map.get(key);
+
+            if (channel.isEmpty())
+            {
+                channel.copy(oldRecord.keyframes.getMap().get(key));
+            }
+        }
     }
 }

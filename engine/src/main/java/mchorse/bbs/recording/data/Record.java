@@ -1,7 +1,6 @@
 package mchorse.bbs.recording.data;
 
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.recording.actions.Action;
 import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.world.entities.Entity;
 
@@ -20,8 +19,6 @@ public class Record extends AbstractData
     public static final short SIGNATURE = 2;
 
     public short version = SIGNATURE;
-    public boolean dirty;
-
     public int length;
     public Frames keyframes = new Frames();
 
@@ -36,11 +33,6 @@ public class Record extends AbstractData
     public int size()
     {
         return this.length;
-    }
-
-    public Action getAction(int tick, int index)
-    {
-        return null;
     }
 
     public void applyFrame(int tick, Entity actor)
@@ -90,8 +82,6 @@ public class Record extends AbstractData
 
     public void copy(Record data)
     {
-        this.dirty = false;
-
         this.length = data.length;
         this.keyframes.copy(data.keyframes);
     }
