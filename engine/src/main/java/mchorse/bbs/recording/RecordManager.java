@@ -186,7 +186,7 @@ public class RecordManager extends BaseManager<Record>
         {
             Record record = this.load(filename);
 
-            if (record == null || record.frames.size() == 0)
+            if (record == null || record.size() <= 0)
             {
                 this.bridge.get(IBridgeWorld.class).sendMessage(EMPTY_RECORDING.format(filename));
 
@@ -228,92 +228,6 @@ public class RecordManager extends BaseManager<Record>
 
         this.players.remove(actor.actor);
         RecordUtils.setPlayer(actor.actor, null);
-    }
-
-    public boolean cancel(Entity player)
-    {
-        return this.halt(player, false, true);
-    }
-
-    public void saveUnsavedRecords()
-    {
-        for (Record record : this.records.values())
-        {
-            if (record.dirty)
-            {
-                try
-                {
-                    BBSData.getRecords().save(record);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public void abort(Entity player)
-    {
-        if (this.recorders.containsKey(player))
-        {
-            RecordRecorder recorder = this.recorders.remove(player);
-
-            this.bridge.get(IBridgeWorld.class).sendMessage(ABORT_RECORDING.format(recorder.record.getId()));
-        }
-    }
-
-    public void savePast(Record record)
-    {
-        this.savePastCopies(record.getId());
-
-        this.save(record);
-    }
-
-    private void savePastCopies(String id)
-    {
-        File file = this.getFile(id);
-
-        if (file.isFile())
-        {
-            this.savePastCopies(file);
-        }
-    }
-
-    private void savePastCopies(File file)
-    {
-        final int copies = 5;
-
-        int counter = copies;
-        String name = StringUtils.removeExtension(file.getName());
-
-        while (counter >= 0 && file.exists())
-        {
-            File current = this.getPastFile(file, name, counter);
-
-            if (current.exists())
-            {
-                if (counter == copies)
-                {
-                    current.delete();
-                }
-                else
-                {
-                    File previous = this.getPastFile(file, name, counter + 1);
-
-                    current.renameTo(previous);
-                }
-            }
-
-            counter--;
-        }
-    }
-
-    private File getPastFile(File file, String name, int iteration)
-    {
-        String extension = this.getExtension();
-
-        return new File(file.getParentFile(), name + extension + (iteration == 0 ? "" : "~" + iteration));
     }
 
     public void tick()

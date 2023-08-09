@@ -2,9 +2,9 @@ package mchorse.bbs.recording.data;
 
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.recording.actions.Action;
 import mchorse.bbs.utils.CollectionUtils;
+import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.world.entities.Entity;
 
 import java.util.ArrayList;
@@ -20,11 +20,14 @@ import java.util.List;
  */
 public class Record extends AbstractData
 {
-    public static final short SIGNATURE = 1;
+    public static final short SIGNATURE = 2;
 
     public short version = SIGNATURE;
     public List<Frame> frames = new ArrayList<>();
     public boolean dirty;
+
+    public int length;
+    public Frames keyframes = new Frames();
 
     public Record()
     {}
@@ -36,7 +39,7 @@ public class Record extends AbstractData
 
     public int size()
     {
-        return this.frames.size();
+        return this.length;
     }
 
     public Action getAction(int tick, int index)
@@ -66,12 +69,7 @@ public class Record extends AbstractData
      */
     public void applyFrame(int tick, Entity actor, List<String> groups)
     {
-        Frame frame = this.getFrame(tick);
-
-        if (frame != null)
-        {
-            frame.apply(actor, groups);
-        }
+        this.keyframes.apply(tick, actor, groups);
     }
 
     public void applyAction(int tick, Entity target)
@@ -116,16 +114,8 @@ public class Record extends AbstractData
         ListType frames = new ListType();
 
         /* Version of the recording */
-        data.putShort("Version", SIGNATURE);
-
-        int c = this.frames.size();
-
-        for (int i = 0; i < c; i++)
-        {
-            frames.add(this.frames.get(i).toData());
-        }
-
-        data.put("Frames", frames);
+        data.putShort("version", SIGNATURE);
+        data.put("keyframes", this.keyframes.toData());
     }
 
     @Override
@@ -133,17 +123,8 @@ public class Record extends AbstractData
     {
         this.frames.clear();
 
-        this.version = data.getShort("Version");
-
-        ListType frames = data.getList("Frames");
-
-        for (int i = 0, c = frames.size(); i < c; i++)
-        {
-            Frame frame = new Frame();
-
-            frame.fromData(frames.getMap(i));
-            this.frames.add(frame);
-        }
+        this.version = data.getShort("version");
+        this.keyframes.fromData(data.getMap("keyframes"));
     }
 
     public void copy(Record data)

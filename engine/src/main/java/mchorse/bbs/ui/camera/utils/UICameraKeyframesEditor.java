@@ -120,6 +120,13 @@ public abstract class UICameraKeyframesEditor <E extends UIKeyframes> extends UI
     }
 
     @Override
+    public void simplify()
+    {
+        this.markUndo(6);
+        super.simplify();
+    }
+
+    @Override
     public void removeSelectedKeyframes()
     {
         this.markUndo(1);

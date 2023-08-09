@@ -169,9 +169,9 @@ public class RecordPlayer
     {
         int original = tick;
 
-        if (tick > this.record.frames.size())
+        if (tick > this.record.size())
         {
-            tick = this.record.frames.size() - 1;
+            tick = this.record.size() - 1;
         }
 
         int min = Math.min(this.tick, tick);
@@ -282,7 +282,7 @@ public class RecordPlayer
 
     public void applyFrame(int tick, Entity target)
     {
-        tick = MathUtils.clamp(tick, 0, this.record.frames.size() - 1);
+        tick = MathUtils.clamp(tick, 0, this.record.size() - 1);
 
         this.record.applyFrame(tick, target, this.groups);
     }

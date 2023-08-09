@@ -95,6 +95,7 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
         {
             menu.action(Icons.MAXIMIZE, UIKeys.KEYFRAMES_CONTEXT_MAXIMIZE, this::resetView);
             menu.action(Icons.FULLSCREEN, UIKeys.KEYFRAMES_CONTEXT_SELECT_ALL, this::selectAll);
+            menu.action(Icons.MINIMIZE, IKey.lazy("Simplify"), this::simplify);
 
             if (this.keyframes.which != Selection.NOT_SELECTED)
             {
@@ -335,6 +336,14 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
     public void selectAll()
     {
         this.keyframes.selectAll();
+    }
+
+    public void simplify()
+    {
+        for (UISheet sheet : this.keyframes.getSheets())
+        {
+            sheet.channel.simplify();
+        }
     }
 
     public void removeSelectedKeyframes()

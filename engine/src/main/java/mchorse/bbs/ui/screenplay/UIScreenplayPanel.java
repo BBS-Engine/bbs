@@ -11,9 +11,7 @@ import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.text.UITextEditor;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageFolderOverlayPanel;
-import mchorse.bbs.ui.framework.elements.overlay.UIMessageOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
-import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.colors.Colors;
@@ -30,6 +28,7 @@ public class UIScreenplayPanel extends UIDataDashboardPanel<Screenplay>
 
         this.screenplay = new UITextEditor((t) -> this.data.content = t);
         this.screenplay.highlighter(new FountainSyntaxHighlighter()).background().relative(this.editor).full();
+        this.screenplay.wrap();
 
         this.generate = new UIIcon(Icons.SOUND, (b) -> this.generateTTS());
         this.generate.tooltip(IKey.lazy("Generate voice lines (ElevenLabs TTS)"), Direction.LEFT);

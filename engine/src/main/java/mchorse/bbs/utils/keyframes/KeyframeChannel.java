@@ -74,10 +74,19 @@ public class KeyframeChannel implements IDataSerializable<ListType>
             return prev.value;
         }
 
-        prev = null;
+        int size = this.keyframes.size();
+        Keyframe last = this.keyframes.get(size - 1);
 
-        for (Keyframe frame : this.keyframes)
+        if (ticks >= last.tick)
         {
+            return last.value;
+        }
+
+        /* TODO: Optimize */
+        for (int i = 1; i < size; i++)
+        {
+            Keyframe frame = this.keyframes.get(i);
+
             if (prev != null && ticks >= prev.tick && ticks < frame.tick)
             {
                 return prev.interpolate(frame, (ticks - prev.tick) / (frame.tick - prev.tick));
@@ -96,7 +105,7 @@ public class KeyframeChannel implements IDataSerializable<ListType>
      * need to add some value, but rather inserts in correct order or
      * overwrites existing keyframe.
      *
-     * Also it returns index at which it was inserted.
+     * Also, it returns index at which it was inserted.
      */
     public int insert(long tick, double value)
     {
@@ -178,6 +187,35 @@ public class KeyframeChannel implements IDataSerializable<ListType>
             }
 
             prev.next = prev;
+        }
+    }
+
+    public void simplify()
+    {
+        if (this.keyframes.size() <= 2)
+        {
+            return;
+        }
+
+        this.sort();
+
+        for (int i = 1; i < this.keyframes.size(); i++)
+        {
+            if (i >= this.keyframes.size() - 1)
+            {
+                continue;
+            }
+
+            Keyframe prev = this.keyframes.get(i - 1);
+            Keyframe current = this.keyframes.get(i);
+            Keyframe next = this.keyframes.get(i + 1);
+
+            if (current.value == prev.value && current.value == next.value)
+            {
+                this.keyframes.remove(i);
+
+                i -= 1;
+            }
         }
     }
 

@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class Screenplay extends AbstractData
 {
     public static final Pattern CHARACTER = Pattern.compile("^[\\p{Lu} _-]+$");
-    public static final Pattern METADATA = Pattern.compile("^[\\w\\d _-]+\\:.*$");
+    public static final Pattern METADATA = Pattern.compile("^[\\w\\d_-]+\\:.*$");
 
     public String content = "";
 

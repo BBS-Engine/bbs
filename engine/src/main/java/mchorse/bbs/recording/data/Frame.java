@@ -177,8 +177,12 @@ public class Frame implements IMapSerializable
             basic.velocity.set(this.vX, this.vY, this.vZ);
             basic.fall = this.fall;
         }
-        if (rotation) basic.setRotation(this.pitch, this.yaw);
-        if (rotation) basic.rotation.z = this.bodyYaw;
+
+        if (rotation)
+        {
+            basic.setRotation(this.pitch, this.yaw);
+            basic.rotation.z = this.bodyYaw;
+        }
 
         /* Motion and fall distance */
         basic.sneak = this.isSneaking;
