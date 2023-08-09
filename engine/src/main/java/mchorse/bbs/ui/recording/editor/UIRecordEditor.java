@@ -23,9 +23,11 @@ import mchorse.bbs.ui.utils.Label;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
+import mchorse.bbs.utils.undo.CompoundUndo;
 import mchorse.bbs.utils.undo.IUndo;
 import mchorse.bbs.utils.undo.UndoManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -46,7 +48,6 @@ public class UIRecordEditor extends UIElement implements IUIClipsDelegate
     private Record record;
 
     private UndoManager<StructureBase> undoManager;
-    private Clip clip;
 
     public UIRecordEditor(IUIRecordEditorDelegate delegate)
     {
@@ -57,14 +58,14 @@ public class UIRecordEditor extends UIElement implements IUIClipsDelegate
         this.keyframes.relative(this).wh(1F, 0.5F);
 
         this.channels = new UILabelList<>(this::selectChannels);
-        this.channels.background().multi();
+        this.channels.background(Colors.A75).multi();
 
         this.channels.relative(this.keyframes).x(1F, -100).w(100).h(1F);
         this.keyframes.add(this.channels);
 
         /* Clips */
         this.clips = new UIElement();
-        this.clips.relative(this).y(0.5F).wh(1F, 0.5F);
+        this.clips.relative(this).y(0.5F).w(1F).hTo(this.area, 1F);
 
         this.timeline = new UIClips(this, BBS.getFactoryActions());
         this.timeline.relative(this.clips).full();
@@ -154,7 +155,7 @@ public class UIRecordEditor extends UIElement implements IUIClipsDelegate
     @Override
     public Clip getClip()
     {
-        return this.clip;
+        return this.panel == null ? null : this.panel.clip;
     }
 
     @Override
@@ -189,11 +190,11 @@ public class UIRecordEditor extends UIElement implements IUIClipsDelegate
             UIClip panel = (UIClip) BBS.getFactoryActions().getData(clip).panelUI.getConstructors()[0].newInstance(clip, this);
 
             this.panel = panel;
-            this.panel.relative(this.editor).w(1F).hTo(this.timeline.area);
-            this.editor.addAfter(this.timeline, this.panel);
+            this.panel.relative(this.clips).x(1F, -160).w(160).h(1F);
+            this.clips.add(this.panel);
 
             this.panel.fillData();
-            this.panel.resize();
+            this.resize();
         }
         catch (Exception e)
         {
@@ -221,7 +222,12 @@ public class UIRecordEditor extends UIElement implements IUIClipsDelegate
 
     @Override
     public void fillData()
-    {}
+    {
+        if (this.panel != null)
+        {
+            this.panel.fillData();
+        }
+    }
 
     @Override
     public void embedView(UIElement element)
@@ -254,16 +260,16 @@ public class UIRecordEditor extends UIElement implements IUIClipsDelegate
             throw new RuntimeException("Given undo is null!");
         }
 
-        UndoManager<StructureBase> undoManager = this.undoManager;
-
         if (apply)
         {
-            undoManager.pushApplyUndo(undo, this.record);
+            this.undoManager.pushApplyUndo(undo, this.record);
         }
         else
         {
-            undoManager.pushUndo(undo);
+            this.undoManager.pushUndo(undo);
         }
+
+        this.fillData();
     }
 
     @Override
@@ -284,5 +290,30 @@ public class UIRecordEditor extends UIElement implements IUIClipsDelegate
 
     @Override
     public void updateClipProperty(ValueInt property, int value)
-    {}
+    {
+        int difference = value - property.get();
+        List<Clip> clips = this.timeline.getClipsFromSelection();
+
+        for (Clip clip : clips)
+        {
+            ValueInt clipValue = (ValueInt) clip.getProperty(property.getId());
+            int newValue = clipValue.get() + difference;
+
+            if (newValue < clipValue.getMin() || newValue > clipValue.getMax())
+            {
+                return;
+            }
+        }
+
+        List<IUndo> undos = new ArrayList<>();
+
+        for (Clip clip : clips)
+        {
+            ValueInt clipValue = (ValueInt) clip.getProperty(property.getId());
+
+            undos.add(this.createUndo(clipValue, (v) -> v.set(clipValue.get() + difference)));
+        }
+
+        this.postUndo(new CompoundUndo(undos));
+    }
 }

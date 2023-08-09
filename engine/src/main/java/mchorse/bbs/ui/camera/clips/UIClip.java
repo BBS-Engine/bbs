@@ -2,7 +2,6 @@ package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.CameraWork;
-import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.data.types.BaseType;
@@ -20,6 +19,7 @@ import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.framework.elements.utils.UILabel;
 import mchorse.bbs.ui.utils.UI;
+import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.undo.IUndo;
 
@@ -71,8 +71,8 @@ public abstract class UIClip <T extends Clip> extends UIElement
         this.envelope = new UIEnvelope(this);
 
         this.panels = UI.scrollView(5, 10);
-        this.panels.scroll.opposite();
-        this.panels.relative(this).w(160).h(1F);
+        this.panels.scroll.cancelScrolling();
+        this.panels.relative(this).full();
 
         this.registerUI();
         this.registerPanels();
@@ -90,6 +90,11 @@ public abstract class UIClip <T extends Clip> extends UIElement
         this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_COLOR), this.color.marginBottom(6));
         this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_METRICS), UI.row(this.layer, this.tick), this.duration);
 
+        this.addEnvelopes();
+    }
+
+    protected void addEnvelopes()
+    {
         this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_ENVELOPES_TITLE).marginTop(12), this.envelope);
     }
 
@@ -138,6 +143,9 @@ public abstract class UIClip <T extends Clip> extends UIElement
     @Override
     public void render(UIContext context)
     {
+        context.batcher.gradientHBox(this.area.x - 40, this.area.y, this.area.ex() - 40, this.area.ey(), 0, Colors.A25);
+        context.batcher.box(this.area.ex() - 40, this.area.y, this.area.ex(), this.area.ey(), Colors.A25);
+
         super.render(context);
     }
 }

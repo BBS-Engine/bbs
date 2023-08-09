@@ -6,6 +6,7 @@ import mchorse.bbs.recording.clips.FormActionClip;
 import mchorse.bbs.recording.data.Mode;
 import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.recording.scene.Replay;
+import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
@@ -207,32 +208,21 @@ public class RecordPlayer
 
     public <T extends ActionClip> T seekAction(int tick, Class<T> actionType)
     {
-        /*  TODO: Frame frame = this.record.getFrame(tick); while (tick >= 0)
+        Clip out = null;
+        int distance = 0;
+
+        for (Clip clip : this.record.clips.get())
         {
-
-
-            if (frame == null)
+            if (clip.getClass() == actionType && clip.tick.get() < tick)
             {
-                return null;
-            }
-
-            if (!frame.actions.isEmpty())
-            {
-                for (int i = frame.actions.size() - 1; i >= 0; i--)
+                if (out == null || clip.tick.get() - out.tick.get() > 0)
                 {
-                    Action action = frame.actions.get(i);
-
-                    if (action.getClass() == actionType)
-                    {
-                        return actionType.cast(action);
-                    }
+                    out = clip;
                 }
             }
+        }
 
-            tick -= 1;
-        } */
-
-        return null;
+        return out == null ? null : actionType.cast(out);
     }
 
     /**

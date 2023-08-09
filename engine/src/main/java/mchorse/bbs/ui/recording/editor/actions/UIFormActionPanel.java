@@ -26,6 +26,7 @@ public class UIFormActionPanel extends UIClip<FormActionClip>
             UIFormPalette.open(this.getParentContainer(), editing, this.clip.form.get(), (form) ->
             {
                 this.editor.postUndo(this.editor.createUndo(this.clip.form, (value) -> value.set(form)));
+                this.clip.form.set(form);
                 this.form.setForm(form);
             }).updatable();
         });
@@ -42,10 +43,14 @@ public class UIFormActionPanel extends UIClip<FormActionClip>
             });
         });
 
-        this.add(UI.label(UIKeys.RECORD_EDITOR_ACTIONS_FORM_FORM), this.form);
-        this.add(this.tween);
-        this.add(this.interpolation);
+        this.panels.add(UIClip.label(UIKeys.RECORD_EDITOR_ACTIONS_FORM_FORM).marginTop(12), this.form);
+        this.panels.add(this.tween);
+        this.panels.add(this.interpolation);
     }
+
+    @Override
+    protected void addEnvelopes()
+    {}
 
     @Override
     public void fillData()

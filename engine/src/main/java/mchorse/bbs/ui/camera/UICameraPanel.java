@@ -39,7 +39,6 @@ import mchorse.bbs.ui.framework.elements.utils.UIDraggable;
 import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
 import mchorse.bbs.ui.recording.scene.UISceneClip;
 import mchorse.bbs.ui.utils.Area;
-import mchorse.bbs.ui.utils.ScrollArea;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.resizers.IResizer;
@@ -124,7 +123,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
         this.recorder = new UICameraRecorder(this);
         this.timeline = new UIClips(this, BBS.getFactoryClips());
-        this.timeline.relative(this.editor).y(1F).w(1F).h(150).anchorY(1F);
+        this.timeline.relative(this.editor).w(0.5F).h(1F);
 
         /* Setup elements */
         this.plause = new UIIcon(Icons.PLAY, (b) -> this.togglePlayback());
@@ -136,26 +135,17 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
         this.draggable = new UIDraggable((context) ->
         {
-            int diff = this.area.ey() - context.mouseY;
-            int max = MathUtils.clamp(diff - diff % 10, 70, Math.min(this.editor.area.h - 70, 410));
-            int h = this.timeline.area.h;
+            int diff = context.mouseX - this.timeline.area.x;
+            int max = MathUtils.clamp(diff - diff % 10, 70, this.editor.area.w - 80);
+            int w = this.timeline.area.w;
 
-            if (max != h)
+            if (max != w)
             {
-                ScrollArea vertical = this.timeline.vertical;
-                int bottom = vertical.scroll + vertical.area.h;
-
-                this.timeline.h(max);
+                this.timeline.w(0F, max);
                 this.resize();
-
-                if (!this.timeline.hasEmbeddedView())
-                {
-                    vertical.scroll = bottom - vertical.area.h;
-                    vertical.clamp();
-                }
             }
         });
-        this.draggable.hoverOnly().relative(this.timeline).x(0.5F, -40).y(-3).wh(80, 6);
+        this.draggable.hoverOnly().relative(this.timeline).x(1F, -3).y(0.5F, -40).wh(6, 80);
 
         this.iconBar.add(this.plause, this.record, this.openVideos);
 
@@ -218,7 +208,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
     private Area getViewportArea()
     {
-        return new Area(this.area.x, this.area.y, this.iconBar.area.x - this.area.x, this.timeline.area.y - this.area.y);
+        return new Area(this.timeline.area.ex(), this.area.y, this.iconBar.area.x - this.timeline.area.ex(), this.area.h);
     }
 
     private Area getFramebufferArea()
@@ -734,7 +724,8 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         });
         GLStates.setupDepthFunction2D();
 
-        viewport.render(context.batcher, Colors.A75);
+        viewport.render(context.batcher, Colors.A50);
+        viewport.render(context.batcher, Colors.A25);
         context.batcher.texturedBox(texture, Colors.WHITE, area.x, area.y, area.w, area.h, 0, height, width, 0, width, height);
 
         /* Render rule of thirds */
@@ -872,7 +863,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             UIClip panel = (UIClip) BBS.getFactoryClips().getData(clip).panelUI.getConstructors()[0].newInstance(clip, this);
 
             this.panel = panel;
-            this.panel.relative(this.editor).w(1F).hTo(this.timeline.area);
+            this.panel.relative(this.editor).x(1F, -160).w(160).h(1F);
             this.editor.addAfter(this.timeline, this.panel);
 
             this.panel.fillData();
@@ -963,21 +954,18 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             throw new RuntimeException("Given undo is null!");
         }
 
-        CameraWork work = this.data;
-        UndoManager<StructureBase> undoManager = this.undoManager;
-
-        undoManager.setCallback(callback ? this::handleUndos : null);
+        this.undoManager.setCallback(callback ? this::handleUndos : null);
 
         if (apply)
         {
-            undoManager.pushApplyUndo(undo, work);
+            this.undoManager.pushApplyUndo(undo, this.data);
         }
         else
         {
-            undoManager.pushUndo(undo);
+            this.undoManager.pushUndo(undo);
         }
 
-        undoManager.setCallback(this::handleUndos);
+        this.undoManager.setCallback(this::handleUndos);
     }
 
     @Override
