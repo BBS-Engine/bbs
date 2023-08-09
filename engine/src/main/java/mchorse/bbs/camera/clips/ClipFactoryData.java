@@ -1,6 +1,7 @@
 package mchorse.bbs.camera.clips;
 
 import mchorse.bbs.camera.clips.converters.IClipConverter;
+import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.factory.UIFactoryData;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.camera.clips.UIClip;

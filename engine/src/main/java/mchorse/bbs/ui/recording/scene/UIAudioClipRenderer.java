@@ -26,5 +26,9 @@ public class UIAudioClipRenderer extends UIClipRenderer<AudioClip>
                 player.getWaveform().render(context.batcher, Colors.WHITE, area.x, area.y, area.w, area.h, 0, clip.duration.get() / 20F);
             }
         }
+        else
+        {
+            super.renderBackground(context, color, clip, area, selected, current);
+        }
     }
 }

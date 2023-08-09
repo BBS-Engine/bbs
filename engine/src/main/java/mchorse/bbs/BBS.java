@@ -4,7 +4,6 @@ import mchorse.bbs.animation.clip.AnimationClip;
 import mchorse.bbs.animation.clip.UIAnimationClip;
 import mchorse.bbs.audio.SoundManager;
 import mchorse.bbs.bridge.IBridge;
-import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipFactoryData;
 import mchorse.bbs.camera.clips.converters.DollyToKeyframeConverter;
 import mchorse.bbs.camera.clips.converters.DollyToPathConverter;
@@ -63,9 +62,7 @@ import mchorse.bbs.graphics.texture.TextureManager;
 import mchorse.bbs.graphics.vao.VAOManager;
 import mchorse.bbs.l10n.L10n;
 import mchorse.bbs.recording.RecordComponent;
-import mchorse.bbs.recording.actions.Action;
-import mchorse.bbs.recording.actions.ActionFactoryData;
-import mchorse.bbs.recording.actions.FormAction;
+import mchorse.bbs.recording.clips.FormActionClip;
 import mchorse.bbs.recording.scene.AudioClip;
 import mchorse.bbs.recording.scene.SceneClip;
 import mchorse.bbs.resources.AssetProvider;
@@ -116,6 +113,7 @@ import mchorse.bbs.ui.world.entities.components.UIFormEntityComponent;
 import mchorse.bbs.ui.world.objects.objects.UICameraWorldObject;
 import mchorse.bbs.ui.world.objects.objects.UIPropWorldObject;
 import mchorse.bbs.ui.world.objects.objects.UIWorldObject;
+import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.factory.MapFactory;
 import mchorse.bbs.voxel.StructureManager;
 import mchorse.bbs.voxel.generation.Generator;
@@ -180,7 +178,7 @@ public class BBS
     /* Data factories */
     private static MapFactory<WorldObject, Class<? extends UIWorldObject>> factoryWorldObjects;
     private static MapFactory<Clip, ClipFactoryData> factoryClips;
-    private static MapFactory<Action, ActionFactoryData> factoryActions;
+    private static MapFactory<Clip, ClipFactoryData> factoryActions;
     private static MapFactory<BlockModelFactory, BlockModelFactoryData> factoryBlockModels;
     private static MapFactory<Generator, Void> factoryGenerators;
     private static MapFactory<Component, Class<? extends UIEntityComponent>> factoryEntityComponents;
@@ -334,7 +332,7 @@ public class BBS
         return factoryClips;
     }
 
-    public static MapFactory<Action, ActionFactoryData> getFactoryActions()
+    public static MapFactory<Clip, ClipFactoryData> getFactoryActions()
     {
         return factoryActions;
     }
@@ -499,8 +497,8 @@ public class BBS
             .register(Link.bbs("subtitle"), SubtitleClip.class, new ClipFactoryData(Icons.FONT, 0x888899, UISubtitleClip.class));
 
         /* Register actions */
-        factoryActions = new MapFactory<Action, ActionFactoryData>()
-            .register(Link.bbs("form"), FormAction.class, new ActionFactoryData(0xde2e9f, UIFormActionPanel.class));
+        factoryActions = new MapFactory<Clip, ClipFactoryData>()
+            .register(Link.bbs("form"), FormActionClip.class, new ClipFactoryData(Icons.POSE, 0xde2e9f, UIFormActionPanel.class));
 
         /* Register forms */
         forms = new FormArchitect();

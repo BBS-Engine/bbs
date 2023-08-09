@@ -2,14 +2,14 @@ package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.CameraWork;
-import mchorse.bbs.camera.clips.Clip;
+import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.widgets.UIEnvelope;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
@@ -30,7 +30,7 @@ public abstract class UIClip <T extends Clip> extends UIElement
     public static final IKey CATEGORY = UIKeys.CAMERA_PANELS_KEYS_TITLE;
 
     public T clip;
-    public IUICameraWorkDelegate editor;
+    public IUIClipsDelegate editor;
 
     public UIToggle enabled;
     public UITextbox title;
@@ -48,7 +48,7 @@ public abstract class UIClip <T extends Clip> extends UIElement
         return UI.label(key).background(() -> BBSSettings.primaryColor(Colors.A50));
     }
 
-    public UIClip(T clip, IUICameraWorkDelegate editor)
+    public UIClip(T clip, IUIClipsDelegate editor)
     {
         this.clip = clip;
         this.editor = editor;

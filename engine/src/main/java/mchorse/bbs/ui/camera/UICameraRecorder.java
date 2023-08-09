@@ -80,7 +80,7 @@ public class UICameraRecorder extends UIElement
             return;
         }
 
-        this.editor.timeline.setTickAndNotify(0);
+        this.editor.setCursor(0);
         this.editor.dashboard.main.setEnabled(false);
         this.editor.dashboard.overlay.add(this);
 
@@ -114,7 +114,7 @@ public class UICameraRecorder extends UIElement
     {
         super.render(context);
 
-        this.minema(this.editor.isRunning() ? this.editor.getRunner().ticks : this.editor.timeline.tick, context.getTransition());
+        this.minema(this.editor.isRunning() ? this.editor.getRunner().ticks : this.editor.getCursor(), context.getTransition());
     }
 
     /**

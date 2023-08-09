@@ -2,8 +2,8 @@ package mchorse.bbs.camera.clips.overwrite;
 
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.CameraClip;
-import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.camera.clips.ClipContext;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 

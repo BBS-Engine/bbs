@@ -2,7 +2,7 @@ package mchorse.bbs.ui.camera.utils.undo;
 
 import mchorse.bbs.camera.data.StructureBase;
 import mchorse.bbs.ui.camera.UICameraPanel;
-import mchorse.bbs.ui.camera.UICameraWork;
+import mchorse.bbs.ui.camera.UIClips;
 import mchorse.bbs.utils.undo.IUndo;
 
 import java.util.ArrayList;
@@ -25,9 +25,9 @@ public abstract class CameraWorkUndo implements IUndo<StructureBase>
 
     public void editor(UICameraPanel editor)
     {
-        UICameraWork timeline = editor.timeline;
+        UIClips timeline = editor.timeline;
 
-        this.tick = timeline.tick;
+        this.tick = editor.getCursor();
         this.viewMin = timeline.scale.getMinValue();
         this.viewMax = timeline.scale.getMaxValue();
         this.scroll = timeline.vertical.scroll;

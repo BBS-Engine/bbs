@@ -2,7 +2,7 @@ package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.overwrite.CircularClip;
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UICircularModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 
@@ -11,7 +11,7 @@ public class UICircularClip extends UIClip<CircularClip>
     public UIPointModule point;
     public UICircularModule circular;
 
-    public UICircularClip(CircularClip clip, IUICameraWorkDelegate editor)
+    public UICircularClip(CircularClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }

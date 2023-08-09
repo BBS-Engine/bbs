@@ -4,7 +4,7 @@ import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.camera.values.ValuePoint;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
@@ -23,12 +23,12 @@ public class UIPointModule extends UIAbstractModule
 
     public ValuePoint point;
 
-    public UIPointModule(IUICameraWorkDelegate editor)
+    public UIPointModule(IUIClipsDelegate editor)
     {
         this(editor, UIKeys.CAMERA_PANELS_POSITION);
     }
 
-    public UIPointModule(IUICameraWorkDelegate editor, IKey title)
+    public UIPointModule(IUIClipsDelegate editor, IKey title)
     {
         super(editor);
 

@@ -1,6 +1,6 @@
 package mchorse.bbs.ui.camera.utils;
 
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.keyframes.Selection;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIDopeSheet;
@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 public class UIDopeSheetView extends UIDopeSheet
 {
-    public IUICameraWorkDelegate editor;
+    public IUIClipsDelegate editor;
 
     private UICameraDopeSheetEditor keyframeEditor;
 
@@ -67,7 +67,7 @@ public class UIDopeSheetView extends UIDopeSheet
         {
             long offset = this.getFixtureOffset();
 
-            this.editor.setTickAndNotify((int) (x + offset));
+            this.editor.setCursor((int) (x + offset));
         }
     }
 

@@ -1,37 +1,17 @@
 package mchorse.bbs.camera;
 
-import mchorse.bbs.camera.clips.CameraClip;
-import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.camera.clips.ClipContext;
-import mchorse.bbs.camera.data.Position;
+import mchorse.bbs.BBS;
 import mchorse.bbs.camera.data.StructureBase;
-import mchorse.bbs.camera.values.ValueClips;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.values.ValueClips;
 
 public class CameraWork extends StructureBase
 {
-    public ValueClips clips = new ValueClips("clips");
+    public ValueClips clips = new ValueClips("clips", BBS.getFactoryClips());
 
     public CameraWork()
     {
         this.register(this.clips);
-    }
-
-    public void apply(ClipContext context, int ticks, float transition, Position position)
-    {
-        context.clipData.clear();
-        context.work = this;
-        context.ticks = ticks;
-        context.transition = transition;
-
-        for (Clip clip : this.clips.getClips(ticks))
-        {
-            if (clip instanceof CameraClip)
-            {
-                context.apply((CameraClip) clip, position);
-            }
-        }
-
-        context.currentLayer = 0;
     }
 
     public int findNextTick(int tick)

@@ -1,13 +1,12 @@
-package mchorse.bbs.camera.clips;
+package mchorse.bbs.utils.clips;
 
 import mchorse.bbs.bridge.IBridge;
-import mchorse.bbs.camera.CameraWork;
-import mchorse.bbs.camera.data.Position;
+import mchorse.bbs.utils.clips.values.ValueClips;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClipContext
+public abstract class ClipContext <T extends Clip, E>
 {
     /**
      * Tick since the beginning of the camera profile.
@@ -30,9 +29,9 @@ public class ClipContext
     public int currentLayer;
 
     /**
-     * Current camera work that the clip is associated with.
+     * Current clips
      */
-    public CameraWork work;
+    public ValueClips clips;
 
     /**
      * Whether currently camera is played or paused
@@ -43,17 +42,17 @@ public class ClipContext
 
     public IBridge bridge;
 
-    public ClipContext setup(int ticks, int transition)
+    public ClipContext setup(int ticks, float transition)
     {
         return this.setup(ticks, ticks, transition);
     }
 
-    public ClipContext setup(int ticks, int relativeTick, int transition)
+    public ClipContext setup(int ticks, int relativeTick, float transition)
     {
         return this.setup(ticks, relativeTick, transition, 0);
     }
 
-    public ClipContext setup(int ticks, int relativeTick, int transition, int currentLayer)
+    public ClipContext setup(int ticks, int relativeTick, float transition, int currentLayer)
     {
         this.ticks = ticks;
         this.relativeTick = relativeTick;
@@ -63,18 +62,12 @@ public class ClipContext
         return this;
     }
 
-    public void apply(CameraClip clip, Position position)
-    {
-        this.currentLayer = clip.layer.get();
-        this.relativeTick = this.ticks - clip.tick.get();
-
-        clip.apply(this, position);
-    }
+    public abstract boolean apply(Clip clip, E position);
 
     /**
      * Apply clips underneath currently running
      */
-    public boolean applyUnderneath(int ticks, float transition, Position position)
+    public boolean applyUnderneath(int ticks, float transition, E position)
     {
         if (this.currentLayer > 0)
         {
@@ -88,12 +81,10 @@ public class ClipContext
 
             boolean applied = false;
 
-            for (Clip clip : this.work.clips.getClips(ticks, lastLayer))
+            for (Clip clip : this.clips.getClips(ticks, lastLayer))
             {
-                if (clip instanceof CameraClip)
+                if (this.apply(clip, position))
                 {
-                    this.apply((CameraClip) clip, position);
-
                     applied = true;
                 }
             }
@@ -107,21 +98,5 @@ public class ClipContext
         }
 
         return false;
-    }
-
-    public void shutdown()
-    {
-        if (this.work == null)
-        {
-            return;
-        }
-
-        for (Clip clip : this.work.clips.get())
-        {
-            if (clip instanceof CameraClip)
-            {
-                ((CameraClip) clip).shutdown(this);
-            }
-        }
     }
 }

@@ -3,7 +3,7 @@ package mchorse.bbs.ui.camera.utils;
 import mchorse.bbs.camera.clips.overwrite.KeyframeClip;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UISheet;
 import mchorse.bbs.utils.colors.Colors;
 
@@ -14,7 +14,7 @@ public class UICameraDopeSheetEditor extends UICameraKeyframesEditor<UIDopeSheet
     public static final IKey[] TITLES = {UIKeys.CAMERA_PANELS_ALL, UIKeys.X, UIKeys.Y, UIKeys.Z, UIKeys.CAMERA_PANELS_YAW, UIKeys.CAMERA_PANELS_PITCH, UIKeys.CAMERA_PANELS_ROLL, UIKeys.CAMERA_PANELS_FOV};
     public static final int[] COLORS = {Colors.RED, Colors.GREEN, Colors.BLUE, Colors.CYAN, Colors.MAGENTA, Colors.YELLOW, Colors.LIGHTEST_GRAY};
 
-    public UICameraDopeSheetEditor(IUICameraWorkDelegate editor)
+    public UICameraDopeSheetEditor(IUIClipsDelegate editor)
     {
         super(editor);
 

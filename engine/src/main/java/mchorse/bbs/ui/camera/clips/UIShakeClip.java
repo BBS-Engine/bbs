@@ -3,7 +3,7 @@ package mchorse.bbs.ui.camera.clips;
 import mchorse.bbs.camera.clips.modifiers.ShakeClip;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.widgets.UIBitToggle;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.utils.UI;
@@ -15,7 +15,7 @@ public class UIShakeClip extends UIClip<ShakeClip>
     public UITrackpad shakeAmount;
     public UIBitToggle active;
 
-    public UIShakeClip(ShakeClip modifier, IUICameraWorkDelegate editor)
+    public UIShakeClip(ShakeClip modifier, IUIClipsDelegate editor)
     {
         super(modifier, editor);
     }

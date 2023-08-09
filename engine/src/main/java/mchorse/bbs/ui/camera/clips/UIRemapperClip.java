@@ -3,7 +3,7 @@ package mchorse.bbs.ui.camera.clips;
 import mchorse.bbs.camera.clips.modifiers.RemapperClip;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.utils.UICameraGraphEditor;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.utils.colors.Colors;
@@ -13,7 +13,7 @@ public class UIRemapperClip extends UIClip<RemapperClip>
     public UICameraGraphEditor channel;
     public UIButton editChannel;
 
-    public UIRemapperClip(RemapperClip clip, IUICameraWorkDelegate editor)
+    public UIRemapperClip(RemapperClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }

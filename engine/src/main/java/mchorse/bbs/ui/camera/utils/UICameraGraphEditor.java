@@ -2,15 +2,14 @@ package mchorse.bbs.ui.camera.utils;
 
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
-import mchorse.bbs.ui.camera.UICameraPanel;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 
 /**
  * Graph editor GUI designed specifically for keyframe fixture panel
  */
 public class UICameraGraphEditor extends UICameraKeyframesEditor<UIGraphView>
 {
-    public UICameraGraphEditor(IUICameraWorkDelegate editor)
+    public UICameraGraphEditor(IUIClipsDelegate editor)
     {
         super(editor);
 

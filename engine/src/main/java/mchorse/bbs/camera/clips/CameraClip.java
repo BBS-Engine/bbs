@@ -2,6 +2,8 @@ package mchorse.bbs.camera.clips;
 
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.data.Position;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.utils.math.Interpolations;
 
 public abstract class CameraClip extends Clip
@@ -16,12 +18,7 @@ public abstract class CameraClip extends Clip
     {
         int duration = this.duration.get();
 
-        context.ticks = this.tick.get() + duration;
-        context.relativeTick = duration;
-        context.transition = 0;
-        context.currentLayer = 0;
-
-        this.applyClip(context, position);
+        this.applyClip(context.setup(this.tick.get() + duration, duration, 0, 0), position);
     }
 
     public void apply(ClipContext context, Position position)

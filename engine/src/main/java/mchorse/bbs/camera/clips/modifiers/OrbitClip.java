@@ -1,8 +1,8 @@
 package mchorse.bbs.camera.clips.modifiers;
 
 import mchorse.bbs.bridge.IBridgeWorld;
-import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.camera.clips.ClipContext;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Angle;
 import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.camera.data.Position;

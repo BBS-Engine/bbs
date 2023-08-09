@@ -1,19 +1,23 @@
-package mchorse.bbs.camera.values;
+package mchorse.bbs.utils.clips.values;
 
-import mchorse.bbs.BBS;
-import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.settings.values.ValueGroup;
+import mchorse.bbs.camera.clips.ClipFactoryData;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.settings.values.ValueGroup;
+import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.factory.IFactory;
 
 public class ValueClip extends ValueGroup
 {
     private Clip clip;
+    private IFactory<Clip, ClipFactoryData> factory;
 
-    public ValueClip(String id, Clip clip)
+    public ValueClip(String id, Clip clip, IFactory<Clip, ClipFactoryData> factory)
     {
         super(id);
+
+        this.factory = factory;
 
         this.assign(clip);
     }
@@ -59,14 +63,14 @@ public class ValueClip extends ValueGroup
     @Override
     public BaseType toData()
     {
-        return BBS.getFactoryClips().toData(this.clip);
+        return this.factory.toData(this.clip);
     }
 
     @Override
     public void fromData(BaseType data)
     {
         MapType map = data.asMap();
-        Clip clip = BBS.getFactoryClips().fromData(map);
+        Clip clip = this.factory.fromData(map);
 
         if (clip != null)
         {

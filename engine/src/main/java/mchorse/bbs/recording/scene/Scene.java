@@ -158,7 +158,7 @@ public class Scene extends AbstractData
 
             if (record != null)
             {
-                max = Math.max(max, record.size());
+                max = Math.max(max, record.getLength());
             }
         }
 
@@ -185,19 +185,17 @@ public class Scene extends AbstractData
     {
         int count = 0;
 
-        for (RecordPlayer actor : this.actors.values())
+        for (RecordPlayer player : this.actors.values())
         {
-            if (this.loops && actor.isFinished())
+            if (this.loops && player.isFinished())
             {
-                actor.record.reset(actor.actor);
+                player.startPlaying(player.kill);
+                player.record.applyAction(0, player.actor);
 
-                actor.startPlaying(actor.kill);
-                actor.record.applyAction(0, actor.actor);
-
-                BBSData.getRecords().players.put(actor.actor, actor);
+                BBSData.getRecords().players.put(player.actor, player);
             }
 
-            if ((actor.isFinished() && actor.playing) || actor.actor.isRemoved())
+            if ((player.isFinished() && player.playing) || player.actor.isRemoved())
             {
                 count++;
             }

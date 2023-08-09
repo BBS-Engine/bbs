@@ -4,8 +4,8 @@ import mchorse.bbs.animation.AnimationPlayer;
 import mchorse.bbs.animation.Animations;
 import mchorse.bbs.bridge.IBridgeAnimations;
 import mchorse.bbs.camera.clips.CameraClip;
-import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.camera.clips.ClipContext;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.settings.values.ValueString;
 

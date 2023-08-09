@@ -1,6 +1,6 @@
 package mchorse.bbs.ui.camera.utils;
 
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.keyframes.Selection;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIGraph;
@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 public class UIGraphView extends UIGraph
 {
-    public IUICameraWorkDelegate editor;
+    public IUIClipsDelegate editor;
 
     private UICameraGraphEditor keyframeEditor;
 
@@ -83,7 +83,7 @@ public class UIGraphView extends UIGraph
         {
             long offset = this.getFixtureOffset();
 
-            this.editor.setTickAndNotify((int) (x + offset));
+            this.editor.setCursor((int) (x + offset));
         }
     }
 

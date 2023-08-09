@@ -1,12 +1,13 @@
 package mchorse.bbs.camera.clips.overwrite;
 
 import mchorse.bbs.camera.Camera;
-import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.camera.clips.ClipContext;
+import mchorse.bbs.camera.clips.CameraClipContext;
 import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueInterpolation;
 import mchorse.bbs.settings.values.ValueFloat;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.math.Interpolation;
 import mchorse.bbs.utils.math.MathUtils;
@@ -75,7 +76,7 @@ public class DollyClip extends IdleClip
         DollyClip dolly = (DollyClip) original;
         Position position = new Position();
 
-        dolly.apply(new ClipContext().setup(offset, 0), position);
+        dolly.apply(new CameraClipContext().setup(offset, 0), position);
 
         Point point = dolly.position.get().point;
         double dx = point.x - position.point.x;

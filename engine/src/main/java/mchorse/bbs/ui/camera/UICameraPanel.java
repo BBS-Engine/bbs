@@ -6,8 +6,6 @@ import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.bridge.IBridgeRender;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.CameraWork;
-import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.camera.clips.ClipContext;
 import mchorse.bbs.camera.clips.misc.Subtitle;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.camera.controller.RunnerCameraController;
@@ -48,6 +46,7 @@ import mchorse.bbs.ui.utils.resizers.IResizer;
 import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.VectorUtils;
+import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.math.MathUtils;
@@ -73,7 +72,7 @@ import java.util.function.Supplier;
  *
  * This GUI provides tools for managing camera profiles.
  */
-public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements IFlightSupported, IUICameraWorkDelegate
+public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements IFlightSupported, IUIClipsDelegate
 {
     private static Map<Class, Integer> scrolls = new HashMap<>();
 
@@ -97,7 +96,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
     /* GUI fields */
 
     public UICameraRecorder recorder;
-    public UICameraWork timeline;
+    public UIClips timeline;
 
     public UIIcon plause;
     public UIIcon record;
@@ -124,7 +123,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         this.runner = new RunnerCameraController(dashboard.bridge);
 
         this.recorder = new UICameraRecorder(this);
-        this.timeline = new UICameraWork(this);
+        this.timeline = new UIClips(this, BBS.getFactoryClips());
         this.timeline.relative(this.editor).y(1F).w(1F).h(150).anchorY(1F);
 
         /* Setup elements */
@@ -177,7 +176,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         this.overlay.namesList.setFileIcon(Icons.FRUSTUM);
 
         /* Register keybinds */
-        IKey clips = UICameraWork.KEYS_CATEGORY;
+        IKey clips = UIClips.KEYS_CATEGORY;
         IKey modes = UIKeys.CAMERA_EDITOR_KEYS_MODES_TITLE;
         IKey editor = UIKeys.CAMERA_EDITOR_KEYS_EDITOR_TITLE;
         IKey looping = UIKeys.CAMERA_EDITOR_KEYS_LOOPING_TITLE;
@@ -186,8 +185,8 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         this.keys().register(Keys.PLAUSE, () -> this.plause.clickItself()).active(active).category(editor);
         this.keys().register(Keys.NEXT_CLIP, this::jumpToNextClip).active(active).category(editor);
         this.keys().register(Keys.PREV_CLIP, this::jumpToPrevClip).active(active).category(editor);
-        this.keys().register(Keys.NEXT, () -> this.timeline.setTickAndNotify(this.timeline.tick + 1)).active(active).category(editor);
-        this.keys().register(Keys.PREV, () -> this.timeline.setTickAndNotify(this.timeline.tick - 1)).active(active).category(editor);
+        this.keys().register(Keys.NEXT, () -> this.setCursor(this.getCursor() + 1)).active(active).category(editor);
+        this.keys().register(Keys.PREV, () -> this.setCursor(this.getCursor() - 1)).active(active).category(editor);
         this.keys().register(Keys.UNDO, this::undo).category(editor);
         this.keys().register(Keys.REDO, this::redo).category(editor);
         this.keys().register(Keys.DESELECT, () -> this.pickClip(null)).active(active).category(clips);
@@ -195,8 +194,8 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         this.keys().register(Keys.LOOPING, () -> BBSSettings.editorLoop.set(!BBSSettings.editorLoop.get())).active(active).category(looping);
         this.keys().register(Keys.LOOPING_SET_MIN, () -> this.timeline.setLoopMin()).active(active).category(looping);
         this.keys().register(Keys.LOOPING_SET_MAX, () -> this.timeline.setLoopMax()).active(active).category(looping);
-        this.keys().register(Keys.JUMP_FORWARD, () -> this.timeline.setTickAndNotify(this.timeline.tick + BBSSettings.editorJump.get())).active(active).category(editor);
-        this.keys().register(Keys.JUMP_BACKWARD, () -> this.timeline.setTickAndNotify(this.timeline.tick - BBSSettings.editorJump.get())).active(active).category(editor);
+        this.keys().register(Keys.JUMP_FORWARD, () -> this.setCursor(this.getCursor() + BBSSettings.editorJump.get())).active(active).category(editor);
+        this.keys().register(Keys.JUMP_BACKWARD, () -> this.setCursor(this.getCursor() - BBSSettings.editorJump.get())).active(active).category(editor);
 
         this.fill(null);
     }
@@ -304,9 +303,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
     private void disableContext()
     {
-        ClipContext context = this.runner.getContext();
-
-        context.shutdown();
+        this.runner.getContext().shutdown();
     }
 
     @Override
@@ -387,28 +384,13 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             }
 
             this.timeline.scale.view(change.viewMin, change.viewMax);
-            this.timeline.setTickAndNotify(change.tick);
+            this.setCursor(change.tick);
             this.timeline.vertical.scrollTo(change.scroll);
         }
 
         if (this.panel != null)
         {
             this.panel.handleUndo(undo, redo);
-        }
-    }
-
-    public void markLastUndoNoMerging()
-    {
-        if (this.data == null)
-        {
-            return;
-        }
-
-        IUndo<StructureBase> undo = this.undoManager.getCurrentUndo();
-
-        if (undo != null)
-        {
-            undo.noMerging();
         }
     }
 
@@ -505,19 +487,19 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
     private void jumpToNextClip()
     {
-        this.timeline.setTickAndNotify(this.data.findNextTick(this.timeline.tick));
+        this.setCursor(this.data.findNextTick(this.getCursor()));
     }
 
     private void jumpToPrevClip()
     {
-        this.timeline.setTickAndNotify(this.data.findPreviousTick(this.timeline.tick));
+        this.setCursor(this.data.findPreviousTick(this.getCursor()));
     }
 
     public void togglePlayback()
     {
         this.setFlight(false);
 
-        this.runner.toggle(this.timeline.tick);
+        this.runner.toggle(this.getCursor());
         this.lastRunning = this.runner.isRunning();
         this.updatePlauseButton();
     }
@@ -629,7 +611,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
             if (min >= 0 && max >= 0 && min < max && (this.runner.ticks >= max - 1 || this.runner.ticks < min))
             {
-                this.timeline.setTickAndNotify((int) min);
+                this.setCursor((int) min);
             }
         }
 
@@ -645,17 +627,11 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             this.dashboard.orbit.setup(this.getCamera());
         }
 
-        /* Update playback timeline */
-        if (this.isRunning())
-        {
-            this.timeline.setTick(this.runner.ticks);
-        }
-
         /* Rewind playback back to 0 */
         if (this.lastRunning && !this.isRunning())
         {
             this.lastRunning = this.runner.isRunning();
-            this.timeline.setTickAndNotify(0);
+            this.setCursor(0);
 
             this.updatePlauseButton();
         }
@@ -912,7 +888,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
             if (this.isFlightEnabled())
             {
-                this.timeline.setTick(clip.tick.get(), true);
+                this.setCursor(clip.tick.get());
             }
         }
         catch (Exception e)
@@ -924,19 +900,13 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
     @Override
     public int getCursor()
     {
-        return this.timeline.tick;
+        return this.runner.ticks;
     }
 
     @Override
-    public void setCursor(int value, boolean notify)
+    public void setCursor(int value)
     {
-        this.runner.ticks = value;
-    }
-
-    @Override
-    public void setTickAndNotify(int tick)
-    {
-        this.timeline.setTickAndNotify(tick);
+        this.runner.ticks = Math.max(0, value);
     }
 
     @Override
@@ -1008,6 +978,22 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         }
 
         undoManager.setCallback(this::handleUndos);
+    }
+
+    @Override
+    public void markLastUndoNoMerging()
+    {
+        if (this.data == null)
+        {
+            return;
+        }
+
+        IUndo<StructureBase> undo = this.undoManager.getCurrentUndo();
+
+        if (undo != null)
+        {
+            undo.noMerging();
+        }
     }
 
     @Override

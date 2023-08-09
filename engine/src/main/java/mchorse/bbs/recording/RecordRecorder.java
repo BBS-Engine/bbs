@@ -11,29 +11,9 @@ import java.util.Map;
 
 public class RecordRecorder
 {
-    /**
-     * Initial record
-     */
     public Record record;
-
-    /**
-     * Recording mode (record actions, frames or both)
-     */
     public Mode mode;
-
-    /**
-     * Current recording tick
-     */
     public int tick = 0;
-
-    /**
-     * Recording offset
-     */
-    public int offset = 0;
-
-    /**
-     * Groups that has to be recorded
-     */
     public List<String> groups;
 
     public RecordRecorder(Record record, Mode mode, List<String> groups)
@@ -43,9 +23,6 @@ public class RecordRecorder
         this.groups = groups;
     }
 
-    /**
-     * Record frame from the player
-     */
     public void record(Entity player)
     {
         this.record.keyframes.record(this.tick, player, this.groups);
@@ -55,13 +32,18 @@ public class RecordRecorder
 
     public void stop(Entity player)
     {
-        this.record.length = this.tick;
+        this.record.length.set(this.tick);
 
         if (this.groups == null || this.groups.isEmpty())
         {
             return;
         }
 
+        this.copyOldKeyframes();
+    }
+
+    private void copyOldKeyframes()
+    {
         Record oldRecord = BBSData.getRecords().load(this.record.getId());
 
         if (oldRecord == null)

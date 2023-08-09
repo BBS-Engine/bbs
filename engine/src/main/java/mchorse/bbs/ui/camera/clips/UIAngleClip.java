@@ -1,7 +1,7 @@
 package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.modifiers.AngleClip;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.camera.clips.widgets.UIBitToggle;
 
@@ -10,7 +10,7 @@ public class UIAngleClip extends UIClip<AngleClip>
     public UIAngleModule angle;
     public UIBitToggle active;
 
-    public UIAngleClip(AngleClip clip, IUICameraWorkDelegate editor)
+    public UIAngleClip(AngleClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }

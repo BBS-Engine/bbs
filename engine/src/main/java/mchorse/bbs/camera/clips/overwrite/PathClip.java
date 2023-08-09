@@ -2,8 +2,7 @@ package mchorse.bbs.camera.clips.overwrite;
 
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.CameraClip;
-import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.camera.clips.ClipContext;
+import mchorse.bbs.camera.clips.CameraClipContext;
 import mchorse.bbs.camera.data.Angle;
 import mchorse.bbs.camera.data.InterpolationType;
 import mchorse.bbs.camera.data.Point;
@@ -12,6 +11,8 @@ import mchorse.bbs.camera.values.ValueInterpolationType;
 import mchorse.bbs.camera.values.ValuePositions;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueDouble;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.utils.math.Interpolation;
 import mchorse.bbs.utils.math.Interpolations;
 import mchorse.bbs.utils.math.MathUtils;
@@ -344,7 +345,7 @@ public class PathClip extends CameraClip
         PathClip path = (PathClip) original;
         Position position = new Position();
 
-        path.apply(new ClipContext().setup(offset, 0), position);
+        path.apply(new CameraClipContext().setup(offset, 0), position);
 
         float factor = (offset / (float) original.duration.get()) * (this.size() - 1);
         int originalPoints = (int) Math.ceil(factor);

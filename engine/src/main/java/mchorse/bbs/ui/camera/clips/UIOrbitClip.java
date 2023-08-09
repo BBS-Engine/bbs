@@ -3,7 +3,7 @@ package mchorse.bbs.ui.camera.clips;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.clips.modifiers.OrbitClip;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UITextboxHelp;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
@@ -19,7 +19,7 @@ public class UIOrbitClip extends UIClip<OrbitClip>
     public UIPointModule offset;
     public UITrackpad distance;
 
-    public UIOrbitClip(OrbitClip clip, IUICameraWorkDelegate editor)
+    public UIOrbitClip(OrbitClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }

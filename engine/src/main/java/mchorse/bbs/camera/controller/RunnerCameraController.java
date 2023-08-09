@@ -46,7 +46,7 @@ public class RunnerCameraController extends CameraWorkCameraController
         {
             this.ticks += 1;
 
-            if (this.ticks >= this.context.work.clips.calculateDuration())
+            if (this.ticks >= this.context.clips.calculateDuration())
             {
                 this.context.playing = false;
             }
@@ -65,7 +65,7 @@ public class RunnerCameraController extends CameraWorkCameraController
         {
             this.manual.apply(camera);
         }
-        else if (this.context.work != null)
+        else if (this.context.clips != null)
         {
             this.apply(camera, this.ticks, this.context.playing ? transition : this.lastTransition);
         }

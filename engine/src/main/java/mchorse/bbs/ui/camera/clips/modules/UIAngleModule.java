@@ -3,7 +3,7 @@ package mchorse.bbs.ui.camera.clips.modules;
 import mchorse.bbs.camera.data.Angle;
 import mchorse.bbs.camera.values.ValueAngle;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
@@ -23,7 +23,7 @@ public class UIAngleModule extends UIAbstractModule
 
     public ValueAngle angle;
 
-    public UIAngleModule(IUICameraWorkDelegate editor)
+    public UIAngleModule(IUIClipsDelegate editor)
     {
         super(editor);
 

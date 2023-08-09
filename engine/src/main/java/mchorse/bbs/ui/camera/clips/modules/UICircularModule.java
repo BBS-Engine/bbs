@@ -2,7 +2,7 @@ package mchorse.bbs.ui.camera.clips.modules;
 
 import mchorse.bbs.camera.clips.overwrite.CircularClip;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 
@@ -23,7 +23,7 @@ public class UICircularModule extends UIAbstractModule
 
     public CircularClip clip;
 
-    public UICircularModule(IUICameraWorkDelegate editor)
+    public UICircularModule(IUIClipsDelegate editor)
     {
         super(editor);
 

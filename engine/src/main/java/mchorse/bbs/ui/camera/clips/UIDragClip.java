@@ -3,7 +3,7 @@ package mchorse.bbs.ui.camera.clips;
 import mchorse.bbs.camera.clips.modifiers.DragClip;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.widgets.UIBitToggle;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
@@ -15,7 +15,7 @@ public class UIDragClip extends UIClip<DragClip>
     public UITrackpad rate;
     public UIBitToggle active;
 
-    public UIDragClip(DragClip clip, IUICameraWorkDelegate editor)
+    public UIDragClip(DragClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }

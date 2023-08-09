@@ -6,7 +6,7 @@ import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.utils.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.camera.utils.UICameraGraphEditor;
 import mchorse.bbs.ui.camera.utils.UICameraKeyframesEditor;
@@ -34,7 +34,7 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     private IKey title = IKey.EMPTY;
     private UICameraKeyframesEditor current;
 
-    public UIKeyframeClip(KeyframeClip clip, IUICameraWorkDelegate editor)
+    public UIKeyframeClip(KeyframeClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }

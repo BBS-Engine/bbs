@@ -5,7 +5,7 @@ import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValuePositions;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.ScrollArea;
 import mchorse.bbs.ui.utils.ScrollDirection;
@@ -36,7 +36,7 @@ public class UIPointsModule extends UIAbstractModule
      */
     public int index = 0;
 
-    public UIPointsModule(IUICameraWorkDelegate editor, Consumer<Integer> picker)
+    public UIPointsModule(IUIClipsDelegate editor, Consumer<Integer> picker)
     {
         super(editor);
 

@@ -1,7 +1,7 @@
-package mchorse.bbs.camera.clips;
+package mchorse.bbs.utils.clips;
 
 import mchorse.bbs.camera.data.StructureBase;
-import mchorse.bbs.camera.values.ValueEnvelope;
+import mchorse.bbs.utils.clips.values.ValueEnvelope;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.ValueString;

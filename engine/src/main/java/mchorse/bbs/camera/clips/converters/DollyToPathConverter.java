@@ -1,6 +1,6 @@
 package mchorse.bbs.camera.clips.converters;
 
-import mchorse.bbs.camera.clips.ClipContext;
+import mchorse.bbs.camera.clips.CameraClipContext;
 import mchorse.bbs.camera.clips.overwrite.DollyClip;
 import mchorse.bbs.camera.clips.overwrite.PathClip;
 import mchorse.bbs.camera.data.InterpolationType;
@@ -15,7 +15,7 @@ public class DollyToPathConverter implements IClipConverter<DollyClip, PathClip>
         Position position = new Position();
         InterpolationType interp = InterpolationType.fromInterp(dolly.interp.get());
 
-        dolly.applyLast(new ClipContext(), position);
+        dolly.applyLast(new CameraClipContext(), position);
 
         path.copy(dolly);
         path.points.reset();

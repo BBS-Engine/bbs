@@ -2,8 +2,9 @@ package mchorse.bbs.ui.camera.clips.renderer;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
-import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.camera.smooth.Envelope;
+import mchorse.bbs.ui.camera.UIClips;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.Envelope;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.ui.framework.UIContext;
@@ -25,7 +26,7 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
     private static Vector2f previous = new Vector2f();
 
     @Override
-    public void renderClip(UIContext context, T clip, Area area, boolean selected, boolean current)
+    public void renderClip(UIContext context, UIClips clips, T clip, Area area, boolean selected, boolean current)
     {
         int y = area.y;
         int h = area.h;
@@ -41,7 +42,7 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
         }
 
         int clipColor = clip.color.get();
-        int color = Colors.A100 | (clipColor == 0 ? BBS.getFactoryClips().getData(clip).color : clipColor);
+        int color = Colors.A100 | (clipColor == 0 ? clips.getFactory().getData(clip).color : clipColor);
 
         if (clip.enabled.get())
         {

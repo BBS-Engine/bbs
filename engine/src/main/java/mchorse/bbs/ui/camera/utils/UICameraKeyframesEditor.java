@@ -3,7 +3,7 @@ package mchorse.bbs.ui.camera.utils;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframes;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframesEditor;
@@ -22,14 +22,14 @@ public abstract class UICameraKeyframesEditor <E extends UIKeyframes> extends UI
 {
     public static final CameraAxisConverter CONVERTER = new CameraAxisConverter();
 
-    protected IUICameraWorkDelegate editor;
+    protected IUIClipsDelegate editor;
     protected List<BaseValue> valueChannels = new ArrayList<>();
 
     private List<BaseType> cachedData = new ArrayList<>();
     private int type = -1;
     private long lastUpdate;
 
-    public UICameraKeyframesEditor(IUICameraWorkDelegate editor)
+    public UICameraKeyframesEditor(IUIClipsDelegate editor)
     {
         super();
 

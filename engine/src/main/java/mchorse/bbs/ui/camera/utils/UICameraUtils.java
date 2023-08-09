@@ -11,7 +11,7 @@ import mchorse.bbs.camera.values.ValuePosition;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.context.ContextAction;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
@@ -78,7 +78,7 @@ public class UICameraUtils
 
     /* Position UX context menu */
 
-    public static void positionContextMenu(ContextMenuManager menu, IUICameraWorkDelegate editor, ValuePosition value)
+    public static void positionContextMenu(ContextMenuManager menu, IUIClipsDelegate editor, ValuePosition value)
     {
         menu.action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_POSITION, Colors.NEGATIVE, () ->
         {
@@ -111,7 +111,7 @@ public class UICameraUtils
         angleContextMenu(menu, editor, value.getAngle());
     }
 
-    public static void pointContextMenu(ContextMenuManager menu, IUICameraWorkDelegate editor, ValuePoint value)
+    public static void pointContextMenu(ContextMenuManager menu, IUIClipsDelegate editor, ValuePoint value)
     {
         menu.shadow().action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_POINT, Colors.POSITIVE, () ->
         {
@@ -156,7 +156,7 @@ public class UICameraUtils
         return null;
     }
 
-    public static void angleContextMenu(ContextMenuManager menu, IUICameraWorkDelegate editor, ValueAngle value)
+    public static void angleContextMenu(ContextMenuManager menu, IUIClipsDelegate editor, ValueAngle value)
     {
         menu.shadow().action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_ANGLE, Colors.INACTIVE, () ->
         {

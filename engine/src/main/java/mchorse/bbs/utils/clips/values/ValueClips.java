@@ -1,10 +1,11 @@
-package mchorse.bbs.camera.values;
+package mchorse.bbs.utils.clips.values;
 
-import mchorse.bbs.BBS;
-import mchorse.bbs.camera.clips.Clip;
+import mchorse.bbs.camera.clips.ClipFactoryData;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.settings.values.ValueGroup;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.factory.IFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,10 +17,13 @@ import java.util.Map;
 public class ValueClips extends ValueGroup
 {
     private List<Clip> clips;
+    private IFactory<Clip, ClipFactoryData> factory;
 
-    public ValueClips(String id)
+    public ValueClips(String id, IFactory<Clip, ClipFactoryData> factory)
     {
         super(id);
+
+        this.factory = factory;
 
         this.assign(new ArrayList<>());
     }
@@ -129,7 +133,7 @@ public class ValueClips extends ValueGroup
 
         for (int i = 0, c = this.clips.size(); i < c; i++)
         {
-            this.add(new ValueClip(String.valueOf(i), this.clips.get(i)));
+            this.add(new ValueClip(String.valueOf(i), this.clips.get(i), this.factory));
         }
     }
 
@@ -153,7 +157,7 @@ public class ValueClips extends ValueGroup
 
         for (Clip clip : this.clips)
         {
-            list.add(BBS.getFactoryClips().toData(clip));
+            list.add(this.factory.toData(clip));
         }
 
         return list;
@@ -171,7 +175,7 @@ public class ValueClips extends ValueGroup
                 continue;
             }
 
-            Clip clip = BBS.getFactoryClips().fromData(type.asMap());
+            Clip clip = this.factory.fromData(type.asMap());
 
             if (clip != null)
             {

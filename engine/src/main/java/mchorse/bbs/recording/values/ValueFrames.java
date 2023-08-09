@@ -1,8 +1,9 @@
-package mchorse.bbs.recording.data;
+package mchorse.bbs.recording.values;
 
-import mchorse.bbs.data.IMapSerializable;
+import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.game.entities.components.PlayerComponent;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.BasicComponent;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Frames implements IMapSerializable
+public class ValueFrames extends BaseValue
 {
     public static final String GROUP_POSITION = "position";
     public static final String GROUP_ROTATION = "rotation";
@@ -53,8 +54,10 @@ public class Frames implements IMapSerializable
 
     private Map<String, KeyframeChannel> keyframes = new HashMap<>();
 
-    public Frames()
+    public ValueFrames(String id)
     {
+        super(id);
+
         this.keyframes.put("x", this.x);
         this.keyframes.put("y", this.y);
         this.keyframes.put("z", this.z);
@@ -203,7 +206,7 @@ public class Frames implements IMapSerializable
         }
     }
 
-    public void copy(Frames frames)
+    public void copy(ValueFrames frames)
     {
         for (String key : this.keyframes.keySet())
         {
@@ -212,20 +215,31 @@ public class Frames implements IMapSerializable
     }
 
     @Override
-    public void fromData(MapType data)
+    public BaseType toData()
     {
-        for (Map.Entry<String, KeyframeChannel> entry : this.keyframes.entrySet())
-        {
-            entry.getValue().fromData(data.getList(entry.getKey()));
-        }
-    }
+        MapType data = new MapType();
 
-    @Override
-    public void toData(MapType data)
-    {
         for (Map.Entry<String, KeyframeChannel> entry : this.keyframes.entrySet())
         {
             data.put(entry.getKey(), entry.getValue().toData());
+        }
+
+        return data;
+    }
+
+    @Override
+    public void fromData(BaseType data)
+    {
+        if (!data.isMap())
+        {
+            return;
+        }
+
+        MapType map = data.asMap();
+
+        for (Map.Entry<String, KeyframeChannel> entry : this.keyframes.entrySet())
+        {
+            entry.getValue().fromData(map.getList(entry.getKey()));
         }
     }
 }

@@ -1,11 +1,10 @@
 package mchorse.bbs.ui.camera.clips;
 
-import mchorse.bbs.camera.CameraWork;
-import mchorse.bbs.camera.clips.ClipContext;
+import mchorse.bbs.camera.clips.CameraClipContext;
 import mchorse.bbs.camera.clips.overwrite.DollyClip;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
@@ -30,7 +29,7 @@ public class UIDollyClip extends UIClip<DollyClip>
     public UITrackpad yaw;
     public UITrackpad pitch;
 
-    public UIDollyClip(DollyClip clip, IUICameraWorkDelegate editor)
+    public UIDollyClip(DollyClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }
@@ -77,7 +76,7 @@ public class UIDollyClip extends UIClip<DollyClip>
     {
         Position position = new Position();
 
-        this.clip.applyLast(new ClipContext(), position);
+        this.clip.applyLast(new CameraClipContext(), position);
 
         this.editor.postUndo(new CompoundUndo<>(
             this.undo(this.clip.position, position.toData()),

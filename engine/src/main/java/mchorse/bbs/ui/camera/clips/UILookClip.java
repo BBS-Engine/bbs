@@ -4,7 +4,7 @@ import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.modifiers.LookClip;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UITextboxHelp;
 import mchorse.bbs.ui.framework.elements.UIElement;
@@ -31,7 +31,7 @@ public class UILookClip extends UIClip<LookClip>
 
     public UIElement row;
 
-    public UILookClip(LookClip clip, IUICameraWorkDelegate editor)
+    public UILookClip(LookClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }

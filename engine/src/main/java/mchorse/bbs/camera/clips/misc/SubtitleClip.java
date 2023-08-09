@@ -1,8 +1,8 @@
 package mchorse.bbs.camera.clips.misc;
 
 import mchorse.bbs.camera.clips.CameraClip;
-import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.camera.clips.ClipContext;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.settings.values.ValueFloat;
 import mchorse.bbs.settings.values.ValueInt;

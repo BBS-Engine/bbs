@@ -1,6 +1,6 @@
-package mchorse.bbs.camera.values;
+package mchorse.bbs.utils.clips.values;
 
-import mchorse.bbs.camera.smooth.Envelope;
+import mchorse.bbs.utils.clips.Envelope;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.data.types.BaseType;

@@ -15,7 +15,6 @@ import mchorse.bbs.settings.values.ValueDouble;
 import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.IInterpolation;
-import mchorse.bbs.utils.math.Interpolation;
 import mchorse.bbs.world.entities.Entity;
 
 import java.util.HashMap;
@@ -152,19 +151,6 @@ public abstract class Form implements IMapSerializable, IPuppet
     }
 
     /* Tweening */
-
-    public void tween(Form form, int duration, String interpolation)
-    {
-        for (Interpolation i : Interpolation.values())
-        {
-            if (i.key.equals(interpolation))
-            {
-                this.tween(form, duration, i);
-
-                return;
-            }
-        }
-    }
 
     public void tween(Form form, int duration, IInterpolation interpolation)
     {

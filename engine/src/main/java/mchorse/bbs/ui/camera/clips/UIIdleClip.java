@@ -2,7 +2,7 @@ package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.overwrite.IdleClip;
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.utils.UICameraUtils;
@@ -18,7 +18,7 @@ public class UIIdleClip extends UIClip<IdleClip>
     public UIPointModule point;
     public UIAngleModule angle;
 
-    public UIIdleClip(IdleClip clip, IUICameraWorkDelegate editor)
+    public UIIdleClip(IdleClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }

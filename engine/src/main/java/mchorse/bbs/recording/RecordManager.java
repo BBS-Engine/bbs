@@ -113,7 +113,7 @@ public class RecordManager extends BaseManager<Record>
 
         RecordRecorder recorder = new RecordRecorder(new Record(filename), Mode.BOTH, groups);
 
-        recorder.offset = offset;
+        recorder.tick = offset;
 
         player.world.damageManager.addDamageControl(recorder, player);
 
@@ -184,7 +184,7 @@ public class RecordManager extends BaseManager<Record>
         {
             Record record = this.load(filename);
 
-            if (record == null || record.size() <= 0)
+            if (record == null || record.getLength() <= 0)
             {
                 this.bridge.get(IBridgeWorld.class).sendMessage(EMPTY_RECORDING.format(filename));
 

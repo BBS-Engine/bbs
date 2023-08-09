@@ -1,6 +1,5 @@
-package mchorse.bbs.camera.smooth;
+package mchorse.bbs.utils.clips;
 
-import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.data.StructureBase;
 import mchorse.bbs.camera.values.ValueInterpolation;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;

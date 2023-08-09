@@ -1,16 +1,16 @@
 package mchorse.bbs.ui.camera;
 
 import mchorse.bbs.camera.Camera;
-import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.framework.elements.UIElement;
+import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.undo.IUndo;
 
 import java.util.function.Consumer;
 
-public interface IUICameraWorkDelegate
+public interface IUIClipsDelegate
 {
     public Camera getCamera();
 
@@ -20,9 +20,7 @@ public interface IUICameraWorkDelegate
 
     public int getCursor();
 
-    public void setCursor(int tick, boolean notify);
-
-    public void setTickAndNotify(int tick);
+    public void setCursor(int tick);
 
     public boolean canUseKeybinds();
 

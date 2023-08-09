@@ -8,7 +8,7 @@ import mchorse.bbs.camera.values.ValuePosition;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointModule;
 import mchorse.bbs.ui.camera.clips.modules.UIPointsModule;
@@ -49,7 +49,7 @@ public class UIPathClip extends UIClip<PathClip>
 
     public ValuePosition position;
 
-    public UIPathClip(PathClip clip, IUICameraWorkDelegate editor)
+    public UIPathClip(PathClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }
@@ -166,7 +166,7 @@ public class UIPathClip extends UIClip<PathClip>
                 offset -= 1;
             }
 
-            this.editor.setTickAndNotify(this.clip.tick.get() + offset);
+            this.editor.setCursor(this.clip.tick.get() + offset);
         }
     }
 

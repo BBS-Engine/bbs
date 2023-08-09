@@ -1,9 +1,8 @@
 package mchorse.bbs.ui.camera.clips.widgets;
 
-import mchorse.bbs.camera.clips.Clip;
-import mchorse.bbs.camera.smooth.Envelope;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.Envelope;
 import mchorse.bbs.camera.utils.TimeUtils;
-import mchorse.bbs.data.types.ByteType;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.camera.utils.UICameraGraphEditor;

@@ -1,16 +1,13 @@
 package mchorse.bbs.ui.camera;
 
-import mchorse.bbs.BBS;
 import mchorse.bbs.BBSData;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.clips.CameraClip;
-import mchorse.bbs.camera.clips.Clip;
 import mchorse.bbs.camera.clips.ClipFactoryData;
 import mchorse.bbs.camera.clips.converters.IClipConverter;
 import mchorse.bbs.camera.clips.overwrite.KeyframeClip;
 import mchorse.bbs.camera.utils.TimeUtils;
-import mchorse.bbs.camera.values.ValueClips;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
@@ -38,7 +35,10 @@ import mchorse.bbs.ui.utils.ScrollDirection;
 import mchorse.bbs.ui.utils.context.ContextAction;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.values.ValueClips;
 import mchorse.bbs.utils.colors.Colors;
+import mchorse.bbs.utils.factory.IFactory;
 import mchorse.bbs.utils.keyframes.Keyframe;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.MathUtils;
@@ -53,7 +53,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class UICameraWork extends UIElement
+public class UIClips extends UIElement
 {
     /* Constants */
     public static final IKey KEYS_CATEGORY = UIKeys.CAMERA_EDITOR_KEYS_CLIPS_TITLE;
@@ -65,11 +65,11 @@ public class UICameraWork extends UIElement
     private static final Area CLIP_AREA = new Area();
 
     /* Main objects */
-    private IUICameraWorkDelegate editor;
+    private IUIClipsDelegate delegate;
     private ValueClips clips;
+    private IFactory<Clip, ClipFactoryData> factory;
 
     /* Navigation */
-    public int tick;
     public Scale scale = new Scale(this.area, ScrollDirection.HORIZONTAL, false);
     public ScrollArea vertical = new ScrollArea(new Area());
 
@@ -100,11 +100,12 @@ public class UICameraWork extends UIElement
 
     private UIClipRenderers renderers = new UIClipRenderers();
 
-    public UICameraWork(IUICameraWorkDelegate editor)
+    public UIClips(IUIClipsDelegate delegate, IFactory<Clip, ClipFactoryData> factory)
     {
         super();
 
-        this.editor = editor;
+        this.delegate = delegate;
+        this.factory = factory;
 
         this.scale.lock(0, Double.MAX_VALUE);
 
@@ -116,7 +117,7 @@ public class UICameraWork extends UIElement
             UIContext context = this.getContext();
             int mouseX = context.mouseX;
             int mouseY = context.mouseY;
-            boolean hasSelected = this.editor.getClip() != null;
+            boolean hasSelected = this.delegate.getClip() != null;
 
             if (this.fromLayerY(mouseY) < 0)
             {
@@ -142,9 +143,9 @@ public class UICameraWork extends UIElement
             }
         });
 
-        Supplier<Boolean> isFlightDisabled = this.editor::canUseKeybinds;
+        Supplier<Boolean> isFlightDisabled = this.delegate::canUseKeybinds;
 
-        this.keys().register(Keys.ADD_ON_TOP, this::showAddsOnTop).category(KEYS_CATEGORY).active(() -> this.editor.getClip() != null && this.editor.canUseKeybinds());
+        this.keys().register(Keys.ADD_ON_TOP, this::showAddsOnTop).category(KEYS_CATEGORY).active(() -> this.delegate.getClip() != null && this.delegate.canUseKeybinds());
         this.keys().register(Keys.ADD_AT_CURSOR, this::showAddsAtCursor).category(KEYS_CATEGORY).active(isFlightDisabled);
         this.keys().register(Keys.ADD_AT_TICK, this::showAddsAtTick).category(KEYS_CATEGORY).active(isFlightDisabled);
         this.keys().register(Keys.CLIP_CUT, this::cut).category(KEYS_CATEGORY).active(isFlightDisabled);
@@ -152,6 +153,11 @@ public class UICameraWork extends UIElement
         this.keys().register(Keys.CLIP_DURATION, this::shiftDurationToCursor).category(KEYS_CATEGORY).active(isFlightDisabled);
         this.keys().register(Keys.CLIP_REMOVE, this::removeSelected).category(KEYS_CATEGORY).active(isFlightDisabled);
         this.keys().register(Keys.CLIP_ENABLE, this::toggleEnabled).category(KEYS_CATEGORY).active(isFlightDisabled);
+    }
+
+    public IFactory<Clip, ClipFactoryData> getFactory()
+    {
+        return this.factory;
     }
 
     /* Update methods */
@@ -178,10 +184,10 @@ public class UICameraWork extends UIElement
         {
             ValueInt clipValue = (ValueInt) clip.getProperty(property.getId());
 
-            undos.add(this.editor.createUndo(clipValue, (v) -> v.set(clipValue.get() + difference)));
+            undos.add(this.delegate.createUndo(clipValue, (v) -> v.set(clipValue.get() + difference)));
         }
 
-        this.editor.postUndo(new CompoundUndo(undos));
+        this.delegate.postUndo(new CompoundUndo(undos));
     }
 
     /* Undo/redo helpers */
@@ -208,8 +214,8 @@ public class UICameraWork extends UIElement
 
         if (undo != null)
         {
-            this.editor.postUndo(undo, false);
-            this.editor.fillData();
+            this.delegate.postUndo(undo, false);
+            this.delegate.fillData();
             this.resetCache();
         }
     }
@@ -221,7 +227,7 @@ public class UICameraWork extends UIElement
             return null;
         }
 
-        IUndo undo = this.editor.createUndo(this.clips, this.cache, this.clips.toData()).noMerging();
+        IUndo undo = this.delegate.createUndo(this.clips, this.cache, this.clips.toData()).noMerging();
 
         if (undo instanceof IUndoSelection)
         {
@@ -242,7 +248,7 @@ public class UICameraWork extends UIElement
             add.action(Icons.CURSOR, UIKeys.CAMERA_TIMELINE_CONTEXT_ADD_AT_CURSOR, () -> this.showAddsAtCursor(context, mouseX, mouseY));
             add.action(Icons.SHIFT_TO, UIKeys.CAMERA_TIMELINE_CONTEXT_ADD_AT_TICK, () -> this.showAddsAtTick(context, mouseX, mouseY));
 
-            if (this.editor.getClip() != null)
+            if (this.delegate.getClip() != null)
             {
                 add.action(Icons.UPLOAD, UIKeys.CAMERA_TIMELINE_CONTEXT_ADD_ON_TOP, this::showAddsOnTop);
             }
@@ -272,12 +278,12 @@ public class UICameraWork extends UIElement
 
     private void showAddsAtTick(UIContext context, int mouseX, int mouseY)
     {
-        this.showAddClips(context, this.tick, this.fromLayerY(mouseY), BBSSettings.getDefaultDuration());
+        this.showAddClips(context, this.delegate.getCursor(), this.fromLayerY(mouseY), BBSSettings.getDefaultDuration());
     }
 
     private void showAddsOnTop()
     {
-        Clip clip = this.editor.getClip();
+        Clip clip = this.delegate.getClip();
         UIContext context = this.getContext();
 
         this.showAddClips(context, clip.tick.get(), clip.layer.get() + 1, clip.duration.get());
@@ -290,10 +296,10 @@ public class UICameraWork extends UIElement
             IKey addCategory = UIKeys.CAMERA_TIMELINE_KEYS_CLIPS;
             int i = 0;
 
-            for (Link type : BBS.getFactoryClips().getKeys())
+            for (Link type : this.factory.getKeys())
             {
                 IKey typeKey = UIKeys.CAMERA_TIMELINE_CONTEXT_ADD_CLIP_TYPE.format(UIKeys.C_CLIP.get(type));
-                ClipFactoryData data = BBS.getFactoryClips().getData(type);
+                ClipFactoryData data = this.factory.getData(type);
                 ContextAction action = add.action(data.icon, typeKey, data.color, () -> this.addClip(type, tick, layer, duration));
 
                 if (i < 30)
@@ -326,11 +332,11 @@ public class UICameraWork extends UIElement
 
     private void addClip(Link type, int tick, int layer, int duration)
     {
-        Clip clip = BBS.getFactoryClips().create(type);
+        Clip clip = this.factory.create(type);
 
         if (clip instanceof CameraClip)
         {
-            ((CameraClip) clip).fromCamera(this.editor.getCamera());
+            ((CameraClip) clip).fromCamera(this.delegate.getCamera());
         }
 
         this.addClip(clip, tick, layer, duration);
@@ -360,7 +366,7 @@ public class UICameraWork extends UIElement
 
         for (Clip clip : this.getClipsFromSelection())
         {
-            clips.add(BBS.getFactoryClips().toData(clip));
+            clips.add(this.factory.toData(clip));
         }
 
         Window.setClipboard(data, "_CopyClips");
@@ -391,7 +397,7 @@ public class UICameraWork extends UIElement
         for (BaseType type : clipsList)
         {
             MapType typeMap = type.asMap();
-            Clip clip = BBS.getFactoryClips().fromData(typeMap);
+            Clip clip = this.factory.fromData(typeMap);
 
             min = Math.min(min, clip.tick.get());
 
@@ -415,8 +421,8 @@ public class UICameraWork extends UIElement
     private void cut()
     {
         List<Clip> clips = this.isSelecting() ? this.getClipsFromSelection() : new ArrayList<>(this.clips.get());
-        Clip original = this.editor.getClip();
-        int offset = this.editor.getCursor();
+        Clip original = this.delegate.getClip();
+        int offset = this.delegate.getCursor();
 
         for (Clip clip : clips)
         {
@@ -444,7 +450,7 @@ public class UICameraWork extends UIElement
      */
     private void addConverters(ContextMenuManager menu, UIContext context)
     {
-        ClipFactoryData data = BBS.getFactoryClips().getData(this.editor.getClip());
+        ClipFactoryData data = this.factory.getData(this.delegate.getClip());
         Collection<Link> converters = data.converters.keySet();
 
         if (converters.isEmpty())
@@ -460,7 +466,7 @@ public class UICameraWork extends UIElement
                 {
                     IKey label = UIKeys.CAMERA_TIMELINE_CONTEXT_CONVERT_TO.format(UIKeys.C_CLIP.get(type));
 
-                    add.action(Icons.REFRESH, label, BBS.getFactoryClips().getData(type).color, () -> this.convertTo(type));
+                    add.action(Icons.REFRESH, label, this.factory.getData(type).color, () -> this.convertTo(type));
                 }
             });
         });
@@ -471,8 +477,8 @@ public class UICameraWork extends UIElement
      */
     private void convertTo(Link type)
     {
-        Clip original = this.editor.getClip();
-        ClipFactoryData data = BBS.getFactoryClips().getData(original);
+        Clip original = this.delegate.getClip();
+        ClipFactoryData data = this.factory.getData(original);
         IClipConverter converter = data.converters.get(type);
         Clip converted = converter.convert(original);
 
@@ -500,7 +506,7 @@ public class UICameraWork extends UIElement
             }
 
             KeyframeClip clip = new KeyframeClip();
-            int size = record.size();
+            int size = record.getLength();
 
             clip.fov.get().insert(0, 50);
 
@@ -550,14 +556,14 @@ public class UICameraWork extends UIElement
             min = Math.min(min, clip.tick.get());
         }
 
-        int diff = this.tick - min;
+        int diff = this.delegate.getCursor() - min;
 
         for (Clip clip : clips)
         {
-            undos.add(this.editor.createUndo(clip.tick, (tick) -> tick.set(clip.tick.get() + diff)));
+            undos.add(this.delegate.createUndo(clip.tick, (tick) -> tick.set(clip.tick.get() + diff)));
         }
 
-        this.editor.postUndoCallback(new CompoundUndo<>(undos));
+        this.delegate.postUndoCallback(new CompoundUndo<>(undos));
     }
 
     /**
@@ -578,20 +584,20 @@ public class UICameraWork extends UIElement
         {
             int offset = clip.tick.get();
 
-            if (this.tick > offset)
+            if (this.delegate.getCursor() > offset)
             {
-                undos.add(this.editor.createUndo(clip.duration, (duration) -> duration.set(this.tick - offset)));
+                undos.add(this.delegate.createUndo(clip.duration, (duration) -> duration.set(this.delegate.getCursor() - offset)));
             }
-            else if (this.tick < offset + clip.duration.get())
+            else if (this.delegate.getCursor() < offset + clip.duration.get())
             {
                 undos.add(new CompoundUndo<>(
-                    this.editor.createUndo(clip.tick, (tick) -> tick.set(this.tick)),
-                    this.editor.createUndo(clip.duration, (duration) -> duration.set(clip.duration.get() + offset - this.tick))
+                    this.delegate.createUndo(clip.tick, (tick) -> tick.set(this.delegate.getCursor())),
+                    this.delegate.createUndo(clip.duration, (duration) -> duration.set(clip.duration.get() + offset - this.delegate.getCursor()))
                 ));
             }
         }
 
-        this.editor.postUndoCallback(new CompoundUndo(undos));
+        this.delegate.postUndoCallback(new CompoundUndo(undos));
     }
 
     /**
@@ -631,11 +637,11 @@ public class UICameraWork extends UIElement
 
         for (Clip clip : clips)
         {
-            undos.add(this.editor.createUndo(clip.enabled, (enabled) -> enabled.set(!clip.enabled.get())));
+            undos.add(this.delegate.createUndo(clip.enabled, (enabled) -> enabled.set(!clip.enabled.get())));
         }
 
-        this.editor.postUndo(new CompoundUndo<>(undos));
-        this.editor.fillData();
+        this.delegate.postUndo(new CompoundUndo<>(undos));
+        this.delegate.fillData();
     }
 
     /* Selection */
@@ -699,12 +705,12 @@ public class UICameraWork extends UIElement
     private void pickClip(Clip clip)
     {
         this.setSelected(clip);
-        this.editor.pickClip(clip);
+        this.delegate.pickClip(clip);
     }
 
     private void pickLastSelectedClip()
     {
-        this.editor.pickClip(this.getLastSelectedClip());
+        this.delegate.pickClip(this.getLastSelectedClip());
     }
 
     public void setSelected(Clip clip)
@@ -798,36 +804,14 @@ public class UICameraWork extends UIElement
         return (int) this.scale.to(value);
     }
 
-    public void setTickAndNotify(int tick)
-    {
-        this.setTick(tick, true);
-    }
-
-    public void setTick(int tick)
-    {
-        this.setTick(tick, false);
-    }
-
-    public void setTick(int tick, boolean notify)
-    {
-        this.tick = Math.max(tick, 0);
-
-        this.editor.setCursor(this.tick, notify);
-
-        if (this.embedded != null && this.embedded instanceof IUIEmbeddedView)
-        {
-            ((IUIEmbeddedView) this.embedded).setTick(tick);
-        }
-    }
-
     public void setLoopMin()
     {
-        this.loopMin = this.tick;
+        this.loopMin = this.delegate.getCursor();
     }
 
     public void setLoopMax()
     {
-        this.loopMax = this.tick;
+        this.loopMax = this.delegate.getCursor();
     }
 
     private void verifyLoopMinMax()
@@ -952,7 +936,7 @@ public class UICameraWork extends UIElement
         else
         {
             this.scrubbing = true;
-            this.setTickAndNotify(this.fromGraphX(mouseX));
+            this.delegate.setCursor(this.fromGraphX(mouseX));
 
             return true;
         }
@@ -984,12 +968,12 @@ public class UICameraWork extends UIElement
         {
             int tick = this.fromGraphX(mouseX);
             int layerIndex = this.fromLayerY(mouseY);
-            Clip original = this.editor.getClip();
+            Clip original = this.delegate.getClip();
             Clip clip = this.clips.getClipAt(tick, layerIndex);
 
             if (clip != null && clip != original)
             {
-                this.editor.pickClip(clip);
+                this.delegate.pickClip(clip);
 
                 if (shift)
                 {
@@ -999,7 +983,7 @@ public class UICameraWork extends UIElement
 
                     if (last != original)
                     {
-                        this.editor.pickClip(last);
+                        this.delegate.pickClip(last);
                     }
                 }
                 else
@@ -1069,7 +1053,7 @@ public class UICameraWork extends UIElement
 
         if (this.grabbing)
         {
-            this.editor.markLastUndoNoMerging();
+            this.delegate.markLastUndoNoMerging();
         }
 
         this.grabbing = false;
@@ -1099,7 +1083,7 @@ public class UICameraWork extends UIElement
     {
         if (this.scrubbing)
         {
-            this.setTickAndNotify(this.fromGraphX(mouseX));
+            this.delegate.setCursor(this.fromGraphX(mouseX));
         }
         else if (this.selectingLoop == 0)
         {
@@ -1147,14 +1131,14 @@ public class UICameraWork extends UIElement
                 int newTick = clip.tick.get() + relativeX;
                 int newLayer = clip.layer.get() + relativeY;
 
-                undos.add(this.editor.createUndo(clip.tick, (tick) -> tick.set(newTick)));
-                undos.add(this.editor.createUndo(clip.layer, (layer) -> layer.set(newLayer)));
+                undos.add(this.delegate.createUndo(clip.tick, (tick) -> tick.set(newTick)));
+                undos.add(this.delegate.createUndo(clip.layer, (layer) -> layer.set(newLayer)));
                 clip.tick.set(newTick);
                 clip.layer.set(newLayer);
             }
 
-            this.editor.postUndo(new CompoundUndo(undos), false);
-            this.editor.fillData();
+            this.delegate.postUndo(new CompoundUndo(undos), false);
+            this.delegate.fillData();
 
             this.lastX = mouseX;
             this.lastY = mouseY;
@@ -1254,7 +1238,7 @@ public class UICameraWork extends UIElement
                 CLIP_AREA.h -= 2;
             }
 
-            renderer.renderClip(context, clip, CLIP_AREA, this.hasSelected(i), this.editor.getClip() == clip);
+            renderer.renderClip(context, this, clip, CLIP_AREA, this.hasSelected(i), this.delegate.getClip() == clip);
         }
 
         this.renderAddPreview(context, h);
@@ -1297,7 +1281,7 @@ public class UICameraWork extends UIElement
         int start = (int) this.scale.getMinValue();
         int end = (int) this.scale.getMaxValue();
         int max = Integer.MAX_VALUE;
-        int cursor = this.toGraphX(this.tick);
+        int cursor = this.toGraphX(this.delegate.getCursor());
 
         start -= start % mult;
         end -= end % mult;
@@ -1330,8 +1314,8 @@ public class UICameraWork extends UIElement
     private void renderCursor(UIContext context, int y)
     {
         /* Draw the marker */
-        String label = TimeUtils.formatTime(this.tick) + "/" + TimeUtils.formatTime(this.clips.calculateDuration());
-        int cursorX = this.toGraphX(this.tick);
+        String label = TimeUtils.formatTime(this.delegate.getCursor()) + "/" + TimeUtils.formatTime(this.clips.calculateDuration());
+        int cursorX = this.toGraphX(this.delegate.getCursor());
         int width = context.font.getWidth(label) + 3;
 
         context.batcher.box(cursorX, y, cursorX + 2, this.area.ey(), Colors.CURSOR);

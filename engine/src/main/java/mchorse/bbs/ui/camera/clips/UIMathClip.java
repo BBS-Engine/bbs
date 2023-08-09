@@ -2,7 +2,7 @@ package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.modifiers.MathClip;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.widgets.UIBitToggle;
 import mchorse.bbs.ui.camera.utils.UITextboxHelp;
 import mchorse.bbs.utils.colors.Colors;
@@ -12,7 +12,7 @@ public class UIMathClip extends UIClip<MathClip>
     public UITextboxHelp expression;
     public UIBitToggle active;
 
-    public UIMathClip(MathClip clip, IUICameraWorkDelegate editor)
+    public UIMathClip(MathClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }

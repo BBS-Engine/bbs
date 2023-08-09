@@ -2,7 +2,7 @@ package mchorse.bbs.ui.camera.clips;
 
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.utils.UI;
@@ -20,7 +20,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
     public UIColor background;
     public UITrackpad backgroundOffset;
 
-    public UISubtitleClip(SubtitleClip clip, IUICameraWorkDelegate editor)
+    public UISubtitleClip(SubtitleClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }

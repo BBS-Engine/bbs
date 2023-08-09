@@ -1,8 +1,8 @@
 package mchorse.bbs.recording;
 
 import mchorse.bbs.BBSData;
-import mchorse.bbs.recording.actions.Action;
-import mchorse.bbs.recording.actions.FormAction;
+import mchorse.bbs.recording.clips.ActionClip;
+import mchorse.bbs.recording.clips.FormActionClip;
 import mchorse.bbs.recording.data.Mode;
 import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.recording.scene.Replay;
@@ -74,7 +74,7 @@ public class RecordPlayer
      */
     public boolean isFinished()
     {
-        boolean isFinished = this.record != null && this.tick >= this.record.size();
+        boolean isFinished = this.record != null && this.tick >= this.record.getLength();
 
         if (isFinished && this.sync)
         {
@@ -122,7 +122,7 @@ public class RecordPlayer
 
         if (this.record != null)
         {
-            if (this.mode.isActions()) this.applyAction(this.tick, actor, false);
+            if (this.mode.isActions()) this.applyAction(this.tick, actor);
             if (this.mode.isFrames()) this.applyFrame(this.tick, actor);
         }
 
@@ -149,7 +149,7 @@ public class RecordPlayer
 
         this.playing = true;
 
-        FormAction action = this.seekAction(tick - 1, FormAction.class);
+        FormActionClip action = this.seekAction(tick - 1, FormActionClip.class);
 
         if (action == null)
         {
@@ -168,9 +168,9 @@ public class RecordPlayer
     {
         int original = tick;
 
-        if (tick > this.record.size())
+        if (tick > this.record.getLength())
         {
-            tick = this.record.size() - 1;
+            tick = this.record.getLength() - 1;
         }
 
         int min = Math.min(this.tick, tick);
@@ -192,7 +192,7 @@ public class RecordPlayer
         {
             this.record.applyAction(tick, this.actor);
 
-            FormAction action = this.seekAction(tick - 1, FormAction.class);
+            FormActionClip action = this.seekAction(tick - 1, FormActionClip.class);
 
             if (action == null)
             {
@@ -205,7 +205,7 @@ public class RecordPlayer
         }
     }
 
-    public <T extends Action> T seekAction(int tick, Class<T> actionType)
+    public <T extends ActionClip> T seekAction(int tick, Class<T> actionType)
     {
         /*  TODO: Frame frame = this.record.getFrame(tick); while (tick >= 0)
         {
@@ -281,13 +281,13 @@ public class RecordPlayer
 
     public void applyFrame(int tick, Entity target)
     {
-        tick = MathUtils.clamp(tick, 0, this.record.size() - 1);
+        tick = MathUtils.clamp(tick, 0, this.record.getLength() - 1);
 
         this.record.applyFrame(tick, target, this.groups);
     }
 
-    public void applyAction(int tick, Entity target, boolean safe)
+    public void applyAction(int tick, Entity target)
     {
-        this.record.applyAction(tick, target, safe);
+        this.record.applyAction(tick, target);
     }
 }

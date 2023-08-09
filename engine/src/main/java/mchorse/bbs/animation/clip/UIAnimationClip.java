@@ -3,7 +3,7 @@ package mchorse.bbs.animation.clip;
 import mchorse.bbs.bridge.IBridgeAnimations;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.game.utils.UIDataUtils;
@@ -12,7 +12,7 @@ public class UIAnimationClip extends UIClip<AnimationClip>
 {
     public UIButton pick;
 
-    public UIAnimationClip(AnimationClip clip, IUICameraWorkDelegate editor)
+    public UIAnimationClip(AnimationClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }

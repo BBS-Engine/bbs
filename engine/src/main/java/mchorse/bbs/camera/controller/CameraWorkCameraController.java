@@ -3,13 +3,14 @@ package mchorse.bbs.camera.controller;
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.CameraWork;
-import mchorse.bbs.camera.clips.ClipContext;
+import mchorse.bbs.camera.clips.CameraClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.core.ITickable;
+import mchorse.bbs.utils.clips.Clip;
 
 public abstract class CameraWorkCameraController implements ICameraController, ITickable
 {
-    protected ClipContext context;
+    protected CameraClipContext context;
     protected IBridge bridge;
     protected Position position = new Position();
 
@@ -17,18 +18,18 @@ public abstract class CameraWorkCameraController implements ICameraController, I
     {
         this.bridge = bridge;
 
-        this.context = new ClipContext();
+        this.context = new CameraClipContext();
         this.context.bridge = bridge;
     }
 
     public CameraWorkCameraController setWork(CameraWork work)
     {
-        this.context.work = work;
+        this.context.clips = work == null ? null : work.clips;
 
         return this;
     }
 
-    public ClipContext getContext()
+    public CameraClipContext getContext()
     {
         return this.context;
     }
@@ -36,7 +37,17 @@ public abstract class CameraWorkCameraController implements ICameraController, I
     protected void apply(Camera camera, int ticks, float transition)
     {
         this.position.set(camera);
-        this.context.work.apply(this.context, ticks, transition, this.position);
+
+        this.context.clipData.clear();
+        this.context.setup(ticks, transition);
+
+        for (Clip clip : this.context.clips.getClips(ticks))
+        {
+            this.context.apply(clip, this.position);
+        }
+
+        this.context.currentLayer = 0;
+
         this.position.apply(camera);
     }
 

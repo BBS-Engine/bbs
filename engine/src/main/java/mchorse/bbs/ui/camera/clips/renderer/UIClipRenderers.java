@@ -1,7 +1,7 @@
 package mchorse.bbs.ui.camera.clips.renderer;
 
 import mchorse.bbs.BBS;
-import mchorse.bbs.camera.clips.Clip;
+import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.recording.scene.AudioClip;
 import mchorse.bbs.ui.recording.scene.UIAudioClipRenderer;
 

@@ -1,7 +1,7 @@
 package mchorse.bbs.ui.recording.scene;
 
 import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.recording.data.Frames;
+import mchorse.bbs.recording.values.ValueFrames;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageBarOverlayPanel;
 
@@ -21,7 +21,7 @@ public class UIRecordOverlayPanel extends UIMessageBarOverlayPanel
         this.callback = callback;
 
         this.groups = new UIStringList(null);
-        this.groups.multi().add(Frames.GROUPS);
+        this.groups.multi().add(ValueFrames.GROUPS);
         this.groups.sort();
 
         this.groups.relative(this.content).x(0.5F).y(70).w(100).hTo(this.confirm.area, -5).anchorX(0.5F);

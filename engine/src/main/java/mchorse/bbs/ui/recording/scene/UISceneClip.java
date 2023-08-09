@@ -10,7 +10,7 @@ import mchorse.bbs.recording.scene.Replay;
 import mchorse.bbs.recording.scene.Scene;
 import mchorse.bbs.recording.scene.SceneClip;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.IUICameraWorkDelegate;
+import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.camera.clips.UIClip;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
@@ -28,16 +28,15 @@ public class UISceneClip extends UIClip<SceneClip>
     public UITrackpad offset;
     public UIButton editRecord;
 
-    public static void openRecordEditor(IUICameraWorkDelegate editor, SceneClip clip, Record record)
+    public static void openRecordEditor(IUIClipsDelegate editor, SceneClip clip, Record record)
     {
         UIDedicatedRecordEditor recordEditor = new UIDedicatedRecordEditor(editor, clip);
 
         editor.embedView(recordEditor);
         recordEditor.fill(record);
-        recordEditor.setTick(editor.getCursor());
     }
 
-    public UISceneClip(SceneClip clip, IUICameraWorkDelegate editor)
+    public UISceneClip(SceneClip clip, IUIClipsDelegate editor)
     {
         super(clip, editor);
     }
