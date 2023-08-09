@@ -7,12 +7,25 @@ import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.BasicComponent;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Frames implements IMapSerializable
 {
+    public static final String GROUP_POSITION = "position";
+    public static final String GROUP_ROTATION = "rotation";
+    public static final String GROUP_DPAD = "dpad";
+    public static final String GROUP_LEFT_STICK = "lstick";
+    public static final String GROUP_RIGHT_STICK = "rstick";
+    public static final String GROUP_TRIGGERS = "triggers";
+
+    public static final Set<String> GROUPS = new HashSet<>(Arrays.asList(GROUP_POSITION, GROUP_ROTATION, GROUP_DPAD, GROUP_LEFT_STICK, GROUP_RIGHT_STICK, GROUP_TRIGGERS));
+
     public KeyframeChannel x = new KeyframeChannel();
     public KeyframeChannel y = new KeyframeChannel();
     public KeyframeChannel z = new KeyframeChannel();
@@ -29,12 +42,12 @@ public class Frames implements IMapSerializable
     public KeyframeChannel grounded = new KeyframeChannel();
     public KeyframeChannel fall = new KeyframeChannel();
 
-    public KeyframeChannel stick1 = new KeyframeChannel();
-    public KeyframeChannel stick2 = new KeyframeChannel();
-    public KeyframeChannel stick3 = new KeyframeChannel();
-    public KeyframeChannel stick4 = new KeyframeChannel();
-    public KeyframeChannel stick5 = new KeyframeChannel();
-    public KeyframeChannel stick6 = new KeyframeChannel();
+    public KeyframeChannel stickLeftX = new KeyframeChannel();
+    public KeyframeChannel stickLeftY = new KeyframeChannel();
+    public KeyframeChannel stickRightX = new KeyframeChannel();
+    public KeyframeChannel stickRightY = new KeyframeChannel();
+    public KeyframeChannel triggerLeft = new KeyframeChannel();
+    public KeyframeChannel triggerRight = new KeyframeChannel();
 
     public KeyframeChannel gamepad = new KeyframeChannel();
 
@@ -54,13 +67,18 @@ public class Frames implements IMapSerializable
         this.keyframes.put("sneaking", this.sneaking);
         this.keyframes.put("grounded", this.grounded);
         this.keyframes.put("fall", this.fall);
-        this.keyframes.put("stick1", this.stick1);
-        this.keyframes.put("stick2", this.stick2);
-        this.keyframes.put("stick3", this.stick3);
-        this.keyframes.put("stick4", this.stick4);
-        this.keyframes.put("stick5", this.stick5);
-        this.keyframes.put("stick6", this.stick6);
+        this.keyframes.put("stick_lx", this.stickLeftX);
+        this.keyframes.put("stick_ly", this.stickLeftY);
+        this.keyframes.put("stick_rx", this.stickRightX);
+        this.keyframes.put("stick_ry", this.stickRightY);
+        this.keyframes.put("trigger_l", this.triggerLeft);
+        this.keyframes.put("trigger_r", this.triggerRight);
         this.keyframes.put("gamepad", this.gamepad);
+    }
+
+    public Map<String, KeyframeChannel> getMap()
+    {
+        return Collections.unmodifiableMap(this.keyframes);
     }
 
     public void record(int tick, Entity entity, List<String> groups)
@@ -68,12 +86,12 @@ public class Frames implements IMapSerializable
         BasicComponent basic = entity.basic;
 
         boolean empty = groups == null || groups.isEmpty();
-        boolean position = empty || groups.contains(Frame.GROUP_POSITION);
-        boolean rotation = empty || groups.contains(Frame.GROUP_ROTATION);
-        boolean dpad = empty || groups.contains(Frame.GROUP_DPAD);
-        boolean leftStick = empty || groups.contains(Frame.GROUP_LEFT_STICK);
-        boolean rightStick = empty || groups.contains(Frame.GROUP_RIGHT_STICK);
-        boolean triggers = empty || groups.contains(Frame.GROUP_TRIGGERS);
+        boolean position = empty || groups.contains(GROUP_POSITION);
+        boolean rotation = empty || groups.contains(GROUP_ROTATION);
+        boolean dpad = empty || groups.contains(GROUP_DPAD);
+        boolean leftStick = empty || groups.contains(GROUP_LEFT_STICK);
+        boolean rightStick = empty || groups.contains(GROUP_RIGHT_STICK);
+        boolean triggers = empty || groups.contains(GROUP_TRIGGERS);
 
         /* Position and rotation */
         if (position)
@@ -105,20 +123,20 @@ public class Frames implements IMapSerializable
         {
             if (leftStick)
             {
-                this.stick1.insert(tick, component.sticks[0]);
-                this.stick2.insert(tick, component.sticks[1]);
+                this.stickLeftX.insert(tick, component.sticks[0]);
+                this.stickLeftY.insert(tick, component.sticks[1]);
             }
 
             if (rightStick)
             {
-                this.stick3.insert(tick, component.sticks[2]);
-                this.stick4.insert(tick, component.sticks[3]);
+                this.stickRightX.insert(tick, component.sticks[2]);
+                this.stickRightY.insert(tick, component.sticks[3]);
             }
 
             if (triggers)
             {
-                this.stick5.insert(tick, component.sticks[4]);
-                this.stick6.insert(tick, component.sticks[5]);
+                this.triggerLeft.insert(tick, component.sticks[4]);
+                this.triggerRight.insert(tick, component.sticks[5]);
             }
 
             if (dpad) this.gamepad.insert(tick, component.gamepad);
@@ -132,12 +150,12 @@ public class Frames implements IMapSerializable
     {
         BasicComponent basic = entity.basic;
         boolean empty = groups == null || groups.isEmpty();
-        boolean position = empty || !groups.contains(Frame.GROUP_POSITION);
-        boolean rotation = empty || !groups.contains(Frame.GROUP_ROTATION);
-        boolean dpad = empty || !groups.contains(Frame.GROUP_DPAD);
-        boolean leftStick = empty || !groups.contains(Frame.GROUP_LEFT_STICK);
-        boolean rightStick = empty || !groups.contains(Frame.GROUP_RIGHT_STICK);
-        boolean triggers = empty || !groups.contains(Frame.GROUP_TRIGGERS);
+        boolean position = empty || !groups.contains(GROUP_POSITION);
+        boolean rotation = empty || !groups.contains(GROUP_ROTATION);
+        boolean dpad = empty || !groups.contains(GROUP_DPAD);
+        boolean leftStick = empty || !groups.contains(GROUP_LEFT_STICK);
+        boolean rightStick = empty || !groups.contains(GROUP_RIGHT_STICK);
+        boolean triggers = empty || !groups.contains(GROUP_TRIGGERS);
 
         if (position)
         {
@@ -162,20 +180,20 @@ public class Frames implements IMapSerializable
         {
             if (leftStick)
             {
-                component.sticks[0] = (float) this.stick1.interpolate(tick);
-                component.sticks[1] = (float) this.stick2.interpolate(tick);
+                component.sticks[0] = (float) this.stickLeftX.interpolate(tick);
+                component.sticks[1] = (float) this.stickLeftY.interpolate(tick);
             }
 
             if (rightStick)
             {
-                component.sticks[2] = (float) this.stick3.interpolate(tick);
-                component.sticks[3] = (float) this.stick4.interpolate(tick);
+                component.sticks[2] = (float) this.stickRightX.interpolate(tick);
+                component.sticks[3] = (float) this.stickRightY.interpolate(tick);
             }
 
             if (triggers)
             {
-                component.sticks[4] = (float) this.stick5.interpolate(tick);
-                component.sticks[5] = (float) this.stick6.interpolate(tick);
+                component.sticks[4] = (float) this.triggerLeft.interpolate(tick);
+                component.sticks[5] = (float) this.triggerRight.interpolate(tick);
             }
 
             if (dpad)
@@ -185,22 +203,20 @@ public class Frames implements IMapSerializable
         }
     }
 
+    public void copy(Frames frames)
+    {
+        for (String key : this.keyframes.keySet())
+        {
+            this.keyframes.get(key).copy(frames.keyframes.get(key));
+        }
+    }
+
     @Override
     public void fromData(MapType data)
     {
         for (Map.Entry<String, KeyframeChannel> entry : this.keyframes.entrySet())
         {
             entry.getValue().fromData(data.getList(entry.getKey()));
-        }
-
-        for (String key : data.keys())
-        {
-            KeyframeChannel keyframeChannel = this.keyframes.get(key);
-
-            if (keyframeChannel != null)
-            {
-                keyframeChannel.fromData(data.getList(key));
-            }
         }
     }
 

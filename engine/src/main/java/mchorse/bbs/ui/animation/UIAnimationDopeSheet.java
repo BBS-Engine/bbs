@@ -6,13 +6,13 @@ import mchorse.bbs.utils.keyframes.Keyframe;
 
 import java.util.function.Consumer;
 
-public class UIDopeSheet extends mchorse.bbs.ui.framework.elements.input.keyframes.UIDopeSheet
+public class UIAnimationDopeSheet extends mchorse.bbs.ui.framework.elements.input.keyframes.UIDopeSheet
 {
     public UIAnimationPanel editor;
 
-    private UIDopeSheetEditor keyframeEditor;
+    private UIAnimationDopeSheetEditor keyframeEditor;
 
-    public UIDopeSheet(UIDopeSheetEditor keyframeEditor, Consumer<Keyframe> callback)
+    public UIAnimationDopeSheet(UIAnimationDopeSheetEditor keyframeEditor, Consumer<Keyframe> callback)
     {
         super(callback);
 

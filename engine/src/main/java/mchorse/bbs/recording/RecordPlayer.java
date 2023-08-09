@@ -3,7 +3,6 @@ package mchorse.bbs.recording;
 import mchorse.bbs.BBSData;
 import mchorse.bbs.recording.actions.Action;
 import mchorse.bbs.recording.actions.FormAction;
-import mchorse.bbs.recording.data.Frame;
 import mchorse.bbs.recording.data.Mode;
 import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.recording.scene.Replay;
@@ -208,9 +207,9 @@ public class RecordPlayer
 
     public <T extends Action> T seekAction(int tick, Class<T> actionType)
     {
-        while (tick >= 0)
+        /*  TODO: Frame frame = this.record.getFrame(tick); while (tick >= 0)
         {
-            Frame frame = this.record.getFrame(tick);
+
 
             if (frame == null)
             {
@@ -231,7 +230,7 @@ public class RecordPlayer
             }
 
             tick -= 1;
-        }
+        } */
 
         return null;
     }

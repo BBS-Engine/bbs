@@ -1,32 +1,22 @@
 package mchorse.bbs.ui.recording.editor;
 
-import mchorse.bbs.BBS;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.recording.actions.Action;
-import mchorse.bbs.recording.data.Frame;
 import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
-import mchorse.bbs.ui.recording.editor.actions.UIActionPanel;
 import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.utils.Range;
 
-import java.util.function.Consumer;
-
-public class UIRecordPanel extends UIDataDashboardPanel<Record> implements IRecordEditor
+public class UIRecordPanel extends UIDataDashboardPanel<Record> implements IUIRecordEditorDelegate
 {
-    public UIRecordTimeline timeline;
-
-    public UIActionPanel actionPanel;
-    public UIFrame framePanel;
+    public UIRecordEditor timeline;
 
     public UIRecordPanel(UIDashboard dashboard)
     {
         super(dashboard);
 
-        this.timeline = new UIRecordTimeline(this);
+        this.timeline = new UIRecordEditor(this);
         this.timeline.relative(this.editor).y(1F, -110).w(1F).h(110);
 
         this.editor.add(this.timeline);
@@ -36,6 +26,22 @@ public class UIRecordPanel extends UIDataDashboardPanel<Record> implements IReco
     }
 
     @Override
+    public boolean supportsCursor()
+    {
+        return false;
+    }
+
+    @Override
+    public int getCursor()
+    {
+        return 0;
+    }
+
+    @Override
+    public void setCursor(int tick)
+    {}
+
+    /* @Override
     public void clickTick(int tick)
     {}
 
@@ -80,39 +86,7 @@ public class UIRecordPanel extends UIDataDashboardPanel<Record> implements IReco
         {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void openFrame(Frame frame)
-    {
-        if (this.framePanel != null)
-        {
-            this.framePanel.removeFromParent();
-        }
-
-        this.framePanel = null;
-
-        if (frame != null)
-        {
-            this.framePanel = new UIFrame(this);
-
-            this.framePanel.fill(frame);
-            this.framePanel.relative(this.editor).x(1F, -200).w(200).hTo(this.timeline.area);
-            this.editor.add(this.framePanel);
-            this.editor.resize();
-        }
-    }
-
-    @Override
-    public void editFrame(Consumer<Frame> consumer)
-    {
-        Range range = this.timeline.calculateRange();
-
-        for (int i = range.min; i <= range.max; i++)
-        {
-            consumer.accept(this.data.frames.get(i));
-        }
-    }
+    } */
 
     @Override
     public void fill(Record data)
@@ -120,8 +94,6 @@ public class UIRecordPanel extends UIDataDashboardPanel<Record> implements IReco
         super.fill(data);
 
         this.timeline.setRecord(data);
-        this.openAction(null);
-        this.openFrame(null);
     }
 
     @Override

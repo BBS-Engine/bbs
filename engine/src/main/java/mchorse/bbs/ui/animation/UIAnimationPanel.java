@@ -54,7 +54,7 @@ import java.util.Set;
 
 public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements IFlightSupported
 {
-    public UIDopeSheetEditor graph;
+    public UIAnimationDopeSheetEditor graph;
     public UIScrollView quickArea;
     public UIIcon showKeyframes;
     public UITrackpad time;
@@ -84,7 +84,7 @@ public class UIAnimationPanel extends UIDataDashboardPanel<Animation> implements
         int h = 160;
         int w = 80;
 
-        this.graph = new UIDopeSheetEditor(this);
+        this.graph = new UIAnimationDopeSheetEditor(this);
         this.graph.relative(this.editor).y(1F, -20).w(1F, -w).h(h - 20).anchorY(1F);
         this.quickArea = UI.scrollView(5, 5);
         this.quickArea.scroll.cancelScrolling();

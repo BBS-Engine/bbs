@@ -5,9 +5,9 @@ import mchorse.bbs.ui.framework.elements.input.keyframes.UISheet;
 
 import java.util.List;
 
-public class UIDopeSheetEditor extends UIKeyframesEditor<UIDopeSheet>
+public class UIAnimationDopeSheetEditor extends UIKeyframesEditor<UIAnimationDopeSheet>
 {
-    public UIDopeSheetEditor(UIAnimationPanel editor)
+    public UIAnimationDopeSheetEditor(UIAnimationPanel editor)
     {
         super();
 
@@ -15,9 +15,9 @@ public class UIDopeSheetEditor extends UIKeyframesEditor<UIDopeSheet>
     }
 
     @Override
-    protected UIDopeSheet createElement()
+    protected UIAnimationDopeSheet createElement()
     {
-        return new UIDopeSheet(this, this::fillData);
+        return new UIAnimationDopeSheet(this, this::fillData);
     }
 
     public void setSheets(List<UISheet> sheets)

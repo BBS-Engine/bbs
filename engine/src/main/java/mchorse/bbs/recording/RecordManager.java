@@ -1,19 +1,17 @@
 package mchorse.bbs.recording;
 
-import mchorse.bbs.BBSData;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.bridge.IBridgePlayer;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.utils.manager.BaseManager;
-import mchorse.bbs.utils.manager.storage.CompressedDataStorage;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.recording.data.Mode;
 import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.recording.events.IconLabelEvent;
 import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.utils.StringUtils;
+import mchorse.bbs.utils.manager.BaseManager;
+import mchorse.bbs.utils.manager.storage.CompressedDataStorage;
 import mchorse.bbs.world.entities.Entity;
 
 import java.io.File;
@@ -292,24 +290,6 @@ public class RecordManager extends BaseManager<Record>
     public Record load(String id)
     {
         return this.records.computeIfAbsent(id, super::load);
-    }
-
-    @Override
-    public boolean save(Record data)
-    {
-        boolean save = super.save(data);
-
-        if (save)
-        {
-            Record record = this.records.get(data.getId());
-
-            if (record != null)
-            {
-                record.copy(data);
-            }
-        }
-
-        return save;
     }
 
     @Override

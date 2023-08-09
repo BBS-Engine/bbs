@@ -3,9 +3,9 @@ package mchorse.bbs.ui.animation;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframesEditor;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 
-public class UIGraphEditor extends UIKeyframesEditor<UIGraphView>
+public class UIAnimationGraphEditor extends UIKeyframesEditor<UIAnimationGraph>
 {
-    public UIGraphEditor(UIAnimationPanel editor)
+    public UIAnimationGraphEditor(UIAnimationPanel editor)
     {
         super();
 
@@ -13,9 +13,9 @@ public class UIGraphEditor extends UIKeyframesEditor<UIGraphView>
     }
 
     @Override
-    protected UIGraphView createElement()
+    protected UIAnimationGraph createElement()
     {
-        return new UIGraphView(this, this::fillData);
+        return new UIAnimationGraph(this, this::fillData);
     }
 
     public void setChannel(KeyframeChannel channel, int color)

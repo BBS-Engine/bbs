@@ -17,7 +17,6 @@ import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.recording.data.Frame;
 import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.values.ValueInt;
@@ -40,6 +39,8 @@ import mchorse.bbs.ui.utils.context.ContextAction;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
+import mchorse.bbs.utils.keyframes.Keyframe;
+import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.utils.undo.CompoundUndo;
 import mchorse.bbs.utils.undo.IUndo;
@@ -503,20 +504,30 @@ public class UICameraWork extends UIElement
 
             clip.fov.get().insert(0, 50);
 
-            for (int i = 0; i < size; i++)
-            {
-                Frame frame = record.frames.get(i);
+            clip.x.get().copy(record.keyframes.x);
+            clip.y.get().copy(record.keyframes.x);
+            clip.z.get().copy(record.keyframes.x);
 
-                clip.x.get().insert(i, frame.x);
-                clip.y.get().insert(i, frame.y);
-                clip.z.get().insert(i, frame.z);
-                clip.yaw.get().insert(i, MathUtils.toDeg(frame.yaw));
-                clip.pitch.get().insert(i, MathUtils.toDeg(frame.pitch));
-            }
+            this.copyKeyframes(clip.yaw.get(), record.keyframes.yaw);
+            this.copyKeyframes(clip.pitch.get(), record.keyframes.pitch);
 
             this.addClip(clip, this.fromGraphX(mouseX), this.fromLayerY(mouseY), size);
             this.getContext().menu.getRoot().getChildren(UIOverlayPanel.class).get(0).close();
         });
+    }
+
+    private void copyKeyframes(KeyframeChannel a, KeyframeChannel b)
+    {
+        for (Keyframe keyframe : b.getKeyframes())
+        {
+            Keyframe copy = keyframe.copy();
+
+            copy.value = Math.toDegrees(copy.value);
+            copy.ly = MathUtils.toDeg(copy.ly);
+            copy.ry = MathUtils.toDeg(copy.ry);
+
+            a.getKeyframes().add(copy);
+        }
     }
 
     /**

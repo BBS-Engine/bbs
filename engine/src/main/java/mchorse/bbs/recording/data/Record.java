@@ -1,13 +1,10 @@
 package mchorse.bbs.recording.data;
 
-import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.recording.actions.Action;
-import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.world.entities.Entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +20,6 @@ public class Record extends AbstractData
     public static final short SIGNATURE = 2;
 
     public short version = SIGNATURE;
-    public List<Frame> frames = new ArrayList<>();
     public boolean dirty;
 
     public int length;
@@ -44,19 +40,7 @@ public class Record extends AbstractData
 
     public Action getAction(int tick, int index)
     {
-        Frame frame = this.frames.get(tick);
-
-        if (frame != null)
-        {
-            return CollectionUtils.inRange(frame.actions, index) ? frame.actions.get(index) : null;
-        }
-
         return null;
-    }
-
-    public Frame getFrame(int tick)
-    {
-        return tick >= 0 && tick < this.frames.size() ? this.frames.get(tick) : null;
     }
 
     public void applyFrame(int tick, Entity actor)
@@ -79,27 +63,7 @@ public class Record extends AbstractData
 
     public void applyAction(int tick, Entity target, boolean safe)
     {
-        Frame frame = this.getFrame(tick);
 
-        if (frame != null)
-        {
-            for (Action action : frame.actions)
-            {
-                if (safe && !action.isSafe())
-                {
-                    continue;
-                }
-
-                try
-                {
-                    action.apply(target);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     /**
@@ -111,25 +75,24 @@ public class Record extends AbstractData
     @Override
     public void toData(MapType data)
     {
-        ListType frames = new ListType();
-
-        /* Version of the recording */
         data.putShort("version", SIGNATURE);
+        data.putInt("length", this.length);
         data.put("keyframes", this.keyframes.toData());
     }
 
     @Override
     public void fromData(MapType data)
     {
-        this.frames.clear();
-
         this.version = data.getShort("version");
+        this.length = data.getInt("length");
         this.keyframes.fromData(data.getMap("keyframes"));
     }
 
     public void copy(Record data)
     {
         this.dirty = false;
-        this.frames = data.frames;
+
+        this.length = data.length;
+        this.keyframes.copy(data.keyframes);
     }
 }

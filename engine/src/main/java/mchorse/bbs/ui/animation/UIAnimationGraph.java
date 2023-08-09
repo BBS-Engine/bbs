@@ -7,13 +7,13 @@ import mchorse.bbs.utils.keyframes.Keyframe;
 
 import java.util.function.Consumer;
 
-public class UIGraphView extends UIGraph
+public class UIAnimationGraph extends UIGraph
 {
     public UIAnimationPanel editor;
 
-    private UIGraphEditor keyframeEditor;
+    private UIAnimationGraphEditor keyframeEditor;
 
-    public UIGraphView(UIGraphEditor keyframeEditor, Consumer<Keyframe> callback)
+    public UIAnimationGraph(UIAnimationGraphEditor keyframeEditor, Consumer<Keyframe> callback)
     {
         super(callback);
 

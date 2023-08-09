@@ -10,7 +10,6 @@ import mchorse.bbs.camera.Camera;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.recording.data.Frame;
 import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.recording.scene.Replay;
 import mchorse.bbs.recording.scene.Scene;
@@ -35,7 +34,6 @@ import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.colors.Colors;
-import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
 
@@ -363,13 +361,14 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
                 record.applyFrame(0, player);
             }
 
-            Frame frame = record.getFrame(0);
+            double x = record.keyframes.x.interpolate(0);
+            double y = record.keyframes.y.interpolate(0);
+            double z = record.keyframes.z.interpolate(0);
+            float yaw = (float) record.keyframes.yaw.interpolate(0);
+            float pitch = (float) record.keyframes.pitch.interpolate(0);
 
-            if (frame != null)
-            {
-                this.dashboard.orbit.position.set(frame.x, frame.y + 1, frame.z);
-                this.dashboard.orbit.rotation.set(frame.pitch, frame.yaw, 0);
-            }
+            this.dashboard.orbit.position.set(x, y + 1, z);
+            this.dashboard.orbit.rotation.set(pitch, yaw, 0);
         }
     }
 

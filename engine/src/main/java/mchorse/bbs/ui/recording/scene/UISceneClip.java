@@ -32,9 +32,9 @@ public class UISceneClip extends UIClip<SceneClip>
     {
         UIDedicatedRecordEditor recordEditor = new UIDedicatedRecordEditor(editor, clip);
 
+        editor.embedView(recordEditor);
         recordEditor.fill(record);
         recordEditor.setTick(editor.getCursor());
-        editor.embedView(recordEditor);
     }
 
     public UISceneClip(SceneClip clip, IUICameraWorkDelegate editor)
