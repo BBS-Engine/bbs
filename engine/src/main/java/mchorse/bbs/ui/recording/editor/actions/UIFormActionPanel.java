@@ -29,7 +29,7 @@ public class UIFormActionPanel extends UIClip<FormActionClip>
                 this.clip.form.set(form);
                 this.form.setForm(form);
             }).updatable();
-        });
+        }).keybinds();
 
         this.tween = new UIToggle(UIKeys.RECORD_EDITOR_ACTIONS_FORM_TWEEN, (b) ->
         {

@@ -76,7 +76,7 @@ public class SceneClip extends CameraClip
                     scene.spawn(tick);
                     scene.resume(tick);
                 }
-                else
+                else if (scene.getTick() != tick)
                 {
                     scene.resume(tick);
                 }

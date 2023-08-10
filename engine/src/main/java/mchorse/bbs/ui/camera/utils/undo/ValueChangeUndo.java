@@ -1,9 +1,8 @@
 package mchorse.bbs.ui.camera.utils.undo;
 
-import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.data.StructureBase;
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.data.types.BaseType;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.utils.undo.IUndo;
 
 public class ValueChangeUndo extends CameraWorkUndo

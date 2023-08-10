@@ -2,8 +2,10 @@ package mchorse.bbs.recording.data;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.camera.data.StructureBase;
+import mchorse.bbs.recording.clips.ActionClip;
 import mchorse.bbs.recording.values.ValueFrames;
 import mchorse.bbs.settings.values.ValueInt;
+import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.clips.values.ValueClips;
 import mchorse.bbs.world.entities.Entity;
 
@@ -44,6 +46,12 @@ public class Record extends StructureBase
 
     public void applyAction(int tick, Entity target)
     {
-        /* TODO: implement clips as actions */
+        for (Clip clip : this.clips.get())
+        {
+            if (clip.tick.get() == tick && clip instanceof ActionClip)
+            {
+                ((ActionClip) clip).apply(target);
+            }
+        }
     }
 }

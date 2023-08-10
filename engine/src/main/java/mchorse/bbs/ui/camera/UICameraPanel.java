@@ -166,7 +166,6 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         this.overlay.namesList.setFileIcon(Icons.FRUSTUM);
 
         /* Register keybinds */
-        IKey clips = UIClips.KEYS_CATEGORY;
         IKey modes = UIKeys.CAMERA_EDITOR_KEYS_MODES_TITLE;
         IKey editor = UIKeys.CAMERA_EDITOR_KEYS_EDITOR_TITLE;
         IKey looping = UIKeys.CAMERA_EDITOR_KEYS_LOOPING_TITLE;
@@ -179,7 +178,6 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         this.keys().register(Keys.PREV, () -> this.setCursor(this.getCursor() - 1)).active(active).category(editor);
         this.keys().register(Keys.UNDO, this::undo).category(editor);
         this.keys().register(Keys.REDO, this::redo).category(editor);
-        this.keys().register(Keys.DESELECT, () -> this.pickClip(null)).active(active).category(clips);
         this.keys().register(Keys.FLIGHT, () -> this.setFlight(this.isFlightDisabled())).active(() -> this.data != null).category(modes);
         this.keys().register(Keys.LOOPING, () -> BBSSettings.editorLoop.set(!BBSSettings.editorLoop.get())).active(active).category(looping);
         this.keys().register(Keys.LOOPING_SET_MIN, () -> this.timeline.setLoopMin()).active(active).category(looping);

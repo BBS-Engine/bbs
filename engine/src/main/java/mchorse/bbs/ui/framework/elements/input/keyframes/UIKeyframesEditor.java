@@ -114,13 +114,6 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
 
                 menu.action(Icons.PASTE, UIKeys.KEYFRAMES_CONTEXT_PASTE, () -> this.pasteKeyframes(keyframes, (long) offset, mouseY));
             }
-
-            if (this.keyframes.which != Selection.NOT_SELECTED && this.keyframes.isMultipleSelected())
-            {
-                menu.action(Icons.LEFT_HANDLE, UIKeys.KEYFRAMES_CONTEXT_TO_LEFT, () -> this.keyframes.which = Selection.LEFT_HANDLE);
-                menu.action(Icons.MAIN_HANDLE, UIKeys.KEYFRAMES_CONTEXT_TO_MAIN, () -> this.keyframes.which = Selection.KEYFRAME);
-                menu.action(Icons.RIGHT_HANDLE, UIKeys.KEYFRAMES_CONTEXT_TO_RIGHT, () -> this.keyframes.which = Selection.RIGHT_HANDLE);
-            }
         });
 
         IKey category = UIKeys.KEYFRAMES_KEYS_CATEGORY;
