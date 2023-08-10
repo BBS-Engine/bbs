@@ -206,7 +206,15 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
     private Area getViewportArea()
     {
-        return new Area(this.timeline.area.ex(), this.area.y, this.iconBar.area.x - this.timeline.area.ex(), this.area.h);
+        Area area = new Area(this.timeline.area.ex(), this.area.y, this.iconBar.area.x - this.timeline.area.ex(), this.area.h);
+
+        if (this.panel != null)
+        {
+            area.x += this.panel.area.w;
+            area.w -= this.panel.area.w;
+        }
+
+        return area;
     }
 
     private Area getFramebufferArea()
@@ -722,8 +730,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         });
         GLStates.setupDepthFunction2D();
 
-        viewport.render(context.batcher, Colors.A50);
-        viewport.render(context.batcher, Colors.A25);
+        viewport.render(context.batcher, Colors.A75);
         context.batcher.texturedBox(texture, Colors.WHITE, area.x, area.y, area.w, area.h, 0, height, width, 0, width, height);
 
         /* Render rule of thirds */
@@ -861,7 +868,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
             UIClip panel = (UIClip) BBS.getFactoryClips().getData(clip).panelUI.getConstructors()[0].newInstance(clip, this);
 
             this.panel = panel;
-            this.panel.relative(this.editor).x(1F, -160).w(160).h(1F);
+            this.panel.relative(this.timeline).x(1F).w(160).h(1F);
             this.editor.addAfter(this.timeline, this.panel);
 
             this.panel.fillData();
