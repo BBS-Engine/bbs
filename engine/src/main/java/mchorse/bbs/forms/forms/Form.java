@@ -154,17 +154,22 @@ public abstract class Form implements IMapSerializable, IPuppet
 
     public void tween(Form form, int duration, IInterpolation interpolation)
     {
+        this.tween(form, duration, interpolation, 0, true);
+    }
+
+    public void tween(Form form, int duration, IInterpolation interpolation, int offset, boolean playing)
+    {
         for (IFormProperty property : this.properties.values())
         {
             IFormProperty formProperty = form.properties.get(property.getKey());
 
             if (formProperty != null)
             {
-                property.tween(formProperty.get(), duration, interpolation);
+                property.tween(formProperty.get(), duration, interpolation, offset, playing);
             }
         }
 
-        this.parts.tween(form.parts, duration, interpolation);
+        this.parts.tween(form.parts, duration, interpolation, offset, playing);
     }
 
     /* IPuppet implementation */

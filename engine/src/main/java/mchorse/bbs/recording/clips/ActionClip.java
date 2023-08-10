@@ -5,6 +5,6 @@ import mchorse.bbs.world.entities.Entity;
 
 public abstract class ActionClip extends Clip
 {
-    public void apply(Entity actor)
+    public void apply(Entity actor, int offset, boolean playing)
     {}
 }

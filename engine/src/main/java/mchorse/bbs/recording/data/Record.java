@@ -50,7 +50,7 @@ public class Record extends StructureBase
         {
             if (clip.tick.get() == tick && clip instanceof ActionClip)
             {
-                ((ActionClip) clip).apply(target);
+                ((ActionClip) clip).apply(target, 0, true);
             }
         }
     }

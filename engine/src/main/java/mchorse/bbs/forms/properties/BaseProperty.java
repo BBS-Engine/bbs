@@ -14,7 +14,7 @@ public abstract class BaseProperty <T> implements IFormProperty<T>
     protected T value;
     protected T lastValue;
 
-    private boolean tweening = true;
+    private boolean playing = true;
     protected int ticks = -1;
     protected int duration;
     protected IInterpolation interpolation = Interpolation.LINEAR;
@@ -61,28 +61,23 @@ public abstract class BaseProperty <T> implements IFormProperty<T>
     @Override
     public void update()
     {
-        if (this.ticks >= 0)
+        if (this.ticks >= 0 && this.playing)
         {
             this.ticks -= 1;
         }
     }
 
     @Override
-    public void tween(T newValue, int duration, IInterpolation interpolation)
+    public void tween(T newValue, int duration, IInterpolation interpolation, int offset, boolean playing)
     {
         this.lastValue = this.value;
         this.value = newValue;
 
         this.ticks = this.duration = duration;
         this.interpolation = interpolation == null ? Interpolation.LINEAR : interpolation;
-        this.tweening = true;
-    }
+        this.playing = playing;
 
-    @Override
-    public void pause(int offset)
-    {
-        this.ticks = offset;
-        this.tweening = false;
+        this.ticks -= offset;
     }
 
     @Override
@@ -99,7 +94,7 @@ public abstract class BaseProperty <T> implements IFormProperty<T>
             return 1;
         }
 
-        return 1 - (this.ticks - (this.tweening ? transition : 0)) / (float) this.duration;
+        return 1 - (this.ticks - (this.playing ? transition : 0)) / (float) this.duration;
     }
 
     @Override

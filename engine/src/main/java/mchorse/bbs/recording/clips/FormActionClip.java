@@ -25,9 +25,9 @@ public class FormActionClip extends ActionClip
     }
 
     @Override
-    public void apply(Entity actor)
+    public void apply(Entity actor, int offset, boolean playing)
     {
-        super.apply(actor);
+        super.apply(actor, offset, playing);
 
         FormComponent component = actor.get(FormComponent.class);
 
@@ -35,13 +35,13 @@ public class FormActionClip extends ActionClip
         {
             Form form = this.form.get();
 
-            if (!Objects.equals(component.form, form))
+            if (!playing || !Objects.equals(component.form, form))
             {
                 Form copy = FormUtils.copy(form);
 
                 if (this.tween.get() && component.form != null && copy != null)
                 {
-                    component.form.tween(copy, this.duration.get(), this.interpolation.get());
+                    component.form.tween(copy, this.duration.get(), this.interpolation.get(), offset, playing);
                 }
                 else
                 {

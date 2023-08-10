@@ -105,7 +105,7 @@ public class BodyPartManager implements IMapSerializable, IPuppet
         return false;
     }
 
-    public void tween(BodyPartManager parts, int duration, IInterpolation interpolation)
+    public void tween(BodyPartManager parts, int duration, IInterpolation interpolation, int offset, boolean playing)
     {
         if (this.parts.size() > parts.parts.size())
         {
@@ -127,7 +127,7 @@ public class BodyPartManager implements IMapSerializable, IPuppet
             BodyPart thisPart = this.parts.get(i);
             BodyPart otherPart = parts.parts.get(i);
 
-            thisPart.tween(otherPart, duration, interpolation);
+            thisPart.tween(otherPart, duration, interpolation, offset, playing);
         }
     }
 

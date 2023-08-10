@@ -23,9 +23,9 @@ public class ActionsConfigProperty extends BaseProperty<ActionsConfig>
     }
 
     @Override
-    public void tween(ActionsConfig newValue, int duration, IInterpolation interpolation)
+    public void tween(ActionsConfig newValue, int duration, IInterpolation interpolation, int offset, boolean playing)
     {
-        super.tween(newValue, duration, interpolation);
+        super.tween(newValue, duration, interpolation, offset, playing);
 
         this.updateAnimator();
     }

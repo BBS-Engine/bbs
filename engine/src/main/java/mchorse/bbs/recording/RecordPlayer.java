@@ -150,16 +150,7 @@ public class RecordPlayer
 
         this.playing = true;
 
-        FormActionClip action = this.seekAction(tick - 1, FormActionClip.class);
-
-        if (action == null)
-        {
-            replay.apply(this.actor);
-        }
-        else
-        {
-            action.apply(this.actor);
-        }
+        this.applyForm(tick, replay);
     }
 
     /**
@@ -193,16 +184,39 @@ public class RecordPlayer
         {
             this.record.applyAction(tick, this.actor);
 
-            FormActionClip action = this.seekAction(tick - 1, FormActionClip.class);
+            this.applyForm(tick, replay);
+        }
+    }
 
-            if (action == null)
+    private void applyForm(int tick, Replay replay)
+    {
+        FormActionClip action = this.seekAction(tick - 1, FormActionClip.class);
+
+        if (action == null)
+        {
+            replay.apply(this.actor);
+        }
+        else
+        {
+            if (!this.playing)
             {
-                replay.apply(this.actor);
+                FormActionClip previous = this.seekAction(action.tick.get() - 1, FormActionClip.class);
+
+                if (previous != null)
+                {
+                    previous.apply(this.actor, 0, true);
+                }
+                else
+                {
+                    replay.apply(this.actor);
+                }
             }
             else
             {
-                action.apply(this.actor);
+                replay.apply(this.actor);
             }
+
+            action.apply(this.actor, tick - action.tick.get(), this.playing);
         }
     }
 

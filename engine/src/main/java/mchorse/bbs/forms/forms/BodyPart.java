@@ -1,11 +1,11 @@
 package mchorse.bbs.forms.forms;
 
 import mchorse.bbs.animation.IPuppet;
-import mchorse.bbs.settings.values.ValueDouble;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.graphics.RenderingContext;
+import mchorse.bbs.settings.values.ValueDouble;
 import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.IInterpolation;
@@ -169,11 +169,11 @@ public class BodyPart implements IMapSerializable, IPuppet
         return IPuppet.fillDefaultValue(this.form, prefix, value);
     }
 
-    public void tween(BodyPart part, int duration, IInterpolation interpolation)
+    public void tween(BodyPart part, int duration, IInterpolation interpolation, int offset, boolean playing)
     {
         if (this.form != null && part.form != null)
         {
-            this.form.tween(part.form, duration, interpolation);
+            this.form.tween(part.form, duration, interpolation, offset, playing);
         }
 
         this.transform.copy(part.transform);

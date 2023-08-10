@@ -3,7 +3,6 @@ package mchorse.bbs.forms.properties;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.utils.math.IInterpolation;
-import mchorse.bbs.utils.math.Interpolation;
 
 public interface IFormProperty <T> extends IMapSerializable
 {
@@ -37,36 +36,10 @@ public interface IFormProperty <T> extends IMapSerializable
      */
     public void update();
 
-    public default void tween(T newValue, int duration)
-    {
-        this.tween(newValue, duration, Interpolation.LINEAR);
-    }
-
     /**
      * Tween this property to new value. Some properties may not fully support tweening!
      */
-    public default void tween(T newValue, int duration, String interpolation)
-    {
-        for (Interpolation i : Interpolation.values())
-        {
-            if (i.key.equals(interpolation))
-            {
-                this.tween(newValue, duration, i);
-
-                return;
-            }
-        }
-    }
-
-    /**
-     * Tween this property to new value. Some properties may not fully support tweening!
-     */
-    public void tween(T newValue, int duration, IInterpolation interpolation);
-
-    /**
-     * Pause tween animation at given offset.
-     */
-    public void pause(int offset);
+    public void tween(T newValue, int duration, IInterpolation interpolation, int offset, boolean playing);
 
     /**
      * Check whether this property is in progress of tweening.
