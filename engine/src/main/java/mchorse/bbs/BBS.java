@@ -41,6 +41,7 @@ import mchorse.bbs.forms.categories.ParticleFormCategory;
 import mchorse.bbs.forms.categories.RecentFormCategory;
 import mchorse.bbs.forms.forms.BillboardForm;
 import mchorse.bbs.forms.forms.BlockForm;
+import mchorse.bbs.forms.forms.ExtrudedForm;
 import mchorse.bbs.forms.forms.LabelForm;
 import mchorse.bbs.forms.forms.LightForm;
 import mchorse.bbs.forms.forms.ModelForm;
@@ -91,6 +92,7 @@ import mchorse.bbs.ui.font.format.UIBaseFontFormat;
 import mchorse.bbs.ui.font.format.UIColorFontFormat;
 import mchorse.bbs.ui.forms.editors.forms.UIBillboardForm;
 import mchorse.bbs.ui.forms.editors.forms.UIBlockForm;
+import mchorse.bbs.ui.forms.editors.forms.UIExtrudedForm;
 import mchorse.bbs.ui.forms.editors.forms.UILabelForm;
 import mchorse.bbs.ui.forms.editors.forms.UILightForm;
 import mchorse.bbs.ui.forms.editors.forms.UIModelForm;
@@ -427,14 +429,17 @@ public class BBS
         BlockForm block = new BlockForm();
         StructureForm structure = new StructureForm();
         LightForm light = new LightForm();
+        ExtrudedForm extruded = new ExtrudedForm();
 
         billboard.texture.set(Link.assets("textures/error.png"));
+        extruded.texture.set(Link.assets("textures/error.png"));
 
         extra.forms.add(billboard);
         extra.forms.add(label);
         extra.forms.add(block);
         extra.forms.add(structure);
         extra.forms.add(light);
+        extra.forms.add(extruded);
 
         forms.categories.add(new RecentFormCategory());
         forms.readUserCategories();
@@ -510,13 +515,15 @@ public class BBS
             .registerEditor(Link.bbs("block"), (f) -> new UIBlockForm())
             .registerEditor(Link.bbs("structure"), (f) -> new UIStructureForm())
             .registerEditor(Link.bbs("light"), (f) -> new UILightForm())
+            .registerEditor(Link.bbs("extruded"), (f) -> new UIExtrudedForm())
             .register(Link.bbs("billboard"), BillboardForm.class)
             .register(Link.bbs("label"), LabelForm.class)
             .register(Link.bbs("model"), ModelForm.class)
             .register(Link.bbs("particle"), ParticleForm.class)
             .register(Link.bbs("block"), BlockForm.class)
             .register(Link.bbs("structure"), StructureForm.class)
-            .register(Link.bbs("light"), LightForm.class);
+            .register(Link.bbs("light"), LightForm.class)
+            .register(Link.bbs("extruded"), ExtrudedForm.class);
 
         /* Register block models */
         factoryBlockModels = new MapFactory<BlockModelFactory, BlockModelFactoryData>()

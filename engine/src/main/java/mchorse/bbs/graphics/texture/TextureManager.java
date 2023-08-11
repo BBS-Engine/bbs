@@ -26,10 +26,16 @@ public class TextureManager implements IDisposable, IWatchDogListener
     public AssetProvider provider;
 
     private Texture error;
+    private TextureExtruder extruder = new TextureExtruder();
 
     public TextureManager(AssetProvider provider)
     {
         this.provider = provider;
+    }
+
+    public TextureExtruder getExtruder()
+    {
+        return this.extruder;
     }
 
     private Texture getError()
@@ -94,6 +100,22 @@ public class TextureManager implements IDisposable, IWatchDogListener
         return texture;
     }
 
+    public Pixels getPixels(Link link) throws Exception
+    {
+        Pixels pixels;
+
+        if (link instanceof MultiLink)
+        {
+            pixels = LinkUtils.getStreamForMultiLink((MultiLink) link);
+        }
+        else
+        {
+            pixels = Pixels.fromPNGStream(this.provider.getAsset(link));
+        }
+
+        return pixels;
+    }
+
     public Texture getTexture(Link link)
     {
         return this.getTexture(link, GL11.GL_NEAREST);
@@ -107,16 +129,7 @@ public class TextureManager implements IDisposable, IWatchDogListener
         {
             try
             {
-                Pixels pixels;
-
-                if (link instanceof MultiLink)
-                {
-                    pixels = LinkUtils.getStreamForMultiLink((MultiLink) link);
-                }
-                else
-                {
-                    pixels = Pixels.fromPNGStream(this.provider.getAsset(link));
-                }
+                Pixels pixels = this.getPixels(link);
 
                 if (pixels != null)
                 {
@@ -213,6 +226,7 @@ public class TextureManager implements IDisposable, IWatchDogListener
         }
 
         this.textures.clear();
+        this.extruder.deleteAll();
     }
 
     @Override
@@ -236,5 +250,7 @@ public class TextureManager implements IDisposable, IWatchDogListener
         {
             texture.delete();
         }
+
+        this.extruder.delete(link);
     }
 }
