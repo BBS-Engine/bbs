@@ -7,6 +7,8 @@ import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.forms.forms.ModelForm;
 import mchorse.bbs.utils.math.IInterpolation;
 
+import java.util.Objects;
+
 public class ActionsConfigProperty extends BaseProperty<ActionsConfig>
 {
     public ActionsConfigProperty(Form form, String key, ActionsConfig value)
@@ -17,17 +19,27 @@ public class ActionsConfigProperty extends BaseProperty<ActionsConfig>
     @Override
     public void set(ActionsConfig value)
     {
+        boolean same = Objects.equals(this.value, value);
+
         super.set(value);
 
-        this.updateAnimator();
+        if (!same)
+        {
+            this.updateAnimator();
+        }
     }
 
     @Override
     public void tween(ActionsConfig newValue, int duration, IInterpolation interpolation, int offset, boolean playing)
     {
+        boolean same = Objects.equals(this.value, value);
+
         super.tween(newValue, duration, interpolation, offset, playing);
 
-        this.updateAnimator();
+        if (!same)
+        {
+            this.updateAnimator();
+        }
     }
 
     private void updateAnimator()

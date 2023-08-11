@@ -16,6 +16,9 @@ import java.util.Map;
 
 public class ValueClips extends ValueGroup
 {
+    private static Map<Integer, Clip> clipMap = new HashMap<>();
+    private static List<Clip> clipList = new ArrayList<>();
+
     private List<Clip> clips;
     private IFactory<Clip, ClipFactoryData> factory;
 
@@ -68,7 +71,7 @@ public class ValueClips extends ValueGroup
 
     public List<Clip> getClips(int tick, int maxLayer)
     {
-        Map<Integer, Clip> clipMap = new HashMap<>();
+        clipMap.clear();
 
         for (Clip clip : this.clips)
         {
@@ -80,11 +83,11 @@ public class ValueClips extends ValueGroup
             }
         }
 
-        List<Clip> clips = new ArrayList<>(clipMap.values());
+        clipList.clear();
+        clipList.addAll(clipMap.values());
+        clipList.sort(Comparator.comparingInt((a) -> a.layer.get()));
 
-        clips.sort(Comparator.comparingInt((a) -> a.layer.get()));
-
-        return clips;
+        return clipList;
     }
 
     /**

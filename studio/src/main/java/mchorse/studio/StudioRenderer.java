@@ -11,6 +11,7 @@ import mchorse.bbs.events.RenderWorldEvent;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.graphics.Draw;
 import mchorse.bbs.graphics.Framebuffer;
+import mchorse.bbs.graphics.FramebufferManager;
 import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.MatrixStack;
 import mchorse.bbs.graphics.Renderbuffer;
@@ -76,7 +77,9 @@ public class StudioRenderer implements IComponent
     public ChunkRenderer renderer = new ChunkRenderer();
     public Framebuffer gbufferFramebuffer;
     public Framebuffer finalFramebuffer;
-    public Framebuffer tmpFramebuffer;
+
+    public Framebuffer renderToGbufferFramebuffer;
+    public Framebuffer renderToFinalFramebuffer;
 
     private ShaderPipeline pipeline;
     private RenderWorldEvent renderWorld;
@@ -170,82 +173,79 @@ public class StudioRenderer implements IComponent
         this.compositeShader = compositeShader;
         this.finalShader = finalShader;
 
-        this.finalFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("final"), (framebuffer) ->
+        FramebufferManager framebuffers = BBS.getFramebuffers();
+
+        this.finalFramebuffer = framebuffers.getFramebuffer(Link.bbs("final"), this::createFinalFramebuffer);
+        this.gbufferFramebuffer = framebuffers.getFramebuffer(Link.bbs("gbuffer"), this::createGbufferFramebuffer);
+
+        this.renderToFinalFramebuffer = framebuffers.getFramebuffer(Link.bbs("render_to_final"), this::createFinalFramebuffer);
+        this.renderToGbufferFramebuffer = framebuffers.getFramebuffer(Link.bbs("render_to_gbuffer"), this::createGbufferFramebuffer);
+    }
+
+    private void createFinalFramebuffer(Framebuffer framebuffer)
+    {
+        Texture texture = new Texture();
+
+        texture.setFilter(GL11.GL_LINEAR);
+        texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
+
+        framebuffer.deleteTextures().attach(texture, GL30.GL_COLOR_ATTACHMENT0);
+        framebuffer.unbind();
+    }
+
+    private void createGbufferFramebuffer(Framebuffer framebuffer)
+    {
+        int colors = 0;
+        boolean hasDepth = false;
+
+        for (ShaderFramebufferTexture t : this.pipeline.gbuffer.textures)
+        {
+            if (t.format.isDepth())
+            {
+                hasDepth = true;
+            }
+            else
+            {
+                colors += 1;
+            }
+        }
+
+        int color = 0;
+        int[] colorAttachments = new int[colors];
+
+        for (ShaderFramebufferTexture t : this.pipeline.gbuffer.textures)
         {
             Texture texture = new Texture();
 
-            texture.setFilter(GL11.GL_LINEAR);
+            texture.setFilter(GL11.GL_NEAREST);
             texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
+            texture.setFormat(t.format);
 
-            framebuffer.deleteTextures().attach(texture, GL30.GL_COLOR_ATTACHMENT0);
-            framebuffer.unbind();
-        });
+            if (t.format.isDepth())
+            {
+                framebuffer.attach(texture, t.format.attachment);
+            }
+            else
+            {
+                framebuffer.attach(texture, t.format.attachment + color);
 
-        this.tmpFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("tmp"), (framebuffer) ->
+                colorAttachments[color] = t.format.attachment + color;
+                color += 1;
+            }
+        }
+
+        if (!hasDepth)
         {
-            Texture texture = new Texture();
+            Renderbuffer renderbuffer = new Renderbuffer();
 
-            texture.setFilter(GL11.GL_LINEAR);
-            texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
+            framebuffer.attach(renderbuffer);
+        }
 
-            framebuffer.deleteTextures().attach(texture, GL30.GL_COLOR_ATTACHMENT0);
-            framebuffer.unbind();
-        });
+        framebuffer.deleteTextures();
 
-        this.gbufferFramebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("gbuffer"), (framebuffer) ->
-        {
-            int colors = 0;
-            boolean hasDepth = false;
+        GL30.glDrawBuffers(colorAttachments);
 
-            for (ShaderFramebufferTexture t : this.pipeline.gbuffer.textures)
-            {
-                if (t.format.isDepth())
-                {
-                    hasDepth = true;
-                }
-                else
-                {
-                    colors += 1;
-                }
-            }
-
-            int color = 0;
-            int[] colorAttachments = new int[colors];
-
-            for (ShaderFramebufferTexture t : this.pipeline.gbuffer.textures)
-            {
-                Texture texture = new Texture();
-
-                texture.setFilter(GL11.GL_NEAREST);
-                texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
-                texture.setFormat(t.format);
-
-                if (t.format.isDepth())
-                {
-                    framebuffer.attach(texture, t.format.attachment);
-                }
-                else
-                {
-                    framebuffer.attach(texture, t.format.attachment + color);
-
-                    colorAttachments[color] = t.format.attachment + color;
-                    color += 1;
-                }
-            }
-
-            if (!hasDepth)
-            {
-                Renderbuffer renderbuffer = new Renderbuffer();
-
-                framebuffer.attach(renderbuffer);
-            }
-
-            framebuffer.deleteTextures();
-
-            GL30.glDrawBuffers(colorAttachments);
-
-            framebuffer.unbind();
-        });
+        framebuffer.unbind();
     }
 
     private void createSkybox()
@@ -334,7 +334,7 @@ public class StudioRenderer implements IComponent
         if (this.engine.screen.canRefresh())
         {
             this.renderFrameTo(this.engine.cameraController.camera, this.gbufferFramebuffer, 0, true);
-            this.renderFinal(this.finalFramebuffer);
+            this.renderFinal(this.finalFramebuffer, this.gbufferFramebuffer);
         }
 
         this.renderFinalQuad();
@@ -342,7 +342,7 @@ public class StudioRenderer implements IComponent
         this.context.runRunnables();
     }
 
-    private void renderFinal(Framebuffer framebuffer)
+    private void renderFinal(Framebuffer framebuffer, Framebuffer gbuffer)
     {
         this.updateSky(this.compositeShader, this.engine.world.settings);
 
@@ -359,9 +359,9 @@ public class StudioRenderer implements IComponent
             texture.setWrap(GL12.GL_CLAMP_TO_EDGE);
         }
 
-        for (int i = this.gbufferFramebuffer.textures.size() - 1; i >= 0; i--)
+        for (int i = gbuffer.textures.size() - 1; i >= 0; i--)
         {
-            this.gbufferFramebuffer.textures.get(i).bind(i);
+            gbuffer.textures.get(i).bind(i);
         }
 
         Framebuffer.renderToQuad(this.context, this.compositeShader);
@@ -392,23 +392,23 @@ public class StudioRenderer implements IComponent
         int w = (int) (mainTexture.width * quality);
         int h = (int) (mainTexture.height * quality);
 
-        Texture gbufferAlbedo = this.gbufferFramebuffer.getMainTexture();
+        Texture gbufferAlbedo = this.renderToGbufferFramebuffer.getMainTexture();
 
         int lastW = gbufferAlbedo.width;
         int lastH = gbufferAlbedo.height;
 
         if (lastW != w || lastH != h)
         {
-            this.gbufferFramebuffer.resize(w, h);
-            this.tmpFramebuffer.resize(w, h);
+            this.renderToGbufferFramebuffer.resize(w, h);
+            this.renderToFinalFramebuffer.resize(w, h);
         }
 
-        this.renderFrameTo(camera, this.gbufferFramebuffer, pass, renderScreen);
-        this.renderFinal(this.tmpFramebuffer);
+        this.renderFrameTo(camera, this.renderToGbufferFramebuffer, pass, renderScreen);
+        this.renderFinal(this.renderToFinalFramebuffer, this.renderToGbufferFramebuffer);
 
         framebuffer.apply();
 
-        this.tmpFramebuffer.getMainTexture().bind(0);
+        this.renderToFinalFramebuffer.getMainTexture().bind(0);
         Framebuffer.renderToQuad(this.context, this.finalShader);
 
         if (rendering != null)
@@ -418,11 +418,6 @@ public class StudioRenderer implements IComponent
 
         framebuffer.unbind();
         GLStates.resetViewport();
-
-        if (lastW != w || lastH != h)
-        {
-            this.gbufferFramebuffer.resize(lastW, lastH);
-        }
     }
 
     public void renderFrameTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen)

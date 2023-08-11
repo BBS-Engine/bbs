@@ -1,7 +1,6 @@
 package mchorse.bbs.recording.clips;
 
 import mchorse.bbs.camera.values.ValueInterpolation;
-import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.recording.values.ValueForm;
 import mchorse.bbs.settings.values.ValueBoolean;
@@ -37,15 +36,13 @@ public class FormActionClip extends ActionClip
 
             if (!playing || !Objects.equals(component.form, form))
             {
-                Form copy = FormUtils.copy(form);
-
-                if (this.tween.get() && component.form != null && copy != null)
+                if (this.tween.get() && component.form != null && form != null)
                 {
-                    component.form.tween(copy, this.duration.get(), this.interpolation.get(), offset, playing);
+                    component.form.tween(form, this.duration.get(), this.interpolation.get(), offset, playing);
                 }
                 else
                 {
-                    component.form = copy;
+                    component.form = form;
                 }
             }
         }
