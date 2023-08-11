@@ -33,6 +33,7 @@ import java.util.function.Consumer;
 public class UIFormEditor extends UIElement implements IUIFormList
 {
     private static final int TREE_WIDTH = 140;
+    private static boolean TOGGLED = true;
 
     public UIFormPalette palette;
 
@@ -112,7 +113,12 @@ public class UIFormEditor extends UIElement implements IUIFormList
         this.finish = new UIIcon(Icons.IN, (b) -> this.palette.exit());
         this.finish.tooltip(UIKeys.FORMS_EDITOR_FINISH, Direction.RIGHT).relative(this.editArea).xy(0, 1F).anchorY(1F);
 
-        this.toggleSidebar = new UIIcon(Icons.LEFTLOAD, (b) -> this.toggleSidebar());
+        this.toggleSidebar = new UIIcon(Icons.LEFTLOAD, (b) ->
+        {
+            this.toggleSidebar();
+
+            TOGGLED = !TOGGLED;
+        });
         this.toggleSidebar.tooltip(UIKeys.FORMS_EDITOR_TOGGLE_TREE, Direction.RIGHT).relative(this.finish).y(-1F);
 
         this.bodyPartData.add(this.pick, this.enabled, this.useTarget, UI.label(UIKeys.FORMS_EDITOR_BONE).marginTop(8), this.bone, this.transform.marginTop(8));
@@ -263,6 +269,11 @@ public class UIFormEditor extends UIElement implements IUIFormList
         if (this.switchEditor(form))
         {
             this.form = form;
+
+            if (TOGGLED != this.formsArea.isVisible())
+            {
+                this.toggleSidebar();
+            }
 
             this.palette.accept(form);
             this.renderer.reset();
