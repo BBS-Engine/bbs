@@ -190,7 +190,7 @@ public class RecordPlayer
 
     private void applyForm(int tick, Replay replay)
     {
-        FormActionClip action = this.seekAction(tick - 1, FormActionClip.class);
+        FormActionClip action = this.seekAction(tick, FormActionClip.class);
 
         if (action == null)
         {
