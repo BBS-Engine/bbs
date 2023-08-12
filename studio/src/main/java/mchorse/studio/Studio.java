@@ -2,7 +2,6 @@ package mchorse.studio;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.bridge.IBridgeWorld;
-import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.resources.Link;
@@ -13,14 +12,11 @@ import mchorse.bbs.utils.Profiler;
 import mchorse.bbs.utils.TimePrintStream;
 import mchorse.bbs.utils.cli.ArgumentParser;
 import mchorse.bbs.utils.cli.ArgumentType;
-import mchorse.bbs.voxel.tilesets.BlockSet;
-import mchorse.bbs.world.WorldMetadata;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.File;
-import java.io.IOException;
 
 public class Studio
 {
@@ -103,8 +99,6 @@ public class Studio
 
             id = Window.getWindow();
 
-            PROFILER.endBegin("clean_world");
-            this.createCleanWorld();
             PROFILER.endBegin("init_engine");
             engine.init();
             PROFILER.endBegin("load_world");
@@ -133,49 +127,5 @@ public class Studio
 
         GLFW.glfwSetErrorCallback(null).free();
         GLFW.glfwTerminate();
-    }
-
-    private void createCleanWorld()
-    {
-        this.gameDirectory.mkdirs();
-
-        File defaultWorld = new File(this.gameDirectory, "worlds/" + this.defaultWorld);
-
-        if (!defaultWorld.exists())
-        {
-            try
-            {
-                this.createWorld(this.gameDirectory, defaultWorld);
-            }
-            catch (IOException e)
-            {
-                System.err.println("Failed to create default world!");
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void createWorld(File gameDirectory, File defaultWorld) throws IOException
-    {
-        /* Generate default tile set */
-        BlockSet blockSet = new BlockSet(Link.assets("tilesets/default.png"));
-        File blockSetFile = new File(gameDirectory, "assets/tilesets/default.json");
-
-        blockSet.fromData(DataToString.mapFromString(IOUtils.readText(this.getClass().getResourceAsStream("/assets/tilesets/default.json"))));
-        blockSetFile.getParentFile().mkdirs();
-        DataToString.write(blockSetFile, blockSet.toData(), true);
-
-        /* Generate default metadata */
-        WorldMetadata metadata = new WorldMetadata(defaultWorld);
-
-        metadata.column = true;
-        metadata.generator = Link.bbs("flat");
-        metadata.metadata.putString("generator.primary", blockSet.get(1).getLink().toString());
-        metadata.metadata.putString("generator.secondary", blockSet.get(2).getLink().toString());
-        metadata.metadata.putString("generator.foliage1", blockSet.get(3).getLink().toString());
-        metadata.metadata.putString("generator.foliage2", blockSet.get(4).getLink().toString());
-
-        defaultWorld.mkdirs();
-        DataToString.write(new File(defaultWorld, "metadata.json"), metadata.toData(), true);
     }
 }

@@ -17,7 +17,7 @@ import java.io.File;
 
 public class WorldMetadata implements IMapSerializable
 {
-    public static final Link TILESET = Link.assets("tilesets/default.json");
+    public static final Link TILESET = Link.assets("tileset/default.json");
     public final File save;
 
     /* Options */
