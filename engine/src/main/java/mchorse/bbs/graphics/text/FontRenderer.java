@@ -9,6 +9,7 @@ import mchorse.bbs.graphics.text.format.IFontFormat;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.utils.colors.Colors;
 import org.joml.Vector2f;
@@ -147,7 +148,9 @@ public class FontRenderer
             {
                 x += this.font.getKerning(prev, letter);
 
-                if (glyph.width != 0)
+                Area tile = glyph.tile;
+
+                if (tile.w != 0)
                 {
                     this.context.setup(i,
                         lx + x + glyph.offsetX,
@@ -168,33 +171,33 @@ public class FontRenderer
                     }
 
                     /* TL, BL, BR, TR vertices */
-                    float skew = this.context.skew * (glyph.height / (float) font.height);
+                    float skew = this.context.skew * (tile.h / (float) font.height);
 
                     Vector2f p = this.process(stack, rx + skew, ry);
                     float x1 = p.x;
                     float y1 = p.y;
 
-                    p = this.process(stack, rx, ry + glyph.height);
+                    p = this.process(stack, rx, ry + tile.h);
                     float x2 = p.x;
                     float y2 = p.y;
 
-                    p = this.process(stack, rx + glyph.width, ry + glyph.height);
+                    p = this.process(stack, rx + tile.w, ry + tile.h);
                     float x3 = p.x;
                     float y3 = p.y;
 
-                    p = this.process(stack, rx + glyph.width + skew, ry);
+                    p = this.process(stack, rx + tile.w + skew, ry);
                     float x4 = p.x;
                     float y4 = p.y;
 
-                    textBuilder.put(builder, x1, y1, glyph.x, glyph.y, tw, th, color);
-                    textBuilder.put(builder, x2, y2, glyph.x, glyph.y + glyph.height, tw, th, color);
-                    textBuilder.put(builder, x3, y3, glyph.x + glyph.width, glyph.y + glyph.height, tw, th, color);
-                    textBuilder.put(builder, x4, y4, glyph.x + glyph.width, glyph.y, tw, th, color);
+                    textBuilder.put(builder, x1, y1, tile.x, tile.y, tw, th, color);
+                    textBuilder.put(builder, x2, y2, tile.x, tile.y + tile.h, tw, th, color);
+                    textBuilder.put(builder, x3, y3, tile.x + tile.w, tile.y + tile.h, tw, th, color);
+                    textBuilder.put(builder, x4, y4, tile.x + tile.w, tile.y, tw, th, color);
 
                     if (!builder.hasIndex())
                     {
-                        textBuilder.put(builder, x1, y1, glyph.x, glyph.y, tw, th, color);
-                        textBuilder.put(builder, x3, y3, glyph.x + glyph.width, glyph.y + glyph.height, tw, th, color);
+                        textBuilder.put(builder, x1, y1, tile.x, tile.y, tw, th, color);
+                        textBuilder.put(builder, x3, y3, tile.x + tile.w, tile.y + tile.h, tw, th, color);
                     }
 
                     if (this.context.bold)
@@ -203,27 +206,27 @@ public class FontRenderer
                         float bx1 = p.x;
                         float by1 = p.y;
 
-                        p = this.process(stack, rx + 1, ry + glyph.height);
+                        p = this.process(stack, rx + 1, ry + tile.h);
                         float bx2 = p.x;
                         float by2 = p.y;
 
-                        p = this.process(stack, rx + glyph.width + 1, ry + glyph.height);
+                        p = this.process(stack, rx + tile.w + 1, ry + tile.h);
                         float bx3 = p.x;
                         float by3 = p.y;
 
-                        p = this.process(stack, rx + glyph.width + skew + 1, ry);
+                        p = this.process(stack, rx + tile.w + skew + 1, ry);
                         float bx4 = p.x;
                         float by4 = p.y;
 
-                        textBuilder.put(builder, bx1, by1, glyph.x, glyph.y, tw, th, color);
-                        textBuilder.put(builder, bx2, by2, glyph.x, glyph.y + glyph.height, tw, th, color);
-                        textBuilder.put(builder, bx3, by3, glyph.x + glyph.width, glyph.y + glyph.height, tw, th, color);
-                        textBuilder.put(builder, bx4, by4, glyph.x + glyph.width, glyph.y, tw, th, color);
+                        textBuilder.put(builder, bx1, by1, tile.x, tile.y, tw, th, color);
+                        textBuilder.put(builder, bx2, by2, tile.x, tile.y + tile.h, tw, th, color);
+                        textBuilder.put(builder, bx3, by3, tile.x + tile.w, tile.y + tile.h, tw, th, color);
+                        textBuilder.put(builder, bx4, by4, tile.x + tile.w, tile.y, tw, th, color);
 
                         if (!builder.hasIndex())
                         {
-                            textBuilder.put(builder, bx1, by1, glyph.x, glyph.y, tw, th, color);
-                            textBuilder.put(builder, bx3, by3, glyph.x + glyph.width, glyph.y + glyph.height, tw, th, color);
+                            textBuilder.put(builder, bx1, by1, tile.x, tile.y, tw, th, color);
+                            textBuilder.put(builder, bx3, by3, tile.x + tile.w, tile.y + tile.h, tw, th, color);
                         }
                     }
 

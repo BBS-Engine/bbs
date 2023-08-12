@@ -3,6 +3,7 @@ package mchorse.bbs.graphics.text;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.ui.utils.Area;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +14,7 @@ public class Glyph implements IMapSerializable
     public int advance;
     public int offsetX;
     public int offsetY;
-    public int width;
-    public int height;
-    public int x;
-    public int y;
+    public Area tile = new Area();
     public boolean emoji;
     public List<Kerning> kernings = new ArrayList<>();
 
@@ -33,10 +31,7 @@ public class Glyph implements IMapSerializable
 
     public Glyph(int x, int y, int w, int h)
     {
-        this.x = x;
-        this.y = y;
-        this.width = w;
-        this.height = h;
+        this.tile.set(x, y, w, h);
     }
 
     @Override
@@ -48,10 +43,7 @@ public class Glyph implements IMapSerializable
         this.advance = data.getInt("advance");
         this.offsetX = offset.getInt(0);
         this.offsetY = offset.getInt(1);
-        this.x = tile.getInt(0);
-        this.y = tile.getInt(1);
-        this.width = tile.getInt(2);
-        this.height = tile.getInt(3);
+        this.tile.set(tile.getInt(0), tile.getInt(1), tile.getInt(2), tile.getInt(3));
         this.emoji = data.getBool("emoji");
 
         if (data.has("kerning"))
@@ -70,10 +62,10 @@ public class Glyph implements IMapSerializable
 
         offset.addInt(this.offsetX);
         offset.addInt(this.offsetY);
-        tile.addInt(this.x);
-        tile.addInt(this.y);
-        tile.addInt(this.width);
-        tile.addInt(this.height);
+        tile.addInt(this.tile.x);
+        tile.addInt(this.tile.y);
+        tile.addInt(this.tile.w);
+        tile.addInt(this.tile.h);
 
         data.put("offset", offset);
         data.put("tile", tile);

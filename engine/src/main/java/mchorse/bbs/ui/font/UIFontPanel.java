@@ -16,6 +16,7 @@ import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIPromptOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIStringOverlayPanel;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.BoxPacker;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.IOUtils;
 import mchorse.bbs.utils.PNGEncoder;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UIFontPanel extends UISidebarDashboardPanel
 {
@@ -130,7 +132,7 @@ public class UIFontPanel extends UISidebarDashboardPanel
 
                 if (glyph != null)
                 {
-                    Pixels copy = pixels.createCopy(glyph.x, glyph.y, glyph.width, glyph.height);
+                    Pixels copy = pixels.createCopy(glyph.tile.x, glyph.tile.y, glyph.tile.w, glyph.tile.h);
 
                     this.glyphs.put((int) glyph.character, new GlyphData(glyph, copy));
                 }
@@ -180,12 +182,12 @@ public class UIFontPanel extends UISidebarDashboardPanel
 
         glyphs.sort(Comparator.comparingInt(a -> a.character));
 
-        Vector2i result = GlyphPacker.pack(glyphs, 1);
+        Vector2i result = BoxPacker.pack(glyphs.stream().map((glyph) -> glyph.tile).collect(Collectors.toList()), 1);
         Pixels pixels = Pixels.fromSize(result.x, result.y);
 
         for (GlyphData data : this.glyphs.values())
         {
-            pixels.draw(data.pixels, data.glyph.x, data.glyph.y);
+            pixels.draw(data.pixels, data.glyph.tile.x, data.glyph.tile.y);
         }
 
         this.fontLink = link;

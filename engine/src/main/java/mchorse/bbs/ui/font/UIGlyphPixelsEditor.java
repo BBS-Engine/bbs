@@ -27,12 +27,12 @@ public class UIGlyphPixelsEditor extends UIPixelsEditor
         this.offsetY = new UITrackpad((v) -> this.data.glyph.offsetY = v.intValue()).integer();
         this.width = new UITrackpad((v) ->
         {
-            this.data.glyph.width = v.intValue();
+            this.data.glyph.tile.w = v.intValue();
             this.updatePixels();
         }).integer().limit(0);
         this.height = new UITrackpad((v) ->
         {
-            this.data.glyph.height = v.intValue();
+            this.data.glyph.tile.h = v.intValue();
             this.updatePixels();
         }).integer().limit(0);
         this.emoji = new UIToggle(UIKeys.FONT_EDITOR_GLYPH_EMOJI, (b) -> this.data.glyph.emoji = b.getValue());
@@ -69,8 +69,8 @@ public class UIGlyphPixelsEditor extends UIPixelsEditor
         this.advance.setValue(data.glyph.advance);
         this.offsetX.setValue(data.glyph.offsetX);
         this.offsetY.setValue(data.glyph.offsetY);
-        this.width.setValue(data.glyph.width);
-        this.height.setValue(data.glyph.height);
+        this.width.setValue(data.glyph.tile.w);
+        this.height.setValue(data.glyph.tile.h);
         this.emoji.setValue(data.glyph.emoji);
         this.kernings.fill(data.glyph.kernings);
 
