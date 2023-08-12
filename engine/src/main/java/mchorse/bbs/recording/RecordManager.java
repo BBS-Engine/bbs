@@ -268,12 +268,6 @@ public class RecordManager extends BaseManager<Record>
     }
 
     @Override
-    protected boolean canCache()
-    {
-        return false;
-    }
-
-    @Override
     protected Record createData(String id, MapType data)
     {
         Record record = new Record();

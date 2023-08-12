@@ -15,7 +15,6 @@ import java.util.Set;
  */
 public abstract class FolderManager <T extends AbstractData> implements IManager<T>
 {
-    protected Map<String, ManagerCache> cache = new HashMap<>();
     protected File folder;
     protected long lastCheck;
 
@@ -33,26 +32,6 @@ public abstract class FolderManager <T extends AbstractData> implements IManager
         return this.folder;
     }
 
-    protected boolean canCache()
-    {
-        return BBSSettings.generalDataCaching.get();
-    }
-
-    protected void doExpirationCheck()
-    {
-        final int threshold = 1000 * 30;
-        long current = System.currentTimeMillis();
-
-        /* Check every 30 seconds all cached entries and remove those that weren't used in
-         * last 30 seconds */
-        if (current - this.lastCheck > threshold)
-        {
-            this.cache.values().removeIf((cache) -> current - cache.lastUsed > threshold);
-
-            this.lastCheck = current;
-        }
-    }
-
     @Override
     public boolean exists(String name)
     {
@@ -68,11 +47,6 @@ public abstract class FolderManager <T extends AbstractData> implements IManager
         {
             if (file.renameTo(this.getFile(to)))
             {
-                if (this.canCache())
-                {
-                    this.cache.put(to, this.cache.remove(from));
-                }
-
                 return true;
             }
         }
@@ -85,14 +59,7 @@ public abstract class FolderManager <T extends AbstractData> implements IManager
     {
         File file = this.getFile(name);
 
-        if (file != null && file.delete())
-        {
-            this.cache.remove(name);
-
-            return true;
-        }
-
-        return false;
+        return file != null && file.delete();
     }
 
     /**
@@ -124,26 +91,6 @@ public abstract class FolderManager <T extends AbstractData> implements IManager
         {
             if (folder.renameTo(this.getFolder(to)))
             {
-                if (this.canCache())
-                {
-                    Set<String> keys = new HashSet<>(this.getKeys());
-
-                    for (String key : keys)
-                    {
-                        if (!key.startsWith(from))
-                        {
-                            continue;
-                        }
-
-                        ManagerCache cache = this.cache.remove(key);
-
-                        if (cache != null)
-                        {
-                            this.cache.put(to + key.substring(from.length()), cache);
-                        }
-                    }
-                }
-
                 return true;
             }
         }
@@ -162,19 +109,6 @@ public abstract class FolderManager <T extends AbstractData> implements IManager
         {
             if (folder.delete())
             {
-                if (this.canCache())
-                {
-                    Set<String> keys = new HashSet<>(this.getKeys());
-
-                    for (String key : keys)
-                    {
-                        if (key.startsWith(path))
-                        {
-                            this.cache.remove(key);
-                        }
-                    }
-                }
-
                 return true;
             }
         }

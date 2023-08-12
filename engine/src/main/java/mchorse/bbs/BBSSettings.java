@@ -53,9 +53,6 @@ public class BBSSettings
     public static ValueBoolean editorCrosshair;
     public static ValueBoolean editorSeconds;
 
-    /* Settings */
-    public static ValueBoolean generalDataCaching;
-
     public static ValueInt nodePulseBackgroundColor;
     public static ValueBoolean nodePulseBackgroundPrimaryColor;
     public static ValueInt nodeThickness;
@@ -165,8 +162,6 @@ public class BBSSettings
         editorCenterLines = builder.getBoolean("center_lines", false);
         editorCrosshair = builder.getBoolean("crosshair", false);
         editorSeconds = builder.getBoolean("seconds", false);
-
-        generalDataCaching = builder.category("data").getBoolean("data_caching", true);
 
         nodePulseBackgroundColor = builder.category("gui").getInt("pulse_background_color", 0).color();
         nodePulseBackgroundPrimaryColor = builder.getBoolean("pulse_background_primary_color", false);

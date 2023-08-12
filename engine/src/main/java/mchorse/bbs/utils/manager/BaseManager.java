@@ -37,7 +37,7 @@ public abstract class BaseManager <T extends AbstractData> extends FolderManager
     {
         try
         {
-            MapType mapType = this.getCached(id);
+            MapType mapType = this.storage.load(this.getFile(id));
             T data = this.create(id, mapType);
 
             return data;
@@ -48,52 +48,6 @@ public abstract class BaseManager <T extends AbstractData> extends FolderManager
         }
 
         return null;
-    }
-
-    /**
-     * Get cached data map from given file by ID
-     */
-    protected MapType getCached(String id) throws Exception
-    {
-        MapType map = null;
-        File file = this.getFile(id);
-        boolean isCaching = this.canCache();
-        long lastUpdated = file.lastModified();
-
-        if (isCaching)
-        {
-            ManagerCache cache = this.cache.get(id);
-
-            if (cache != null)
-            {
-                /* This is necessary for update if the files were edited externally,
-                 * because dashboard save will clear the cache for sure */
-                if (cache.lastUpdated < lastUpdated)
-                {
-                    this.cache.remove(id);
-                }
-                else
-                {
-                    map = cache.data;
-
-                    cache.update();
-                }
-
-                this.doExpirationCheck();
-            }
-        }
-
-        if (map == null)
-        {
-            map = this.storage.load(file);
-
-            if (isCaching)
-            {
-                this.cache.put(id, new ManagerCache(map, lastUpdated));
-            }
-        }
-
-        return map;
     }
 
     public boolean save(T data)
@@ -107,7 +61,6 @@ public abstract class BaseManager <T extends AbstractData> extends FolderManager
         try
         {
             this.storage.save(this.getFile(id), data);
-            this.cache.remove(id);
 
             return true;
         }

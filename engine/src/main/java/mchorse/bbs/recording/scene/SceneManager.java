@@ -7,8 +7,8 @@ import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -23,10 +23,6 @@ public class SceneManager extends BaseManager<Scene>
      * Currently loaded scenes
      */
     private Map<String, Scene> scenes = new HashMap<>();
-
-    private List<String> toRemove = new ArrayList<>();
-    private Map<String, Scene> toPut = new HashMap<>();
-    private boolean ticking;
 
     public SceneManager(File folder)
     {
@@ -51,19 +47,20 @@ public class SceneManager extends BaseManager<Scene>
      */
     public void tick()
     {
-        this.ticking = true;
+        Iterator<Map.Entry<String, Scene>> it = this.scenes.entrySet().iterator();
 
         try
         {
-            for (Map.Entry<String, Scene> entry : this.scenes.entrySet())
+            while (it.hasNext())
             {
+                Map.Entry<String, Scene> entry = it.next();
                 Scene scene = entry.getValue();
 
                 scene.tick();
 
                 if (!scene.playing)
                 {
-                    this.toRemove.add(entry.getKey());
+                    it.remove();
                 }
             }
         }
@@ -71,18 +68,6 @@ public class SceneManager extends BaseManager<Scene>
         {
             e.printStackTrace();
         }
-
-        this.ticking = false;
-
-        for (String scene : this.toRemove)
-        {
-            this.scenes.remove(scene);
-        }
-
-        this.scenes.putAll(this.toPut);
-
-        this.toRemove.clear();
-        this.toPut.clear();
     }
 
     /**
@@ -121,7 +106,7 @@ public class SceneManager extends BaseManager<Scene>
                 {
                     if (!BBSData.getRecords().recorders.containsKey(player))
                     {
-                        this.put(filename, scene);
+                        this.scenes.put(filename, scene);
                         scene.recording().startPlayback(record, offset);
                     }
                     else
@@ -169,7 +154,7 @@ public class SceneManager extends BaseManager<Scene>
             if (scene != null)
             {
                 scene.setWorld(world);
-                this.put(filename, scene);
+                this.scenes.put(filename, scene);
             }
         }
         catch (Exception e)
@@ -191,10 +176,5 @@ public class SceneManager extends BaseManager<Scene>
         }
 
         return this.save(data, reload);
-    }
-
-    private void put(String filename, Scene scene)
-    {
-        (this.ticking ? this.toPut : this.scenes).put(filename, scene);
     }
 }
