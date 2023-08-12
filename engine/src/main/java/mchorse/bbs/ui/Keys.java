@@ -59,12 +59,6 @@ public class Keys
     public static final KeyCombo FORMS_PICK_ALT = new KeyCombo(UIKeys.PICK, GLFW.GLFW_KEY_P, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("forms");
     public static final KeyCombo FORMS_EDIT_ALT = new KeyCombo(UIKeys.EDIT, GLFW.GLFW_KEY_E, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("forms");
 
-    /* Nodes */
-    public static final KeyCombo NODES_TIE = new KeyCombo(UIKeys.NODES_CONTEXT_TIE, GLFW.GLFW_KEY_F).categoryKey("nodes");
-    public static final KeyCombo NODES_UNTIE = new KeyCombo(UIKeys.NODES_CONTEXT_UNTIE, GLFW.GLFW_KEY_U).categoryKey("nodes");
-    public static final KeyCombo NODES_MAIN = new KeyCombo(UIKeys.NODES_CONTEXT_MAIN, GLFW.GLFW_KEY_M).categoryKey("nodes");
-    public static final KeyCombo NODES_SORT = new KeyCombo(UIKeys.NODES_CONTEXT_SORT, GLFW.GLFW_KEY_C).categoryKey("nodes");
-
     /* Pixel editor */
     public static final KeyCombo PIXEL_COPY = new KeyCombo(UIKeys.TEXTURES_VIEWER_CONTEXT_COPY_HEX, GLFW.GLFW_KEY_C, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("pixels");
     public static final KeyCombo PIXEL_SWAP = new KeyCombo(UIKeys.TEXTURES_KEYS_SWAP, GLFW.GLFW_KEY_X).categoryKey("pixels");
@@ -75,27 +69,6 @@ public class Keys
     public static final KeyCombo KEYFRAMES_SELECT_ALL = new KeyCombo(UIKeys.KEYFRAMES_CONTEXT_SELECT_ALL, GLFW.GLFW_KEY_A, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("keyframes");
     public static final KeyCombo KEYFRAMES_INTERP = new KeyCombo(UIKeys.KEYFRAMES_KEYS_TOGGLE_INTERP, GLFW.GLFW_KEY_T, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("keyframes");
     public static final KeyCombo KEYFRAMES_EASING = new KeyCombo(UIKeys.KEYFRAMES_KEYS_TOGGLE_EASING, GLFW.GLFW_KEY_E, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("keyframes");
-
-    /* Record editor */
-    public static final KeyCombo RECORD_SELECT_ALL = new KeyCombo(UIKeys.RECORD_EDITOR_CONTEXT_SELECT_ALL, GLFW.GLFW_KEY_A, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("record");
-    public static final KeyCombo RECORD_JUMP_NEXT_ACTION = new KeyCombo(UIKeys.RECORD_EDITOR_JUMP_NEXT_ACTION, GLFW.GLFW_KEY_RIGHT_BRACKET).categoryKey("record");
-    public static final KeyCombo RECORD_JUMP_PREV_ACTION = new KeyCombo(UIKeys.RECORD_EDITOR_JUMP_PREV_ACTION, GLFW.GLFW_KEY_LEFT_BRACKET).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_ADD = new KeyCombo(UIKeys.RECORD_EDITOR_TOOLS_ADD_TITLE, GLFW.GLFW_KEY_N, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_APPLY = new KeyCombo(UIKeys.RECORD_EDITOR_TOOLS_APPLY_TITLE, GLFW.GLFW_KEY_A, GLFW.GLFW_KEY_LEFT_ALT).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_CAMERA = new KeyCombo(UIKeys.RECORD_EDITOR_TOOLS_CAMERA_TITLE, GLFW.GLFW_KEY_C, GLFW.GLFW_KEY_LEFT_ALT).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_CAPTURE = new KeyCombo(UIKeys.RECORD_EDITOR_CAPTURE, GLFW.GLFW_KEY_R, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_COPY = new KeyCombo(UIKeys.RECORD_EDITOR_COPY, GLFW.GLFW_KEY_C, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_CUT = new KeyCombo(UIKeys.RECORD_EDITOR_CUT, GLFW.GLFW_KEY_X, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_INSERT = new KeyCombo(UIKeys.RECORD_EDITOR_TOOLS_INSERT_TITLE, GLFW.GLFW_KEY_I).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_LERP = new KeyCombo(UIKeys.RECORD_EDITOR_TOOLS_LERP_TITLE, GLFW.GLFW_KEY_L).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_PASTE = new KeyCombo(UIKeys.RECORD_EDITOR_PASTE, GLFW.GLFW_KEY_V, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_PROCESS = new KeyCombo(UIKeys.RECORD_EDITOR_TOOLS_PROCESS_TITLE, GLFW.GLFW_KEY_M).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_REMOVE = new KeyCombo(UIKeys.REMOVE, GLFW.GLFW_KEY_DELETE).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_REVERSE = new KeyCombo(UIKeys.RECORD_EDITOR_TOOLS_PROCESS_REVERSE_TITLE, GLFW.GLFW_KEY_R, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("record");
-    public static final KeyCombo RECORD_TOOL_TELEPORT = new KeyCombo(UIKeys.RECORD_EDITOR_TELEPORT, GLFW.GLFW_KEY_T, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("record");
-
-    /* Scripts */
-    public static final KeyCombo SCRIPT_WORD_WRAP = new KeyCombo(UIKeys.SCRIPTS_KEYS_WORD_WRAP, GLFW.GLFW_KEY_P, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("scripts");
 
     /* Chalkboard */
     public static final KeyCombo CHALKBOARD_TOGGLE = new KeyCombo(UIKeys.CHALKBOARD_KEYS_TOGGLE, GLFW.GLFW_KEY_F8).categoryKey("chalkboard");
