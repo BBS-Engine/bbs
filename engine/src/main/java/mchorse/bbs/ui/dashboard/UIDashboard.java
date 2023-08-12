@@ -25,7 +25,6 @@ import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.ui.UISettingsOverlayPanel;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.animation.UIAnimationPanel;
 import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.dashboard.panels.UIDashboardPanel;
 import mchorse.bbs.ui.dashboard.panels.UIDashboardPanels;
@@ -274,7 +273,6 @@ public class UIDashboard extends UIBaseMenu
 
         this.panels.registerPanel(new UITileSetEditorPanel(this), UIKeys.TILE_SET_TITLE, Icons.STAIR);
 
-        this.panels.registerPanel(new UIAnimationPanel(this), UIKeys.PANELS_ANIMATIONS, Icons.CURVES).marginLeft(10);
         this.panels.registerPanel(new UIScenePanel(this), UIKeys.PANELS_SCENES, Icons.SCENE);
         this.panels.registerPanel(new UIRecordPanel(this), UIKeys.PANELS_RECORDS, Icons.EDITOR);
         this.panels.registerPanel(new UICameraPanel(this), UIKeys.PANELS_CAMERAS, Icons.FRUSTUM);

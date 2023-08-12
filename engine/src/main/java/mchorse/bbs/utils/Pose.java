@@ -1,6 +1,5 @@
 package mchorse.bbs.utils;
 
-import mchorse.bbs.animation.IPuppet;
 import mchorse.bbs.cubic.data.model.Model;
 import mchorse.bbs.cubic.data.model.ModelGroup;
 import mchorse.bbs.data.IMapSerializable;
@@ -18,19 +17,6 @@ public class Pose implements IMapSerializable
     public boolean staticPose;
 
     public final Map<String, Transform> transforms = new HashMap<>();
-
-    public static void getAvailableKeys(String prefix, Set<String> keys)
-    {
-        keys.add(IPuppet.combinePaths(prefix, "x"));
-        keys.add(IPuppet.combinePaths(prefix, "y"));
-        keys.add(IPuppet.combinePaths(prefix, "z"));
-        keys.add(IPuppet.combinePaths(prefix, "sx"));
-        keys.add(IPuppet.combinePaths(prefix, "sy"));
-        keys.add(IPuppet.combinePaths(prefix, "sz"));
-        keys.add(IPuppet.combinePaths(prefix, "rx"));
-        keys.add(IPuppet.combinePaths(prefix, "ry"));
-        keys.add(IPuppet.combinePaths(prefix, "rz"));
-    }
 
     public Transform get(String name)
     {

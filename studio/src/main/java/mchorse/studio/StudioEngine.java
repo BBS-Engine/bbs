@@ -4,7 +4,6 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.BBSData;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridge;
-import mchorse.bbs.bridge.IBridgeAnimations;
 import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.bridge.IBridgeMenu;
 import mchorse.bbs.bridge.IBridgePlayer;
@@ -43,7 +42,6 @@ import mchorse.bbs.utils.recording.VideoRecorder;
 import mchorse.bbs.utils.resources.Pixels;
 import mchorse.bbs.utils.watchdog.WatchDog;
 import mchorse.bbs.world.World;
-import mchorse.studio.bridge.BridgeAnimations;
 import mchorse.studio.bridge.BridgeCamera;
 import mchorse.studio.bridge.BridgeMenu;
 import mchorse.studio.bridge.BridgePlayer;
@@ -88,7 +86,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
     {
         super();
 
-        this.apis.put(IBridgeAnimations.class, new BridgeAnimations(this));
         this.apis.put(IBridgeCamera.class, new BridgeCamera(this));
         this.apis.put(IBridgeMenu.class, new BridgeMenu(this));
         this.apis.put(IBridgePlayer.class, new BridgePlayer(this));

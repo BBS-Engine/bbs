@@ -1,8 +1,6 @@
 package mchorse.studio;
 
 import mchorse.bbs.BBS;
-import mchorse.bbs.animation.AnimationPlayer;
-import mchorse.bbs.animation.Animations;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.core.IComponent;
 import mchorse.bbs.data.DataToString;
@@ -55,13 +53,10 @@ import org.lwjgl.opengl.GL30;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.util.Iterator;
 
 public class StudioRenderer implements IComponent
 {
     public StudioEngine engine;
-
-    public Animations animations = new Animations();
 
     public RenderingContext context;
 
@@ -288,23 +283,6 @@ public class StudioRenderer implements IComponent
     @Override
     public void update()
     {
-        Iterator<AnimationPlayer> it = this.animations.animations.values().iterator();
-
-        while (it.hasNext())
-        {
-            AnimationPlayer player = it.next();
-
-            if (player != null)
-            {
-                player.update();
-
-                if (player.canRemove())
-                {
-                    it.remove();
-                }
-            }
-        }
-
         this.dummy.basic.ticks += 1;
         this.ticks += 1;
 
@@ -551,14 +529,6 @@ public class StudioRenderer implements IComponent
         for (WorldObject object : world.objects)
         {
             object.render(this.context);
-        }
-
-        for (AnimationPlayer animation : this.animations.animations.values())
-        {
-            if (animation != null)
-            {
-                animation.render(context);
-            }
         }
 
         BBS.events.post(this.renderWorld);

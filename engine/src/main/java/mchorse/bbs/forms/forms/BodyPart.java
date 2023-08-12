@@ -1,22 +1,17 @@
 package mchorse.bbs.forms.forms;
 
-import mchorse.bbs.animation.IPuppet;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.graphics.RenderingContext;
-import mchorse.bbs.settings.values.ValueDouble;
 import mchorse.bbs.utils.Transform;
-import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.architect.EntityArchitect;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
-public class BodyPart implements IMapSerializable, IPuppet
+public class BodyPart implements IMapSerializable
 {
     /**
      * This body part's owner.
@@ -101,72 +96,6 @@ public class BodyPart implements IMapSerializable, IPuppet
         part.fromData(this.toData());
 
         return part;
-    }
-
-    @Override
-    public void freeze()
-    {
-        this.puppetTransform = this.transform.copy();
-
-        IPuppet.freeze(this.form);
-    }
-
-    @Override
-    public void getAvailableKeys(String prefix, Set<String> keys)
-    {
-        keys.add(IPuppet.combinePaths(prefix, "x"));
-        keys.add(IPuppet.combinePaths(prefix, "y"));
-        keys.add(IPuppet.combinePaths(prefix, "z"));
-        keys.add(IPuppet.combinePaths(prefix, "sx"));
-        keys.add(IPuppet.combinePaths(prefix, "sy"));
-        keys.add(IPuppet.combinePaths(prefix, "sz"));
-        keys.add(IPuppet.combinePaths(prefix, "rx"));
-        keys.add(IPuppet.combinePaths(prefix, "ry"));
-        keys.add(IPuppet.combinePaths(prefix, "rz"));
-
-        IPuppet.getAvailableKeys(this.form, prefix, keys);
-    }
-
-    @Override
-    public void applyKeyframes(String prefix, Map<String, KeyframeChannel> keyframes, float ticks)
-    {
-        this.applyKeyframe(IPuppet.combinePaths(prefix, "x"), keyframes, ticks, false);
-        this.applyKeyframe(IPuppet.combinePaths(prefix, "y"), keyframes, ticks, false);
-        this.applyKeyframe(IPuppet.combinePaths(prefix, "z"), keyframes, ticks, false);
-        this.applyKeyframe(IPuppet.combinePaths(prefix, "sx"), keyframes, ticks, false);
-        this.applyKeyframe(IPuppet.combinePaths(prefix, "sy"), keyframes, ticks, false);
-        this.applyKeyframe(IPuppet.combinePaths(prefix, "sz"), keyframes, ticks, false);
-        this.applyKeyframe(IPuppet.combinePaths(prefix, "rx"), keyframes, ticks, true);
-        this.applyKeyframe(IPuppet.combinePaths(prefix, "ry"), keyframes, ticks, true);
-        this.applyKeyframe(IPuppet.combinePaths(prefix, "rz"), keyframes, ticks, true);
-
-        IPuppet.applyKeyframes(this.form, prefix, keyframes, ticks);
-    }
-
-    private void applyKeyframe(String key, Map<String, KeyframeChannel> keyframes, float ticks, boolean rads)
-    {
-        KeyframeChannel channel = keyframes.get(key);
-
-        if (channel != null)
-        {
-            this.puppetTransform.applyKeyframe(channel, key, ticks, rads);
-        }
-    }
-
-    @Override
-    public boolean fillDefaultValue(String prefix, ValueDouble value)
-    {
-        String start = IPuppet.combinePaths(prefix, "");
-
-        if (value.getId().startsWith(start) && value.getId().indexOf('.', start.length()) == -1)
-        {
-            if (this.transform.fillDefaultValue(value, value.getId(), false))
-            {
-                return true;
-            }
-        }
-
-        return IPuppet.fillDefaultValue(this.form, prefix, value);
     }
 
     public void tween(BodyPart part, int duration, IInterpolation interpolation, int offset, boolean playing)

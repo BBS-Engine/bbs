@@ -1,7 +1,5 @@
 package mchorse.bbs;
 
-import mchorse.bbs.animation.clip.AnimationClip;
-import mchorse.bbs.animation.clip.UIAnimationClip;
 import mchorse.bbs.audio.SoundManager;
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.camera.clips.ClipFactoryData;
@@ -497,7 +495,6 @@ public class BBS
 
             .register(Link.bbs("scene"), SceneClip.class, new ClipFactoryData(Icons.SCENE, 0xff1493, UISceneClip.class))
             .register(Link.bbs("audio"), AudioClip.class, new ClipFactoryData(Icons.SOUND, 0xffc825, UIAudioClip.class))
-            .register(Link.bbs("animation"), AnimationClip.class, new ClipFactoryData(Icons.CURVES, 0xeeeeee, UIAnimationClip.class))
 
             .register(Link.bbs("subtitle"), SubtitleClip.class, new ClipFactoryData(Icons.FONT, 0x888899, UISubtitleClip.class));
 

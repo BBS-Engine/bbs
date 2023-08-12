@@ -1,23 +1,18 @@
 package mchorse.bbs.forms.forms;
 
-import mchorse.bbs.animation.IPuppet;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.settings.values.ValueDouble;
-import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.world.entities.Entity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
-public class BodyPartManager implements IMapSerializable, IPuppet
+public class BodyPartManager implements IMapSerializable
 {
     /**
      * Form owner of this body part manager.
@@ -62,47 +57,6 @@ public class BodyPartManager implements IMapSerializable, IPuppet
         {
             part.update(target);
         }
-    }
-
-    @Override
-    public void freeze()
-    {
-        for (BodyPart part : this.parts)
-        {
-            part.freeze();
-        }
-    }
-
-    @Override
-    public void getAvailableKeys(String prefix, Set<String> keys)
-    {
-        for (int i = 0; i < this.parts.size(); i++)
-        {
-            this.parts.get(i).getAvailableKeys(IPuppet.combinePaths(prefix, String.valueOf(i)), keys);
-        }
-    }
-
-    @Override
-    public void applyKeyframes(String prefix, Map<String, KeyframeChannel> keyframes, float ticks)
-    {
-        for (int i = 0; i < this.parts.size(); i++)
-        {
-            this.parts.get(i).applyKeyframes(IPuppet.combinePaths(prefix, String.valueOf(i)), keyframes, ticks);
-        }
-    }
-
-    @Override
-    public boolean fillDefaultValue(String prefix, ValueDouble value)
-    {
-        for (int i = 0; i < this.parts.size(); i++)
-        {
-            if (this.parts.get(i).fillDefaultValue(IPuppet.combinePaths(prefix, String.valueOf(i)), value))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public void tween(BodyPartManager parts, int duration, IInterpolation interpolation, int offset, boolean playing)

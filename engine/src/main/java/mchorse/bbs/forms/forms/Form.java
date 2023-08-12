@@ -1,7 +1,6 @@
 package mchorse.bbs.forms.forms;
 
 import mchorse.bbs.BBS;
-import mchorse.bbs.animation.IPuppet;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.FormArchitect;
@@ -11,17 +10,14 @@ import mchorse.bbs.forms.properties.IFormProperty;
 import mchorse.bbs.forms.properties.StringProperty;
 import mchorse.bbs.forms.properties.TransformProperty;
 import mchorse.bbs.forms.renderers.FormRenderer;
-import mchorse.bbs.settings.values.ValueDouble;
 import mchorse.bbs.utils.Transform;
-import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.world.entities.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-public abstract class Form implements IMapSerializable, IPuppet
+public abstract class Form implements IMapSerializable
 {
     private Form parent;
 
@@ -170,71 +166,6 @@ public abstract class Form implements IMapSerializable, IPuppet
         }
 
         this.parts.tween(form.parts, duration, interpolation, offset, playing);
-    }
-
-    /* IPuppet implementation */
-
-    @Override
-    public void freeze()
-    {
-        if (this.frozen)
-        {
-            return;
-        }
-
-        for (IFormProperty property : this.properties.values())
-        {
-            if (property instanceof IPuppet)
-            {
-                ((IPuppet) property).freeze();
-            }
-        }
-
-        this.parts.freeze();
-
-        this.frozen = true;
-    }
-
-    @Override
-    public void getAvailableKeys(String prefix, Set<String> keys)
-    {
-        for (IFormProperty property : this.properties.values())
-        {
-            if (property instanceof IPuppet)
-            {
-                ((IPuppet) property).getAvailableKeys(prefix, keys);
-            }
-        }
-
-        this.parts.getAvailableKeys(prefix, keys);
-    }
-
-    @Override
-    public void applyKeyframes(String prefix, Map<String, KeyframeChannel> keyframes, float ticks)
-    {
-        for (IFormProperty property : this.properties.values())
-        {
-            if (property instanceof IPuppet)
-            {
-                ((IPuppet) property).applyKeyframes(prefix, keyframes, ticks);
-            }
-        }
-
-        this.parts.applyKeyframes(prefix, keyframes, ticks);
-    }
-
-    @Override
-    public boolean fillDefaultValue(String prefix, ValueDouble value)
-    {
-        for (IFormProperty property : this.properties.values())
-        {
-            if (property instanceof IPuppet && ((IPuppet) property).fillDefaultValue(prefix, value))
-            {
-                return true;
-            }
-        }
-
-        return this.parts.fillDefaultValue(prefix, value);
     }
 
     /* Data comparison and (de)serialization */
