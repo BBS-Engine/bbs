@@ -273,7 +273,7 @@ public class UIDashboard extends UIBaseMenu
 
         this.panels.registerPanel(new UITileSetEditorPanel(this), UIKeys.TILE_SET_TITLE, Icons.STAIR);
 
-        this.panels.registerPanel(new UIScenePanel(this), UIKeys.PANELS_SCENES, Icons.SCENE);
+        this.panels.registerPanel(new UIScenePanel(this), UIKeys.PANELS_SCENES, Icons.SCENE).marginLeft(10);
         this.panels.registerPanel(new UIRecordPanel(this), UIKeys.PANELS_RECORDS, Icons.EDITOR);
         this.panels.registerPanel(new UICameraPanel(this), UIKeys.PANELS_CAMERAS, Icons.FRUSTUM);
         this.panels.registerPanel(new UIScreenplayPanel(this), IKey.lazy("Screenplays"), Icons.FILE);

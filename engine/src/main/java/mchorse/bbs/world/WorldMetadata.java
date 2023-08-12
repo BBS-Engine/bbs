@@ -7,7 +7,6 @@ import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.IOUtils;
 import mchorse.bbs.utils.Range;
-import mchorse.bbs.utils.resources.LinkUtils;
 import mchorse.bbs.voxel.generation.Generator;
 import mchorse.bbs.voxel.storage.ChunkFactory;
 import mchorse.bbs.voxel.storage.column.ChunkColumnFactory;
@@ -18,11 +17,11 @@ import java.io.File;
 
 public class WorldMetadata implements IMapSerializable
 {
+    public static final Link TILESET = Link.assets("tilesets/default.json");
     public final File save;
 
     /* Options */
     public String name = "";
-    public Link tileset = Link.assets("tilesets/default.json");
 
     public long seed;
     public Link generator = Generator.DEFAULT;
@@ -92,11 +91,11 @@ public class WorldMetadata implements IMapSerializable
 
     public BlockSet createBlockSet()
     {
-        BlockSet blocks = new BlockSet(this.tileset);
+        BlockSet blocks = new BlockSet(TILESET);
 
         try
         {
-            blocks.fromData(DataToString.mapFromString(IOUtils.readText(BBS.getProvider().getAsset(this.tileset))));
+            blocks.fromData(DataToString.mapFromString(IOUtils.readText(BBS.getProvider().getAsset(blocks.id))));
         }
         catch (Exception e)
         {
@@ -117,7 +116,6 @@ public class WorldMetadata implements IMapSerializable
         data.combine(this.metadata);
 
         data.putString("name", this.name);
-        data.put("tileset", LinkUtils.toData(this.tileset));
 
         data.putInt("seed", (int) this.seed);
         data.putString("generator", this.generator.toString());
@@ -145,11 +143,6 @@ public class WorldMetadata implements IMapSerializable
         this.metadata.combine(data);
 
         this.name = data.getString("name");
-
-        if (data.has("tileset"))
-        {
-            this.tileset = LinkUtils.create(data.get("tileset"));
-        }
 
         this.seed = data.getLong("seed");
         this.generator = Link.create(data.getString("generator", Generator.DEFAULT.toString()));

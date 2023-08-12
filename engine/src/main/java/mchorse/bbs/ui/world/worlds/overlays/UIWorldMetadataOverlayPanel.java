@@ -40,7 +40,6 @@ public class UIWorldMetadataOverlayPanel extends UIOverlayPanel
 
     public UITextbox id;
     public UITextbox name;
-    public UIButton changeTileset;
 
     public UITrackpad seed;
     public UICirculate generator;
@@ -85,7 +84,6 @@ public class UIWorldMetadataOverlayPanel extends UIOverlayPanel
 
         this.id = new UITextbox(this::verifyId);
         this.name = new UITextbox((s) -> this.metadata.name = s);
-        this.changeTileset = new UIButton(UIKeys.WORLDS_OPTIONS_TILE_SET, (b) -> this.changeTileSet());
 
         this.seed = new UITrackpad((v) -> this.metadata.seed = v.longValue());
         this.generator = new UICirculate((b) ->
@@ -128,23 +126,6 @@ public class UIWorldMetadataOverlayPanel extends UIOverlayPanel
         this.content.add(this.view);
 
         this.rebuild();
-    }
-
-    private void changeTileSet()
-    {
-        List<String> strings = new ArrayList<>();
-
-        for (File file : BBS.getAssetsPath("tilesets").listFiles())
-        {
-            strings.add("assets:tilesets/" + file.getName());
-        }
-
-        UIStringOverlayPanel panel = new UIStringOverlayPanel(UIKeys.WORLDS_OPTIONS_TILE_SET_TITLE, false, strings, (s) ->
-        {
-            this.metadata.tileset = Link.create(s);
-        });
-
-        UIOverlay.addOverlay(this.getContext(), panel.set(this.metadata.tileset.toString()));
     }
 
     public WorldMetadata getMetadata()
@@ -211,8 +192,7 @@ public class UIWorldMetadataOverlayPanel extends UIOverlayPanel
 
         this.view.removeAll();
         this.view.add(UI.label(UIKeys.WORLDS_OPTIONS_ID).background(color), this.id.marginBottom(12));
-        this.view.add(UI.label(UIKeys.WORLDS_OPTIONS_TITLE).background(color), this.name);
-        this.view.add(this.changeTileset.marginBottom(12));
+        this.view.add(UI.label(UIKeys.WORLDS_OPTIONS_TITLE).background(color), this.name.marginBottom(12));
         this.view.add(UI.label(UIKeys.WORLDS_OPTIONS_GENERATOR_OPTIONS).background(color));
         this.view.add(UI.label(UIKeys.WORLDS_OPTIONS_SEED).marginTop(6), this.seed, this.generator.marginBottom(12));
 

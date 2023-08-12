@@ -5,7 +5,6 @@ import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.l10n.keys.KeyCollection;
 import mchorse.bbs.particles.ParticleCurveType;
 import mchorse.bbs.utils.EnumUtils;
-import mchorse.bbs.utils.keyframes.KeyframeEasing;
 import mchorse.bbs.utils.keyframes.KeyframeInterpolation;
 import mchorse.bbs.utils.math.Interpolation;
 
@@ -611,7 +610,6 @@ public class UIKeys
     public static final IKey WORLDS_OPTIONS_SEED = IKey.lang("bbs.ui.worlds.options.seed");
     public static final IKey WORLDS_OPTIONS_STORAGE = IKey.lang("bbs.ui.worlds.options.storage");
     public static final IKey WORLDS_OPTIONS_TITLE = IKey.lang("bbs.ui.worlds.options.title");
-    public static final IKey WORLDS_OPTIONS_TILE_SET = IKey.lang("bbs.ui.worlds.options.tile_set");
     public static final IKey WORLDS_OPTIONS_TILE_SET_TITLE = IKey.lang("bbs.ui.worlds.options.tile_set-title");
     public static final IKey WORLDS_OPTIONS_WARNING_WORLD_ID = IKey.lang("bbs.ui.worlds.options.warning.world_id");
     public static final IKey WORLDS_OPTIONS_WARNING_EMPTY_DATA = IKey.lang("bbs.ui.worlds.options.warning.empty_data");

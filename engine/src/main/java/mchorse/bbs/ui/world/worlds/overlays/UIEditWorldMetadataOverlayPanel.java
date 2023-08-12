@@ -24,8 +24,7 @@ public class UIEditWorldMetadataOverlayPanel extends UIWorldMetadataOverlayPanel
         int color = Colors.A50 | BBSSettings.primaryColor.get();
 
         this.view.removeAll();
-        this.view.add(UI.label(UIKeys.EDIT_WORLD_TITLE).background(color), this.name);
-        this.view.add(this.changeTileset.marginBottom(12));
+        this.view.add(UI.label(UIKeys.EDIT_WORLD_TITLE).background(color), this.name.marginBottom(12));
         this.view.add(UI.label(UIKeys.WORLDS_OPTIONS_CHUNKS).marginTop(6), this.chunks);
         this.view.add(UI.label(UIKeys.EDIT_WORLD_CHUNK_LIMIT).background(color).marginBottom(6).marginTop(6), this.x.marginBottom(6));
 
