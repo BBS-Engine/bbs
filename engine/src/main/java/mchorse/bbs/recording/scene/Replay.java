@@ -19,12 +19,9 @@ public class Replay implements IMapSerializable
 {
     /* Meta data */
     public String id = "";
-    public String name = "";
-    public String target = "";
 
     /* Visual data */
     public Form form;
-    public boolean invisible = false;
     public boolean enabled = true;
 
     public Replay()
@@ -52,15 +49,12 @@ public class Replay implements IMapSerializable
     public void toData(MapType data)
     {
         data.putString("id", this.id);
-        data.putString("name", this.name);
-        data.putString("target", this.target);
 
         if (this.form != null)
         {
             data.put("form", FormUtils.toData(this.form));
         }
 
-        data.putBool("invisible", this.invisible);
         data.putBool("enabled", this.enabled);
     }
 
@@ -68,9 +62,6 @@ public class Replay implements IMapSerializable
     public void fromData(MapType data)
     {
         this.id = data.getString("id");
-        this.name = data.getString("name");
-        this.target = data.getString("target");
-        this.invisible = data.getBool("invisible");
 
         if (data.has("form")) this.form = FormUtils.fromData(data.getMap("form"));
         if (data.has("enabled")) this.enabled = data.getBool("enabled");
@@ -84,9 +75,6 @@ public class Replay implements IMapSerializable
             Replay replay = (Replay) obj;
 
             return Objects.equals(replay.id, this.id)
-                && Objects.equals(replay.name, this.name)
-                && Objects.equals(replay.target, this.target)
-                && replay.invisible == this.invisible
                 && Objects.equals(replay.form, this.form);
         }
 

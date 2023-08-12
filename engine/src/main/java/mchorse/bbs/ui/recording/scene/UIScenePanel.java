@@ -51,9 +51,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
 
     /* Replay fields */
     public UITextbox id;
-    public UITextbox name;
-    public UITextbox target;
-    public UIToggle invisible;
     public UIToggle enabled;
 
     public UIIcon record;
@@ -94,11 +91,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
 
             this.updateLabel();
         }).filename();
-        this.name = new UITextbox(80, (str) -> this.replay.name = str);
-        this.name.tooltip(UIKeys.SCENE_NAME_TOOLTIP, Direction.RIGHT);
-        this.target = new UITextbox(80, (str) -> this.replay.target = str);
-        this.target.tooltip(UIKeys.SCENE_TARGET_TOOLTIP, Direction.LEFT);
-        this.invisible = new UIToggle(UIKeys.SCENE_INVISIBLE, false, (b) -> this.replay.invisible = b.getValue());
         this.enabled = new UIToggle(UIKeys.SCENE_ENABLED, false, (b) -> this.replay.enabled = b.getValue());
         this.recordingId = UI.label(UIKeys.SCENE_ID).color(Colors.LIGHTEST_GRAY);
 
@@ -116,8 +108,7 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
         });
 
         this.replayEditor.add(this.pickMorph, this.recordingId, this.id);
-        this.replayEditor.add(UI.label(UIKeys.SCENE_NAME).color(Colors.LIGHTEST_GRAY), this.name);
-        this.replayEditor.add(this.invisible, this.enabled);
+        this.replayEditor.add(this.enabled);
         this.replays.add(this.replayEditor);
 
         this.record = new UIIcon(Icons.SPHERE, (b) ->
@@ -131,8 +122,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
         this.rename.tooltip(UIKeys.SCENE_RENAME_PREFIX, Direction.LEFT);
         this.teleport = new UIIcon(Icons.MOVE_TO, (b) -> this.teleport());
         this.teleport.tooltip(UIKeys.SCENE_TP, Direction.LEFT);
-
-        this.replayEditor.add(UI.label(UIKeys.SCENE_TARGET).color(Colors.LIGHTEST_GRAY).marginTop(12), this.target);
 
         this.addOptions();
         this.options.fields.add(this.loops, this.audio);
@@ -308,7 +297,7 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
 
     private void fillReplayData()
     {
-        this.replayEditor.setEnabled(this.replay != null);
+        this.replayEditor.setVisible(this.replay != null);
 
         if (this.replay == null)
         {
@@ -316,9 +305,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
         }
 
         this.id.setText(this.replay.id);
-        this.name.setText(this.replay.name);
-        this.target.setText(this.replay.target);
-        this.invisible.setValue(this.replay.invisible);
         this.enabled.setValue(this.replay.enabled);
         this.pickMorph.setForm(this.replay.form);
 

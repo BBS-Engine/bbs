@@ -417,25 +417,9 @@ public class Scene extends AbstractData
                 continue;
             }
 
-            Entity actor = null;
+            Entity actor = this.world.architect.create(Link.bbs("player"));
 
-            /* Locate the target player */
-            if (!replay.target.isEmpty())
-            {
-                Entity player = this.getTarget(replay.target);
-
-                if (player != null)
-                {
-                    actor = player;
-                }
-            }
-
-            if (actor == null)
-            {
-                actor = this.world.architect.create(Link.bbs("player"));
-                actor.canBeSaved = false;
-            }
-
+            actor.canBeSaved = false;
             actor.setWorld(this.world);
 
             RecordPlayer player = BBSData.getRecords().play(replay.id, actor, Mode.BOTH, 0, true);
@@ -449,22 +433,6 @@ public class Scene extends AbstractData
                 this.actors.put(replay, player);
             }
         }
-    }
-
-    /**
-     * Get target player
-     */
-    private Entity getTarget(String target)
-    {
-        for (Entity entity : this.world.entities)
-        {
-            if (entity.getUUID().toString().equals(target))
-            {
-                return entity;
-            }
-        }
-
-        return null;
     }
 
     public boolean isPlaying()
