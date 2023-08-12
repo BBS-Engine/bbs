@@ -1240,7 +1240,7 @@ public class UITextarea <T extends TextLine> extends UIElement implements IFocus
         }
         else if (ctrl && context.isPressed(GLFW.GLFW_KEY_V))
         {
-            String pasted = Window.getClipboard();
+            String pasted = Window.getClipboard().replaceAll("\r", "");
 
             this.deleteSelection();
             this.deselect();

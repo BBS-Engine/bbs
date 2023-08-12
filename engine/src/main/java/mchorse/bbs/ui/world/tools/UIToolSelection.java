@@ -9,7 +9,7 @@ import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.world.UIWorldEditorPanel;
 import mchorse.bbs.utils.Axis;
 import mchorse.bbs.utils.Direction;
-import mchorse.bbs.utils.VectorUtils;
+import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.voxel.raytracing.RayTraceResult;
 import mchorse.bbs.voxel.utils.BlockSelection;
 import org.joml.Vector3d;
@@ -47,8 +47,8 @@ public class UIToolSelection extends UIToolSelectionBase
         this.lastMax = new Vector3d();
         this.selection = this.getSelection();
 
-        VectorUtils.min(selection.getA(), selection.getB(), this.lastMin);
-        VectorUtils.max(selection.getA(), selection.getB(), this.lastMax);
+        Vectors.min(selection.getA(), selection.getB(), this.lastMin);
+        Vectors.max(selection.getA(), selection.getB(), this.lastMax);
 
         this.select(result);
     }
@@ -81,7 +81,7 @@ public class UIToolSelection extends UIToolSelectionBase
 
         BlockSelection selection = this.editor.getSelection();
         Camera camera = this.editor.getBridge().get(IBridgeCamera.class).getCamera();
-        Vector3d intersection = VectorUtils.intersectPlanePerpendicular(this.selection.axis, camera.position, camera.getMouseDirection(), this.selection.block);
+        Vector3d intersection = Vectors.intersectPlanePerpendicular(this.selection.axis, camera.position, camera.getMouseDirection(), this.selection.block);
 
         if (intersection != null && this.lastIntersection != null)
         {

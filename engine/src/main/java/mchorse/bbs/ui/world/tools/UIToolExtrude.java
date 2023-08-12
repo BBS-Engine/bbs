@@ -12,7 +12,7 @@ import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.world.UIWorldEditorPanel;
 import mchorse.bbs.utils.Axis;
 import mchorse.bbs.utils.Direction;
-import mchorse.bbs.utils.VectorUtils;
+import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.voxel.Chunk;
 import mchorse.bbs.voxel.processor.CopyProcessor;
 import mchorse.bbs.voxel.processor.PasteProcessor;
@@ -80,7 +80,7 @@ public class UIToolExtrude extends UIToolSelectionBase
         BlockSelection selection = this.editor.getSelection();
         Camera camera = this.editor.getBridge().get(IBridgeCamera.class).getCamera();
         Vector3d center = selection.getCenter();
-        Vector3d intersection = VectorUtils.intersectPlanePerpendicular(this.plane.axis, camera.position, camera.getMouseDirection(), center);
+        Vector3d intersection = Vectors.intersectPlanePerpendicular(this.plane.axis, camera.position, camera.getMouseDirection(), center);
 
         if (intersection != null)
         {

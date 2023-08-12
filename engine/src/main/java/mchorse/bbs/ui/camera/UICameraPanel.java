@@ -44,10 +44,10 @@ import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.resizers.IResizer;
 import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.Direction;
-import mchorse.bbs.utils.VectorUtils;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Matrices;
+import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.utils.undo.CompoundUndo;
 import mchorse.bbs.utils.undo.IUndo;
@@ -232,7 +232,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         camera.copy(this.dashboard.bridge.get(IBridgeCamera.class).getCamera());
         camera.updatePerspectiveProjection(width, height);
 
-        Vector2i size = VectorUtils.resize(width / (float) height, viewport.w, viewport.h);
+        Vector2i size = Vectors.resize(width / (float) height, viewport.w, viewport.h);
         Area area = new Area();
 
         area.setSize(size.x, size.y);

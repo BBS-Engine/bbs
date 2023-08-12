@@ -9,7 +9,7 @@ import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.world.UIWorldEditorPanel;
 import mchorse.bbs.utils.Axis;
-import mchorse.bbs.utils.VectorUtils;
+import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.voxel.raytracing.RayTraceResult;
 import org.joml.Vector3d;
@@ -126,7 +126,7 @@ public abstract class UIToolPainting extends UITool
         {
             Camera camera = this.editor.getBridge().get(IBridgeCamera.class).getCamera();
             Vector3d anchor = new Vector3d(this.firstBlock.x + 0.5D, this.firstBlock.y + 0.5D, this.firstBlock.z + 0.5D);
-            Vector3d vec = VectorUtils.intersectPlanePerpendicular(this.limit, camera.position, camera.getMouseDirection(), anchor);
+            Vector3d vec = Vectors.intersectPlanePerpendicular(this.limit, camera.position, camera.getMouseDirection(), anchor);
 
             if (vec != null)
             {

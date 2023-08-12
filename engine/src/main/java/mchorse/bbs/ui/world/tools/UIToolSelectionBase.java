@@ -13,8 +13,8 @@ import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.world.UIWorldEditorPanel;
 import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.Axis;
-import mchorse.bbs.utils.VectorUtils;
 import mchorse.bbs.utils.colors.Color;
+import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.voxel.utils.BlockSelection;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
@@ -53,7 +53,7 @@ public abstract class UIToolSelectionBase extends UITool
 
         for (PlaneSelection plane : planes)
         {
-            Vector3d intersection = VectorUtils.intersectPlane(plane.axis, camera.position, camera.getMouseDirection(), plane.block);
+            Vector3d intersection = Vectors.intersectPlane(plane.axis, camera.position, camera.getMouseDirection(), plane.block);
 
             if (intersection != null && aabb.contains(intersection))
             {

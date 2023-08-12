@@ -1,6 +1,6 @@
 package mchorse.bbs.voxel.utils;
 
-import mchorse.bbs.utils.VectorUtils;
+import mchorse.bbs.utils.joml.Vectors;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
@@ -69,8 +69,8 @@ public class BlockSelection
 
     private void recalculateRange()
     {
-        Vector3d min = VectorUtils.min(this.a, this.b);
-        Vector3d max = VectorUtils.max(this.a, this.b);
+        Vector3d min = Vectors.min(this.a, this.b);
+        Vector3d max = Vectors.max(this.a, this.b);
 
         this.min.set((int) Math.floor(min.x), (int) Math.floor(min.y), (int) Math.floor(min.z));
         this.max.set((int) Math.ceil(max.x), (int) Math.ceil(max.y), (int) Math.ceil(max.z));

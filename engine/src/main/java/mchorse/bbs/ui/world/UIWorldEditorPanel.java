@@ -38,7 +38,6 @@ import mchorse.bbs.ui.world.tools.UIToolSpray;
 import mchorse.bbs.ui.world.utils.WorldEditorChunkProxy;
 import mchorse.bbs.utils.Axis;
 import mchorse.bbs.utils.Direction;
-import mchorse.bbs.utils.VectorUtils;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.utils.math.MathUtils;
@@ -482,8 +481,8 @@ public class UIWorldEditorPanel extends UIWorldPanel
         Chunk chunk = new Chunk(size.x, size.y, size.z, this.proxy.getAir());
         Vector3f transform = new Vector3f();
 
-        VectorUtils.min(min, max, transform);
-        VectorUtils.max(min, max, max);
+        Vectors.min(min, max, transform);
+        Vectors.max(min, max, max);
 
         min.set(transform);
 
@@ -569,8 +568,8 @@ public class UIWorldEditorPanel extends UIWorldPanel
             if (this.canTraverseFurther(front, block, checked)) toCheck.add(front);
             if (this.canTraverseFurther(back, block, checked)) toCheck.add(back);
 
-            VectorUtils.min(min, p, min);
-            VectorUtils.max(max, p, max);
+            Vectors.min(min, p, min);
+            Vectors.max(max, p, max);
 
             checked.add(p);
         }
