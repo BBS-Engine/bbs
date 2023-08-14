@@ -3,8 +3,6 @@ package mchorse.studio;
 import mchorse.bbs.BBS;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.core.IComponent;
-import mchorse.bbs.data.DataToString;
-import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.events.RenderWorldEvent;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.graphics.Draw;
@@ -17,20 +15,18 @@ import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.shaders.ShaderRepository;
-import mchorse.bbs.graphics.shaders.pipeline.ShaderFramebufferTexture;
-import mchorse.bbs.graphics.shaders.pipeline.ShaderPipeline;
 import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector2;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector3;
 import mchorse.bbs.graphics.text.FontRenderer;
 import mchorse.bbs.graphics.text.builders.ITextBuilder;
 import mchorse.bbs.graphics.texture.Texture;
+import mchorse.bbs.graphics.texture.TextureFormat;
 import mchorse.bbs.graphics.ubo.ProjectionViewUBO;
 import mchorse.bbs.graphics.vao.VAO;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.resources.Link;
-import mchorse.bbs.utils.IOUtils;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.utils.math.MathUtils;
@@ -50,8 +46,6 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 public class StudioRenderer implements IComponent
@@ -76,7 +70,6 @@ public class StudioRenderer implements IComponent
     public Framebuffer renderToGbufferFramebuffer;
     public Framebuffer renderToFinalFramebuffer;
 
-    private ShaderPipeline pipeline;
     private RenderWorldEvent renderWorld;
 
     private int ticks;
@@ -112,31 +105,17 @@ public class StudioRenderer implements IComponent
 
     private void setupShaderPipeline()
     {
-        this.pipeline = new ShaderPipeline();
-
-        try
-        {
-            InputStream asset = BBS.getProvider().getAsset(Studio.link("shaders/default/default.shader.json"));
-            MapType data = DataToString.mapFromString(IOUtils.readText(asset));
-
-            this.pipeline.fromData(data);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
         ShaderRepository mainShaders = this.context.getMainShaders();
 
-        Shader skyboxShader = new Shader(this.pipeline.shaders.get("skybox"), VBOAttributes.VERTEX);
-        Shader vertexRGBA = new Shader(this.pipeline.shaders.get("solid"), VBOAttributes.VERTEX_RGBA);
-        Shader vertexUVRGBA = new Shader(this.pipeline.shaders.get("textured"), VBOAttributes.VERTEX_UV_RGBA);
-        Shader vertexNormalUVRGBA = new Shader(this.pipeline.shaders.get("model"), VBOAttributes.VERTEX_NORMAL_UV_RGBA);
-        Shader vertexNormalUVLightRGBA = new Shader(this.pipeline.shaders.get("terrain"), VBOAttributes.VERTEX_NORMAL_UV_LIGHT_RGBA);
-        Shader vertexNormalUVRGBABones = new Shader(this.pipeline.shaders.get("model_animated"), VBOAttributes.VERTEX_NORMAL_UV_RGBA_BONES);
+        Shader skyboxShader = new Shader(Link.create("studio:shaders/default/world/vertex-skybox.glsl"), VBOAttributes.VERTEX);
+        Shader vertexRGBA = new Shader(Link.create("studio:shaders/default/world/vertex_rgba.glsl"), VBOAttributes.VERTEX_RGBA);
+        Shader vertexUVRGBA = new Shader(Link.create("studio:shaders/default/world/vertex_uv_rgba.glsl"), VBOAttributes.VERTEX_UV_RGBA);
+        Shader vertexNormalUVRGBA = new Shader(Link.create("studio:shaders/default/world/vertex_normal_uv_rgba.glsl"), VBOAttributes.VERTEX_NORMAL_UV_RGBA);
+        Shader vertexNormalUVLightRGBA = new Shader(Link.create("studio:shaders/default/world/vertex_normal_uv_light_rgba.glsl"), VBOAttributes.VERTEX_NORMAL_UV_LIGHT_RGBA);
+        Shader vertexNormalUVRGBABones = new Shader(Link.create("studio:shaders/default/world/vertex_normal_uv_rgba_bones.glsl"), VBOAttributes.VERTEX_NORMAL_UV_RGBA_BONES);
 
-        Shader compositeShader = new Shader(this.pipeline.shaders.get("composite"), VBOAttributes.VERTEX_2D);
-        Shader finalShader = new Shader(this.pipeline.shaders.get("final"), VBOAttributes.VERTEX_2D);
+        Shader compositeShader = new Shader(Link.create("studio:shaders/default/deferred/vertex_2d-composite.glsl"), VBOAttributes.VERTEX_2D);
+        Shader finalShader = new Shader(Link.create("studio:shaders/default/deferred/vertex_2d-final.glsl"), VBOAttributes.VERTEX_2D);
 
         skyboxShader.attachUBO(this.context.getUBO(), "u_matrices");
         vertexRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
@@ -190,57 +169,34 @@ public class StudioRenderer implements IComponent
 
     private void createGbufferFramebuffer(Framebuffer framebuffer)
     {
-        int colors = 0;
-        boolean hasDepth = false;
+        Texture albedo = this.create(TextureFormat.RGBA_U8);
+        Texture position = this.create(TextureFormat.RGBA_F16);
+        Texture normal = this.create(TextureFormat.RGBA_F16);
+        Texture light = this.create(TextureFormat.RGBA_U8);
+        Renderbuffer depth = new Renderbuffer();
 
-        for (ShaderFramebufferTexture t : this.pipeline.gbuffer.textures)
-        {
-            if (t.format.isDepth())
-            {
-                hasDepth = true;
-            }
-            else
-            {
-                colors += 1;
-            }
-        }
-
-        int color = 0;
-        int[] colorAttachments = new int[colors];
-
-        for (ShaderFramebufferTexture t : this.pipeline.gbuffer.textures)
-        {
-            Texture texture = new Texture();
-
-            texture.setFilter(GL11.GL_NEAREST);
-            texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
-            texture.setFormat(t.format);
-
-            if (t.format.isDepth())
-            {
-                framebuffer.attach(texture, t.format.attachment);
-            }
-            else
-            {
-                framebuffer.attach(texture, t.format.attachment + color);
-
-                colorAttachments[color] = t.format.attachment + color;
-                color += 1;
-            }
-        }
-
-        if (!hasDepth)
-        {
-            Renderbuffer renderbuffer = new Renderbuffer();
-
-            framebuffer.attach(renderbuffer);
-        }
+        framebuffer.attach(albedo, GL30.GL_COLOR_ATTACHMENT0);
+        framebuffer.attach(position, GL30.GL_COLOR_ATTACHMENT1);
+        framebuffer.attach(normal, GL30.GL_COLOR_ATTACHMENT2);
+        framebuffer.attach(light, GL30.GL_COLOR_ATTACHMENT3);
+        framebuffer.attach(depth);
 
         framebuffer.deleteTextures();
 
-        GL30.glDrawBuffers(colorAttachments);
+        GL30.glDrawBuffers(new int[]{GL30.GL_COLOR_ATTACHMENT0, GL30.GL_COLOR_ATTACHMENT1, GL30.GL_COLOR_ATTACHMENT2, GL30.GL_COLOR_ATTACHMENT3});
 
         framebuffer.unbind();
+    }
+
+    private Texture create(TextureFormat format)
+    {
+        Texture texture = new Texture();
+
+        texture.setFilter(GL11.GL_NEAREST);
+        texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
+        texture.setFormat(format);
+
+        return texture;
     }
 
     private void createSkybox()

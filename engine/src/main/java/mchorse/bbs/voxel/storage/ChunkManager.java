@@ -255,10 +255,13 @@ public abstract class ChunkManager implements IDisposable, IBlockAccessor
 
             ChunkCell cell = this.getCell(block.x, block.y, block.z, false);
 
-            cell.dirty();
-            cell.saveLater();
-            cell.setLighting(block.x, block.y, block.z, light - 1);
-            this.markNeighbors(block.x, block.y, block.z, true);
+            if (cell != null)
+            {
+                cell.dirty();
+                cell.saveLater();
+                cell.setLighting(block.x, block.y, block.z, light - 1);
+                this.markNeighbors(block.x, block.y, block.z, true);
+            }
         }
     }
 

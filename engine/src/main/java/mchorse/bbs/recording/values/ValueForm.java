@@ -21,7 +21,11 @@ public class ValueForm extends BaseValueBasic<Form>
     @Override
     public void fromData(BaseType data)
     {
-        if (data.isMap())
+        if (data == null)
+        {
+            this.set(null);
+        }
+        else if (data.isMap())
         {
             this.set(FormUtils.fromData(data.asMap()));
         }
