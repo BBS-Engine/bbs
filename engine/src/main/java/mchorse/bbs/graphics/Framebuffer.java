@@ -77,13 +77,17 @@ public class Framebuffer implements IDisposable
         return GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER) == GL30.GL_FRAMEBUFFER_COMPLETE;
     }
 
-    public void apply()
+    public void apply(boolean clear)
     {
         Texture texture = this.getMainTexture();
 
         GL11.glViewport(0, 0, texture.width, texture.height);
         this.bind();
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+        if (clear)
+        {
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        }
     }
 
     public void bind()

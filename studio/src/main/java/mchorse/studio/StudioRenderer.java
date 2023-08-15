@@ -10,12 +10,12 @@ import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.FramebufferManager;
 import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.MatrixStack;
-import mchorse.bbs.graphics.Renderbuffer;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.shaders.ShaderRepository;
 import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
+import mchorse.bbs.graphics.shaders.uniforms.UniformMatrix4;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector2;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector3;
 import mchorse.bbs.graphics.text.FontRenderer;
@@ -47,6 +47,8 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StudioRenderer implements IComponent
 {
@@ -71,8 +73,10 @@ public class StudioRenderer implements IComponent
     public Framebuffer renderToFinalFramebuffer;
 
     private RenderWorldEvent renderWorld;
+    private Map<String, String> cachedDefines = new HashMap<>();
 
     private int ticks;
+    private int frames;
 
     private Entity dummy = EntityArchitect.createDummy();
 
@@ -173,13 +177,13 @@ public class StudioRenderer implements IComponent
         Texture position = this.create(TextureFormat.RGBA_F16);
         Texture normal = this.create(TextureFormat.RGBA_F16);
         Texture light = this.create(TextureFormat.RGBA_U8);
-        Renderbuffer depth = new Renderbuffer();
+        Texture depth = this.create(TextureFormat.DEPTH_F24);
 
         framebuffer.attach(albedo, GL30.GL_COLOR_ATTACHMENT0);
         framebuffer.attach(position, GL30.GL_COLOR_ATTACHMENT1);
         framebuffer.attach(normal, GL30.GL_COLOR_ATTACHMENT2);
         framebuffer.attach(light, GL30.GL_COLOR_ATTACHMENT3);
-        framebuffer.attach(depth);
+        framebuffer.attach(depth, GL30.GL_DEPTH_ATTACHMENT);
 
         framebuffer.deleteTextures();
 
@@ -268,19 +272,42 @@ public class StudioRenderer implements IComponent
         if (this.engine.screen.canRefresh())
         {
             this.renderFrameTo(this.engine.cameraController.camera, this.gbufferFramebuffer, 0, true);
-            this.renderFinal(this.finalFramebuffer, this.gbufferFramebuffer);
+            this.renderFinal(this.context.getCamera(), this.finalFramebuffer, this.gbufferFramebuffer);
         }
 
         this.renderFinalQuad();
 
         this.context.runRunnables();
+
+        this.frames += 1;
     }
 
-    private void renderFinal(Framebuffer framebuffer, Framebuffer gbuffer)
+    private void renderFinal(Camera camera, Framebuffer framebuffer, Framebuffer gbuffer)
     {
+        UniformMatrix4 projection = this.compositeShader.getUniform("u_projection", UniformMatrix4.class);
+
+        if (projection != null)
+        {
+            projection.set(camera.projection);
+        }
+
+        UniformMatrix4 view = this.compositeShader.getUniform("u_view", UniformMatrix4.class);
+
+        if (view != null)
+        {
+            view.set(camera.view);
+        }
+
+        UniformInt frames = this.compositeShader.getUniform("u_frames", UniformInt.class);
+
+        if (frames != null)
+        {
+            frames.set(this.frames);
+        }
+
         this.updateSky(this.compositeShader, this.engine.world.settings);
 
-        framebuffer.apply();
+        framebuffer.apply(this.canClearGbufferFramebuffer());
 
         Link lightmap = this.engine.world.settings.lightmap;
 
@@ -302,6 +329,13 @@ public class StudioRenderer implements IComponent
 
         framebuffer.unbind();
         GLStates.resetViewport();
+    }
+
+    private boolean canClearGbufferFramebuffer()
+    {
+        String define = this.compositeShader.getDefines().get("clear_color_0");
+
+        return define == null || define.equalsIgnoreCase("true");
     }
 
     private void renderFinalQuad()
@@ -338,9 +372,9 @@ public class StudioRenderer implements IComponent
         }
 
         this.renderFrameTo(camera, this.renderToGbufferFramebuffer, pass, renderScreen);
-        this.renderFinal(this.renderToFinalFramebuffer, this.renderToGbufferFramebuffer);
+        this.renderFinal(camera, this.renderToFinalFramebuffer, this.renderToGbufferFramebuffer);
 
-        framebuffer.apply();
+        framebuffer.apply(true);
 
         this.renderToFinalFramebuffer.getMainTexture().bind(0);
         Framebuffer.renderToQuad(this.context, this.finalShader);
@@ -356,7 +390,16 @@ public class StudioRenderer implements IComponent
 
     public void renderFrameTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen)
     {
-        framebuffer.apply();
+        framebuffer.apply(false);
+
+        float[] clearColor = {0F, 0F, 0F, 0F};
+        Map<String, String> defines = this.collectDefines();
+
+        if (this.hasDefine(defines, "clear_color_0", true)) GL30.glClearBufferfv(GL30.GL_COLOR, 0, clearColor);
+        if (this.hasDefine(defines, "clear_color_1", true)) GL30.glClearBufferfv(GL30.GL_COLOR, 1, clearColor);
+        if (this.hasDefine(defines, "clear_color_2", true)) GL30.glClearBufferfv(GL30.GL_COLOR, 2, clearColor);
+        if (this.hasDefine(defines, "clear_color_3", true)) GL30.glClearBufferfv(GL30.GL_COLOR, 3, clearColor);
+        if (this.hasDefine(defines, "clear_depth_0", true)) GL30.glClearBufferfv(GL30.GL_DEPTH, 0, new float[]{1F});
 
         /* Update context state */
         camera.updateView();
@@ -373,6 +416,30 @@ public class StudioRenderer implements IComponent
         framebuffer.unbind();
 
         GLStates.resetViewport();
+    }
+
+    private Map<String, String> collectDefines()
+    {
+        this.cachedDefines.clear();
+
+        for (Shader shader : this.context.getShaders().getAll())
+        {
+            this.cachedDefines.putAll(shader.getDefines());
+        }
+
+        return this.cachedDefines;
+    }
+
+    private boolean hasDefine(Map<String, String> defines, String key, boolean defaultValue)
+    {
+        String define = defines.get(key);
+
+        if (define == null)
+        {
+            return defaultValue;
+        }
+
+        return define.equalsIgnoreCase("true");
     }
 
     private void renderFrameCommon(Camera camera, RenderingContext context)

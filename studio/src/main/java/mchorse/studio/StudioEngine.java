@@ -28,6 +28,7 @@ import mchorse.bbs.l10n.L10n;
 import mchorse.bbs.l10n.L10nUtils;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.resources.packs.DataSourcePack;
+import mchorse.bbs.resources.packs.ExternalAssetsSourcePack;
 import mchorse.bbs.resources.packs.InternalAssetsSourcePack;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueInt;
@@ -112,6 +113,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         this.watchDog.register(BBS.getModels());
         this.watchDog.register(BBS.getSounds());
         this.watchDog.register(BBS.getFonts());
+        this.watchDog.register(BBS.getShaders());
         this.watchDog.start();
     }
 
@@ -172,6 +174,11 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
      */
     private void registerMiscellaneous()
     {
+        File studio = BBS.getGamePath("studio");
+
+        studio.mkdirs();
+
+        BBS.getProvider().register(new ExternalAssetsSourcePack("studio", studio));
         BBS.getProvider().register(new InternalAssetsSourcePack("studio", StudioEngine.class));
 
         File file = BBS.getGamePath("assets.dat");

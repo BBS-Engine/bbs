@@ -54,6 +54,11 @@ public final class Shader implements IDisposable
     private Map<String, UBO> ubos = new HashMap<>();
 
     /**
+     * Parsed defines
+     */
+    private Map<String, String> defines = new HashMap<>();
+
+    /**
      * Initialize callback
      */
     private Consumer<Shader> onInitialize;
@@ -75,6 +80,17 @@ public final class Shader implements IDisposable
         this.attributes = attributes;
 
         this.createProgram();
+    }
+
+    public void setDefines(Map<String, String> defines)
+    {
+        this.defines.clear();
+        this.defines.putAll(defines);
+    }
+
+    public Map<String, String> getDefines()
+    {
+        return this.defines;
     }
 
     private void createProgram()

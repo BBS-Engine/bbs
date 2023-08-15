@@ -6,8 +6,11 @@ import mchorse.bbs.resources.AssetProvider;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.IOUtils;
 import mchorse.bbs.utils.Rewriter;
+import mchorse.bbs.utils.watchdog.IWatchDogListener;
+import mchorse.bbs.utils.watchdog.WatchDogEvent;
 import org.lwjgl.opengl.GL20;
 
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -17,7 +20,7 @@ import java.util.regex.Pattern;
  * 
  * This class is responsible for creating, managing and deleting shaders 
  */
-public class ShaderManager implements IDisposable
+public class ShaderManager implements IDisposable, IWatchDogListener
 {
     public static final Pattern pattern = Pattern.compile("^[\t ]*#import \\\"([\\w /_.:]+)\\\"\\s*$", Pattern.MULTILINE);
 
@@ -39,6 +42,7 @@ public class ShaderManager implements IDisposable
         int vertex = this.createShader(program, parser.vertex, GL20.GL_VERTEX_SHADER);
         int fragment = this.createShader(program, parser.fragment, GL20.GL_FRAGMENT_SHADER);
 
+        program.setDefines(parser.defines);
         program.registerUniforms(Uniforms.createFromMap(parser.uniforms));
         program.link(vertex, fragment);
         this.programs.add(program);
@@ -118,4 +122,8 @@ public class ShaderManager implements IDisposable
 
         this.programs.clear();
     }
+
+    @Override
+    public void accept(Path path, WatchDogEvent event)
+    {}
 }

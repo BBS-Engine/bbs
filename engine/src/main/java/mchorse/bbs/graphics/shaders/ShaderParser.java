@@ -7,10 +7,12 @@ public class ShaderParser
 {
     public static final String SECTION_MARKER = "//@";
     public static final String UNIFORM = "\nuniform";
+    public static final String DEFINE = "\n#define";
 
     public String vertex;
     public String fragment;
     public Map<String, String> uniforms = new HashMap<>();
+    public Map<String, String> defines = new HashMap<>();
 
     /**
      * Parse vertex and fragment shader code out of merged shader code.  
@@ -44,6 +46,7 @@ public class ShaderParser
         }
 
         this.parseUniforms(code);
+        this.parseDefines(code);
 
         String common = sections.get("");
 
@@ -93,5 +96,31 @@ public class ShaderParser
         }
 
         return type;
+    }
+
+    public void parseDefines(String code)
+    {
+        int index = 0;
+
+        while (index >= 0)
+        {
+            int nextIndex = code.indexOf(DEFINE, index);
+
+            if (nextIndex < 0)
+            {
+                break;
+            }
+
+            int endIndex = code.indexOf('\n', nextIndex + 1);
+            String line = code.substring(nextIndex + DEFINE.length() + 1, endIndex);
+
+            int space = line.lastIndexOf(' ');
+            String value = line.substring(space + 1);
+            String define = line.substring(0, space);
+
+            this.defines.put(define, value);
+
+            index = endIndex + 1;
+        }
     }
 }
