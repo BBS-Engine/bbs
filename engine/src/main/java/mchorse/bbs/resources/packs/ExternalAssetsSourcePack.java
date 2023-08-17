@@ -78,6 +78,27 @@ public class ExternalAssetsSourcePack implements ISourcePack
         return this.providesFiles ? this.getFileInternal(link) : null;
     }
 
+    @Override
+    public Link getLink(File file)
+    {
+        String fullPath = this.folder.getAbsolutePath();
+        String filePath = file.getAbsolutePath();
+
+        if (filePath.startsWith(fullPath))
+        {
+            String path = filePath.substring(fullPath.length());
+
+            if (path.charAt(0) == '/' || path.charAt(0) == '\\')
+            {
+                path = path.substring(1);
+            }
+
+            return new Link(this.source, path.replaceAll("\\\\", "/"));
+        }
+
+        return null;
+    }
+
     private File getFileInternal(Link link)
     {
         return new File(this.folder, link.path);

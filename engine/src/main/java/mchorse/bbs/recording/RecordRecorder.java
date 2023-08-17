@@ -3,6 +3,7 @@ package mchorse.bbs.recording;
 import mchorse.bbs.BBSData;
 import mchorse.bbs.recording.data.Mode;
 import mchorse.bbs.recording.data.Record;
+import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.world.entities.Entity;
 
@@ -49,6 +50,11 @@ public class RecordRecorder
         if (oldRecord == null)
         {
             return;
+        }
+
+        for (Clip clip : oldRecord.clips.get())
+        {
+            this.record.clips.add(clip);
         }
 
         Map<String, KeyframeChannel> map = this.record.keyframes.getMap();

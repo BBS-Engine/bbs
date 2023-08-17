@@ -14,6 +14,7 @@ import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.shaders.ShaderRepository;
+import mchorse.bbs.graphics.shaders.uniforms.UniformFloat;
 import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
 import mchorse.bbs.graphics.shaders.uniforms.UniformMatrix4;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector2;
@@ -28,6 +29,7 @@ import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.colors.Colors;
+import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.voxel.ChunkRenderer;
@@ -197,7 +199,7 @@ public class StudioRenderer implements IComponent
         Texture texture = new Texture();
 
         texture.setFilter(GL11.GL_NEAREST);
-        texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
+        texture.setWrap(GL13.GL_REPEAT);
         texture.setFormat(format);
 
         return texture;
@@ -285,24 +287,26 @@ public class StudioRenderer implements IComponent
     private void renderFinal(Camera camera, Framebuffer framebuffer, Framebuffer gbuffer)
     {
         UniformMatrix4 projection = this.compositeShader.getUniform("u_projection", UniformMatrix4.class);
-
-        if (projection != null)
-        {
-            projection.set(camera.projection);
-        }
-
         UniformMatrix4 view = this.compositeShader.getUniform("u_view", UniformMatrix4.class);
-
-        if (view != null)
-        {
-            view.set(camera.view);
-        }
-
+        UniformMatrix4 projectionInverse = this.compositeShader.getUniform("u_projection_inv", UniformMatrix4.class);
+        UniformMatrix4 viewInverse = this.compositeShader.getUniform("u_view_inv", UniformMatrix4.class);
         UniformInt frames = this.compositeShader.getUniform("u_frames", UniformInt.class);
+        UniformFloat far = this.compositeShader.getUniform("u_far", UniformFloat.class);
+        UniformFloat near = this.compositeShader.getUniform("u_near", UniformFloat.class);
+        UniformVector2 screenSize = this.compositeShader.getUniform("u_screen_size", UniformVector2.class);
 
-        if (frames != null)
+        if (projection != null) projection.set(camera.projection);
+        if (view != null) view.set(camera.view);
+        if (projectionInverse != null) projectionInverse.set(Matrices.TEMP_4F.set(camera.projection).invert());
+        if (viewInverse != null) viewInverse.set(Matrices.TEMP_4F.set(camera.view).invert());
+        if (frames != null) frames.set(this.frames);
+        if (near != null) near.set(camera.near);
+        if (far != null) far.set(camera.far);
+        if (screenSize != null)
         {
-            frames.set(this.frames);
+            Texture mainTexture = framebuffer.getMainTexture();
+
+            screenSize.set(mainTexture.width, mainTexture.height);
         }
 
         this.updateSky(this.compositeShader, this.engine.world.settings);
@@ -634,12 +638,5 @@ public class StudioRenderer implements IComponent
 
         this.gbufferFramebuffer.resize(width, height);
         this.finalFramebuffer.resize(width, height);
-
-        UniformVector2 screenSize = this.compositeShader.getUniform("u_screen_size", UniformVector2.class);
-
-        if (screenSize != null)
-        {
-            screenSize.set(width, height);
-        }
     }
 }

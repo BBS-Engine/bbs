@@ -15,5 +15,7 @@ public interface ISourcePack
 
     public File getFile(Link link);
 
+    public Link getLink(File file);
+
     public void getLinksFromPath(Collection<Link> links, Link link, boolean recursive);
 }

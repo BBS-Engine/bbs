@@ -80,6 +80,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
     public ScreenshotRecorder screenshot;
 
     private WatchDog watchDog;
+    private WatchDog watchDog2;
 
     private Map<Class, Object> apis = new HashMap<>();
 
@@ -113,8 +114,11 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         this.watchDog.register(BBS.getModels());
         this.watchDog.register(BBS.getSounds());
         this.watchDog.register(BBS.getFonts());
-        this.watchDog.register(BBS.getShaders());
         this.watchDog.start();
+
+        this.watchDog2 = new WatchDog(BBS.getGamePath("studio"));
+        this.watchDog2.register(BBS.getShaders());
+        this.watchDog2.start();
     }
 
     @Subscribe
@@ -327,6 +331,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         this.screen.delete();
         this.world.delete();
         this.watchDog.stop();
+        this.watchDog2.stop();
 
         BBSData.delete();
         BBS.terminate();

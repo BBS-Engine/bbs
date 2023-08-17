@@ -109,7 +109,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
 
         this.replayEditor.add(this.pickMorph, this.recordingId, this.id);
         this.replayEditor.add(this.enabled);
-        this.replays.add(this.replayEditor);
 
         this.record = new UIIcon(Icons.SPHERE, (b) ->
         {

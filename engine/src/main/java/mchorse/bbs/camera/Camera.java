@@ -17,7 +17,7 @@ public class Camera
     public Matrix4f projection = new Matrix4f();
     public Matrix4f view = new Matrix4f();
     public float fov;
-    public float near = 0.005F;
+    public float near = 0.01F;
     public float far = 300F;
 
     public Vector3d position = new Vector3d();

@@ -84,7 +84,13 @@ public class FontManager implements IWatchDogListener
     @Override
     public void accept(Path path, WatchDogEvent event)
     {
-        Link link = IWatchDogListener.getAssetsLink(path);
+        Link link = BBS.getProvider().getLink(path.toFile());
+
+        if (link == null)
+        {
+            return;
+        }
+
         FontRenderer fontRenderer = this.fontRenderers.get(link);
 
         if (fontRenderer != null)

@@ -59,6 +59,11 @@ public final class Shader implements IDisposable
     private Map<String, String> defines = new HashMap<>();
 
     /**
+     * Imported shaders
+     */
+    private Set<Link> imported = new HashSet<>();
+
+    /**
      * Initialize callback
      */
     private Consumer<Shader> onInitialize;
@@ -91,6 +96,17 @@ public final class Shader implements IDisposable
     public Map<String, String> getDefines()
     {
         return this.defines;
+    }
+
+    public void setImported(Set<Link> imported)
+    {
+        this.imported.clear();
+        this.imported.addAll(imported);
+    }
+
+    public Set<Link> getImported()
+    {
+        return this.imported;
     }
 
     private void createProgram()

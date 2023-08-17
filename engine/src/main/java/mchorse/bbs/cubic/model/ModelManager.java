@@ -1,5 +1,6 @@
 package mchorse.bbs.cubic.model;
 
+import mchorse.bbs.BBS;
 import mchorse.bbs.core.IDisposable;
 import mchorse.bbs.cubic.CubicModel;
 import mchorse.bbs.cubic.MolangHelper;
@@ -94,13 +95,18 @@ public class ModelManager implements IDisposable, IWatchDogListener
     @Override
     public void accept(Path path, WatchDogEvent event)
     {
-        String relativePath = IWatchDogListener.getAssetsLink(path).path;
+        Link link = BBS.getProvider().getLink(path.toFile());
 
-        if (relativePath.endsWith(".bbs.json") || relativePath.endsWith(".vox"))
+        if (link == null)
         {
-            int index = relativePath.lastIndexOf('/');
-            int secondIndex = relativePath.lastIndexOf('/', index - 1);
-            String key = relativePath.substring(secondIndex + 1, index);
+            return;
+        }
+
+        if (link.path.endsWith(".bbs.json") || link.path.endsWith(".vox"))
+        {
+            int index = link.path.lastIndexOf('/');
+            int secondIndex = link.path.lastIndexOf('/', index - 1);
+            String key = link.path.substring(secondIndex + 1, index);
 
             this.models.remove(key);
         }

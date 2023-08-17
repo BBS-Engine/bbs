@@ -1,5 +1,6 @@
 package mchorse.bbs.graphics.shaders;
 
+import mchorse.bbs.BBS;
 import mchorse.bbs.core.IDisposable;
 import mchorse.bbs.graphics.shaders.uniforms.Uniforms;
 import mchorse.bbs.resources.AssetProvider;
@@ -12,6 +13,7 @@ import org.lwjgl.opengl.GL20;
 
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -35,13 +37,15 @@ public class ShaderManager implements IDisposable, IWatchDogListener
     public void buildShader(Shader program, Link linkToCode) throws Exception
     {
         ShaderParser parser = new ShaderParser();
-        String code = this.fetchCode(linkToCode);
+        Set<Link> fetched = new HashSet<>();
+        String code = this.fetchCode(linkToCode, fetched);
 
         parser.parse(code);
 
         int vertex = this.createShader(program, parser.vertex, GL20.GL_VERTEX_SHADER);
         int fragment = this.createShader(program, parser.fragment, GL20.GL_FRAGMENT_SHADER);
 
+        program.setImported(fetched);
         program.setDefines(parser.defines);
         program.registerUniforms(Uniforms.createFromMap(parser.uniforms));
         program.link(vertex, fragment);
@@ -88,13 +92,19 @@ public class ShaderManager implements IDisposable, IWatchDogListener
         return shaderId;
     }
 
-    public String fetchCode(Link path)
+    public String fetchCode(Link path, Set<Link> fetched)
     {
         try
         {
             String code = IOUtils.readText(this.provider.getAsset(path));
 
-            return Rewriter.rewrite(pattern, code, (result) -> this.fetchCode(Link.create(result.group(1))));
+            return Rewriter.rewrite(pattern, code, (result) ->
+            {
+                Link link = Link.create(result.group(1));
+                fetched.add(link);
+
+                return this.fetchCode(link, fetched);
+            });
         }
         catch (Exception e)
         {
@@ -125,5 +135,24 @@ public class ShaderManager implements IDisposable, IWatchDogListener
 
     @Override
     public void accept(Path path, WatchDogEvent event)
-    {}
+    {
+        Link link = BBS.getProvider().getLink(path.toFile());
+
+        if (link == null)
+        {
+            return;
+        }
+
+        Iterator<Shader> it = this.programs.iterator();
+
+        while (it.hasNext())
+        {
+            Shader program = it.next();
+
+            if (program.name.equals(link) || program.getImported().contains(link))
+            {
+                program.reload();
+            }
+        }
+    }
 }

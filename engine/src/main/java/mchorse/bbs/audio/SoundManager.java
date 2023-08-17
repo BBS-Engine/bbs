@@ -1,5 +1,6 @@
 package mchorse.bbs.audio;
 
+import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.core.IDisposable;
@@ -360,27 +361,22 @@ public class SoundManager implements IDisposable, IWatchDogListener
             return;
         }
 
-        String relativePath = IWatchDogListener.getAssetsLink(path).path;
+        Link link = BBS.getProvider().getLink(path.toFile());
 
-        if (relativePath.endsWith(".ogg") || relativePath.endsWith(".wav"))
+        if (link == null && !(link.path.endsWith(".ogg") || link.path.endsWith(".wav")))
         {
-            if (relativePath.startsWith("/"))
+            return;
+        }
+
+        if (this.buffers.containsKey(link))
+        {
+            this.stop(link);
+
+            SoundBuffer buffer = this.buffers.remove(link);
+
+            if (buffer != null)
             {
-                relativePath = relativePath.substring(1);
-            }
-
-            Link link = Link.assets(relativePath);
-
-            if (this.buffers.containsKey(link))
-            {
-                this.stop(link);
-
-                SoundBuffer buffer = this.buffers.remove(link);
-
-                if (buffer != null)
-                {
-                    buffer.delete();
-                }
+                buffer.delete();
             }
         }
     }

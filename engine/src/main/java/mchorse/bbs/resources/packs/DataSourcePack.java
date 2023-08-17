@@ -144,6 +144,12 @@ public class DataSourcePack implements ISourcePack
     }
 
     @Override
+    public Link getLink(File file)
+    {
+        return null;
+    }
+
+    @Override
     public void getLinksFromPath(Collection<Link> links, Link link, boolean recursive)
     {
         DataPath linkPath = new DataPath(link.path);

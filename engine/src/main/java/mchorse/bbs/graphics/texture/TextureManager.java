@@ -242,7 +242,12 @@ public class TextureManager implements IDisposable, IWatchDogListener
     @Override
     public void accept(Path path, WatchDogEvent event)
     {
-        Link link = IWatchDogListener.getAssetsLink(path);
+        Link link = BBS.getProvider().getLink(path.toFile());
+
+        if (link == null)
+        {
+            return;
+        }
 
         Texture texture = this.textures.remove(link);
 

@@ -55,6 +55,12 @@ public class InternalAssetsSourcePack implements ISourcePack
     }
 
     @Override
+    public Link getLink(File file)
+    {
+        return null;
+    }
+
+    @Override
     public void getLinksFromPath(Collection<Link> links, Link link, boolean recursive)
     {
         URL url = this.clazz.getProtectionDomain().getCodeSource().getLocation();

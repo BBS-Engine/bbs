@@ -71,6 +71,24 @@ public class AssetProvider
         return null;
     }
 
+    public Link getLink(File file)
+    {
+        for (List<ISourcePack> sourcePacks : this.sourcePacks.values())
+        {
+            for (ISourcePack sourcePack : sourcePacks)
+            {
+                Link link = sourcePack.getLink(file);
+
+                if (link != null)
+                {
+                    return link;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public Collection<Link> getLinksFromPath(Link link)
     {
         return this.getLinksFromPath(link, true);
