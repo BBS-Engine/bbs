@@ -4,6 +4,7 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.core.IComponent;
 import mchorse.bbs.data.DataToString;
+import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.events.RenderWorldEvent;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.graphics.Draw;
@@ -143,8 +144,9 @@ public class StudioRenderer implements IComponent
         try
         {
             String string = IOUtils.readText(BBS.getProvider().getAsset(Link.create("studio:shaders/default/default.shader.json")));
+            MapType data = DataToString.mapFromString(string);
 
-            this.pipeline.fromData(DataToString.mapFromString(string));
+            this.pipeline.fromData(data);
         }
         catch (Exception e)
         {
@@ -156,9 +158,9 @@ public class StudioRenderer implements IComponent
         this.finalShader = new Shader(Link.create("studio:shaders/default/deferred/vertex_2d-final.glsl"), VBOAttributes.VERTEX_2D);
         this.finalShader.onInitialize(CommonShaderAccess::initializeTexture);
 
-        for (StudioShaders.Stage stage : this.shaders.stages)
+        for (Shader shader : this.shaders.shaders)
         {
-            stage.shader.attachUBO(this.context.getLights(), "u_lights_block");
+            shader.attachUBO(this.context.getLights(), "u_lights_block");
         }
     }
 
@@ -254,13 +256,17 @@ public class StudioRenderer implements IComponent
             texture.setWrap(GL12.GL_CLAMP_TO_EDGE);
         }
 
-        StudioShaders.Stage previous = null;
+        int j = 0;
 
-        for (StudioShaders.Stage stage : this.shaders.stages)
+        for (Shader shader : this.shaders.shaders)
         {
-            this.setupCompositeShader(stage.shader, camera, shaders.gbuffer);
+            Framebuffer a = j % 2 == 0 ? shaders.compositePing : shaders.compositePong;
+            Framebuffer b = j % 2 == 0 ? shaders.compositePong : shaders.compositePing;
 
-            stage.framebuffer.apply();
+            a.apply();
+            a.clear();
+
+            this.setupCompositeShader(shader, camera, shaders.gbuffer);
 
             int i = 1;
 
@@ -271,21 +277,17 @@ public class StudioRenderer implements IComponent
                 i += 1;
             }
 
-            if (previous != null)
+            for (Texture texture : b.textures)
             {
-                for (Texture texture : previous.framebuffer.textures)
-                {
-                    texture.bind(i);
+                texture.bind(i);
 
-                    i += 1;
-                }
+                i += 1;
             }
 
-            Framebuffer.renderToQuad(this.context, stage.shader);
+            Framebuffer.renderToQuad(this.context, shader);
+            a.unbind();
 
-            stage.framebuffer.unbind();
-
-            previous = stage;
+            j += 1;
         }
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -338,10 +340,14 @@ public class StudioRenderer implements IComponent
     {
         GLStates.depthMask(false);
 
-        Framebuffer framebuffer = this.shaders.stages.get(this.shaders.stages.size() - 1).framebuffer;
+        Texture texture = this.shaders.shaders.size() % 2 == 0
+            ? this.shaders.compositePong.getMainTexture()
+            : this.shaders.compositePing.getMainTexture();
 
-        framebuffer.getMainTexture().bind(0);
+        texture.bind(0);
+        texture.setFilter(GL11.GL_LINEAR);
         Framebuffer.renderToQuad(this.context, this.finalShader);
+        texture.setFilter(GL11.GL_NEAREST);
 
         GLStates.depthMask(true);
     }
@@ -389,7 +395,7 @@ public class StudioRenderer implements IComponent
 
     public void renderFrameTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen)
     {
-        framebuffer.apply();
+        framebuffer.applyClear();
 
         /* Update context state */
         camera.updateView();

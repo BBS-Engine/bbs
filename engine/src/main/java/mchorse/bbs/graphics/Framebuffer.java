@@ -80,13 +80,18 @@ public class Framebuffer implements IDisposable
         GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, renderbuffer.target, GL30.GL_RENDERBUFFER, renderbuffer.id);
     }
 
+    public void applyClear()
+    {
+        this.apply();
+        this.clear();
+    }
+
     public void apply()
     {
         Texture texture = this.getMainTexture();
 
         GL11.glViewport(0, 0, texture.width, texture.height);
         this.bind();
-        this.clear();
     }
 
     public void clear()

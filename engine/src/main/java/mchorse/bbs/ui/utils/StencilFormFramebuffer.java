@@ -96,7 +96,7 @@ public class StencilFormFramebuffer
 
     public void apply()
     {
-        this.framebuffer.apply();
+        this.framebuffer.applyClear();
     }
 
     public void pickGUI(UIContext context, Area area)

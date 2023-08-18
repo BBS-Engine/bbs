@@ -21,31 +21,19 @@
             "format": "depth_f24"
         }
     ],
-    "composite": {
-        "stages": [
-            {
-                "shader": "studio:shaders/default/deferred/vertex_2d-composite.glsl",
-                "buffers": [
-                    {
-                        "name": "u_texture0",
-                        "format": "rgba_u8"
-                    },
-                    {
-                        "name": "u_texture1",
-                        "format": "rgba_u8"
-                    }
-                ]
-            },
-            {
-                "shader": "studio:shaders/default/deferred/vertex_2d-composite1.glsl",
-                "buffers": [
-                    {
-                        "name": "u_texture0",
-                        "format": "rgba_u8",
-                        "linear": true
-                    }
-                ]
-            }
-        ]
-    }
+    "composite": [
+        {
+            "name": "u_texture0",
+            "format": "rgba_u8",
+            "clear": true
+        },
+        {
+            "name": "u_texture1",
+            "format": "rgba_u8"
+        }
+    ],
+    "stages": [
+        "studio:shaders/default/deferred/vertex_2d-composite.glsl",
+        "studio:shaders/default/deferred/vertex_2d-composite1.glsl"
+    ]
 }

@@ -1,13 +1,14 @@
 package mchorse.studio;
 
+import mchorse.bbs.BBS;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.shaders.pipeline.ShaderBuffer;
 import mchorse.bbs.graphics.shaders.pipeline.ShaderPipeline;
-import mchorse.bbs.graphics.shaders.pipeline.ShaderStage;
 import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.graphics.vao.VBOAttributes;
+import mchorse.bbs.resources.Link;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
@@ -23,7 +24,10 @@ public class StudioShaders
     private ShaderPipeline pipeline;
 
     public Framebuffer gbuffer;
-    public List<Stage> stages = new ArrayList<>();
+    public Framebuffer compositePing;
+    public Framebuffer compositePong;
+
+    public List<Shader> shaders = new ArrayList<>();
 
     public StudioShaders(ShaderPipeline pipeline)
     {
@@ -33,32 +37,22 @@ public class StudioShaders
     public void reload()
     {
         /* Clean up */
-        if (this.gbuffer != null)
-        {
-            this.gbuffer.delete();
-        }
+        if (this.gbuffer != null) this.gbuffer.delete();
+        if (this.compositePing != null) this.compositePing.delete();
+        if (this.compositePong != null) this.compositePong.delete();
 
-        for (Stage stage : this.stages)
-        {
-            stage.framebuffer.delete();
-        }
-
-        this.stages.clear();
+        this.shaders.clear();
 
         /* Setup */
-        this.gbuffer = this.setup(this.pipeline.gbuffers);
+        this.gbuffer = this.setup(this.pipeline.gbuffers, "g_");
+        this.compositePing = this.setup(this.pipeline.composite, "ping_");
+        this.compositePong = this.setup(this.pipeline.composite, "pong_");
 
-        ShaderStage previous = null;
-
-        for (ShaderStage shaderStage : this.pipeline.compositeStages)
+        for (Link shaderName : this.pipeline.stages)
         {
-            Stage stage = new Stage();
-            ShaderStage previousStage = previous;
+            Shader stageShader = new Shader(shaderName, VBOAttributes.VERTEX_2D);
 
-            stage.buffers = shaderStage.buffers;
-            stage.framebuffer = this.setup(shaderStage.buffers);
-            stage.shader = new Shader(shaderStage.shader, VBOAttributes.VERTEX_2D);
-            stage.shader.onInitialize((shader) ->
+            stageShader.onInitialize((shader) ->
             {
                 int i = 1;
 
@@ -81,35 +75,30 @@ public class StudioShaders
                     }
                 }
 
-                if (previousStage != null)
+                for (ShaderBuffer buffer : this.pipeline.composite)
                 {
-                    for (ShaderBuffer buffer : previousStage.buffers)
+                    UniformInt uniform = shader.getUniform(buffer.name, UniformInt.class);
+
+                    if (uniform != null)
                     {
-                        UniformInt uniform = shader.getUniform(buffer.name, UniformInt.class);
+                        uniform.set(i);
 
-                        if (uniform != null)
-                        {
-                            uniform.set(i);
-
-                            i += 1;
-                        }
+                        i += 1;
                     }
                 }
             });
 
-            this.stages.add(stage);
-
-            previous = shaderStage;
+            this.shaders.add(stageShader);
         }
     }
 
-    private Framebuffer setup(List<ShaderBuffer> buffers)
+    private Framebuffer setup(List<ShaderBuffer> buffers, String prefix)
     {
         int colors = 0;
 
         Framebuffer framebuffer = new Framebuffer();
 
-        framebuffer.deleteTextures().clearCallback(() ->
+        framebuffer.clearCallback(() ->
         {
             int i = 0;
 
@@ -133,7 +122,7 @@ public class StudioShaders
 
         for (ShaderBuffer buffer : buffers)
         {
-            Texture texture = new Texture();
+            Texture texture = BBS.getTextures().createTexture(new Link("bbs", prefix + buffer.name));
 
             texture.bind();
             texture.setFilter(buffer.linear ? GL11.GL_LINEAR : GL11.GL_NEAREST);
@@ -164,17 +153,7 @@ public class StudioShaders
     public void resize(int w, int h)
     {
         this.gbuffer.resize(w, h);
-
-        for (Stage stage : this.stages)
-        {
-            stage.framebuffer.resize(w, h);
-        }
-    }
-
-    public static class Stage
-    {
-        public Shader shader;
-        public Framebuffer framebuffer;
-        public List<ShaderBuffer> buffers;
+        this.compositePing.resize(w, h);
+        this.compositePong.resize(w, h);
     }
 }

@@ -4,6 +4,8 @@ import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.resources.Link;
+import mchorse.bbs.utils.resources.LinkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +13,15 @@ import java.util.List;
 public class ShaderPipeline implements IMapSerializable
 {
     public List<ShaderBuffer> gbuffers = new ArrayList<>();
-    public List<ShaderStage> compositeStages = new ArrayList<>();
+    public List<ShaderBuffer> composite = new ArrayList<>();
+    public List<Link> stages = new ArrayList<>();
 
     @Override
     public void fromData(MapType data)
     {
         this.gbuffers.clear();
-        this.compositeStages.clear();
+        this.composite.clear();
+        this.stages.clear();
 
         ListType gbuffers = data.getList("gbuffers");
 
@@ -32,17 +36,28 @@ public class ShaderPipeline implements IMapSerializable
             }
         }
 
-        MapType composite = data.getMap("composite");
-        ListType stages = composite.getList("stages");
+        ListType composites = data.getList("composite");
+
+        for (BaseType composite : composites)
+        {
+            if (composite.isMap())
+            {
+                ShaderBuffer shaderBuffer = new ShaderBuffer();
+
+                shaderBuffer.fromData(composite.asMap());
+                this.composite.add(shaderBuffer);
+            }
+        }
+
+        ListType stages = data.getList("stages");
 
         for (BaseType stage : stages)
         {
-            if (stage.isMap())
-            {
-                ShaderStage shaderStage = new ShaderStage();
+            Link link = LinkUtils.create(stage);
 
-                shaderStage.fromData(stage.asMap());
-                this.compositeStages.add(shaderStage);
+            if (link != null)
+            {
+                this.stages.add(link);
             }
         }
     }
