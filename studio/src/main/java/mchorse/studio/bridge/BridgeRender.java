@@ -15,7 +15,7 @@ public class BridgeRender extends BaseBridge implements IBridgeRender
     @Override
     public Framebuffer getMainFramebuffer()
     {
-        return this.engine.renderer.finalFramebuffer;
+        return this.engine.renderer.composite1Framebuffer;
     }
 
     @Override

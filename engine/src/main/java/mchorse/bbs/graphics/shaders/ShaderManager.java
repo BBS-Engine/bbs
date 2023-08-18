@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 /**
@@ -29,9 +30,16 @@ public class ShaderManager implements IDisposable, IWatchDogListener
     public AssetProvider provider;
     public Set<Shader> programs = new HashSet<>();
 
+    private Consumer<Boolean> reloadCallback;
+
     public ShaderManager(AssetProvider provider)
     {
         this.provider = provider;
+    }
+
+    public void setReloadCallback(Consumer<Boolean> callback)
+    {
+        this.reloadCallback = callback;
     }
 
     public void buildShader(Shader program, Link linkToCode) throws Exception
@@ -120,6 +128,11 @@ public class ShaderManager implements IDisposable, IWatchDogListener
         {
             shader.reload();
         }
+
+        if (this.reloadCallback != null)
+        {
+            this.reloadCallback.accept(true);
+        }
     }
 
     @Override
@@ -144,6 +157,7 @@ public class ShaderManager implements IDisposable, IWatchDogListener
         }
 
         Iterator<Shader> it = this.programs.iterator();
+        int i = 0;
 
         while (it.hasNext())
         {
@@ -152,7 +166,14 @@ public class ShaderManager implements IDisposable, IWatchDogListener
             if (program.name.equals(link) || program.getImported().contains(link))
             {
                 program.reload();
+
+                i += 1;
             }
+        }
+
+        if (this.reloadCallback != null && i > 0)
+        {
+            this.reloadCallback.accept(false);
         }
     }
 }

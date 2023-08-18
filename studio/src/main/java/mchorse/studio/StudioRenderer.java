@@ -3,6 +3,7 @@ package mchorse.studio;
 import mchorse.bbs.BBS;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.core.IComponent;
+import mchorse.bbs.data.DataToString;
 import mchorse.bbs.events.RenderWorldEvent;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.graphics.Draw;
@@ -14,6 +15,7 @@ import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.shaders.ShaderRepository;
+import mchorse.bbs.graphics.shaders.pipeline.ShaderPipeline;
 import mchorse.bbs.graphics.shaders.uniforms.UniformFloat;
 import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
 import mchorse.bbs.graphics.shaders.uniforms.UniformMatrix4;
@@ -28,6 +30,7 @@ import mchorse.bbs.graphics.vao.VAO;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.utils.IOUtils;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.joml.Vectors;
@@ -63,16 +66,22 @@ public class StudioRenderer implements IComponent
 
     /* VAOs */
     public VAO sky;
-    public Shader compositeShader;
+    public Shader composite0Shader;
+    public Shader composite1Shader;
     public Shader finalShader;
     public Shader skyboxShader;
 
     public ChunkRenderer renderer = new ChunkRenderer();
     public Framebuffer gbufferFramebuffer;
-    public Framebuffer finalFramebuffer;
+    public Framebuffer composite0Framebuffer;
+    public Framebuffer composite1Framebuffer;
 
     public Framebuffer renderToGbufferFramebuffer;
-    public Framebuffer renderToFinalFramebuffer;
+    public Framebuffer renderToComposite0Framebuffer;
+    public Framebuffer renderToComposite1Framebuffer;
+
+    private ShaderPipeline pipeline = new ShaderPipeline();
+    private StudioShaders shaders = new StudioShaders(this.pipeline);
 
     private RenderWorldEvent renderWorld;
     private Map<String, String> cachedDefines = new HashMap<>();
@@ -85,6 +94,11 @@ public class StudioRenderer implements IComponent
     public StudioRenderer(StudioEngine engine)
     {
         this.engine = engine;
+    }
+
+    public void reloadShaders(boolean full)
+    {
+
     }
 
     @Override
@@ -104,31 +118,60 @@ public class StudioRenderer implements IComponent
         this.context.setUBO(this.ubo);
 
         this.createSkybox();
+        this.setupShaders();
         this.setupShaderPipeline();
 
         this.renderWorld = new RenderWorldEvent(this.context);
     }
 
-    private void setupShaderPipeline()
+    private void setupShaders()
     {
         ShaderRepository mainShaders = this.context.getMainShaders();
-
-        Shader skyboxShader = new Shader(Link.create("studio:shaders/default/world/vertex-skybox.glsl"), VBOAttributes.VERTEX);
         Shader vertexRGBA = new Shader(Link.create("studio:shaders/default/world/vertex_rgba.glsl"), VBOAttributes.VERTEX_RGBA);
         Shader vertexUVRGBA = new Shader(Link.create("studio:shaders/default/world/vertex_uv_rgba.glsl"), VBOAttributes.VERTEX_UV_RGBA);
         Shader vertexNormalUVRGBA = new Shader(Link.create("studio:shaders/default/world/vertex_normal_uv_rgba.glsl"), VBOAttributes.VERTEX_NORMAL_UV_RGBA);
         Shader vertexNormalUVLightRGBA = new Shader(Link.create("studio:shaders/default/world/vertex_normal_uv_light_rgba.glsl"), VBOAttributes.VERTEX_NORMAL_UV_LIGHT_RGBA);
         Shader vertexNormalUVRGBABones = new Shader(Link.create("studio:shaders/default/world/vertex_normal_uv_rgba_bones.glsl"), VBOAttributes.VERTEX_NORMAL_UV_RGBA_BONES);
 
-        Shader compositeShader = new Shader(Link.create("studio:shaders/default/deferred/vertex_2d-composite.glsl"), VBOAttributes.VERTEX_2D);
-        Shader finalShader = new Shader(Link.create("studio:shaders/default/deferred/vertex_2d-final.glsl"), VBOAttributes.VERTEX_2D);
-
-        skyboxShader.attachUBO(this.context.getUBO(), "u_matrices");
         vertexRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
         vertexUVRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
         vertexNormalUVRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
         vertexNormalUVLightRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
         vertexNormalUVRGBABones.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
+
+        mainShaders.clear();
+        mainShaders.register(vertexRGBA);
+        mainShaders.register(vertexUVRGBA);
+        mainShaders.register(vertexNormalUVRGBA);
+        mainShaders.register(vertexNormalUVLightRGBA);
+        mainShaders.register(vertexNormalUVRGBABones);
+
+        this.skyboxShader = new Shader(Link.create("studio:shaders/default/world/vertex-skybox.glsl"), VBOAttributes.VERTEX);
+        this.skyboxShader.attachUBO(this.context.getUBO(), "u_matrices");
+    }
+
+    private void setupShaderPipeline()
+    {
+        try
+        {
+            String string = IOUtils.readText(BBS.getProvider().getAsset(Link.create("studio:shaders/default/default.shader.json")));
+
+            this.pipeline.fromData(DataToString.mapFromString(string));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        this.shaders.reload();
+
+        Shader compositeShader = new Shader(Link.create("studio:shaders/default/deferred/vertex_2d-composite.glsl"), VBOAttributes.VERTEX_2D);
+        Shader compositeShader1 = new Shader(Link.create("studio:shaders/default/deferred/vertex_2d-composite1.glsl"), VBOAttributes.VERTEX_2D);
+        Shader finalShader = new Shader(Link.create("studio:shaders/default/deferred/vertex_2d-final.glsl"), VBOAttributes.VERTEX_2D);
+
+        this.composite0Shader = compositeShader;
+        this.composite1Shader = compositeShader1;
+        this.finalShader = finalShader;
 
         compositeShader.onInitialize((shader) ->
         {
@@ -140,29 +183,32 @@ public class StudioRenderer implements IComponent
             shader.getUniform("u_lightmap", UniformInt.class).set(7);
         });
         compositeShader.attachUBO(this.context.getLights(), "u_lights_block");
+        compositeShader1.onInitialize((shader) ->
+        {
+            shader.getUniform("u_texture", UniformInt.class).set(0);
+            shader.getUniform("u_position", UniformInt.class).set(1);
+            shader.getUniform("u_normal", UniformInt.class).set(2);
+            shader.getUniform("u_lighting", UniformInt.class).set(3);
+            shader.getUniform("u_depth", UniformInt.class).set(4);
+            shader.getUniform("u_lightmap", UniformInt.class).set(7);
+
+            shader.getUniform("u_texture0", UniformInt.class).set(8);
+            shader.getUniform("u_texture1", UniformInt.class).set(9);
+        });
         finalShader.onInitialize(CommonShaderAccess::initializeTexture);
-
-        mainShaders.clear();
-        mainShaders.register(vertexRGBA);
-        mainShaders.register(vertexUVRGBA);
-        mainShaders.register(vertexNormalUVRGBA);
-        mainShaders.register(vertexNormalUVLightRGBA);
-        mainShaders.register(vertexNormalUVRGBABones);
-
-        this.skyboxShader = skyboxShader;
-        this.compositeShader = compositeShader;
-        this.finalShader = finalShader;
 
         FramebufferManager framebuffers = BBS.getFramebuffers();
 
-        this.finalFramebuffer = framebuffers.getFramebuffer(Link.bbs("final"), this::createFinalFramebuffer);
+        this.composite0Framebuffer = framebuffers.getFramebuffer(Link.bbs("composite0"), this::createComposite0Framebuffer);
+        this.composite1Framebuffer = framebuffers.getFramebuffer(Link.bbs("composite1"), this::createComposite1Framebuffer);
         this.gbufferFramebuffer = framebuffers.getFramebuffer(Link.bbs("gbuffer"), this::createGbufferFramebuffer);
 
-        this.renderToFinalFramebuffer = framebuffers.getFramebuffer(Link.bbs("render_to_final"), this::createFinalFramebuffer);
+        this.renderToComposite0Framebuffer = framebuffers.getFramebuffer(Link.bbs("render_to_composite0"), this::createComposite0Framebuffer);
+        this.renderToComposite1Framebuffer = framebuffers.getFramebuffer(Link.bbs("render_to_composite1"), this::createComposite1Framebuffer);
         this.renderToGbufferFramebuffer = framebuffers.getFramebuffer(Link.bbs("render_to_gbuffer"), this::createGbufferFramebuffer);
     }
 
-    private void createFinalFramebuffer(Framebuffer framebuffer)
+    private void createComposite1Framebuffer(Framebuffer framebuffer)
     {
         Texture texture = new Texture();
 
@@ -170,6 +216,29 @@ public class StudioRenderer implements IComponent
         texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
 
         framebuffer.deleteTextures().attach(texture, GL30.GL_COLOR_ATTACHMENT0);
+        framebuffer.unbind();
+    }
+
+    private void createComposite0Framebuffer(Framebuffer framebuffer)
+    {
+        Texture texture = new Texture();
+
+        texture.setFilter(GL11.GL_LINEAR);
+        texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
+
+        Texture texture2 = new Texture();
+
+        texture2.setFilter(GL11.GL_LINEAR);
+        texture2.setWrap(GL13.GL_CLAMP_TO_EDGE);
+        texture2.setFormat(TextureFormat.RGBA_F16);
+
+        framebuffer.attach(texture, GL30.GL_COLOR_ATTACHMENT0);
+        framebuffer.attach(texture2, GL30.GL_COLOR_ATTACHMENT1);
+
+        framebuffer.deleteTextures();
+
+        GL30.glDrawBuffers(new int[]{GL30.GL_COLOR_ATTACHMENT0, GL30.GL_COLOR_ATTACHMENT1});
+
         framebuffer.unbind();
     }
 
@@ -199,7 +268,7 @@ public class StudioRenderer implements IComponent
         Texture texture = new Texture();
 
         texture.setFilter(GL11.GL_NEAREST);
-        texture.setWrap(GL13.GL_REPEAT);
+        texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
         texture.setFormat(format);
 
         return texture;
@@ -274,7 +343,7 @@ public class StudioRenderer implements IComponent
         if (this.engine.screen.canRefresh())
         {
             this.renderFrameTo(this.engine.cameraController.camera, this.gbufferFramebuffer, 0, true);
-            this.renderFinal(this.context.getCamera(), this.finalFramebuffer, this.gbufferFramebuffer);
+            this.renderFinal(this.context.getCamera(), this.composite0Framebuffer, this.composite1Framebuffer, this.gbufferFramebuffer);
         }
 
         this.renderFinalQuad();
@@ -284,34 +353,13 @@ public class StudioRenderer implements IComponent
         this.frames += 1;
     }
 
-    private void renderFinal(Camera camera, Framebuffer framebuffer, Framebuffer gbuffer)
+    private void renderFinal(Camera camera, Framebuffer composite0, Framebuffer composite1, Framebuffer gbuffer)
     {
-        UniformMatrix4 projection = this.compositeShader.getUniform("u_projection", UniformMatrix4.class);
-        UniformMatrix4 view = this.compositeShader.getUniform("u_view", UniformMatrix4.class);
-        UniformMatrix4 projectionInverse = this.compositeShader.getUniform("u_projection_inv", UniformMatrix4.class);
-        UniformMatrix4 viewInverse = this.compositeShader.getUniform("u_view_inv", UniformMatrix4.class);
-        UniformInt frames = this.compositeShader.getUniform("u_frames", UniformInt.class);
-        UniformFloat far = this.compositeShader.getUniform("u_far", UniformFloat.class);
-        UniformFloat near = this.compositeShader.getUniform("u_near", UniformFloat.class);
-        UniformVector2 screenSize = this.compositeShader.getUniform("u_screen_size", UniformVector2.class);
+        this.setupCompositeShader(this.composite0Shader, camera, composite0);
+        this.setupCompositeShader(this.composite1Shader, camera, composite0);
 
-        if (projection != null) projection.set(camera.projection);
-        if (view != null) view.set(camera.view);
-        if (projectionInverse != null) projectionInverse.set(Matrices.TEMP_4F.set(camera.projection).invert());
-        if (viewInverse != null) viewInverse.set(Matrices.TEMP_4F.set(camera.view).invert());
-        if (frames != null) frames.set(this.frames);
-        if (near != null) near.set(camera.near);
-        if (far != null) far.set(camera.far);
-        if (screenSize != null)
-        {
-            Texture mainTexture = framebuffer.getMainTexture();
-
-            screenSize.set(mainTexture.width, mainTexture.height);
-        }
-
-        this.updateSky(this.compositeShader, this.engine.world.settings);
-
-        framebuffer.apply(this.canClearGbufferFramebuffer());
+        composite0.apply();
+        composite0.clear();
 
         Link lightmap = this.engine.world.settings.lightmap;
 
@@ -329,24 +377,57 @@ public class StudioRenderer implements IComponent
             gbuffer.textures.get(i).bind(i);
         }
 
-        Framebuffer.renderToQuad(this.context, this.compositeShader);
+        Framebuffer.renderToQuad(this.context, this.composite0Shader);
 
-        framebuffer.unbind();
+        composite0.unbind();
+        composite1.apply();
+        composite1.clear();
+
+        for (int i = composite0.textures.size() - 1; i >= 0; i--)
+        {
+            composite0.textures.get(i).bind(i + 8);
+        }
+
+        Framebuffer.renderToQuad(this.context, this.composite1Shader);
+
+        composite1.unbind();
+
         GLStates.resetViewport();
     }
 
-    private boolean canClearGbufferFramebuffer()
+    private void setupCompositeShader(Shader shader, Camera camera, Framebuffer framebuffer)
     {
-        String define = this.compositeShader.getDefines().get("clear_color_0");
+        UniformMatrix4 projection = shader.getUniform("u_projection", UniformMatrix4.class);
+        UniformMatrix4 view = shader.getUniform("u_view", UniformMatrix4.class);
+        UniformMatrix4 projectionInverse = shader.getUniform("u_projection_inv", UniformMatrix4.class);
+        UniformMatrix4 viewInverse = shader.getUniform("u_view_inv", UniformMatrix4.class);
+        UniformInt frames = shader.getUniform("u_frames", UniformInt.class);
+        UniformFloat far = shader.getUniform("u_far", UniformFloat.class);
+        UniformFloat near = shader.getUniform("u_near", UniformFloat.class);
+        UniformVector2 screenSize = shader.getUniform("u_screen_size", UniformVector2.class);
 
-        return define == null || define.equalsIgnoreCase("true");
+        if (projection != null) projection.set(camera.projection);
+        if (view != null) view.set(camera.view);
+        if (projectionInverse != null) projectionInverse.set(Matrices.TEMP_4F.set(camera.projection).invert());
+        if (viewInverse != null) viewInverse.set(Matrices.TEMP_4F.set(camera.view).invert());
+        if (frames != null) frames.set(this.frames);
+        if (near != null) near.set(camera.near);
+        if (far != null) far.set(camera.far);
+        if (screenSize != null)
+        {
+            Texture mainTexture = framebuffer.getMainTexture();
+
+            screenSize.set(mainTexture.width, mainTexture.height);
+        }
+
+        this.updateSky(shader, this.engine.world.settings);
     }
 
     private void renderFinalQuad()
     {
         GLStates.depthMask(false);
 
-        this.finalFramebuffer.getMainTexture().bind(0);
+        this.composite1Framebuffer.getMainTexture().bind(0);
         Framebuffer.renderToQuad(this.context, this.finalShader);
 
         GLStates.depthMask(true);
@@ -372,15 +453,16 @@ public class StudioRenderer implements IComponent
         if (lastW != w || lastH != h)
         {
             this.renderToGbufferFramebuffer.resize(w, h);
-            this.renderToFinalFramebuffer.resize(w, h);
+            this.renderToComposite1Framebuffer.resize(w, h);
         }
 
         this.renderFrameTo(camera, this.renderToGbufferFramebuffer, pass, renderScreen);
-        this.renderFinal(camera, this.renderToFinalFramebuffer, this.renderToGbufferFramebuffer);
+        this.renderFinal(camera, this.renderToComposite0Framebuffer, this.renderToComposite1Framebuffer, this.renderToGbufferFramebuffer);
 
-        framebuffer.apply(true);
+        framebuffer.apply();
+        framebuffer.clear();
 
-        this.renderToFinalFramebuffer.getMainTexture().bind(0);
+        this.renderToComposite1Framebuffer.getMainTexture().bind(0);
         Framebuffer.renderToQuad(this.context, this.finalShader);
 
         if (rendering != null)
@@ -394,16 +476,8 @@ public class StudioRenderer implements IComponent
 
     public void renderFrameTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen)
     {
-        framebuffer.apply(false);
-
-        float[] clearColor = {0F, 0F, 0F, 0F};
-        Map<String, String> defines = this.collectDefines();
-
-        if (this.hasDefine(defines, "clear_color_0", true)) GL30.glClearBufferfv(GL30.GL_COLOR, 0, clearColor);
-        if (this.hasDefine(defines, "clear_color_1", true)) GL30.glClearBufferfv(GL30.GL_COLOR, 1, clearColor);
-        if (this.hasDefine(defines, "clear_color_2", true)) GL30.glClearBufferfv(GL30.GL_COLOR, 2, clearColor);
-        if (this.hasDefine(defines, "clear_color_3", true)) GL30.glClearBufferfv(GL30.GL_COLOR, 3, clearColor);
-        if (this.hasDefine(defines, "clear_depth_0", true)) GL30.glClearBufferfv(GL30.GL_DEPTH, 0, new float[]{1F});
+        framebuffer.apply();
+        framebuffer.clear();
 
         /* Update context state */
         camera.updateView();
@@ -420,30 +494,6 @@ public class StudioRenderer implements IComponent
         framebuffer.unbind();
 
         GLStates.resetViewport();
-    }
-
-    private Map<String, String> collectDefines()
-    {
-        this.cachedDefines.clear();
-
-        for (Shader shader : this.context.getShaders().getAll())
-        {
-            this.cachedDefines.putAll(shader.getDefines());
-        }
-
-        return this.cachedDefines;
-    }
-
-    private boolean hasDefine(Map<String, String> defines, String key, boolean defaultValue)
-    {
-        String define = defines.get(key);
-
-        if (define == null)
-        {
-            return defaultValue;
-        }
-
-        return define.equalsIgnoreCase("true");
     }
 
     private void renderFrameCommon(Camera camera, RenderingContext context)
@@ -637,6 +687,7 @@ public class StudioRenderer implements IComponent
         height *= renderQuality;
 
         this.gbufferFramebuffer.resize(width, height);
-        this.finalFramebuffer.resize(width, height);
+        this.composite0Framebuffer.resize(width, height);
+        this.composite1Framebuffer.resize(width, height);
     }
 }

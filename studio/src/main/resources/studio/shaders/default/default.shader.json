@@ -1,0 +1,44 @@
+{
+    "gbuffers": [
+        {
+            "name": "u_texture",
+            "format": "rgba_u8"
+        },
+        {
+            "name": "u_position",
+            "format": "rgba_f16"
+        },
+        {
+            "name": "u_normal",
+            "format": "rgba_f16"
+        },
+        {
+            "name": "u_lighting",
+            "format": "rgba_u8"
+        },
+        {
+            "name": "u_depth",
+            "format": "depth_f24"
+        }
+    ],
+    "composite": {
+        "stages": [
+            {
+                "shader": "studio:shaders/default/deferred/vertex_2d-composite.glsl",
+                "buffers": [
+                    {
+                        "name": "u_texture0",
+                        "format": "rgba_u8"
+                    },
+                    {
+                        "name": "u_texture1",
+                        "format": "rgba_f16"
+                    }
+                ]
+            },
+            {
+                "shader": "studio:shaders/default/deferred/vertex_2d-composite1.glsl"
+            }
+        ]
+    }
+}

@@ -119,6 +119,8 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         this.watchDog2 = new WatchDog(BBS.getGamePath("studio"));
         this.watchDog2.register(BBS.getShaders());
         this.watchDog2.start();
+
+        BBS.getShaders().setReloadCallback(this.renderer::reloadShaders);
     }
 
     @Subscribe
@@ -223,7 +225,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         global.add(debug.keys(GLFW.GLFW_KEY_F3));
         global.add(fullscreen.keys(GLFW.GLFW_KEY_F11));
 
-        Keybind video = new Keybind("video", () -> this.video.toggleRecording(this.renderer.finalFramebuffer));
+        Keybind video = new Keybind("video", () -> this.video.toggleRecording(this.renderer.composite1Framebuffer));
         Keybind utilities = new Keybind("utilities", () ->
         {
             UIBaseMenu currentMenu = this.screen.menu;
