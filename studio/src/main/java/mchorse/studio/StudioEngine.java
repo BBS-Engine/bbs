@@ -225,7 +225,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         global.add(debug.keys(GLFW.GLFW_KEY_F3));
         global.add(fullscreen.keys(GLFW.GLFW_KEY_F11));
 
-        Keybind video = new Keybind("video", () -> this.video.toggleRecording(this.renderer.composite1Framebuffer));
         Keybind utilities = new Keybind("utilities", () ->
         {
             UIBaseMenu currentMenu = this.screen.menu;
@@ -245,7 +244,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
             }
         });
 
-        global.add(video.keys(GLFW.GLFW_KEY_F4));
         global.add(utilities.keys(GLFW.GLFW_KEY_F6));
 
         this.keys.keybinds.add(global);

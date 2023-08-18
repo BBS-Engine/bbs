@@ -32,12 +32,19 @@
                     },
                     {
                         "name": "u_texture1",
-                        "format": "rgba_f16"
+                        "format": "rgba_u8"
                     }
                 ]
             },
             {
-                "shader": "studio:shaders/default/deferred/vertex_2d-composite1.glsl"
+                "shader": "studio:shaders/default/deferred/vertex_2d-composite1.glsl",
+                "buffers": [
+                    {
+                        "name": "u_texture0",
+                        "format": "rgba_u8",
+                        "linear": true
+                    }
+                ]
             }
         ]
     }

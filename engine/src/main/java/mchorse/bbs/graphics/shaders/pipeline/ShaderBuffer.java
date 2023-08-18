@@ -9,6 +9,7 @@ public class ShaderBuffer implements IMapSerializable
     public String name = "";
     public TextureFormat format = TextureFormat.RGBA_U8;
     public boolean clear = true;
+    public boolean linear = false;
 
     @Override
     public void fromData(MapType data)
@@ -16,6 +17,7 @@ public class ShaderBuffer implements IMapSerializable
         this.name = data.getString("name");
         this.format = TextureFormat.getByName(data.getString("format"));
         this.clear = data.getBool("clear", true);
+        this.linear = data.getBool("linear", false);
     }
 
     @Override

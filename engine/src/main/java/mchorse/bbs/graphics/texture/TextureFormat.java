@@ -41,4 +41,9 @@ public enum TextureFormat
     {
         return this.format == GL30.GL_DEPTH_COMPONENT;
     }
+
+    public boolean isColor()
+    {
+        return this.attachment == GL30.GL_COLOR_ATTACHMENT0;
+    }
 }

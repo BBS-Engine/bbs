@@ -1,6 +1,7 @@
 package mchorse.bbs.graphics.shaders.uniforms;
 
 import mchorse.bbs.utils.colors.Color;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL20;
 
@@ -13,6 +14,11 @@ public class UniformVector3 extends Uniform
     public UniformVector3(String name)
     {
         super(name);
+    }
+
+    public void set(Vector3d vector)
+    {
+        this.set((float) vector.x, (float) vector.y, (float) vector.z);
     }
 
     public void set(Vector3f vector)

@@ -17,6 +17,7 @@ public class Framebuffer implements IDisposable
     public final List<Renderbuffer> renderbuffers = new ArrayList<>();
 
     private boolean deleteTextures;
+    private Runnable clearCallback;
 
     public static void renderToQuad(RenderingContext context, Shader shader)
     {
@@ -32,6 +33,13 @@ public class Framebuffer implements IDisposable
     public Framebuffer()
     {
         this.id = GL30.glGenFramebuffers();
+    }
+
+    public Framebuffer clearCallback(Runnable clearCallback)
+    {
+        this.clearCallback = clearCallback;
+
+        return this;
     }
 
     public Framebuffer deleteTextures()
@@ -72,22 +80,25 @@ public class Framebuffer implements IDisposable
         GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, renderbuffer.target, GL30.GL_RENDERBUFFER, renderbuffer.id);
     }
 
-    public boolean isComplete()
-    {
-        return GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER) == GL30.GL_FRAMEBUFFER_COMPLETE;
-    }
-
     public void apply()
     {
         Texture texture = this.getMainTexture();
 
         GL11.glViewport(0, 0, texture.width, texture.height);
         this.bind();
+        this.clear();
     }
 
     public void clear()
     {
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        if (this.clearCallback == null)
+        {
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        }
+        else
+        {
+            this.clearCallback.run();
+        }
     }
 
     public void bind()
@@ -137,5 +148,10 @@ public class Framebuffer implements IDisposable
         }
 
         this.renderbuffers.clear();
+    }
+
+    public void attachments(int... attachments)
+    {
+        GL30.glDrawBuffers(attachments);
     }
 }

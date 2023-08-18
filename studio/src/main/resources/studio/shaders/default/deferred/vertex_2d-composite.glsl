@@ -22,7 +22,6 @@ struct Light
 in vec2 pass_uv;
 
 layout(location=0) out vec4 out_color;
-layout(location=1) out vec4 out_something;
 
 uniform sampler2D u_texture;
 uniform sampler2D u_position;
@@ -101,6 +100,4 @@ void main()
             out_color.rgb = mix_fog(out_color.rgb, u_fog, position);
         }
     }
-
-    out_something = vec4(1, 1, 0, 1);
 }

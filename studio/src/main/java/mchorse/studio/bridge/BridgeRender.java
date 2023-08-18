@@ -13,12 +13,6 @@ public class BridgeRender extends BaseBridge implements IBridgeRender
     }
 
     @Override
-    public Framebuffer getMainFramebuffer()
-    {
-        return this.engine.renderer.composite1Framebuffer;
-    }
-
-    @Override
     public void renderSceneTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality, Runnable rendering)
     {
         this.engine.renderer.renderFrameToQuality(camera, framebuffer, pass, renderScreen, quality, rendering);

@@ -5,8 +5,6 @@ import mchorse.bbs.graphics.Framebuffer;
 
 public interface IBridgeRender
 {
-    public Framebuffer getMainFramebuffer();
-
     public default void renderSceneTo(Camera camera, Framebuffer framebuffer, int pass)
     {
         this.renderSceneTo(camera, framebuffer, pass, 0);

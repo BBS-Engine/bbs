@@ -219,7 +219,7 @@ public final class Shader implements IDisposable
 
             if (block < 0)
             {
-                throw new IllegalStateException("Shader \"" + this.name + "\" doesn't have uniform block named \"" + entry.getKey() + "\"");
+                System.err.println("Shader \"" + this.name + "\" doesn't have uniform block named \"" + entry.getKey() + "\"");
             }
 
             GL31.glUniformBlockBinding(this.program, block, entry.getValue().unit);
