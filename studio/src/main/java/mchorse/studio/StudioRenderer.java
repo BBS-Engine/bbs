@@ -49,7 +49,6 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
 
 import java.nio.ByteBuffer;
 
@@ -70,6 +69,7 @@ public class StudioRenderer implements IComponent
     public ChunkRenderer renderer = new ChunkRenderer();
     private ShaderPipeline pipeline = new ShaderPipeline();
     private StudioShaders shaders = new StudioShaders(this.pipeline);
+    private StudioShaders targetShaders = new StudioShaders(this.pipeline);
 
     private RenderWorldEvent renderWorld;
 
@@ -154,6 +154,7 @@ public class StudioRenderer implements IComponent
         }
 
         this.shaders.reload();
+        this.targetShaders.reload();
 
         this.finalShader = new Shader(Link.create("studio:shaders/default/deferred/vertex_2d-final.glsl"), VBOAttributes.VERTEX_2D);
         this.finalShader.onInitialize(CommonShaderAccess::initializeTexture);
@@ -348,24 +349,25 @@ public class StudioRenderer implements IComponent
         int w = (int) (mainTexture.width * quality);
         int h = (int) (mainTexture.height * quality);
 
-        /* Texture gbufferAlbedo = this.renderToGbufferFramebuffer.getMainTexture();
+        Texture gbufferAlbedo = this.targetShaders.gbuffer.getMainTexture();
 
         int lastW = gbufferAlbedo.width;
         int lastH = gbufferAlbedo.height;
 
         if (lastW != w || lastH != h)
         {
-            this.renderToGbufferFramebuffer.resize(w, h);
-            this.renderToComposite1Framebuffer.resize(w, h);
+            this.targetShaders.resize(w, h);
         }
 
-        this.renderFrameTo(camera, this.renderToGbufferFramebuffer, pass, renderScreen);
-        this.renderFinal(camera, this.renderToComposite0Framebuffer, this.renderToComposite1Framebuffer, this.renderToGbufferFramebuffer);
+        this.renderFrameTo(camera, this.targetShaders.gbuffer, pass, renderScreen);
+        this.renderFinal(camera, this.targetShaders);
 
         framebuffer.apply();
         framebuffer.clear();
 
-        this.renderToComposite1Framebuffer.getMainTexture().bind(0);
+        Texture texture = this.targetShaders.stages.get(this.targetShaders.stages.size() - 1).framebuffer.getMainTexture();
+
+        texture.bind(0);
         Framebuffer.renderToQuad(this.context, this.finalShader);
 
         if (rendering != null)
@@ -374,7 +376,7 @@ public class StudioRenderer implements IComponent
         }
 
         framebuffer.unbind();
-        GLStates.resetViewport(); */
+        GLStates.resetViewport();
     }
 
     public void renderFrameTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen)

@@ -14,7 +14,7 @@ float randF()
     return float(rngState) / float(0xffffffffu);
 }
 
-vec2 rand2F(
+vec2 rand2F()
 {
     return vec2(randF(), randF());
 }
