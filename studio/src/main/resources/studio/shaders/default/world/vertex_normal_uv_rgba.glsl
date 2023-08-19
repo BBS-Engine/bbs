@@ -35,7 +35,7 @@ in vec3 pass_normal;
 in vec2 pass_uv;
 in vec4 pass_rgba;
 
-#import "studio:shaders/default/gbuffer_format.glsl"
+#import "studio:shaders/default/import/gbuffer_format.glsl"
 
 uniform vec4 u_color;
 uniform sampler2D u_texture;

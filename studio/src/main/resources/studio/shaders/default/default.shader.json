@@ -24,7 +24,8 @@
     "composite": [
         {
             "name": "u_texture0",
-            "format": "rgba_u8"
+            "format": "rgba_u8",
+            "linear": true
         },
         {
             "name": "u_texture1",
@@ -32,19 +33,28 @@
         },
         {
             "name": "u_texture2",
-            "format": "rgba_u8",
-            "linear": true
+            "format": "rgba_f16"
+        },
+        {
+            "name": "u_texture3",
+            "format": "rgba_f16",
+            "clear": false
         }
     ],
     "stages": [
         {
             "shader": "studio:shaders/default/deferred/vertex_2d-composite.glsl",
-            "output": ["u_texture0", "u_texture1"]
+            "output": ["u_texture1"]
         },
         {
             "shader": "studio:shaders/default/deferred/vertex_2d-composite1.glsl",
-            "input": ["u_texture0", "u_texture1"],
+            "input": ["u_texture3"],
             "output": ["u_texture2"]
+        },
+        {
+            "shader": "studio:shaders/default/deferred/vertex_2d-composite2.glsl",
+            "input": ["u_texture1", "u_texture2"],
+            "output": ["u_texture0", "u_texture3"]
         }
     ]
 }

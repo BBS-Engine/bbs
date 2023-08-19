@@ -21,11 +21,11 @@ void main()
 //@fragment
 in vec3 pass_uv;
 
-#import "studio:shaders/default/gbuffer_format.glsl"
+#import "studio:shaders/default/import/gbuffer_format.glsl"
 
 vec3 up = vec3(0, 1, 0);
 
-#import "studio:shaders/default/sky.glsl"
+#import "studio:shaders/default/import/fragment/sky.glsl"
 
 void main()
 {

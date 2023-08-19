@@ -21,8 +21,9 @@ struct Light
 
 in vec2 pass_uv;
 
-layout(location=0) out vec4 out_color;
-layout(location=1) out vec4 out_color1;
+out vec4 out_color;
+
+uniform int u_frames;
 
 uniform sampler2D u_texture;
 uniform sampler2D u_position;
@@ -30,6 +31,14 @@ uniform sampler2D u_normal;
 uniform sampler2D u_lighting;
 uniform sampler2D u_lightmap;
 uniform sampler2D u_depth;
+
+uniform mat4 u_view;
+uniform mat4 u_view_inv;
+uniform mat4 u_projection;
+uniform mat4 u_projection_inv;
+
+uniform float u_near;
+uniform float u_far;
 
 layout (std140) uniform u_lights_block
 {
@@ -39,10 +48,7 @@ layout (std140) uniform u_lights_block
 
 uniform vec2 u_screen_size;
 
-uniform int u_fog;
 uniform vec3 u_shading;
-
-#import "studio:shaders/default/sky.glsl"
 
 void apply_lightmap(inout vec4 result, vec2 coords)
 {
@@ -95,12 +101,5 @@ void main()
 
         // out_color.rgb = mix(out_color.rgb, color.rgb * shadingFactor * clamp(additive, 0, 1), mixFactor * mixFactor * mixFactor);
         out_color.rgb = mix(out_color.rgb, color.rgb * shadingFactor * clamp(additive, 0, 1), clamp(additiveFactor, 0, 1));
-
-        if (u_fog > 0)
-        {
-            out_color.rgb = mix_fog(out_color.rgb, u_fog, position);
-        }
     }
-
-    out_color1 = vec4(0, 1, 0, 1);
 }

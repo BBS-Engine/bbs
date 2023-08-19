@@ -30,7 +30,7 @@ in vec2 pass_uv;
 in vec4 pass_rgba;
 in vec4 pass_vertex;
 
-#import "studio:shaders/default/gbuffer_format.glsl"
+#import "studio:shaders/default/import/gbuffer_format.glsl"
 
 uniform sampler2D u_texture;
 uniform vec4 u_color;
