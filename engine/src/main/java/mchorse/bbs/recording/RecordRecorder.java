@@ -33,7 +33,7 @@ public class RecordRecorder
 
     public void stop(Entity player)
     {
-        this.record.length.set(this.tick);
+        this.record.length.set(Math.max(this.tick, this.record.length.get()));
 
         if (this.groups == null || this.groups.isEmpty())
         {

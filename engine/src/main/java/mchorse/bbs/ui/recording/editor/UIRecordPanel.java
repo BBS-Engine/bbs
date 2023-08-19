@@ -6,11 +6,14 @@ import mchorse.bbs.recording.data.Record;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
+import mchorse.bbs.ui.framework.elements.input.UITrackpad;
+import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 
 public class UIRecordPanel extends UIDataDashboardPanel<Record> implements IUIRecordEditorDelegate
 {
     public UIRecordEditor timeline;
+    public UITrackpad length;
 
     public UIRecordPanel(UIDashboard dashboard)
     {
@@ -21,6 +24,13 @@ public class UIRecordPanel extends UIDataDashboardPanel<Record> implements IUIRe
 
         this.editor.add(this.timeline);
         this.overlay.namesList.setFileIcon(Icons.EDITOR);
+
+        this.length = new UITrackpad((v) -> this.data.length.set(v.intValue()));
+        this.length.limit(0).integer();
+
+        this.options.fields.add(UI.label(IKey.lazy("Length")), this.length);
+
+        this.addOptions();
 
         this.fill(null);
     }
@@ -94,6 +104,11 @@ public class UIRecordPanel extends UIDataDashboardPanel<Record> implements IUIRe
         super.fill(data);
 
         this.timeline.setRecord(data);
+
+        if (data != null)
+        {
+            this.length.setValue(data.length.get());
+        }
     }
 
     @Override
