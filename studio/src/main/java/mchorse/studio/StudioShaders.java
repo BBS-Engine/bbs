@@ -5,8 +5,10 @@ import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.shaders.pipeline.ShaderBuffer;
 import mchorse.bbs.graphics.shaders.pipeline.ShaderPipeline;
+import mchorse.bbs.graphics.shaders.pipeline.ShaderStage;
 import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
 import mchorse.bbs.graphics.texture.Texture;
+import mchorse.bbs.graphics.texture.TextureFormat;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.resources.Link;
 import org.lwjgl.opengl.GL11;
@@ -14,20 +16,18 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudioShaders
 {
-    private static final float[] CLEAR_COLOR = {0F, 0F, 0F, 0F};
-    private static final float[] CLEAR_DEPTH = {1F};
-
     private ShaderPipeline pipeline;
 
     public Framebuffer gbuffer;
-    public Framebuffer compositePing;
-    public Framebuffer compositePong;
 
-    public List<Shader> shaders = new ArrayList<>();
+    public Map<String, Buffer> textures = new HashMap<>();
+    public List<Stage> stages = new ArrayList<>();
 
     public StudioShaders(ShaderPipeline pipeline)
     {
@@ -38,19 +38,41 @@ public class StudioShaders
     {
         /* Clean up */
         if (this.gbuffer != null) this.gbuffer.delete();
-        if (this.compositePing != null) this.compositePing.delete();
-        if (this.compositePong != null) this.compositePong.delete();
 
-        this.shaders.clear();
+        for (Stage stage : this.stages)
+        {
+            stage.framebuffer.delete();
+        }
+
+        this.textures.clear();
+        this.stages.clear();
 
         /* Setup */
-        this.gbuffer = this.setup(this.pipeline.gbuffers, "g_");
-        this.compositePing = this.setup(this.pipeline.composite, "ping_");
-        this.compositePong = this.setup(this.pipeline.composite, "pong_");
+        List<Texture> gbuffers = this.setupTextures(this.pipeline.gbuffers, "g_");
 
-        for (Link shaderName : this.pipeline.stages)
+        this.gbuffer = this.setup(gbuffers);
+
+        List<Texture> compositeBuffers = this.setupTextures(this.pipeline.composite, "c_");
+
+        for (int i = 0; i < compositeBuffers.size(); i++)
         {
-            Shader stageShader = new Shader(shaderName, VBOAttributes.VERTEX_2D);
+            Texture texture = compositeBuffers.get(i);
+            ShaderBuffer buffer = this.pipeline.composite.get(i);
+
+            this.textures.put(buffer.name, new Buffer(texture, buffer));
+        }
+
+        for (ShaderStage shaderStage : this.pipeline.stages)
+        {
+            List<Texture> output = new ArrayList<>();
+
+            for (String outputTexture : shaderStage.output)
+            {
+                output.add(this.textures.get(outputTexture).texture);
+            }
+
+            Shader stageShader = new Shader(shaderStage.shader, VBOAttributes.VERTEX_2D);
+            Framebuffer framebuffer = this.setup(output);
 
             stageShader.onInitialize((shader) ->
             {
@@ -58,94 +80,73 @@ public class StudioShaders
 
                 UniformInt lightmap = shader.getUniform("u_lightmap", UniformInt.class);
 
-                if (lightmap != null)
-                {
-                    lightmap.set(0);
-                }
+                if (lightmap != null) lightmap.set(0);
 
                 for (ShaderBuffer buffer : this.pipeline.gbuffers)
                 {
                     UniformInt uniform = shader.getUniform(buffer.name, UniformInt.class);
 
-                    if (uniform != null)
-                    {
-                        uniform.set(i);
-
-                        i += 1;
-                    }
+                    if (uniform != null) uniform.set(i++);
                 }
 
-                for (ShaderBuffer buffer : this.pipeline.composite)
+                for (String bufferName : shaderStage.input)
                 {
-                    UniformInt uniform = shader.getUniform(buffer.name, UniformInt.class);
+                    UniformInt uniform = shader.getUniform(bufferName, UniformInt.class);
 
-                    if (uniform != null)
-                    {
-                        uniform.set(i);
-
-                        i += 1;
-                    }
+                    if (uniform != null) uniform.set(i++);
                 }
             });
 
-            this.shaders.add(stageShader);
+            List<Texture> inputs = new ArrayList<>();
+
+            for (String input : shaderStage.input)
+            {
+                inputs.add(this.textures.get(input).texture);
+            }
+
+            this.stages.add(new Stage(stageShader, framebuffer, inputs));
         }
     }
 
-    private Framebuffer setup(List<ShaderBuffer> buffers, String prefix)
+    private List<Texture> setupTextures(List<ShaderBuffer> buffers, String prefix)
     {
-        int colors = 0;
-
-        Framebuffer framebuffer = new Framebuffer();
-
-        framebuffer.clearCallback(() ->
-        {
-            int i = 0;
-
-            for (ShaderBuffer buffer : buffers)
-            {
-                if (buffer.format.isColor())
-                {
-                    if (buffer.clear)
-                    {
-                        GL30.glClearBufferfv(GL30.GL_COLOR, i, CLEAR_COLOR);
-                    }
-
-                    i += 1;
-                }
-                else if (buffer.clear)
-                {
-                    GL30.glClearBufferfv(GL30.GL_DEPTH, 0, CLEAR_DEPTH);
-                }
-            }
-        });
+        List<Texture> textures = new ArrayList<>();
 
         for (ShaderBuffer buffer : buffers)
         {
             Texture texture = BBS.getTextures().createTexture(new Link("bbs", prefix + buffer.name));
 
             texture.bind();
+            texture.setClearable(buffer.clear);
             texture.setFilter(buffer.linear ? GL11.GL_LINEAR : GL11.GL_NEAREST);
             texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
             texture.setFormat(buffer.format);
 
-            framebuffer.attach(texture, buffer.format.attachment + (buffer.format.isColor() ? colors : 0));
+            textures.add(texture);
+        }
 
-            if (buffer.format.isColor())
+        return textures;
+    }
+
+    private Framebuffer setup(List<Texture> textures)
+    {
+        int colors = 0;
+
+        Framebuffer framebuffer = new Framebuffer().enableAdvancedClearing();
+
+        for (Texture texture : textures)
+        {
+            TextureFormat format = texture.getFormat();
+
+            framebuffer.attach(texture, format.attachment + (format.isColor() ? colors : 0));
+
+            if (format.isColor())
             {
                 colors += 1;
             }
         }
 
-        /* Specify draw framebuffer attachments */
-        int[] attachments = new int[colors];
-
-        for (int i = 0; i < colors; i++)
-        {
-            attachments[i] = GL30.GL_COLOR_ATTACHMENT0 + i;
-        }
-
-        framebuffer.attachments(attachments);
+        framebuffer.attachments(colors);
 
         return framebuffer;
     }
@@ -153,7 +154,36 @@ public class StudioShaders
     public void resize(int w, int h)
     {
         this.gbuffer.resize(w, h);
-        this.compositePing.resize(w, h);
-        this.compositePong.resize(w, h);
+
+        for (Stage stage : this.stages)
+        {
+            stage.framebuffer.resize(w, h);
+        }
+    }
+
+    public static class Stage
+    {
+        public Shader shader;
+        public Framebuffer framebuffer;
+        public List<Texture> inputs;
+
+        public Stage(Shader shader, Framebuffer framebuffer, List<Texture> inputs)
+        {
+            this.shader = shader;
+            this.framebuffer = framebuffer;
+            this.inputs = inputs;
+        }
+    }
+
+    public static class Buffer
+    {
+        public Texture texture;
+        public ShaderBuffer buffer;
+
+        public Buffer(Texture texture, ShaderBuffer buffer)
+        {
+            this.texture = texture;
+            this.buffer = buffer;
+        }
     }
 }

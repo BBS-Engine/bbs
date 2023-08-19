@@ -4,8 +4,6 @@ import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.resources.Link;
-import mchorse.bbs.utils.resources.LinkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +12,7 @@ public class ShaderPipeline implements IMapSerializable
 {
     public List<ShaderBuffer> gbuffers = new ArrayList<>();
     public List<ShaderBuffer> composite = new ArrayList<>();
-    public List<Link> stages = new ArrayList<>();
+    public List<ShaderStage> stages = new ArrayList<>();
 
     @Override
     public void fromData(MapType data)
@@ -53,11 +51,12 @@ public class ShaderPipeline implements IMapSerializable
 
         for (BaseType stage : stages)
         {
-            Link link = LinkUtils.create(stage);
-
-            if (link != null)
+            if (stage.isMap())
             {
-                this.stages.add(link);
+                ShaderStage shaderStage = new ShaderStage();
+
+                shaderStage.fromData(stage.asMap());
+                this.stages.add(shaderStage);
             }
         }
     }

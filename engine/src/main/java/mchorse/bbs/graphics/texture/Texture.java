@@ -1,9 +1,9 @@
 package mchorse.bbs.graphics.texture;
 
 import mchorse.bbs.core.IDisposable;
+import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.utils.resources.Pixels;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
 import java.nio.ByteBuffer;
@@ -23,6 +23,7 @@ public class Texture implements IDisposable
 
     private boolean mipmap;
     private boolean refreshable = true;
+    private boolean clearable;
 
     private TextureFormat format = TextureFormat.RGBA_U8;
 
@@ -39,6 +40,21 @@ public class Texture implements IDisposable
         this.refreshable = false;
 
         return this;
+    }
+
+    public void setClearable(boolean clearable)
+    {
+        this.clearable = clearable;
+    }
+
+    public boolean isClearable()
+    {
+        return this.clearable;
+    }
+
+    public TextureFormat getFormat()
+    {
+        return this.format;
     }
 
     public boolean isMipmap()
@@ -63,7 +79,7 @@ public class Texture implements IDisposable
 
     public void bind(int texture)
     {
-        GL13.glActiveTexture(GL13.GL_TEXTURE0 + texture);
+        GLStates.activeTexture(texture);
         GL11.glBindTexture(this.target, this.id);
     }
 
@@ -74,7 +90,7 @@ public class Texture implements IDisposable
 
     public void unbind(int texture)
     {
-        GL13.glActiveTexture(GL13.GL_TEXTURE0 + texture);
+        GLStates.activeTexture(texture);
         GL11.glBindTexture(this.target, 0);
     }
 

@@ -158,9 +158,9 @@ public class StudioRenderer implements IComponent
         this.finalShader = new Shader(Link.create("studio:shaders/default/deferred/vertex_2d-final.glsl"), VBOAttributes.VERTEX_2D);
         this.finalShader.onInitialize(CommonShaderAccess::initializeTexture);
 
-        for (Shader shader : this.shaders.shaders)
+        for (StudioShaders.Stage stage : this.shaders.stages)
         {
-            shader.attachUBO(this.context.getLights(), "u_lights_block");
+            stage.shader.attachUBO(this.context.getLights(), "u_lights_block");
         }
     }
 
@@ -256,41 +256,29 @@ public class StudioRenderer implements IComponent
             texture.setWrap(GL12.GL_CLAMP_TO_EDGE);
         }
 
-        int j = 0;
-
-        for (Shader shader : this.shaders.shaders)
+        for (StudioShaders.Stage stage : this.shaders.stages)
         {
-            Framebuffer a = j % 2 == 0 ? shaders.compositePing : shaders.compositePong;
-            Framebuffer b = j % 2 == 0 ? shaders.compositePong : shaders.compositePing;
+            stage.framebuffer.applyClear();
 
-            a.apply();
-            a.clear();
-
-            this.setupCompositeShader(shader, camera, shaders.gbuffer);
+            this.setupCompositeShader(stage.shader, camera, shaders.gbuffer);
 
             int i = 1;
 
             for (Texture texture : shaders.gbuffer.textures)
             {
-                texture.bind(i);
-
-                i += 1;
+                texture.bind(i++);
             }
 
-            for (Texture texture : b.textures)
+            for (Texture texture : stage.inputs)
             {
-                texture.bind(i);
-
-                i += 1;
+                texture.bind(i++);
             }
 
-            Framebuffer.renderToQuad(this.context, shader);
-            a.unbind();
-
-            j += 1;
+            Framebuffer.renderToQuad(this.context, stage.shader);
+            stage.framebuffer.unbind();
         }
 
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GLStates.activeTexture(0);
         GLStates.resetViewport();
 
         this.prevProjection.set(camera.projection);
@@ -340,14 +328,10 @@ public class StudioRenderer implements IComponent
     {
         GLStates.depthMask(false);
 
-        Texture texture = this.shaders.shaders.size() % 2 == 0
-            ? this.shaders.compositePong.getMainTexture()
-            : this.shaders.compositePing.getMainTexture();
+        Texture texture = this.shaders.stages.get(this.shaders.stages.size() - 1).framebuffer.getMainTexture();
 
         texture.bind(0);
-        texture.setFilter(GL11.GL_LINEAR);
         Framebuffer.renderToQuad(this.context, this.finalShader);
-        texture.setFilter(GL11.GL_NEAREST);
 
         GLStates.depthMask(true);
     }

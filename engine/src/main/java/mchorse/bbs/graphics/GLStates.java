@@ -2,10 +2,16 @@ package mchorse.bbs.graphics;
 
 import mchorse.bbs.graphics.window.Window;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 
 public class GLStates
 {
+    public static void activeTexture(int unit)
+    {
+        GL13.glActiveTexture(GL13.GL_TEXTURE0 + unit);
+    }
+
     public static void alpha(boolean on)
     {
         toggleState(GL11.GL_ALPHA, on);

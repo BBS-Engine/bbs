@@ -12,12 +12,15 @@ import java.util.List;
 
 public class Framebuffer implements IDisposable
 {
+    private static final float[] CLEAR_COLOR = {0F, 0F, 0F, 0F};
+    private static final float[] CLEAR_DEPTH = {1F};
+
     public int id;
     public List<Texture> textures = new ArrayList<>();
     public final List<Renderbuffer> renderbuffers = new ArrayList<>();
 
     private boolean deleteTextures;
-    private Runnable clearCallback;
+    private boolean advancedClearing;
 
     public static void renderToQuad(RenderingContext context, Shader shader)
     {
@@ -35,9 +38,9 @@ public class Framebuffer implements IDisposable
         this.id = GL30.glGenFramebuffers();
     }
 
-    public Framebuffer clearCallback(Runnable clearCallback)
+    public Framebuffer enableAdvancedClearing()
     {
-        this.clearCallback = clearCallback;
+        this.advancedClearing = true;
 
         return this;
     }
@@ -80,6 +83,23 @@ public class Framebuffer implements IDisposable
         GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, renderbuffer.target, GL30.GL_RENDERBUFFER, renderbuffer.id);
     }
 
+    public void attachments(int count)
+    {
+        int[] attachments = new int[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            attachments[i] = GL30.GL_COLOR_ATTACHMENT0 + i;
+        }
+
+        this.attachments(attachments);
+    }
+
+    public void attachments(int... attachments)
+    {
+        GL30.glDrawBuffers(attachments);
+    }
+
     public void applyClear()
     {
         this.apply();
@@ -96,13 +116,30 @@ public class Framebuffer implements IDisposable
 
     public void clear()
     {
-        if (this.clearCallback == null)
+        if (this.advancedClearing)
         {
-            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+            int i = 0;
+
+            for (Texture texture : this.textures)
+            {
+                if (texture.getFormat().isColor())
+                {
+                    if (texture.isClearable())
+                    {
+                        GL30.glClearBufferfv(GL30.GL_COLOR, i, CLEAR_COLOR);
+                    }
+
+                    i += 1;
+                }
+                else if (texture.isClearable())
+                {
+                    GL30.glClearBufferfv(GL30.GL_DEPTH, 0, CLEAR_DEPTH);
+                }
+            }
         }
         else
         {
-            this.clearCallback.run();
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         }
     }
 
@@ -153,10 +190,5 @@ public class Framebuffer implements IDisposable
         }
 
         this.renderbuffers.clear();
-    }
-
-    public void attachments(int... attachments)
-    {
-        GL30.glDrawBuffers(attachments);
     }
 }
