@@ -3,6 +3,8 @@ package mchorse.bbs.bridge;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.graphics.Framebuffer;
 
+import java.util.function.Consumer;
+
 public interface IBridgeRender
 {
     public default void renderSceneTo(Camera camera, Framebuffer framebuffer, int pass)
@@ -20,5 +22,5 @@ public interface IBridgeRender
         this.renderSceneTo(camera, framebuffer, pass, renderScreen, quality, null);
     }
 
-    public void renderSceneTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality, Runnable rendering);
+    public void renderSceneTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality, Consumer<Framebuffer> rendering);
 }

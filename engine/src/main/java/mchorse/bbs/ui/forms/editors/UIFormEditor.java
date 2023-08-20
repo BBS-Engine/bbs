@@ -22,7 +22,7 @@ import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
 import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.ui.world.objects.objects.UIPropTransforms;
+import mchorse.bbs.ui.world.objects.objects.UIPropTransform;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
@@ -45,7 +45,7 @@ public class UIFormEditor extends UIElement implements IUIFormList
     public UIToggle enabled;
     public UIToggle useTarget;
     public UIStringList bone;
-    public UIPropTransforms transform;
+    public UIPropTransform transform;
 
     public UIElement editArea;
     public UIPickableFormRenderer renderer;
@@ -101,7 +101,7 @@ public class UIFormEditor extends UIElement implements IUIFormList
         });
         this.bone.background().h(16 * 6);
 
-        this.transform = new UIPropTransforms();
+        this.transform = new UIPropTransform();
         this.transform.verticalCompact();
 
         this.editArea = new UIElement();

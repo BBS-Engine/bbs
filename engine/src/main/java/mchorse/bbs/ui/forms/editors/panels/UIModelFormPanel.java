@@ -14,12 +14,12 @@ import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.input.UITexturePicker;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
 import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.ui.world.objects.objects.UIPropTransforms;
+import mchorse.bbs.ui.world.objects.objects.UIPropTransform;
 import mchorse.bbs.utils.colors.Color;
 
 public class UIModelFormPanel extends UIFormPanel<ModelForm>
 {
-    public UIPropTransforms pose;
+    public UIPropTransform pose;
     public UIStringList groups;
     public UIToggle staticPose;
     public UIColor color;
@@ -30,7 +30,7 @@ public class UIModelFormPanel extends UIFormPanel<ModelForm>
     {
         super(editor);
 
-        this.pose = new UIPropTransforms();
+        this.pose = new UIPropTransform();
         this.groups = new UIStringList((l) -> this.pickGroup(l.get(0)));
         this.groups.background().context((menu) ->
         {

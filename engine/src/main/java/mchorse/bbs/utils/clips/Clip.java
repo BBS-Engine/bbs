@@ -1,16 +1,15 @@
 package mchorse.bbs.utils.clips;
 
 import mchorse.bbs.camera.data.StructureBase;
-import mchorse.bbs.utils.clips.values.ValueEnvelope;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.ValueString;
+import mchorse.bbs.utils.clips.values.ValueEnvelope;
 
 public abstract class Clip extends StructureBase
 {
     public final ValueBoolean enabled = new ValueBoolean("enabled", true);
     public final ValueString title = new ValueString("title", "");
-    public final ValueInt color = new ValueInt("color", 0);
     public final ValueInt layer = new ValueInt("layer", 0, 0, Integer.MAX_VALUE);
     public final ValueInt tick = new ValueInt("tick", 0, 0, Integer.MAX_VALUE);
     public final ValueInt duration = new ValueInt("duration", 1, 1, Integer.MAX_VALUE);
@@ -20,7 +19,6 @@ public abstract class Clip extends StructureBase
     {
         this.register(this.enabled);
         this.register(this.title);
-        this.register(this.color);
         this.register(this.layer);
         this.register(this.tick);
         this.register(this.duration);

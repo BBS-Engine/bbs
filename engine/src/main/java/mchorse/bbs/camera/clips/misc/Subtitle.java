@@ -1,5 +1,7 @@
 package mchorse.bbs.camera.clips.misc;
 
+import mchorse.bbs.utils.Transform;
+
 public class Subtitle
 {
     public String label = "";
@@ -13,6 +15,10 @@ public class Subtitle
     public int color;
     public int backgroundColor;
     public float backgroundOffset;
+    public float shadow;
+
+    public Transform transform;
+    public float factor;
 
     public void update(String label, int x, int y, float size, float anchorX, float anchorY, int color)
     {
@@ -31,9 +37,16 @@ public class Subtitle
         this.windowY = y;
     }
 
-    public void updateBackground(int backgroundColor, float backgroundOffset)
+    public void updateBackground(int backgroundColor, float backgroundOffset, float shadow)
     {
         this.backgroundColor = backgroundColor;
         this.backgroundOffset = backgroundOffset;
+        this.shadow = shadow;
+    }
+
+    public void updateTransform(Transform transform, float factor)
+    {
+        this.transform = transform;
+        this.factor = factor;
     }
 }

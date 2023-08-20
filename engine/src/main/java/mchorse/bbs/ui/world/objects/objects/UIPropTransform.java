@@ -1,12 +1,23 @@
 package mchorse.bbs.ui.world.objects.objects;
 
-import mchorse.bbs.ui.framework.elements.input.UITransformations;
+import mchorse.bbs.ui.framework.elements.input.UITransform;
 import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.math.MathUtils;
 
-public class UIPropTransforms extends UITransformations
+import java.util.function.Consumer;
+
+public class UIPropTransform extends UITransform
 {
     private Transform transform;
+    private Consumer<Transform> callback;
+
+    public UIPropTransform()
+    {}
+
+    public UIPropTransform(Consumer<Transform> callback)
+    {
+        this.callback = callback;
+    }
 
     public void setTransform(Transform transform)
     {
@@ -21,17 +32,32 @@ public class UIPropTransforms extends UITransformations
     public void setT(double x, double y, double z)
     {
         this.transform.translate.set((float) x, (float) y, (float) z);
+
+        if (this.callback != null)
+        {
+            this.callback.accept(this.transform);
+        }
     }
 
     @Override
     public void setS(double x, double y, double z)
     {
         this.transform.scale.set((float) x, (float) y, (float) z);
+
+        if (this.callback != null)
+        {
+            this.callback.accept(this.transform);
+        }
     }
 
     @Override
     public void setR(double x, double y, double z)
     {
         this.transform.rotate.set(MathUtils.toRad((float) x), MathUtils.toRad((float) y), MathUtils.toRad((float) z));
+
+        if (this.callback != null)
+        {
+            this.callback.accept(this.transform);
+        }
     }
 }

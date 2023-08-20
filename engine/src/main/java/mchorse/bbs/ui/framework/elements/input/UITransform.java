@@ -16,7 +16,7 @@ import org.lwjgl.glfw.GLFW;
  * 
  * Must be exactly 190 by 70 (with extra 12 on top for labels)
  */
-public abstract class UITransformations extends UIElement
+public abstract class UITransform extends UIElement
 {
     public UITrackpad tx;
     public UITrackpad ty;
@@ -30,7 +30,9 @@ public abstract class UITransformations extends UIElement
 
     protected boolean vertical;
 
-    public UITransformations()
+    private boolean renderLabels = true;
+
+    public UITransform()
     {
         super();
 
@@ -118,7 +120,14 @@ public abstract class UITransformations extends UIElement
         this.wh(190, 70);
     }
 
-    public UITransformations vertical()
+    public UITransform noLabels()
+    {
+        this.renderLabels = false;
+
+        return this;
+    }
+
+    public UITransform vertical()
     {
         this.vertical = true;
 
@@ -137,7 +146,7 @@ public abstract class UITransformations extends UIElement
         return this;
     }
 
-    public UITransformations verticalCompact()
+    public UITransform verticalCompact()
     {
         this.vertical = true;
 
@@ -321,7 +330,7 @@ public abstract class UITransformations extends UIElement
     @Override
     public void render(UIContext context)
     {
-        if (!this.vertical)
+        if (!this.vertical && this.renderLabels)
         {
             context.batcher.textShadow(UIKeys.TRANSFORMS_TRANSLATE.get(), this.tx.area.x, this.tx.area.y - 12);
             context.batcher.textShadow(UIKeys.TRANSFORMS_SCALE.get(), this.sx.area.x, this.sx.area.y - 12);

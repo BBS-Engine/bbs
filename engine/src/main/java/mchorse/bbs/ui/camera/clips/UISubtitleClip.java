@@ -6,6 +6,7 @@ import mchorse.bbs.ui.camera.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.utils.UI;
+import mchorse.bbs.ui.world.objects.objects.UIPropTransform;
 
 public class UISubtitleClip extends UIClip<SubtitleClip>
 {
@@ -19,6 +20,8 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
     public UITrackpad windowY;
     public UIColor background;
     public UITrackpad backgroundOffset;
+    public UITrackpad shadow;
+    public UIPropTransform transform;
 
     public UISubtitleClip(SubtitleClip clip, IUIClipsDelegate editor)
     {
@@ -45,6 +48,10 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
 
         this.background = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.background, (background) -> background.set(c)))).withAlpha();
         this.backgroundOffset = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.backgroundOffset, (backgroundOffset) -> backgroundOffset.set(v.floatValue()))));
+        this.shadow = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.shadow, (shadow) -> shadow.set(v.floatValue()))));
+
+        this.transform = new UIPropTransform((t) -> this.editor.postUndo(this.undo(this.clip.transform, (transform) -> transform.set(t.copy()))));
+        this.transform.noLabels();
     }
 
     @Override
@@ -57,6 +64,8 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         this.panels.add(UIClip.label(IKey.lazy("Anchor")).marginTop(6), UI.row(this.anchorX, this.anchorY));
         this.panels.add(UIClip.label(IKey.lazy("Window")).marginTop(6), UI.row(this.windowX, this.windowY));
         this.panels.add(UIClip.label(IKey.lazy("Background")).marginTop(6), this.background, this.backgroundOffset);
+        this.panels.add(UIClip.label(IKey.lazy("Shadow")).marginTop(6), this.shadow);
+        this.panels.add(UIClip.label(IKey.lazy("Transform")).marginTop(6), this.transform);
     }
 
     @Override
@@ -74,5 +83,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         this.windowY.setValue(this.clip.windowY.get());
         this.background.setColor(this.clip.background.get());
         this.backgroundOffset.setValue(this.clip.backgroundOffset.get());
+        this.shadow.setValue(this.clip.shadow.get());
+        this.transform.setTransform(this.clip.transform.get());
     }
 }

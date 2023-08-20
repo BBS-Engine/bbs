@@ -17,7 +17,7 @@ public class UIPropWorldObject extends UIWorldObject<PropObject>
     public UIToggle collidable;
     public UIVector3d hitbox;
 
-    public UIPropTransforms transforms;
+    public UIPropTransform transforms;
 
     public UIPropWorldObject()
     {
@@ -39,7 +39,7 @@ public class UIPropWorldObject extends UIWorldObject<PropObject>
             }
         }).alternativeKeybinds();
 
-        this.transforms = new UIPropTransforms();
+        this.transforms = new UIPropTransform();
         this.transforms.verticalCompact();
 
         this.collidable = new UIToggle(UIKeys.WORLD_OBJECTS_OBJECTS_PROP_HITBOX, (b) -> this.object.collidable = b.getValue());

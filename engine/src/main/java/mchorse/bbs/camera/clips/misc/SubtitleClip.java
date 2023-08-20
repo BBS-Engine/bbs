@@ -1,11 +1,13 @@
 package mchorse.bbs.camera.clips.misc;
 
 import mchorse.bbs.camera.clips.CameraClip;
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
+import mchorse.bbs.camera.values.ValueTransform;
 import mchorse.bbs.settings.values.ValueFloat;
 import mchorse.bbs.settings.values.ValueInt;
+import mchorse.bbs.utils.Transform;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.utils.colors.Colors;
 
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class SubtitleClip extends CameraClip
     public ValueFloat windowY = new ValueFloat("windowY", 0.5F);
     public ValueInt background = new ValueInt("background", 0);
     public ValueFloat backgroundOffset = new ValueFloat("backgroundOffset", 2F);
+    public ValueFloat shadow = new ValueFloat("shadow", 0F);
+    public ValueTransform transform = new ValueTransform("transform", new Transform());
 
     private Subtitle subtitle = new Subtitle();
 
@@ -57,17 +61,21 @@ public class SubtitleClip extends CameraClip
         this.register(this.windowY);
         this.register(this.background);
         this.register(this.backgroundOffset);
+        this.register(this.shadow);
+        this.register(this.transform);
     }
 
     @Override
     protected void applyClip(ClipContext context, Position position)
     {
         List<Subtitle> subtitles = getSubtitles(context);
-        int color = Colors.setA(this.color.get(), this.envelope.get().factorEnabled(this.duration.get(), context.relativeTick + context.transition));
+        float factor = this.envelope.get().factorEnabled(this.duration.get(), context.relativeTick + context.transition);
+        int color = Colors.setA(this.color.get(), factor);
 
         this.subtitle.update(this.title.get(), this.x.get(), this.y.get(), this.size.get(), this.anchorX.get(), this.anchorY.get(), color);
         this.subtitle.updateWindow(this.windowX.get(), this.windowY.get());
-        this.subtitle.updateBackground(this.background.get(), this.backgroundOffset.get());
+        this.subtitle.updateBackground(this.background.get(), this.backgroundOffset.get(), this.shadow.get());
+        this.subtitle.updateTransform(this.transform.get(), factor);
         subtitles.add(this.subtitle);
     }
 

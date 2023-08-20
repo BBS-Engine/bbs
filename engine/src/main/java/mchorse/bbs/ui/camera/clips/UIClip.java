@@ -14,7 +14,6 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
-import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.framework.elements.utils.UILabel;
@@ -34,7 +33,6 @@ public abstract class UIClip <T extends Clip> extends UIElement
 
     public UIToggle enabled;
     public UITextbox title;
-    public UIColor color;
     public UITrackpad layer;
     public UITrackpad tick;
     public UITrackpad duration;
@@ -56,8 +54,6 @@ public abstract class UIClip <T extends Clip> extends UIElement
         this.enabled = new UIToggle(UIKeys.CAMERA_PANELS_ENABLED, (b) -> this.editor.postUndo(this.undo(this.clip.enabled, (enabled) -> enabled.set(b.getValue()))));
         this.title = new UITextbox(1000, (t) -> this.editor.postUndo(this.undo(this.clip.title, (title) -> title.set(t))));
         this.title.tooltip(UIKeys.CAMERA_PANELS_TITLE_TOOLTIP);
-        this.color = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.color, (color) -> color.set(c))));
-        this.color.tooltip(UIKeys.CAMERA_PANELS_COLOR_TOOLTIP);
         this.layer = new UITrackpad((v) -> this.editor.updateClipProperty(this.clip.layer, v.intValue()));
         this.layer.limit(0, Integer.MAX_VALUE, true).tooltip(UIKeys.CAMERA_PANELS_LAYER);
         this.tick = new UITrackpad((v) -> this.editor.updateClipProperty(this.clip.tick, TimeUtils.fromTime(v)));
@@ -87,7 +83,6 @@ public abstract class UIClip <T extends Clip> extends UIElement
     {
         this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_TITLE), this.title);
         this.panels.add(this.enabled.marginBottom(6));
-        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_COLOR), this.color.marginBottom(6));
         this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_METRICS), UI.row(this.layer, this.tick), this.duration);
 
         this.addEnvelopes();
@@ -133,7 +128,6 @@ public abstract class UIClip <T extends Clip> extends UIElement
 
         this.enabled.setValue(this.clip.enabled.get());
         this.title.setText(this.clip.title.get());
-        this.color.setColor(this.clip.color.get());
         this.layer.setValue(this.clip.layer.get());
         this.tick.setValue(TimeUtils.toTime(this.clip.tick.get()));
         this.duration.setValue(TimeUtils.toTime(this.clip.duration.get()));

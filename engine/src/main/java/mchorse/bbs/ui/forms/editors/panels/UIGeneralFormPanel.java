@@ -7,12 +7,12 @@ import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.ui.world.objects.objects.UIPropTransforms;
+import mchorse.bbs.ui.world.objects.objects.UIPropTransform;
 
 public class UIGeneralFormPanel extends UIFormPanel
 {
     public UITextbox name;
-    public UIPropTransforms transform;
+    public UIPropTransform transform;
 
     public UIToggle hitbox;
     public UITrackpad hitboxWidth;
@@ -26,7 +26,7 @@ public class UIGeneralFormPanel extends UIFormPanel
 
         this.name = new UITextbox(120, (t) -> this.form.name.set(t));
 
-        this.transform = new UIPropTransforms();
+        this.transform = new UIPropTransform();
         this.transform.relative(this).x(0.5F).y(1F, -10).anchor(0.5F, 1F);
 
         this.hitbox = new UIToggle(UIKeys.FORMS_EDITORS_GENERAL_HITBOX, (b) -> this.form.hitbox.set(b.getValue()));

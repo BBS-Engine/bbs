@@ -1,15 +1,14 @@
 package mchorse.bbs.ui.camera.clips.renderer;
 
-import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
-import mchorse.bbs.ui.camera.UIClips;
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.Envelope;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
+import mchorse.bbs.ui.camera.UIClips;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.Envelope;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.Keyframe;
@@ -41,8 +40,7 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
             context.batcher.dropShadow(left + 2, y + 2, right - 2, y + h - 2, 8, Colors.A75 + color, color);
         }
 
-        int clipColor = clip.color.get();
-        int color = Colors.A100 | (clipColor == 0 ? clips.getFactory().getData(clip).color : clipColor);
+        int color = Colors.A100 | clips.getFactory().getData(clip).color;
 
         if (clip.enabled.get())
         {

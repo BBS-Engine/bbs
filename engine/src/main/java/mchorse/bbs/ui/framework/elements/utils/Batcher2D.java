@@ -385,7 +385,17 @@ public class Batcher2D
 
     public void fullTexturedBox(Texture texture, float x, float y, float w, float h)
     {
-        this.texturedBox(texture, Colors.WHITE, x, y, w, h, 0, 0, w, h, (int) w, (int) h);
+        this.fullTexturedBox(texture, x, y, w, h);
+    }
+
+    public void fullTexturedBox(Texture texture, int color, float x, float y, float w, float h)
+    {
+        this.texturedBox(texture, color, x, y, w, h, 0, 0, w, h, (int) w, (int) h);
+    }
+
+    public void fullTexturedBox(Shader shader, Texture texture, int color, float x, float y, float w, float h)
+    {
+        this.texturedBox(shader, texture, color, x, y, w, h, 0, 0, w, h, (int) w, (int) h);
     }
 
     public void texturedBox(Texture texture, int color, float x, float y, float w, float h, float u1, float v1, float u2, float v2)

@@ -50,8 +50,8 @@ uniform vec2 u_screen_size;
 
 #import "studio:shaders/default/import/fragment/ssao.glsl"
 
-#define DEPTH_WEIGHT_STRENGTH 1.0
-#define MAX_ACCUMULATED_FRAMES 2.0
+#define DEPTH_WEIGHT_STRENGTH 250.0
+#define MAX_ACCUMULATED_FRAMES 3.0
 
 void main()
 {

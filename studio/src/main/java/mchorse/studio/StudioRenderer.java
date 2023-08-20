@@ -51,6 +51,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import java.nio.ByteBuffer;
+import java.util.function.Consumer;
 
 public class StudioRenderer implements IComponent
 {
@@ -337,7 +338,7 @@ public class StudioRenderer implements IComponent
         GLStates.depthMask(true);
     }
 
-    public void renderFrameToQuality(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality, Runnable rendering)
+    public void renderFrameToQuality(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality, Consumer<Framebuffer> rendering)
     {
         if (quality <= 0)
         {
@@ -372,7 +373,7 @@ public class StudioRenderer implements IComponent
 
         if (rendering != null)
         {
-            rendering.run();
+            rendering.accept(framebuffer);
         }
 
         framebuffer.unbind();

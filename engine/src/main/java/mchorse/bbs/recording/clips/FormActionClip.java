@@ -21,6 +21,8 @@ public class FormActionClip extends ActionClip
         this.register(this.form);
         this.register(this.tween);
         this.register(this.interpolation);
+
+        this.duration.set(10);
     }
 
     @Override
