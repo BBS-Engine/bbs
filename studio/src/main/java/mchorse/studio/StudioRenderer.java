@@ -164,6 +164,11 @@ public class StudioRenderer implements IComponent
         {
             stage.shader.attachUBO(this.context.getLights(), "u_lights_block");
         }
+
+        for (StudioShaders.Stage stage : this.targetShaders.stages)
+        {
+            stage.shader.attachUBO(this.context.getLights(), "u_lights_block");
+        }
     }
 
     private void createSkybox()
@@ -258,7 +263,7 @@ public class StudioRenderer implements IComponent
             texture.setWrap(GL12.GL_CLAMP_TO_EDGE);
         }
 
-        for (StudioShaders.Stage stage : this.shaders.stages)
+        for (StudioShaders.Stage stage : shaders.stages)
         {
             stage.framebuffer.applyClear();
 

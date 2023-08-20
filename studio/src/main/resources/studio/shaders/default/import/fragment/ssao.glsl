@@ -1,6 +1,6 @@
 #define SSAO_SAMPLES   16
-#define SSAO_RADIUS   0.4
-#define SSAO_STRENGTH 1.0
+#define SSAO_RADIUS   0.2
+#define SSAO_STRENGTH 0.5
 
 float computeSSAO(vec3 viewPosition, vec3 normal)
 {

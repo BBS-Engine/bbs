@@ -1,6 +1,5 @@
 package mchorse.studio;
 
-import mchorse.bbs.BBS;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.shaders.pipeline.ShaderBuffer;
@@ -10,10 +9,8 @@ import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.graphics.texture.TextureFormat;
 import mchorse.bbs.graphics.vao.VBOAttributes;
-import mchorse.bbs.resources.Link;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,11 +45,10 @@ public class StudioShaders
         this.stages.clear();
 
         /* Setup */
-        List<Texture> gbuffers = this.setupTextures(this.pipeline.gbuffers, "g_");
+        List<Texture> gbuffers = this.setupTextures(this.pipeline.gbuffers);
+        List<Texture> compositeBuffers = this.setupTextures(this.pipeline.composite);
 
         this.gbuffer = this.setup(gbuffers);
-
-        List<Texture> compositeBuffers = this.setupTextures(this.pipeline.composite, "c_");
 
         for (int i = 0; i < compositeBuffers.size(); i++)
         {
@@ -108,13 +104,13 @@ public class StudioShaders
         }
     }
 
-    private List<Texture> setupTextures(List<ShaderBuffer> buffers, String prefix)
+    private List<Texture> setupTextures(List<ShaderBuffer> buffers)
     {
         List<Texture> textures = new ArrayList<>();
 
         for (ShaderBuffer buffer : buffers)
         {
-            Texture texture = BBS.getTextures().createTexture(new Link("bbs", prefix + buffer.name));
+            Texture texture = new Texture();
 
             texture.bind();
             texture.setClearable(buffer.clear);

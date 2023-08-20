@@ -385,7 +385,7 @@ public class Batcher2D
 
     public void fullTexturedBox(Texture texture, float x, float y, float w, float h)
     {
-        this.fullTexturedBox(texture, x, y, w, h);
+        this.fullTexturedBox(texture, Colors.WHITE, x, y, w, h);
     }
 
     public void fullTexturedBox(Texture texture, int color, float x, float y, float w, float h)
