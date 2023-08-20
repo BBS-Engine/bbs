@@ -3,6 +3,7 @@ package mchorse.bbs.utils;
 import mchorse.bbs.data.DataStorageUtils;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.graphics.MatrixStack;
 import mchorse.bbs.settings.values.ValueDouble;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
@@ -48,6 +49,15 @@ public class Transform implements IMapSerializable
         matrix.scale(this.scale);
 
         return matrix;
+    }
+
+    public void apply(MatrixStack stack)
+    {
+        stack.translate(this.translate);
+        stack.rotateZ(this.rotate.z);
+        stack.rotateY(this.rotate.y);
+        stack.rotateX(this.rotate.x);
+        stack.scale(this.scale.x, this.scale.y, this.scale.z);
     }
 
     public void applyKeyframe(KeyframeChannel channel, String key, float ticks, boolean rads)

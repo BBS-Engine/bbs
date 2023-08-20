@@ -20,6 +20,9 @@ public class Subtitle
     public Transform transform;
     public float factor;
 
+    public int lineHeight;
+    public int maxWidth;
+
     public void update(String label, int x, int y, float size, float anchorX, float anchorY, int color)
     {
         this.label = label;
@@ -48,5 +51,11 @@ public class Subtitle
     {
         this.transform = transform;
         this.factor = factor;
+    }
+
+    public void updateConstraints(int lineHeight, int maxWidth)
+    {
+        this.lineHeight = lineHeight;
+        this.maxWidth = maxWidth;
     }
 }

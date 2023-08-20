@@ -6,7 +6,6 @@ import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.bridge.IBridgeRender;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.CameraWork;
-import mchorse.bbs.camera.clips.misc.Subtitle;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.camera.data.Position;
@@ -17,13 +16,7 @@ import mchorse.bbs.graphics.Draw;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.RenderingContext;
-import mchorse.bbs.graphics.shaders.CommonShaderAccess;
-import mchorse.bbs.graphics.shaders.Shader;
-import mchorse.bbs.graphics.shaders.uniforms.UniformFloat;
-import mchorse.bbs.graphics.shaders.uniforms.UniformVector2;
-import mchorse.bbs.graphics.text.TextUtils;
 import mchorse.bbs.graphics.texture.Texture;
-import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.recording.RecordComponent;
 import mchorse.bbs.recording.scene.SceneClip;
@@ -49,17 +42,14 @@ import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.resizers.IResizer;
 import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.Direction;
-import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
-import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.utils.undo.CompoundUndo;
 import mchorse.bbs.utils.undo.IUndo;
 import mchorse.bbs.utils.undo.UndoManager;
 import mchorse.bbs.world.entities.Entity;
-import org.joml.Matrix4f;
 import org.joml.Vector2i;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -79,8 +69,6 @@ import java.util.function.Supplier;
  */
 public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements IFlightSupported, IUIClipsDelegate
 {
-    public static Shader blurShader;
-
     private static Map<Class, Integer> scrolls = new HashMap<>();
 
     /**
@@ -734,7 +722,7 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
         GLStates.setupDepthFunction3D();
         this.dashboard.bridge.get(IBridgeRender.class).renderSceneTo(this.camera, framebuffer, 0, true, 0, (fb) ->
         {
-            this.renderSubtitles(context, fb, width, height);
+            UISubtitleRenderer.renderSubtitles(context, fb, SubtitleClip.getSubtitles(this.runner.getContext()));
         });
         GLStates.setupDepthFunction2D();
 
@@ -770,116 +758,6 @@ public class UICameraPanel extends UIDataDashboardPanel<CameraWork> implements I
 
             context.batcher.box(x - 4, y - 1, x + 3, y, Colors.setA(Colors.WHITE, 0.5F));
             context.batcher.box(x - 1, y - 4, x, y + 3, Colors.setA(Colors.WHITE, 0.5F));
-        }
-    }
-
-    private void renderSubtitles(UIContext context, Framebuffer main, int width, int height)
-    {
-        this.ensureShaderCreated(context.render);
-
-        width /= 2;
-        height /= 2;
-
-        List<Subtitle> subtitles = SubtitleClip.getSubtitles(this.runner.getContext());
-
-        if (subtitles.isEmpty())
-        {
-            return;
-        }
-
-        Framebuffer framebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("camera_subtitles"), (f) ->
-        {
-            Texture texture = BBS.getTextures().createTexture(Link.bbs("test"));
-
-            texture.setFilter(GL11.GL_NEAREST);
-            texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
-
-            f.deleteTextures();
-            f.attach(texture, GL30.GL_COLOR_ATTACHMENT0);
-
-            f.unbind();
-        });
-
-        Texture mainTexture = framebuffer.getMainTexture();
-        Matrix4f ortho = new Matrix4f().ortho(0, width, height, 0, -100, 100);
-
-        GLStates.cullFaces(false);
-
-        for (Subtitle subtitle : subtitles)
-        {
-            float alpha = Colors.getAlpha(subtitle.color);
-
-            if (alpha <= 0)
-            {
-                continue;
-            }
-
-            String label = TextUtils.processColoredText(subtitle.label);
-            int w = context.font.getWidth(label);
-            int h = context.font.getHeight();
-            int x = (int) (width * subtitle.windowX + subtitle.x);
-            int y = (int) (height * subtitle.windowY + subtitle.y);
-            float scale = subtitle.size;
-
-            int fw = (int) ((w + 10) * scale);
-            int fh = (int) ((h + 10) * scale);
-
-            context.render.getUBO().update(new Matrix4f().ortho(0, w + 10, 0, h + 10, -100, 100), Matrices.EMPTY_4F);
-
-            framebuffer.resize(fw, fh);
-            framebuffer.applyClear();
-
-            if (Colors.getAlpha(subtitle.backgroundColor) > 0)
-            {
-                context.batcher.textCard(context.font, label, 5, 5, Colors.setA(subtitle.color, 1F), Colors.mulA(subtitle.backgroundColor, alpha), subtitle.backgroundOffset);
-            }
-            else
-            {
-                context.batcher.textShadow(context.font, label, 5, 5, Colors.setA(subtitle.color, 1F));
-            }
-
-            context.batcher.flush();
-
-            /* Render the texture */
-            main.apply();
-
-            context.render.getUBO().update(ortho, Matrices.EMPTY_4F);
-
-            Transform transform = new Transform();
-
-            transform.lerp(subtitle.transform, 1F - subtitle.factor);
-
-            context.render.stack.push();
-            context.render.stack.translate(x, y, 0);
-            context.render.stack.translate(transform.translate);
-            context.render.stack.rotateZ(transform.rotate.z);
-            context.render.stack.rotateY(transform.rotate.y);
-            context.render.stack.rotateX(transform.rotate.x);
-            context.render.stack.scale(transform.scale.x, transform.scale.y, transform.scale.z);
-
-            UniformVector2 textureSize = blurShader.getUniform("u_texture_size", UniformVector2.class);
-            UniformFloat blur = blurShader.getUniform("u_blur", UniformFloat.class);
-
-            if (blur != null) blur.set(subtitle.shadow);
-            if (textureSize != null) textureSize.set(mainTexture.width, mainTexture.height);
-
-            context.batcher.fullTexturedBox(blurShader, mainTexture, Colors.setA(Colors.WHITE, alpha), (int) (-fw * subtitle.anchorX), (int) (-fh * subtitle.anchorX), mainTexture.width, mainTexture.height);
-            context.batcher.flush();
-
-            context.render.stack.pop();
-        }
-
-        context.render.getUBO().update(context.render.projection, Matrices.EMPTY_4F);
-
-        GLStates.cullFaces(true);
-    }
-
-    private void ensureShaderCreated(RenderingContext context)
-    {
-        if (blurShader == null)
-        {
-            blurShader = new Shader(Link.assets("shaders/ui/vertex_uv_rgba_2d-blur.glsl"), VBOAttributes.VERTEX_UV_RGBA_2D);
-            blurShader.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(context.getUBO(), "u_matrices");
         }
     }
 

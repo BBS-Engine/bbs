@@ -27,6 +27,8 @@ public class SubtitleClip extends CameraClip
     public ValueFloat backgroundOffset = new ValueFloat("backgroundOffset", 2F);
     public ValueFloat shadow = new ValueFloat("shadow", 0F);
     public ValueTransform transform = new ValueTransform("transform", new Transform());
+    public ValueInt lineHeight = new ValueInt("lineHeight", 12);
+    public ValueInt maxWidth = new ValueInt("maxWidth", 0);
 
     private Subtitle subtitle = new Subtitle();
 
@@ -63,6 +65,8 @@ public class SubtitleClip extends CameraClip
         this.register(this.backgroundOffset);
         this.register(this.shadow);
         this.register(this.transform);
+        this.register(this.lineHeight);
+        this.register(this.maxWidth);
     }
 
     @Override
@@ -76,6 +80,7 @@ public class SubtitleClip extends CameraClip
         this.subtitle.updateWindow(this.windowX.get(), this.windowY.get());
         this.subtitle.updateBackground(this.background.get(), this.backgroundOffset.get(), this.shadow.get());
         this.subtitle.updateTransform(this.transform.get(), factor);
+        this.subtitle.updateConstraints(this.lineHeight.get(), this.maxWidth.get());
         subtitles.add(this.subtitle);
     }
 

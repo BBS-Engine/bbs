@@ -7,6 +7,7 @@ import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.world.objects.objects.UIPropTransform;
+import mchorse.bbs.utils.Direction;
 
 public class UISubtitleClip extends UIClip<SubtitleClip>
 {
@@ -22,6 +23,8 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
     public UITrackpad backgroundOffset;
     public UITrackpad shadow;
     public UIPropTransform transform;
+    public UITrackpad lineHeight;
+    public UITrackpad maxWidth;
 
     public UISubtitleClip(SubtitleClip clip, IUIClipsDelegate editor)
     {
@@ -48,10 +51,15 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
 
         this.background = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.background, (background) -> background.set(c)))).withAlpha();
         this.backgroundOffset = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.backgroundOffset, (backgroundOffset) -> backgroundOffset.set(v.floatValue()))));
-        this.shadow = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.shadow, (shadow) -> shadow.set(v.floatValue()))));
+        this.shadow = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.shadow, (shadow) -> shadow.set(v.floatValue())))).limit(0);
 
         this.transform = new UIPropTransform((t) -> this.editor.postUndo(this.undo(this.clip.transform, (transform) -> transform.set(t.copy()))));
         this.transform.noLabels();
+
+        this.lineHeight = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.lineHeight, (lineHeight) -> lineHeight.set(v.intValue()))));
+        this.lineHeight.limit(0).integer().tooltip(IKey.lazy("Line height"), Direction.BOTTOM);
+        this.maxWidth = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.maxWidth, (maxWidth) -> maxWidth.set(v.intValue()))));
+        this.maxWidth.limit(0).integer().tooltip(IKey.lazy("Max width"), Direction.BOTTOM);
     }
 
     @Override
@@ -66,6 +74,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         this.panels.add(UIClip.label(IKey.lazy("Background")).marginTop(6), this.background, this.backgroundOffset);
         this.panels.add(UIClip.label(IKey.lazy("Shadow")).marginTop(6), this.shadow);
         this.panels.add(UIClip.label(IKey.lazy("Transform")).marginTop(6), this.transform);
+        this.panels.add(UIClip.label(IKey.lazy("Constraints")).marginTop(6), UI.row(this.lineHeight, this.maxWidth));
     }
 
     @Override
@@ -85,5 +94,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         this.backgroundOffset.setValue(this.clip.backgroundOffset.get());
         this.shadow.setValue(this.clip.shadow.get());
         this.transform.setTransform(this.clip.transform.get());
+        this.lineHeight.setValue(this.clip.lineHeight.get());
+        this.maxWidth.setValue(this.clip.maxWidth.get());
     }
 }
