@@ -37,6 +37,11 @@ public class RecordRecorder
 
         if (this.groups == null || this.groups.isEmpty())
         {
+            for (KeyframeChannel channel : this.record.keyframes.getMap().values())
+            {
+                channel.simplify();
+            }
+
             return;
         }
 
@@ -66,6 +71,7 @@ public class RecordRecorder
             if (channel.isEmpty())
             {
                 channel.copy(oldRecord.keyframes.getMap().get(key));
+                channel.simplify();
             }
         }
     }

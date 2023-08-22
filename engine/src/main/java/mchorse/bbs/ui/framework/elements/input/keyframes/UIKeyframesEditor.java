@@ -16,6 +16,7 @@ import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.keyframes.Keyframe;
 import mchorse.bbs.utils.keyframes.KeyframeEasing;
 import mchorse.bbs.utils.keyframes.KeyframeInterpolation;
+import mchorse.bbs.utils.keyframes.KeyframeSimplifier;
 import mchorse.bbs.utils.math.MathUtils;
 
 import java.util.ArrayList;
@@ -336,6 +337,7 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
         for (UISheet sheet : this.keyframes.getSheets())
         {
             sheet.channel.simplify();
+            sheet.channel.copy(KeyframeSimplifier.simplify(sheet.channel));
         }
     }
 
