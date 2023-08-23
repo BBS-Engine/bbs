@@ -41,7 +41,8 @@ public class LabelFormRenderer extends FormRenderer<LabelForm>
     {
         context.stack.push();
 
-        Shader shader = context.getShaders().get(VBOAttributes.VERTEX_UV_RGBA);
+        ColoredTextBuilder3D textBuilder = ITextBuilder.colored3D;
+        Shader shader = context.getShaders().get(textBuilder.getAttributes());
         VAOBuilder builder = context.getVAO().setup(shader);
         float scale = 1F / 16F;
 
@@ -56,11 +57,11 @@ public class LabelFormRenderer extends FormRenderer<LabelForm>
 
         if (this.form.max.get(context.getTransition()) <= 10)
         {
-            this.renderString(context, builder, font);
+            this.renderString(context, builder, textBuilder, font);
         }
         else
         {
-            this.renderLimitedString(context, builder, font);
+            this.renderLimitedString(context, builder, textBuilder, font);
         }
 
         GLStates.cullFaces(true);
@@ -68,7 +69,7 @@ public class LabelFormRenderer extends FormRenderer<LabelForm>
         context.stack.pop();
     }
 
-    private void renderString(RenderingContext context, VAOBuilder builder, FontRenderer text)
+    private void renderString(RenderingContext context, VAOBuilder builder, ColoredTextBuilder3D textBuilder, FontRenderer text)
     {
         String content = TextUtils.processColoredText(this.form.text.get());
         float transition = context.getTransition();
@@ -80,7 +81,6 @@ public class LabelFormRenderer extends FormRenderer<LabelForm>
         builder.begin();
 
         Color color = this.form.shadowColor.get(transition);
-        ColoredTextBuilder3D textBuilder = ITextBuilder.colored3D;
 
         if (color.a > 0)
         {
@@ -98,7 +98,7 @@ public class LabelFormRenderer extends FormRenderer<LabelForm>
         this.renderShadow(context, x, y, w, h);
     }
 
-    private void renderLimitedString(RenderingContext context, VAOBuilder builder, FontRenderer text)
+    private void renderLimitedString(RenderingContext context, VAOBuilder builder, ColoredTextBuilder3D textBuilder, FontRenderer text)
     {
         float transition = context.getTransition();
         int w = 0;
@@ -108,7 +108,7 @@ public class LabelFormRenderer extends FormRenderer<LabelForm>
 
         if (lines.size() <= 1)
         {
-            this.renderString(context, builder, text);
+            this.renderString(context, builder, textBuilder, text);
 
             return;
         }

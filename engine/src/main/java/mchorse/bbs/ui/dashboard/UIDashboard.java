@@ -15,6 +15,7 @@ import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.text.FontRenderer;
+import mchorse.bbs.graphics.text.builders.ColoredTextBuilder3D;
 import mchorse.bbs.graphics.text.builders.ITextBuilder;
 import mchorse.bbs.graphics.vao.VAO;
 import mchorse.bbs.graphics.vao.VAOBuilder;
@@ -494,6 +495,7 @@ public class UIDashboard extends UIBaseMenu
     {
         final float scale = 0.125F / 16F;
         MatrixStack stack = context.stack;
+        ColoredTextBuilder3D textBuilder = ITextBuilder.colored3D;
 
         stack.push();
         stack.translate(relative);
@@ -502,7 +504,7 @@ public class UIDashboard extends UIBaseMenu
         stack.rotateY(-this.orbit.rotation.y);
         stack.rotateX(this.orbit.rotation.x);
 
-        Shader shader = context.getShaders().get(VBOAttributes.VERTEX_UV_RGBA);
+        Shader shader = context.getShaders().get(textBuilder.getAttributes());
 
         CommonShaderAccess.setModelView(shader, stack);
 
@@ -515,7 +517,7 @@ public class UIDashboard extends UIBaseMenu
         VAOBuilder builder = context.getVAO().setup(shader, VAO.INDICES);
 
         builder.begin();
-        font.buildVAO(-font.getWidth(label) / 2, -font.getHeight() / 2, label, builder, ITextBuilder.colored3D.setup(Colors.A100));
+        font.buildVAO(-font.getWidth(label) / 2, -font.getHeight() / 2, label, builder, textBuilder.setup(Colors.A100));
         builder.render();
     }
 }

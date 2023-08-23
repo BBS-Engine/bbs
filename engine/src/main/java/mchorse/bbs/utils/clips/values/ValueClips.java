@@ -17,7 +17,6 @@ import java.util.Map;
 public class ValueClips extends ValueGroup
 {
     private static Map<Integer, Clip> clipMap = new HashMap<>();
-    private static List<Clip> clipList = new ArrayList<>();
 
     private List<Clip> clips;
     private IFactory<Clip, ClipFactoryData> factory;
@@ -82,6 +81,8 @@ public class ValueClips extends ValueGroup
                 clipMap.put(clip.layer.get(), clip);
             }
         }
+
+        List<Clip> clipList = new ArrayList<>();
 
         clipList.clear();
         clipList.addAll(clipMap.values());

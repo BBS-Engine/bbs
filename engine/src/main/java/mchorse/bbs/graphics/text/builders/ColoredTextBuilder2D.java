@@ -1,6 +1,7 @@
 package mchorse.bbs.graphics.text.builders;
 
 import mchorse.bbs.graphics.vao.VAOBuilder;
+import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.utils.colors.Color;
 
 public class ColoredTextBuilder2D extends BaseColoredTextBuilder
@@ -10,6 +11,12 @@ public class ColoredTextBuilder2D extends BaseColoredTextBuilder
         this.color.set(color);
 
         return this;
+    }
+
+    @Override
+    public VBOAttributes getAttributes()
+    {
+        return VBOAttributes.VERTEX_UV_RGBA_2D;
     }
 
     @Override

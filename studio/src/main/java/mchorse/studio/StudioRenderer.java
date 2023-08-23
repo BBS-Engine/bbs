@@ -22,6 +22,7 @@ import mchorse.bbs.graphics.shaders.uniforms.UniformMatrix4;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector2;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector3;
 import mchorse.bbs.graphics.text.FontRenderer;
+import mchorse.bbs.graphics.text.builders.ColoredTextBuilder3D;
 import mchorse.bbs.graphics.text.builders.ITextBuilder;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.graphics.ubo.ProjectionViewUBO;
@@ -564,7 +565,8 @@ public class StudioRenderer implements IComponent
         Draw.renderBox(this.context, x, y, z, w, h, d, 1, display.parent.generated ? 1 : 0, display.dirty ? 0 : 1);
 
         MatrixStack stack = this.context.stack;
-        Shader shader = this.context.getShaders().get(VBOAttributes.VERTEX_UV_RGBA);
+        ColoredTextBuilder3D textBuilder = ITextBuilder.colored3D;
+        Shader shader = this.context.getShaders().get(textBuilder.getAttributes());
         VAOBuilder builder = this.context.getVAO().setup(shader);
         String label = "(" + MathUtils.toChunk(x, s) + ", " + MathUtils.toChunk(y, s) + ", " + MathUtils.toChunk(z, s) + ")";
         float scale = 1 / 16F;
@@ -584,7 +586,7 @@ public class StudioRenderer implements IComponent
         text.bindTexture(this.context);
 
         builder.begin();
-        text.buildVAO(-text.getWidth(label) / 2, -text.getHeight() / 2, label, builder, ITextBuilder.colored3D.setup(Colors.A100));
+        text.buildVAO(-text.getWidth(label) / 2, -text.getHeight() / 2, label, builder, textBuilder.setup(Colors.A100));
         builder.render();
     }
 

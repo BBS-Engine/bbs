@@ -1,6 +1,7 @@
 package mchorse.bbs.graphics.text.builders;
 
 import mchorse.bbs.graphics.vao.VAOBuilder;
+import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.utils.colors.Color;
 import org.joml.Vector3f;
 
@@ -22,11 +23,18 @@ public class ColoredTextBuilder3D extends BaseColoredTextBuilder
     }
 
     @Override
+    public VBOAttributes getAttributes()
+    {
+        return VBOAttributes.VERTEX_NORMAL_UV_RGBA;
+    }
+
+    @Override
     public VAOBuilder put(VAOBuilder builder, float x, float y, float u, float v, float tw, float th, Color color)
     {
         if (this.multiply)
         {
             return builder.xyz(x + this.offset.x, y + this.offset.y, this.offset.z)
+                .xyz(0F, 0F, 1F)
                 .uv(u, v, tw, th)
                 .rgba(this.color.r * color.r, this.color.g * color.g, this.color.b * color.b, this.color.a * color.a);
         }
@@ -38,6 +46,9 @@ public class ColoredTextBuilder3D extends BaseColoredTextBuilder
             c = color;
         }
 
-        return builder.xyz(x + this.offset.x, y + this.offset.y, this.offset.z).uv(u, v, tw, th).rgba(c.r, c.g, c.b, this.color.a * color.a);
+        return builder.xyz(x + this.offset.x, y + this.offset.y, this.offset.z)
+            .xyz(0F, 0F, 1F)
+            .uv(u, v, tw, th)
+            .rgba(c.r, c.g, c.b, this.color.a * color.a);
     }
 }
