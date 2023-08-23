@@ -1,6 +1,5 @@
 package mchorse.studio.settings;
 
-import mchorse.studio.utils.ValueGameButtons;
 import mchorse.bbs.settings.SettingsBuilder;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueFloat;
@@ -20,8 +19,6 @@ public class StudioSettings
     {
         welcome = builder.category("rendering").getBoolean("welcome", false);
         welcome.invisible();
-
-        builder.register(new ValueGameButtons("buttons"));
 
         renderTerrain = builder.getBoolean("terrain", true);
         renderTerrainDebug = builder.getBoolean("terrain_debug", false);

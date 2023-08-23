@@ -80,6 +80,8 @@ public class UIDashboard extends UIBaseMenu
     private Entity walker;
     private boolean displayAxes = true;
 
+    private UISettingsOverlayPanel settingsPanel;
+
     public UIDashboard(IBridge bridge)
     {
         super(bridge);
@@ -108,9 +110,11 @@ public class UIDashboard extends UIBaseMenu
 
         this.main.add(this.panels);
 
+        this.settingsPanel = new UISettingsOverlayPanel();
+
         this.settings = new UIIcon(Icons.SETTINGS, (b) ->
         {
-            UIOverlay.addOverlayRight(this.context, new UISettingsOverlayPanel(), 240);
+            UIOverlay.addOverlayRight(this.context, this.settingsPanel, 240);
         });
         this.settings.tooltip(UIKeys.CONFIG_TITLE, Direction.TOP);
         this.worlds = new UIIcon(Icons.GLOBE, (b) ->

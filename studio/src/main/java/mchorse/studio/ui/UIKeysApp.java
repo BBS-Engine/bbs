@@ -24,19 +24,6 @@ public class UIKeysApp
     /* Non-creative pause menu */
     public static final IKey PAUSE_RESUME = IKey.lang("studio.ui.pause.resume");
 
-    /* Player menu */
-    public static final IKey PLAYER_EQUIPMENT = IKey.lang("studio.ui.player.equipment");
-    public static final IKey PLAYER_INVENTORY = IKey.lang("studio.ui.player.inventory");
-
-    /* ValueModButtons */
-    public static final IKey MOD = IKey.lang("studio.ui.mod_buttons.mod");
-    public static final IKey MOD_BUTTONS_HOMEPAGE = IKey.lang("studio.ui.mod_buttons.visit_homepage");
-    public static final IKey MOD_BUTTONS_SOURCE = IKey.lang("studio.ui.mod_buttons.visit_source");
-    public static final IKey MOD_NO_MOD = IKey.lang("studio.ui.mod_buttons.no_mod");
-
-    /* App's settings buttons */
-    public static final IKey BUTTONS_OPEN_FOLDER = IKey.lang("studio.ui.game_buttons.open_folder");
-
     /* Welcome UI menu */
     public static final IKey WELCOME_DISCORD = IKey.lang("studio.ui.welcome.discord");
     public static final IKey WELCOME_FEATURES_BLOCKBENCH = IKey.lang("studio.ui.welcome.main_features.blockbench");
