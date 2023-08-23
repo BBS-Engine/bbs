@@ -46,7 +46,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
     private UIScrollView replayEditor;
 
     /* Settings fields */
-    public UIToggle loops;
     public UIButton audio;
 
     /* Replay fields */
@@ -75,7 +74,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
         this.editor.add(this.replayEditor, this.replays);
 
         /* Settings options */
-        this.loops = new UIToggle(UIKeys.SCENE_LOOPS, false, (b) -> this.data.loops = b.getValue());
         this.audio = new UIButton(IKey.lazy("Pick audio..."), (b) ->
         {
             UIOverlay.addOverlay(this.getContext(), new UISoundOverlayPanel((l) ->
@@ -123,7 +121,7 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
         this.teleport.tooltip(UIKeys.SCENE_TP, Direction.LEFT);
 
         this.addOptions();
-        this.options.fields.add(this.loops, this.audio);
+        this.options.fields.add(this.audio);
 
         this.iconBar.add(this.record, this.edit, this.rename, this.teleport);
         this.overlay.namesList.setFileIcon(Icons.SCENE);
@@ -272,7 +270,6 @@ public class UIScenePanel extends UIDataDashboardPanel<Scene>
             }
 
             this.replays.setList(replays);
-            this.loops.setValue(this.data.loops);
         }
     }
 

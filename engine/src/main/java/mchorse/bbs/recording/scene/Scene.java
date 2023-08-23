@@ -29,7 +29,6 @@ public class Scene extends AbstractData
     public static final Pattern PREFIX = Pattern.compile("^(.+)_([^_]+)$");
 
     public List<Replay> replays = new ArrayList<>();
-    public boolean loops;
     public Link audio;
 
     /* Runtime properties */
@@ -187,14 +186,6 @@ public class Scene extends AbstractData
 
         for (RecordPlayer player : this.actors.values())
         {
-            if (this.loops && player.isFinished())
-            {
-                player.startPlaying(player.kill);
-                player.record.applyAction(0, player.actor);
-
-                BBSData.getRecords().players.put(player.actor, player);
-            }
-
             if ((player.isFinished() && player.playing) || player.actor.isRemoved())
             {
                 count++;
@@ -217,7 +208,7 @@ public class Scene extends AbstractData
             return;
         }
 
-        if (this.areActorsFinished() && !this.loops)
+        if (this.areActorsFinished())
         {
             this.stopPlayback();
         }
@@ -255,7 +246,7 @@ public class Scene extends AbstractData
                 firstActor = actor.actor;
             }
 
-            actor.startPlaying(tick, !this.loops);
+            actor.startPlaying(tick, true);
         }
 
         this.setPlaying(true);
@@ -611,8 +602,6 @@ public class Scene extends AbstractData
 
         this.replays.clear();
         this.replays.addAll(scene.replays);
-
-        this.loops = scene.loops;
     }
 
     @Override
@@ -626,7 +615,6 @@ public class Scene extends AbstractData
         }
 
         data.put("replays", replays);
-        data.putBool("loops", this.loops);
 
         if (this.audio != null)
         {
@@ -648,8 +636,6 @@ public class Scene extends AbstractData
             replay.fromData(replays.getMap(i));
             this.replays.add(replay);
         }
-
-        this.loops = data.getBool("loops");
 
         if (data.has("audio"))
         {
