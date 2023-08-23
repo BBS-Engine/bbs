@@ -1,26 +1,11 @@
 package mchorse.bbs.recording;
 
-import mchorse.bbs.BBSData;
-import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.world.entities.components.Component;
 
 public class RecordComponent extends Component
 {
     public RecordPlayer player;
     public RecordRecorder recorder;
-
-    @Override
-    public void entityWasRemoved()
-    {
-        super.entityWasRemoved();
-
-        if (this.recorder != null)
-        {
-            BBSData.getRecords().halt(this.entity, true, true);
-
-            this.entity.world.bridge.get(IBridgeWorld.class).sendMessage(RecordManager.EMPTY_FILENAME);
-        }
-    }
 
     @Override
     public void preUpdate()

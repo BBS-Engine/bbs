@@ -2,11 +2,11 @@ package mchorse.bbs.camera.controller;
 
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.camera.Camera;
-import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.clips.CameraClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.core.ITickable;
 import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.values.ValueClips;
 
 public abstract class CameraWorkCameraController implements ICameraController, ITickable
 {
@@ -22,9 +22,9 @@ public abstract class CameraWorkCameraController implements ICameraController, I
         this.context.bridge = bridge;
     }
 
-    public CameraWorkCameraController setWork(CameraWork work)
+    public CameraWorkCameraController setWork(ValueClips clips)
     {
-        this.context.clips = work == null ? null : work.clips;
+        this.context.clips = clips;
 
         return this;
     }

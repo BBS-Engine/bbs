@@ -383,9 +383,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         {
             this.world.update();
 
-            BBSData.getRecords().tick();
-            BBSData.getScenes().tick();
-
             if (this.cameraController.getCurrent() instanceof ITickable)
             {
                 ((ITickable) this.cameraController.getCurrent()).update();

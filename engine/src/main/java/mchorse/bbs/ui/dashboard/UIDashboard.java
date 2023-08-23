@@ -26,20 +26,18 @@ import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.ui.UISettingsOverlayPanel;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.UICameraPanel;
 import mchorse.bbs.ui.dashboard.panels.UIDashboardPanel;
 import mchorse.bbs.ui.dashboard.panels.UIDashboardPanels;
 import mchorse.bbs.ui.dashboard.textures.UITextureManagerPanel;
 import mchorse.bbs.ui.dashboard.utils.UIGraphPanel;
 import mchorse.bbs.ui.dashboard.utils.UIOrbitCamera;
+import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.font.UIFontPanel;
 import mchorse.bbs.ui.framework.UIBaseMenu;
 import mchorse.bbs.ui.framework.UIRenderingContext;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.particles.UIParticleSchemePanel;
-import mchorse.bbs.ui.recording.editor.UIRecordPanel;
-import mchorse.bbs.ui.recording.scene.UIScenePanel;
 import mchorse.bbs.ui.screenplay.UIScreenplayPanel;
 import mchorse.bbs.ui.tileset.UITileSetEditorPanel;
 import mchorse.bbs.ui.utils.UIChalkboard;
@@ -99,7 +97,7 @@ public class UIDashboard extends UIBaseMenu
         {
             this.orbitUI.setControl(this.panels.isFlightSupported());
 
-            if (e.lastPanel instanceof UICameraPanel)
+            if (e.lastPanel instanceof UIFilmPanel)
             {
                 this.orbit.setup(this.bridge.get(IBridgeCamera.class).getCamera());
             }
@@ -131,8 +129,9 @@ public class UIDashboard extends UIBaseMenu
         IKey category = UIKeys.DASHBOARD_CATEGORY;
 
         this.overlay.keys().register(Keys.TOGGLE_VISIBILITY, this.main::toggleVisible).category(category);
+        /* TODO: This
         this.overlay.keys().register(Keys.WORLD_RECORD_REPLAY, () -> this.getPanel(UIScenePanel.class).record()).category(category);
-        this.overlay.keys().register(Keys.WORLD_PLAYBACK_SCENE, () -> this.getPanel(UIScenePanel.class).plause()).category(category);
+        this.overlay.keys().register(Keys.WORLD_PLAYBACK_SCENE, () -> this.getPanel(UIScenePanel.class).plause()).category(category); */
         this.overlay.keys().register(Keys.WORLD_SAVE, this::saveWorld).category(category);
         this.overlay.keys().register(Keys.WORLD_TOGGLE_WALK, this::toggleWalkMode).category(category);
         this.overlay.keys().register(Keys.WORLD_TOGGLE_AXES, () -> this.displayAxes = !this.displayAxes).category(category);
@@ -278,9 +277,7 @@ public class UIDashboard extends UIBaseMenu
 
         this.panels.registerPanel(new UITileSetEditorPanel(this), UIKeys.TILE_SET_TITLE, Icons.STAIR);
 
-        this.panels.registerPanel(new UIScenePanel(this), UIKeys.PANELS_SCENES, Icons.SCENE).marginLeft(10);
-        this.panels.registerPanel(new UIRecordPanel(this), UIKeys.PANELS_RECORDS, Icons.EDITOR);
-        this.panels.registerPanel(new UICameraPanel(this), UIKeys.PANELS_CAMERAS, Icons.FRUSTUM);
+        this.panels.registerPanel(new UIFilmPanel(this), IKey.lazy("Films"), Icons.FILM).marginLeft(10);
         this.panels.registerPanel(new UIScreenplayPanel(this), IKey.lazy("Screenplays"), Icons.FILE);
 
         this.panels.registerPanel(new UIParticleSchemePanel(this), UIKeys.PANELS_PARTICLES, Icons.PARTICLE).marginLeft(10);

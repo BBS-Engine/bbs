@@ -28,11 +28,9 @@ public class Record extends StructureBase
 
     public Record(String id)
     {
-        this.setId(id);
+        this();
 
-        this.register(this.length);
-        this.register(this.keyframes);
-        this.register(this.clips);
+        this.setId(id);
     }
 
     public int getLength()

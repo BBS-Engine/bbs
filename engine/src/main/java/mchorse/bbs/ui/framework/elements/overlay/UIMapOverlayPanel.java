@@ -7,7 +7,7 @@ import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.game.utils.UIDataUtils;
+import mchorse.bbs.ui.utils.UIDataUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 
 import java.util.Map;

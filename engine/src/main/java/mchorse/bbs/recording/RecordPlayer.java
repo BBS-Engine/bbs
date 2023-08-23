@@ -1,11 +1,10 @@
 package mchorse.bbs.recording;
 
-import mchorse.bbs.BBSData;
+import mchorse.bbs.film.values.ValueReplay;
 import mchorse.bbs.recording.clips.ActionClip;
 import mchorse.bbs.recording.clips.FormActionClip;
 import mchorse.bbs.recording.data.Mode;
 import mchorse.bbs.recording.data.Record;
-import mchorse.bbs.recording.scene.Replay;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.world.World;
@@ -55,11 +54,6 @@ public class RecordPlayer
      * Sync mode - pauses the playback once hit the end
      */
     public boolean sync = false;
-
-    /**
-     * It might be null
-     */
-    public Replay replay;
 
     public List<String> groups;
 
@@ -141,7 +135,7 @@ public class RecordPlayer
     /**
      * Resume the paused actor
      */
-    public void resume(int tick, Replay replay)
+    public void resume(int tick, ValueReplay replay)
     {
         if (tick >= 0)
         {
@@ -156,7 +150,7 @@ public class RecordPlayer
     /**
      * Make an actor go to the given tick
      */
-    public void goTo(int tick, boolean actions, Replay replay)
+    public void goTo(int tick, boolean actions, ValueReplay replay)
     {
         int original = tick;
 
@@ -188,7 +182,7 @@ public class RecordPlayer
         }
     }
 
-    private void applyForm(int tick, Replay replay)
+    private void applyForm(int tick, ValueReplay replay)
     {
         FormActionClip action = this.seekAction(tick, FormActionClip.class);
 
@@ -279,8 +273,6 @@ public class RecordPlayer
     public void stopPlaying()
     {
         this.actor.basic.manualControl = false;
-
-        BBSData.getRecords().stop(this);
     }
 
     public void applyFrame(int tick, Entity target)

@@ -35,10 +35,10 @@ public class CameraWorkTest
     @Test
     public void testTickFinding()
     {
-        Assertions.assertEquals(100, this.work.findNextTick(70));
-        Assertions.assertEquals(60, this.work.findPreviousTick(70));
+        Assertions.assertEquals(100, this.work.clips.findNextTick(70));
+        Assertions.assertEquals(60, this.work.clips.findPreviousTick(70));
 
-        Assertions.assertEquals(50, this.work.findPreviousTick(60));
-        Assertions.assertEquals(110, this.work.findNextTick(100));
+        Assertions.assertEquals(50, this.work.clips.findPreviousTick(60));
+        Assertions.assertEquals(110, this.work.clips.findNextTick(100));
     }
 }

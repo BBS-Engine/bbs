@@ -33,7 +33,6 @@ public class StudioController implements ITickable, IMouseHandler, IKeyHandler, 
     public Entity controller;
     public Entity player;
 
-    /* ... */
     public Keybind walkForward;
     public Keybind walkBackward;
     public Keybind walkLeft;

@@ -9,7 +9,7 @@ import mchorse.bbs.settings.values.base.IParseableValue;
 import mchorse.bbs.settings.values.base.IValueUIProvider;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
-import mchorse.bbs.ui.game.utils.UIDataUtils;
+import mchorse.bbs.ui.utils.UIDataUtils;
 
 import java.util.Arrays;
 import java.util.List;

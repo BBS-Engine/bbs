@@ -24,21 +24,6 @@ dependencies {
 
 /* Utility tasks */
 
-task scriptingJavadocsJson(type: Exec) {
-    // Writing gradle tasks is PAIN, if you'll ever would need to run this, clone and build:
-    // https://github.com/mchorse/jsonDoclet
-    //
-    // Rename it to jsonDoclet.jar, and place it in the root folder of the project
-    executable "javadoc"
-    args "-doclet", "mchorse.utils.doclets.JsonDoclet", "-docletpath", "./jsonDoclet.jar", "-sourcepath", "./src/main/java/", "-subpackages", "mchorse.bbs.game.scripts.user:mchorse.bbs.game.scripts.ui.components:mchorse.bbs.game.scripts.ui.graphics"
-
-    doLast {
-        file("src/main/resources/assets/docs.json").setText(file("docs.json").text)
-    }
-}
-
-tasks.processResources.dependsOn(scriptingJavadocsJson)
-
 task copyRuntimeLibs(type: Copy) {
     from sourceSets.main.compileClasspath
     into "build/dependencies/"

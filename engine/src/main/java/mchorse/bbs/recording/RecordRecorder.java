@@ -1,14 +1,11 @@
 package mchorse.bbs.recording;
 
-import mchorse.bbs.BBSData;
 import mchorse.bbs.recording.data.Mode;
 import mchorse.bbs.recording.data.Record;
-import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.world.entities.Entity;
 
 import java.util.List;
-import java.util.Map;
 
 public class RecordRecorder
 {
@@ -50,6 +47,7 @@ public class RecordRecorder
 
     private void copyOldKeyframes()
     {
+        /* TODO:
         Record oldRecord = BBSData.getRecords().load(this.record.getId());
 
         if (oldRecord == null)
@@ -74,5 +72,6 @@ public class RecordRecorder
                 channel.simplify();
             }
         }
+        */
     }
 }

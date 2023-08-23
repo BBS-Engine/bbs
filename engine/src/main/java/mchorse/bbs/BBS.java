@@ -11,6 +11,7 @@ import mchorse.bbs.camera.clips.converters.IdleToKeyframeConverter;
 import mchorse.bbs.camera.clips.converters.IdleToPathConverter;
 import mchorse.bbs.camera.clips.converters.PathToDollyConverter;
 import mchorse.bbs.camera.clips.converters.PathToKeyframeConverter;
+import mchorse.bbs.camera.clips.misc.AudioClip;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.camera.clips.modifiers.AngleClip;
 import mchorse.bbs.camera.clips.modifiers.DragClip;
@@ -62,8 +63,6 @@ import mchorse.bbs.graphics.vao.VAOManager;
 import mchorse.bbs.l10n.L10n;
 import mchorse.bbs.recording.RecordComponent;
 import mchorse.bbs.recording.clips.FormActionClip;
-import mchorse.bbs.recording.scene.AudioClip;
-import mchorse.bbs.recording.scene.SceneClip;
 import mchorse.bbs.resources.AssetProvider;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.resources.packs.ExternalAssetsSourcePack;
@@ -72,20 +71,21 @@ import mchorse.bbs.settings.Settings;
 import mchorse.bbs.settings.SettingsBuilder;
 import mchorse.bbs.settings.SettingsManager;
 import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.camera.clips.UIAngleClip;
-import mchorse.bbs.ui.camera.clips.UICircularClip;
-import mchorse.bbs.ui.camera.clips.UIDollyClip;
-import mchorse.bbs.ui.camera.clips.UIDragClip;
-import mchorse.bbs.ui.camera.clips.UIIdleClip;
-import mchorse.bbs.ui.camera.clips.UIKeyframeClip;
-import mchorse.bbs.ui.camera.clips.UILookClip;
-import mchorse.bbs.ui.camera.clips.UIMathClip;
-import mchorse.bbs.ui.camera.clips.UIOrbitClip;
-import mchorse.bbs.ui.camera.clips.UIPathClip;
-import mchorse.bbs.ui.camera.clips.UIRemapperClip;
-import mchorse.bbs.ui.camera.clips.UIShakeClip;
-import mchorse.bbs.ui.camera.clips.UISubtitleClip;
-import mchorse.bbs.ui.camera.clips.UITranslateClip;
+import mchorse.bbs.ui.film.clips.UIAngleClip;
+import mchorse.bbs.ui.film.clips.UIAudioClip;
+import mchorse.bbs.ui.film.clips.UICircularClip;
+import mchorse.bbs.ui.film.clips.UIDollyClip;
+import mchorse.bbs.ui.film.clips.UIDragClip;
+import mchorse.bbs.ui.film.clips.UIIdleClip;
+import mchorse.bbs.ui.film.clips.UIKeyframeClip;
+import mchorse.bbs.ui.film.clips.UILookClip;
+import mchorse.bbs.ui.film.clips.UIMathClip;
+import mchorse.bbs.ui.film.clips.UIOrbitClip;
+import mchorse.bbs.ui.film.clips.UIPathClip;
+import mchorse.bbs.ui.film.clips.UIRemapperClip;
+import mchorse.bbs.ui.film.clips.UIShakeClip;
+import mchorse.bbs.ui.film.clips.UISubtitleClip;
+import mchorse.bbs.ui.film.clips.UITranslateClip;
 import mchorse.bbs.ui.font.format.UIBaseFontFormat;
 import mchorse.bbs.ui.font.format.UIColorFontFormat;
 import mchorse.bbs.ui.forms.editors.forms.UIBillboardForm;
@@ -96,9 +96,7 @@ import mchorse.bbs.ui.forms.editors.forms.UILightForm;
 import mchorse.bbs.ui.forms.editors.forms.UIModelForm;
 import mchorse.bbs.ui.forms.editors.forms.UIParticleForm;
 import mchorse.bbs.ui.forms.editors.forms.UIStructureForm;
-import mchorse.bbs.ui.recording.editor.actions.UIFormActionPanel;
-import mchorse.bbs.ui.recording.scene.UIAudioClip;
-import mchorse.bbs.ui.recording.scene.UISceneClip;
+import mchorse.bbs.ui.recording.editor.actions.UIFormAction;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockCombined;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockEach;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockFactory;
@@ -492,15 +490,12 @@ public class BBS
             .register(Link.bbs("look"), LookClip.class, new ClipFactoryData(Icons.VISIBLE, 0x197fff, UILookClip.class))
             .register(Link.bbs("orbit"), OrbitClip.class, new ClipFactoryData(Icons.GLOBE, 0xd82253, UIOrbitClip.class))
             .register(Link.bbs("remapper"), RemapperClip.class, new ClipFactoryData(Icons.TIME, 0x222222, UIRemapperClip.class))
-
-            .register(Link.bbs("scene"), SceneClip.class, new ClipFactoryData(Icons.SCENE, 0xff1493, UISceneClip.class))
             .register(Link.bbs("audio"), AudioClip.class, new ClipFactoryData(Icons.SOUND, 0xffc825, UIAudioClip.class))
-
             .register(Link.bbs("subtitle"), SubtitleClip.class, new ClipFactoryData(Icons.FONT, 0x888899, UISubtitleClip.class));
 
         /* Register actions */
         factoryActions = new MapFactory<Clip, ClipFactoryData>()
-            .register(Link.bbs("form"), FormActionClip.class, new ClipFactoryData(Icons.POSE, 0xde2e9f, UIFormActionPanel.class));
+            .register(Link.bbs("form"), FormActionClip.class, new ClipFactoryData(Icons.POSE, 0xde2e9f, UIFormAction.class));
 
         /* Register forms */
         forms = new FormArchitect();
