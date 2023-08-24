@@ -1,22 +1,17 @@
 package mchorse.bbs.recording.values;
 
-import mchorse.bbs.data.types.BaseType;
-import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.game.entities.components.PlayerComponent;
-import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.utils.keyframes.KeyframeChannel;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.BasicComponent;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-public class ValueFrames extends BaseValue
+public class ValueFrames extends ValueGroup
 {
     public static final String GROUP_POSITION = "position";
     public static final String GROUP_ROTATION = "rotation";
@@ -27,61 +22,54 @@ public class ValueFrames extends BaseValue
 
     public static final Set<String> GROUPS = new HashSet<>(Arrays.asList(GROUP_POSITION, GROUP_ROTATION, GROUP_DPAD, GROUP_LEFT_STICK, GROUP_RIGHT_STICK, GROUP_TRIGGERS));
 
-    public KeyframeChannel x = new KeyframeChannel();
-    public KeyframeChannel y = new KeyframeChannel();
-    public KeyframeChannel z = new KeyframeChannel();
+    public final ValueKeyframeChannel x = new ValueKeyframeChannel("x");
+    public final ValueKeyframeChannel y = new ValueKeyframeChannel("y");
+    public final ValueKeyframeChannel z = new ValueKeyframeChannel("z");
 
-    public KeyframeChannel vX = new KeyframeChannel();
-    public KeyframeChannel vY = new KeyframeChannel();
-    public KeyframeChannel vZ = new KeyframeChannel();
+    public final ValueKeyframeChannel vX = new ValueKeyframeChannel("vX");
+    public final ValueKeyframeChannel vY = new ValueKeyframeChannel("vY");
+    public final ValueKeyframeChannel vZ = new ValueKeyframeChannel("vZ");
 
-    public KeyframeChannel yaw = new KeyframeChannel();
-    public KeyframeChannel pitch = new KeyframeChannel();
-    public KeyframeChannel bodyYaw = new KeyframeChannel();
+    public final ValueKeyframeChannel yaw = new ValueKeyframeChannel("yaw");
+    public final ValueKeyframeChannel pitch = new ValueKeyframeChannel("pitch");
+    public final ValueKeyframeChannel bodyYaw = new ValueKeyframeChannel("bodyYaw");
 
-    public KeyframeChannel sneaking = new KeyframeChannel();
-    public KeyframeChannel grounded = new KeyframeChannel();
-    public KeyframeChannel fall = new KeyframeChannel();
+    public final ValueKeyframeChannel sneaking = new ValueKeyframeChannel("sneaking");
+    public final ValueKeyframeChannel grounded = new ValueKeyframeChannel("grounded");
+    public final ValueKeyframeChannel fall = new ValueKeyframeChannel("fall");
 
-    public KeyframeChannel stickLeftX = new KeyframeChannel();
-    public KeyframeChannel stickLeftY = new KeyframeChannel();
-    public KeyframeChannel stickRightX = new KeyframeChannel();
-    public KeyframeChannel stickRightY = new KeyframeChannel();
-    public KeyframeChannel triggerLeft = new KeyframeChannel();
-    public KeyframeChannel triggerRight = new KeyframeChannel();
+    public final ValueKeyframeChannel stickLeftX = new ValueKeyframeChannel("stick_lx");
+    public final ValueKeyframeChannel stickLeftY = new ValueKeyframeChannel("stick_ly");
+    public final ValueKeyframeChannel stickRightX = new ValueKeyframeChannel("stick_rx");
+    public final ValueKeyframeChannel stickRightY = new ValueKeyframeChannel("stick_ry");
+    public final ValueKeyframeChannel triggerLeft = new ValueKeyframeChannel("trigger_l");
+    public final ValueKeyframeChannel triggerRight = new ValueKeyframeChannel("trigger_r");
 
-    public KeyframeChannel gamepad = new KeyframeChannel();
-
-    private Map<String, KeyframeChannel> keyframes = new HashMap<>();
+    public final ValueKeyframeChannel gamepad = new ValueKeyframeChannel("gamepad");
 
     public ValueFrames(String id)
     {
         super(id);
 
-        this.keyframes.put("x", this.x);
-        this.keyframes.put("y", this.y);
-        this.keyframes.put("z", this.z);
-        this.keyframes.put("vX", this.vX);
-        this.keyframes.put("vY", this.vY);
-        this.keyframes.put("vZ", this.vZ);
-        this.keyframes.put("yaw", this.yaw);
-        this.keyframes.put("pitch", this.pitch);
-        this.keyframes.put("bodyYaw", this.bodyYaw);
-        this.keyframes.put("sneaking", this.sneaking);
-        this.keyframes.put("grounded", this.grounded);
-        this.keyframes.put("fall", this.fall);
-        this.keyframes.put("stick_lx", this.stickLeftX);
-        this.keyframes.put("stick_ly", this.stickLeftY);
-        this.keyframes.put("stick_rx", this.stickRightX);
-        this.keyframes.put("stick_ry", this.stickRightY);
-        this.keyframes.put("trigger_l", this.triggerLeft);
-        this.keyframes.put("trigger_r", this.triggerRight);
-        this.keyframes.put("gamepad", this.gamepad);
-    }
-
-    public Map<String, KeyframeChannel> getMap()
-    {
-        return Collections.unmodifiableMap(this.keyframes);
+        this.add(this.x);
+        this.add(this.y);
+        this.add(this.z);
+        this.add(this.vX);
+        this.add(this.vY);
+        this.add(this.vZ);
+        this.add(this.yaw);
+        this.add(this.pitch);
+        this.add(this.bodyYaw);
+        this.add(this.sneaking);
+        this.add(this.grounded);
+        this.add(this.fall);
+        this.add(this.stickLeftX);
+        this.add(this.stickLeftY);
+        this.add(this.stickRightX);
+        this.add(this.stickRightY);
+        this.add(this.triggerLeft);
+        this.add(this.triggerRight);
+        this.add(this.gamepad);
     }
 
     public void record(int tick, Entity entity, List<String> groups)
@@ -99,25 +87,25 @@ public class ValueFrames extends BaseValue
         /* Position and rotation */
         if (position)
         {
-            this.x.insert(tick, basic.position.x);
-            this.y.insert(tick, basic.position.y);
-            this.z.insert(tick, basic.position.z);
+            this.x.get().insert(tick, basic.position.x);
+            this.y.get().insert(tick, basic.position.y);
+            this.z.get().insert(tick, basic.position.z);
 
-            this.vX.insert(tick, basic.velocity.x);
-            this.vY.insert(tick, basic.velocity.y);
-            this.vZ.insert(tick, basic.velocity.z);
+            this.vX.get().insert(tick, basic.velocity.x);
+            this.vY.get().insert(tick, basic.velocity.y);
+            this.vZ.get().insert(tick, basic.velocity.z);
 
-            this.fall.insert(tick, basic.fall);
+            this.fall.get().insert(tick, basic.fall);
         }
 
-        this.sneaking.insert(tick, basic.sneak ? 1D : 0D);
-        this.grounded.insert(tick, basic.grounded ? 1D : 0D);
+        this.sneaking.get().insert(tick, basic.sneak ? 1D : 0D);
+        this.grounded.get().insert(tick, basic.grounded ? 1D : 0D);
 
         if (rotation)
         {
-            this.yaw.insert(tick, basic.rotation.y);
-            this.pitch.insert(tick, basic.rotation.x);
-            this.bodyYaw.insert(tick, basic.rotation.z);
+            this.yaw.get().insert(tick, basic.rotation.y);
+            this.pitch.get().insert(tick, basic.rotation.x);
+            this.bodyYaw.get().insert(tick, basic.rotation.z);
         }
 
         PlayerComponent component = entity.get(PlayerComponent.class);
@@ -126,23 +114,23 @@ public class ValueFrames extends BaseValue
         {
             if (leftStick)
             {
-                this.stickLeftX.insert(tick, component.sticks[0]);
-                this.stickLeftY.insert(tick, component.sticks[1]);
+                this.stickLeftX.get().insert(tick, component.sticks[0]);
+                this.stickLeftY.get().insert(tick, component.sticks[1]);
             }
 
             if (rightStick)
             {
-                this.stickRightX.insert(tick, component.sticks[2]);
-                this.stickRightY.insert(tick, component.sticks[3]);
+                this.stickRightX.get().insert(tick, component.sticks[2]);
+                this.stickRightY.get().insert(tick, component.sticks[3]);
             }
 
             if (triggers)
             {
-                this.triggerLeft.insert(tick, component.sticks[4]);
-                this.triggerRight.insert(tick, component.sticks[5]);
+                this.triggerLeft.get().insert(tick, component.sticks[4]);
+                this.triggerRight.get().insert(tick, component.sticks[5]);
             }
 
-            if (dpad) this.gamepad.insert(tick, component.gamepad);
+            if (dpad) this.gamepad.get().insert(tick, component.gamepad);
         }
     }
 
@@ -162,20 +150,20 @@ public class ValueFrames extends BaseValue
 
         if (position)
         {
-            basic.setPosition(this.x.interpolate(tick), this.y.interpolate(tick), this.z.interpolate(tick));
-            basic.velocity.set((float) this.vX.interpolate(tick), (float) this.vY.interpolate(tick), (float) this.vZ.interpolate(tick));
-            basic.fall = (float) this.fall.interpolate(tick);
+            basic.setPosition(this.x.get().interpolate(tick), this.y.get().interpolate(tick), this.z.get().interpolate(tick));
+            basic.velocity.set((float) this.vX.get().interpolate(tick), (float) this.vY.get().interpolate(tick), (float) this.vZ.get().interpolate(tick));
+            basic.fall = (float) this.fall.get().interpolate(tick);
         }
 
         if (rotation)
         {
-            basic.setRotation((float) this.pitch.interpolate(tick), (float) this.yaw.interpolate(tick));
-            basic.rotation.z = (float) this.bodyYaw.interpolate(tick);
+            basic.setRotation((float) this.pitch.get().interpolate(tick), (float) this.yaw.get().interpolate(tick));
+            basic.rotation.z = (float) this.bodyYaw.get().interpolate(tick);
         }
 
         /* Motion and fall distance */
-        basic.sneak = this.sneaking.interpolate(tick) != 0D;
-        basic.grounded = this.grounded.interpolate(tick) != 0D;
+        basic.sneak = this.sneaking.get().interpolate(tick) != 0D;
+        basic.grounded = this.grounded.get().interpolate(tick) != 0D;
 
         PlayerComponent component = entity.get(PlayerComponent.class);
 
@@ -183,63 +171,26 @@ public class ValueFrames extends BaseValue
         {
             if (leftStick)
             {
-                component.sticks[0] = (float) this.stickLeftX.interpolate(tick);
-                component.sticks[1] = (float) this.stickLeftY.interpolate(tick);
+                component.sticks[0] = (float) this.stickLeftX.get().interpolate(tick);
+                component.sticks[1] = (float) this.stickLeftY.get().interpolate(tick);
             }
 
             if (rightStick)
             {
-                component.sticks[2] = (float) this.stickRightX.interpolate(tick);
-                component.sticks[3] = (float) this.stickRightY.interpolate(tick);
+                component.sticks[2] = (float) this.stickRightX.get().interpolate(tick);
+                component.sticks[3] = (float) this.stickRightY.get().interpolate(tick);
             }
 
             if (triggers)
             {
-                component.sticks[4] = (float) this.triggerLeft.interpolate(tick);
-                component.sticks[5] = (float) this.triggerRight.interpolate(tick);
+                component.sticks[4] = (float) this.triggerLeft.get().interpolate(tick);
+                component.sticks[5] = (float) this.triggerRight.get().interpolate(tick);
             }
 
             if (dpad)
             {
-                component.gamepad = (int) this.gamepad.interpolate(tick);
+                component.gamepad = (int) this.gamepad.get().interpolate(tick);
             }
-        }
-    }
-
-    public void copy(ValueFrames frames)
-    {
-        for (String key : this.keyframes.keySet())
-        {
-            this.keyframes.get(key).copy(frames.keyframes.get(key));
-        }
-    }
-
-    @Override
-    public BaseType toData()
-    {
-        MapType data = new MapType();
-
-        for (Map.Entry<String, KeyframeChannel> entry : this.keyframes.entrySet())
-        {
-            data.put(entry.getKey(), entry.getValue().toData());
-        }
-
-        return data;
-    }
-
-    @Override
-    public void fromData(BaseType data)
-    {
-        if (!data.isMap())
-        {
-            return;
-        }
-
-        MapType map = data.asMap();
-
-        for (Map.Entry<String, KeyframeChannel> entry : this.keyframes.entrySet())
-        {
-            entry.getValue().fromData(map.getList(entry.getKey()));
         }
     }
 }

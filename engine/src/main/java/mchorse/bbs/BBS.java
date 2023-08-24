@@ -96,7 +96,7 @@ import mchorse.bbs.ui.forms.editors.forms.UILightForm;
 import mchorse.bbs.ui.forms.editors.forms.UIModelForm;
 import mchorse.bbs.ui.forms.editors.forms.UIParticleForm;
 import mchorse.bbs.ui.forms.editors.forms.UIStructureForm;
-import mchorse.bbs.ui.recording.editor.actions.UIFormAction;
+import mchorse.bbs.ui.film.clips.UIFormAction;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockCombined;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockEach;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockFactory;

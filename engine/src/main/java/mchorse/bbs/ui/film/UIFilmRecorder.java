@@ -26,9 +26,14 @@ public class UIFilmRecorder extends UIElement
         this.noCulling();
     }
 
+    private UIContext getUIContext()
+    {
+        return ((UIElement) this.editor).getContext();
+    }
+
     private VideoRecorder getRecorder()
     {
-        return this.getContext().menu.bridge.get(IBridgeVideoRecorder.class).getVideoRecorder();
+        return this.getUIContext().menu.bridge.get(IBridgeVideoRecorder.class).getVideoRecorder();
     }
 
     private boolean isRunning()
@@ -44,6 +49,7 @@ public class UIFilmRecorder extends UIElement
     public void startRecording(int duration, Framebuffer framebuffer)
     {
         VideoRecorder recorder = this.getRecorder();
+        UIContext context = this.getUIContext();
 
         if (this.isRunning() || recorder.isRecording() || duration <= 0)
         {
@@ -58,12 +64,10 @@ public class UIFilmRecorder extends UIElement
         }
         catch (Exception e)
         {
-            UIOverlay.addOverlay(this.getContext(), new UIMessageOverlayPanel(UIKeys.ERROR, IKey.raw(e.getMessage())));
+            UIOverlay.addOverlay(context, new UIMessageOverlayPanel(UIKeys.ERROR, IKey.raw(e.getMessage())));
 
             return;
         }
-
-        UIContext context = this.getContext();
 
         this.editor.setCursor(0);
         this.editor.togglePlayback();
@@ -86,7 +90,7 @@ public class UIFilmRecorder extends UIElement
                 this.editor.togglePlayback();
             }
 
-            UIContext context = this.getContext();
+            UIContext context = this.getUIContext();
 
             context.menu.main.setEnabled(true);
             context.render.postRunnable(this::removeFromParent);
@@ -98,32 +102,10 @@ public class UIFilmRecorder extends UIElement
     {
         super.render(context);
 
-        this.minema(this.editor.getCursor());
-    }
-
-    /**
-     * Update the minema recording logic
-     */
-    public void minema(int ticks)
-    {
-        if (!this.getRecorder().isRecording())
-        {
-            return;
-        }
+        int ticks = this.editor.getCursor();
 
         if (!this.getRecorder().isRecording())
         {
-            this.stop();
-
-            UIContext context = this.getContext();
-
-            context.render.postRunnable(() ->
-            {
-                UIMessageOverlayPanel panel = new UIMessageOverlayPanel(UIKeys.ERROR, UIKeys.CAMERA_RECORDING_PREMATURE_STOP);
-
-                UIOverlay.addOverlay(context, panel);
-            });
-
             return;
         }
 

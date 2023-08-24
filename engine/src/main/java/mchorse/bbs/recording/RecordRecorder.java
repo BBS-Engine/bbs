@@ -1,8 +1,9 @@
 package mchorse.bbs.recording;
 
+import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.recording.data.Mode;
 import mchorse.bbs.recording.data.Record;
-import mchorse.bbs.utils.keyframes.KeyframeChannel;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.world.entities.Entity;
 
 import java.util.List;
@@ -34,9 +35,9 @@ public class RecordRecorder
 
         if (this.groups == null || this.groups.isEmpty())
         {
-            for (KeyframeChannel channel : this.record.keyframes.getMap().values())
+            for (BaseValue channel : this.record.keyframes.getAll())
             {
-                channel.simplify();
+                ((ValueKeyframeChannel) channel).get().simplify();
             }
 
             return;

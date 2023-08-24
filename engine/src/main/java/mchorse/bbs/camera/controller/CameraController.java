@@ -3,6 +3,7 @@ package mchorse.bbs.camera.controller;
 import mchorse.bbs.BBS;
 import mchorse.bbs.audio.SoundManager;
 import mchorse.bbs.camera.Camera;
+import mchorse.bbs.core.ITickable;
 import mchorse.bbs.graphics.window.Window;
 import org.joml.Vector3d;
 
@@ -78,7 +79,7 @@ public class CameraController implements ICameraController
         this.updateCurrent();
     }
 
-    public void update()
+    public void updateSoundPosition()
     {
         Camera camera = this.camera;
         SoundManager sounds = BBS.getSounds();
@@ -93,6 +94,14 @@ public class CameraController implements ICameraController
         }
 
         this.prevPosition.set(camera.position);
+    }
+
+    public void tick()
+    {
+        if (this.current instanceof ITickable)
+        {
+            ((ITickable) this.current).update();
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package mchorse.bbs.ui.film.utils.keyframes;
 
 import mchorse.bbs.camera.clips.overwrite.KeyframeClip;
+import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
@@ -40,6 +41,26 @@ public class UICameraDopeSheetEditor extends UICameraKeyframesEditor<UIDopeSheet
         {
             this.valueChannels.add(clip.channels[i]);
             sheets.add(new UISheet(String.valueOf(i), TITLES[i + 1], COLORS[i], clip.channels[i].get()));
+        }
+
+        this.frameButtons.setVisible(false);
+    }
+
+    public void setChannels(List<ValueKeyframeChannel> channels, List<Integer> colors)
+    {
+        List<UISheet> sheets = this.keyframes.sheets;
+
+        sheets.clear();
+        this.keyframes.clearSelection();
+
+        this.valueChannels.clear();
+
+        for (int i = 0; i < channels.size(); i++)
+        {
+            ValueKeyframeChannel channel = channels.get(i);
+
+            this.valueChannels.add(channel);
+            sheets.add(new UISheet(channel.getId(), IKey.raw(channel.getId()), colors.get(i), channel.get()));
         }
 
         this.frameButtons.setVisible(false);

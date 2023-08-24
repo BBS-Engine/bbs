@@ -1,4 +1,4 @@
-package mchorse.bbs.ui.recording.editor.actions;
+package mchorse.bbs.ui.film.clips;
 
 import mchorse.bbs.recording.clips.FormActionClip;
 import mchorse.bbs.ui.UIKeys;

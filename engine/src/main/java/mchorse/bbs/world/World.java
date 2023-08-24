@@ -11,7 +11,6 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.events.register.RegisterArchitectBlueprintsEvent;
-import mchorse.bbs.recording.capturing.DamageControlManager;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.IOUtils;
@@ -57,7 +56,6 @@ public class World implements ITickable, IDisposable
     public ChunkView view;
     public ChunkManager chunks;
     public Generator generator;
-    public DamageControlManager damageManager = new DamageControlManager();
 
     public final IBridge bridge;
 
