@@ -2,13 +2,13 @@ package mchorse.bbs.ui.framework.elements.overlay;
 
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.UIDataUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.colors.Colors;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -36,7 +36,7 @@ public abstract class UIMapOverlayPanel <T extends IMapSerializable> extends UIS
 
         this.strings.context((menu) ->
         {
-            menu.shadow().action(Icons.ADD, this.addContext, this::addState);
+            menu.action(Icons.ADD, this.addContext, this::addState);
 
             if (!this.strings.list.isDeselected())
             {

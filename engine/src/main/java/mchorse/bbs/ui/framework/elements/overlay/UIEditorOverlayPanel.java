@@ -1,11 +1,11 @@
 package mchorse.bbs.ui.framework.elements.overlay;
 
-import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.input.list.UIList;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.colors.Colors;
 
 /**
  * General purpose overlay list editor of generic data
@@ -24,7 +24,7 @@ public abstract class UIEditorOverlayPanel <T> extends UIOverlayPanel
         this.list = this.createList();
         this.list.context((menu) ->
         {
-            menu.shadow().action(Icons.ADD, this.getAddLabel(), this::addItem);
+            menu.action(Icons.ADD, this.getAddLabel(), this::addItem);
 
             if (!this.list.getList().isEmpty())
             {

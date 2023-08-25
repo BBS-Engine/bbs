@@ -47,7 +47,7 @@ public class UIBlockModelFactoriesOverlayPanel extends UIOverlayPanel
         this.list.sorting().afterDrop((l) -> this.menu.dirty()).setList(menu.getBlockSet().factories);
         this.list.context((m) ->
         {
-            m.shadow().action(Icons.COPY, UIKeys.TILE_SET_LIST_CONTEXT_COPY, () ->
+            m.action(Icons.COPY, UIKeys.TILE_SET_LIST_CONTEXT_COPY, () ->
             {
                 Window.setClipboard(BBS.getFactoryBlockModels().toData(this.menu.panel.model), "_BlockModelFactoriesCopy");
             });
@@ -80,8 +80,6 @@ public class UIBlockModelFactoriesOverlayPanel extends UIOverlayPanel
     {
         this.getContext().replaceContextMenu((menu) ->
         {
-            menu.shadow();
-
             for (Link key : BBS.getFactoryBlockModels().getKeys())
             {
                 BlockModelFactoryData data = BBS.getFactoryBlockModels().getData(key);
@@ -106,8 +104,6 @@ public class UIBlockModelFactoriesOverlayPanel extends UIOverlayPanel
     {
         this.getContext().replaceContextMenu((menu) ->
         {
-            menu.shadow();
-
             for (Link key : BBS.getFactoryBlockModels().getKeys())
             {
                 BlockModelFactoryData data = BBS.getFactoryBlockModels().getData(key);

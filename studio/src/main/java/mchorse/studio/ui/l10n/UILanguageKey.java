@@ -1,6 +1,5 @@
 package mchorse.studio.ui.l10n;
 
-import mchorse.studio.ui.UIKeysApp;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
@@ -16,6 +15,7 @@ import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.colors.Colors;
+import mchorse.studio.ui.UIKeysApp;
 
 public class UILanguageKey extends UIElement
 {
@@ -65,7 +65,6 @@ public class UILanguageKey extends UIElement
 
         this.context((menu) ->
         {
-            menu.shadow();
             menu.action(Icons.COPY, UIKeysApp.LANGUAGE_EDITOR_CONTEXT_COPY_KEY, () -> Window.setClipboard(this.langKey.key));
             menu.action(Icons.COPY, UIKeysApp.LANGUAGE_EDITOR_CONTEXT_COPY_ORIGINAL, () -> Window.setClipboard(this.original));
 

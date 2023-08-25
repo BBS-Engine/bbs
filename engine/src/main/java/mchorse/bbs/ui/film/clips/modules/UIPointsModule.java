@@ -47,7 +47,7 @@ public class UIPointsModule extends UIAbstractModule
 
         this.context((menu) ->
         {
-            menu.shadow().action(Icons.ADD, UIKeys.CAMERA_PANELS_POINTS_CONTEXT_ADD, this::addPoint);
+            menu.action(Icons.ADD, UIKeys.CAMERA_PANELS_POINTS_CONTEXT_ADD, this::addPoint);
             menu.action(Icons.REMOVE, UIKeys.CAMERA_PANELS_POINTS_CONTEXT_REMOVE, this::removePoint);
             menu.action(Icons.SHIFT_BACKWARD, UIKeys.CAMERA_PANELS_POINTS_CONTEXT_MOVE_BACK, this::moveBack);
             menu.action(Icons.SHIFT_FORWARD, UIKeys.CAMERA_PANELS_POINTS_CONTEXT_MOVE_FORWARD, this::moveForward);

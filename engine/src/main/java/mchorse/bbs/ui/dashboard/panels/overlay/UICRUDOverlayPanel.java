@@ -32,7 +32,7 @@ public abstract class UICRUDOverlayPanel extends UIOverlayPanel
         this.callback = callback;
 
         this.add = new UIIcon(Icons.ADD, this::addNewData);
-        this.add.context((menu) -> menu.shadow().action(Icons.FOLDER, UIKeys.PANELS_MODALS_ADD_FOLDER_TITLE, this::addNewFolder));
+        this.add.context((menu) -> menu.action(Icons.FOLDER, UIKeys.PANELS_MODALS_ADD_FOLDER_TITLE, this::addNewFolder));
         this.dupe = new UIIcon(Icons.DUPE, this::dupeData);
         this.rename = new UIIcon(Icons.EDIT, this::renameData);
         this.remove = new UIIcon(Icons.REMOVE, this::removeData);

@@ -113,7 +113,7 @@ public class UICameraUtils
 
     public static void pointContextMenu(ContextMenuManager menu, IUIClipsDelegate editor, ValuePoint value)
     {
-        menu.shadow().action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_POINT, Colors.POSITIVE, () ->
+        menu.action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_POINT, Colors.POSITIVE, () ->
         {
             Map<String, Double> map = new LinkedHashMap<>();
 
@@ -158,7 +158,7 @@ public class UICameraUtils
 
     public static void angleContextMenu(ContextMenuManager menu, IUIClipsDelegate editor, ValueAngle value)
     {
-        menu.shadow().action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_ANGLE, Colors.INACTIVE, () ->
+        menu.action(Icons.COPY, UIKeys.CAMERA_PANELS_CONTEXT_COPY_ANGLE, Colors.INACTIVE, () ->
         {
             Map<String, Double> map = new LinkedHashMap<>();
 

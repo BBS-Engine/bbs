@@ -16,18 +16,10 @@ public class ContextMenuManager
 {
     public List<ContextAction> actions = new ArrayList<>();
     public Consumer<UIRemovedEvent> onClose;
-    public boolean shadow;
 
     public ContextMenuManager onClose(Consumer<UIRemovedEvent> onClose)
     {
         this.onClose = onClose;
-
-        return this;
-    }
-
-    public ContextMenuManager shadow()
-    {
-        this.shadow = true;
 
         return this;
     }
@@ -69,7 +61,6 @@ public class ContextMenuManager
         UISimpleContextMenu contextMenu = new UISimpleContextMenu();
 
         contextMenu.actions.add(this.actions);
-        contextMenu.shadow = this.shadow;
         contextMenu.getEvents().register(UIRemovedEvent.class, this.onClose);
 
         for (int i = 0; i < this.actions.size(); i++)

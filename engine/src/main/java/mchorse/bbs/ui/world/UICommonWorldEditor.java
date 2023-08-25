@@ -49,7 +49,7 @@ public abstract class UICommonWorldEditor <T> extends UIWorldPanel
         {
             MapType type = Window.getClipboardMap("_Copy" + this.getClass().getSimpleName());
 
-            m.shadow().action(Icons.ADD, UIKeys.WORLD_CONTEXT_ADD, this::addObject);
+            m.action(Icons.ADD, UIKeys.WORLD_CONTEXT_ADD, this::addObject);
 
             if (this.object != null) m.action(Icons.COPY, UIKeys.WORLD_CONTEXT_COPY, this::copyObject);
 

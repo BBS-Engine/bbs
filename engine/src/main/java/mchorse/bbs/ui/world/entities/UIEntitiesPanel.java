@@ -95,7 +95,7 @@ public class UIEntitiesPanel extends UICommonWorldEditor<Entity>
 
             for (Link key : world.architect.getKeys())
             {
-                menu.shadow().action(Icons.ADD, UIKeys.ENTITIES_CONTEXT_ADD.format(UIKeys.C_ENTITIES.get(key)), () ->
+                menu.action(Icons.ADD, UIKeys.ENTITIES_CONTEXT_ADD.format(UIKeys.C_ENTITIES.get(key)), () ->
                 {
                     this.addObject(world.architect.create(key));
                 });

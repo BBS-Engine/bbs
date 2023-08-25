@@ -9,7 +9,6 @@ import mchorse.bbs.utils.colors.Colors;
 public class UISimpleContextMenu extends UIContextMenu
 {
     public UIList<ContextAction> actions;
-    public boolean shadow;
 
     private ContextAction action;
 
@@ -65,12 +64,9 @@ public class UISimpleContextMenu extends UIContextMenu
     @Override
     public void render(UIContext context)
     {
-        if (this.shadow)
-        {
-            int color = BBSSettings.primaryColor.get();
+        int color = BBSSettings.primaryColor.get();
 
-            context.batcher.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
-        }
+        context.batcher.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
 
         super.render(context);
     }

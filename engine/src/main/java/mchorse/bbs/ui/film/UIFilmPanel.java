@@ -105,7 +105,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.runner = new RunnerCameraController(dashboard.bridge);
 
         this.main = new UIElement();
-        this.main.relative(this.editor).w(0.5F).h(1F);
+        this.main.relative(this.editor).w(0.75F).h(1F);
 
         this.recorder = new UIFilmRecorder(this);
         this.timeline = new UIClips(this, BBS.getFactoryClips());
@@ -618,10 +618,6 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         {
             return;
         }
-
-        int primary = BBSSettings.primaryColor.get();
-
-        this.main.area.render(context.batcher, Colors.mulRGB(primary | Colors.A100, 0.6F));
 
         context.batcher.flush();
 

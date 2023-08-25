@@ -43,7 +43,7 @@ public class UIModelFormPanel extends UIFormPanel<ModelForm>
 
             if (data != null)
             {
-                menu.shadow().action(Icons.PASTE, IKey.lazy("Paste pose"), () ->
+                menu.action(Icons.PASTE, IKey.lazy("Paste pose"), () ->
                 {
                     this.form.pose.fromData(data);
 

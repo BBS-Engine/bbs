@@ -49,7 +49,7 @@ public class UIFontOverlayPanel extends UIOverlayPanel
         this.glyphsList = new UIGlyphList((l) -> this.panel.pickGlyph(l.get(0)));
         this.glyphsList.context((menu) ->
         {
-            menu.shadow().action(Icons.ADD, UIKeys.FONT_EDITOR_CONTEXT_ADD, () -> this.addGlyph(null));
+            menu.action(Icons.ADD, UIKeys.FONT_EDITOR_CONTEXT_ADD, () -> this.addGlyph(null));
 
             if (this.glyphsList.isSelected())
             {

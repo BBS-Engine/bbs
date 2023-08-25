@@ -1,14 +1,14 @@
 package mchorse.bbs.ui.dashboard.panels.overlay;
 
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.utils.manager.FolderManager;
-import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.manager.FolderManager;
+import mchorse.bbs.utils.manager.data.AbstractData;
 
 import java.io.File;
 import java.util.function.Consumer;
@@ -26,7 +26,7 @@ public class UIDataOverlayPanel <T extends AbstractData> extends UICRUDOverlayPa
 
         this.namesList.context((menu) ->
         {
-            menu.shadow().action(Icons.FOLDER, UIKeys.PANELS_MODALS_ADD_FOLDER_TITLE, this::addNewFolder);
+            menu.action(Icons.FOLDER, UIKeys.PANELS_MODALS_ADD_FOLDER_TITLE, this::addNewFolder);
 
             if (this.panel.getData() != null)
             {

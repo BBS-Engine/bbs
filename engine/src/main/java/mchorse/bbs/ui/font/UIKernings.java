@@ -40,7 +40,7 @@ public class UIKernings extends UIElement
 
         uiKerning.context((menu) ->
         {
-            menu.shadow().action(Icons.REMOVE, UIKeys.FONT_EDITOR_KERNING_REMOVE, () -> this.removeKerning(uiKerning));
+            menu.action(Icons.REMOVE, UIKeys.FONT_EDITOR_KERNING_REMOVE, () -> this.removeKerning(uiKerning));
         });
 
         this.editor.add(uiKerning);

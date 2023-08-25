@@ -55,7 +55,7 @@ public class UIWorldObjectsPanel extends UICommonWorldEditor<WorldObject> implem
         {
             for (Link key : BBS.getFactoryWorldObjects().getKeys())
             {
-                menu.shadow().action(Icons.ADD, UIKeys.WORLD_OBJECTS_CONTEXT_ADD.format(UIKeys.C_WORLD_OBJECT.get(key)), () ->
+                menu.action(Icons.ADD, UIKeys.WORLD_OBJECTS_CONTEXT_ADD.format(UIKeys.C_WORLD_OBJECT.get(key)), () ->
                 {
                     this.addObject(BBS.getFactoryWorldObjects().create(key));
                 });

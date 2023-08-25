@@ -37,7 +37,7 @@ public class UIFontFormatsOverlayPanel extends UIOverlayPanel
             {
                 for (String key : BBS.getFactoryFontFormats().getStringKeys())
                 {
-                    menu.shadow().action(Icons.ADD, UIKeys.FONT_EDITOR_CODES_CONTEXT_ADD.format(UIKeys.C_FONT_FORMAT.get(key)), () ->
+                    menu.action(Icons.ADD, UIKeys.FONT_EDITOR_CODES_CONTEXT_ADD.format(UIKeys.C_FONT_FORMAT.get(key)), () ->
                     {
                         char available = this.getAvailableControlCharacter();
                         IFontFormat format = BBS.getFactoryFontFormats().create(Link.create(key));
@@ -83,7 +83,7 @@ public class UIFontFormatsOverlayPanel extends UIOverlayPanel
             formatUI.fill((BaseFontFormat) format);
             formatUI.context((menu) ->
             {
-                menu.shadow().action(Icons.REMOVE, UIKeys.FONT_EDITOR_CODES_CONTEXT_REMOVE, Colors.NEGATIVE, () ->
+                menu.action(Icons.REMOVE, UIKeys.FONT_EDITOR_CODES_CONTEXT_REMOVE, Colors.NEGATIVE, () ->
                 {
                     this.font.formats.remove(format.getControlCharacter());
                     this.list.remove(formatUI);
