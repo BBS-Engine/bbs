@@ -1,13 +1,7 @@
 package mchorse.bbs.film.values;
 
-import mchorse.bbs.BBS;
 import mchorse.bbs.forms.FormUtils;
-import mchorse.bbs.recording.clips.ActionClip;
-import mchorse.bbs.recording.values.ValueForm;
-import mchorse.bbs.recording.values.ValueFrames;
 import mchorse.bbs.settings.values.ValueGroup;
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.values.ValueClips;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.FormComponent;
 
@@ -18,7 +12,6 @@ public class ValueReplay extends ValueGroup
 {
     public final ValueForm form = new ValueForm("form");
     public final ValueFrames keyframes = new ValueFrames("keyframes");
-    public final ValueClips clips = new ValueClips("clips", BBS.getFactoryActions());
 
     public ValueReplay(String id)
     {
@@ -26,7 +19,6 @@ public class ValueReplay extends ValueGroup
 
         this.add(this.form);
         this.add(this.keyframes);
-        this.add(this.clips);
     }
 
     void remapId(String id)
@@ -52,16 +44,5 @@ public class ValueReplay extends ValueGroup
     public void applyFrame(int tick, Entity actor, List<String> groups)
     {
         this.keyframes.apply(tick, actor, groups);
-    }
-
-    public void applyAction(int tick, Entity target)
-    {
-        for (Clip clip : this.clips.get())
-        {
-            if (clip.tick.get() == tick && clip instanceof ActionClip)
-            {
-                ((ActionClip) clip).apply(target, 0, true);
-            }
-        }
     }
 }

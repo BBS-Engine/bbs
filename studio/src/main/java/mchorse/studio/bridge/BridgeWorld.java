@@ -3,7 +3,6 @@ package mchorse.studio.bridge;
 import mchorse.bbs.BBS;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.graphics.window.Window;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.voxel.storage.ChunkFactory;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.WorldMetadata;
@@ -55,11 +54,5 @@ public class BridgeWorld extends BaseBridge implements IBridgeWorld
         this.engine.cameraController.camera.updatePerspectiveProjection(Window.width, Window.height);
 
         return true;
-    }
-
-    @Override
-    public void sendMessage(IKey message)
-    {
-        this.engine.screen.getHUD().sendMessage(message);
     }
 }

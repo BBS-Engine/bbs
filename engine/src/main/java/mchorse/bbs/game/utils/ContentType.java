@@ -7,7 +7,6 @@ import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.particles.UIParticleSchemePanel;
-import mchorse.bbs.ui.screenplay.UIScreenplayPanel;
 import mchorse.bbs.utils.manager.IManager;
 import mchorse.bbs.utils.manager.data.AbstractData;
 
@@ -17,7 +16,6 @@ import java.util.function.Supplier;
 public class ContentType
 {
     public static final ContentType PARTICLES = new ContentType("particles", UIKeys.OVERLAYS_PARTICLE_EFFECT, BBSData::getParticles, (dashboard) -> dashboard.getPanel(UIParticleSchemePanel.class));
-    public static final ContentType SCREENPLAY = new ContentType("screenplay", UIKeys.OVERLAYS_PARTICLE_EFFECT, BBSData::getScreenplays, (dashboard) -> dashboard.getPanel(UIScreenplayPanel.class));
     public static final ContentType FILMS = new ContentType("films", UIKeys.OVERLAYS_PARTICLE_EFFECT, BBSData::getFilms, (dashboard) -> dashboard.getPanel(UIFilmPanel.class));
 
     private final String id;

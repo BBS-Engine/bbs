@@ -4,10 +4,7 @@ import mchorse.bbs.data.DataStorageUtils;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.graphics.MatrixStack;
-import mchorse.bbs.settings.values.ValueDouble;
 import mchorse.bbs.utils.joml.Matrices;
-import mchorse.bbs.utils.keyframes.KeyframeChannel;
-import mchorse.bbs.utils.math.MathUtils;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -58,81 +55,6 @@ public class Transform implements IMapSerializable
         stack.rotateY(this.rotate.y);
         stack.rotateX(this.rotate.x);
         stack.scale(this.scale.x, this.scale.y, this.scale.z);
-    }
-
-    public void applyKeyframe(KeyframeChannel channel, String key, float ticks, boolean rads)
-    {
-        float value = (float) channel.interpolate(ticks);
-
-        if (key.endsWith(".x")) this.translate.x = value;
-        else if (key.endsWith(".y")) this.translate.y = value;
-        else if (key.endsWith(".z")) this.translate.z = value;
-        else if (key.endsWith(".sx")) this.scale.x = value;
-        else if (key.endsWith(".sy")) this.scale.y = value;
-        else if (key.endsWith(".sz")) this.scale.z = value;
-        else if (key.endsWith(".rx")) this.rotate.x = rads ? value / 180F * MathUtils.PI : value;
-        else if (key.endsWith(".ry")) this.rotate.y = rads ? value / 180F * MathUtils.PI : value;
-        else if (key.endsWith(".rz")) this.rotate.z = rads ? value / 180F * MathUtils.PI : value;
-    }
-
-    public boolean fillDefaultValue(ValueDouble value, String key, boolean rads)
-    {
-        if (key.endsWith(".x"))
-        {
-            value.set((double) this.translate.x);
-
-            return true;
-        }
-        else if (key.endsWith(".y"))
-        {
-            value.set((double) this.translate.y);
-
-            return true;
-        }
-        else if (key.endsWith(".z"))
-        {
-            value.set((double) this.translate.z);
-
-            return true;
-        }
-        else if (key.endsWith(".sx"))
-        {
-            value.set((double) this.scale.x);
-
-            return true;
-        }
-        else if (key.endsWith(".sy"))
-        {
-            value.set((double) this.scale.y);
-
-            return true;
-        }
-        else if (key.endsWith(".sz"))
-        {
-            value.set((double) this.scale.z);
-
-            return true;
-        }
-        else if (key.endsWith(".rx"))
-        {
-            value.set((double) (rads ? this.rotate.x / MathUtils.PI * 180F : this.rotate.x));
-
-            return true;
-        }
-        else if (key.endsWith(".ry"))
-        {
-            value.set((double) (rads ? this.rotate.y / MathUtils.PI * 180F : this.rotate.y));
-
-            return true;
-        }
-        else if (key.endsWith(".rz"))
-        {
-            value.set((double) (rads ? this.rotate.z / MathUtils.PI * 180F : this.rotate.z));
-
-            return true;
-        }
-
-        return false;
     }
 
     @Override

@@ -11,6 +11,8 @@ import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.data.StructureBase;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.film.Film;
+import mchorse.bbs.film.tts.ElevenLabsAPI;
+import mchorse.bbs.film.tts.TTSGenerateResult;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
@@ -25,11 +27,15 @@ import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.IFlightSupported;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.film.clips.UIClip;
+import mchorse.bbs.ui.film.screenplay.FountainSyntaxHighlighter;
 import mchorse.bbs.ui.film.utils.undo.ValueChangeUndo;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
+import mchorse.bbs.ui.framework.elements.input.text.UITextEditor;
+import mchorse.bbs.ui.framework.elements.overlay.UIMessageFolderOverlayPanel;
+import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.utils.UIDraggable;
 import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
 import mchorse.bbs.ui.utils.Area;
@@ -70,11 +76,14 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public UIClips timeline;
     public UIReplaysEditor replays;
 
+    public UITextEditor screenplay;
+
     public UIIcon plause;
     public UIIcon record;
     public UIIcon openVideos;
     public UIIcon openCamera;
     public UIIcon openScene;
+    public UIIcon openScreenplay;
 
     public UITrackpad length;
 
@@ -106,6 +115,15 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.replays.relative(this.main).full();
         this.replays.setVisible(false);
 
+        this.screenplay = new UITextEditor((t) -> this.postUndo(this.createUndo(this.data.screenplay, (screenplay) -> screenplay.set(t))));
+        this.screenplay.highlighter(new FountainSyntaxHighlighter()).background().relative(this.editor).full();
+        this.screenplay.relative(this.main).full();
+        this.screenplay.wrap().setVisible(false);
+        this.screenplay.context((menu) ->
+        {
+            menu.action(Icons.SOUND, IKey.lazy("Generate audio (ElevenLabs)"), this::generateTTS);
+        });
+
         /* Setup elements */
         this.plause = new UIIcon(Icons.PLAY, (b) -> this.togglePlayback());
         this.plause.tooltip(UIKeys.CAMERA_EDITOR_KEYS_EDITOR_PLAUSE, Direction.BOTTOM);
@@ -117,11 +135,19 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         {
             this.replays.setVisible(true);
             this.timeline.setVisible(false);
+            this.screenplay.setVisible(false);
         });
         this.openCamera = new UIIcon(Icons.FRUSTUM, (b) ->
         {
             this.replays.setVisible(false);
             this.timeline.setVisible(true);
+            this.screenplay.setVisible(false);
+        });
+        this.openScreenplay = new UIIcon(Icons.FILE, (b) ->
+        {
+            this.replays.setVisible(false);
+            this.timeline.setVisible(false);
+            this.screenplay.setVisible(true);
         });
 
         this.draggable = new UIDraggable((context) ->
@@ -146,13 +172,13 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
         this.addOptions();
         this.options.fields.add(UI.label(IKey.lazy("Length")), this.length);
-        this.iconBar.add(this.plause, this.record, this.openVideos, this.openScene, this.openCamera);
+        this.iconBar.add(this.plause, this.record, this.openVideos, this.openScene, this.openCamera, this.openScreenplay);
 
         /* Adding everything */
         UIRenderable renderable = new UIRenderable(this::renderIcons);
 
         this.editor.add(this.main, renderable);
-        this.main.add(this.timeline, this.replays, this.draggable);
+        this.main.add(this.timeline, this.replays, this.screenplay, this.draggable);
         this.overlay.namesList.setFileIcon(Icons.FILM);
 
         /* Register keybinds */
@@ -176,6 +202,47 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.keys().register(Keys.JUMP_BACKWARD, () -> this.setCursor(this.getCursor() - BBSSettings.editorJump.get())).active(active).category(editor);
 
         this.fill(null);
+    }
+
+    private void generateTTS()
+    {
+        try
+        {
+            ElevenLabsAPI.generate(this.data, (result) ->
+            {
+                if (result.status == TTSGenerateResult.Status.INITIALIZED)
+                {
+                    this.getContext().notify(IKey.lazy("Starting TTS generation!"), Colors.BLUE | Colors.A100);
+                }
+                else if (result.status == TTSGenerateResult.Status.GENERATED)
+                {
+                    this.getContext().notify(IKey.lazy(result.message), Colors.BLUE | Colors.A100);
+                }
+                else if (result.status == TTSGenerateResult.Status.ERROR)
+                {
+                    this.getContext().notify(IKey.lazy("An error has occurred when generating a voice line: " + result.message), Colors.RED | Colors.A100);
+                }
+                else if (result.status == TTSGenerateResult.Status.TOKEN_MISSING)
+                {
+                    this.getContext().notify(IKey.lazy("You haven't specified a token in BBS' settings!"), Colors.RED | Colors.A100);
+                }
+                else if (result.status == TTSGenerateResult.Status.VOICE_IS_MISSING)
+                {
+                    this.getContext().notify(!result.missingVoices.isEmpty()
+                                    ? IKey.lazy("A voice " + result.missingVoices.get(0) + " provided in the screenplay isn't available!")
+                                    : IKey.lazy("A list of voices couldn't get loaded!"),
+                            Colors.RED | Colors.A100);
+                }
+                else /* SUCCESS */
+                {
+                    UIOverlay.addOverlay(this.getContext(), new UIMessageFolderOverlayPanel(UIKeys.SUCCESS, IKey.lazy("Voice lines were successfully generated!"), result.folder));
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public Framebuffer getFramebuffer()
@@ -328,6 +395,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.record.setEnabled(data != null);
         this.openCamera.setEnabled(data != null);
         this.openScene.setEnabled(data != null);
+        this.openScreenplay.setEnabled(data != null);
 
         this.runner.setWork(data == null ? null : data.camera);
         this.timeline.setClips(data == null ? null : data.camera);
@@ -739,7 +807,8 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
         if (this.data != null)
         {
-            this.length.setValue(data.length.get());
+            this.length.setValue(this.data.length.get());
+            this.screenplay.setText(this.data.screenplay.get());
         }
     }
 

@@ -1,6 +1,5 @@
 package mchorse.bbs.ui.film;
 
-import mchorse.bbs.BBS;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.values.ValueReplay;
@@ -34,8 +33,6 @@ public class UIReplaysEditor extends UIElement
     public UIKeyframesEditor keyframeEditor;
 
     /* Clips */
-    public UIClips timeline;
-
     private UIFilmPanel delegate;
     private Film film;
     private ValueReplay replay;
@@ -84,11 +81,7 @@ public class UIReplaysEditor extends UIElement
         this.channels.relative(this.keyframes).x(1F, -100).w(100).h(1F);
         this.keyframes.add(this.channels);
 
-        /* Clips */
-        this.timeline = new UIClips(this.delegate, BBS.getFactoryActions());
-        this.timeline.relative(this.editor).y(0.5F).w(1F).hTo(this.editor.area, 1F);
-
-        this.editor.add(this.keyframes, this.timeline);
+        this.editor.add(this.keyframes);
         this.add(this.replays, this.editor);
     }
 
@@ -204,7 +197,6 @@ public class UIReplaysEditor extends UIElement
         this.channels.clear();
 
         this.keyframes.setVisible(replay != null);
-        this.timeline.setVisible(replay != null);
 
         if (replay != null)
         {
@@ -217,8 +209,6 @@ public class UIReplaysEditor extends UIElement
 
             this.channels.sort();
             this.channels.setIndex(0);
-
-            this.timeline.setClips(this.replay == null ? null : this.replay.clips);
 
             this.selectChannels(this.channels.getCurrent());
         }

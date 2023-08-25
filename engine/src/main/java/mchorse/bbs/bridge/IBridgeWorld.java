@@ -14,6 +14,4 @@ public interface IBridgeWorld
     }
 
     public boolean loadWorld(String world);
-
-    public void sendMessage(IKey message);
 }

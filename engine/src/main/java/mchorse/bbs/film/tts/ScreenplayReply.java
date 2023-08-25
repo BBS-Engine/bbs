@@ -1,4 +1,4 @@
-package mchorse.bbs.screenplay;
+package mchorse.bbs.film.tts;
 
 public class ScreenplayReply
 {

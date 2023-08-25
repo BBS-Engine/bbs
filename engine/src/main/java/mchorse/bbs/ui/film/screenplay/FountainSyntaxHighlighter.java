@@ -1,7 +1,7 @@
-package mchorse.bbs.ui.screenplay;
+package mchorse.bbs.ui.film.screenplay;
 
+import mchorse.bbs.film.Film;
 import mchorse.bbs.graphics.text.FontRenderer;
-import mchorse.bbs.screenplay.Screenplay;
 import mchorse.bbs.ui.framework.elements.input.text.highlighting.HighlightedTextLine;
 import mchorse.bbs.ui.framework.elements.input.text.highlighting.ISyntaxHighlighter;
 import mchorse.bbs.ui.framework.elements.input.text.highlighting.SyntaxStyle;
@@ -36,7 +36,7 @@ public class FountainSyntaxHighlighter implements ISyntaxHighlighter
     {
         List<TextSegment> list = new ArrayList<>();
 
-        if (Screenplay.CHARACTER.matcher(line).matches())
+        if (Film.CHARACTER.matcher(line).matches())
         {
             list.add(new TextSegment(line, this.style.primary, font.getWidth(line)));
         }
@@ -44,7 +44,7 @@ public class FountainSyntaxHighlighter implements ISyntaxHighlighter
         {
             list.add(new TextSegment(line, this.style.secondary, font.getWidth(line)));
         }
-        else if (Screenplay.METADATA.matcher(line).matches())
+        else if (Film.METADATA.matcher(line).matches())
         {
             list.add(new TextSegment(line, this.style.numbers, font.getWidth(line)));
         }

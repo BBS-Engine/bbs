@@ -61,8 +61,6 @@ import mchorse.bbs.graphics.text.format.WaveFontFormat;
 import mchorse.bbs.graphics.texture.TextureManager;
 import mchorse.bbs.graphics.vao.VAOManager;
 import mchorse.bbs.l10n.L10n;
-import mchorse.bbs.recording.RecordComponent;
-import mchorse.bbs.recording.clips.FormActionClip;
 import mchorse.bbs.resources.AssetProvider;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.resources.packs.ExternalAssetsSourcePack;
@@ -96,7 +94,6 @@ import mchorse.bbs.ui.forms.editors.forms.UILightForm;
 import mchorse.bbs.ui.forms.editors.forms.UIModelForm;
 import mchorse.bbs.ui.forms.editors.forms.UIParticleForm;
 import mchorse.bbs.ui.forms.editors.forms.UIStructureForm;
-import mchorse.bbs.ui.film.clips.UIFormAction;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockCombined;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockEach;
 import mchorse.bbs.ui.tileset.panels.UIModelBlockFactory;
@@ -176,7 +173,6 @@ public class BBS
     /* Data factories */
     private static MapFactory<WorldObject, Class<? extends UIWorldObject>> factoryWorldObjects;
     private static MapFactory<Clip, ClipFactoryData> factoryClips;
-    private static MapFactory<Clip, ClipFactoryData> factoryActions;
     private static MapFactory<BlockModelFactory, BlockModelFactoryData> factoryBlockModels;
     private static MapFactory<Generator, Void> factoryGenerators;
     private static MapFactory<Component, Class<? extends UIEntityComponent>> factoryEntityComponents;
@@ -328,11 +324,6 @@ public class BBS
     public static MapFactory<Clip, ClipFactoryData> getFactoryClips()
     {
         return factoryClips;
-    }
-
-    public static MapFactory<Clip, ClipFactoryData> getFactoryActions()
-    {
-        return factoryActions;
     }
 
     public static MapFactory<BlockModelFactory, BlockModelFactoryData> getFactoryBlockModels()
@@ -493,10 +484,6 @@ public class BBS
             .register(Link.bbs("audio"), AudioClip.class, new ClipFactoryData(Icons.SOUND, 0xffc825, UIAudioClip.class))
             .register(Link.bbs("subtitle"), SubtitleClip.class, new ClipFactoryData(Icons.FONT, 0x888899, UISubtitleClip.class));
 
-        /* Register actions */
-        factoryActions = new MapFactory<Clip, ClipFactoryData>()
-            .register(Link.bbs("form"), FormActionClip.class, new ClipFactoryData(Icons.POSE, 0xde2e9f, UIFormAction.class));
-
         /* Register forms */
         forms = new FormArchitect();
         forms
@@ -538,8 +525,7 @@ public class BBS
         factoryEntityComponents = new MapFactory<Component, Class<? extends UIEntityComponent>>()
             .register(Link.bbs("basic"), BasicComponent.class, UIBasicEntityComponent.class)
             .register(Link.bbs("collision"), CollisionComponent.class, null)
-            .register(Link.bbs("form"), FormComponent.class, UIFormEntityComponent.class)
-            .register(Link.bbs("record"), RecordComponent.class, null);
+            .register(Link.bbs("form"), FormComponent.class, UIFormEntityComponent.class);
 
         /* Register entity components */
         factoryFontFormats = new MapFactory<IFontFormat, Class<? extends UIBaseFontFormat>>()

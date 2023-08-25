@@ -65,8 +65,6 @@ public class UIScreen implements IEngine, IFileDropListener
 
             this.showMenu(new UIWelcomeMenu(this.engine));
         }
-
-        world.getEventBus().register(this.hud);
     }
 
     private String getLanguageCode()
@@ -290,7 +288,6 @@ public class UIScreen implements IEngine, IFileDropListener
     private void renderHUD(int w, int h)
     {
         this.engine.controller.renderHUD(this.context, w, h);
-        this.hud.renderMessages(this.context, w, h);
 
         BBS.events.post(new RenderHUDEvent(this.context, w, h));
 

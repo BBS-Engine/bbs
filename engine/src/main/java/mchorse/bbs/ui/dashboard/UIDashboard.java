@@ -38,7 +38,6 @@ import mchorse.bbs.ui.framework.UIRenderingContext;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.particles.UIParticleSchemePanel;
-import mchorse.bbs.ui.screenplay.UIScreenplayPanel;
 import mchorse.bbs.ui.tileset.UITileSetEditorPanel;
 import mchorse.bbs.ui.utils.UIChalkboard;
 import mchorse.bbs.ui.utils.UIUtils;
@@ -278,7 +277,6 @@ public class UIDashboard extends UIBaseMenu
         this.panels.registerPanel(new UITileSetEditorPanel(this), UIKeys.TILE_SET_TITLE, Icons.STAIR);
 
         this.panels.registerPanel(new UIFilmPanel(this), IKey.lazy("Films"), Icons.FILM).marginLeft(10);
-        this.panels.registerPanel(new UIScreenplayPanel(this), IKey.lazy("Screenplays"), Icons.FILE);
 
         this.panels.registerPanel(new UIParticleSchemePanel(this), UIKeys.PANELS_PARTICLES, Icons.PARTICLE).marginLeft(10);
         this.panels.registerPanel(new UIFontPanel(this), UIKeys.FONT_EDITOR_TITLE, Icons.FONT);

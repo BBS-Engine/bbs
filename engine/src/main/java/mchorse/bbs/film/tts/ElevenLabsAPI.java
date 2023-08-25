@@ -1,4 +1,4 @@
-package mchorse.bbs.screenplay.tts;
+package mchorse.bbs.film.tts;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
@@ -6,8 +6,7 @@ import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.screenplay.Screenplay;
-import mchorse.bbs.screenplay.ScreenplayReply;
+import mchorse.bbs.film.Film;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -33,13 +32,13 @@ public class ElevenLabsAPI implements Runnable
     private static Map<String, String> voices = new HashMap<>();
 
     private final String token;
-    private final Screenplay screenplay;
+    private final Film screenplay;
     private final Consumer<TTSGenerateResult> callback;
 
-    public ElevenLabsAPI(String token, Screenplay screenplay, Consumer<TTSGenerateResult> callback)
+    public ElevenLabsAPI(String token, Film film, Consumer<TTSGenerateResult> callback)
     {
         this.token = token;
-        this.screenplay = screenplay;
+        this.screenplay = film;
         this.callback = callback;
     }
 
@@ -106,9 +105,9 @@ public class ElevenLabsAPI implements Runnable
     }
 
     /**
-     * Generate audio voice lines from a screenplay using ElevenLabs API
+     * Generate audio voice lines from a film using ElevenLabs API
      */
-    public static void generate(Screenplay screenplay, Consumer<TTSGenerateResult> callback)
+    public static void generate(Film film, Consumer<TTSGenerateResult> callback)
     {
         String token = getToken();
 
@@ -126,7 +125,7 @@ public class ElevenLabsAPI implements Runnable
             return;
         }
 
-        thread = new Thread(new ElevenLabsAPI(token, screenplay, callback));
+        thread = new Thread(new ElevenLabsAPI(token, film, callback));
         thread.start();
     }
 

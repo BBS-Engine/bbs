@@ -1,7 +1,7 @@
 package mchorse.bbs.ui.film.utils;
 
 import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.recording.values.ValueFrames;
+import mchorse.bbs.film.values.ValueFrames;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageBarOverlayPanel;
 
