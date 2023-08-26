@@ -62,40 +62,41 @@ public class KeyframeChannel implements IDataSerializable<ListType>
      */
     public double interpolate(float ticks)
     {
-        if (this.keyframes.isEmpty())
-        {
-            return 0;
-        }
+        /* No keyframes, no values */
+        if (this.keyframes.isEmpty()) return 0;
 
+        /* Check whether given ticks are outside keyframe channel's range */
         Keyframe prev = this.keyframes.get(0);
 
-        if (ticks < prev.tick)
-        {
-            return prev.value;
-        }
+        if (ticks < prev.tick) return prev.value;
 
         int size = this.keyframes.size();
         Keyframe last = this.keyframes.get(size - 1);
 
-        if (ticks >= last.tick)
-        {
-            return last.value;
-        }
+        if (ticks >= last.tick) return last.value;
 
-        /* TODO: Optimize */
-        for (int i = 1; i < size; i++)
-        {
-            Keyframe frame = this.keyframes.get(i);
+        /* Use binary search to find the proper segment */
+        int low = 0;
+        int high = size - 1;
 
-            if (prev != null && ticks >= prev.tick && ticks < frame.tick)
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+
+            if (this.keyframes.get(mid).tick < ticks)
             {
-                return prev.interpolate(frame, (ticks - prev.tick) / (frame.tick - prev.tick));
+                low = mid + 1;
             }
-
-            prev = frame;
+            else
+            {
+                high = mid - 1;
+            }
         }
 
-        return prev.value;
+        Keyframe b = this.keyframes.get(low);
+        Keyframe a = low - 1 >= 0 ? this.keyframes.get(low - 1) : b;
+
+        return a.interpolate(b, (ticks - a.tick) / (b.tick - a.tick));
     }
 
     /**
