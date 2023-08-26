@@ -19,14 +19,12 @@ public class Film extends StructureBase
     public static final Pattern CHARACTER = Pattern.compile("^[\\p{Lu} _-]+$");
     public static final Pattern METADATA = Pattern.compile("^[\\w\\d_-]+\\:.*$");
 
-    public final ValueInt length = new ValueInt("length", 0);
     public final ValueClips camera = new ValueClips("camera", BBS.getFactoryClips());
     public final ValueReplays replays = new ValueReplays("replays");
     public final ValueString screenplay = new ValueString("screenplay", "");
 
     public Film()
     {
-        this.register(this.length);
         this.register(this.camera);
         this.register(this.replays);
         this.register(this.screenplay);

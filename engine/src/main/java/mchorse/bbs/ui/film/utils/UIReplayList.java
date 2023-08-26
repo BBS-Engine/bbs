@@ -2,10 +2,13 @@ package mchorse.bbs.ui.film.utils;
 
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.film.Film;
+import mchorse.bbs.film.values.ValueForm;
 import mchorse.bbs.film.values.ValueReplay;
 import mchorse.bbs.forms.forms.Form;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.UIFilmPanel;
+import mchorse.bbs.ui.forms.UIFormPalette;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.list.UIList;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -38,6 +41,31 @@ public class UIReplayList extends UIList<ValueReplay>
             {
                 menu.action(Icons.DUPE, UIKeys.SCENE_REPLAYS_CONTEXT_DUPE, this::dupeReplay);
                 menu.action(Icons.REMOVE, UIKeys.SCENE_REPLAYS_CONTEXT_REMOVE, this::removeReplay);
+
+                if (this.isSelected())
+                {
+                    menu.action(Icons.POSE, IKey.lazy("Pick form..."), () ->
+                    {
+                        ValueForm form = this.getCurrentFirst().form;
+
+                        UIFormPalette.open(this.getParentContainer(), false, form.get(), (f) ->
+                        {
+                            form.set(f);
+                            panel.updateEntities();
+                        });
+                    });
+
+                    menu.action(Icons.EDIT, IKey.lazy("Edit form..."), () ->
+                    {
+                        ValueForm form = this.getCurrentFirst().form;
+
+                        UIFormPalette.open(this.getParentContainer(), true, form.get(), (f) ->
+                        {
+                            form.set(f);
+                            panel.updateEntities();
+                        });
+                    });
+                }
             }
         });
     }
@@ -90,6 +118,8 @@ public class UIReplayList extends UIList<ValueReplay>
     @Override
     public void render(UIContext context)
     {
+        this.area.render(context.batcher, 0x99000000);
+
         super.render(context);
 
         if (this.getList().isEmpty())

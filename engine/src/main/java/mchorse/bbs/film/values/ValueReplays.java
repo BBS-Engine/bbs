@@ -1,5 +1,7 @@
 package mchorse.bbs.film.values;
 
+import mchorse.bbs.data.types.BaseType;
+import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.settings.values.ValueGroup;
 
 import java.util.ArrayList;
@@ -20,8 +22,6 @@ public class ValueReplays extends ValueGroup
 
         this.replays.add(replay);
         this.add(replay);
-
-        this.sync();
 
         return replay;
     }
@@ -45,6 +45,33 @@ public class ValueReplays extends ValueGroup
             this.add(replay);
 
             i += 1;
+        }
+    }
+
+    @Override
+    public void fromData(BaseType data)
+    {
+        super.fromData(data);
+
+        this.replays.clear();
+
+        if (!data.isMap())
+        {
+            return;
+        }
+
+        MapType map = data.asMap();
+
+        for (String key : map.keys())
+        {
+            MapType mapType = map.getMap(key);
+
+            if (!mapType.isEmpty())
+            {
+                ValueReplay add = this.add();
+
+                add.fromData(mapType);
+            }
         }
     }
 }

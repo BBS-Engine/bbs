@@ -27,4 +27,10 @@ public class FilmManager extends BaseManager<Film>
 
         return film;
     }
+
+    @Override
+    protected String getExtension()
+    {
+        return ".dat";
+    }
 }

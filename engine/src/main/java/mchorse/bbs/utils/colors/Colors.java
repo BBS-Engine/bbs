@@ -10,6 +10,7 @@ public class Colors
 
     /* Alpha */
     public static final int A100 = 0xff000000;
+    public static final int A90 = 0xee000000;
     public static final int A75 = 0xbb000000;
     public static final int A50 = 0x88000000;
     public static final int A25 = 0x44000000;

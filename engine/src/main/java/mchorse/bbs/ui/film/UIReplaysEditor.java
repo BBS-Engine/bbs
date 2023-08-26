@@ -25,7 +25,6 @@ public class UIReplaysEditor extends UIElement
     private static final Map<String, Integer> COLORS = new HashMap<>();
 
     public UIReplayList replays;
-    public UIElement editor;
 
     /* Keyframes */
     public UIElement keyframes;
@@ -61,12 +60,9 @@ public class UIReplaysEditor extends UIElement
         this.replays = new UIReplayList((l) -> this.setReplay(l.get(0)), this.delegate);
         this.replays.relative(this).w(1F).h(80);
 
-        this.editor = new UIElement();
-        this.editor.relative(this).y(80).w(1F).h(1F, -80);
-
         /* Keyframes */
         this.keyframes = new UIElement();
-        this.keyframes.relative(this.editor).wh(1F, 0.5F);
+        this.keyframes.relative(this).y(80).w(1F).h(1F, -80);
 
         this.channels = new UILabelList<>(this::selectChannels);
         this.channels.background(Colors.A75).multi().context((menu) ->
@@ -81,8 +77,9 @@ public class UIReplaysEditor extends UIElement
         this.channels.relative(this.keyframes).x(1F, -100).w(100).h(1F);
         this.keyframes.add(this.channels);
 
-        this.editor.add(this.keyframes);
-        this.add(this.replays, this.editor);
+        this.add(this.replays, this.keyframes);
+
+        this.markContainer();
     }
 
     private void pick(String... channels)
@@ -126,6 +123,12 @@ public class UIReplaysEditor extends UIElement
         this.keyframes.add(this.keyframeEditor);
 
         this.resize();
+
+        if (this.keyframeEditor != null)
+        {
+            this.keyframeEditor.keyframes.duration = this.film.camera.calculateDuration();
+            this.keyframeEditor.resetView();
+        }
     }
 
     private void selectChannels(List<Label<ValueKeyframeChannel>> l)
@@ -173,7 +176,7 @@ public class UIReplaysEditor extends UIElement
 
         if (this.keyframeEditor != null)
         {
-            this.keyframeEditor.keyframes.duration = this.film.length.get();
+            this.keyframeEditor.keyframes.duration = this.film.camera.calculateDuration();
             this.keyframeEditor.resetView();
         }
     }

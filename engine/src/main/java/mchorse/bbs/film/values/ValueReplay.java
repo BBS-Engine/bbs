@@ -1,12 +1,9 @@
 package mchorse.bbs.film.values;
 
-import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.world.entities.Entity;
-import mchorse.bbs.world.entities.components.FormComponent;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ValueReplay extends ValueGroup
 {
@@ -24,16 +21,6 @@ public class ValueReplay extends ValueGroup
     void remapId(String id)
     {
         this.id = id;
-    }
-
-    public void apply(Entity actor)
-    {
-        FormComponent component = actor.get(FormComponent.class);
-
-        if (component != null && !Objects.equals(component.form, this.form.get()))
-        {
-            component.setForm(FormUtils.copy(this.form.get()));
-        }
     }
 
     public void applyFrame(int tick, Entity actor)

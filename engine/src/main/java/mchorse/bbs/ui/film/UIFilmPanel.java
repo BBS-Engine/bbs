@@ -4,6 +4,7 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.bridge.IBridgeRender;
+import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.camera.controller.RunnerCameraController;
@@ -13,9 +14,11 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.tts.ElevenLabsAPI;
 import mchorse.bbs.film.tts.TTSGenerateResult;
+import mchorse.bbs.film.values.ValueReplay;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
+import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
@@ -32,14 +35,12 @@ import mchorse.bbs.ui.film.utils.undo.ValueChangeUndo;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
-import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.input.text.UITextEditor;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageFolderOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.utils.UIDraggable;
 import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
 import mchorse.bbs.ui.utils.Area;
-import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
@@ -50,11 +51,15 @@ import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.utils.undo.CompoundUndo;
 import mchorse.bbs.utils.undo.IUndo;
 import mchorse.bbs.utils.undo.UndoManager;
+import mchorse.bbs.world.World;
+import mchorse.bbs.world.entities.Entity;
+import mchorse.bbs.world.entities.components.FormComponent;
 import org.joml.Vector2i;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,13 +90,12 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public UIIcon openScene;
     public UIIcon openScreenplay;
 
-    public UITrackpad length;
-
     public UIClip panel;
     public UIRenderable renderableOverlay;
     public UIDraggable draggable;
 
     private Camera camera = new Camera();
+    private List<Entity> entities = new ArrayList<>();
 
     private UndoManager<StructureBase> undoManager;
 
@@ -164,14 +168,6 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         });
         this.draggable.hoverOnly().relative(this.main).x(1F, -3).y(0.5F, -40).wh(6, 80);
 
-        this.length = new UITrackpad((v) ->
-        {
-            this.postUndo(this.createUndo(this.data.length, (length) -> length.set(v.intValue())));
-        });
-        this.length.limit(0).integer();
-
-        this.addOptions();
-        this.options.fields.add(UI.label(IKey.lazy("Length")), this.length);
         this.iconBar.add(this.plause, this.record, this.openVideos, this.openScene, this.openCamera, this.openScreenplay);
 
         /* Adding everything */
@@ -403,6 +399,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.pickClip(null);
 
         this.fillData();
+        this.updateEntities();
     }
 
     private void handleUndos(IUndo<StructureBase> undo, boolean redo)
@@ -648,7 +645,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         });
         GLStates.setupDepthFunction2D();
 
-        viewport.render(context.batcher, Colors.A75);
+        viewport.render(context.batcher, Colors.A90);
         context.batcher.texturedBox(texture, Colors.WHITE, area.x, area.y, area.w, area.h, 0, height, width, 0, width, height);
 
         /* Render rule of thirds */
@@ -680,6 +677,57 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
             context.batcher.box(x - 4, y - 1, x + 3, y, Colors.setA(Colors.WHITE, 0.5F));
             context.batcher.box(x - 1, y - 4, x, y + 3, Colors.setA(Colors.WHITE, 0.5F));
+        }
+    }
+
+    @Override
+    public void update()
+    {
+        for (int i = 0; i < this.entities.size(); i++)
+        {
+            Entity entity = this.entities.get(i);
+            ValueReplay replay = this.data.replays.replays.get(i);
+
+            entity.update();
+
+            replay.applyFrame(this.runner.ticks, entity);
+        }
+
+        super.update();
+    }
+
+    public void updateEntities()
+    {
+        UIContext context = this.getContext();
+
+        this.entities.clear();
+
+        if (context != null && this.data != null)
+        {
+            for (ValueReplay replay : this.data.replays.replays)
+            {
+                World world = context.menu.bridge.get(IBridgeWorld.class).getWorld();
+                Entity entity = world.architect.create(Link.bbs("player"));
+
+                entity.setWorld(world);
+                entity.get(FormComponent.class).setForm(replay.form.get());
+                replay.applyFrame(this.runner.ticks, entity);
+                entity.basic.prevPosition.set(entity.basic.position);
+                entity.basic.prevRotation.set(entity.basic.rotation);
+
+                this.entities.add(entity);
+            }
+        }
+    }
+
+    @Override
+    public void renderInWorld(RenderingContext context)
+    {
+        super.renderInWorld(context);
+
+        for (Entity entity : this.entities)
+        {
+            entity.render(context);
         }
     }
 
@@ -803,7 +851,6 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
         if (this.data != null)
         {
-            this.length.setValue(this.data.length.get());
             this.screenplay.setText(this.data.screenplay.get());
         }
     }

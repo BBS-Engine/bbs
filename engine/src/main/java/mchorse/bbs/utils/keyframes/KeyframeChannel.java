@@ -68,7 +68,7 @@ public class KeyframeChannel implements IDataSerializable<ListType>
         /* Check whether given ticks are outside keyframe channel's range */
         Keyframe prev = this.keyframes.get(0);
 
-        if (ticks < prev.tick) return prev.value;
+        if (ticks <= prev.tick) return prev.value;
 
         int size = this.keyframes.size();
         Keyframe last = this.keyframes.get(size - 1);
