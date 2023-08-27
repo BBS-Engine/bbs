@@ -35,8 +35,8 @@ public class UIGraph extends UIKeyframes
     {
         super(callback);
 
-        this.scaleY = new Scale(this.area, ScrollDirection.VERTICAL, true);
-        this.scaleY.anchor(0.5F);
+        this.scaleY = new Scale(this.area, ScrollDirection.VERTICAL);
+        this.scaleY.inverse().anchor(0.5F);
     }
 
     public Scale getScaleY()
@@ -378,7 +378,7 @@ public class UIGraph extends UIKeyframes
     }
 
     @Override
-    protected void zoom(int scroll)
+    protected void zoom(UIContext context, int scroll)
     {
         boolean x = Window.isShiftPressed();
         boolean y = Window.isCtrlPressed();
@@ -387,13 +387,13 @@ public class UIGraph extends UIKeyframes
         /* Scaling X */
         if (x && !y || none)
         {
-            this.scaleX.zoom(Math.copySign(this.scaleX.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
+            this.scaleX.zoomAnchor(Scale.getAnchorX(context, this.area), Math.copySign(this.scaleX.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
         }
 
         /* Scaling Y */
         if (y && !x || none)
         {
-            this.scaleY.zoom(Math.copySign(this.scaleY.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
+            this.scaleY.zoomAnchor(Scale.getAnchorY(context, this.area), Math.copySign(this.scaleY.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
         }
     }
 

@@ -1263,7 +1263,7 @@
     "bbs.ui.world.player_data_editor": "Player data editor",
     "bbs.ui.world.settings": "World settings",
     "bbs.ui.world.stop": "Stop",
-    "bbs.ui.world.world_editor": "World editor (blocks)",
+    "bbs.ui.world.world_editor": "World editor",
     "bbs.ui.world.worlds": "World manager",
     "bbs.ui.world.context.add": "Add...",
     "bbs.ui.world.context.copy": "Copy",

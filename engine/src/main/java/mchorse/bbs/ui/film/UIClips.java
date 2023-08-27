@@ -64,7 +64,7 @@ public class UIClips extends UIElement
     private IFactory<Clip, ClipFactoryData> factory;
 
     /* Navigation */
-    public Scale scale = new Scale(this.area, ScrollDirection.HORIZONTAL, false);
+    public Scale scale = new Scale(this.area, ScrollDirection.HORIZONTAL);
     public ScrollArea vertical = new ScrollArea(new Area());
 
     private boolean grabbing;
@@ -97,6 +97,8 @@ public class UIClips extends UIElement
     public UIClips(IUIClipsDelegate delegate, IFactory<Clip, ClipFactoryData> factory)
     {
         super();
+
+        this.scale.anchor(0.5F);
 
         this.delegate = delegate;
         this.factory = factory;
@@ -805,7 +807,7 @@ public class UIClips extends UIElement
 
     public int toGraphX(int value)
     {
-        return (int) this.scale.to(value);
+        return (int) (this.scale.to(value));
     }
 
     public void setLoopMin()
@@ -1031,7 +1033,8 @@ public class UIClips extends UIElement
             }
             else
             {
-                this.scale.zoom(Math.copySign(this.scale.getZoomFactor(), context.mouseWheel), 0.001D, 1000D);
+
+                this.scale.zoomAnchor(Scale.getAnchorX(context, this.area), Math.copySign(this.scale.getZoomFactor(), context.mouseWheel), 0.001D, 1000D);
             }
 
             return true;
@@ -1193,12 +1196,11 @@ public class UIClips extends UIElement
         Batcher2D batcher = context.batcher;
         Area area = this.area;
         int h = LAYER_HEIGHT;
+        int leftEdge = this.toGraphX(0);
 
-        if (this.hasEmbeddedView())
+        if (leftEdge > this.area.x)
         {
-            int y = this.embedded.area.ey();
-
-            batcher.gradientVBox(this.embedded.area.x, y - MARGIN, this.embedded.area.ex(), y, 0, Colors.A50);
+            batcher.box(this.area.x, this.area.y, leftEdge, this.area.ey(), Colors.A75);
         }
 
         area.render(batcher, Colors.A50);
@@ -1210,7 +1212,7 @@ public class UIClips extends UIElement
 
             if (i % 2 != 0)
             {
-                batcher.box(this.area.x, ly, this.area.ex(), ly + h, Colors.A50);
+                batcher.box(leftEdge, ly, this.area.ex(), ly + h, Colors.A50);
             }
         }
 

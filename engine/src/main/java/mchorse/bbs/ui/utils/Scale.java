@@ -1,5 +1,6 @@
 package mchorse.bbs.ui.utils;
 
+import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.utils.math.Interpolations;
 import mchorse.bbs.utils.math.MathUtils;
 
@@ -21,23 +22,35 @@ public class Scale
     protected double lockMin;
     protected double lockMax;
 
-    public Scale(Area area, ScrollDirection direction, boolean inverse)
+    public static float getAnchorX(UIContext context, Area area)
     {
-        this(area, inverse);
+        return (context.mouseX - area.x) / (float) area.w;
+    }
+
+    public static float getAnchorY(UIContext context, Area area)
+    {
+        return (context.mouseY - area.y) / (float) area.h;
+    }
+
+    public Scale(Area area, ScrollDirection direction)
+    {
+        this(area);
 
         this.direction = direction;
     }
 
-    public Scale(Area area, boolean inverse)
+    public Scale(Area area)
     {
-        this(inverse);
+        super();
 
         this.area = area;
     }
 
-    public Scale(boolean inverse)
+    public Scale inverse()
     {
-        this.inverse = inverse;
+        this.inverse = true;
+
+        return this;
     }
 
     /* Convenience methods */
@@ -183,7 +196,10 @@ public class Scale
      */
     public double to(double value)
     {
-        double factor = (!this.inverse ? value - this.shift : -value + this.shift) * this.zoom;
+        double factor = (this.inverse
+            ? -value + this.shift
+            : value - this.shift
+        ) * this.zoom;
 
         if (this.area != null)
         {
@@ -203,7 +219,9 @@ public class Scale
             coordinate -= this.direction.getPosition(this.area, this.anchor);
         }
 
-        return this.inverse ? -(coordinate / this.zoom - this.shift) : coordinate / this.zoom + this.shift;
+        return this.inverse
+            ? -(coordinate / this.zoom - this.shift)
+            : coordinate / this.zoom + this.shift;
     }
 
     public double getMinValue()
@@ -297,6 +315,29 @@ public class Scale
     public void zoom(double amount, double min, double max)
     {
         this.setZoom(MathUtils.clamp(this.zoom + amount, min, max));
+    }
+
+    public void zoomAnchor(float newAnchor, double amount, double min, double max)
+    {
+        if (this.area != null)
+        {
+            if (this.inverse)
+            {
+                double shift = this.direction.getPosition(this.area, this.anchor) - this.direction.getPosition(this.area, newAnchor);
+
+                this.shift += shift / this.zoom;
+            }
+            else
+            {
+                double shift = this.direction.getPosition(this.area, this.anchor) - this.direction.getPosition(this.area, newAnchor);
+
+                this.shift -= shift / this.zoom;
+            }
+        }
+
+        this.anchor = newAnchor;
+
+        this.zoom(amount, min, max);
     }
 
     public double getZoomFactor()

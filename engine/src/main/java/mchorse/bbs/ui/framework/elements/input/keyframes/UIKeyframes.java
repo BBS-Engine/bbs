@@ -69,7 +69,7 @@ public abstract class UIKeyframes extends UIElement
         super();
 
         this.callback = callback;
-        this.scaleX = new Scale(this.area, false);
+        this.scaleX = new Scale(this.area);
         this.scaleX.anchor(0.5F);
     }
 
@@ -259,7 +259,7 @@ public abstract class UIKeyframes extends UIElement
                 scroll = -scroll;
             }
 
-            this.zoom(scroll);
+            this.zoom(context, scroll);
 
             return true;
         }
@@ -267,9 +267,9 @@ public abstract class UIKeyframes extends UIElement
         return super.subMouseScrolled(context);
     }
 
-    protected void zoom(int scroll)
+    protected void zoom(UIContext context, int scroll)
     {
-        this.scaleX.zoom(Math.copySign(this.scaleX.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
+        this.scaleX.zoomAnchor(Scale.getAnchorX(context, this.area), Math.copySign(this.scaleX.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
     }
 
     @Override

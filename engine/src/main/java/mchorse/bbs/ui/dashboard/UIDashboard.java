@@ -270,13 +270,12 @@ public class UIDashboard extends UIBaseMenu
     {
         this.panels.registerPanel(new UIWorldSettingsPanel(this), UIKeys.WORLD_SETTINGS, Icons.GEAR);
 
+        this.panels.registerPanel(new UIFilmPanel(this), IKey.lazy("Films"), Icons.FILM).marginLeft(10);
+
         this.panels.registerPanel(new UIWorldEditorPanel(this), UIKeys.WORLD_WORLD_EDITOR, Icons.BLOCK).marginLeft(10);
         this.panels.registerPanel(new UIWorldObjectsPanel(this), UIKeys.WORLD_OBJECT_EDITOR, Icons.SPHERE);
         this.panels.registerPanel(new UIEntitiesPanel(this), UIKeys.WORLD_ENTITY_EDITOR, Icons.POSE);
-
         this.panels.registerPanel(new UITileSetEditorPanel(this), UIKeys.TILE_SET_TITLE, Icons.STAIR);
-
-        this.panels.registerPanel(new UIFilmPanel(this), IKey.lazy("Films"), Icons.FILM).marginLeft(10);
 
         this.panels.registerPanel(new UIParticleSchemePanel(this), UIKeys.PANELS_PARTICLES, Icons.PARTICLE).marginLeft(10);
         this.panels.registerPanel(new UIFontPanel(this), UIKeys.FONT_EDITOR_TITLE, Icons.FONT);

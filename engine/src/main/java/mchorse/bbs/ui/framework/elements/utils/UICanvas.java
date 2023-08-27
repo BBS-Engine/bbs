@@ -23,9 +23,9 @@ public abstract class UICanvas extends UIElement
     {
         super();
 
-        this.scaleX = new Scale(this.area, false);
+        this.scaleX = new Scale(this.area);
         this.scaleX.anchor(0.5F);
-        this.scaleY = new Scale(this.area, ScrollDirection.VERTICAL, false);
+        this.scaleY = new Scale(this.area, ScrollDirection.VERTICAL);
         this.scaleY.anchor(0.5F);
     }
 
@@ -91,16 +91,16 @@ public abstract class UICanvas extends UIElement
     {
         if (this.area.isInside(context.mouseX, context.mouseY) && !this.dragging)
         {
-            this.zoom(context.mouseWheel);
+            this.zoom(context, context.mouseWheel);
         }
 
         return super.subMouseScrolled(context);
     }
 
-    protected void zoom(int scroll)
+    protected void zoom(UIContext context, int scroll)
     {
-        this.scaleX.zoom(Math.copySign(this.scaleX.getZoomFactor(), scroll), 0.001, 1000);
-        this.scaleY.zoom(Math.copySign(this.scaleY.getZoomFactor(), scroll), 0.001, 1000);
+        this.scaleX.zoomAnchor(Scale.getAnchorX(context, this.area), Math.copySign(this.scaleX.getZoomFactor(), scroll), 0.001, 1000);
+        this.scaleY.zoomAnchor(Scale.getAnchorY(context, this.area), Math.copySign(this.scaleY.getZoomFactor(), scroll), 0.001, 1000);
     }
 
     @Override
