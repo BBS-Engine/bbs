@@ -32,7 +32,7 @@ public class ActionsConfigProperty extends BaseProperty<ActionsConfig>
     @Override
     public void tween(ActionsConfig newValue, int duration, IInterpolation interpolation, int offset, boolean playing)
     {
-        boolean same = Objects.equals(this.value, value);
+        boolean same = Objects.equals(this.value, newValue);
 
         super.tween(newValue, duration, interpolation, offset, playing);
 

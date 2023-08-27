@@ -8,11 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * Animated actions config. This little dude right there is 
- * responsible for storing configuration for the name of actions 
- * which should be used for particular <s>set of skills</s> actions. 
- */
 public class ActionsConfig implements IMapSerializable
 {
     private static Map<String, ActionConfig> a = new HashMap<>();
@@ -69,9 +64,6 @@ public class ActionsConfig implements IMapSerializable
         this.actions.putAll(config.actions);
     }
 
-    /**
-     * Get key for the action 
-     */
     public ActionConfig getConfig(String key)
     {
         ActionConfig output = this.actions.get(key);

@@ -43,6 +43,7 @@ import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
@@ -78,6 +79,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public UIElement main;
     public UIFilmRecorder recorder;
 
+    public UIElement clips;
     public UIClips timeline;
     public UIReplaysEditor replays;
 
@@ -87,7 +89,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public UIIcon record;
     public UIIcon openVideos;
     public UIIcon openCamera;
-    public UIIcon openScene;
+    public UIIcon openReplays;
     public UIIcon openScreenplay;
 
     public UIClip panel;
@@ -111,9 +113,12 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.main = new UIElement();
         this.main.relative(this.editor).w(0.75F).h(1F);
 
+        this.clips = new UIElement();
+        this.clips.relative(this.main).full();
+
         this.recorder = new UIFilmRecorder(this);
         this.timeline = new UIClips(this, BBS.getFactoryClips());
-        this.timeline.relative(this.main).full();
+        this.timeline.relative(this.clips).full();
 
         this.replays = new UIReplaysEditor(this);
         this.replays.relative(this.main).full();
@@ -135,24 +140,9 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.record.tooltip(UIKeys.CAMERA_TOOLTIPS_RECORD, Direction.LEFT);
         this.openVideos = new UIIcon(Icons.FILM, (b) -> this.recorder.openMovies());
         this.openVideos.tooltip(UIKeys.CAMERA_TOOLTIPS_OPEN_VIDEOS, Direction.LEFT);
-        this.openScene = new UIIcon(Icons.SCENE, (b) ->
-        {
-            this.replays.setVisible(true);
-            this.timeline.setVisible(false);
-            this.screenplay.setVisible(false);
-        });
-        this.openCamera = new UIIcon(Icons.FRUSTUM, (b) ->
-        {
-            this.replays.setVisible(false);
-            this.timeline.setVisible(true);
-            this.screenplay.setVisible(false);
-        });
-        this.openScreenplay = new UIIcon(Icons.FILE, (b) ->
-        {
-            this.replays.setVisible(false);
-            this.timeline.setVisible(false);
-            this.screenplay.setVisible(true);
-        });
+        this.openReplays = new UIIcon(Icons.SCENE, (b) -> this.showPanel(this.replays));
+        this.openCamera = new UIIcon(Icons.FRUSTUM, (b) -> this.showPanel(this.clips));
+        this.openScreenplay = new UIIcon(Icons.FILE, (b) -> this.showPanel(this.screenplay));
 
         this.draggable = new UIDraggable((context) ->
         {
@@ -168,13 +158,14 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         });
         this.draggable.hoverOnly().relative(this.main).x(1F, -3).y(0.5F, -40).wh(6, 80);
 
-        this.iconBar.add(this.plause, this.record, this.openVideos, this.openScene, this.openCamera, this.openScreenplay);
+        this.iconBar.add(this.plause, this.record, this.openVideos, this.openReplays, this.openCamera, this.openScreenplay);
 
         /* Adding everything */
         UIRenderable renderable = new UIRenderable(this::renderIcons);
 
         this.editor.add(this.main, renderable);
-        this.main.add(this.timeline, this.replays, this.screenplay, this.draggable);
+        this.clips.add(this.timeline);
+        this.main.add(this.clips, this.replays, this.screenplay, this.draggable);
         this.overlay.namesList.setFileIcon(Icons.FILM);
 
         /* Register keybinds */
@@ -198,6 +189,15 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.keys().register(Keys.JUMP_BACKWARD, () -> this.setCursor(this.getCursor() - BBSSettings.editorJump.get())).active(active).category(editor);
 
         this.fill(null);
+    }
+
+    private void showPanel(UIElement element)
+    {
+        this.clips.setVisible(false);
+        this.replays.setVisible(false);
+        this.screenplay.setVisible(false);
+
+        element.setVisible(true);
     }
 
     private void generateTTS()
@@ -225,9 +225,9 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
                 else if (result.status == TTSGenerateResult.Status.VOICE_IS_MISSING)
                 {
                     this.getContext().notify(!result.missingVoices.isEmpty()
-                                    ? IKey.lazy("A voice " + result.missingVoices.get(0) + " provided in the screenplay isn't available!")
-                                    : IKey.lazy("A list of voices couldn't get loaded!"),
-                            Colors.RED | Colors.A100);
+                        ? IKey.lazy("A voice " + result.missingVoices.get(0) + " provided in the screenplay isn't available!")
+                        : IKey.lazy("A list of voices couldn't get loaded!"),
+                        Colors.RED | Colors.A100);
                 }
                 else /* SUCCESS */
                 {
@@ -259,15 +259,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
     private Area getViewportArea()
     {
-        Area area = new Area(this.timeline.area.ex(), this.area.y, this.iconBar.area.x - this.timeline.area.ex(), this.area.h);
-
-        if (this.panel != null)
-        {
-            area.x += this.panel.area.w;
-            area.w -= this.panel.area.w;
-        }
-
-        return area;
+        return new Area(this.clips.area.ex(), this.area.y, this.iconBar.area.x - this.clips.area.ex(), this.area.h);
     }
 
     private Area getFramebufferArea(Area viewport)
@@ -390,7 +382,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.plause.setEnabled(data != null);
         this.record.setEnabled(data != null);
         this.openCamera.setEnabled(data != null);
-        this.openScene.setEnabled(data != null);
+        this.openReplays.setEnabled(data != null);
         this.openScreenplay.setEnabled(data != null);
 
         this.runner.setWork(data == null ? null : data.camera);
@@ -415,6 +407,8 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         {
             ValueChangeUndo change = (ValueChangeUndo) anotherUndo;
             List<Integer> selection = change.getSelection(redo);
+
+            this.showPanel(change.panel == 1 ? this.replays : (change.panel == 2 ? this.screenplay : this.clips));
 
             if (selection.isEmpty())
             {
@@ -686,11 +680,15 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         for (int i = 0; i < this.entities.size(); i++)
         {
             Entity entity = this.entities.get(i);
-            ValueReplay replay = this.data.replays.replays.get(i);
 
             entity.update();
 
-            replay.applyFrame(this.runner.ticks, entity);
+            if (CollectionUtils.inRange(this.data.replays.replays, i))
+            {
+                ValueReplay replay = this.data.replays.replays.get(i);
+
+                replay.applyFrame(this.runner.ticks, entity);
+            }
         }
 
         super.update();
@@ -765,7 +763,10 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         if (clip == null)
         {
             this.panel = null;
+
+            this.timeline.w(1F, 0);
             this.timeline.clearSelection();
+            this.clips.resize();
 
             return;
         }
@@ -782,11 +783,10 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
             UIClip panel = (UIClip) BBS.getFactoryClips().getData(clip).panelUI.getConstructors()[0].newInstance(clip, this);
 
             this.panel = panel;
-            this.panel.relative(this.main).x(1F).w(160).h(1F);
-            this.editor.addAfter(this.main, this.panel);
+            this.panel.relative(this.clips).x(1F, -160).w(160).h(1F);
+            this.clips.add(this.panel);
 
             this.panel.fillData();
-            this.panel.resize();
 
             Integer scroll = scrolls.get(this.panel.getClass());
 
@@ -805,6 +805,9 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         {
             e.printStackTrace();
         }
+
+        this.timeline.w(1F, -160);
+        this.clips.resize();
     }
 
     @Override

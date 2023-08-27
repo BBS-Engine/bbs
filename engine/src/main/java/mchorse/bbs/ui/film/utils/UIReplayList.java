@@ -1,6 +1,8 @@
 package mchorse.bbs.ui.film.utils;
 
 import mchorse.bbs.BBSSettings;
+import mchorse.bbs.bridge.IBridgeWorld;
+import mchorse.bbs.camera.Camera;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.values.ValueForm;
 import mchorse.bbs.film.values.ValueReplay;
@@ -14,6 +16,11 @@ import mchorse.bbs.ui.framework.elements.input.list.UIList;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.MathUtils;
+import mchorse.bbs.voxel.raytracing.RayTraceResult;
+import mchorse.bbs.voxel.raytracing.RayTraceType;
+import mchorse.bbs.voxel.raytracing.RayTracer;
+import mchorse.bbs.world.World;
+import org.joml.Vector3d;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -51,7 +58,7 @@ public class UIReplayList extends UIList<ValueReplay>
                         UIFormPalette.open(this.getParentContainer(), false, form.get(), (f) ->
                         {
                             form.set(f);
-                            panel.updateEntities();
+                            this.panel.updateEntities();
                         });
                     });
 
@@ -62,7 +69,7 @@ public class UIReplayList extends UIList<ValueReplay>
                         UIFormPalette.open(this.getParentContainer(), true, form.get(), (f) ->
                         {
                             form.set(f);
-                            panel.updateEntities();
+                            this.panel.updateEntities();
                         });
                     });
                 }
@@ -74,9 +81,40 @@ public class UIReplayList extends UIList<ValueReplay>
     {
         Film film = this.panel.getData();
         ValueReplay replay = film.replays.add();
+        World world = this.getContext().menu.bridge.get(IBridgeWorld.class).getWorld();
+        RayTraceResult result = new RayTraceResult();
+        Camera camera = this.panel.getCamera();
+
+        RayTracer.trace(result, world.chunks, camera.position, camera.getLookDirection(), 64F);
+
+        if (result.type == RayTraceType.BLOCK)
+        {
+            replay.keyframes.x.get().insert(0, result.hit.x);
+            replay.keyframes.y.get().insert(0, result.hit.y);
+            replay.keyframes.z.get().insert(0, result.hit.z);
+        }
+        else
+        {
+            Vector3d position = new Vector3d(camera.getLookDirection()).mul(5F).add(camera.position);
+
+            replay.keyframes.x.get().insert(0, position.x);
+            replay.keyframes.y.get().insert(0, position.y);
+            replay.keyframes.z.get().insert(0, position.z);
+        }
+
+        replay.keyframes.pitch.get().insert(0, camera.rotation.x);
+        replay.keyframes.yaw.get().insert(0, camera.rotation.y + Math.PI);
+        replay.keyframes.bodyYaw.get().insert(0, camera.rotation.y + Math.PI);
 
         this.update();
         this.panel.replays.setReplay(replay);
+        this.panel.updateEntities();
+
+        UIFormPalette.open(this.getParentContainer(), false, replay.form.get(), (f) ->
+        {
+            replay.form.set(f);
+            this.panel.updateEntities();
+        });
     }
 
     private void dupeReplay()
@@ -94,6 +132,7 @@ public class UIReplayList extends UIList<ValueReplay>
 
         this.update();
         this.panel.replays.setReplay(replay);
+        this.panel.updateEntities();
     }
 
     private void removeReplay()
@@ -113,6 +152,7 @@ public class UIReplayList extends UIList<ValueReplay>
 
         this.update();
         this.panel.replays.setReplay(size == 0 ? null : this.list.get(index));
+        this.panel.updateEntities();
     }
 
     @Override

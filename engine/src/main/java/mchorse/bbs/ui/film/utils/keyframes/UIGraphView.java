@@ -14,6 +14,7 @@ public class UIGraphView extends UIGraph
     public IUIClipsDelegate editor;
 
     private UICameraGraphEditor keyframeEditor;
+    private boolean relative = true;
 
     public UIGraphView(UICameraGraphEditor keyframeEditor, Consumer<Keyframe> callback)
     {
@@ -22,9 +23,16 @@ public class UIGraphView extends UIGraph
         this.keyframeEditor = keyframeEditor;
     }
 
+    public UIGraphView absolute()
+    {
+        this.relative = false;
+
+        return this;
+    }
+
     public long getFixtureOffset()
     {
-        if (this.editor == null || this.editor.getClip() == null)
+        if (this.editor == null || this.editor.getClip() == null || !this.relative)
         {
             return 0;
         }

@@ -5,7 +5,7 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.utils.undo.IUndo;
 
-public class ValueChangeUndo extends CameraWorkUndo
+public class ValueChangeUndo extends FilmEditorUndo
 {
     public String name;
     public BaseType oldValue;

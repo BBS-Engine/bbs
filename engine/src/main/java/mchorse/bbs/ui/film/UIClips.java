@@ -101,8 +101,6 @@ public class UIClips extends UIElement
         this.delegate = delegate;
         this.factory = factory;
 
-        this.scale.lock(0, Double.MAX_VALUE);
-
         this.embeddedClose = new UIIcon(Icons.CLOSE, (b) -> this.embedView(null));
         this.embeddedClose.relative(this);
 

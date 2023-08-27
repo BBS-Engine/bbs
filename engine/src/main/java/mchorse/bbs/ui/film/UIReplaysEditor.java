@@ -93,6 +93,7 @@ public class UIReplaysEditor extends UIElement
         }
 
         UICameraDopeSheetEditor editor = new UICameraDopeSheetEditor(this.delegate);
+
         List<ValueKeyframeChannel> keyframes = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
@@ -117,6 +118,7 @@ public class UIReplaysEditor extends UIElement
             }
         }
 
+        editor.keyframes.absolute();
         editor.setChannels(keyframes, colors);
 
         this.keyframeEditor.relative(this.keyframes).wTo(this.channels.area).h(1F);
@@ -153,6 +155,7 @@ public class UIReplaysEditor extends UIElement
                 colors.add(COLORS.getOrDefault(key, Colors.ACTIVE));
             }
 
+            editor.keyframes.absolute();
             editor.setChannels(keyframes, colors);
 
             this.keyframeEditor = editor;
@@ -161,6 +164,7 @@ public class UIReplaysEditor extends UIElement
         {
             UICameraGraphEditor editor = new UICameraGraphEditor(this.delegate);
 
+            editor.keyframes.absolute();
             editor.setChannel(l.get(0).value, COLORS.getOrDefault(l.get(0).title.get(), Colors.ACTIVE));
 
             this.keyframeEditor = editor;

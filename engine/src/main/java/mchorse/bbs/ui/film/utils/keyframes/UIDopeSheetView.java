@@ -14,6 +14,7 @@ public class UIDopeSheetView extends UIDopeSheet
     public IUIClipsDelegate editor;
 
     private UICameraDopeSheetEditor keyframeEditor;
+    private boolean relative = true;
 
     public UIDopeSheetView(UICameraDopeSheetEditor keyframeEditor, Consumer<Keyframe> callback)
     {
@@ -22,9 +23,16 @@ public class UIDopeSheetView extends UIDopeSheet
         this.keyframeEditor = keyframeEditor;
     }
 
-    public long getFixtureOffset()
+    public UIDopeSheetView absolute()
     {
-        if (this.editor == null || this.editor.getClip() == null)
+        this.relative = false;
+
+        return this;
+    }
+
+    public long getClipOffset()
+    {
+        if (this.editor == null || this.editor.getClip() == null || !this.relative)
         {
             return 0;
         }
@@ -39,7 +47,7 @@ public class UIDopeSheetView extends UIDopeSheet
             return 0;
         }
 
-        return (int) (this.editor.getCursor() - this.getFixtureOffset());
+        return (int) (this.editor.getCursor() - this.getClipOffset());
     }
 
     @Override
@@ -65,7 +73,7 @@ public class UIDopeSheetView extends UIDopeSheet
     {
         if (this.editor != null)
         {
-            long offset = this.getFixtureOffset();
+            long offset = this.getClipOffset();
 
             this.editor.setCursor((int) (x + offset));
         }
