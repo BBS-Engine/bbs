@@ -4,7 +4,6 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.bridge.IBridgeRender;
-import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.camera.controller.RunnerCameraController;
@@ -14,7 +13,6 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.tts.ElevenLabsAPI;
 import mchorse.bbs.film.tts.TTSGenerateResult;
-import mchorse.bbs.film.values.ValueReplay;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
@@ -43,7 +41,6 @@ import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
@@ -52,15 +49,11 @@ import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.utils.undo.CompoundUndo;
 import mchorse.bbs.utils.undo.IUndo;
 import mchorse.bbs.utils.undo.UndoManager;
-import mchorse.bbs.world.World;
-import mchorse.bbs.world.entities.Entity;
-import mchorse.bbs.world.entities.components.FormComponent;
 import org.joml.Vector2i;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +90,9 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public UIDraggable draggable;
 
     private Camera camera = new Camera();
-    private List<Entity> entities = new ArrayList<>();
+
+    /* Entity control */
+    private UIFilmController controller = new UIFilmController(this);
 
     private UndoManager<StructureBase> undoManager;
 
@@ -166,6 +161,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.editor.add(this.main, renderable);
         this.clips.add(this.timeline);
         this.main.add(this.clips, this.replays, this.screenplay, this.draggable);
+        this.add(this.controller);
         this.overlay.namesList.setFileIcon(Icons.FILM);
 
         /* Register keybinds */
@@ -239,6 +235,16 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         {
             e.printStackTrace();
         }
+    }
+
+    public UIFilmController getController()
+    {
+        return this.controller;
+    }
+
+    public RunnerCameraController getRunner()
+    {
+        return this.runner;
     }
 
     public Framebuffer getFramebuffer()
@@ -391,7 +397,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.pickClip(null);
 
         this.fillData();
-        this.updateEntities();
+        this.controller.updateEntities();
     }
 
     private void handleUndos(IUndo<StructureBase> undo, boolean redo)
@@ -438,23 +444,12 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
     public void undo()
     {
-        if (this.data != null && this.undoManager.undo(this.data))
-        {
-            UIUtils.playClick();
-        }
+        if (this.data != null && this.undoManager.undo(this.data)) UIUtils.playClick();
     }
 
     public void redo()
     {
-        if (this.data != null && this.undoManager.redo(this.data))
-        {
-            UIUtils.playClick();
-        }
-    }
-
-    public boolean isFlightEnabled()
-    {
-        return this.dashboard.orbitUI.canControl();
+        if (this.data != null && this.undoManager.redo(this.data)) UIUtils.playClick();
     }
 
     public boolean isFlightDisabled()
@@ -496,6 +491,14 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     private void updatePlauseButton()
     {
         this.plause.both(this.isRunning() ? Icons.PAUSE : Icons.PLAY);
+    }
+
+    @Override
+    public void update()
+    {
+        this.controller.update();
+
+        super.update();
     }
 
     /* Rendering code */
@@ -672,50 +675,8 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
             context.batcher.box(x - 4, y - 1, x + 3, y, Colors.setA(Colors.WHITE, 0.5F));
             context.batcher.box(x - 1, y - 4, x, y + 3, Colors.setA(Colors.WHITE, 0.5F));
         }
-    }
 
-    @Override
-    public void update()
-    {
-        for (int i = 0; i < this.entities.size(); i++)
-        {
-            Entity entity = this.entities.get(i);
-
-            entity.update();
-
-            if (CollectionUtils.inRange(this.data.replays.replays, i))
-            {
-                ValueReplay replay = this.data.replays.replays.get(i);
-
-                replay.applyFrame(this.runner.ticks, entity);
-            }
-        }
-
-        super.update();
-    }
-
-    public void updateEntities()
-    {
-        UIContext context = this.getContext();
-
-        this.entities.clear();
-
-        if (context != null && this.data != null)
-        {
-            for (ValueReplay replay : this.data.replays.replays)
-            {
-                World world = context.menu.bridge.get(IBridgeWorld.class).getWorld();
-                Entity entity = world.architect.create(Link.bbs("player"));
-
-                entity.setWorld(world);
-                entity.get(FormComponent.class).setForm(replay.form.get());
-                replay.applyFrame(this.runner.ticks, entity);
-                entity.basic.prevPosition.set(entity.basic.position);
-                entity.basic.prevRotation.set(entity.basic.rotation);
-
-                this.entities.add(entity);
-            }
-        }
+        this.controller.renderHUD(context, area);
     }
 
     @Override
@@ -723,10 +684,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     {
         super.renderInWorld(context);
 
-        for (Entity entity : this.entities)
-        {
-            entity.render(context);
-        }
+        this.controller.renderFrame(context);
     }
 
     /* IUICameraWorkDelegate implementation */
@@ -796,7 +754,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
                 this.panel.panels.scroll.clamp();
             }
 
-            if (this.isFlightEnabled())
+            if (!this.isFlightDisabled())
             {
                 this.setCursor(clip.tick.get());
             }

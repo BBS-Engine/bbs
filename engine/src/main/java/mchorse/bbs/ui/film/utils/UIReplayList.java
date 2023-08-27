@@ -58,7 +58,7 @@ public class UIReplayList extends UIList<ValueReplay>
                         UIFormPalette.open(this.getParentContainer(), false, form.get(), (f) ->
                         {
                             form.set(f);
-                            this.panel.updateEntities();
+                            this.panel.getController().updateEntities();
                         });
                     });
 
@@ -69,7 +69,7 @@ public class UIReplayList extends UIList<ValueReplay>
                         UIFormPalette.open(this.getParentContainer(), true, form.get(), (f) ->
                         {
                             form.set(f);
-                            this.panel.updateEntities();
+                            this.panel.getController().updateEntities();
                         });
                     });
                 }
@@ -108,12 +108,12 @@ public class UIReplayList extends UIList<ValueReplay>
 
         this.update();
         this.panel.replays.setReplay(replay);
-        this.panel.updateEntities();
+        this.panel.getController().updateEntities();
 
         UIFormPalette.open(this.getParentContainer(), false, replay.form.get(), (f) ->
         {
             replay.form.set(f);
-            this.panel.updateEntities();
+            this.panel.getController().updateEntities();
         });
     }
 
@@ -132,7 +132,7 @@ public class UIReplayList extends UIList<ValueReplay>
 
         this.update();
         this.panel.replays.setReplay(replay);
-        this.panel.updateEntities();
+        this.panel.getController().updateEntities();
     }
 
     private void removeReplay()
@@ -152,7 +152,7 @@ public class UIReplayList extends UIList<ValueReplay>
 
         this.update();
         this.panel.replays.setReplay(size == 0 ? null : this.list.get(index));
-        this.panel.updateEntities();
+        this.panel.getController().updateEntities();
     }
 
     @Override
