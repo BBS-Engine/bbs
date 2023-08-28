@@ -67,11 +67,11 @@ public class UIReplaysEditor extends UIElement
         this.channels = new UILabelList<>(this::selectChannels);
         this.channels.background(Colors.A75).multi().context((menu) ->
         {
-            menu.action(Icons.SPHERE, IKey.lazy("Select position"), () -> this.pick("x", "y", "z"));
-            menu.action(Icons.FRUSTUM, IKey.lazy("Select rotations"), () -> this.pick("yaw", "pitch", "bodyYaw"));
-            menu.action(Icons.LEFT_HANDLE, IKey.lazy("Select left stick"), () -> this.pick("stick_lx", "stick_ly"));
-            menu.action(Icons.RIGHT_HANDLE, IKey.lazy("Select right stick"), () -> this.pick("stick_rx", "stick_ry"));
-            menu.action(Icons.DOWNLOAD, IKey.lazy("Select triggers"), () -> this.pick("trigger_l", "trigger_r"));
+            menu.action(Icons.ALL_DIRECTIONS, IKey.lazy("Select position"), () -> this.pick("x", "y", "z"));
+            menu.action(Icons.REFRESH, IKey.lazy("Select rotations"), () -> this.pick("yaw", "pitch", "bodyYaw"));
+            menu.action(Icons.LEFT_STICK, IKey.lazy("Select left stick"), () -> this.pick("stick_lx", "stick_ly"));
+            menu.action(Icons.RIGHT_STICK, IKey.lazy("Select right stick"), () -> this.pick("stick_rx", "stick_ry"));
+            menu.action(Icons.TRIGGER, IKey.lazy("Select triggers"), () -> this.pick("trigger_l", "trigger_r"));
         });
 
         this.channels.relative(this.keyframes).x(1F, -100).w(100).h(1F);

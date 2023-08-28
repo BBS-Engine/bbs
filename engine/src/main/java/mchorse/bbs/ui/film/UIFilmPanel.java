@@ -141,15 +141,10 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
         this.draggable = new UIDraggable((context) ->
         {
-            int diff = context.mouseX - this.main.area.x;
-            int max = MathUtils.clamp(diff - diff % 10, 70, this.editor.area.w - 80);
-            int w = this.main.area.w;
+            float value = (context.mouseX - this.main.area.x) / (float) this.editor.area.w;
 
-            if (max != w)
-            {
-                this.main.w(0F, max);
-                this.resize();
-            }
+            this.main.w(MathUtils.clamp(value, 0.05F, 0.95F), 0);
+            this.resize();
         });
         this.draggable.hoverOnly().relative(this.main).x(1F, -3).y(0.5F, -40).wh(6, 80);
 
