@@ -4,9 +4,9 @@ import mchorse.bbs.data.IDataSerializable;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.utils.Pair;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class KeyframeChannel implements IDataSerializable<ListType>
 {
+    private static Pair<Keyframe, Keyframe> segment = new Pair<>();
+
     protected final List<Keyframe> keyframes = new ArrayList<>();
 
     protected Keyframe create(long tick, double value)
@@ -62,18 +64,51 @@ public class KeyframeChannel implements IDataSerializable<ListType>
      */
     public double interpolate(float ticks)
     {
+        Pair<Keyframe, Keyframe> segment = this.findSegment(ticks);
+
+        if (segment == null)
+        {
+            return 0;
+        }
+
+        if (segment.a == segment.b)
+        {
+            return segment.a.value;
+        }
+
+        return segment.a.interpolateTicks(segment.b, ticks);
+    }
+
+    /**
+     * Find a keyframe segment at given ticks
+     */
+    public Pair<Keyframe, Keyframe> findSegment(float ticks)
+    {
         /* No keyframes, no values */
-        if (this.keyframes.isEmpty()) return 0;
+        if (this.keyframes.isEmpty())
+        {
+            return null;
+        }
 
         /* Check whether given ticks are outside keyframe channel's range */
         Keyframe prev = this.keyframes.get(0);
 
-        if (ticks <= prev.tick) return prev.value;
+        if (ticks <= prev.tick)
+        {
+            segment.set(prev, prev);
+
+            return segment;
+        }
 
         int size = this.keyframes.size();
         Keyframe last = this.keyframes.get(size - 1);
 
-        if (ticks >= last.tick) return last.value;
+        if (ticks >= last.tick)
+        {
+            segment.set(last, last);
+
+            return segment;
+        }
 
         /* Use binary search to find the proper segment */
         int low = 0;
@@ -96,7 +131,9 @@ public class KeyframeChannel implements IDataSerializable<ListType>
         Keyframe b = this.keyframes.get(low);
         Keyframe a = low - 1 >= 0 ? this.keyframes.get(low - 1) : b;
 
-        return a.interpolate(b, (ticks - a.tick) / (b.tick - a.tick));
+        segment.set(a, b);
+
+        return segment;
     }
 
     /**
@@ -110,7 +147,7 @@ public class KeyframeChannel implements IDataSerializable<ListType>
      */
     public int insert(long tick, double value)
     {
-        Keyframe prev = null;
+        Keyframe prev;
 
         if (!this.keyframes.isEmpty())
         {
@@ -173,7 +210,7 @@ public class KeyframeChannel implements IDataSerializable<ListType>
      */
     public void sort()
     {
-        Collections.sort(this.keyframes, (a, b) -> (int) (a.tick - b.tick));
+        this.keyframes.sort((a, b) -> (int) (a.tick - b.tick));
 
         if (!this.keyframes.isEmpty())
         {
@@ -197,8 +234,6 @@ public class KeyframeChannel implements IDataSerializable<ListType>
         {
             return;
         }
-
-        this.sort();
 
         for (int i = 1; i < this.keyframes.size(); i++)
         {
@@ -258,7 +293,7 @@ public class KeyframeChannel implements IDataSerializable<ListType>
             }
 
             MapType object = element.asMap();
-            Keyframe keyframe = new Keyframe();
+            Keyframe keyframe = this.create(0, 0);
 
             keyframe.fromData(object);
             this.keyframes.add(keyframe);

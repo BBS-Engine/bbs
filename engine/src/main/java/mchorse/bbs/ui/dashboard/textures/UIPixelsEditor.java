@@ -148,7 +148,7 @@ public class UIPixelsEditor extends UICanvasEditor
 
         if (color != null)
         {
-            Window.setClipboard(color.stringify(false));
+            Window.setClipboard(color.stringify());
 
             UIUtils.playClick();
         }

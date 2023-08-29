@@ -59,6 +59,11 @@ public class Keyframe implements IMapSerializable
         this.easing = easing;
     }
 
+    public double interpolateTicks(Keyframe frame, double ticks)
+    {
+        return this.interp.interpolate(this, frame, (ticks - this.tick) / (frame.tick - this.tick));
+    }
+
     public double interpolate(Keyframe frame, double x)
     {
         return this.interp.interpolate(this, frame, x);
