@@ -1,6 +1,6 @@
 package mchorse.bbs.ui.film.utils;
 
-import mchorse.bbs.film.values.ValueFrames;
+import mchorse.bbs.film.values.ValueKeyframes;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
@@ -23,11 +23,11 @@ public class UIRecordOverlayPanel extends UIMessageOverlayPanel
         this.callback = callback;
 
         UIIcon all = new UIIcon(Icons.SPHERE, (b) -> this.submit(null));
-        UIIcon position = new UIIcon(Icons.ALL_DIRECTIONS, (b) -> this.submit(Arrays.asList(ValueFrames.GROUP_POSITION)));
-        UIIcon rotation = new UIIcon(Icons.REFRESH, (b) -> this.submit(Arrays.asList(ValueFrames.GROUP_ROTATION)));
-        UIIcon left = new UIIcon(Icons.LEFT_STICK, (b) -> this.submit(Arrays.asList(ValueFrames.GROUP_LEFT_STICK)));
-        UIIcon right = new UIIcon(Icons.RIGHT_STICK, (b) -> this.submit(Arrays.asList(ValueFrames.GROUP_RIGHT_STICK)));
-        UIIcon triggers = new UIIcon(Icons.TRIGGER, (b) -> this.submit(Arrays.asList(ValueFrames.GROUP_TRIGGERS)));
+        UIIcon position = new UIIcon(Icons.ALL_DIRECTIONS, (b) -> this.submit(Arrays.asList(ValueKeyframes.GROUP_POSITION)));
+        UIIcon rotation = new UIIcon(Icons.REFRESH, (b) -> this.submit(Arrays.asList(ValueKeyframes.GROUP_ROTATION)));
+        UIIcon left = new UIIcon(Icons.LEFT_STICK, (b) -> this.submit(Arrays.asList(ValueKeyframes.GROUP_LEFT_STICK)));
+        UIIcon right = new UIIcon(Icons.RIGHT_STICK, (b) -> this.submit(Arrays.asList(ValueKeyframes.GROUP_RIGHT_STICK)));
+        UIIcon triggers = new UIIcon(Icons.TRIGGER, (b) -> this.submit(Arrays.asList(ValueKeyframes.GROUP_TRIGGERS)));
 
         all.tooltip(IKey.lazy("All groups"));
         position.tooltip(IKey.lazy("Only position"));

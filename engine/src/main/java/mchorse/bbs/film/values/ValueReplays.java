@@ -66,12 +66,12 @@ public class ValueReplays extends ValueGroup
         {
             MapType mapType = map.getMap(key);
 
-            if (!mapType.isEmpty())
+            if (mapType.isEmpty())
             {
-                ValueReplay add = this.add();
-
-                add.fromData(mapType);
+                continue;
             }
+
+            this.add().fromData(mapType);
         }
     }
 }

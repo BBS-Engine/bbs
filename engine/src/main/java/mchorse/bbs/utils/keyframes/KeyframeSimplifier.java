@@ -74,7 +74,7 @@ public class KeyframeSimplifier
         Keyframe left = new Keyframe();
         Keyframe right = new Keyframe();
 
-        channel.keyframes.addAll(keyframes);
+        channel.getKeyframes().addAll(keyframes);
         channel.sort();
 
         left.copy(keyframes.get(0));

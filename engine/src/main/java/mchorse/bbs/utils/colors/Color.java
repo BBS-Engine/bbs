@@ -8,7 +8,7 @@ public class Color
     public float r;
     public float g;
     public float b;
-    public float a = 1;
+    public float a = 1F;
 
     public static Color rgb(int rgb)
     {

@@ -39,7 +39,7 @@ public interface IFormProperty <T> extends IMapSerializable
     /**
      * Tween this property to new value. Some properties may not fully support tweening!
      */
-    public void tween(T newValue, int duration, IInterpolation interpolation, int offset, boolean playing);
+    public void tween(T newValue, T oldValue, int duration, IInterpolation interpolation, int offset, boolean playing);
 
     /**
      * Check whether this property is in progress of tweening.

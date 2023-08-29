@@ -3,8 +3,10 @@ package mchorse.bbs.forms.properties;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.utils.colors.Color;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
+import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
 
-public class ColorProperty extends BaseTweenProperty<Color>
+public class ColorProperty extends BaseTweenProperty<Color> implements IKeyframeable
 {
     private Color i = new Color();
 
@@ -36,5 +38,11 @@ public class ColorProperty extends BaseTweenProperty<Color>
     public void toData(MapType data)
     {
         data.putInt(this.getKey(), this.value.getARGBColor());
+    }
+
+    @Override
+    public GenericKeyframeChannel createChannel()
+    {
+        return new GenericKeyframeChannel(KeyframeSerializers.COLOR);
     }
 }

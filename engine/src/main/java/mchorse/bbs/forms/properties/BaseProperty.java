@@ -68,9 +68,9 @@ public abstract class BaseProperty <T> implements IFormProperty<T>
     }
 
     @Override
-    public void tween(T newValue, int duration, IInterpolation interpolation, int offset, boolean playing)
+    public void tween(T newValue, T oldValue, int duration, IInterpolation interpolation, int offset, boolean playing)
     {
-        this.lastValue = this.value;
+        this.lastValue = oldValue;
         this.value = newValue;
 
         this.ticks = this.duration = duration;

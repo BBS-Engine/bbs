@@ -12,14 +12,14 @@ import java.util.List;
 /**
  * Keyframe channel
  *
- * This class is responsible for storing individual keyframes and also
- * interpolating between them.
+ * <p>This class is responsible for storing individual keyframes and also
+ * interpolating between them.</p>
  */
 public class KeyframeChannel implements IDataSerializable<ListType>
 {
-    private static Pair<Keyframe, Keyframe> segment = new Pair<>();
+    private static final Pair<Keyframe, Keyframe> segment = new Pair<>();
 
-    protected final List<Keyframe> keyframes = new ArrayList<>();
+    private final List<Keyframe> keyframes = new ArrayList<>();
 
     protected Keyframe create(long tick, double value)
     {
@@ -139,11 +139,11 @@ public class KeyframeChannel implements IDataSerializable<ListType>
     /**
      * Insert a keyframe at given tick with given value
      *
-     * This method is useful as it's not creating keyframes every time you
+     * <p>This method is useful as it's not creating keyframes every time you
      * need to add some value, but rather inserts in correct order or
-     * overwrites existing keyframe.
+     * overwrites existing keyframe.</p>
      *
-     * Also, it returns index at which it was inserted.
+     * <p>Also, it returns index at which it was inserted.</p>
      */
     public int insert(long tick, double value)
     {

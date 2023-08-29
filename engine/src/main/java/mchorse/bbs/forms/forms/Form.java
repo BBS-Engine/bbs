@@ -14,6 +14,7 @@ import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.world.entities.Entity;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,8 +37,6 @@ public abstract class Form implements IMapSerializable
     protected String cachedID;
     protected final Map<String, IFormProperty> properties = new HashMap<>();
 
-    protected boolean frozen;
-
     public Form()
     {
         this.register(this.name);
@@ -58,6 +57,11 @@ public abstract class Form implements IMapSerializable
         }
 
         this.properties.put(property.getKey(), property);
+    }
+
+    public Map<String, IFormProperty> getProperties()
+    {
+        return Collections.unmodifiableMap(properties);
     }
 
     /**
@@ -148,11 +152,6 @@ public abstract class Form implements IMapSerializable
 
     /* Tweening */
 
-    public void tween(Form form, int duration, IInterpolation interpolation)
-    {
-        this.tween(form, duration, interpolation, 0, true);
-    }
-
     public void tween(Form form, int duration, IInterpolation interpolation, int offset, boolean playing)
     {
         for (IFormProperty property : this.properties.values())
@@ -161,7 +160,7 @@ public abstract class Form implements IMapSerializable
 
             if (formProperty != null)
             {
-                property.tween(formProperty.get(), duration, interpolation, offset, playing);
+                property.tween(formProperty.get(), property.get(), duration, interpolation, offset, playing);
             }
         }
 

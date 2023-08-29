@@ -8,7 +8,7 @@ import mchorse.bbs.world.entities.components.BasicComponent;
 
 import java.util.List;
 
-public class ValueFrames extends ValueGroup
+public class ValueKeyframes extends ValueGroup
 {
     public static final String GROUP_POSITION = "position";
     public static final String GROUP_ROTATION = "rotation";
@@ -39,7 +39,7 @@ public class ValueFrames extends ValueGroup
     public final ValueKeyframeChannel triggerLeft = new ValueKeyframeChannel("trigger_l");
     public final ValueKeyframeChannel triggerRight = new ValueKeyframeChannel("trigger_r");
 
-    public ValueFrames(String id)
+    public ValueKeyframes(String id)
     {
         super(id);
 

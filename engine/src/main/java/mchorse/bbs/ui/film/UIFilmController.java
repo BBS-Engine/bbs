@@ -7,6 +7,7 @@ import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.core.input.MouseInput;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.values.ValueReplay;
+import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.game.entities.components.PlayerComponent;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.window.Window;
@@ -98,7 +99,7 @@ public class UIFilmController extends UIElement
                 Entity entity = world.architect.create(Link.bbs("player"));
 
                 entity.setWorld(world);
-                entity.get(FormComponent.class).setForm(replay.form.get());
+                entity.get(FormComponent.class).setForm(FormUtils.copy(replay.form.get()));
                 replay.applyFrame(this.getTick(), entity);
                 entity.basic.prevPosition.set(entity.basic.position);
                 entity.basic.prevRotation.set(entity.basic.rotation);
@@ -301,6 +302,8 @@ public class UIFilmController extends UIElement
                 {
                     replay.keyframes.record(ticks, entity, this.recordingGroups);
                 }
+
+                replay.applyProperties(ticks, entity, runner.isRunning());
             }
         }
 
