@@ -47,8 +47,15 @@ public class Line <T>
 
             if (pointPrev != null && pointNext != null)
             {
-                from = pointPrev;
-                to = pointNext;
+                Vector2f perpendicularPrev = new Vector2f(pointPrev.x, pointPrev.y).sub(point.x, point.y).perpendicular().normalize().mul(thickness);
+                Vector2f perpendicularNext = new Vector2f(point.x, point.y).sub(pointNext.x, pointNext.y).perpendicular().normalize().mul(thickness);
+
+                compiled.add(new LinePoint<>(-perpendicularPrev.x + point.x, -perpendicularPrev.y + point.y, point.user));
+                compiled.add(new LinePoint<>(perpendicularPrev.x + point.x, perpendicularPrev.y + point.y, point.user));
+                compiled.add(new LinePoint<>(-perpendicularNext.x + point.x, -perpendicularNext.y + point.y, point.user));
+                compiled.add(new LinePoint<>(perpendicularNext.x + point.x, perpendicularNext.y + point.y, point.user));
+
+                continue;
             }
             else if (pointPrev != null)
             {
@@ -67,6 +74,16 @@ public class Line <T>
         }
 
         return compiled;
+    }
+
+    private Vector2f getClosest(Vector2f a, Vector2f b, Vector2f ref)
+    {
+        return ref.distanceSquared(a) < ref.distanceSquared(b) ? a : b;
+    }
+
+    private Vector2f getFurthest(Vector2f a, Vector2f b, Vector2f ref)
+    {
+        return ref.distanceSquared(a) > ref.distanceSquared(b) ? a : b;
     }
 
     private LinePoint<T> getPoint(int i)
