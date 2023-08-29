@@ -1,6 +1,5 @@
 package mchorse.bbs.game.entities.components;
 
-import mchorse.bbs.core.input.JoystickInput;
 import mchorse.bbs.world.entities.components.Component;
 import org.lwjgl.glfw.GLFWGamepadState;
 
@@ -11,7 +10,6 @@ public class PlayerComponent extends Component
     /* Joystick options */
     public final float[] prevSticks = new float[6];
     public final float[] sticks = new float[6];
-    public int gamepad;
 
     @Override
     public void preUpdate()
@@ -34,7 +32,5 @@ public class PlayerComponent extends Component
         this.sticks[3] = buffer.get();
         this.sticks[4] = buffer.get();
         this.sticks[5] = buffer.get();
-
-        this.gamepad = JoystickInput.getJoystickStateAsInt(state);
     }
 }

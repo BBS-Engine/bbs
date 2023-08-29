@@ -47,7 +47,6 @@ public class BridgeWorld extends BaseBridge implements IBridgeWorld
 
         this.engine.world.initialize(factory);
         this.engine.world.readExtraData(metadata.save);
-        this.engine.controller.reload();
         this.engine.screen.reload(this.engine.world);
 
         this.engine.cameraController.camera.setFarNear(0.01F, (this.engine.world.chunks.getW() * this.engine.world.chunks.s) / 2F);

@@ -128,9 +128,6 @@ public class UIDashboard extends UIBaseMenu
         IKey category = UIKeys.DASHBOARD_CATEGORY;
 
         this.overlay.keys().register(Keys.TOGGLE_VISIBILITY, this.main::toggleVisible).category(category);
-        /* TODO: This
-        this.overlay.keys().register(Keys.WORLD_RECORD_REPLAY, () -> this.getPanel(UIScenePanel.class).record()).category(category);
-        this.overlay.keys().register(Keys.WORLD_PLAYBACK_SCENE, () -> this.getPanel(UIScenePanel.class).plause()).category(category); */
         this.overlay.keys().register(Keys.WORLD_SAVE, this::saveWorld).category(category);
         this.overlay.keys().register(Keys.WORLD_TOGGLE_WALK, this::toggleWalkMode).category(category);
         this.overlay.keys().register(Keys.WORLD_TOGGLE_AXES, () -> this.displayAxes = !this.displayAxes).category(category);
@@ -259,11 +256,7 @@ public class UIDashboard extends UIBaseMenu
         if (!this.main.isVisible())
         {
             this.main.setVisible(true);
-
-            return;
         }
-
-        super.closeMenu();
     }
 
     protected void registerPanels()

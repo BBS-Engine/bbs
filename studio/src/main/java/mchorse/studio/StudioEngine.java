@@ -6,13 +6,11 @@ import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.bridge.IBridgeMenu;
-import mchorse.bbs.bridge.IBridgePlayer;
 import mchorse.bbs.bridge.IBridgeRender;
 import mchorse.bbs.bridge.IBridgeVideoRecorder;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.controller.CameraController;
 import mchorse.bbs.core.Engine;
-import mchorse.bbs.core.ITickable;
 import mchorse.bbs.core.keybinds.Keybind;
 import mchorse.bbs.core.keybinds.KeybindCategory;
 import mchorse.bbs.data.DataToString;
@@ -45,7 +43,6 @@ import mchorse.bbs.utils.watchdog.WatchDog;
 import mchorse.bbs.world.World;
 import mchorse.studio.bridge.BridgeCamera;
 import mchorse.studio.bridge.BridgeMenu;
-import mchorse.studio.bridge.BridgePlayer;
 import mchorse.studio.bridge.BridgeRender;
 import mchorse.studio.bridge.BridgeVideoRecorder;
 import mchorse.studio.bridge.BridgeWorld;
@@ -69,7 +66,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
 {
     /* Game */
     public StudioRenderer renderer;
-    public StudioController controller;
     public UIScreen screen;
     public World world;
 
@@ -90,7 +86,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
 
         this.apis.put(IBridgeCamera.class, new BridgeCamera(this));
         this.apis.put(IBridgeMenu.class, new BridgeMenu(this));
-        this.apis.put(IBridgePlayer.class, new BridgePlayer(this));
         this.apis.put(IBridgeRender.class, new BridgeRender(this));
         this.apis.put(IBridgeVideoRecorder.class, new BridgeVideoRecorder(this));
         this.apis.put(IBridgeWorld.class, new BridgeWorld(this));
@@ -106,7 +101,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
 
         this.screen = new UIScreen(this);
         this.renderer = new StudioRenderer(this);
-        this.controller = new StudioController(this);
         this.cameraController.camera.position.set(0, 0.5, 0);
 
         this.watchDog = new WatchDog(BBS.getAssetsFolder());
@@ -272,8 +266,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         Window.focus();
         Window.toggleMousePointer(true);
 
-        this.controller.init();
-
         Studio.PROFILER.endBegin("init_callbacks");
         this.registerSettingsCallbacks();
     }
@@ -341,7 +333,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
     public boolean handleKey(int key, int scancode, int action, int mods)
     {
         return this.keys.keybinds.handleKey(key, scancode, action, mods)
-            || this.controller.handleKey(key, scancode, action, mods)
             || this.screen.handleKey(key, scancode, action, mods);
     }
 
@@ -354,11 +345,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
     @Override
     public void handleMouse(int button, int action, int mode)
     {
-        if (!this.screen.hasMenu())
-        {
-            this.controller.handleMouse(button, action, mode);
-        }
-
         this.screen.handleMouse(button, action, mode);
     }
 
@@ -371,7 +357,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
     @Override
     public boolean handleGamepad(int button, int action)
     {
-        return this.controller.handleGamepad(button, action);
+        return false;
     }
 
     @Override
@@ -385,8 +371,8 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
             this.cameraController.tick();
         }
 
+        this.world.view.updateChunks(this.cameraController.camera.position);
         this.renderer.update();
-        this.controller.update();
         this.screen.update();
         this.cameraController.updateSoundPosition();
 
@@ -404,7 +390,6 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-        this.controller.render();
         this.renderer.render(worldTransition);
         this.screen.render(transition);
 

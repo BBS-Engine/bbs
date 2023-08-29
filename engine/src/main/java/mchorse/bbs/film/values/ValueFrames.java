@@ -6,21 +6,15 @@ import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.BasicComponent;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ValueFrames extends ValueGroup
 {
     public static final String GROUP_POSITION = "position";
     public static final String GROUP_ROTATION = "rotation";
-    public static final String GROUP_DPAD = "dpad";
     public static final String GROUP_LEFT_STICK = "lstick";
     public static final String GROUP_RIGHT_STICK = "rstick";
     public static final String GROUP_TRIGGERS = "triggers";
-
-    public static final Set<String> GROUPS = new HashSet<>(Arrays.asList(GROUP_POSITION, GROUP_ROTATION, GROUP_DPAD, GROUP_LEFT_STICK, GROUP_RIGHT_STICK, GROUP_TRIGGERS));
 
     public final ValueKeyframeChannel x = new ValueKeyframeChannel("x");
     public final ValueKeyframeChannel y = new ValueKeyframeChannel("y");
@@ -45,8 +39,6 @@ public class ValueFrames extends ValueGroup
     public final ValueKeyframeChannel triggerLeft = new ValueKeyframeChannel("trigger_l");
     public final ValueKeyframeChannel triggerRight = new ValueKeyframeChannel("trigger_r");
 
-    public final ValueKeyframeChannel gamepad = new ValueKeyframeChannel("gamepad");
-
     public ValueFrames(String id)
     {
         super(id);
@@ -69,7 +61,6 @@ public class ValueFrames extends ValueGroup
         this.add(this.stickRightY);
         this.add(this.triggerLeft);
         this.add(this.triggerRight);
-        this.add(this.gamepad);
     }
 
     public void record(int tick, Entity entity, List<String> groups)
@@ -79,7 +70,6 @@ public class ValueFrames extends ValueGroup
         boolean empty = groups == null || groups.isEmpty();
         boolean position = empty || groups.contains(GROUP_POSITION);
         boolean rotation = empty || groups.contains(GROUP_ROTATION);
-        boolean dpad = empty || groups.contains(GROUP_DPAD);
         boolean leftStick = empty || groups.contains(GROUP_LEFT_STICK);
         boolean rightStick = empty || groups.contains(GROUP_RIGHT_STICK);
         boolean triggers = empty || groups.contains(GROUP_TRIGGERS);
@@ -129,8 +119,6 @@ public class ValueFrames extends ValueGroup
                 this.triggerLeft.get().insert(tick, component.sticks[4]);
                 this.triggerRight.get().insert(tick, component.sticks[5]);
             }
-
-            if (dpad) this.gamepad.get().insert(tick, component.gamepad);
         }
     }
 
@@ -143,7 +131,6 @@ public class ValueFrames extends ValueGroup
         boolean empty = groups == null || groups.isEmpty();
         boolean position = empty || !groups.contains(GROUP_POSITION);
         boolean rotation = empty || !groups.contains(GROUP_ROTATION);
-        boolean dpad = empty || !groups.contains(GROUP_DPAD);
         boolean leftStick = empty || !groups.contains(GROUP_LEFT_STICK);
         boolean rightStick = empty || !groups.contains(GROUP_RIGHT_STICK);
         boolean triggers = empty || !groups.contains(GROUP_TRIGGERS);
@@ -185,11 +172,6 @@ public class ValueFrames extends ValueGroup
             {
                 component.sticks[4] = (float) this.triggerLeft.get().interpolate(tick);
                 component.sticks[5] = (float) this.triggerRight.get().interpolate(tick);
-            }
-
-            if (dpad)
-            {
-                component.gamepad = (int) this.gamepad.get().interpolate(tick);
             }
         }
     }

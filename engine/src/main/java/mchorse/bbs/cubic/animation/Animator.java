@@ -4,10 +4,8 @@ import mchorse.bbs.cubic.CubicModel;
 import mchorse.bbs.cubic.data.animation.Animation;
 import mchorse.bbs.cubic.data.animation.Animations;
 import mchorse.bbs.cubic.data.model.Model;
-import mchorse.bbs.game.entities.components.PlayerComponent;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.BasicComponent;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,11 +35,6 @@ public class Animator
     public ActionPlayback shoot;
     public ActionPlayback consume;
 
-    public ActionPlayback joystickUp;
-    public ActionPlayback joystickDown;
-    public ActionPlayback joystickLeft;
-    public ActionPlayback joystickRight;
-
     /* Action pipeline properties */
     public ActionPlayback active;
     public ActionPlayback lastActive;
@@ -56,17 +49,11 @@ public class Animator
 
     private CubicModel model;
 
-    private boolean wasUpPressed;
-    private boolean wasDownPressed;
-    private boolean wasLeftPressed;
-    private boolean wasRightPressed;
-
     public List<String> getActions()
     {
         return Arrays.asList(
             "idle", "running", "crouching", "crouching_idle", "dying", "falling",
-            "swipe", "jump", "hurt", "land", "shoot", "consume",
-            "joystick_up", "joystick_down", "joystick_left", "joystick_right"
+            "swipe", "jump", "hurt", "land", "shoot", "consume"
         );
     }
 
@@ -87,11 +74,6 @@ public class Animator
         this.land = this.createAction(this.land, actions.getConfig("land"), false);
         this.shoot = this.createAction(this.shoot, actions.getConfig("shoot"), true);
         this.consume = this.createAction(this.consume, actions.getConfig("consume"), true);
-
-        this.joystickUp = this.createAction(this.joystickUp, actions.getConfig("joystick_up"), false);
-        this.joystickDown = this.createAction(this.joystickDown, actions.getConfig("joystick_down"), false);
-        this.joystickLeft = this.createAction(this.joystickLeft, actions.getConfig("joystick_left"), true);
-        this.joystickRight = this.createAction(this.joystickRight, actions.getConfig("joystick_right"), true);
     }
 
     /**
@@ -259,28 +241,6 @@ public class Animator
         if (basic.hitTimer >= 5)
         {
             this.addAction(this.swipe);
-        }
-
-        PlayerComponent component = target.get(PlayerComponent.class);
-
-        if (component != null)
-        {
-            int gamepad = component.gamepad;
-
-            boolean wasUpPressed = this.isGamepadPressed(gamepad, GLFW.GLFW_GAMEPAD_BUTTON_DPAD_UP);
-            boolean wasDownPressed = this.isGamepadPressed(gamepad, GLFW.GLFW_GAMEPAD_BUTTON_DPAD_DOWN);
-            boolean wasLeftPressed = this.isGamepadPressed(gamepad, GLFW.GLFW_GAMEPAD_BUTTON_DPAD_LEFT);
-            boolean wasRightPressed = this.isGamepadPressed(gamepad, GLFW.GLFW_GAMEPAD_BUTTON_DPAD_RIGHT);
-
-            if (wasUpPressed && !this.wasUpPressed) this.addAction(this.joystickUp);
-            if (wasDownPressed && !this.wasDownPressed) this.addAction(this.joystickDown);
-            if (wasLeftPressed && !this.wasLeftPressed) this.addAction(this.joystickLeft);
-            if (wasRightPressed && !this.wasRightPressed) this.addAction(this.joystickRight);
-
-            this.wasUpPressed = wasUpPressed;
-            this.wasDownPressed = wasDownPressed;
-            this.wasLeftPressed = wasLeftPressed;
-            this.wasRightPressed = wasRightPressed;
         }
 
         this.prevX = basic.position.x;
