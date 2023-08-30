@@ -5,7 +5,7 @@ import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.utils.Pose;
 import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
-import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
+import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -60,7 +60,7 @@ public class PoseProperty extends BaseTweenProperty<Pose>
     @Override
     public GenericKeyframeChannel createChannel()
     {
-        return new GenericKeyframeChannel(KeyframeSerializers.POSE);
+        return new GenericKeyframeChannel(KeyframeFactories.POSE);
     }
 
     @Override

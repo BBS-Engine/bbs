@@ -28,6 +28,7 @@ import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.IFlightSupported;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.film.clips.UIClip;
+import mchorse.bbs.ui.film.replays.UIReplaysEditor;
 import mchorse.bbs.ui.film.screenplay.FountainSyntaxHighlighter;
 import mchorse.bbs.ui.film.utils.undo.ValueChangeUndo;
 import mchorse.bbs.ui.framework.UIContext;

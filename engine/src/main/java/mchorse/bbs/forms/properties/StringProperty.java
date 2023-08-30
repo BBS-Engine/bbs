@@ -3,7 +3,7 @@ package mchorse.bbs.forms.properties;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
-import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
+import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 
 public class StringProperty extends BaseProperty<String>
 {
@@ -33,6 +33,6 @@ public class StringProperty extends BaseProperty<String>
     @Override
     public GenericKeyframeChannel createChannel()
     {
-        return new GenericKeyframeChannel(KeyframeSerializers.STRING);
+        return new GenericKeyframeChannel(KeyframeFactories.STRING);
     }
 }

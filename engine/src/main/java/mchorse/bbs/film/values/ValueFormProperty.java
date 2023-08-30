@@ -5,8 +5,8 @@ import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.settings.values.base.BaseValueBasic;
 import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
-import mchorse.bbs.utils.keyframes.generic.serializers.IGenericKeyframeSerializer;
-import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
+import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
+import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 
 public class ValueFormProperty extends BaseValueBasic<GenericKeyframeChannel>
 {
@@ -22,7 +22,7 @@ public class ValueFormProperty extends BaseValueBasic<GenericKeyframeChannel>
 
         if (this.value != null)
         {
-            type.putString("type", CollectionUtils.getKey(KeyframeSerializers.SERIALIZERS, this.value.getSerializer()));
+            type.putString("type", CollectionUtils.getKey(KeyframeFactories.SERIALIZERS, this.value.getFactory()));
             type.put("keyframes", this.value.toData());
         }
 
@@ -38,7 +38,7 @@ public class ValueFormProperty extends BaseValueBasic<GenericKeyframeChannel>
         }
 
         MapType map = data.asMap();
-        IGenericKeyframeSerializer serializer = KeyframeSerializers.SERIALIZERS.get(map.getString("type"));
+        IGenericKeyframeFactory serializer = KeyframeFactories.SERIALIZERS.get(map.getString("type"));
         GenericKeyframeChannel channel = new GenericKeyframeChannel(serializer);
 
         channel.fromData(map.getList("keyframes"));

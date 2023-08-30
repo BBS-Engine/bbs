@@ -4,7 +4,7 @@ import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
-import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
+import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 
 public class TransformProperty extends BaseTweenProperty<Transform>
 {
@@ -35,7 +35,7 @@ public class TransformProperty extends BaseTweenProperty<Transform>
     @Override
     public GenericKeyframeChannel createChannel()
     {
-        return new GenericKeyframeChannel(KeyframeSerializers.TRANSFORM);
+        return new GenericKeyframeChannel(KeyframeFactories.TRANSFORM);
     }
 
     @Override

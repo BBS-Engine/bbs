@@ -80,6 +80,11 @@ public class FormUtils
 
     public static void collectPropertyPaths(Form form, List<String> properties, String prefix)
     {
+        if (form == null)
+        {
+            return;
+        }
+
         for (IFormProperty property : form.getProperties().values())
         {
             if (property.canCreateChannel())

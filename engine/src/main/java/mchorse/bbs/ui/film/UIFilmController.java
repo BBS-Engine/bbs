@@ -13,7 +13,7 @@ import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
-import mchorse.bbs.ui.film.utils.UIRecordOverlayPanel;
+import mchorse.bbs.ui.film.replays.UIRecordOverlayPanel;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;

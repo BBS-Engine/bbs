@@ -3,8 +3,10 @@ package mchorse.bbs.film.values;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.FormUtils;
+import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.forms.properties.IFormProperty;
 import mchorse.bbs.settings.values.ValueGroup;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
 
 import java.util.HashMap;
@@ -19,7 +21,21 @@ public class ValueFormProperties extends ValueGroup
         super(id);
     }
 
-    public GenericKeyframeChannel create(IFormProperty property)
+    public ValueFormProperty getOrCreate(Form form, String key)
+    {
+        BaseValue value = this.get(key);
+
+        if (value instanceof ValueFormProperty)
+        {
+            return (ValueFormProperty) value;
+        }
+
+        IFormProperty property = FormUtils.getProperty(form, key);
+
+        return property != null ? this.create(property) : null;
+    }
+
+    public ValueFormProperty create(IFormProperty property)
     {
         if (property.canCreateChannel())
         {
@@ -31,7 +47,7 @@ public class ValueFormProperties extends ValueGroup
             this.properties.put(key, valueFormProperty);
             this.add(valueFormProperty);
 
-            return channel;
+            return valueFormProperty;
         }
 
         return null;
@@ -64,7 +80,7 @@ public class ValueFormProperties extends ValueGroup
 
             property.fromData(mapType);
 
-            if (property.get().getSerializer() != null)
+            if (property.get().getFactory() != null)
             {
                 this.properties.put(key, property);
                 this.add(property);

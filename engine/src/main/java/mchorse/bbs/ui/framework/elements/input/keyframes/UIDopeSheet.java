@@ -396,21 +396,6 @@ public class UIDopeSheet extends UIKeyframes
     }
 
     @Override
-    protected void postSlideSort(UIContext context)
-    {
-        /* Resort after dragging the tick thing */
-        for (UISheet sheet : this.sheets)
-        {
-            if (!sheet.selected.isEmpty())
-            {
-                sheet.sort();
-            }
-        }
-
-        this.sliding = false;
-    }
-
-    @Override
     protected void resetMouseReleased(UIContext context)
     {
         if (this.isGrabbing())

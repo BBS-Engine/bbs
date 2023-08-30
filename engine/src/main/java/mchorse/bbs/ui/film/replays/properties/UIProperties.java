@@ -1,29 +1,30 @@
-package mchorse.bbs.ui.framework.elements.input.keyframes;
+package mchorse.bbs.ui.film.replays.properties;
 
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
+import mchorse.bbs.ui.framework.elements.input.keyframes.IAxisConverter;
 import mchorse.bbs.ui.utils.Scale;
 import mchorse.bbs.utils.OS;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.utils.colors.Colors;
-import mchorse.bbs.utils.keyframes.Keyframe;
-import mchorse.bbs.utils.keyframes.KeyframeEasing;
-import mchorse.bbs.utils.keyframes.KeyframeInterpolation;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.math.IInterpolation;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-public abstract class UIKeyframes extends UIElement
+public abstract class UIProperties extends UIElement
 {
     public static final Color COLOR = new Color();
 
-    public Consumer<Keyframe> callback;
-    public Selection which = Selection.NOT_SELECTED;
+    public Consumer<GenericKeyframe> callback;
     public int duration;
 
     public static final double MIN_ZOOM = 0.01D;
     public static final double MAX_ZOOM = 1000D;
+
+    protected boolean selected;
 
     /**
      * Sliding flag, whether keyframes should be sorted after
@@ -58,13 +59,12 @@ public abstract class UIKeyframes extends UIElement
     protected int lastX;
     protected int lastY;
     protected double lastT;
-    protected double lastV;
 
     protected Scale scaleX;
 
     protected IAxisConverter converter;
 
-    public UIKeyframes(Consumer<Keyframe> callback)
+    public UIProperties(Consumer<GenericKeyframe> callback)
     {
         super();
 
@@ -83,7 +83,7 @@ public abstract class UIKeyframes extends UIElement
         return this.scaleX;
     }
 
-    protected void setKeyframe(Keyframe current)
+    protected void setKeyframe(GenericKeyframe current)
     {
         if (this.callback != null)
         {
@@ -93,13 +93,11 @@ public abstract class UIKeyframes extends UIElement
 
     /* Setters */
 
-    public abstract void setTick(double tick, boolean opposite);
+    public abstract void setTick(double tick);
 
-    public abstract void setValue(double value, boolean opposite);
+    public abstract void setValue(Object value);
 
-    public abstract void setInterpolation(KeyframeInterpolation interp);
-
-    public abstract void setEasing(KeyframeEasing easing);
+    public abstract void setInterpolation(IInterpolation interp);
 
     public void setDuration(long duration)
     {
@@ -122,11 +120,11 @@ public abstract class UIKeyframes extends UIElement
 
     /* Abstract methods */
 
-    public abstract Keyframe getCurrent();
+    public abstract GenericKeyframe getCurrent();
 
-    public abstract List<UISheet> getSheets();
+    public abstract List<UIProperty> getProperties();
 
-    public abstract UISheet getSheet(int mouseY);
+    public abstract UIProperty getSheet(int mouseY);
 
     public boolean isGrabbing()
     {
@@ -154,11 +152,11 @@ public abstract class UIKeyframes extends UIElement
 
     public void doubleClick(int mouseX, int mouseY)
     {
-        if (this.which == Selection.NOT_SELECTED)
+        if (!this.selected)
         {
             this.addCurrent(mouseX, mouseY);
         }
-        else if (this.which == Selection.KEYFRAME && !this.isMultipleSelected())
+        else if (!this.isMultipleSelected())
         {
             this.removeCurrent();
         }
@@ -175,7 +173,7 @@ public abstract class UIKeyframes extends UIElement
     protected void updateMoved()
     {}
 
-    protected void moveNoKeyframe(UIContext context, Keyframe frame, double x, double y)
+    protected void moveNoKeyframe(UIContext context, GenericKeyframe frame, double x, double y)
     {}
 
     protected void renderCursor(UIContext context)
@@ -197,7 +195,7 @@ public abstract class UIKeyframes extends UIElement
                 boolean shift = Window.isShiftPressed();
 
                 /* Duplicate the keyframe */
-                if (Window.isAltPressed() && !shift && this.which == Selection.KEYFRAME)
+                if (Window.isAltPressed() && !shift && this.selected)
                 {
                     this.duplicateKeyframe(context, mouseX, mouseY);
 
@@ -275,16 +273,16 @@ public abstract class UIKeyframes extends UIElement
     @Override
     public boolean subMouseReleased(UIContext context)
     {
-        if (this.which == Selection.KEYFRAME)
+        if (this.selected)
         {
             if (this.sliding)
             {
                 /* Resort after dragging the tick thing */
-                for (UISheet sheet : this.getSheets())
+                for (UIProperty property : this.getProperties())
                 {
-                    if (!sheet.selected.isEmpty())
+                    if (!property.selected.isEmpty())
                     {
-                        sheet.sort();
+                        property.sort();
                     }
                 }
 
@@ -413,7 +411,7 @@ public abstract class UIKeyframes extends UIElement
         this.scaleX.setShift(-(mouseX - this.lastX) / this.scaleX.getZoom() + this.lastT);
     }
 
-    protected Keyframe moving(UIContext context, int mouseX, int mouseY)
+    protected GenericKeyframe moving(UIContext context, int mouseX, int mouseY)
     {
         return null;
     }

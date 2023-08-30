@@ -1,18 +1,23 @@
-package mchorse.bbs.ui.film;
+package mchorse.bbs.ui.film.replays;
 
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.film.Film;
+import mchorse.bbs.film.values.ValueFormProperty;
 import mchorse.bbs.film.values.ValueKeyframes;
 import mchorse.bbs.film.values.ValueReplay;
+import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.ui.film.utils.UIReplayList;
+import mchorse.bbs.ui.film.UIFilmPanel;
+import mchorse.bbs.ui.film.replays.properties.UIProperty;
+import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraGraphEditor;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframesEditor;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.StringUtils;
 import mchorse.bbs.utils.colors.Colors;
 
 import java.util.ArrayList;
@@ -30,6 +35,7 @@ public class UIReplaysEditor extends UIElement
     public UIElement keyframes;
     public UIStringList channels;
     public UIKeyframesEditor keyframeEditor;
+    public UIPropertyEditor propertyEditor;
 
     /* Clips */
     private UIFilmPanel delegate;
@@ -38,6 +44,7 @@ public class UIReplaysEditor extends UIElement
 
     private List<ValueKeyframeChannel> tempKeyframes = new ArrayList<>();
     private List<Integer> tempColors = new ArrayList<>();
+    private List<ValueFormProperty> tempProperties = new ArrayList<>();
 
     static
     {
@@ -113,9 +120,30 @@ public class UIReplaysEditor extends UIElement
             this.keyframeEditor = null;
         }
 
+        if (this.propertyEditor != null)
+        {
+            this.propertyEditor.removeFromParent();
+            this.propertyEditor = null;
+        }
+
         this.collectChannels(l);
 
-        if (this.tempKeyframes.size() > 1)
+        if (!this.tempProperties.isEmpty())
+        {
+            UIPropertyEditor editor = new UIPropertyEditor(this.delegate);
+
+            List<UIProperty> properties = editor.properties.getProperties();
+
+            for (int i = 0; i < this.tempProperties.size(); i++)
+            {
+                ValueFormProperty property = this.tempProperties.get(i);
+
+                properties.add(new UIProperty(property.getId(), IKey.raw(property.getId()), this.tempColors.get(i), property.get()));
+            }
+
+            this.propertyEditor = editor;
+        }
+        else if (this.tempKeyframes.size() > 1)
         {
             UICameraDopeSheetEditor editor = new UICameraDopeSheetEditor(this.delegate);
 
@@ -140,6 +168,12 @@ public class UIReplaysEditor extends UIElement
             this.keyframes.add(this.keyframeEditor);
         }
 
+        if (this.propertyEditor != null)
+        {
+            this.propertyEditor.relative(this.keyframes).wTo(this.channels.area).h(1F);
+            this.keyframes.add(this.propertyEditor);
+        }
+
         this.resize();
 
         if (this.keyframeEditor != null)
@@ -147,12 +181,19 @@ public class UIReplaysEditor extends UIElement
             this.keyframeEditor.keyframes.duration = this.film.camera.calculateDuration();
             this.keyframeEditor.resetView();
         }
+
+        if (this.propertyEditor != null)
+        {
+            this.propertyEditor.properties.duration = this.film.camera.calculateDuration();
+            this.propertyEditor.resetView();
+        }
     }
 
     private void collectChannels(List<String> keys)
     {
         this.tempKeyframes.clear();
         this.tempColors.clear();
+        this.tempProperties.clear();
 
         for (String key : keys)
         {
@@ -162,6 +203,16 @@ public class UIReplaysEditor extends UIElement
             {
                 this.tempKeyframes.add((ValueKeyframeChannel) value);
                 this.tempColors.add(COLORS.getOrDefault(key, Colors.ACTIVE));
+            }
+            else
+            {
+                ValueFormProperty property = this.replay.properties.getOrCreate(this.replay.form.get(), key);
+
+                if (property != null)
+                {
+                    this.tempProperties.add(property);
+                    this.tempColors.add(COLORS.getOrDefault(StringUtils.fileName(key), Colors.ACTIVE));
+                }
             }
         }
     }
@@ -193,6 +244,7 @@ public class UIReplaysEditor extends UIElement
                 this.channels.add(key);
             }
 
+            this.channels.add(FormUtils.collectPropertyPaths(replay.form.get()));
             this.channels.setIndex(0);
 
             this.selectChannels(this.channels.getCurrent());

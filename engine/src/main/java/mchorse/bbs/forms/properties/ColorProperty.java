@@ -4,7 +4,7 @@ import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
-import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
+import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 
 public class ColorProperty extends BaseTweenProperty<Color>
 {
@@ -49,6 +49,6 @@ public class ColorProperty extends BaseTweenProperty<Color>
     @Override
     public GenericKeyframeChannel createChannel()
     {
-        return new GenericKeyframeChannel(KeyframeSerializers.COLOR);
+        return new GenericKeyframeChannel(KeyframeFactories.COLOR);
     }
 }

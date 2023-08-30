@@ -387,22 +387,14 @@ public class UIGraph extends UIKeyframes
         /* Scaling X */
         if (x && !y || none)
         {
-            this.scaleX.zoomAnchor(Scale.getAnchorX(context, this.area), Math.copySign(this.scaleX.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
+            this.scaleX.zoomAnchor(Scale.getAnchorX(context, this.area), Math.copySign(this.scaleX.getZoomFactor(), scroll), MIN_ZOOM, MAX_ZOOM);
         }
 
         /* Scaling Y */
         if (y && !x || none)
         {
-            this.scaleY.zoomAnchor(Scale.getAnchorY(context, this.area), Math.copySign(this.scaleY.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
+            this.scaleY.zoomAnchor(Scale.getAnchorY(context, this.area), Math.copySign(this.scaleY.getZoomFactor(), scroll), MIN_ZOOM, MAX_ZOOM);
         }
-    }
-
-    @Override
-    protected void postSlideSort(UIContext context)
-    {
-        /* Resort after dragging the tick thing */
-        this.sheet.sort();
-        this.sliding = false;
     }
 
     @Override

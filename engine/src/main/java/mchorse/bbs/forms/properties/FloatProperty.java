@@ -3,7 +3,7 @@ package mchorse.bbs.forms.properties;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
-import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
+import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 
 public class FloatProperty extends BaseTweenProperty<Float>
 {
@@ -39,6 +39,6 @@ public class FloatProperty extends BaseTweenProperty<Float>
     @Override
     public GenericKeyframeChannel createChannel()
     {
-        return new GenericKeyframeChannel(KeyframeSerializers.FLOAT);
+        return new GenericKeyframeChannel(KeyframeFactories.FLOAT);
     }
 }

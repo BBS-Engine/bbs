@@ -5,7 +5,7 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.utils.Pair;
-import mchorse.bbs.utils.keyframes.generic.serializers.IGenericKeyframeSerializer;
+import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,21 +19,21 @@ import java.util.List;
 public class GenericKeyframeChannel <T> implements IDataSerializable<ListType>
 {
     private final List<GenericKeyframe<T>> keyframes = new ArrayList<>();
-    private final IGenericKeyframeSerializer<T> serializer;
+    private final IGenericKeyframeFactory<T> factory;
 
-    public GenericKeyframeChannel(IGenericKeyframeSerializer<T> serializer)
+    public GenericKeyframeChannel(IGenericKeyframeFactory<T> factory)
     {
-        this.serializer = serializer;
+        this.factory = factory;
     }
 
-    public IGenericKeyframeSerializer<T> getSerializer()
+    public IGenericKeyframeFactory<T> getFactory()
     {
-        return this.serializer;
+        return this.factory;
     }
 
     protected GenericKeyframe<T> create(long tick, T value)
     {
-        GenericKeyframe<T> keyframe = new GenericKeyframe<>(this.serializer);
+        GenericKeyframe<T> keyframe = new GenericKeyframe<>(this.factory);
 
         keyframe.tick = tick;
         keyframe.value = value;

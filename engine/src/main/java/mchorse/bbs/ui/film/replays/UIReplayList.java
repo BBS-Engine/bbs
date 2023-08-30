@@ -1,4 +1,4 @@
-package mchorse.bbs.ui.film.utils;
+package mchorse.bbs.ui.film.replays;
 
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridgeWorld;

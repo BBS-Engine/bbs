@@ -4,7 +4,7 @@ import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
-import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
+import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 import mchorse.bbs.utils.resources.LinkUtils;
 import mchorse.bbs.utils.resources.MultiLink;
 
@@ -93,7 +93,7 @@ public class LinkProperty extends BaseTweenProperty<Link>
     @Override
     public GenericKeyframeChannel createChannel()
     {
-        return new GenericKeyframeChannel(KeyframeSerializers.LINK);
+        return new GenericKeyframeChannel(KeyframeFactories.LINK);
     }
 
     @Override
