@@ -4,7 +4,6 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.properties.IFormProperty;
-import mchorse.bbs.forms.properties.IKeyframeable;
 import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
 
@@ -22,9 +21,9 @@ public class ValueFormProperties extends ValueGroup
 
     public GenericKeyframeChannel create(IFormProperty property)
     {
-        if (property instanceof IKeyframeable)
+        if (property.canCreateChannel())
         {
-            GenericKeyframeChannel channel = ((IKeyframeable) property).createChannel();
+            GenericKeyframeChannel channel = property.createChannel();
             String key = FormUtils.getPropertyPath(property);
             ValueFormProperty valueFormProperty = new ValueFormProperty(key);
 

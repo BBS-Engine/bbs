@@ -2,6 +2,7 @@ package mchorse.bbs.forms.properties;
 
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.forms.forms.Form;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
 import mchorse.bbs.utils.math.IInterpolation;
 
 public interface IFormProperty <T> extends IMapSerializable
@@ -50,4 +51,14 @@ public interface IFormProperty <T> extends IMapSerializable
      * Get tween factor (0 - started tweening, 1 - finished tweening).
      */
     public float getTweenFactor(float transition);
+
+    /**
+     * Checks whether this property can create a generic keyframe channel
+     */
+    public boolean canCreateChannel();
+
+    /**
+     * Create a generic keyframe channel that can be used with this property
+     */
+    public GenericKeyframeChannel createChannel();
 }

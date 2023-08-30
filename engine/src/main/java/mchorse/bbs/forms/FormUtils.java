@@ -80,9 +80,12 @@ public class FormUtils
 
     public static void collectPropertyPaths(Form form, List<String> properties, String prefix)
     {
-        for (String key : form.getProperties().keySet())
+        for (IFormProperty property : form.getProperties().values())
         {
-            properties.add(StringUtils.combinePaths(prefix, key));
+            if (property.canCreateChannel())
+            {
+                properties.add(StringUtils.combinePaths(prefix, property.getKey()));
+            }
         }
 
         List<BodyPart> all = form.parts.getAll();

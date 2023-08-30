@@ -135,8 +135,8 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.record.tooltip(UIKeys.CAMERA_TOOLTIPS_RECORD, Direction.LEFT);
         this.openVideos = new UIIcon(Icons.FILM, (b) -> this.recorder.openMovies());
         this.openVideos.tooltip(UIKeys.CAMERA_TOOLTIPS_OPEN_VIDEOS, Direction.LEFT);
-        this.openReplays = new UIIcon(Icons.SCENE, (b) -> this.showPanel(this.replays));
         this.openCamera = new UIIcon(Icons.FRUSTUM, (b) -> this.showPanel(this.clips));
+        this.openReplays = new UIIcon(Icons.SCENE, (b) -> this.showPanel(this.replays));
         this.openScreenplay = new UIIcon(Icons.FILE, (b) -> this.showPanel(this.screenplay));
 
         this.draggable = new UIDraggable((context) ->
@@ -148,7 +148,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         });
         this.draggable.hoverOnly().relative(this.main).x(1F, -3).y(0.5F, -40).wh(6, 80);
 
-        this.iconBar.add(this.plause, this.record, this.openVideos, this.openReplays, this.openCamera, this.openScreenplay);
+        this.iconBar.add(this.plause, this.record, this.openVideos, this.openCamera, this.openReplays, this.openScreenplay);
 
         /* Adding everything */
         UIRenderable renderable = new UIRenderable(this::renderIcons);

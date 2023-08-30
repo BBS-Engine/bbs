@@ -842,11 +842,6 @@ public class UIClips extends UIElement
 
         if (this.embedded != null)
         {
-            if (this.embedded instanceof IUIEmbeddedView)
-            {
-                ((IUIEmbeddedView) this.embedded).close();
-            }
-
             this.embedded.removeFromParent();
         }
 

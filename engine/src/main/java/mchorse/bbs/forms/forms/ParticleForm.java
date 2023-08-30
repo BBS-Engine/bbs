@@ -20,6 +20,8 @@ public class ParticleForm extends Form
     {
         super();
 
+        this.effect.cantAnimate();
+
         this.register(this.effect);
     }
 

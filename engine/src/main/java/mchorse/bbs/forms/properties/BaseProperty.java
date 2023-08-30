@@ -2,6 +2,7 @@ package mchorse.bbs.forms.properties;
 
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.Form;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.utils.math.Interpolation;
 
@@ -19,11 +20,18 @@ public abstract class BaseProperty <T> implements IFormProperty<T>
     protected int duration;
     protected IInterpolation interpolation = Interpolation.LINEAR;
 
+    protected boolean canAnimate = true;
+
     public BaseProperty(Form form, String key, T value)
     {
         this.form = form;
         this.key = key;
         this.value = value;
+    }
+
+    public void cantAnimate()
+    {
+        this.canAnimate = false;
     }
 
     @Override
@@ -95,6 +103,18 @@ public abstract class BaseProperty <T> implements IFormProperty<T>
         }
 
         return 1 - (this.ticks - (this.playing ? transition : 0)) / (float) this.duration;
+    }
+
+    @Override
+    public boolean canCreateChannel()
+    {
+        return false;
+    }
+
+    @Override
+    public GenericKeyframeChannel createChannel()
+    {
+        return null;
     }
 
     @Override

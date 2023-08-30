@@ -26,6 +26,8 @@ public class BillboardForm extends Form
     {
         super();
 
+        this.resizeCrop.cantAnimate();
+
         this.register(this.texture);
         this.register(this.billboard);
         this.register(this.crop);

@@ -34,6 +34,8 @@ public class LabelForm extends Form
     {
         super();
 
+        this.font.cantAnimate();
+
         this.register(this.text);
         this.register(this.font);
         this.register(this.color);

@@ -6,7 +6,7 @@ import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
 import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
 
-public class ColorProperty extends BaseTweenProperty<Color> implements IKeyframeable
+public class ColorProperty extends BaseTweenProperty<Color>
 {
     private Color i = new Color();
 
@@ -38,6 +38,12 @@ public class ColorProperty extends BaseTweenProperty<Color> implements IKeyframe
     public void toData(MapType data)
     {
         data.putInt(this.getKey(), this.value.getARGBColor());
+    }
+
+    @Override
+    public boolean canCreateChannel()
+    {
+        return this.canAnimate;
     }
 
     @Override

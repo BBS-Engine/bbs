@@ -2,6 +2,8 @@ package mchorse.bbs.forms.properties;
 
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.Form;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
+import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
 
 public class BooleanProperty extends BaseProperty<Boolean>
 {
@@ -20,5 +22,17 @@ public class BooleanProperty extends BaseProperty<Boolean>
     public void toData(MapType data)
     {
         data.putBool(this.getKey(), this.value);
+    }
+
+    @Override
+    public boolean canCreateChannel()
+    {
+        return this.canAnimate;
+    }
+
+    @Override
+    public GenericKeyframeChannel createChannel()
+    {
+        return new GenericKeyframeChannel(KeyframeSerializers.BOOLEAN);
     }
 }

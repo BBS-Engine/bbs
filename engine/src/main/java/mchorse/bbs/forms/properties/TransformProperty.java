@@ -3,6 +3,8 @@ package mchorse.bbs.forms.properties;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.utils.Transform;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
+import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
 
 public class TransformProperty extends BaseTweenProperty<Transform>
 {
@@ -22,6 +24,18 @@ public class TransformProperty extends BaseTweenProperty<Transform>
         this.i.lerp(this.value, factor);
 
         return this.i;
+    }
+
+    @Override
+    public boolean canCreateChannel()
+    {
+        return this.canAnimate;
+    }
+
+    @Override
+    public GenericKeyframeChannel createChannel()
+    {
+        return new GenericKeyframeChannel(KeyframeSerializers.TRANSFORM);
     }
 
     @Override

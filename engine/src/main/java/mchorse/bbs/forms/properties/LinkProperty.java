@@ -3,6 +3,8 @@ package mchorse.bbs.forms.properties;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
+import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
 import mchorse.bbs.utils.resources.LinkUtils;
 import mchorse.bbs.utils.resources.MultiLink;
 
@@ -80,6 +82,18 @@ public class LinkProperty extends BaseTweenProperty<Link>
         }
 
         return path.substring(0, lastUnderscore + 1) + frame + path.substring(lastDot);
+    }
+
+    @Override
+    public boolean canCreateChannel()
+    {
+        return this.canAnimate;
+    }
+
+    @Override
+    public GenericKeyframeChannel createChannel()
+    {
+        return new GenericKeyframeChannel(KeyframeSerializers.LINK);
     }
 
     @Override

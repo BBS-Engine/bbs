@@ -6,6 +6,7 @@ import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.BasicComponent;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ValueKeyframes extends ValueGroup
@@ -15,6 +16,8 @@ public class ValueKeyframes extends ValueGroup
     public static final String GROUP_LEFT_STICK = "lstick";
     public static final String GROUP_RIGHT_STICK = "rstick";
     public static final String GROUP_TRIGGERS = "triggers";
+
+    public static final List<String> CURATED_CHANNELS = Arrays.asList("x", "y", "z", "pitch", "yaw", "bodyYaw", "sneaking", "stick_lx", "stick_ly", "stick_rx", "stick_ry", "trigger_l", "trigger_r");
 
     public final ValueKeyframeChannel x = new ValueKeyframeChannel("x");
     public final ValueKeyframeChannel y = new ValueKeyframeChannel("y");

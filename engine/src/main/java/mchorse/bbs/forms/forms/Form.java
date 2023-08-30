@@ -39,8 +39,16 @@ public abstract class Form implements IMapSerializable
 
     public Form()
     {
+        this.name.cantAnimate();
+
         this.register(this.name);
         this.register(this.transform);
+
+        this.hitbox.cantAnimate();
+        this.hitboxWidth.cantAnimate();
+        this.hitboxHeight.cantAnimate();
+        this.hitboxSneakMultiplier.cantAnimate();
+        this.hitboxEyeHeight.cantAnimate();
 
         this.register(this.hitbox);
         this.register(this.hitboxWidth);

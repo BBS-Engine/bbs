@@ -96,6 +96,15 @@ public class Pose implements IMapSerializable
         return false;
     }
 
+    public Pose copy()
+    {
+        Pose pose = new Pose();
+
+        pose.copy(this);
+
+        return pose;
+    }
+
     public void copy(Pose pose)
     {
         this.staticPose = pose.staticPose;

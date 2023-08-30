@@ -4,6 +4,8 @@ import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.utils.Pose;
 import mchorse.bbs.utils.Transform;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
+import mchorse.bbs.utils.keyframes.generic.serializers.KeyframeSerializers;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,6 +49,18 @@ public class PoseProperty extends BaseTweenProperty<Pose>
         }
 
         return this.i;
+    }
+
+    @Override
+    public boolean canCreateChannel()
+    {
+        return this.canAnimate;
+    }
+
+    @Override
+    public GenericKeyframeChannel createChannel()
+    {
+        return new GenericKeyframeChannel(KeyframeSerializers.POSE);
     }
 
     @Override
