@@ -151,7 +151,7 @@ public class UIValueFactory
 
     public static UITextbox stringUI(ValueString value, Consumer<String> callback)
     {
-        UITextbox textbox = new UITextbox(callback == null ? value::set : (string) ->
+        UITextbox textbox = new UITextbox(10000, callback == null ? value::set : (string) ->
         {
             value.set(string);
             callback.accept(string);

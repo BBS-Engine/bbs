@@ -76,7 +76,7 @@ public class VideoRecorder
         {
             Path path = Paths.get(this.movies.toString());
             String movieName = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-            String params = "-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4";
+            String params = BBSSettings.videoEncoderArguments.get();
 
             params = params.replace("%WIDTH%", String.valueOf(width));
             params = params.replace("%HEIGHT%", String.valueOf(height));

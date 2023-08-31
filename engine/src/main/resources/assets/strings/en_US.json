@@ -129,6 +129,8 @@
     "bbs.config.tutorials.tooltip": "This category provides options which are useful for making tutorial videos",
     "bbs.config.video.encoder_path": "Encoder path",
     "bbs.config.video.encoder_path-comment": "To record a video, you need to specify here a path to ffmpeg's binary (to ffmpeg or ffmpeg.exe file, depending on OS)",
+    "bbs.config.video.encoder_args": "Encoder arguments",
+    "bbs.config.video.encoder_args-comment": "Here you can specify custom ffmpeg arguments. Change this field at your own risk!",
     "bbs.config.video.height": "Video height",
     "bbs.config.video.height-comment": "Video height that will be recorded (as opposed to current window height)",
     "bbs.config.video.title": "Video capturing",

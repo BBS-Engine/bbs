@@ -40,6 +40,7 @@ public class BBSSettings
     public static ValueBoolean multiskinMultiThreaded;
 
     public static ValueString videoEncoderPath;
+    public static ValueString videoEncoderArguments;
     public static ValueInt videoWidth;
     public static ValueInt videoHeight;
 
@@ -149,6 +150,7 @@ public class BBSSettings
         multiskinMultiThreaded = builder.category("multiskin").getBoolean("multithreaded", true);
 
         videoEncoderPath = builder.category("video").getString("encoder_path", "ffmpeg");
+        videoEncoderArguments = builder.getString("encoder_args", "-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4");
         videoWidth = builder.getInt("width", 1920, 2, 1024 * 8);
         videoHeight = builder.getInt("height", 1080, 2, 1024 * 8);
 
