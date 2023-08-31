@@ -7,9 +7,12 @@ import mchorse.bbs.ui.film.replays.properties.factories.UIColorKeyframeFactory;
 import mchorse.bbs.ui.film.replays.properties.factories.UIKeyframeFactory;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.math.IInterpolation;
 
 public class ColorKeyframeFactory implements IGenericKeyframeFactory<Color>
 {
+    private Color i = new Color();
+
     @Override
     public Color fromData(BaseType data)
     {
@@ -34,9 +37,14 @@ public class ColorKeyframeFactory implements IGenericKeyframeFactory<Color>
     }
 
     @Override
-    public Color create()
+    public Color interpolate(Color a, Color b, IInterpolation interpolation, float x)
     {
-        return new Color();
+        this.i.r = interpolation.interpolate(a.r, b.r, x);
+        this.i.g = interpolation.interpolate(a.g, b.g, x);
+        this.i.b = interpolation.interpolate(a.b, b.b, x);
+        this.i.a = interpolation.interpolate(a.a, b.a, x);
+
+        return this.i;
     }
 
     @Override

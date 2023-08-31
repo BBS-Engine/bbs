@@ -6,9 +6,12 @@ import mchorse.bbs.ui.film.replays.properties.factories.UIKeyframeFactory;
 import mchorse.bbs.ui.film.replays.properties.factories.UITransformKeyframeFactory;
 import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.math.IInterpolation;
 
 public class TransformKeyframeFactory implements IGenericKeyframeFactory<Transform>
 {
+    private Transform i = new Transform();
+
     @Override
     public Transform fromData(BaseType data)
     {
@@ -35,9 +38,14 @@ public class TransformKeyframeFactory implements IGenericKeyframeFactory<Transfo
     }
 
     @Override
-    public Transform create()
+    public Transform interpolate(Transform a, Transform b, IInterpolation interpolation, float x)
     {
-        return new Transform();
+        float factor = interpolation.interpolate(0, 1, x);
+
+        this.i.copy(a);
+        this.i.lerp(b, factor);
+
+        return this.i;
     }
 
     @Override

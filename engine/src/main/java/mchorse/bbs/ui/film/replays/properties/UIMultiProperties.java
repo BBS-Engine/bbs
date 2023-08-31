@@ -6,8 +6,10 @@ import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.Area;
+import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.utils.math.Interpolation;
 
@@ -225,6 +227,7 @@ public class UIMultiProperties extends UIProperties
         UIProperty property = this.properties.get(i);
         IInterpolation interp = Interpolation.LINEAR;
         GenericKeyframe frame = this.getCurrent();
+        IGenericKeyframeFactory factory = property.channel.getFactory();
         long tick = Math.round(this.fromGraphX(mouseX));
         long oldTick = tick;
 
@@ -234,8 +237,32 @@ public class UIMultiProperties extends UIProperties
             oldTick = frame.tick;
         }
 
+        Object value;
+        Pair segment = property.channel.findSegment(tick);
+
+        if (segment == null)
+        {
+            value = factory.copy(property.property.get());
+        }
+        else
+        {
+            GenericKeyframe a = (GenericKeyframe) segment.a;
+            GenericKeyframe b = (GenericKeyframe) segment.b;
+
+            if (a == b)
+            {
+                value = a.value;
+            }
+            else
+            {
+                value = factory.interpolate(a.value, b.value, a.interp, (tick - a.tick) / (float) (b.tick - a.tick));
+            }
+
+            value = factory.copy(value);
+        }
+
         property.selected.clear();
-        property.selected.add(property.channel.insert(tick, property.channel.getFactory().create()));
+        property.selected.add(property.channel.insert(tick, value));
         frame = this.getCurrent();
 
         if (oldTick != tick)

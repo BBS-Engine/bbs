@@ -6,6 +6,7 @@ import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
 import mchorse.bbs.ui.film.replays.properties.factories.UIBooleanKeyframeFactory;
 import mchorse.bbs.ui.film.replays.properties.factories.UIKeyframeFactory;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.math.IInterpolation;
 
 public class BooleanKeyframeFactory implements IGenericKeyframeFactory<Boolean>
 {
@@ -28,9 +29,9 @@ public class BooleanKeyframeFactory implements IGenericKeyframeFactory<Boolean>
     }
 
     @Override
-    public Boolean create()
+    public Boolean interpolate(Boolean a, Boolean b, IInterpolation interpolation, float x)
     {
-        return false;
+        return b;
     }
 
     @Override

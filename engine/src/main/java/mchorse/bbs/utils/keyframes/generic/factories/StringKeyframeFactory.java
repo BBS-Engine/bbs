@@ -6,6 +6,7 @@ import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
 import mchorse.bbs.ui.film.replays.properties.factories.UIKeyframeFactory;
 import mchorse.bbs.ui.film.replays.properties.factories.UIStringKeyframeFactory;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.math.IInterpolation;
 
 public class StringKeyframeFactory implements IGenericKeyframeFactory<String>
 {
@@ -28,9 +29,9 @@ public class StringKeyframeFactory implements IGenericKeyframeFactory<String>
     }
 
     @Override
-    public String create()
+    public String interpolate(String a, String b, IInterpolation interpolation, float x)
     {
-        return null;
+        return b;
     }
 
     @Override

@@ -5,10 +5,19 @@ import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
 import mchorse.bbs.ui.film.replays.properties.factories.UIKeyframeFactory;
 import mchorse.bbs.ui.film.replays.properties.factories.UIPoseKeyframeFactory;
 import mchorse.bbs.utils.Pose;
+import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.math.IInterpolation;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class PoseKeyframeFactory implements IGenericKeyframeFactory<Pose>
 {
+    private static Set<String> keys = new HashSet<>();
+
+    private Pose i = new Pose();
+
     @Override
     public Pose fromData(BaseType data)
     {
@@ -35,9 +44,33 @@ public class PoseKeyframeFactory implements IGenericKeyframeFactory<Pose>
     }
 
     @Override
-    public Pose create()
+    public Pose interpolate(Pose a, Pose b, IInterpolation interpolation, float x)
     {
-        return new Pose();
+        float factor = interpolation.interpolate(0, 1, x);
+
+        keys.clear();
+
+        if (a != null)
+        {
+            keys.addAll(a.transforms.keySet());
+        }
+
+        if (b != null)
+        {
+            keys.addAll(b.transforms.keySet());
+        }
+
+        this.i.copy(a);
+
+        for (String key : keys)
+        {
+            Transform transform = this.i.get(key);
+            Transform t = b.get(key);
+
+            transform.lerp(t, factor);
+        }
+
+        return this.i;
     }
 
     @Override
