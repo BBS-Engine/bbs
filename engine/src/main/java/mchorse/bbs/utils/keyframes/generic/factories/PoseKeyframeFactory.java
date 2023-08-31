@@ -3,6 +3,7 @@ package mchorse.bbs.utils.keyframes.generic.factories;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
 import mchorse.bbs.ui.film.replays.properties.factories.UIKeyframeFactory;
+import mchorse.bbs.ui.film.replays.properties.factories.UIPoseKeyframeFactory;
 import mchorse.bbs.utils.Pose;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 
@@ -42,6 +43,6 @@ public class PoseKeyframeFactory implements IGenericKeyframeFactory<Pose>
     @Override
     public UIKeyframeFactory<Pose> createUI(GenericKeyframe<Pose> keyframe, UIPropertyEditor editor)
     {
-        return null;
+        return new UIPoseKeyframeFactory(keyframe, editor);
     }
 }

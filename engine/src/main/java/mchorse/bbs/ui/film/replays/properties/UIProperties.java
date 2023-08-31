@@ -124,6 +124,22 @@ public abstract class UIProperties extends UIElement
 
     public abstract List<UIProperty> getProperties();
 
+    public UIProperty getProperty(GenericKeyframe keyframe)
+    {
+        for (UIProperty property : this.getProperties())
+        {
+            for (Object object : property.channel.getKeyframes())
+            {
+                if (object == keyframe)
+                {
+                    return property;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public abstract UIProperty getSheet(int mouseY);
 
     public boolean isGrabbing()

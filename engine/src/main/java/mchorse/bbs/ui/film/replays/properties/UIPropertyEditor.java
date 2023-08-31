@@ -18,6 +18,7 @@ import mchorse.bbs.ui.framework.tooltips.InterpolationTooltip;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.CollectionUtils;
+import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
 import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
@@ -46,7 +47,7 @@ public class UIPropertyEditor extends UIElement
     {
         super();
 
-        InterpolationTooltip tooltip = new InterpolationTooltip(0F, 0F, () ->
+        InterpolationTooltip tooltip = new InterpolationTooltip(0F, 1F, () ->
         {
             GenericKeyframe keyframe = this.properties.getCurrent();
 
@@ -59,7 +60,7 @@ public class UIPropertyEditor extends UIElement
         }, null);
 
         this.frameButtons = new UIElement();
-        this.frameButtons.relative(this).x(1F).y(1F).w(100).anchor(1F).column().vertical().stretch().padding(5);
+        this.frameButtons.relative(this).y(1F).w(120).anchor(0F, 1F).column().vertical().stretch().padding(5);
         this.frameButtons.setVisible(false);
         this.tick = new UITrackpad(this::setTick);
         this.tick.limit(Integer.MIN_VALUE, Integer.MAX_VALUE, true).tooltip(UIKeys.KEYFRAMES_TICK);
@@ -76,7 +77,7 @@ public class UIPropertyEditor extends UIElement
 
         /* Position the elements */
         this.tick.w(70);
-        this.properties.relative(this).set(0, 0, 0, 0).w(1, 0).h(1, 0);
+        this.properties.relative(this).full();
 
         /* Add all elements */
         this.add(this.properties, this.frameButtons);

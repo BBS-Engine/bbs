@@ -1,5 +1,6 @@
 package mchorse.bbs.ui.film.replays.properties;
 
+import mchorse.bbs.forms.properties.IFormProperty;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
@@ -17,13 +18,15 @@ public class UIProperty
     public int color;
     public GenericKeyframeChannel channel;
     public List<Integer> selected = new ArrayList<>();
+    public IFormProperty property;
 
-    public UIProperty(String id, IKey title, int color, GenericKeyframeChannel channel)
+    public UIProperty(String id, IKey title, int color, GenericKeyframeChannel channel, IFormProperty property)
     {
         this.id = id;
         this.title = title;
         this.color = color;
         this.channel = channel;
+        this.property = property;
     }
 
     public void sort()

@@ -6,6 +6,7 @@ import mchorse.bbs.film.values.ValueFormProperty;
 import mchorse.bbs.film.values.ValueKeyframes;
 import mchorse.bbs.film.values.ValueReplay;
 import mchorse.bbs.forms.FormUtils;
+import mchorse.bbs.forms.properties.IFormProperty;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.film.UIFilmPanel;
@@ -45,6 +46,7 @@ public class UIReplaysEditor extends UIElement
     private List<ValueKeyframeChannel> tempKeyframes = new ArrayList<>();
     private List<Integer> tempColors = new ArrayList<>();
     private List<ValueFormProperty> tempProperties = new ArrayList<>();
+    private List<IFormProperty> tempFormProperties = new ArrayList<>();
 
     static
     {
@@ -137,8 +139,9 @@ public class UIReplaysEditor extends UIElement
             for (int i = 0; i < this.tempProperties.size(); i++)
             {
                 ValueFormProperty property = this.tempProperties.get(i);
+                IFormProperty formProperty = this.tempFormProperties.get(i);
 
-                properties.add(new UIProperty(property.getId(), IKey.raw(property.getId()), this.tempColors.get(i), property.get()));
+                properties.add(new UIProperty(property.getId(), IKey.raw(property.getId()), this.tempColors.get(i), property.get(), formProperty));
             }
 
             this.propertyEditor = editor;
@@ -194,6 +197,7 @@ public class UIReplaysEditor extends UIElement
         this.tempKeyframes.clear();
         this.tempColors.clear();
         this.tempProperties.clear();
+        this.tempFormProperties.clear();
 
         for (String key : keys)
         {
@@ -210,8 +214,11 @@ public class UIReplaysEditor extends UIElement
 
                 if (property != null)
                 {
+                    IFormProperty formProperty = FormUtils.getProperty(this.replay.form.get(), key);
+
                     this.tempProperties.add(property);
                     this.tempColors.add(COLORS.getOrDefault(StringUtils.fileName(key), Colors.ACTIVE));
+                    this.tempFormProperties.add(formProperty);
                 }
             }
         }

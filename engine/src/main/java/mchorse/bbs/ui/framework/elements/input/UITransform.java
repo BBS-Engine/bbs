@@ -156,11 +156,11 @@ public abstract class UITransform extends UIElement
         }
 
         this.removeAll();
-        this.resetFlex().w(1F).h(120).column().stretch().vertical();
+        this.resetFlex().w(1F).column().stretch().vertical();
 
-        this.add(UI.label(UIKeys.TRANSFORMS_TRANSLATE), UI.row(this.tx, this.ty, this.tz));
-        this.add(UI.label(UIKeys.TRANSFORMS_SCALE).marginTop(4), UI.row(this.sx, this.sy, this.sz));
-        this.add(UI.label(UIKeys.TRANSFORMS_ROTATE).marginTop(4), UI.row(this.rx, this.ry, this.rz));
+        this.add(UI.row(this.tx, this.ty, this.tz));
+        this.add(UI.row(this.sx, this.sy, this.sz));
+        this.add(UI.row(this.rx, this.ry, this.rz));
 
         return this;
     }
