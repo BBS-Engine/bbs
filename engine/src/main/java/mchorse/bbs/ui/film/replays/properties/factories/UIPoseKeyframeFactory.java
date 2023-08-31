@@ -44,4 +44,10 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
     {
         this.transform.setTransform(this.keyframe.value.get(bone));
     }
+
+    public void selectBone(String bone)
+    {
+        this.bones.setCurrentScroll(bone);
+        this.pickBone(bone);
+    }
 }

@@ -45,14 +45,14 @@ public class StencilFormFramebuffer
         return this.indexMap.get(this.index);
     }
 
-    public void setup()
+    public void setup(Link id)
     {
         if (this.framebuffer != null)
         {
             return;
         }
 
-        this.framebuffer = BBS.getFramebuffers().getFramebuffer(Link.bbs("stencil"), (framebuffer) ->
+        this.framebuffer = BBS.getFramebuffers().getFramebuffer(id, (framebuffer) ->
         {
             Texture texture = new Texture();
 
@@ -63,9 +63,8 @@ public class StencilFormFramebuffer
 
             framebuffer.deleteTextures().attach(texture, GL30.GL_COLOR_ATTACHMENT0);
             framebuffer.attach(renderbuffer);
+            framebuffer.unbind();
         });
-
-        this.framebuffer.unbind();
     }
 
     public void resizeGUI(int w, int h)

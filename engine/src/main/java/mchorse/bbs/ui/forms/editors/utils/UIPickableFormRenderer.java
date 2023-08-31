@@ -7,6 +7,7 @@ import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.graphics.vao.VBOAttributes;
+import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.StencilFormFramebuffer;
 import mchorse.bbs.utils.Pair;
@@ -35,7 +36,7 @@ public class UIPickableFormRenderer extends UIFormRenderer
 
     private void ensureFramebuffer()
     {
-        this.stencil.setup();
+        this.stencil.setup(Link.bbs("stencil_form"));
         this.stencil.resizeGUI(this.area.w, this.area.h);
     }
 

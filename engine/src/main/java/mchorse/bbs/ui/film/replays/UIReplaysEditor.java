@@ -6,20 +6,26 @@ import mchorse.bbs.film.values.ValueFormProperty;
 import mchorse.bbs.film.values.ValueKeyframes;
 import mchorse.bbs.film.values.ValueReplay;
 import mchorse.bbs.forms.FormUtils;
+import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.forms.properties.IFormProperty;
+import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.film.replays.properties.UIProperty;
 import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
+import mchorse.bbs.ui.film.replays.properties.factories.UIPoseKeyframeFactory;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraGraphEditor;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframesEditor;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
+import mchorse.bbs.ui.utils.context.ContextMenuManager;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.StringUtils;
 import mchorse.bbs.utils.colors.Colors;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -258,5 +264,51 @@ public class UIReplaysEditor extends UIElement
         }
 
         this.replays.setCurrentScroll(replay);
+    }
+
+    public void pickForm(Form form, String bone)
+    {
+        String path = FormUtils.getPath(form);
+
+        if (Window.isCtrlPressed())
+        {
+            ContextMenuManager manager = new ContextMenuManager();
+
+            for (IFormProperty property : form.getProperties().values())
+            {
+                if (property.canCreateChannel())
+                {
+                    manager.action(Icons.POINTER, IKey.raw(property.getKey()), () ->
+                    {
+                        this.pick(StringUtils.combinePaths(path, property.getKey()));
+                    });
+                }
+            }
+
+            this.getContext().replaceContextMenu(manager.create());
+        }
+        else if (!bone.isEmpty())
+        {
+            this.pick(StringUtils.combinePaths(path, "pose"));
+
+            UIProperty property = this.propertyEditor.properties.getProperties().get(0);
+            int ticks = this.delegate.getRunner().ticks;
+
+            Pair segment = property.channel.findSegment(ticks);
+
+            if (segment != null)
+            {
+                GenericKeyframe a = (GenericKeyframe) segment.a;
+                GenericKeyframe b = (GenericKeyframe) segment.b;
+                GenericKeyframe closest = Math.abs(a.tick - ticks) > Math.abs(b.tick - ticks) ? b : a;
+
+                this.propertyEditor.pickKeyframe(closest);
+
+                if (this.propertyEditor.editor instanceof UIPoseKeyframeFactory)
+                {
+                    ((UIPoseKeyframeFactory) this.propertyEditor.editor).selectBone(bone);
+                }
+            }
+        }
     }
 }

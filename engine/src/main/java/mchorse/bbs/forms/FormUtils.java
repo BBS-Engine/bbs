@@ -33,6 +33,42 @@ public class FormUtils
         return form == null ? null : form.copy();
     }
 
+    public static String getPath(Form form)
+    {
+        if (form.getParent() == null)
+        {
+            return "";
+        }
+
+        path.clear();
+
+        while (form != null)
+        {
+            Form parent = form.getParent();
+
+            if (parent != null)
+            {
+                int i = 0;
+
+                for (BodyPart part : parent.parts.getAll())
+                {
+                    if (part.getForm() == form)
+                    {
+                        path.add(String.valueOf(i));
+                    }
+
+                    i += 1;
+                }
+            }
+
+            form = parent;
+        }
+
+        Collections.reverse(path);
+
+        return String.join(PATH_SEPARATOR, path);
+    }
+
     /* Form properties utils */
 
     public static String getPropertyPath(IFormProperty property)

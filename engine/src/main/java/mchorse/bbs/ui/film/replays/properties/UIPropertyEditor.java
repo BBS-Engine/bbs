@@ -18,7 +18,6 @@ import mchorse.bbs.ui.framework.tooltips.InterpolationTooltip;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.CollectionUtils;
-import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
 import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
@@ -363,5 +362,30 @@ public class UIPropertyEditor extends UIElement
 
         this.tick.setValue(this.converter == null ? tick : this.converter.to(tick));
         this.frameButtons.resize();
+    }
+
+    public void pickKeyframe(GenericKeyframe frame)
+    {
+        this.fillData(frame);
+
+        this.properties.selected = true;
+
+        main:
+        for (UIProperty property : this.properties.getProperties())
+        {
+            int i = 0;
+
+            for (Object object : property.channel.getKeyframes())
+            {
+                if (object == frame)
+                {
+                    property.selected.add(i);
+
+                    break main;
+                }
+
+                i += 1;
+            }
+        }
     }
 }

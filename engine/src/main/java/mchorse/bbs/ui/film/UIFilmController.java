@@ -3,13 +3,19 @@ package mchorse.bbs.ui.film;
 import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridgeWorld;
+import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.core.input.MouseInput;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.values.ValueReplay;
 import mchorse.bbs.forms.FormUtils;
+import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.game.entities.components.PlayerComponent;
 import mchorse.bbs.graphics.RenderingContext;
+import mchorse.bbs.graphics.shaders.CommonShaderAccess;
+import mchorse.bbs.graphics.shaders.Shader;
+import mchorse.bbs.graphics.texture.Texture;
+import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
@@ -18,9 +24,11 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.utils.Area;
+import mchorse.bbs.ui.utils.StencilFormFramebuffer;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.keys.KeyAction;
 import mchorse.bbs.utils.CollectionUtils;
+import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.math.MathUtils;
@@ -53,6 +61,9 @@ public class UIFilmController extends UIElement
     private boolean recording;
     private int recordingCountdown;
     private List<String> recordingGroups;
+
+    private Camera stencilCamera = new Camera();
+    private StencilFormFramebuffer stencil = new StencilFormFramebuffer();
 
     public UIFilmController(UIFilmPanel panel)
     {
@@ -151,6 +162,24 @@ public class UIFilmController extends UIElement
         UIContext context = this.getContext();
 
         return this.controlled != null && context != null && !UIOverlay.has(context);
+    }
+
+    @Override
+    protected boolean subMouseClicked(UIContext context)
+    {
+        if (this.stencil.hasPicked() && context.mouseButton == 0)
+        {
+            Pair<Form, String> pair = this.stencil.getPicked();
+
+            if (pair != null)
+            {
+                this.panel.replays.pickForm(pair.a, pair.b);
+
+                return true;
+            }
+        }
+
+        return super.subMouseClicked(context);
     }
 
     @Override
@@ -393,6 +422,39 @@ public class UIFilmController extends UIElement
                 context.batcher.textCard(context.font, String.valueOf(this.recordingCountdown / 20F), x, y, Colors.WHITE, Colors.A50);
             }
         }
+
+        this.renderPicking(context, area);
+    }
+
+    private void renderPicking(UIContext context, Area area)
+    {
+        if (!this.stencil.hasPicked())
+        {
+            return;
+        }
+
+        int index = this.stencil.getIndex();
+        Texture texture = this.stencil.getFramebuffer().getMainTexture();
+        Pair<Form, String> pair = this.stencil.getPicked();
+        int w = texture.width;
+        int h = texture.height;
+
+        Shader shader = context.render.getPickingShaders().get(VBOAttributes.VERTEX_UV_RGBA_2D);
+
+        CommonShaderAccess.setTarget(shader, index);
+        context.batcher.texturedBox(shader, texture, Colors.WHITE, area.x, area.y, area.w, area.h, 0, h, w, 0, w, h);
+
+        if (pair != null)
+        {
+            String label = pair.a.getIdOrName();
+
+            if (!pair.b.isEmpty())
+            {
+                label += " - " + pair.b;
+            }
+
+            context.batcher.textCard(context.font, label, context.mouseX + 12, context.mouseY + 8);
+        }
     }
 
     public void renderFrame(RenderingContext context)
@@ -401,6 +463,8 @@ public class UIFilmController extends UIElement
         {
             entity.render(context);
         }
+
+        this.renderStencil(this.getContext());
 
         MouseInput mouse = BBS.getEngine().mouse;
         int x = mouse.x;
@@ -443,5 +507,54 @@ public class UIFilmController extends UIElement
         }
 
         this.lastMouse.set(x, y);
+    }
+
+    private void renderStencil(UIContext context)
+    {
+        int index = this.panel.replays.replays.getIndex();
+
+        if (!CollectionUtils.inRange(this.entities, index))
+        {
+            return;
+        }
+
+        Entity entity = this.entities.get(index);
+        Camera camera = context.render.getCamera();
+
+        this.ensureStencilFramebuffer();
+
+        Texture mainTexture = this.stencil.getFramebuffer().getMainTexture();
+
+        this.stencilCamera.copy(this.panel.getCamera());
+        this.stencilCamera.updatePerspectiveProjection(mainTexture.width, mainTexture.height);
+        context.render.getUBO().update(this.stencilCamera.projection, this.stencilCamera.view);
+
+        this.stencil.apply(context);
+        context.render.setCamera(this.stencilCamera);
+        entity.render(context.render);
+        context.render.setCamera(camera);
+
+        Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());
+        int x = (int) ((context.mouseX - area.x) / (float) area.w * mainTexture.width);
+        int y = (int) ((1F - (context.mouseY - area.y) / (float) area.h) * mainTexture.height);
+
+        this.stencil.pick(x, y);
+        this.stencil.unbind(context);
+
+        context.render.getUBO().update(context.render.projection, Matrices.EMPTY_4F);
+    }
+
+    private void ensureStencilFramebuffer()
+    {
+        this.stencil.setup(Link.bbs("stencil_film"));
+
+        Texture mainTexture = this.stencil.getFramebuffer().getMainTexture();
+        int w = BBSSettings.videoWidth.get();
+        int h = BBSSettings.videoHeight.get();
+
+        if (mainTexture.width != w || mainTexture.height != h)
+        {
+            this.stencil.resizeGUI(w, h);
+        }
     }
 }

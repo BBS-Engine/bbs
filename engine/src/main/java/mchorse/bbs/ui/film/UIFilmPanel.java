@@ -259,12 +259,12 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         });
     }
 
-    private Area getViewportArea()
+    public Area getViewportArea()
     {
         return new Area(this.clips.area.ex(), this.area.y, this.iconBar.area.x - this.clips.area.ex(), this.area.h);
     }
 
-    private Area getFramebufferArea(Area viewport)
+    public Area getFramebufferArea(Area viewport)
     {
         int width = BBSSettings.videoWidth.get();
         int height = BBSSettings.videoHeight.get();
