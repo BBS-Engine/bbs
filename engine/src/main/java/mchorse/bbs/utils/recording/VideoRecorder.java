@@ -1,35 +1,36 @@
 package mchorse.bbs.utils.recording;
 
+import mchorse.bbs.BBSSettings;
 import mchorse.bbs.core.Engine;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.ui.utils.UIUtils;
-import org.bytedeco.ffmpeg.global.avcodec;
-import org.bytedeco.ffmpeg.global.avutil;
-import org.bytedeco.javacv.FFmpegFrameFilter;
-import org.bytedeco.javacv.FFmpegFrameRecorder;
-import org.bytedeco.javacv.Frame;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.system.MemoryUtil;
 
 import java.io.File;
-import java.nio.Buffer;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class VideoRecorder
 {
     public File movies;
     public Engine engine;
 
+    private Process process;
+    private WritableByteChannel channel;
     private boolean recording;
-
-    private FFmpegFrameRecorder recorder;
-    private FFmpegFrameFilter filter;
 
     private ByteBuffer buffer;
     private Framebuffer framebuffer;
@@ -48,7 +49,7 @@ public class VideoRecorder
     }
 
     /**
-     * Start recording the video using ffmpeg 
+     * Start recording the video using ffmpeg
      */
     public void startRecording(Framebuffer framebuffer)
     {
@@ -75,20 +76,29 @@ public class VideoRecorder
         {
             Path path = Paths.get(this.movies.toString());
             String movieName = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+            String params = "-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4";
 
-            this.recorder = new FFmpegFrameRecorder(path.resolve(movieName + ".mp4").toFile(), 0);
+            params = params.replace("%WIDTH%", String.valueOf(width));
+            params = params.replace("%HEIGHT%", String.valueOf(height));
+            params = params.replace("%FPS%", String.valueOf(this.engine.frameRate));
+            params = params.replace("%NAME%", movieName);
 
-            this.recorder.setFrameRate(this.engine.frameRate);
-            this.recorder.setImageWidth(width);
-            this.recorder.setImageHeight(height);
-            this.recorder.setVideoQuality(2);
-            this.recorder.setPixelFormat(avutil.AV_PIX_FMT_YUV420P);
+            List<String> args = new ArrayList<String>();
 
-            this.filter = new FFmpegFrameFilter("vflip", width, height);
+            args.add(BBSSettings.videoEncoderPath.get());
+            args.addAll(Arrays.asList(params.split(" ")));
 
-            this.recorder.start();
-            this.filter.start();
+            ProcessBuilder builder = new ProcessBuilder(args);
 
+            builder.directory(path.toFile());
+            builder.redirectErrorStream(true);
+            builder.redirectOutput(path.resolve(movieName.concat(".log")).toFile());
+
+            this.process = builder.start();
+
+            OutputStream os = this.process.getOutputStream();
+
+            this.channel = Channels.newChannel(os);
             this.recording = true;
 
             UIUtils.playClick(2F);
@@ -100,7 +110,7 @@ public class VideoRecorder
     }
 
     /**
-     * Stop recording 
+     * Stop recording
      */
     public void stopRecording()
     {
@@ -120,16 +130,25 @@ public class VideoRecorder
 
         try
         {
-            this.recorder.stop();
-            this.filter.stop();
+            if (this.channel.isOpen())
+            {
+                this.channel.close();
+            }
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
 
-        this.recorder = null;
-        this.filter = null;
+        try
+        {
+            this.process.waitFor(1, TimeUnit.MINUTES);
+            this.process.destroy();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         this.engine.toggleRealTime(true);
         this.recording = false;
@@ -138,7 +157,7 @@ public class VideoRecorder
     }
 
     /**
-     * Record a frame 
+     * Record a frame
      */
     public void recordFrame()
     {
@@ -156,27 +175,11 @@ public class VideoRecorder
 
         try
         {
-            Frame frame = new Frame();
-
-            int width = mainTexture.width;
-            int height = mainTexture.height;
-
-            frame.imageWidth = width;
-            frame.imageHeight = height;
-            frame.imageDepth = Frame.DEPTH_BYTE;
-            frame.imageChannels = 3;
-            frame.image = new Buffer[]{this.buffer};
-            frame.imageStride = ((width * frame.imageChannels * Frame.pixelSize(frame.imageDepth) + 7) & ~7) / Frame.pixelSize(frame.imageDepth);
-            frame.type = Frame.Type.VIDEO;
-
-            this.filter.push(frame, avutil.AV_PIX_FMT_BGR24);
-            this.recorder.record(this.filter.pull(), avutil.AV_PIX_FMT_BGR24);
+            this.channel.write(this.buffer);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-
-            this.stopRecording();
         }
 
         this.engine.nextFrame();

@@ -287,7 +287,7 @@ public class UIReplaysEditor extends UIElement
 
             this.getContext().replaceContextMenu(manager.create());
         }
-        else if (!bone.isEmpty())
+        else if (!bone.isEmpty() && this.propertyEditor != null)
         {
             this.pick(StringUtils.combinePaths(path, "pose"));
 

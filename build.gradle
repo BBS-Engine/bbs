@@ -19,19 +19,16 @@ ext.gitHash = { ->
 switch (OperatingSystem.current()) {
     case OperatingSystem.LINUX:
         project.ext.lwjglNatives = "natives-linux"
-        project.ext.javacvNatives = "linux-x86_64"
 
         break
     case OperatingSystem.MAC_OS:
         def isArm = System.getProperty("os.arch").startsWith("aarch64")
 
         project.ext.lwjglNatives = isArm ? "natives-macos-arm64" : "natives-macos"
-        project.ext.javacvNatives = isArm ? "macosx-arm64" : "macosx-x86_64"
 
         break
     case OperatingSystem.WINDOWS:
         project.ext.lwjglNatives = "natives-windows"
-        project.ext.javacvNatives = "windows-x86_64"
 
         break
 }
@@ -40,16 +37,6 @@ if (project.hasProperty("os")) {
     def os = project.getProperties().get("os")
 
     ext.lwjglNatives = "natives-" + os
-
-    if (os.equals("linux")) {
-        project.ext.javacvNatives = "linux-x86_64"
-    } else if (os.equals("macos")) {
-        project.ext.javacvNatives = "macosx-x86_64"
-    } else if (os.equals("macos-arm64")) {
-        project.ext.javacvNatives = "macosx-arm64"
-    } else if (os.equals("windows")) {
-        project.ext.javacvNatives = "windows-x86_64"
-    }
 }
 
 ext.commonDependencies.addAll([
@@ -65,10 +52,5 @@ ext.commonDependencies.addAll([
     "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives",
     "org.greenrobot:eventbus-java:3.3.1",
     "org.joml:joml:1.9.2",
-    "com.github.Querz:NBT:6.1",
-    "org.bytedeco:javacv:1.5.8",
-    "org.bytedeco:javacpp:1.5.8",
-    "org.bytedeco:ffmpeg:5.1.2-1.5.8",
-    "org.bytedeco:javacpp:1.5.8:$javacvNatives",
-    "org.bytedeco:ffmpeg:1.5.8:$javacvNatives"
+    "com.github.Querz:NBT:6.1"
 ])

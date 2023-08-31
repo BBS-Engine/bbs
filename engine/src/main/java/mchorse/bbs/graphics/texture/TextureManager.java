@@ -2,7 +2,6 @@ package mchorse.bbs.graphics.texture;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.core.IDisposable;
-import mchorse.bbs.graphics.video.VideoPlaybackThread;
 import mchorse.bbs.resources.AssetProvider;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.resources.LinkUtils;
@@ -10,10 +9,8 @@ import mchorse.bbs.utils.resources.MultiLink;
 import mchorse.bbs.utils.resources.Pixels;
 import mchorse.bbs.utils.watchdog.IWatchDogListener;
 import mchorse.bbs.utils.watchdog.WatchDogEvent;
-import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.lwjgl.opengl.GL11;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,7 +19,6 @@ import java.util.Map;
 public class TextureManager implements IDisposable, IWatchDogListener
 {
     public final Map<Link, Texture> textures = new HashMap<>();
-    public final Map<Link, VideoPlaybackThread> videos = new HashMap<>();
     public AssetProvider provider;
 
     private Texture error;
@@ -156,47 +152,6 @@ public class TextureManager implements IDisposable, IWatchDogListener
         return texture;
     }
 
-    /* Video playback */
-
-    public boolean playVideo(Link link)
-    {
-        File file = BBS.getProvider().getFile(link);
-
-        if (file != null)
-        {
-            try
-            {
-                FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(file);
-
-                grabber.start();
-
-                VideoPlaybackThread video = new VideoPlaybackThread(grabber, link);
-
-                this.videos.put(link, video);
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        return false;
-    }
-
-    public boolean stopVideo(Link link)
-    {
-        VideoPlaybackThread video = this.videos.remove(link);
-
-        if (video != null)
-        {
-            video.stop();
-        }
-
-        return video != null;
-    }
-
     public void reload()
     {
         this.reload(false);
@@ -204,13 +159,6 @@ public class TextureManager implements IDisposable, IWatchDogListener
 
     public void reload(boolean delete)
     {
-        for (VideoPlaybackThread video : this.videos.values())
-        {
-            video.stop();
-        }
-
-        this.videos.clear();
-
         Iterator<Texture> it = this.textures.values().iterator();
 
         while (it.hasNext())
