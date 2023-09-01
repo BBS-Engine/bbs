@@ -67,8 +67,8 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
     private RunnerCameraController runner;
     private boolean lastRunning;
-    private Position position = new Position(0, 0, 0, 0, 0);
-    private Position lastPosition = new Position(0, 0, 0, 0, 0);
+    private final Position position = new Position(0, 0, 0, 0, 0);
+    private final Position lastPosition = new Position(0, 0, 0, 0, 0);
 
     public UIElement main;
     public UIFilmRecorder recorder;

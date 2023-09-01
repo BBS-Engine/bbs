@@ -289,12 +289,30 @@ public class UIReplaysEditor extends UIElement
         }
         else if (!bone.isEmpty() && this.propertyEditor != null)
         {
-            this.pick(StringUtils.combinePaths(path, "pose"));
+            List<UIProperty> properties = this.propertyEditor.properties.getProperties();
+            String key = StringUtils.combinePaths(path, "pose");
+            UIProperty poseProperty = null;
 
-            UIProperty property = this.propertyEditor.properties.getProperties().get(0);
+            for (UIProperty property : properties)
+            {
+                if (FormUtils.getPropertyPath(property.property).equals(key))
+                {
+                    poseProperty = property;
+
+                    break;
+                }
+            }
+
+            if (poseProperty == null)
+            {
+                this.pick(key);
+
+                poseProperty = this.propertyEditor.properties.getProperties().get(0);
+            }
+
             int ticks = this.delegate.getRunner().ticks;
 
-            Pair segment = property.channel.findSegment(ticks);
+            Pair segment = poseProperty.channel.findSegment(ticks);
 
             if (segment != null)
             {
@@ -308,6 +326,8 @@ public class UIReplaysEditor extends UIElement
                 {
                     ((UIPoseKeyframeFactory) this.propertyEditor.editor).selectBone(bone);
                 }
+
+                this.delegate.setCursor((int) closest.tick);
             }
         }
     }
