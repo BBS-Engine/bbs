@@ -73,6 +73,11 @@ public class StudioRenderer implements IComponent
     private StudioShaders shaders = new StudioShaders(this.pipeline);
     private StudioShaders targetShaders = new StudioShaders(this.pipeline);
 
+    /* Shadow */
+    private boolean shadowCameraFreeze;
+    private Camera shadowCamera = new Camera();
+    private ShaderRepository shadowShaders = new ShaderRepository();
+
     private RenderWorldEvent renderWorld;
 
     private int ticks;
@@ -112,6 +117,11 @@ public class StudioRenderer implements IComponent
         this.renderWorld = new RenderWorldEvent(this.context);
     }
 
+    public void freezeShadow()
+    {
+        this.shadowCameraFreeze = !this.shadowCameraFreeze;
+    }
+
     public void reloadShaders(boolean full)
     {}
 
@@ -124,11 +134,23 @@ public class StudioRenderer implements IComponent
         Shader vertexNormalUVLightRGBA = new Shader(Link.create("studio:shaders/default/world/vertex_normal_uv_light_rgba.glsl"), VBOAttributes.VERTEX_NORMAL_UV_LIGHT_RGBA);
         Shader vertexNormalUVRGBABones = new Shader(Link.create("studio:shaders/default/world/vertex_normal_uv_rgba_bones.glsl"), VBOAttributes.VERTEX_NORMAL_UV_RGBA_BONES);
 
+        Shader shadowVertexRGBA = new Shader(Link.create("studio:shaders/default/shadow/vertex_rgba.glsl"), VBOAttributes.VERTEX_RGBA);
+        Shader shadowVertexUVRGBA = new Shader(Link.create("studio:shaders/default/shadow/vertex_uv_rgba.glsl"), VBOAttributes.VERTEX_UV_RGBA);
+        Shader shadowVertexNormalUVRGBA = new Shader(Link.create("studio:shaders/default/shadow/vertex_normal_uv_rgba.glsl"), VBOAttributes.VERTEX_NORMAL_UV_RGBA);
+        Shader shadowVertexNormalUVLightRGBA = new Shader(Link.create("studio:shaders/default/shadow/vertex_normal_uv_light_rgba.glsl"), VBOAttributes.VERTEX_NORMAL_UV_LIGHT_RGBA);
+        Shader shadowVertexNormalUVRGBABones = new Shader(Link.create("studio:shaders/default/shadow/vertex_normal_uv_rgba_bones.glsl"), VBOAttributes.VERTEX_NORMAL_UV_RGBA_BONES);
+
         vertexRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
         vertexUVRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
         vertexNormalUVRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
         vertexNormalUVLightRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
         vertexNormalUVRGBABones.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
+
+        shadowVertexRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
+        shadowVertexUVRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
+        shadowVertexNormalUVRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
+        shadowVertexNormalUVLightRGBA.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
+        shadowVertexNormalUVRGBABones.onInitialize(CommonShaderAccess::initializeTexture).attachUBO(this.ubo, "u_matrices");
 
         mainShaders.clear();
         mainShaders.register(vertexRGBA);
@@ -136,6 +158,13 @@ public class StudioRenderer implements IComponent
         mainShaders.register(vertexNormalUVRGBA);
         mainShaders.register(vertexNormalUVLightRGBA);
         mainShaders.register(vertexNormalUVRGBABones);
+
+        this.shadowShaders.clear();
+        this.shadowShaders.register(shadowVertexRGBA);
+        this.shadowShaders.register(shadowVertexUVRGBA);
+        this.shadowShaders.register(shadowVertexNormalUVRGBA);
+        this.shadowShaders.register(shadowVertexNormalUVLightRGBA);
+        this.shadowShaders.register(shadowVertexNormalUVRGBABones);
 
         this.skyboxShader = new Shader(Link.create("studio:shaders/default/world/vertex-skybox.glsl"), VBOAttributes.VERTEX);
         this.skyboxShader.attachUBO(this.context.getUBO(), "u_matrices");
@@ -240,7 +269,7 @@ public class StudioRenderer implements IComponent
 
         if (this.engine.screen.canRefresh())
         {
-            this.renderFrameTo(this.engine.cameraController.camera, this.shaders.gbuffer, 0, true);
+            this.renderFrameTo(this.engine.cameraController.camera, this.shaders, 0, true);
             this.renderFinal(this.context.getCamera(), this.shaders);
         }
 
@@ -264,13 +293,18 @@ public class StudioRenderer implements IComponent
             texture.setWrap(GL12.GL_CLAMP_TO_EDGE);
         }
 
+        if (shaders.shadow != null)
+        {
+            shaders.shadow.getMainTexture().bind(1);
+        }
+
         for (StudioShaders.Stage stage : shaders.stages)
         {
             stage.framebuffer.applyClear();
 
-            this.setupCompositeShader(stage.shader, camera, shaders.gbuffer);
+            this.setupCompositeShader(shaders, stage.shader, camera, shaders.gbuffer);
 
-            int i = 1;
+            int i = shaders.getTextureIndex();
 
             for (Texture texture : shaders.gbuffer.textures)
             {
@@ -294,7 +328,7 @@ public class StudioRenderer implements IComponent
         this.prevPosition.set(camera.position);
     }
 
-    private void setupCompositeShader(Shader shader, Camera camera, Framebuffer framebuffer)
+    private void setupCompositeShader(StudioShaders shaders, Shader shader, Camera camera, Framebuffer framebuffer)
     {
         UniformVector3 position = shader.getUniform("u_camera", UniformVector3.class);
         UniformMatrix4 projection = shader.getUniform("u_projection", UniformMatrix4.class);
@@ -309,6 +343,10 @@ public class StudioRenderer implements IComponent
         UniformVector3 prevPosition = shader.getUniform("u_prev_camera", UniformVector3.class);
         UniformMatrix4 prevProjection = shader.getUniform("u_prev_projection", UniformMatrix4.class);
         UniformMatrix4 prevView = shader.getUniform("u_prev_view", UniformMatrix4.class);
+
+        UniformMatrix4 shadowProjection = shader.getUniform("u_shadow_projection", UniformMatrix4.class);
+        UniformMatrix4 shadowView = shader.getUniform("u_shadow_view", UniformMatrix4.class);
+        UniformFloat shadowResolution = shader.getUniform("u_shadow_resolution", UniformFloat.class);
 
         if (position != null) position.set(camera.position);
         if (projection != null) projection.set(camera.projection);
@@ -328,6 +366,10 @@ public class StudioRenderer implements IComponent
         if (prevPosition != null) prevPosition.set(this.prevPosition);
         if (prevProjection != null) prevProjection.set(this.prevProjection);
         if (prevView != null) prevView.set(this.prevView);
+
+        if (shadowProjection != null) shadowProjection.set(this.shadowCamera.projection);
+        if (shadowView != null) shadowView.set(this.shadowCamera.view);
+        if (shadowResolution != null) shadowResolution.set(shaders.shadow.getMainTexture().width);
 
         this.updateSky(shader, this.engine.world.settings);
     }
@@ -366,7 +408,7 @@ public class StudioRenderer implements IComponent
             this.targetShaders.resize(w, h);
         }
 
-        this.renderFrameTo(camera, this.targetShaders.gbuffer, pass, renderScreen);
+        this.renderFrameTo(camera, this.targetShaders, pass, renderScreen);
         this.renderFinal(camera, this.targetShaders);
 
         framebuffer.apply();
@@ -386,12 +428,32 @@ public class StudioRenderer implements IComponent
         GLStates.resetViewport();
     }
 
-    public void renderFrameTo(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen)
+    public void renderFrameTo(Camera camera, StudioShaders shaders, int pass, boolean renderScreen)
     {
-        framebuffer.applyClear();
+        if (shaders.shadow != null)
+        {
+            if (!this.shadowCameraFreeze)
+            {
+                this.shadowCamera.copy(camera);
+            }
+
+            this.shadowCamera.updatePerspectiveProjection(this.pipeline.shadowResolution, this.pipeline.shadowResolution);
+
+            this.context.setCamera(this.shadowCamera);
+            this.context.setShaders(this.shadowShaders);
+            shaders.shadow.applyClear();
+
+            this.context.setPass(pass + 2);
+            this.renderFrameCommon(this.shadowCamera, this.context);
+            this.context.setPass(pass);
+
+            shaders.shadow.unbind();
+            this.context.setShaders(this.context.getMainShaders());
+        }
+
+        shaders.gbuffer.applyClear();
 
         /* Update context state */
-        camera.updateView();
         this.context.setCamera(camera);
         this.context.setPass(pass);
 
@@ -402,7 +464,7 @@ public class StudioRenderer implements IComponent
             this.engine.screen.renderWorld(this.context);
         }
 
-        framebuffer.unbind();
+        shaders.gbuffer.unbind();
 
         GLStates.resetViewport();
     }

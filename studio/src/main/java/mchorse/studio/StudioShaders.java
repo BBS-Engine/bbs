@@ -11,6 +11,7 @@ import mchorse.bbs.graphics.texture.TextureFormat;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class StudioShaders
     private ShaderPipeline pipeline;
 
     public Framebuffer gbuffer;
+    public Framebuffer shadow;
 
     public Map<String, Buffer> textures = new HashMap<>();
     public List<Stage> stages = new ArrayList<>();
@@ -34,7 +36,19 @@ public class StudioShaders
     public void reload()
     {
         /* Clean up */
-        if (this.gbuffer != null) this.gbuffer.delete();
+        if (this.gbuffer != null)
+        {
+            this.gbuffer.delete();
+
+            this.gbuffer = null;
+        }
+
+        if (this.shadow != null)
+        {
+            this.shadow.delete();
+
+            this.shadow = null;
+        }
 
         for (Stage stage : this.stages)
         {
@@ -72,11 +86,13 @@ public class StudioShaders
 
             stageShader.onInitialize((shader) ->
             {
-                int i = 1;
+                int i = this.getTextureIndex();
 
                 UniformInt lightmap = shader.getUniform("u_lightmap", UniformInt.class);
+                UniformInt shadowmap = shader.getUniform("u_shadowmap", UniformInt.class);
 
                 if (lightmap != null) lightmap.set(0);
+                if (shadowmap != null) shadowmap.set(1);
 
                 for (ShaderBuffer buffer : this.pipeline.gbuffers)
                 {
@@ -102,6 +118,26 @@ public class StudioShaders
 
             this.stages.add(new Stage(stageShader, framebuffer, inputs));
         }
+
+        if (this.pipeline.shadowMap)
+        {
+            Framebuffer framebuffer = new Framebuffer();
+            Texture texture = new Texture();
+
+            texture.setFilter(GL11.GL_NEAREST);
+            texture.setFormat(TextureFormat.DEPTH_F24);
+            texture.setWrap(GL13.GL_CLAMP_TO_EDGE);
+
+            framebuffer.attach(texture, GL30.GL_DEPTH_ATTACHMENT);
+            framebuffer.resize(this.pipeline.shadowResolution, this.pipeline.shadowResolution);
+
+            this.shadow = framebuffer;
+        }
+    }
+
+    public int getTextureIndex()
+    {
+        return this.pipeline.shadowMap ? 2 : 1;
     }
 
     private List<Texture> setupTextures(List<ShaderBuffer> buffers)

@@ -28,6 +28,7 @@ uniform sampler2D u_depth;
 
 uniform sampler2D u_texture1;
 uniform sampler2D u_texture2;
+uniform sampler2D u_shadowmap;
 
 uniform vec3 u_camera;
 uniform vec3 u_prev_camera;
@@ -49,6 +50,11 @@ uniform int u_fog;
 
 #import "studio:shaders/default/import/fragment/sky.glsl"
 
+float linearizeDepth(float depth, float near, float far)
+{
+    return (2.0 * near) / (far + near - depth * (far - near));
+}
+
 void main()
 {
     vec2 uv = (pass_uv / 2) + 0.5;
@@ -63,5 +69,12 @@ void main()
     if (u_fog > 0 && texture(u_depth, uv).r != 1.0)
     {
         out_color.rgb = mix_fog(out_color.rgb, u_fog, position);
+    }
+
+    if (uv.x < 0.5 && uv.y < 0.5)
+    {
+        float depth = linearizeDepth(texture(u_shadowmap, uv * 2).r, 0.01, 100);
+
+        out_color = vec4(depth, depth, depth, 1.0);
     }
 }

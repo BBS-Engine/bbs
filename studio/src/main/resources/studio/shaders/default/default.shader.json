@@ -41,6 +41,10 @@
             "clear": false
         }
     ],
+    "shadow": {
+        "enabled": true,
+        "resolution": 1024
+    },
     "stages": [
         {
             "shader": "studio:shaders/default/deferred/vertex_2d-composite.glsl",

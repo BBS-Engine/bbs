@@ -96,12 +96,12 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         BBS.registerFactories();
         BBS.registerFoundation();
 
-        this.registerMiscellaneous();
-        this.registerKeybinds();
-
         this.screen = new UIScreen(this);
         this.renderer = new StudioRenderer(this);
         this.cameraController.camera.position.set(0, 0.5, 0);
+
+        this.registerMiscellaneous();
+        this.registerKeybinds();
 
         this.watchDog = new WatchDog(BBS.getAssetsFolder());
         this.watchDog.register(BBS.getTextures());
@@ -214,10 +214,12 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         Keybind screenshot = new Keybind("screenshot", () -> this.screenshot.take(Window.isAltPressed()));
         Keybind fullscreen = new Keybind("fullscreen", this::toggleFullScreen);
         Keybind debug = new Keybind("debug", () -> this.renderer.context.setDebug(!this.renderer.context.isDebug()));
+        Keybind freezeShadow = new Keybind("freeze_shadow", this.renderer::freezeShadow);
 
         global.add(screenshot.keys(GLFW.GLFW_KEY_F2));
         global.add(debug.keys(GLFW.GLFW_KEY_F3));
         global.add(fullscreen.keys(GLFW.GLFW_KEY_F11));
+        global.add(freezeShadow.keys(GLFW.GLFW_KEY_F10));
 
         Keybind utilities = new Keybind("utilities", () ->
         {

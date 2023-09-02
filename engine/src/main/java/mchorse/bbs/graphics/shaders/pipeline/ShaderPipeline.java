@@ -14,6 +14,9 @@ public class ShaderPipeline implements IMapSerializable
     public List<ShaderBuffer> composite = new ArrayList<>();
     public List<ShaderStage> stages = new ArrayList<>();
 
+    public boolean shadowMap;
+    public int shadowResolution = 1024;
+
     @Override
     public void fromData(MapType data)
     {
@@ -59,6 +62,11 @@ public class ShaderPipeline implements IMapSerializable
                 this.stages.add(shaderStage);
             }
         }
+        
+        MapType shadowMap = data.getMap("shadow");
+
+        this.shadowMap = shadowMap.getBool("enabled", false);
+        this.shadowResolution = shadowMap.getInt("resolution", 1024);
     }
 
     @Override
