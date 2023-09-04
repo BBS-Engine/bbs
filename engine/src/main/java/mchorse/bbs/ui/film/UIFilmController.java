@@ -7,6 +7,7 @@ import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.core.input.MouseInput;
 import mchorse.bbs.film.Film;
+import mchorse.bbs.film.values.ValueKeyframes;
 import mchorse.bbs.film.values.ValueReplay;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
@@ -58,6 +59,7 @@ public class UIFilmController extends UIElement
     private int mouseMode;
     private final Vector2f mouseStick = new Vector2f();
 
+    private int recordingTick;
     private boolean recording;
     private int recordingCountdown;
     private List<String> recordingGroups;
@@ -80,6 +82,24 @@ public class UIFilmController extends UIElement
     private int getMouseMode()
     {
         return this.mouseMode % 4;
+    }
+
+    private void setMouseMode(int mode)
+    {
+        this.mouseMode = mode;
+
+        if (this.controlled != null)
+        {
+            /* Restore value of the mouse stick */
+            int index = this.getMouseMode() - 1;
+
+            if (index >= 0)
+            {
+                PlayerComponent component = this.controlled.get(PlayerComponent.class);
+
+                this.mouseStick.set(component.sticks[index * 2 + 1], component.sticks[index * 2]);
+            }
+        }
     }
 
     private boolean isMouseLookMode()
@@ -131,14 +151,33 @@ public class UIFilmController extends UIElement
             this.controlled = this.entities.get(this.panel.replays.replays.getIndex());
         }
 
+        this.walkDirection.set(0, 0);
+
         Window.toggleMousePointer(this.controlled != null);
     }
 
     public void startRecording(List<String> groups)
     {
+        this.recordingTick = this.getTick();
         this.recording = true;
         this.recordingCountdown = 30;
         this.recordingGroups = groups;
+
+        if (groups != null)
+        {
+            if (groups.contains(ValueKeyframes.GROUP_LEFT_STICK))
+            {
+                this.setMouseMode(1);
+            }
+            else if (groups.contains(ValueKeyframes.GROUP_RIGHT_STICK))
+            {
+                this.setMouseMode(2);
+            }
+            else if (groups.contains(ValueKeyframes.GROUP_TRIGGERS))
+            {
+                this.setMouseMode(3);
+            }
+        }
 
         if (this.controlled == null)
         {
@@ -148,6 +187,14 @@ public class UIFilmController extends UIElement
 
     public void stopRecording()
     {
+        this.panel.setCursor(this.recordingTick);
+
+        if (this.panel.getRunner().isRunning())
+        {
+            this.panel.togglePlayback();
+        }
+
+        this.setMouseMode(0);
         this.recording = false;
         this.recordingGroups = null;
 
@@ -236,7 +283,7 @@ public class UIFilmController extends UIElement
                 Window.toggleMousePointer(false);
 
                 UIRecordOverlayPanel panel = new UIRecordOverlayPanel(
-                    IKey.lazy("Record"),
+                    IKey.lazy("Insert keyframe"),
                     IKey.lazy("Pick a keyframe group that you want to insert:"),
                     (groups) ->
                     {
@@ -259,17 +306,7 @@ public class UIFilmController extends UIElement
             }
             else if (context.getKeyAction() == KeyAction.PRESSED && context.getKeyCode() >= GLFW.GLFW_KEY_1 && context.getKeyCode() <= GLFW.GLFW_KEY_4)
             {
-                this.mouseMode = context.getKeyCode() - GLFW.GLFW_KEY_1;
-
-                /* Restore value of the mouse stick */
-                int index = this.getMouseMode() - 1;
-
-                if (index >= 0)
-                {
-                    PlayerComponent component = this.controlled.get(PlayerComponent.class);
-
-                    this.mouseStick.set(component.sticks[index * 2 + 1], component.sticks[index * 2]);
-                }
+                this.setMouseMode(context.getKeyCode() - GLFW.GLFW_KEY_1);
 
                 return true;
             }
@@ -408,19 +445,24 @@ public class UIFilmController extends UIElement
         /* Render reording overlay */
         if (this.recording && this.controlled != null)
         {
-            int x = area.x + 5 + 15;
+            int x = area.x + 5 + 16;
             int y = area.y + 5;
 
-            context.batcher.icon(Icons.SPHERE, Colors.RED | Colors.A100, x - 18, y - 4, 0F, 0F);
+            context.batcher.icon(Icons.SPHERE, Colors.RED | Colors.A100, x, y, 1F, 0F);
 
             if (this.recordingCountdown <= 0)
             {
-                context.batcher.textCard(context.font, String.valueOf(this.getTick()), x, y, Colors.WHITE, Colors.A50);
+                context.batcher.textCard(context.font, this.getTick() + " ticks", x + 3, y + 4, Colors.WHITE, Colors.A50);
             }
             else
             {
-                context.batcher.textCard(context.font, String.valueOf(this.recordingCountdown / 20F), x, y, Colors.WHITE, Colors.A50);
+                context.batcher.textCard(context.font, String.valueOf(this.recordingCountdown / 20F), x + 3, y + 4, Colors.WHITE, Colors.A50);
             }
+        }
+
+        if (this.controlled != null)
+        {
+            context.batcher.outlinedIcon(Icons.POSE, area.ex() - 5, area.y + 5, 1F, 0F);
         }
 
         this.renderPicking(context, area);

@@ -2,6 +2,7 @@ package mchorse.bbs.ui.film;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
+import mchorse.bbs.audio.AudioRenderer;
 import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.bridge.IBridgeRender;
 import mchorse.bbs.camera.Camera;
@@ -673,6 +674,19 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         }
 
         this.controller.renderHUD(context, area);
+
+        if (this.replays.isVisible())
+        {
+            this.renderAudio(context, area);
+        }
+    }
+
+    private void renderAudio(UIContext context, Area area)
+    {
+        int w = (int) (area.w * BBSSettings.audioWaveformWidth.get());
+        int x = area.x(0.5F, w);
+
+        AudioRenderer.renderAll(context.batcher, x, area.y + 40, w, BBSSettings.audioWaveformHeight.get(), this.dashboard.width, this.dashboard.height);
     }
 
     @Override

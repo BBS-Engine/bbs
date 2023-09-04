@@ -70,11 +70,4 @@ void main()
     {
         out_color.rgb = mix_fog(out_color.rgb, u_fog, position);
     }
-
-    if (uv.x < 0.5 && uv.y < 0.5)
-    {
-        float depth = linearizeDepth(texture(u_shadowmap, uv * 2).r, 0.01, 100);
-
-        out_color = vec4(depth, depth, depth, 1.0);
-    }
 }

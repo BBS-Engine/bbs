@@ -42,7 +42,7 @@
         }
     ],
     "shadow": {
-        "enabled": true,
+        "enabled": false,
         "resolution": 1024
     },
     "stages": [

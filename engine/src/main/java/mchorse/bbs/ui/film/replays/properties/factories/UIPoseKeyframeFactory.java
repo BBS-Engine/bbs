@@ -1,26 +1,58 @@
 package mchorse.bbs.ui.film.replays.properties.factories;
 
 import mchorse.bbs.cubic.CubicModel;
+import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.ModelForm;
+import mchorse.bbs.graphics.window.Window;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.film.replays.properties.UIProperty;
 import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
+import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.world.objects.objects.UIPropTransform;
 import mchorse.bbs.utils.Pose;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 
 public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
 {
-    private UIStringList bones;
+    private UIStringList groups;
     private UIPropTransform transform;
 
     public UIPoseKeyframeFactory(GenericKeyframe<Pose> keyframe, UIPropertyEditor editor)
     {
         super(keyframe, editor);
 
-        this.bones = new UIStringList((l) -> this.pickBone(l.get(0)));
-        this.bones.background().h(16 * 8);
-        this.bones.scroll.cancelScrolling();
+        this.groups = new UIStringList((l) -> this.pickBone(l.get(0)));
+        this.groups.background().h(16 * 8);
+        this.groups.scroll.cancelScrolling();
+        this.groups.context((menu) ->
+        {
+            menu.action(Icons.COPY, IKey.lazy("Copy pose"), () ->
+            {
+                Window.setClipboard(this.keyframe.value.toData(), "_ModelCopyPose");
+            });
+
+            MapType data = Window.getClipboardMap("_ModelCopyPose");
+
+            if (data != null)
+            {
+                menu.action(Icons.PASTE, IKey.lazy("Paste pose"), () ->
+                {
+                    String current = this.groups.getCurrentFirst();
+
+                    this.keyframe.value.fromData(data);
+                    this.pickBone(current);
+                });
+            }
+
+            menu.action(Icons.REFRESH, IKey.lazy("Reset pose"), () ->
+            {
+                String current = this.groups.getCurrentFirst();
+
+                this.keyframe.value.transforms.clear();
+                this.pickBone(current);
+            });
+        });
         this.transform = new UIPropTransform();
         this.transform.verticalCompact();
 
@@ -30,14 +62,14 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
 
         if (model != null)
         {
-            this.bones.add(model.model.getAllGroupKeys());
-            this.bones.sort();
+            this.groups.add(model.model.getAllGroupKeys());
+            this.groups.sort();
 
-            this.bones.setIndex(0);
-            this.pickBone(this.bones.getCurrentFirst());
+            this.groups.setIndex(0);
+            this.pickBone(this.groups.getCurrentFirst());
         }
 
-        this.add(this.bones, this.transform);
+        this.add(this.groups, this.transform);
     }
 
     private void pickBone(String bone)
@@ -47,7 +79,7 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
 
     public void selectBone(String bone)
     {
-        this.bones.setCurrentScroll(bone);
+        this.groups.setCurrentScroll(bone);
         this.pickBone(bone);
     }
 }
