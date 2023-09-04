@@ -67,8 +67,8 @@ public class UIReplaysEditor extends UIElement
         COLORS.put("stick_ly", Colors.GREEN);
         COLORS.put("stick_rx", Colors.RED);
         COLORS.put("stick_ry", Colors.GREEN);
-        COLORS.put("trigger_r", Colors.RED);
-        COLORS.put("trigger_l", Colors.GREEN);
+        COLORS.put("trigger_l", Colors.RED);
+        COLORS.put("trigger_r", Colors.GREEN);
     }
 
     public UIReplaysEditor(UIFilmPanel delegate)

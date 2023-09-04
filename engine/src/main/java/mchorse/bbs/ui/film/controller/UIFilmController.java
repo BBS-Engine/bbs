@@ -6,6 +6,7 @@ import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.controller.CameraController;
 import mchorse.bbs.camera.controller.RunnerCameraController;
+import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.core.input.MouseInput;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.values.ValueKeyframes;
@@ -22,6 +23,7 @@ import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.film.replays.UIRecordOverlayPanel;
 import mchorse.bbs.ui.framework.UIContext;
@@ -200,6 +202,28 @@ public class UIFilmController extends UIElement
         if (this.panel.getRunner().isRunning())
         {
             this.panel.togglePlayback();
+        }
+
+        int i = this.entities.indexOf(this.controlled);
+        Film film = this.panel.getData();
+
+        if (film != null)
+        {
+            List<ValueReplay> replays = film.replays.replays;
+
+            /* TODO: Undo */
+            if (CollectionUtils.inRange(replays, i))
+            {
+                ValueReplay replay = replays.get(i);
+
+                for (BaseValue value : replay.keyframes.getAll())
+                {
+                    if (value instanceof ValueKeyframeChannel)
+                    {
+                        ((ValueKeyframeChannel) value).get().simplify();
+                    }
+                }
+            }
         }
 
         this.setMouseMode(0);
