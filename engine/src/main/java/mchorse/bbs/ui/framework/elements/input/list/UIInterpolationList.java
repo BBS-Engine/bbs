@@ -1,5 +1,6 @@
 package mchorse.bbs.ui.framework.elements.input.list;
 
+import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.utils.math.Interpolation;
 
 import java.util.Collections;
@@ -35,7 +36,7 @@ public class UIInterpolationList extends UIList<Interpolation>
     }
 
     @Override
-    protected String elementToString(int i, Interpolation element)
+    protected String elementToString(UIContext context, int i, Interpolation element)
     {
         return element.getName().get();
     }

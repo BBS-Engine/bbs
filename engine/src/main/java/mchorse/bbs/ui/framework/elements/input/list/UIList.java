@@ -157,7 +157,7 @@ public abstract class UIList <T> extends UIElement
         {
             T element = this.list.get(i);
 
-            if (this.elementToString(i, element).toLowerCase().contains(filter))
+            if (this.elementToString(this.getContext(), i, element).toLowerCase().contains(filter))
             {
                 this.filtered.add(new Pair<>(element, i));
             }
@@ -751,13 +751,13 @@ public abstract class UIList <T> extends UIElement
      */
     protected void renderElementPart(UIContext context, T element, int i, int x, int y, boolean hover, boolean selected)
     {
-        context.batcher.textShadow(context.font, this.elementToString(i, element), x + 4, y + (this.scroll.scrollItemSize - context.font.getHeight()) / 2, hover ? Colors.HIGHLIGHT : Colors.WHITE);
+        context.batcher.textShadow(context.font, this.elementToString(context, i, element), x + 4, y + (this.scroll.scrollItemSize - context.font.getHeight()) / 2, hover ? Colors.HIGHLIGHT : Colors.WHITE);
     }
 
     /**
      * Convert element to string
      */
-    protected String elementToString(int i, T element)
+    protected String elementToString(UIContext context, int i, T element)
     {
         return element.toString();
     }

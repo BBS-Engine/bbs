@@ -1,5 +1,6 @@
 package mchorse.bbs.ui.framework.elements.input.keyframes;
 
+import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.list.UIList;
 import mchorse.bbs.utils.keyframes.KeyframeInterpolation;
 
@@ -36,7 +37,7 @@ public class UIKeyframeInterpolationsList extends UIList<KeyframeInterpolation>
     }
 
     @Override
-    protected String elementToString(int i, KeyframeInterpolation element)
+    protected String elementToString(UIContext context, int i, KeyframeInterpolation element)
     {
         return element.getKey().get();
     }

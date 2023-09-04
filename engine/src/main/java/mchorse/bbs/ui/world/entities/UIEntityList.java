@@ -1,8 +1,8 @@
 package mchorse.bbs.ui.world.entities;
 
+import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.list.UIList;
 import mchorse.bbs.world.entities.Entity;
-import mchorse.bbs.world.objects.WorldObject;
 import org.joml.Vector3d;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class UIEntityList extends UIList<Entity>
     }
 
     @Override
-    protected String elementToString(int i, Entity element)
+    protected String elementToString(UIContext context, int i, Entity element)
     {
         Vector3d position = element.basic.position;
 

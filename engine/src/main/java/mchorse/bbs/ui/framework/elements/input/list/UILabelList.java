@@ -1,5 +1,6 @@
 package mchorse.bbs.ui.framework.elements.input.list;
 
+import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.Label;
 import mchorse.bbs.l10n.keys.IKey;
 
@@ -56,7 +57,7 @@ public class UILabelList <T> extends UIList<Label<T>>
     }
 
     @Override
-    protected String elementToString(int i, Label<T> element)
+    protected String elementToString(UIContext context, int i, Label<T> element)
     {
         return element.title.get();
     }

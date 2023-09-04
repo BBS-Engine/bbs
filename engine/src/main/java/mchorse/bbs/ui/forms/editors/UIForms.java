@@ -86,7 +86,7 @@ public class UIForms extends UIList<UIForms.FormEntry>
     }
 
     @Override
-    protected String elementToString(int i, FormEntry element)
+    protected String elementToString(UIContext context, int i, FormEntry element)
     {
         return StringUtils.repeat("  ", element.depth * 2) + element.toString();
     }

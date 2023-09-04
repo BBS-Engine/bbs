@@ -258,7 +258,7 @@ public class UIDataPathList extends UIList<DataPath>
     }
 
     @Override
-    protected String elementToString(int i, DataPath element)
+    protected String elementToString(UIContext context, int i, DataPath element)
     {
         return element.getLast() + (element.folder ? "/" : "");
     }

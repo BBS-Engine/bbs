@@ -1,5 +1,6 @@
 package mchorse.bbs.ui.font;
 
+import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.list.UIList;
 
 import java.util.Comparator;
@@ -22,7 +23,7 @@ public class UIGlyphList extends UIList<Integer>
     }
 
     @Override
-    protected String elementToString(int i, Integer element)
+    protected String elementToString(UIContext context, int i, Integer element)
     {
         return element + " - " + Character.getName(element).toLowerCase();
     }

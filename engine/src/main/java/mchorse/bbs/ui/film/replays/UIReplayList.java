@@ -1,6 +1,5 @@
 package mchorse.bbs.ui.film.replays;
 
-import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.film.Film;
@@ -13,6 +12,7 @@ import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.forms.UIFormPalette;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.list.UIList;
+import mchorse.bbs.ui.utils.UIDataUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.MathUtils;
@@ -39,7 +39,7 @@ public class UIReplayList extends UIList<ValueReplay>
 
         this.panel = panel;
 
-        this.horizontal().scroll.scrollItemSize = 40;
+        this.scroll.scrollItemSize = 20;
         this.context((menu) ->
         {
             menu.action(Icons.ADD, UIKeys.SCENE_REPLAYS_CONTEXT_ADD, this::addReplay);
@@ -158,47 +158,41 @@ public class UIReplayList extends UIList<ValueReplay>
     @Override
     public void render(UIContext context)
     {
-        this.area.render(context.batcher, 0x99000000);
-
-        super.render(context);
+        this.area.render(context.batcher, Colors.A100);
 
         if (this.getList().isEmpty())
         {
-            String label = UIKeys.SCENE_NO_REPLAYS.get();
-            int x = this.area.mx(context.font.getWidth(label));
-            int y = this.area.my() - 6;
-
-            context.batcher.text(label, x, y);
+            UIDataUtils.renderRightClickHere(context, this.area);
         }
+
+        super.render(context);
     }
 
     @Override
-    public void renderElementPart(UIContext context, ValueReplay replay, int i, int x, int y, boolean hover, boolean selected)
+    protected String elementToString(UIContext context, int i, ValueReplay element)
     {
-        int w = this.scroll.scrollItemSize;
-        int h = this.area.h;
-        boolean isDragging = this.isDragging() && this.getDraggingIndex() == i;
+        Form form = element.form.get();
 
-        if (selected && !isDragging)
-        {
-            context.batcher.box(x, y, x + w, y + h, Colors.A75 | BBSSettings.primaryColor.get());
-            context.batcher.clip(x, y, w, h, context);
-        }
+        return form == null ? "-" : context.font.limitToWidth(form.getIdOrName(), this.area.w - 20);
+    }
 
-        Form form = replay.form.get();
+    @Override
+    protected void renderElementPart(UIContext context, ValueReplay element, int i, int x, int y, boolean hover, boolean selected)
+    {
+        super.renderElementPart(context, element, i, x, y, hover, selected);
+
+        Form form = element.form.get();
 
         if (form != null)
         {
-            form.getRenderer().renderUI(context, x, y, x + w, y + this.area.h);
-        }
-        else
-        {
-            context.batcher.icon(Icons.POSE, x + w / 2 - 8, y + this.area.h / 2 - 8);
-        }
+            x += this.area.w - 30;
 
-        if (selected && !isDragging)
-        {
-            context.batcher.outline(x, y, x + w, y + h, Colors.A100 | BBSSettings.primaryColor.get(), 2);
+            context.batcher.clip(x, y, 40, 20, context);
+
+            y -= 10;
+
+            form.getRenderer().renderUI(context, x, y, x + 40, y + 40);
+
             context.batcher.unclip(context);
         }
     }

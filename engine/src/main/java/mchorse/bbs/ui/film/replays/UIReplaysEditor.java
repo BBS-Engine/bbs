@@ -75,12 +75,14 @@ public class UIReplaysEditor extends UIElement
     {
         this.delegate = delegate;
 
-        this.replays = new UIReplayList((l) -> this.setReplay(l.get(0)), this.delegate);
-        this.replays.relative(this).w(1F).h(80);
+        int w = 120;
+        int h = 140;
 
-        /* Keyframes */
         this.keyframes = new UIElement();
-        this.keyframes.relative(this).y(80).w(1F).h(1F, -80);
+        this.keyframes.relative(this).w(1F, -w).h(1F);
+
+        this.replays = new UIReplayList((l) -> this.setReplay(l.get(0)), this.delegate);
+        this.replays.relative(this).x(1F, -w).w(w).h(h);
 
         this.channels = new UIStringList(this::selectChannels);
         this.channels.background(Colors.A75).multi().context((menu) ->
@@ -92,10 +94,9 @@ public class UIReplaysEditor extends UIElement
             menu.action(Icons.TRIGGER, IKey.lazy("Select triggers"), () -> this.pick("trigger_l", "trigger_r"));
         });
 
-        this.channels.relative(this.keyframes).x(1F, -100).w(100).h(1F);
-        this.keyframes.add(this.channels);
+        this.channels.relative(this).x(1F, -w).y(h).w(w).h(1F, -h);
 
-        this.add(this.replays, this.keyframes);
+        this.add(this.replays, this.channels, this.keyframes);
 
         this.markContainer();
     }
@@ -173,13 +174,13 @@ public class UIReplaysEditor extends UIElement
 
         if (this.keyframeEditor != null)
         {
-            this.keyframeEditor.relative(this.keyframes).wTo(this.channels.area).h(1F);
+            this.keyframeEditor.relative(this.keyframes).full();
             this.keyframes.add(this.keyframeEditor);
         }
 
         if (this.propertyEditor != null)
         {
-            this.propertyEditor.relative(this.keyframes).wTo(this.channels.area).h(1F);
+            this.propertyEditor.relative(this.keyframes).full();
             this.keyframes.add(this.propertyEditor);
         }
 

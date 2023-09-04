@@ -1,5 +1,7 @@
 package mchorse.bbs.ui.framework.elements.input.list;
 
+import mchorse.bbs.ui.framework.UIContext;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -22,7 +24,7 @@ public class UIStringList extends UIList<String>
     }
 
     @Override
-    protected String elementToString(int i, String element)
+    protected String elementToString(UIContext context, int i, String element)
     {
         return element;
     }
