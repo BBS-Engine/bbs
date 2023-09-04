@@ -125,6 +125,11 @@ public class CameraController implements ICameraController
         this.camera.updatePerspectiveProjection(width, height);
     }
 
+    public boolean has(ICameraController controller)
+    {
+        return this.controllers.contains(controller);
+    }
+
     public boolean has(Class clazz)
     {
         for (ICameraController controller : this.controllers)

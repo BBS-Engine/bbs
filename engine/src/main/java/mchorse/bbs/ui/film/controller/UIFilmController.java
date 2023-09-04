@@ -1,9 +1,10 @@
-package mchorse.bbs.ui.film;
+package mchorse.bbs.ui.film.controller;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
+import mchorse.bbs.camera.controller.CameraController;
 import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.core.input.MouseInput;
 import mchorse.bbs.film.Film;
@@ -12,6 +13,7 @@ import mchorse.bbs.film.values.ValueReplay;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.game.entities.components.PlayerComponent;
+import mchorse.bbs.graphics.Draw;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
@@ -20,6 +22,7 @@ import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.film.replays.UIRecordOverlayPanel;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
@@ -28,6 +31,7 @@ import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.StencilFormFramebuffer;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.keys.KeyAction;
+import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
@@ -47,9 +51,9 @@ import java.util.List;
 
 public class UIFilmController extends UIElement
 {
-    private UIFilmPanel panel;
+    public final UIFilmPanel panel;
 
-    private List<Entity> entities = new ArrayList<>();
+    public final List<Entity> entities = new ArrayList<>();
 
     private Entity controlled;
     private final Vector3f direction = new Vector3f();
@@ -64,8 +68,12 @@ public class UIFilmController extends UIElement
     private int recordingCountdown;
     private List<String> recordingGroups;
 
+    private Entity hoveredEntity;
+
     private Camera stencilCamera = new Camera();
     private StencilFormFramebuffer stencil = new StencilFormFramebuffer();
+
+    public final OrbitFilmCameraController orbit = new OrbitFilmCameraController(this);
 
     public UIFilmController(UIFilmPanel panel)
     {
@@ -225,8 +233,55 @@ public class UIFilmController extends UIElement
                 return true;
             }
         }
+        else if (context.mouseButton == 0 && this.hoveredEntity != null)
+        {
+            int index = this.entities.indexOf(this.hoveredEntity);
+
+            this.panel.replays.setReplay(this.panel.getData().replays.replays.get(index));
+
+            if (!this.panel.replays.isVisible())
+            {
+                this.panel.showPanel(this.panel.replays);
+            }
+
+            return true;
+        }
+        else if (context.mouseButton == 2)
+        {
+            Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());
+
+            if (area.isInside(context))
+            {
+                this.orbit.start(context);
+
+                return true;
+            }
+        }
 
         return super.subMouseClicked(context);
+    }
+
+    @Override
+    protected boolean subMouseScrolled(UIContext context)
+    {
+        Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());
+
+        if (area.isInside(context) && this.panel.getCameraController().has(this.orbit))
+        {
+            this.orbit.handleDistance(context);
+
+            return true;
+        }
+
+        return super.subMouseScrolled(context);
+    }
+
+    @Override
+    protected boolean subMouseReleased(UIContext context)
+    {
+        this.orbit.stop();
+
+        return super.subMouseReleased(context);
     }
 
     @Override
@@ -241,6 +296,21 @@ public class UIFilmController extends UIElement
                 IKey.lazy("Pick a keyframe group that you want to record:"),
                 this::startRecording
             ));
+
+            return true;
+        }
+        else if (context.isPressed(GLFW.GLFW_KEY_O))
+        {
+            CameraController cameraController = this.panel.getCameraController();
+
+            if (cameraController.has(this.orbit))
+            {
+                cameraController.remove(this.orbit);
+            }
+            else
+            {
+                cameraController.add(this.orbit);
+            }
 
             return true;
         }
@@ -361,7 +431,7 @@ public class UIFilmController extends UIElement
 
                 if (entity != this.controlled || (this.recording && this.recordingCountdown <= 0 && this.recordingGroups != null))
                 {
-                    replay.applyFrame(ticks, entity, this.recordingGroups);
+                    replay.applyFrame(ticks, entity, entity == this.controlled ? this.recordingGroups : null);
                 }
 
                 if (entity == this.controlled && this.recording && runner.isRunning())
@@ -466,6 +536,8 @@ public class UIFilmController extends UIElement
         }
 
         this.renderPicking(context, area);
+
+        this.orbit.handleOrbiting(context);
     }
 
     private void renderPicking(UIContext context, Area area)
@@ -506,6 +578,7 @@ public class UIFilmController extends UIElement
             entity.render(context);
         }
 
+        this.rayTraceEntity(context);
         this.renderStencil(this.getContext());
 
         MouseInput mouse = BBS.getEngine().mouse;
@@ -549,6 +622,52 @@ public class UIFilmController extends UIElement
         }
 
         this.lastMouse.set(x, y);
+    }
+
+    private void rayTraceEntity(RenderingContext context)
+    {
+        this.hoveredEntity = null;
+
+        if (!Window.isAltPressed())
+        {
+            return;
+        }
+
+        UIContext c = this.getContext();
+        Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());
+
+        if (!area.isInside(c))
+        {
+            return;
+        }
+
+        List<Entity> entities = new ArrayList<>();
+        Camera camera = this.panel.getCamera();
+        Vector3f mouseDirection = camera.getMouseDirection(c.mouseX, c.mouseY, area);
+
+        for (Entity entity : this.entities)
+        {
+            AABB aabb = entity.getPickingHitbox();
+
+            if (aabb.intersectsRay(camera.position, mouseDirection))
+            {
+                entities.add(entity);
+            }
+        }
+
+        if (!entities.isEmpty())
+        {
+            entities.sort((a, b) -> (int) (a.basic.position.distanceSquared(camera.position) - b.basic.position.distanceSquared(camera.position)));
+
+            this.hoveredEntity = entities.get(0);
+        }
+
+        if (this.hoveredEntity != null)
+        {
+            AABB aabb = this.hoveredEntity.getPickingHitbox();
+
+            Draw.renderBox(context, aabb.x, aabb.y, aabb.z, aabb.w, aabb.h, aabb.d, 0F, 0.5F, 1F);
+        }
     }
 
     private void renderStencil(UIContext context)

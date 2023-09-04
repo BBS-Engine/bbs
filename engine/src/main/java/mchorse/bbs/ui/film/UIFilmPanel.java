@@ -7,6 +7,7 @@ import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.bridge.IBridgeRender;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
+import mchorse.bbs.camera.controller.CameraController;
 import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.data.StructureBase;
@@ -29,6 +30,7 @@ import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.IFlightSupported;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.film.clips.UIClip;
+import mchorse.bbs.ui.film.controller.UIFilmController;
 import mchorse.bbs.ui.film.replays.UIReplaysEditor;
 import mchorse.bbs.ui.film.screenplay.FountainSyntaxHighlighter;
 import mchorse.bbs.ui.film.utils.undo.ValueChangeUndo;
@@ -184,7 +186,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.fill(null);
     }
 
-    private void showPanel(UIElement element)
+    public void showPanel(UIElement element)
     {
         this.clips.setVisible(false);
         this.replays.setVisible(false);
@@ -272,7 +274,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
         Camera camera = new Camera();
 
-        camera.copy(this.dashboard.bridge.get(IBridgeCamera.class).getCamera());
+        camera.copy(this.getWorldCamera());
         camera.updatePerspectiveProjection(width, height);
 
         Vector2i size = Vectors.resize(width / (float) height, viewport.w, viewport.h);
@@ -300,9 +302,11 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     {
         super.appear();
 
+        CameraController cameraController = this.getCameraController();
+
         this.fillData();
         this.setFlight(false);
-        this.dashboard.bridge.get(IBridgeCamera.class).getCameraController().add(this.runner);
+        cameraController.add(this.runner);
         this.dashboard.getRoot().prepend(this.renderableOverlay);
 
         if (this.dashboard.isWalkMode())
@@ -316,9 +320,12 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     {
         super.close();
 
+        CameraController cameraController = this.getCameraController();
+
         this.timeline.embedView(null);
         this.setFlight(false);
-        this.dashboard.bridge.get(IBridgeCamera.class).getCameraController().remove(this.runner);
+        cameraController.remove(this.runner);
+        cameraController.remove(this.controller.orbit);
 
         this.disableContext();
     }
@@ -329,7 +336,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         super.disappear();
 
         this.setFlight(false);
-        this.dashboard.bridge.get(IBridgeCamera.class).getCameraController().remove(this.runner);
+        this.getCameraController().remove(this.runner);
         this.dashboard.getRoot().remove(this.renderableOverlay);
 
         this.disableContext();
@@ -620,7 +627,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         int width = BBSSettings.videoWidth.get();
         int height = BBSSettings.videoHeight.get();
 
-        this.camera.copy(this.getCamera());
+        this.camera.copy(this.getWorldCamera());
         this.camera.updatePerspectiveProjection(width, height);
 
         /* Resize framebuffer if desired width and height changed */
@@ -702,7 +709,17 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     @Override
     public Camera getCamera()
     {
+        return this.camera;
+    }
+
+    public Camera getWorldCamera()
+    {
         return this.dashboard.bridge.get(IBridgeCamera.class).getCamera();
+    }
+
+    public CameraController getCameraController()
+    {
+        return this.dashboard.bridge.get(IBridgeCamera.class).getCameraController();
     }
 
     @Override
