@@ -571,6 +571,7 @@ public class UITexturePicker extends UIElement implements IFileDropListener
         if (this.lastChecked.checkRepeat())
         {
             File file = BBS.getProvider().getFile(this.picker.path);
+            int scroll = this.picker.scroll.scroll;
 
             if (file != null)
             {
@@ -583,6 +584,8 @@ public class UITexturePicker extends UIElement implements IFileDropListener
                     this.picker.setCurrent(selected.link);
                 }
             }
+
+            this.picker.scroll.scrollTo(scroll);
         }
 
         /* Draw the background */
