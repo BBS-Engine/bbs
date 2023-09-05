@@ -21,6 +21,11 @@ public class KeyframeChannel implements IDataSerializable<ListType>
 
     private final List<Keyframe> keyframes = new ArrayList<>();
 
+    public int getLength()
+    {
+        return this.keyframes.isEmpty() ? 0 : (int) this.keyframes.get(this.keyframes.size() - 1).tick;
+    }
+
     protected Keyframe create(long tick, double value)
     {
         return new Keyframe(tick, value);

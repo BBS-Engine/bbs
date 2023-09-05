@@ -707,6 +707,12 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     /* IUICameraWorkDelegate implementation */
 
     @Override
+    public Film getFilm()
+    {
+        return this.data;
+    }
+
+    @Override
     public Camera getCamera()
     {
         return this.camera;

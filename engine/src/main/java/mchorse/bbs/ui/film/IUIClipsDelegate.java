@@ -2,6 +2,7 @@ package mchorse.bbs.ui.film;
 
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.data.types.BaseType;
+import mchorse.bbs.film.Film;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.framework.elements.UIElement;
@@ -12,6 +13,8 @@ import java.util.function.Consumer;
 
 public interface IUIClipsDelegate
 {
+    public Film getFilm();
+
     public Camera getCamera();
 
     public Clip getClip();

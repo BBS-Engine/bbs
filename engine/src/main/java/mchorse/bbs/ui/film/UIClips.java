@@ -5,10 +5,14 @@ import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.ClipFactoryData;
 import mchorse.bbs.camera.clips.converters.IClipConverter;
+import mchorse.bbs.camera.clips.overwrite.KeyframeClip;
 import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.film.Film;
+import mchorse.bbs.film.values.ValueReplay;
+import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
@@ -502,30 +506,42 @@ public class UIClips extends UIElement
 
     private void fromPlayerRecording(int mouseX, int mouseY)
     {
-        /* TODO: UIDataUtils.openPicker(this.getContext(), ContentType.RECORDS, "", (str) ->
+        Film film = this.delegate.getFilm();
+
+        this.getContext().replaceContextMenu((menu) ->
         {
-            Record record = BBSData.getRecords().load(str);
-
-            if (record == null)
+            for (ValueReplay replay : film.replays.replays)
             {
-                return;
+                Form form = replay.form.get();
+
+                menu.action(Icons.EDITOR, IKey.raw(form == null ? "-" : form.getIdOrName()), () ->
+                {
+                    KeyframeClip clip = new KeyframeClip();
+
+                    clip.fov.get().insert(0, 50);
+
+                    clip.x.get().copy(replay.keyframes.x.get());
+                    clip.y.get().copy(replay.keyframes.y.get());
+                    clip.z.get().copy(replay.keyframes.z.get());
+
+                    this.copyKeyframes(clip.yaw.get(), replay.keyframes.yaw.get());
+                    this.copyKeyframes(clip.pitch.get(), replay.keyframes.pitch.get());
+
+                    int size = Math.max(
+                        clip.x.get().getLength(),
+                        Math.max(
+                            clip.y.get().getLength(),
+                            Math.max(
+                                clip.z.get().getLength(),
+                                Math.max(clip.yaw.get().getLength(), clip.pitch.get().getLength())
+                            )
+                        )
+                    );
+
+                    this.addClip(clip, this.fromGraphX(mouseX), this.fromLayerY(mouseY), size);
+                });
             }
-
-            KeyframeClip clip = new KeyframeClip();
-            int size = record.getLength();
-
-            clip.fov.get().insert(0, 50);
-
-            clip.x.get().copy(record.keyframes.x);
-            clip.y.get().copy(record.keyframes.y);
-            clip.z.get().copy(record.keyframes.z);
-
-            this.copyKeyframes(clip.yaw.get(), record.keyframes.yaw);
-            this.copyKeyframes(clip.pitch.get(), record.keyframes.pitch);
-
-            this.addClip(clip, this.fromGraphX(mouseX), this.fromLayerY(mouseY), size);
-            this.getContext().menu.getRoot().getChildren(UIOverlayPanel.class).get(0).close();
-        }); */
+        });
     }
 
     private void copyKeyframes(KeyframeChannel a, KeyframeChannel b)
