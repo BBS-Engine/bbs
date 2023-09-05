@@ -49,7 +49,7 @@ public class AudioRenderer
 
         if (!wave.isCreated())
         {
-            wave.render();
+            wave.render(null);
         }
 
         float duration = w / (float) wave.getPixelsPerSecond();

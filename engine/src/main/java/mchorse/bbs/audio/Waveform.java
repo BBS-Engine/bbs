@@ -20,7 +20,7 @@ public class Waveform
     private int h;
     private int pixelsPerSecond;
 
-    public void generate(Wave data, int pixelsPerSecond, int height)
+    public void generate(Wave data, List<ColorCode> colorCodes, int pixelsPerSecond, int height)
     {
         if (data.getBytesPerSample() != 2)
         {
@@ -28,16 +28,18 @@ public class Waveform
         }
 
         this.populate(data, pixelsPerSecond, height);
-        this.render();
+        this.render(colorCodes);
     }
 
-    public void render()
+    public void render(List<ColorCode> colorCodes)
     {
         this.delete();
 
         int maxTextureSize = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE) / 2;
         int count = (int) Math.ceil(this.w / (double) maxTextureSize);
         int offset = 0;
+        float time = 0;
+        ColorCode code = this.getColorCode(colorCodes, time);
 
         for (int t = 0; t < count; t++)
         {
@@ -54,11 +56,19 @@ public class Waveform
                 int maxHeight = (int) (maximum * this.h);
                 int avgHeight = (int) (average * (this.h - 1)) + 1;
 
+                int color = Colors.WHITE;
+
+                if (code != null && !code.isInside(time)) code = null;
+                if (code == null) code = this.getColorCode(colorCodes, time);
+                if (code != null) color = Colors.setA(code.color, 1F);
+
                 if (avgHeight > 0)
                 {
-                    pixels.drawRect(j, this.h / 2 - maxHeight / 2, 1, maxHeight, Colors.WHITE);
-                    pixels.drawRect(j, this.h / 2 - avgHeight / 2, 1, avgHeight, Colors.LIGHTEST_GRAY);
+                    pixels.drawRect(j, this.h / 2 - maxHeight / 2, 1, maxHeight, color);
+                    pixels.drawRect(j, this.h / 2 - avgHeight / 2, 1, avgHeight, Colors.mulRGB(color, 0.8F));
                 }
+
+                time += 1 / (float) this.pixelsPerSecond;
             }
 
             pixels.rewindBuffer();
@@ -73,6 +83,24 @@ public class Waveform
 
             offset += maxTextureSize;
         }
+    }
+
+    private ColorCode getColorCode(List<ColorCode> colorCodes, float time)
+    {
+        if (colorCodes == null)
+        {
+            return null;
+        }
+
+        for (ColorCode colorCode : colorCodes)
+        {
+            if (colorCode.isInside(time))
+            {
+                return colorCode;
+            }
+        }
+
+        return null;
     }
 
     public void populate(Wave data, int pixelsPerSecond, int height)

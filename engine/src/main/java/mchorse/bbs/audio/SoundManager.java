@@ -4,8 +4,12 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.core.IDisposable;
+import mchorse.bbs.data.DataToString;
+import mchorse.bbs.data.types.BaseType;
+import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.resources.AssetProvider;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.utils.IOUtils;
 import mchorse.bbs.utils.watchdog.IWatchDogListener;
 import mchorse.bbs.utils.watchdog.WatchDogEvent;
 import org.joml.Matrix4f;
@@ -20,6 +24,8 @@ import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.openal.EXTDisconnect;
 import org.lwjgl.system.MemoryUtil;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Files;
@@ -112,7 +118,7 @@ public class SoundManager implements IDisposable, IWatchDogListener
                 }
 
                 waveform = new Waveform();
-                waveform.generate(wave, BBSSettings.audioWaveformDensity.get(), 40);
+                waveform.generate(wave, this.tryReadingColorCodes(link), BBSSettings.audioWaveformDensity.get(), 40);
             }
 
             SoundBuffer buffer = new SoundBuffer(link, wave, waveform);
@@ -127,6 +133,43 @@ public class SoundManager implements IDisposable, IWatchDogListener
         {
             e.printStackTrace();
         }
+
+        return null;
+    }
+
+    private List<ColorCode> tryReadingColorCodes(Link link)
+    {
+        try
+        {
+            InputStream stream = this.provider.getAsset(new Link(link.source, link.path + ".json"));
+            String string = IOUtils.readText(stream);
+            ListType data = DataToString.listFromString(string);
+
+            if (data != null && !data.isEmpty())
+            {
+                List<ColorCode> colorCodes = new ArrayList<>();
+
+                for (BaseType type : data)
+                {
+                    if (!type.isList())
+                    {
+                        continue;
+                    }
+
+                    ColorCode colorCode = new ColorCode();
+
+                    colorCode.fromData(type.asList());
+                    colorCodes.add(colorCode);
+                }
+
+                if (!colorCodes.isEmpty())
+                {
+                    return colorCodes;
+                }
+            }
+        }
+        catch (IOException e)
+        {}
 
         return null;
     }
