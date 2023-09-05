@@ -18,6 +18,6 @@ public class AudioReader
             return VorbisReader.read(link, provider.getAsset(link));
         }
 
-        throw new IllegalStateException("Given link " + link.toString() + " isn't a Wave or a Vorbis file!");
+        throw new IllegalStateException("Given link " + link + " isn't a Wave or a Vorbis file!");
     }
 }

@@ -7,21 +7,18 @@ import mchorse.bbs.forms.categories.FormCategory;
 import mchorse.bbs.forms.categories.RecentFormCategory;
 import mchorse.bbs.forms.categories.UserFormCategory;
 import mchorse.bbs.forms.forms.Form;
-import mchorse.bbs.utils.factory.MapFactory;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.forms.editors.forms.UIForm;
+import mchorse.bbs.utils.factory.MapFactory;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
-public class FormArchitect extends MapFactory<Form, Void>
+public class FormArchitect extends MapFactory<Form, Function<Form, UIForm>>
 {
-    public Map<Link, Function<Form, UIForm>> editors = new HashMap<>();
     public List<FormCategory> categories = new ArrayList<>();
 
     public static File getUserCategoriesFile()
@@ -50,13 +47,6 @@ public class FormArchitect extends MapFactory<Form, Void>
         return this.factory.containsKey(id);
     }
 
-    public FormArchitect registerEditor(Link id, Function<Form, UIForm> factory)
-    {
-        this.editors.put(id, factory);
-
-        return this;
-    }
-
     public UIForm getEditor(Form form)
     {
         if (form == null)
@@ -64,7 +54,7 @@ public class FormArchitect extends MapFactory<Form, Void>
             return null;
         }
 
-        Function<Form, UIForm> editor = this.editors.get(this.getType(form));
+        Function<Form, UIForm> editor = this.getData(this.getType(form));
 
         if (editor != null)
         {

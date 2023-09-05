@@ -487,22 +487,14 @@ public class BBS
         /* Register forms */
         forms = new FormArchitect();
         forms
-            .registerEditor(Link.bbs("billboard"), (f) -> new UIBillboardForm())
-            .registerEditor(Link.bbs("label"), (f) -> new UILabelForm())
-            .registerEditor(Link.bbs("model"), (f) -> new UIModelForm())
-            .registerEditor(Link.bbs("particle"), (f) -> new UIParticleForm())
-            .registerEditor(Link.bbs("block"), (f) -> new UIBlockForm())
-            .registerEditor(Link.bbs("structure"), (f) -> new UIStructureForm())
-            .registerEditor(Link.bbs("light"), (f) -> new UILightForm())
-            .registerEditor(Link.bbs("extruded"), (f) -> new UIExtrudedForm())
-            .register(Link.bbs("billboard"), BillboardForm.class)
-            .register(Link.bbs("label"), LabelForm.class)
-            .register(Link.bbs("model"), ModelForm.class)
-            .register(Link.bbs("particle"), ParticleForm.class)
-            .register(Link.bbs("block"), BlockForm.class)
-            .register(Link.bbs("structure"), StructureForm.class)
-            .register(Link.bbs("light"), LightForm.class)
-            .register(Link.bbs("extruded"), ExtrudedForm.class);
+            .register(Link.bbs("billboard"), BillboardForm.class, (f) -> new UIBillboardForm())
+            .register(Link.bbs("label"), LabelForm.class, (f) -> new UILabelForm())
+            .register(Link.bbs("model"), ModelForm.class, (f) -> new UIModelForm())
+            .register(Link.bbs("particle"), ParticleForm.class, (f) -> new UIParticleForm())
+            .register(Link.bbs("block"), BlockForm.class, (f) -> new UIBlockForm())
+            .register(Link.bbs("structure"), StructureForm.class, (f) -> new UIStructureForm())
+            .register(Link.bbs("light"), LightForm.class, (f) -> new UILightForm())
+            .register(Link.bbs("extruded"), ExtrudedForm.class, (f) -> new UIExtrudedForm());
 
         /* Register block models */
         factoryBlockModels = new MapFactory<BlockModelFactory, BlockModelFactoryData>()
