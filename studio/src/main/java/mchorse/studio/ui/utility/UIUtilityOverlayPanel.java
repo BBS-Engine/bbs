@@ -9,12 +9,14 @@ import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
+import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageFolderOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.UIUtils;
+import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.StringUtils;
 import mchorse.studio.ui.UIKeysApp;
 import mchorse.studio.ui.l10n.UILanguageEditorOverlayPanel;
@@ -40,42 +42,48 @@ public class UIUtilityOverlayPanel extends UIOverlayPanel
         UIButton openAudioDirectory = new UIButton(IKey.lazy("Audio"), (b) -> UIUtils.openFolder(BBS.getAssetsPath("audio")));
         UIButton openModelsDirectory = new UIButton(IKey.lazy("Models"), (b) -> UIUtils.openFolder(BBS.getAssetsPath("models")));
 
-        UIButton shaders = new UIButton(UIKeysApp.UTILITY_RELOAD_SHADERS, (b) ->
+        UIIcon shaders = new UIIcon(Icons.SPHERE, (b) ->
         {
             this.print("Reloading shaders!");
             BBS.getShaders().reload();
             this.close();
         });
-        UIButton textures = new UIButton(UIKeysApp.UTILITY_RELOAD_TEXTURES, (b) ->
+        shaders.w(0).tooltip(UIKeysApp.UTILITY_RELOAD_SHADERS);
+        UIIcon textures = new UIIcon(Icons.MATERIAL, (b) ->
         {
             this.print("Reloading textures!");
             BBS.getTextures().reload();
             this.close();
         });
-        UIButton language = new UIButton(UIKeysApp.UTILITY_RELOAD_LANG, (b) ->
+        textures.w(0).tooltip(UIKeysApp.UTILITY_RELOAD_TEXTURES);
+        UIIcon language = new UIIcon(Icons.GLOBE, (b) ->
         {
             this.print("Reloading languages!");
             BBS.getL10n().reload();
             this.close();
         });
-        UIButton models = new UIButton(UIKeysApp.UTILITY_RELOAD_MODELS, (b) ->
+        language.w(0).tooltip(UIKeysApp.UTILITY_RELOAD_LANG);
+        UIIcon models = new UIIcon(Icons.POSE, (b) ->
         {
             this.print("Reloading models");
             BBS.getModels().reload();
             this.close();
         });
-        UIButton sounds = new UIButton(UIKeysApp.UTILITY_RELOAD_SOUNDS, (b) ->
+        models.w(0).tooltip(UIKeysApp.UTILITY_RELOAD_MODELS);
+        UIIcon sounds = new UIIcon(Icons.SOUND, (b) ->
         {
             this.print("Reloading sounds");
             BBS.getSounds().deleteSounds();
             this.close();
         });
-        UIButton terrain = new UIButton(UIKeysApp.UTILITY_RELOAD_TERRAIN, (b) ->
+        sounds.w(0).tooltip(UIKeysApp.UTILITY_RELOAD_SOUNDS);
+        UIIcon terrain = new UIIcon(Icons.TREE, (b) ->
         {
             this.print("Forcing chunk loader");
             this.getContext().menu.bridge.get(IBridgeWorld.class).getWorld().chunks.buildChunks(BBS.getRender(), true);
             this.close();
         });
+        terrain.w(0).tooltip(UIKeysApp.UTILITY_RELOAD_TERRAIN);
 
         this.width = new UITrackpad((v) ->
         {
@@ -94,7 +102,7 @@ public class UIUtilityOverlayPanel extends UIOverlayPanel
        UIButton langEditor = new UIButton(UIKeysApp.UTILITY_LANG_EDITOR, (b) -> this.openLangEditor());
 
        this.view.add(UI.label(IKey.lazy("Open folder...")), UI.row(openGameDirectory, openModelsDirectory, openAudioDirectory).marginBottom(8));
-       this.view.add(UI.label(UIKeysApp.UTILITY_RELOAD_LABEL), UI.row(shaders, textures), UI.row(language, models), UI.row(sounds, terrain).marginBottom(8));
+       this.view.add(UI.label(UIKeysApp.UTILITY_RELOAD_LABEL), UI.row(shaders, textures, language, models, sounds, terrain).marginBottom(8));
        this.view.add(UI.column(UI.label(UIKeysApp.UTILITY_RESIZE_WINDOW), UI.row(this.width, this.height)).marginBottom(8));
        this.view.add(UI.label(UIKeysApp.UTILITY_LANG_LABEL), UI.row(analyze, compile), langEditor);
        this.content.add(this.view);

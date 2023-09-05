@@ -274,7 +274,7 @@ public class UIFilmController extends UIElement
         {
             Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());
 
-            if (area.isInside(context))
+            if (area.isInside(context) && this.panel.getCameraController().has(this.orbit))
             {
                 this.orbit.start(context);
 
@@ -323,7 +323,7 @@ public class UIFilmController extends UIElement
 
             return true;
         }
-        else if (context.isPressed(GLFW.GLFW_KEY_O))
+        else if (context.isPressed(GLFW.GLFW_KEY_O) && !context.isFocused())
         {
             CameraController cameraController = this.panel.getCameraController();
 

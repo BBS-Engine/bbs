@@ -7,6 +7,8 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.film.Film;
+import mchorse.bbs.utils.FFMpegUtils;
+import mchorse.bbs.utils.IOUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -17,6 +19,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -251,6 +254,7 @@ public class ElevenLabsAPI implements Runnable
         int i = 0;
         String lastChapter = "";
         File folder = BBS.getAssetsPath("audio/elevenlabs/" + this.screenplay.getId());
+        List<File> files = new ArrayList<>();
 
         for (ScreenplayReply reply : replies)
         {
@@ -287,6 +291,8 @@ public class ElevenLabsAPI implements Runnable
                     lastChapter = reply.chapter;
 
                     this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.GENERATED, "Voice line " + filename + " was generated!"));
+
+                    files.add(file);
                 }
                 else
                 {
@@ -297,6 +303,30 @@ public class ElevenLabsAPI implements Runnable
             {
                 e.printStackTrace();
             }
+        }
+
+        /* Concatenate all of these into a single file */
+        StringBuilder list = new StringBuilder();
+        File listFile = new File(folder, "_list.txt");
+
+        for (File file : files)
+        {
+            list.append("file './");
+            list.append(file.getName());
+            list.append("'\n");
+        }
+
+        try
+        {
+            IOUtils.writeText(listFile, list.toString());
+
+            FFMpegUtils.execute(folder, "-f", "concat", "-safe", "0", "-i", listFile.getName(), this.screenplay.getId() + ".wav");
+
+            listFile.delete();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
 
         this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.SUCCESS, folder));
