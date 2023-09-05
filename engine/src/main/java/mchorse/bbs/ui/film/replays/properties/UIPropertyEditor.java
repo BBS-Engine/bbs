@@ -111,12 +111,7 @@ public class UIPropertyEditor extends UIElement
         this.keys().register(Keys.KEYFRAMES_MAXIMIZE, this::resetView).inside().category(category);
         this.keys().register(Keys.KEYFRAMES_SELECT_ALL, this::selectAll).inside().category(category);
 
-        this.interp.keys().register(Keys.KEYFRAMES_INTERP, this::toggleInterpolation).category(category);
-    }
-
-    protected void toggleInterpolation()
-    {
-        this.interp.clickItself();
+        this.interp.keys().register(Keys.KEYFRAMES_INTERP, this.interp::clickItself).category(category);
     }
 
     public void setConverter(IAxisConverter converter)

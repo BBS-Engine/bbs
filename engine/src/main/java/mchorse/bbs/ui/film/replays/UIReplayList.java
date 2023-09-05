@@ -58,7 +58,7 @@ public class UIReplayList extends UIList<ValueReplay>
                         UIFormPalette.open(this.getParentContainer(), false, form.get(), (f) ->
                         {
                             form.set(f);
-                            this.panel.getController().updateEntities();
+                            this.updateFilmEditor();
                         });
                     });
 
@@ -69,7 +69,7 @@ public class UIReplayList extends UIList<ValueReplay>
                         UIFormPalette.open(this.getParentContainer(), true, form.get(), (f) ->
                         {
                             form.set(f);
-                            this.panel.getController().updateEntities();
+                            this.updateFilmEditor();
                         });
                     });
                 }
@@ -108,13 +108,19 @@ public class UIReplayList extends UIList<ValueReplay>
 
         this.update();
         this.panel.replays.setReplay(replay);
-        this.panel.getController().updateEntities();
+        this.updateFilmEditor();
 
         UIFormPalette.open(this.getParentContainer(), false, replay.form.get(), (f) ->
         {
             replay.form.set(f);
-            this.panel.getController().updateEntities();
+            this.updateFilmEditor();
         });
+    }
+
+    private void updateFilmEditor()
+    {
+        this.panel.getController().createEntities();
+        this.panel.replays.updateChannelsList();
     }
 
     private void dupeReplay()
@@ -132,7 +138,7 @@ public class UIReplayList extends UIList<ValueReplay>
 
         this.update();
         this.panel.replays.setReplay(replay);
-        this.panel.getController().updateEntities();
+        this.updateFilmEditor();
     }
 
     private void removeReplay()
@@ -152,7 +158,7 @@ public class UIReplayList extends UIList<ValueReplay>
 
         this.update();
         this.panel.replays.setReplay(size == 0 ? null : this.list.get(index));
-        this.panel.getController().updateEntities();
+        this.updateFilmEditor();
     }
 
     @Override

@@ -247,11 +247,17 @@ public class UIReplaysEditor extends UIElement
     {
         this.replay = replay;
 
+        this.keyframes.setVisible(replay != null);
+        this.updateChannelsList();
+
+        this.replays.setCurrentScroll(replay);
+    }
+
+    public void updateChannelsList()
+    {
         this.channels.clear();
 
-        this.keyframes.setVisible(replay != null);
-
-        if (replay != null)
+        if (this.replay != null)
         {
             for (String key : ValueKeyframes.CURATED_CHANNELS)
             {
@@ -263,8 +269,6 @@ public class UIReplaysEditor extends UIElement
 
             this.selectChannels(this.channels.getCurrent());
         }
-
-        this.replays.setCurrentScroll(replay);
     }
 
     public void pickForm(Form form, String bone)

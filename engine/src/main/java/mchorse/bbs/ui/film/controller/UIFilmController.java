@@ -8,6 +8,7 @@ import mchorse.bbs.camera.controller.CameraController;
 import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.core.input.MouseInput;
+import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.values.ValueKeyframes;
 import mchorse.bbs.film.values.ValueReplay;
@@ -39,6 +40,7 @@ import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.math.MathUtils;
+import mchorse.bbs.utils.undo.IUndo;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.BasicComponent;
@@ -57,21 +59,23 @@ public class UIFilmController extends UIElement
 
     public final List<Entity> entities = new ArrayList<>();
 
+    /* Character control */
     private Entity controlled;
     private final Vector3f direction = new Vector3f();
     private final Vector2f walkDirection = new Vector2f();
     private final Vector2i lastMouse = new Vector2i();
-
     private int mouseMode;
     private final Vector2f mouseStick = new Vector2f();
 
+    /* Recording state */
     private int recordingTick;
     private boolean recording;
     private int recordingCountdown;
     private List<String> recordingGroups;
+    private BaseType recordingOld;
 
+    /* Replay and group picking */
     private Entity hoveredEntity;
-
     private Camera stencilCamera = new Camera();
     private StencilFormFramebuffer stencil = new StencilFormFramebuffer();
 
@@ -87,6 +91,11 @@ public class UIFilmController extends UIElement
     private int getTick()
     {
         return this.panel.getRunner().ticks;
+    }
+
+    private ValueReplay getReplay()
+    {
+        return this.panel.replays.replays.getCurrentFirst();
     }
 
     private int getMouseMode()
@@ -117,7 +126,7 @@ public class UIFilmController extends UIElement
         return this.getMouseMode() == 0;
     }
 
-    public void updateEntities()
+    public void createEntities()
     {
         this.stopRecording();
 
@@ -150,6 +159,8 @@ public class UIFilmController extends UIElement
         }
     }
 
+    /* Character control state */
+
     public void toggleControl()
     {
         if (this.controlled != null)
@@ -164,7 +175,21 @@ public class UIFilmController extends UIElement
         this.walkDirection.set(0, 0);
 
         Window.toggleMousePointer(this.controlled != null);
+
+        if (this.controlled == null && this.recording)
+        {
+            this.stopRecording();
+        }
     }
+
+    private boolean canControl()
+    {
+        UIContext context = this.getContext();
+
+        return this.controlled != null && context != null && !UIOverlay.has(context);
+    }
+
+    /* Recording */
 
     public void startRecording(List<String> groups)
     {
@@ -172,6 +197,8 @@ public class UIFilmController extends UIElement
         this.recording = true;
         this.recordingCountdown = 30;
         this.recordingGroups = groups;
+
+        this.recordingOld = this.getReplay().keyframes.toData();
 
         if (groups != null)
         {
@@ -193,40 +220,12 @@ public class UIFilmController extends UIElement
         {
             this.toggleControl();
         }
+
+        Window.toggleMousePointer(this.controlled != null);
     }
 
     public void stopRecording()
     {
-        this.panel.setCursor(this.recordingTick);
-
-        if (this.panel.getRunner().isRunning())
-        {
-            this.panel.togglePlayback();
-        }
-
-        int i = this.entities.indexOf(this.controlled);
-        Film film = this.panel.getData();
-
-        if (film != null)
-        {
-            List<ValueReplay> replays = film.replays.replays;
-
-            /* TODO: Undo */
-            if (CollectionUtils.inRange(replays, i))
-            {
-                ValueReplay replay = replays.get(i);
-
-                for (BaseValue value : replay.keyframes.getAll())
-                {
-                    if (value instanceof ValueKeyframeChannel)
-                    {
-                        ((ValueKeyframeChannel) value).get().simplify();
-                    }
-                }
-            }
-        }
-
-        this.setMouseMode(0);
         this.recording = false;
         this.recordingGroups = null;
 
@@ -234,41 +233,72 @@ public class UIFilmController extends UIElement
         {
             this.toggleControl();
         }
+
+        this.panel.setCursor(this.recordingTick);
+
+        if (this.panel.getRunner().isRunning())
+        {
+            this.panel.togglePlayback();
+        }
+
+        if (this.recordingCountdown > 0)
+        {
+            return;
+        }
+
+        ValueReplay replay = this.getReplay();
+
+        if (replay != null)
+        {
+            for (BaseValue value : replay.keyframes.getAll())
+            {
+                if (value instanceof ValueKeyframeChannel)
+                {
+                    ((ValueKeyframeChannel) value).get().simplify();
+                }
+            }
+
+            IUndo undo = this.panel.createUndo(replay.keyframes, this.recordingOld, replay.keyframes.toData());
+
+            this.panel.postUndo(undo.noMerging(), false, false);
+
+            this.recordingOld = null;
+        }
+
+        this.setMouseMode(0);
     }
 
-    private boolean canControl()
-    {
-        UIContext context = this.getContext();
-
-        return this.controlled != null && context != null && !UIOverlay.has(context);
-    }
+    /* Input handling */
 
     @Override
     protected boolean subMouseClicked(UIContext context)
     {
-        if (this.stencil.hasPicked() && context.mouseButton == 0)
+        if (context.mouseButton == 0)
         {
-            Pair<Form, String> pair = this.stencil.getPicked();
-
-            if (pair != null)
+            if (this.hoveredEntity != null)
             {
-                this.panel.replays.pickForm(pair.a, pair.b);
+                int index = this.entities.indexOf(this.hoveredEntity);
+
+                this.panel.replays.setReplay(this.panel.getData().replays.replays.get(index));
+
+                if (!this.panel.replays.isVisible())
+                {
+                    this.panel.showPanel(this.panel.replays);
+                }
 
                 return true;
             }
-        }
-        else if (context.mouseButton == 0 && this.hoveredEntity != null)
-        {
-            int index = this.entities.indexOf(this.hoveredEntity);
-
-            this.panel.replays.setReplay(this.panel.getData().replays.replays.get(index));
-
-            if (!this.panel.replays.isVisible())
+            else if (this.stencil.hasPicked())
             {
-                this.panel.showPanel(this.panel.replays);
-            }
+                Pair<Form, String> pair = this.stencil.getPicked();
 
-            return true;
+                if (pair != null)
+                {
+                    this.panel.replays.pickForm(pair.a, pair.b);
+
+                    return true;
+                }
+            }
         }
         else if (context.mouseButton == 2)
         {
@@ -313,28 +343,13 @@ public class UIFilmController extends UIElement
     {
         if (context.isPressed(GLFW.GLFW_KEY_R) && Window.isCtrlPressed())
         {
-            Window.toggleMousePointer(false);
-
-            UIOverlay.addOverlay(this.getContext(), new UIRecordOverlayPanel(
-                IKey.lazy("Record"),
-                IKey.lazy("Pick a keyframe group that you want to record:"),
-                this::startRecording
-            ));
+            this.pickRecording();
 
             return true;
         }
         else if (context.isPressed(GLFW.GLFW_KEY_O) && !context.isFocused())
         {
-            CameraController cameraController = this.panel.getCameraController();
-
-            if (cameraController.has(this.orbit))
-            {
-                cameraController.remove(this.orbit);
-            }
-            else
-            {
-                cameraController.add(this.orbit);
-            }
+            this.toggleOrbit();
 
             return true;
         }
@@ -365,41 +380,19 @@ public class UIFilmController extends UIElement
             }
             else if (context.isPressed(GLFW.GLFW_KEY_SPACE))
             {
-                this.controlled.basic.velocity.y = this.controlled.basic.sneak ? 0.4F : 0.5F;
-                this.controlled.basic.velocity.x *= 1.2F;
-                this.controlled.basic.velocity.z *= 1.2F;
-                this.controlled.basic.grounded = false;
+                this.jump();
 
                 return true;
             }
-            else if (context.isPressed(GLFW.GLFW_KEY_I) && Window.isCtrlPressed())
+            else if (context.isPressed(GLFW.GLFW_KEY_I))
             {
-                Window.toggleMousePointer(false);
-
-                UIRecordOverlayPanel panel = new UIRecordOverlayPanel(
-                    IKey.lazy("Insert keyframe"),
-                    IKey.lazy("Pick a keyframe group that you want to insert:"),
-                    (groups) ->
-                    {
-                        int index = this.entities.indexOf(this.controlled);
-
-                        if (index >= 0 && CollectionUtils.inRange(this.panel.getData().replays.replays, index))
-                        {
-                            this.panel.getData().replays.replays.get(index).keyframes.record(this.getTick(), this.controlled, groups);
-                        }
-
-                        Window.toggleMousePointer(true);
-                    }
-                );
-
-                panel.onClose((event) -> Window.toggleMousePointer(true));
-
-                UIOverlay.addOverlay(this.getContext(), panel);
+                this.insertFrame();
 
                 return true;
             }
             else if (context.getKeyAction() == KeyAction.PRESSED && context.getKeyCode() >= GLFW.GLFW_KEY_1 && context.getKeyCode() <= GLFW.GLFW_KEY_4)
             {
+                /* Switch mouse input mode */
                 this.setMouseMode(context.getKeyCode() - GLFW.GLFW_KEY_1);
 
                 return true;
@@ -408,6 +401,70 @@ public class UIFilmController extends UIElement
 
         return super.subKeyPressed(context);
     }
+
+    private void pickRecording()
+    {
+        Window.toggleMousePointer(false);
+
+        UIOverlay.addOverlay(this.getContext(), new UIRecordOverlayPanel(
+            IKey.lazy("Record"),
+            IKey.lazy("Pick a keyframe group that you want to record:"),
+            this::startRecording
+        ));
+    }
+
+    private void toggleOrbit()
+    {
+        CameraController cameraController = this.panel.getCameraController();
+
+        if (cameraController.has(this.orbit))
+        {
+            cameraController.remove(this.orbit);
+        }
+        else
+        {
+            cameraController.add(this.orbit);
+        }
+    }
+
+    private void jump()
+    {
+        this.controlled.basic.velocity.y = this.controlled.basic.sneak ? 0.4F : 0.5F;
+        this.controlled.basic.velocity.x *= 1.2F;
+        this.controlled.basic.velocity.z *= 1.2F;
+        this.controlled.basic.grounded = false;
+    }
+
+    private void insertFrame()
+    {
+        Window.toggleMousePointer(false);
+
+        UIRecordOverlayPanel panel = new UIRecordOverlayPanel(
+            IKey.lazy("Insert keyframe"),
+            IKey.lazy("Pick a keyframe group that you want to insert:"),
+            (groups) ->
+            {
+                ValueReplay replay = this.getReplay();
+
+                if (replay != null)
+                {
+                    IUndo undo = this.panel.createUndo(replay.keyframes, (keyframes) ->
+                    {
+                        keyframes.record(this.getTick(), this.controlled, groups);
+                    });
+
+                    undo.noMerging();
+                    this.panel.postUndo(undo);
+                }
+            }
+        );
+
+        panel.onClose((event) -> Window.toggleMousePointer(true));
+
+        UIOverlay.addOverlay(this.getContext(), panel);
+    }
+
+    /* Update */
 
     public void update()
     {
@@ -421,6 +478,17 @@ public class UIFilmController extends UIElement
         RunnerCameraController runner = this.panel.getRunner();
         UIContext context = this.getContext();
 
+        this.handleRecording(runner);
+        this.updateEntities(film, runner, context);
+
+        if (this.canControl())
+        {
+            this.updateControls();
+        }
+    }
+
+    private void handleRecording(RunnerCameraController runner)
+    {
         if (this.recording)
         {
             if (this.recordingCountdown > 0)
@@ -438,7 +506,10 @@ public class UIFilmController extends UIElement
                 this.stopRecording();
             }
         }
+    }
 
+    private void updateEntities(Film film, RunnerCameraController runner, UIContext context)
+    {
         for (int i = 0; i < this.entities.size(); i++)
         {
             Entity entity = this.entities.get(i);
@@ -466,105 +537,107 @@ public class UIFilmController extends UIElement
                 replay.applyProperties(ticks, entity, runner.isRunning());
             }
         }
+    }
 
-        if (this.canControl())
+    private void updateControls()
+    {
+        Entity controller = this.controlled;
+        float moveX = this.walkDirection.x;
+        float moveZ = this.walkDirection.y;
+
+        if (moveZ != 0 || moveX != 0)
         {
-            Entity controller = this.controlled;
-            float moveX = this.walkDirection.x;
-            float moveZ = this.walkDirection.y;
+            this.direction.set(moveX, 0, moveZ).normalize().mul(0.25F);
 
-            if (moveZ != 0 || moveX != 0)
+            BasicComponent basic = controller.basic;
+
+            Matrices.rotate(this.direction, 0, -basic.rotation.y);
+            this.direction.mul((basic.sneak ? 0.33F : 1F) * (basic.grounded ? 1F : 0.05F));
+            this.direction.mul(basic.speed);
+
+            basic.velocity.x += this.direction.x;
+            basic.velocity.z += this.direction.z;
+        }
+
+        if (!this.isMouseLookMode())
+        {
+            PlayerComponent component = controller.get(PlayerComponent.class);
+
+            if (component != null)
             {
-                this.direction.set(moveX, 0, moveZ).normalize().mul(0.25F);
+                int index = this.getMouseMode() - 1;
 
-                BasicComponent basic = controller.basic;
-
-                Matrices.rotate(this.direction, 0, -basic.rotation.y);
-                this.direction.mul((basic.sneak ? 0.33F : 1F) * (basic.grounded ? 1F : 0.05F));
-                this.direction.mul(basic.speed);
-
-                basic.velocity.x += this.direction.x;
-                basic.velocity.z += this.direction.z;
-            }
-
-            if (!this.isMouseLookMode())
-            {
-                PlayerComponent component = controller.get(PlayerComponent.class);
-
-                if (component != null)
-                {
-                    int index = this.getMouseMode() - 1;
-
-                    component.sticks[index * 2] = this.mouseStick.y;
-                    component.sticks[index * 2 + 1] = this.mouseStick.x;
-                }
+                component.sticks[index * 2] = this.mouseStick.y;
+                component.sticks[index * 2 + 1] = this.mouseStick.x;
             }
         }
     }
+
+    /* Render */
 
     public void renderHUD(UIContext context, Area area)
     {
         int mode = this.getMouseMode();
 
-        /* Render helpful guides for sticks and triggers controls */
-        if (mode > 0 && this.controlled != null)
-        {
-            String label = "Left stick";
-
-            if (mode == 2)
-            {
-                label = "Right stick";
-            }
-            else if (mode == 3)
-            {
-                label = "Triggers";
-            }
-
-            context.batcher.textCard(context.font, label, area.x + 5, area.ey() - 5 - context.font.getHeight(), Colors.WHITE, BBSSettings.primaryColor(Colors.A100));
-
-            int ww = (int) (Math.min(area.w, area.h) * 0.75F);
-            int hh = ww;
-            int x = area.x + (area.w - ww) / 2;
-            int y = area.y + (area.h - hh) / 2;
-            int color = Colors.setA(Colors.WHITE, 0.5F);
-
-            context.batcher.outline(x, y, x + ww, y + hh, color);
-
-            int bx = area.x + area.w / 2 + (int) ((this.mouseStick.y) * ww / 2);
-            int by = area.y + area.h / 2 + (int) ((this.mouseStick.x) * hh / 2);
-
-            context.batcher.box(bx - 4, by - 4, bx + 4, by + 4, color);
-        }
-
-        /* Render reording overlay */
-        if (this.recording && this.controlled != null)
-        {
-            int x = area.x + 5 + 16;
-            int y = area.y + 5;
-
-            context.batcher.icon(Icons.SPHERE, Colors.RED | Colors.A100, x, y, 1F, 0F);
-
-            if (this.recordingCountdown <= 0)
-            {
-                context.batcher.textCard(context.font, this.getTick() + " ticks", x + 3, y + 4, Colors.WHITE, Colors.A50);
-            }
-            else
-            {
-                context.batcher.textCard(context.font, String.valueOf(this.recordingCountdown / 20F), x + 3, y + 4, Colors.WHITE, Colors.A50);
-            }
-        }
-
         if (this.controlled != null)
         {
+            /* Render helpful guides for sticks and triggers controls */
+            if (mode > 0)
+            {
+                String label = "Left stick";
+
+                if (mode == 2)
+                {
+                    label = "Right stick";
+                }
+                else if (mode == 3)
+                {
+                    label = "Triggers";
+                }
+
+                context.batcher.textCard(context.font, label, area.x + 5, area.ey() - 5 - context.font.getHeight(), Colors.WHITE, BBSSettings.primaryColor(Colors.A100));
+
+                int ww = (int) (Math.min(area.w, area.h) * 0.75F);
+                int hh = ww;
+                int x = area.x + (area.w - ww) / 2;
+                int y = area.y + (area.h - hh) / 2;
+                int color = Colors.setA(Colors.WHITE, 0.5F);
+
+                context.batcher.outline(x, y, x + ww, y + hh, color);
+
+                int bx = area.x + area.w / 2 + (int) ((this.mouseStick.y) * ww / 2);
+                int by = area.y + area.h / 2 + (int) ((this.mouseStick.x) * hh / 2);
+
+                context.batcher.box(bx - 4, by - 4, bx + 4, by + 4, color);
+            }
+
+            /* Render reording overlay */
+            if (this.recording)
+            {
+                int x = area.x + 5 + 16;
+                int y = area.y + 5;
+
+                context.batcher.icon(Icons.SPHERE, Colors.RED | Colors.A100, x, y, 1F, 0F);
+
+                if (this.recordingCountdown <= 0)
+                {
+                    context.batcher.textCard(context.font, this.getTick() + " ticks", x + 3, y + 4, Colors.WHITE, Colors.A50);
+                }
+                else
+                {
+                    context.batcher.textCard(context.font, String.valueOf(this.recordingCountdown / 20F), x + 3, y + 4, Colors.WHITE, Colors.A50);
+                }
+            }
+
             context.batcher.outlinedIcon(Icons.POSE, area.ex() - 5, area.y + 5, 1F, 0F);
         }
 
-        this.renderPicking(context, area);
+        this.renderPickingPreview(context, area);
 
         this.orbit.handleOrbiting(context);
     }
 
-    private void renderPicking(UIContext context, Area area)
+    private void renderPickingPreview(UIContext context, Area area)
     {
         if (!this.stencil.hasPicked())
         {

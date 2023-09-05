@@ -401,7 +401,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.pickClip(null);
 
         this.fillData();
-        this.controller.updateEntities();
+        this.controller.createEntities();
     }
 
     private void handleUndos(IUndo<StructureBase> undo, boolean redo)
