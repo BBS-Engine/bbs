@@ -45,7 +45,7 @@ import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.world.UIWorldEditorPanel;
 import mchorse.bbs.ui.world.entities.UIEntitiesPanel;
 import mchorse.bbs.ui.world.objects.UIWorldObjectsPanel;
-import mchorse.bbs.ui.world.settings.UIWorldSettingsPanel;
+import mchorse.bbs.ui.world.settings.UIWorldSettingsOverlayPanel;
 import mchorse.bbs.ui.world.worlds.UIWorldsOverlayPanel;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.colors.Colors;
@@ -69,6 +69,7 @@ public class UIDashboard extends UIBaseMenu
 
     public UIIcon settings;
     public UIIcon worlds;
+    public UIIcon worldSettings;
 
     /* Camera data */
     public final UIOrbitCamera orbitUI = new UIOrbitCamera();
@@ -120,8 +121,15 @@ public class UIDashboard extends UIBaseMenu
             UIOverlay.addOverlay(this.context, new UIWorldsOverlayPanel(this.bridge));
         });
         this.worlds.tooltip(UIKeys.WORLD_WORLDS, Direction.TOP);
+        this.worldSettings = new UIIcon(Icons.GEAR, (b) ->
+        {
+            UIWorldSettingsOverlayPanel settings = new UIWorldSettingsOverlayPanel(this.bridge.get(IBridgeWorld.class).getWorld().settings);
+            UIOverlay overlay = UIOverlay.addOverlayRight(this.context, settings, 200);
 
-        this.panels.pinned.add(this.settings, this.worlds);
+            overlay.noBackground();
+        });
+
+        this.panels.pinned.add(this.settings, this.worlds, this.worldSettings);
         this.getRoot().prepend(this.orbitUI);
 
         /* Register keys */
@@ -261,9 +269,7 @@ public class UIDashboard extends UIBaseMenu
 
     protected void registerPanels()
     {
-        this.panels.registerPanel(new UIWorldSettingsPanel(this), UIKeys.WORLD_SETTINGS, Icons.GEAR);
-
-        this.panels.registerPanel(new UIFilmPanel(this), IKey.lazy("Films"), Icons.FILM).marginLeft(10);
+        this.panels.registerPanel(new UIFilmPanel(this), IKey.lazy("Films"), Icons.FILM);
 
         this.panels.registerPanel(new UIWorldEditorPanel(this), UIKeys.WORLD_WORLD_EDITOR, Icons.BLOCK).marginLeft(10);
         this.panels.registerPanel(new UIWorldObjectsPanel(this), UIKeys.WORLD_OBJECT_EDITOR, Icons.SPHERE);
