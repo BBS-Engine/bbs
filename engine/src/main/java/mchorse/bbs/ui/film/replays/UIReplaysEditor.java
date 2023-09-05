@@ -15,6 +15,7 @@ import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.film.replays.properties.UIProperty;
 import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
 import mchorse.bbs.ui.film.replays.properties.factories.UIPoseKeyframeFactory;
+import mchorse.bbs.ui.film.replays.properties.undo.UIUndoPropertyEditor;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraGraphEditor;
 import mchorse.bbs.ui.framework.elements.UIElement;
@@ -139,17 +140,9 @@ public class UIReplaysEditor extends UIElement
 
         if (!this.tempProperties.isEmpty())
         {
-            UIPropertyEditor editor = new UIPropertyEditor(this.delegate);
+            UIUndoPropertyEditor editor = new UIUndoPropertyEditor(this.delegate);
 
-            List<UIProperty> properties = editor.properties.getProperties();
-
-            for (int i = 0; i < this.tempProperties.size(); i++)
-            {
-                ValueFormProperty property = this.tempProperties.get(i);
-                IFormProperty formProperty = this.tempFormProperties.get(i);
-
-                properties.add(new UIProperty(property.getId(), IKey.raw(property.getId()), this.tempColors.get(i), property.get(), formProperty));
-            }
+            editor.setChannels(this.tempProperties, this.tempFormProperties, this.tempColors);
 
             this.propertyEditor = editor;
         }

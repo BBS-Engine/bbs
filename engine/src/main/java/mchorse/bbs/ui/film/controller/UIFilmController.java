@@ -248,7 +248,7 @@ public class UIFilmController extends UIElement
 
         ValueReplay replay = this.getReplay();
 
-        if (replay != null)
+        if (replay != null && this.recordingOld != null)
         {
             for (BaseValue value : replay.keyframes.getAll())
             {

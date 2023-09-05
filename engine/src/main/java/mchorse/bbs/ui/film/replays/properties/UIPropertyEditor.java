@@ -21,6 +21,7 @@ import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
 import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
+import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.utils.math.Interpolation;
 
 import java.util.ArrayList;
@@ -65,14 +66,11 @@ public class UIPropertyEditor extends UIElement
         this.tick.limit(Integer.MIN_VALUE, Integer.MAX_VALUE, true).tooltip(UIKeys.KEYFRAMES_TICK);
         this.interp = new UIIcon(Icons.GRAPH, (b) ->
         {
-            UICameraUtils.interps(this.getContext(), (Interpolation) this.properties.getCurrent().interp, (i) ->
-            {
-                this.properties.setInterpolation(i);
-            });
+            UICameraUtils.interps(this.getContext(), (Interpolation) this.properties.getCurrent().interp, this::pickInterpolation);
         });
         this.interp.tooltip(tooltip);
 
-        this.properties = new UIMultiProperties(delegate, this::fillData);
+        this.properties = this.create(delegate);
 
         /* Position the elements */
         this.tick.w(70);
@@ -112,6 +110,11 @@ public class UIPropertyEditor extends UIElement
         this.keys().register(Keys.KEYFRAMES_SELECT_ALL, this::selectAll).inside().category(category);
 
         this.interp.keys().register(Keys.KEYFRAMES_INTERP, this.interp::clickItself).category(category);
+    }
+
+    protected UIMultiProperties create(IUIClipsDelegate delegate)
+    {
+        return new UIMultiProperties(delegate, this::fillData);
     }
 
     public void setConverter(IAxisConverter converter)
@@ -327,6 +330,11 @@ public class UIPropertyEditor extends UIElement
     public void setValue(Object value)
     {
         this.properties.setValue(value);
+    }
+
+    public void pickInterpolation(IInterpolation interp)
+    {
+        this.properties.setInterpolation(interp);
     }
 
     public void fillData(GenericKeyframe frame)

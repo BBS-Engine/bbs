@@ -38,10 +38,18 @@ public class ValueFormProperty extends BaseValueBasic<GenericKeyframeChannel>
         }
 
         MapType map = data.asMap();
-        IGenericKeyframeFactory serializer = KeyframeFactories.SERIALIZERS.get(map.getString("type"));
-        GenericKeyframeChannel channel = new GenericKeyframeChannel(serializer);
 
-        channel.fromData(map.getList("keyframes"));
-        this.set(channel);
+        if (this.value == null)
+        {
+            IGenericKeyframeFactory serializer = KeyframeFactories.SERIALIZERS.get(map.getString("type"));
+            GenericKeyframeChannel channel = new GenericKeyframeChannel(serializer);
+
+            channel.fromData(map.getList("keyframes"));
+            this.set(channel);
+        }
+        else
+        {
+            this.value.fromData(map.getList("keyframes"));
+        }
     }
 }
