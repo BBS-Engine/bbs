@@ -15,7 +15,7 @@ public class IdleClip extends CameraClip
     {
         super();
 
-        this.register(this.position);
+        this.add(this.position);
     }
 
     @Override

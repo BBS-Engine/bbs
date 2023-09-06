@@ -2,12 +2,12 @@ package mchorse.bbs.camera.clips.overwrite;
 
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.CameraClip;
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValuePoint;
 import mchorse.bbs.settings.values.ValueFloat;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.utils.math.MathUtils;
 
 public class CircularClip extends CameraClip
@@ -46,12 +46,12 @@ public class CircularClip extends CameraClip
     {
         super();
 
-        this.register(this.start);
-        this.register(this.offset);
-        this.register(this.circles);
-        this.register(this.distance);
-        this.register(this.pitch);
-        this.register(this.fov);
+        this.add(this.start);
+        this.add(this.offset);
+        this.add(this.circles);
+        this.add(this.distance);
+        this.add(this.pitch);
+        this.add(this.fov);
     }
 
     @Override

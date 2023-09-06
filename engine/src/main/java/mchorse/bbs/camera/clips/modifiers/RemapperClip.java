@@ -2,10 +2,10 @@ package mchorse.bbs.camera.clips.modifiers;
 
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.clips.CameraClip;
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.utils.math.MathUtils;
 
 public class RemapperClip extends CameraClip
@@ -16,7 +16,7 @@ public class RemapperClip extends CameraClip
     {
         super();
 
-        this.register(this.channel);
+        this.add(this.channel);
 
         this.channel.get().insert(0, 0);
         this.channel.get().insert(BBSSettings.getDefaultDuration(), 1);

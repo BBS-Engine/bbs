@@ -24,10 +24,10 @@ public class DollyClip extends IdleClip
     {
         super();
 
-        this.register(this.distance);
-        this.register(this.interp);
-        this.register(this.yaw);
-        this.register(this.pitch);
+        this.add(this.distance);
+        this.add(this.interp);
+        this.add(this.yaw);
+        this.add(this.pitch);
     }
 
     @Override

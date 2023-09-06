@@ -6,7 +6,7 @@ import mchorse.bbs.camera.clips.CameraClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.core.ITickable;
 import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.values.ValueClips;
+import mchorse.bbs.utils.clips.Clips;
 
 public abstract class CameraWorkCameraController implements ICameraController, ITickable
 {
@@ -22,7 +22,7 @@ public abstract class CameraWorkCameraController implements ICameraController, I
         this.context.bridge = bridge;
     }
 
-    public CameraWorkCameraController setWork(ValueClips clips)
+    public CameraWorkCameraController setWork(Clips clips)
     {
         this.context.clips = clips;
 

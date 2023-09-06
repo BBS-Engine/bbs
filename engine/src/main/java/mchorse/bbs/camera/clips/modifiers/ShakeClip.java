@@ -1,9 +1,9 @@
 package mchorse.bbs.camera.clips.modifiers;
 
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.settings.values.ValueFloat;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 
 /**
  * Shake modifier
@@ -20,8 +20,8 @@ public class ShakeClip extends ComponentClip
     {
         super();
 
-        this.register(this.shake);
-        this.register(this.shakeAmount);
+        this.add(this.shake);
+        this.add(this.shakeAmount);
     }
 
     @Override

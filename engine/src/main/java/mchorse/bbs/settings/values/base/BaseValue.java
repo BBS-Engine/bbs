@@ -18,6 +18,14 @@ public abstract class BaseValue implements IValue, IDataSerializable<BaseType>
 
     public BaseValue(String id)
     {
+        this.setId(id);
+    }
+
+    /**
+     * Don't use it without a reason!
+     */
+    public void setId(String id)
+    {
         this.id = id;
     }
 

@@ -52,13 +52,13 @@ public class PathClip extends CameraClip
     {
         super();
 
-        this.register(this.points);
-        this.register(this.interpolationPoint);
-        this.register(this.interpolationAngle);
+        this.add(this.points);
+        this.add(this.interpolationPoint);
+        this.add(this.interpolationAngle);
 
-        this.register(this.circularAutoCenter);
-        this.register(this.circularX);
-        this.register(this.circularZ);
+        this.add(this.circularAutoCenter);
+        this.add(this.circularX);
+        this.add(this.circularZ);
     }
 
     public Position getPoint(int index)

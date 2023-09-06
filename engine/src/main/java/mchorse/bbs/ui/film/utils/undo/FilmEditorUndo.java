@@ -1,6 +1,6 @@
 package mchorse.bbs.ui.film.utils.undo;
 
-import mchorse.bbs.camera.data.StructureBase;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.ui.film.UIClips;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.utils.undo.IUndo;
@@ -8,7 +8,7 @@ import mchorse.bbs.utils.undo.IUndo;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class FilmEditorUndo implements IUndo<StructureBase>
+public abstract class FilmEditorUndo implements IUndo<ValueGroup>
 {
     public int tick;
     public double viewMin;

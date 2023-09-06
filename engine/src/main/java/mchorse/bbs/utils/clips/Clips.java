@@ -1,10 +1,9 @@
-package mchorse.bbs.utils.clips.values;
+package mchorse.bbs.utils.clips;
 
 import mchorse.bbs.camera.clips.ClipFactoryData;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.settings.values.ValueGroup;
-import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.factory.IFactory;
 
 import java.util.ArrayList;
@@ -14,20 +13,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ValueClips extends ValueGroup
+public class Clips extends ValueGroup
 {
     private static Map<Integer, Clip> clipMap = new HashMap<>();
 
-    private List<Clip> clips;
+    private List<Clip> clips = new ArrayList<>();
     private IFactory<Clip, ClipFactoryData> factory;
 
-    public ValueClips(String id, IFactory<Clip, ClipFactoryData> factory)
+    public Clips(String id, IFactory<Clip, ClipFactoryData> factory)
     {
         super(id);
 
         this.factory = factory;
-
-        this.assign(new ArrayList<>());
     }
 
     /**
@@ -101,16 +98,9 @@ public class ValueClips extends ValueGroup
         return this.clips.indexOf(clip);
     }
 
-    public void add(Clip clip)
+    public void addClip(Clip clip)
     {
         this.clips.add(clip);
-
-        this.sync();
-    }
-
-    public void remove(int index)
-    {
-        this.clips.remove(index);
 
         this.sync();
     }
@@ -124,20 +114,16 @@ public class ValueClips extends ValueGroup
 
     /* New value methods */
 
-    public void assign(List<Clip> clips)
-    {
-        this.clips = clips;
-
-        this.sync();
-    }
-
     public void sync()
     {
         this.removeAll();
 
         for (int i = 0, c = this.clips.size(); i < c; i++)
         {
-            this.add(new ValueClip(String.valueOf(i), this.clips.get(i), this.factory));
+            Clip clip = this.clips.get(i);
+
+            clip.setId(String.valueOf(i));
+            this.add(clip);
         }
     }
 
@@ -201,7 +187,8 @@ public class ValueClips extends ValueGroup
     @Override
     public void reset()
     {
-        this.assign(new ArrayList<>());
+        this.removeAll();
+        this.clips.clear();
     }
 
     @Override

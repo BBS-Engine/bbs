@@ -1,12 +1,10 @@
 package mchorse.bbs.ui.film.clips.widgets;
 
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.Envelope;
 import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.clips.UIClip;
-import mchorse.bbs.ui.film.utils.keyframes.UICameraGraphEditor;
 import mchorse.bbs.ui.film.utils.UICameraUtils;
+import mchorse.bbs.ui.film.utils.keyframes.UICameraGraphEditor;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
@@ -14,6 +12,8 @@ import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.tooltips.InterpolationTooltip;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.utils.Direction;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.Envelope;
 import mchorse.bbs.utils.colors.Colors;
 
 public class UIEnvelope extends UIElement
@@ -148,6 +148,6 @@ public class UIEnvelope extends UIElement
 
     public Envelope get()
     {
-        return this.panel.clip.envelope.get();
+        return this.panel.clip.envelope;
     }
 }

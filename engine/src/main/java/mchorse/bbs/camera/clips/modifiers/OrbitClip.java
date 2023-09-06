@@ -1,13 +1,13 @@
 package mchorse.bbs.camera.clips.modifiers;
 
 import mchorse.bbs.bridge.IBridgeWorld;
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Angle;
 import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueFloat;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.math.Interpolations;
 import mchorse.bbs.utils.math.MathUtils;
@@ -46,10 +46,10 @@ public class OrbitClip extends EntityClip
     {
         super();
 
-        this.register(this.copy);
-        this.register(this.distance);
-        this.register(this.yaw);
-        this.register(this.pitch);
+        this.add(this.copy);
+        this.add(this.distance);
+        this.add(this.yaw);
+        this.add(this.pitch);
     }
 
     @Override

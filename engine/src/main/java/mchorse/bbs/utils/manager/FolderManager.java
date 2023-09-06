@@ -1,19 +1,16 @@
 package mchorse.bbs.utils.manager;
 
-import mchorse.bbs.BBSSettings;
-import mchorse.bbs.utils.manager.data.AbstractData;
+import mchorse.bbs.settings.values.ValueGroup;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * Folder based manager
  */
-public abstract class FolderManager <T extends AbstractData> implements IManager<T>
+public abstract class FolderManager <T extends ValueGroup> implements IManager<T>
 {
     protected File folder;
     protected long lastCheck;

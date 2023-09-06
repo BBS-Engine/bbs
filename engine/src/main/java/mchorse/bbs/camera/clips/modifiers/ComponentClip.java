@@ -15,7 +15,7 @@ public abstract class ComponentClip extends CameraClip
     {
         super();
 
-        this.register(this.active);
+        this.add(this.active);
     }
 
     /**

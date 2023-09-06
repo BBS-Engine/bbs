@@ -367,9 +367,12 @@ public class StudioRenderer implements IComponent
         if (prevProjection != null) prevProjection.set(this.prevProjection);
         if (prevView != null) prevView.set(this.prevView);
 
-        if (shadowProjection != null) shadowProjection.set(this.shadowCamera.projection);
-        if (shadowView != null) shadowView.set(this.shadowCamera.view);
-        if (shadowResolution != null) shadowResolution.set(shaders.shadow.getMainTexture().width);
+        if (shaders.shadow != null)
+        {
+            if (shadowProjection != null) shadowProjection.set(this.shadowCamera.projection);
+            if (shadowView != null) shadowView.set(this.shadowCamera.view);
+            if (shadowResolution != null) shadowResolution.set(shaders.shadow.getMainTexture().width);
+        }
 
         this.updateSky(shader, this.engine.world.settings);
     }

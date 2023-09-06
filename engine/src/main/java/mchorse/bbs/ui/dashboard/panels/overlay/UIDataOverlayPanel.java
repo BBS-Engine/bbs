@@ -3,17 +3,17 @@ package mchorse.bbs.ui.dashboard.panels.overlay;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.manager.FolderManager;
-import mchorse.bbs.utils.manager.data.AbstractData;
 
 import java.io.File;
 import java.util.function.Consumer;
 
-public class UIDataOverlayPanel <T extends AbstractData> extends UICRUDOverlayPanel
+public class UIDataOverlayPanel <T extends ValueGroup> extends UICRUDOverlayPanel
 {
     protected UIDataDashboardPanel<T> panel;
     protected T transientCopy;
@@ -56,7 +56,7 @@ public class UIDataOverlayPanel <T extends AbstractData> extends UICRUDOverlayPa
 
     private void copy()
     {
-        Window.setClipboard(this.panel.getData().toData(), "_ContentType_" + this.panel.getType().getId());
+        Window.setClipboard(this.panel.getData().toData().asMap(), "_ContentType_" + this.panel.getType().getId());
     }
 
     private void paste(MapType data)
@@ -114,10 +114,10 @@ public class UIDataOverlayPanel <T extends AbstractData> extends UICRUDOverlayPa
         if (this.panel.getData() != null && !this.namesList.getList().contains(name))
         {
             this.panel.save();
-            this.panel.getType().getManager().save(name, this.panel.getData().toData());
+            this.panel.getType().getManager().save(name, this.panel.getData().toData().asMap());
             this.namesList.addFile(name);
 
-            T data = (T) this.panel.getType().getManager().create(name, this.panel.getData().toData());
+            T data = (T) this.panel.getType().getManager().create(name, this.panel.getData().toData().asMap());
 
             this.panel.fill(data);
         }

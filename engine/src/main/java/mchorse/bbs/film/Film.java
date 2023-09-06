@@ -1,12 +1,11 @@
 package mchorse.bbs.film;
 
 import mchorse.bbs.BBS;
-import mchorse.bbs.camera.data.StructureBase;
-import mchorse.bbs.film.values.ValueReplays;
 import mchorse.bbs.film.tts.ScreenplayReply;
-import mchorse.bbs.settings.values.ValueInt;
+import mchorse.bbs.film.values.ValueReplays;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.ValueString;
-import mchorse.bbs.utils.clips.values.ValueClips;
+import mchorse.bbs.utils.clips.Clips;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,20 +13,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class Film extends StructureBase
+public class Film extends ValueGroup
 {
     public static final Pattern CHARACTER = Pattern.compile("^[\\p{Lu} _-]+$");
     public static final Pattern METADATA = Pattern.compile("^[\\w\\d_-]+\\:.*$");
 
-    public final ValueClips camera = new ValueClips("camera", BBS.getFactoryClips());
+    public final Clips camera = new Clips("camera", BBS.getFactoryCameraClips());
     public final ValueReplays replays = new ValueReplays("replays");
     public final ValueString screenplay = new ValueString("screenplay", "");
 
     public Film()
     {
-        this.register(this.camera);
-        this.register(this.replays);
-        this.register(this.screenplay);
+        super("");
+
+        this.add(this.camera);
+        this.add(this.replays);
+        this.add(this.screenplay);
     }
 
     public List<ScreenplayReply> parseReplies()

@@ -27,11 +27,6 @@ public class ValueReplay extends ValueGroup
         this.add(this.properties);
     }
 
-    void remapId(String id)
-    {
-        this.id = id;
-    }
-
     public void applyFrame(int tick, Entity actor)
     {
         this.applyFrame(tick, actor, null);

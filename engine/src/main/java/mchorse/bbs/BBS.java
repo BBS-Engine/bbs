@@ -172,7 +172,7 @@ public class BBS
 
     /* Data factories */
     private static MapFactory<WorldObject, Class<? extends UIWorldObject>> factoryWorldObjects;
-    private static MapFactory<Clip, ClipFactoryData> factoryClips;
+    private static MapFactory<Clip, ClipFactoryData> factoryCameraClips;
     private static MapFactory<BlockModelFactory, BlockModelFactoryData> factoryBlockModels;
     private static MapFactory<Generator, Void> factoryGenerators;
     private static MapFactory<Component, Class<? extends UIEntityComponent>> factoryEntityComponents;
@@ -321,9 +321,9 @@ public class BBS
         return factoryWorldObjects;
     }
 
-    public static MapFactory<Clip, ClipFactoryData> getFactoryClips()
+    public static MapFactory<Clip, ClipFactoryData> getFactoryCameraClips()
     {
-        return factoryClips;
+        return factoryCameraClips;
     }
 
     public static MapFactory<BlockModelFactory, BlockModelFactoryData> getFactoryBlockModels()
@@ -455,7 +455,7 @@ public class BBS
             .register(Link.bbs("camera"), CameraObject.class, UICameraWorldObject.class);
 
         /* Register camera clips */
-        factoryClips = new MapFactory<Clip, ClipFactoryData>()
+        factoryCameraClips = new MapFactory<Clip, ClipFactoryData>()
             .register(Link.bbs("idle"), IdleClip.class, new ClipFactoryData(Icons.FRUSTUM, 0x159e64, UIIdleClip.class)
                 .withConverter(Link.bbs("dolly"), new IdleToDollyConverter())
                 .withConverter(Link.bbs("path"), new IdleToPathConverter())
@@ -472,7 +472,6 @@ public class BBS
             .register(Link.bbs("keyframe"), KeyframeClip.class, new ClipFactoryData(Icons.CURVES, 0xde2e9f, UIKeyframeClip.class)
                 .withConverter(Link.bbs("idle"), IdleConverter.CONVERTER)
                 .withConverter(Link.bbs("keyframe"), new PathToKeyframeConverter()))
-
             .register(Link.bbs("translate"), TranslateClip.class, new ClipFactoryData(Icons.UPLOAD, 0x4ba03e, UITranslateClip.class))
             .register(Link.bbs("angle"), AngleClip.class, new ClipFactoryData(Icons.ARC, 0xd77a0a, UIAngleClip.class))
             .register(Link.bbs("drag"), DragClip.class, new ClipFactoryData(Icons.FADING, 0x4baff7, UIDragClip.class))

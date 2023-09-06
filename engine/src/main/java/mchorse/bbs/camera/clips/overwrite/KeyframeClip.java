@@ -33,7 +33,7 @@ public class KeyframeClip extends CameraClip
 
         for (ValueKeyframeChannel channel : this.channels)
         {
-            this.register(channel);
+            this.add(channel);
         }
     }
 

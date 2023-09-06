@@ -1,15 +1,15 @@
 package mchorse.bbs.utils.clips;
 
-import mchorse.bbs.camera.data.StructureBase;
+import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.values.ValueInterpolation;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
-import mchorse.bbs.BBSSettings;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueFloat;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.utils.math.Interpolations;
 import mchorse.bbs.utils.math.MathUtils;
 
-public class Envelope extends StructureBase
+public class Envelope extends ValueGroup
 {
     public final ValueBoolean enabled = new ValueBoolean("enabled");
 
@@ -21,26 +21,19 @@ public class Envelope extends StructureBase
     public final ValueBoolean keyframes = new ValueBoolean("keyframes");
     public final ValueKeyframeChannel channel = new ValueKeyframeChannel("channel");
 
-    public Envelope()
+    public Envelope(String id)
     {
-        this.register(this.enabled);
-        this.register(this.fadeIn);
-        this.register(this.fadeOut);
-        this.register(this.interpolation);
-        this.register(this.keyframes);
-        this.register(this.channel);
+        super(id);
+
+        this.add(this.enabled);
+        this.add(this.fadeIn);
+        this.add(this.fadeOut);
+        this.add(this.interpolation);
+        this.add(this.keyframes);
+        this.add(this.channel);
 
         this.channel.get().insert(0, 0);
         this.channel.get().insert(BBSSettings.getDefaultDuration(), 1);
-    }
-
-    public Envelope copy()
-    {
-        Envelope envelope = new Envelope();
-
-        envelope.copy(this);
-
-        return envelope;
     }
 
     public float getStartX(int duration)
@@ -95,10 +88,8 @@ public class Envelope extends StructureBase
 
     public void breakDown(Clip original, int offset)
     {
-        Envelope originalEnvelope = original.envelope.get();
-
         this.fadeIn.set(0F);
-        originalEnvelope.fadeOut.set(0F);
+        original.envelope.fadeOut.set(0F);
 
         this.channel.get().moveX(-offset);
     }

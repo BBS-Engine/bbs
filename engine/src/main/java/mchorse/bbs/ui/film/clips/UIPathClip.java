@@ -1,11 +1,11 @@
 package mchorse.bbs.ui.film.clips;
 
-import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.clips.overwrite.PathClip;
 import mchorse.bbs.camera.data.InterpolationType;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValuePosition;
 import mchorse.bbs.graphics.window.Window;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
@@ -80,7 +80,7 @@ public class UIPathClip extends UIClip<PathClip>
 
         this.autoCenter = new UIToggle(UIKeys.CAMERA_PANELS_AUTO_CENTER, (b) ->
         {
-            IUndo<CameraWork> undo = this.undo(this.clip.circularAutoCenter, (autoCenter) -> autoCenter.set(b.getValue()));
+            IUndo<ValueGroup> undo = this.undo(this.clip.circularAutoCenter, (autoCenter) -> autoCenter.set(b.getValue()));
 
             if (!b.getValue())
             {

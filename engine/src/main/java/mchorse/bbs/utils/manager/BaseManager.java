@@ -1,7 +1,7 @@
 package mchorse.bbs.utils.manager;
 
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.utils.manager.data.AbstractData;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.utils.manager.storage.IDataStorage;
 import mchorse.bbs.utils.manager.storage.JSONLikeStorage;
 
@@ -11,7 +11,7 @@ import java.io.File;
  * Base JSON manager which loads and saves different data
  * structures based upon Data API
  */
-public abstract class BaseManager <T extends AbstractData> extends FolderManager<T>
+public abstract class BaseManager <T extends ValueGroup> extends FolderManager<T>
 {
     protected IDataStorage storage = new JSONLikeStorage();
 
@@ -52,7 +52,7 @@ public abstract class BaseManager <T extends AbstractData> extends FolderManager
 
     public boolean save(T data)
     {
-        return this.save(data.getId(), data.toData());
+        return this.save(data.getId(), data.toData().asMap());
     }
 
     @Override

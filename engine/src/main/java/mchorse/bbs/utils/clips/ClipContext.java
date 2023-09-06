@@ -1,7 +1,6 @@
 package mchorse.bbs.utils.clips;
 
 import mchorse.bbs.bridge.IBridge;
-import mchorse.bbs.utils.clips.values.ValueClips;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +30,7 @@ public abstract class ClipContext <T extends Clip, E>
     /**
      * Current clips
      */
-    public ValueClips clips;
+    public Clips clips;
 
     /**
      * Whether currently camera is played or paused

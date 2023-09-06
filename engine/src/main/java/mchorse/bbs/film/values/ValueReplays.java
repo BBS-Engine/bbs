@@ -41,7 +41,7 @@ public class ValueReplays extends ValueGroup
 
         for (ValueReplay replay : this.replays)
         {
-            replay.remapId(String.valueOf(i));
+            replay.setId(String.valueOf(i));
             this.add(replay);
 
             i += 1;

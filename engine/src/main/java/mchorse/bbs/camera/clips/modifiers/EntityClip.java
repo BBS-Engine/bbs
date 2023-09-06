@@ -44,8 +44,8 @@ public abstract class EntityClip extends CameraClip
     {
         super();
 
-        this.register(this.selector);
-        this.register(this.offset);
+        this.add(this.selector);
+        this.add(this.offset);
     }
 
     /**

@@ -1,11 +1,11 @@
 package mchorse.bbs.ui.film.clips;
 
 import mchorse.bbs.BBSSettings;
-import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
@@ -93,7 +93,7 @@ public abstract class UIClip <T extends Clip> extends UIElement
         this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_ENVELOPES_TITLE).marginTop(12), this.envelope);
     }
 
-    public void handleUndo(IUndo<CameraWork> undo, boolean redo)
+    public void handleUndo(IUndo<ValueGroup> undo, boolean redo)
     {
         this.fillData();
     }

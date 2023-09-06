@@ -53,27 +53,27 @@ public class SubtitleClip extends CameraClip
 
     public SubtitleClip()
     {
-        this.register(this.x);
-        this.register(this.y);
-        this.register(this.size);
-        this.register(this.anchorX);
-        this.register(this.anchorY);
-        this.register(this.color);
-        this.register(this.windowX);
-        this.register(this.windowY);
-        this.register(this.background);
-        this.register(this.backgroundOffset);
-        this.register(this.shadow);
-        this.register(this.transform);
-        this.register(this.lineHeight);
-        this.register(this.maxWidth);
+        this.add(this.x);
+        this.add(this.y);
+        this.add(this.size);
+        this.add(this.anchorX);
+        this.add(this.anchorY);
+        this.add(this.color);
+        this.add(this.windowX);
+        this.add(this.windowY);
+        this.add(this.background);
+        this.add(this.backgroundOffset);
+        this.add(this.shadow);
+        this.add(this.transform);
+        this.add(this.lineHeight);
+        this.add(this.maxWidth);
     }
 
     @Override
     protected void applyClip(ClipContext context, Position position)
     {
         List<Subtitle> subtitles = getSubtitles(context);
-        float factor = this.envelope.get().factorEnabled(this.duration.get(), context.relativeTick + context.transition);
+        float factor = this.envelope.factorEnabled(this.duration.get(), context.relativeTick + context.transition);
         int color = Colors.setA(this.color.get(), factor);
 
         this.subtitle.update(this.title.get(), this.x.get(), this.y.get(), this.size.get(), this.anchorX.get(), this.anchorY.get(), color);

@@ -725,7 +725,7 @@ public class UIKeys
 
     /* Key collections */
     public static final KeyCollection C_CLIP = new KeyCollection("bbs.ui.camera.clips.^")
-        .load(BBS.getFactoryClips().getStringKeys());
+        .load(BBS.getFactoryCameraClips().getStringKeys());
     public static final KeyCollection C_ENTITY_COMPONENT = new KeyCollection("bbs.entity_components.^")
         .load(BBS.getFactoryEntityComponents().getStringKeys());
     public static final KeyCollection C_BLOCK_MODEL = new KeyCollection("bbs.ui.tile_set.models.^")

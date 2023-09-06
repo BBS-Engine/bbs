@@ -1,10 +1,10 @@
 package mchorse.bbs.camera.clips.modifiers;
 
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Angle;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueAngle;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 
 /**
  * Angle modifier
@@ -20,7 +20,7 @@ public class AngleClip extends ComponentClip
     {
         super();
 
-        this.register(this.angle);
+        this.add(this.angle);
     }
 
     @Override

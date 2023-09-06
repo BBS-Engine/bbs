@@ -1,10 +1,10 @@
 package mchorse.bbs.camera.clips.modifiers;
 
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValuePoint;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 
 /**
  * Translate camera modifier
@@ -20,7 +20,7 @@ public class TranslateClip extends ComponentClip
     {
         super();
 
-        this.register(this.translate);
+        this.add(this.translate);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package mchorse.bbs.utils.factory;
 
-import mchorse.bbs.data.IMapSerializable;
+import mchorse.bbs.data.IDataSerializable;
+import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.resources.Link;
 
@@ -18,9 +19,14 @@ public interface IFactory <T, D>
     {
         MapType data = new MapType();
 
-        if (object instanceof IMapSerializable)
+        if (object instanceof IDataSerializable)
         {
-            ((IMapSerializable) object).toData(data);
+            BaseType baseData = ((IDataSerializable) object).toData();
+
+            if (baseData.isMap())
+            {
+                data = baseData.asMap();
+            }
 
             data.putString(this.getTypeKey(), this.getType(object).toString());
         }
@@ -38,9 +44,9 @@ public interface IFactory <T, D>
         Link type = Link.create(data.getString(this.getTypeKey()));
         T object = this.create(type);
 
-        if (object instanceof IMapSerializable)
+        if (object instanceof IDataSerializable)
         {
-            ((IMapSerializable) object).fromData(data);
+            ((IDataSerializable) object).fromData(data);
         }
 
         return object;

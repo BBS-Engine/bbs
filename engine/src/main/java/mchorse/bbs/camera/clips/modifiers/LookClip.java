@@ -1,13 +1,13 @@
 package mchorse.bbs.camera.clips.modifiers;
 
 import mchorse.bbs.bridge.IBridgeWorld;
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Angle;
 import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValuePoint;
 import mchorse.bbs.settings.values.ValueBoolean;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.utils.math.Interpolations;
 import mchorse.bbs.world.entities.Entity;
 
@@ -28,10 +28,10 @@ public class LookClip extends EntityClip
     {
         super();
 
-        this.register(this.relative);
-        this.register(this.atBlock);
-        this.register(this.forward);
-        this.register(this.block);
+        this.add(this.relative);
+        this.add(this.atBlock);
+        this.add(this.forward);
+        this.add(this.block);
     }
 
     @Override

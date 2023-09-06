@@ -1,28 +1,29 @@
 package mchorse.bbs.utils.clips;
 
-import mchorse.bbs.camera.data.StructureBase;
 import mchorse.bbs.settings.values.ValueBoolean;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.ValueString;
-import mchorse.bbs.utils.clips.values.ValueEnvelope;
 
-public abstract class Clip extends StructureBase
+public abstract class Clip extends ValueGroup
 {
     public final ValueBoolean enabled = new ValueBoolean("enabled", true);
     public final ValueString title = new ValueString("title", "");
     public final ValueInt layer = new ValueInt("layer", 0, 0, Integer.MAX_VALUE);
     public final ValueInt tick = new ValueInt("tick", 0, 0, Integer.MAX_VALUE);
     public final ValueInt duration = new ValueInt("duration", 1, 1, Integer.MAX_VALUE);
-    public final ValueEnvelope envelope = new ValueEnvelope("envelope");
+    public final Envelope envelope = new Envelope("envelope");
 
     public Clip()
     {
-        this.register(this.enabled);
-        this.register(this.title);
-        this.register(this.layer);
-        this.register(this.tick);
-        this.register(this.duration);
-        this.register(this.envelope);
+        super("");
+
+        this.add(this.enabled);
+        this.add(this.title);
+        this.add(this.layer);
+        this.add(this.tick);
+        this.add(this.duration);
+        this.add(this.envelope);
     }
 
     public boolean isGlobal()
@@ -70,6 +71,6 @@ public abstract class Clip extends StructureBase
 
     protected void breakDownClip(Clip original, int offset)
     {
-        this.envelope.get().breakDown(original, offset);
+        this.envelope.breakDown(original, offset);
     }
 }

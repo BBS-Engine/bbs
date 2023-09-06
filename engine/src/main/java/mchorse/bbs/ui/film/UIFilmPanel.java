@@ -10,7 +10,6 @@ import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.camera.controller.CameraController;
 import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.camera.data.StructureBase;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.tts.ElevenLabsAPI;
@@ -22,6 +21,7 @@ import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.Keys;
@@ -98,7 +98,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     /* Entity control */
     private UIFilmController controller = new UIFilmController(this);
 
-    private UndoManager<StructureBase> undoManager;
+    private UndoManager<ValueGroup> undoManager;
 
     /**
      * Initialize the camera editor with a camera profile.
@@ -116,7 +116,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.clips.relative(this.main).full();
 
         this.recorder = new UIFilmRecorder(this);
-        this.timeline = new UIClips(this, BBS.getFactoryClips());
+        this.timeline = new UIClips(this, BBS.getFactoryCameraClips());
         this.timeline.relative(this.clips).full();
 
         this.replays = new UIReplaysEditor(this);
@@ -404,13 +404,13 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.controller.createEntities();
     }
 
-    private void handleUndos(IUndo<StructureBase> undo, boolean redo)
+    private void handleUndos(IUndo<ValueGroup> undo, boolean redo)
     {
-        IUndo<StructureBase> anotherUndo = undo;
+        IUndo<ValueGroup> anotherUndo = undo;
 
         if (anotherUndo instanceof CompoundUndo)
         {
-            anotherUndo = ((CompoundUndo<StructureBase>) anotherUndo).getFirst(ValueChangeUndo.class);
+            anotherUndo = ((CompoundUndo<ValueGroup>) anotherUndo).getFirst(ValueChangeUndo.class);
         }
 
         if (anotherUndo instanceof ValueChangeUndo)
@@ -771,7 +771,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
             this.timeline.embedView(null);
 
-            UIClip panel = (UIClip) BBS.getFactoryClips().getData(clip).panelUI.getConstructors()[0].newInstance(clip, this);
+            UIClip panel = (UIClip) BBS.getFactoryCameraClips().getData(clip).panelUI.getConstructors()[0].newInstance(clip, this);
 
             this.panel = panel;
             this.panel.relative(this.clips).x(1F, -160).w(160).h(1F);
@@ -910,7 +910,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
             return;
         }
 
-        IUndo<StructureBase> undo = this.undoManager.getCurrentUndo();
+        IUndo<ValueGroup> undo = this.undoManager.getCurrentUndo();
 
         if (undo != null)
         {

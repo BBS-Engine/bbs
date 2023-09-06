@@ -3,11 +3,11 @@ package mchorse.bbs.camera.clips.misc;
 import mchorse.bbs.BBS;
 import mchorse.bbs.audio.SoundPlayer;
 import mchorse.bbs.camera.clips.CameraClip;
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.values.ValueLink;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 
 public class AudioClip extends CameraClip
 {
@@ -17,7 +17,7 @@ public class AudioClip extends CameraClip
     {
         super();
 
-        this.register(this.audio);
+        this.add(this.audio);
     }
 
     @Override

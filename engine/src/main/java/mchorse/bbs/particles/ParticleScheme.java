@@ -1,8 +1,8 @@
 package mchorse.bbs.particles;
 
 import mchorse.bbs.data.DataToString;
+import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.utils.manager.data.AbstractData;
 import mchorse.bbs.math.molang.MolangParser;
 import mchorse.bbs.particles.components.IComponentBase;
 import mchorse.bbs.particles.components.IComponentEmitterInitialize;
@@ -13,6 +13,7 @@ import mchorse.bbs.particles.components.IComponentParticleUpdate;
 import mchorse.bbs.particles.components.ParticleComponentBase;
 import mchorse.bbs.particles.components.motion.ParticleComponentInitialSpeed;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.settings.values.ValueGroup;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class ParticleScheme extends AbstractData
+public class ParticleScheme extends ValueGroup
 {
     public static final Link DEFAULT_TEXTURE = Link.assets("textures/default_atlas.png");
     public static final ParticleParser PARSER = new ParticleParser();
@@ -83,6 +84,8 @@ public class ParticleScheme extends AbstractData
 
     public ParticleScheme()
     {
+        super("");
+
         this.parser = new MolangParser();
 
         /* Default variables */
@@ -232,11 +235,11 @@ public class ParticleScheme extends AbstractData
     }
 
     @Override
-    public void fromData(MapType data)
+    public void fromData(BaseType data)
     {
         try
         {
-            PARSER.fromData(this, data);
+            PARSER.fromData(this, data.asMap());
         }
         catch (Exception e)
         {
@@ -245,8 +248,8 @@ public class ParticleScheme extends AbstractData
     }
 
     @Override
-    public void toData(MapType data)
+    public BaseType toData()
     {
-        data.combine(PARSER.toData(this));
+        return PARSER.toData(this);
     }
 }

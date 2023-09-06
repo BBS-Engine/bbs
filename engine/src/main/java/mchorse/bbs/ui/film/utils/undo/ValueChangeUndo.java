@@ -1,7 +1,7 @@
 package mchorse.bbs.ui.film.utils.undo;
 
-import mchorse.bbs.camera.data.StructureBase;
 import mchorse.bbs.data.types.BaseType;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.utils.undo.IUndo;
 
@@ -26,7 +26,7 @@ public class ValueChangeUndo extends FilmEditorUndo
     }
 
     @Override
-    public IUndo<StructureBase> noMerging()
+    public IUndo<ValueGroup> noMerging()
     {
         this.mergable = false;
 
@@ -34,7 +34,7 @@ public class ValueChangeUndo extends FilmEditorUndo
     }
 
     @Override
-    public boolean isMergeable(IUndo<StructureBase> undo)
+    public boolean isMergeable(IUndo<ValueGroup> undo)
     {
         if (!this.mergable)
         {
@@ -52,7 +52,7 @@ public class ValueChangeUndo extends FilmEditorUndo
     }
 
     @Override
-    public void merge(IUndo<StructureBase> undo)
+    public void merge(IUndo<ValueGroup> undo)
     {
         if (undo instanceof ValueChangeUndo)
         {
@@ -63,17 +63,17 @@ public class ValueChangeUndo extends FilmEditorUndo
     }
 
     @Override
-    public void undo(StructureBase context)
+    public void undo(ValueGroup context)
     {
-        BaseValue value = context.getProperty(this.name);
+        BaseValue value = context.getRecursively(this.name);
 
         value.fromData(this.oldValue);
     }
 
     @Override
-    public void redo(StructureBase context)
+    public void redo(ValueGroup context)
     {
-        BaseValue value = context.getProperty(this.name);
+        BaseValue value = context.getRecursively(this.name);
 
         value.fromData(this.newValue);
     }

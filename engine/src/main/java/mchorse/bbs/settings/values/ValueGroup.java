@@ -62,7 +62,7 @@ public class ValueGroup extends BaseValue
     private BaseValue searchRecursively(String[] splits, String name)
     {
         int i = 0;
-        BaseValue current = this.children.get(splits[i]);
+        BaseValue current = this;
 
         while (current != null && i < splits.length - 1)
         {

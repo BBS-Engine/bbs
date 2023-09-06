@@ -53,11 +53,9 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
 
         context.batcher.outline(left, y, right, y + h, selected ? Colors.WHITE : Colors.A50);
 
-        Envelope envelope = clip.envelope.get();
-
-        if (right - left > 10 && envelope.enabled.get())
+        if (right - left > 10 && clip.envelope.enabled.get())
         {
-            this.renderEnvelope(context, envelope, clip.duration.get(), left + 1, y + 1, right - 1, y + 17);
+            this.renderEnvelope(context, clip.envelope, clip.duration.get(), left + 1, y + 1, right - 1, y + 17);
         }
 
         String label = context.font.limitToWidth(clip.title.get(), right - 5 - left);

@@ -1,7 +1,6 @@
 package mchorse.bbs.ui.film;
 
 import mchorse.bbs.BBSSettings;
-import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.clips.ClipFactoryData;
 import mchorse.bbs.camera.clips.converters.IClipConverter;
@@ -16,6 +15,7 @@ import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
@@ -34,7 +34,7 @@ import mchorse.bbs.ui.utils.context.ContextAction;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.values.ValueClips;
+import mchorse.bbs.utils.clips.Clips;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.factory.IFactory;
 import mchorse.bbs.utils.keyframes.Keyframe;
@@ -64,7 +64,7 @@ public class UIClips extends UIElement
 
     /* Main objects */
     private IUIClipsDelegate delegate;
-    private ValueClips clips;
+    private Clips clips;
     private IFactory<Clip, ClipFactoryData> factory;
 
     /* Navigation */
@@ -179,7 +179,7 @@ public class UIClips extends UIElement
 
         for (Clip clip : clips)
         {
-            ValueInt clipValue = (ValueInt) clip.getProperty(property.getId());
+            ValueInt clipValue = (ValueInt) clip.get(property.getId());
             int newValue = clipValue.get() + difference;
 
             if (newValue < clipValue.getMin() || newValue > clipValue.getMax())
@@ -192,7 +192,7 @@ public class UIClips extends UIElement
 
         for (Clip clip : clips)
         {
-            ValueInt clipValue = (ValueInt) clip.getProperty(property.getId());
+            ValueInt clipValue = (ValueInt) clip.get(property.getId());
 
             undos.add(this.delegate.createUndo(clipValue, (v) -> v.set(clipValue.get() + difference)));
         }
@@ -362,7 +362,7 @@ public class UIClips extends UIElement
         clip.duration.set(duration);
 
         this.cache();
-        this.clips.add(clip);
+        this.clips.addClip(clip);
         this.pickClip(clip);
         this.postUndo();
     }
@@ -417,7 +417,7 @@ public class UIClips extends UIElement
         for (Clip clip : clips)
         {
             clip.tick.set(tick + (clip.tick.get() - min));
-            this.clips.add(clip);
+            this.clips.addClip(clip);
             this.addSelected(clip);
         }
 
@@ -447,7 +447,7 @@ public class UIClips extends UIElement
 
             clip.duration.set(clip.duration.get() - copy.duration.get());
             copy.tick.set(copy.tick.get() + clip.duration.get());
-            this.clips.add(copy);
+            this.clips.addClip(copy);
             this.addSelected(copy);
         }
 
@@ -499,7 +499,7 @@ public class UIClips extends UIElement
 
         this.cache();
         this.clips.remove(original);
-        this.clips.add(converted);
+        this.clips.addClip(converted);
         this.pickClip(converted);
         this.postUndo();
     }
@@ -570,7 +570,7 @@ public class UIClips extends UIElement
             return;
         }
 
-        List<IUndo<CameraWork>> undos = new ArrayList<>();
+        List<IUndo<ValueGroup>> undos = new ArrayList<>();
         int min = Integer.MAX_VALUE;
 
         for (Clip clip : clips)
@@ -655,7 +655,7 @@ public class UIClips extends UIElement
             return;
         }
 
-        List<IUndo<CameraWork>> undos = new ArrayList<>();
+        List<IUndo<ValueGroup>> undos = new ArrayList<>();
 
         for (Clip clip : clips)
         {
@@ -759,7 +759,7 @@ public class UIClips extends UIElement
 
     /* Getters and setters */
 
-    public void setClips(ValueClips clips)
+    public void setClips(Clips clips)
     {
         this.clips = clips;
         this.addPreview = null;

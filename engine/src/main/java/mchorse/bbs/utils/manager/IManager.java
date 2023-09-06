@@ -1,11 +1,11 @@
 package mchorse.bbs.utils.manager;
 
-import mchorse.bbs.data.IMapSerializable;
+import mchorse.bbs.data.IDataSerializable;
 import mchorse.bbs.data.types.MapType;
 
 import java.util.Collection;
 
-public interface IManager <T extends IMapSerializable>
+public interface IManager <T extends IDataSerializable>
 {
     boolean exists(String name);
 

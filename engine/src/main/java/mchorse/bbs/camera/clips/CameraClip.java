@@ -28,7 +28,7 @@ public abstract class CameraClip extends Clip
             return;
         }
 
-        float factor = this.envelope.get().factorEnabled(this.duration.get(), context.relativeTick + context.transition);
+        float factor = this.envelope.factorEnabled(this.duration.get(), context.relativeTick + context.transition);
 
         if (factor >= 1)
         {

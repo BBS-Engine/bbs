@@ -1,11 +1,11 @@
 package mchorse.bbs.camera.clips.modifiers;
 
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueFloat;
 import mchorse.bbs.settings.values.ValueInt;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.utils.math.Interpolations;
 
 /**
@@ -37,9 +37,9 @@ public class DragClip extends ComponentClip
     {
         super();
 
-        this.register(this.deterministic);
-        this.register(this.factor);
-        this.register(this.rate);
+        this.add(this.deterministic);
+        this.add(this.factor);
+        this.add(this.rate);
     }
 
     public void resetCache()

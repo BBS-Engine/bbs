@@ -1,10 +1,10 @@
 package mchorse.bbs.ui.film.clips;
 
-import mchorse.bbs.camera.CameraWork;
 import mchorse.bbs.camera.clips.overwrite.KeyframeClip;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
@@ -84,7 +84,7 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     {
         long tick = this.editor.getCursor() - this.clip.tick.get();
 
-        CompoundUndo<CameraWork> undo = new CompoundUndo<>(
+        CompoundUndo<ValueGroup> undo = new CompoundUndo<>(
             this.undoKeyframes(this.clip.x, tick, position.point.x),
             this.undoKeyframes(this.clip.y, tick, position.point.y),
             this.undoKeyframes(this.clip.z, tick, position.point.z),
@@ -97,14 +97,14 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
         this.editor.postUndo(undo, false);
     }
 
-    private IUndo<CameraWork> undoKeyframes(ValueKeyframeChannel channel, long tick, double value)
+    private IUndo<ValueGroup> undoKeyframes(ValueKeyframeChannel channel, long tick, double value)
     {
         KeyframeChannel c = new KeyframeChannel();
 
         c.copy(channel.get());
         c.insert(tick, value);
 
-        IUndo<CameraWork> undo = this.undo(channel, c.toData());
+        IUndo<ValueGroup> undo = this.undo(channel, c.toData());
 
         channel.get().insert(tick, value);
 

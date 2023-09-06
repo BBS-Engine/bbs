@@ -1,12 +1,12 @@
 package mchorse.bbs.camera.clips.modifiers;
 
-import mchorse.bbs.utils.clips.Clip;
-import mchorse.bbs.utils.clips.ClipContext;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueExpression;
 import mchorse.bbs.math.IExpression;
 import mchorse.bbs.math.MathBuilder;
 import mchorse.bbs.math.Variable;
+import mchorse.bbs.utils.clips.Clip;
+import mchorse.bbs.utils.clips.ClipContext;
 
 /**
  * Math modifier
@@ -51,7 +51,7 @@ public class MathClip extends ComponentClip
     {
         super();
 
-        this.register(this.expression);
+        this.add(this.expression);
 
         this.varTicks = this.builder.register("t");
         this.varOffset = this.builder.register("o");
