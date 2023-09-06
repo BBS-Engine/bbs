@@ -543,6 +543,12 @@ public class StudioRenderer implements IComponent
 
             fog.set(settings.fog ? distance : 0);
         }
+
+        UniformFloat dayCycle = shader.getUniform("u_day_cycle", UniformFloat.class);
+        UniformFloat dayYaw = shader.getUniform("u_day_yaw", UniformFloat.class);
+
+        if (dayCycle != null) dayCycle.set(settings.dayCycle);
+        if (dayYaw != null) dayYaw.set(settings.dayYaw);
     }
 
     private void renderScene(RenderingContext context)

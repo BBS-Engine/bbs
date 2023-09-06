@@ -16,33 +16,9 @@ in vec2 pass_uv;
 
 layout (location = 0) out vec4 out_ao;
 
-uniform int u_frames;
-
-uniform sampler2D u_texture;
-uniform sampler2D u_position;
-uniform sampler2D u_normal;
-uniform sampler2D u_lighting;
-uniform sampler2D u_lightmap;
-uniform sampler2D u_depth;
-
 uniform sampler2D u_texture3;
 
-uniform vec3 u_camera;
-uniform vec3 u_prev_camera;
-
-uniform mat4 u_view;
-uniform mat4 u_view_inv;
-uniform mat4 u_projection;
-uniform mat4 u_projection_inv;
-
-uniform mat4 u_prev_view;
-uniform mat4 u_prev_projection;
-
-uniform float u_near;
-uniform float u_far;
-
-uniform vec2 u_screen_size;
-
+#import "studio:shaders/default/import/utility/uniforms.glsl"
 #import "studio:shaders/default/import/utility/constants.glsl"
 #import "studio:shaders/default/import/utility/math.glsl"
 #import "studio:shaders/default/import/utility/transforms.glsl"

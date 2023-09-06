@@ -13,11 +13,11 @@ import mchorse.bbs.utils.recording.VideoRecorder;
 
 public class UIFilmRecorder extends UIElement
 {
-    public IUIClipsDelegate editor;
+    public UIFilmPanel editor;
 
     private int end;
 
-    public UIFilmRecorder(IUIClipsDelegate editor)
+    public UIFilmRecorder(UIFilmPanel editor)
     {
         super();
 
@@ -69,6 +69,7 @@ public class UIFilmRecorder extends UIElement
             return;
         }
 
+        // this.editor.getController().createEntities();
         this.editor.setCursor(0);
         this.editor.togglePlayback();
         context.menu.main.setEnabled(false);

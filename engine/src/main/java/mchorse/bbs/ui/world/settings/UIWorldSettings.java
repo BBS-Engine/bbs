@@ -1,6 +1,7 @@
 package mchorse.bbs.ui.world.settings;
 
 import mchorse.bbs.bridge.IBridgeCamera;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.forms.UIFormPalette;
 import mchorse.bbs.ui.forms.UINestedEdit;
@@ -9,6 +10,7 @@ import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.input.UITexturePicker;
+import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.world.entities.UIVector3d;
@@ -24,6 +26,8 @@ public class UIWorldSettings extends UIElement
     public UIColor zenith;
     public UIColor horizon;
     public UIColor bottom;
+    public UITrackpad dayCycle;
+    public UITrackpad dayYaw;
     public UIVector3d shadingDirection;
     public UIButton pickLightmap;
 
@@ -57,6 +61,10 @@ public class UIWorldSettings extends UIElement
         this.bottom = new UIColor((c) -> this.settings.bottom.set(c, false));
         this.bottom.tooltip(UIKeys.WORLD_SETTINGS_BOTTOM);
         this.bottom.setColor(this.settings.bottom.getRGBColor());
+        this.dayCycle = new UITrackpad((v) -> this.settings.dayCycle = v.floatValue());
+        this.dayCycle.setValue(this.settings.dayCycle);
+        this.dayYaw = new UITrackpad((v) -> this.settings.dayYaw = v.floatValue());
+        this.dayYaw.setValue(this.settings.dayYaw);
         this.shadingDirection = new UIVector3d((v) -> this.settings.shadingDirection.set(v));
         this.shadingDirection.fill(this.settings.shadingDirection);
         this.shadingDirection.context((menu) ->
@@ -76,6 +84,7 @@ public class UIWorldSettings extends UIElement
 
         this.add(UI.label(UIKeys.WORLD_SETTINGS_PICK_SKYBOX).background(), this.pickSkyForm);
         this.add(this.sky.marginTop(8), this.fog, this.zenith, this.horizon, this.bottom);
+        this.add(UI.label(IKey.lazy("Day cycle and yaw")).marginTop(8), this.dayCycle, this.dayYaw);
         this.add(UI.label(UIKeys.WORLD_SETTINGS_SHADING).marginTop(8), this.shadingDirection, this.pickLightmap);
 
         this.column().vertical().stretch();

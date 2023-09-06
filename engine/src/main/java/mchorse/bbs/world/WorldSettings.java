@@ -24,6 +24,8 @@ public class WorldSettings implements IMapSerializable
     public Color bottom = new Color(69F / 255F, 61F / 255F, 120F / 255F, 1F);
     public final Vector3f shadingDirection = new Vector3f(0, -1, 0);
     public Link lightmap = DEFAULT_LIGHTMAP;
+    public float dayCycle;
+    public float dayYaw;
 
     public final Vector3d cameraPosition = new Vector3d(0.5, 0.5, 0.5);
     public final Vector3f cameraRotation = new Vector3f();
@@ -44,6 +46,8 @@ public class WorldSettings implements IMapSerializable
         this.bottom.set(data.getInt("bottom", this.bottom.getRGBColor()), false);
         this.shadingDirection.set(DataStorageUtils.vector3fFromData(data.getList("shadingDirection"), this.shadingDirection));
         this.lightmap = LinkUtils.create(data.get("lightmap"));
+        this.dayCycle = data.getFloat("dayCycle");
+        this.dayYaw = data.getFloat("dayYaw");
 
         if (this.lightmap == null)
         {
@@ -70,6 +74,8 @@ public class WorldSettings implements IMapSerializable
         data.putInt("bottom", this.bottom.getRGBColor());
         data.put("shadingDirection", DataStorageUtils.vector3fToData(this.shadingDirection));
         data.put("lightmap", LinkUtils.toData(this.lightmap == null ? DEFAULT_LIGHTMAP : this.lightmap));
+        data.putFloat("dayCycle", this.dayCycle);
+        data.putFloat("dayYaw", this.dayYaw);
 
         data.put("cameraPosition", DataStorageUtils.vector3dToData(this.cameraPosition));
         data.put("cameraRotation", DataStorageUtils.vector3fToData(this.cameraRotation));

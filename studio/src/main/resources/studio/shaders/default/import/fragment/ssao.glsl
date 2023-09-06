@@ -13,7 +13,7 @@ float computeSSAO(vec3 viewPosition, vec3 normal)
         float rayDepth    = getViewPosition(viewToScreen(rayPosition).xy).z;
 
         float rangeCheck = quintic(0.0, 1.0, SSAO_RADIUS / abs(viewPosition.z - rayDepth));
-        occlusion       += (rayDepth >= rayPosition.z + EPS ? 1.0 : 0.0) * rangeCheck;
+        occlusion       += (rayDepth >= rayPosition.z - rayDepth * 1e-3 ? 1.0 : 0.0) * rangeCheck;
     }
 
     return pow(1.0 - occlusion / SSAO_SAMPLES, SSAO_STRENGTH);

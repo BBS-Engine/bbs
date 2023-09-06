@@ -1,3 +1,9 @@
+float rand(vec2 uv)
+{
+    float dt = dot(uv.xy, vec2(12.9898, 78.233));
+    return fract(sin(mod(dt, PI)) * 43758.5453);
+}
+
 void pcg(inout uint seed)
 {
     uint state = seed * 747796405u + 2891336453u;
