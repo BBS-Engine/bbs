@@ -10,8 +10,8 @@ import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.core.input.MouseInput;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.film.Film;
-import mchorse.bbs.film.replays.ReplayKeyframes;
 import mchorse.bbs.film.replays.Replay;
+import mchorse.bbs.film.replays.ReplayKeyframes;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.game.entities.components.PlayerComponent;
@@ -143,7 +143,7 @@ public class UIFilmController extends UIElement
 
         if (context != null && film != null)
         {
-            for (Replay replay : film.replays.replays)
+            for (Replay replay : film.replays.getList())
             {
                 World world = context.menu.bridge.get(IBridgeWorld.class).getWorld();
                 Entity entity = world.architect.create(Link.bbs("player"));
@@ -279,7 +279,7 @@ public class UIFilmController extends UIElement
             {
                 int index = this.entities.indexOf(this.hoveredEntity);
 
-                this.panel.replays.setReplay(this.panel.getData().replays.replays.get(index));
+                this.panel.replays.setReplay(this.panel.getData().replays.getList().get(index));
 
                 if (!this.panel.replays.isVisible())
                 {
@@ -519,9 +519,11 @@ public class UIFilmController extends UIElement
                 entity.update();
             }
 
-            if (CollectionUtils.inRange(film.replays.replays, i))
+            List<Replay> replays = film.replays.getList();
+
+            if (CollectionUtils.inRange(replays, i))
             {
-                Replay replay = film.replays.replays.get(i);
+                Replay replay = replays.get(i);
                 int ticks = runner.ticks;
 
                 if (entity != this.controlled || (this.recording && this.recordingCountdown <= 0 && this.recordingGroups != null))

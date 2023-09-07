@@ -510,7 +510,7 @@ public class UIClips extends UIElement
 
         this.getContext().replaceContextMenu((menu) ->
         {
-            for (Replay replay : film.replays.replays)
+            for (Replay replay : film.replays.getList())
             {
                 Form form = replay.form.get();
 

@@ -3,8 +3,8 @@ package mchorse.bbs.ui.film.replays;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.replays.FormProperty;
-import mchorse.bbs.film.replays.ReplayKeyframes;
 import mchorse.bbs.film.replays.Replay;
+import mchorse.bbs.film.replays.ReplayKeyframes;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.forms.properties.IFormProperty;
@@ -230,9 +230,10 @@ public class UIReplaysEditor extends UIElement
 
         if (film != null)
         {
-            this.replays.setList(film.replays.replays);
+            List<Replay> replays = film.replays.getList();
 
-            this.setReplay(film.replays.replays.isEmpty() ? null : film.replays.replays.get(0));
+            this.replays.setList(replays);
+            this.setReplay(replays.isEmpty() ? null : replays.get(0));
         }
     }
 

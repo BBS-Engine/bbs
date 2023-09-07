@@ -80,7 +80,7 @@ public class UIReplayList extends UIList<Replay>
     private void addReplay()
     {
         Film film = this.panel.getData();
-        Replay replay = film.replays.add();
+        Replay replay = film.replays.addReplay();
         World world = this.getContext().menu.bridge.get(IBridgeWorld.class).getWorld();
         RayTraceResult result = new RayTraceResult();
         Camera camera = this.panel.getCamera();
@@ -132,7 +132,7 @@ public class UIReplayList extends UIList<Replay>
 
         Replay currentFirst = this.getCurrentFirst();
         Film film = this.panel.getData();
-        Replay replay = film.replays.add();
+        Replay replay = film.replays.addReplay();
 
         replay.copy(currentFirst);
 

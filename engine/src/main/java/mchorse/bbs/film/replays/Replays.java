@@ -1,26 +1,19 @@
 package mchorse.bbs.film.replays;
 
-import mchorse.bbs.data.types.BaseType;
-import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.settings.values.ValueGroup;
+import mchorse.bbs.settings.values.ValueList;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Replays extends ValueGroup
+public class Replays extends ValueList<Replay>
 {
-    public final List<Replay> replays = new ArrayList<>();
-
     public Replays(String id)
     {
         super(id);
     }
 
-    public Replay add()
+    public Replay addReplay()
     {
-        Replay replay = new Replay(String.valueOf(this.replays.size()));
+        Replay replay = new Replay(String.valueOf(this.list.size()));
 
-        this.replays.add(replay);
+        this.list.add(replay);
         this.add(replay);
 
         return replay;
@@ -28,50 +21,14 @@ public class Replays extends ValueGroup
 
     public void remove(Replay replay)
     {
-        this.replays.remove(replay);
+        this.list.remove(replay);
 
         this.sync();
     }
 
-    public void sync()
-    {
-        this.removeAll();
-
-        int i = 0;
-
-        for (Replay replay : this.replays)
-        {
-            replay.setId(String.valueOf(i));
-            this.add(replay);
-
-            i += 1;
-        }
-    }
-
     @Override
-    public void fromData(BaseType data)
+    protected Replay create(String id)
     {
-        super.fromData(data);
-
-        this.replays.clear();
-
-        if (!data.isMap())
-        {
-            return;
-        }
-
-        MapType map = data.asMap();
-
-        for (String key : map.keys())
-        {
-            MapType mapType = map.getMap(key);
-
-            if (mapType.isEmpty())
-            {
-                continue;
-            }
-
-            this.add().fromData(mapType);
-        }
+        return new Replay(id);
     }
 }
