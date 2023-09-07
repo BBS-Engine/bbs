@@ -1,8 +1,8 @@
 package mchorse.bbs.camera.values;
 
 import mchorse.bbs.camera.data.Point;
-import mchorse.bbs.settings.values.base.BaseValueBasic;
 import mchorse.bbs.data.types.BaseType;
+import mchorse.bbs.settings.values.base.BaseValueBasic;
 
 public class ValuePoint extends BaseValueBasic<Point>
 {
@@ -11,12 +11,6 @@ public class ValuePoint extends BaseValueBasic<Point>
         super(id);
 
         this.value = point;
-    }
-
-    @Override
-    public void reset()
-    {
-        this.value.set(0, 0, 0);
     }
 
     @Override

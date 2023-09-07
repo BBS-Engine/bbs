@@ -23,14 +23,18 @@ public class ValueKeyCombo extends BaseValueBasic<KeyCombo> implements IValueUIP
     }
 
     @Override
+    public void set(KeyCombo value)
+    {
+        this.preNotifyParent(this);
+        this.value.copy(value);
+        this.postNotifyParent(this);
+    }
+
+    @Override
     public List<UIElement> getFields(UIElement ui)
     {
         UILabel label = UI.label(this.value.label, 0).labelAnchor(0, 0.5F);
-        UIKeybind keybind = new UIKeybind((k) ->
-        {
-            this.value.copy(k);
-            this.notifyParent();
-        });
+        UIKeybind keybind = new UIKeybind(this::set);
 
         keybind.setKeyCombo(this.value);
         keybind.w(100);

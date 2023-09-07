@@ -185,13 +185,6 @@ public class Clips extends ValueGroup
     /* Value implementation */
 
     @Override
-    public void reset()
-    {
-        this.removeAll();
-        this.clips.clear();
-    }
-
-    @Override
     public BaseType toData()
     {
         ListType list = new ListType();

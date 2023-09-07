@@ -48,7 +48,6 @@ public class ValuePositions extends ValueGroup
         }
     }
 
-    @Override
     public void reset()
     {
         this.positions.clear();

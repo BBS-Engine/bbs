@@ -14,7 +14,8 @@ public abstract class BaseValue implements IValue, IDataSerializable<BaseType>
     protected IValue parent;
 
     private boolean visible = true;
-    private List<Consumer<BaseValue>> callbacks;
+    private List<Consumer<BaseValue>> preCallbacks;
+    private List<Consumer<BaseValue>> postCallbacks;
 
     public BaseValue(String id)
     {
@@ -29,9 +30,6 @@ public abstract class BaseValue implements IValue, IDataSerializable<BaseType>
         this.id = id;
     }
 
-    public void reset()
-    {}
-
     public BaseValue invisible()
     {
         this.visible = false;
@@ -39,14 +37,26 @@ public abstract class BaseValue implements IValue, IDataSerializable<BaseType>
         return this;
     }
 
-    public BaseValue callback(Consumer<BaseValue> callback)
+    public BaseValue preCallback(Consumer<BaseValue> callback)
     {
-        if (this.callbacks == null)
+        if (this.preCallbacks == null)
         {
-            this.callbacks = new ArrayList<>();
+            this.preCallbacks = new ArrayList<>();
         }
 
-        this.callbacks.add(callback);
+        this.preCallbacks.add(callback);
+
+        return this;
+    }
+
+    public BaseValue postCallback(Consumer<BaseValue> callback)
+    {
+        if (this.postCallbacks == null)
+        {
+            this.postCallbacks = new ArrayList<>();
+        }
+
+        this.postCallbacks.add(callback);
 
         return this;
     }
@@ -92,16 +102,33 @@ public abstract class BaseValue implements IValue, IDataSerializable<BaseType>
     }
 
     @Override
-    public void notifyParent()
+    public void preNotifyParent(IValue value)
     {
         if (this.parent != null)
         {
-            this.parent.notifyParent();
+            this.parent.preNotifyParent(this);
         }
 
-        if (this.callbacks != null)
+        if (this.preCallbacks != null)
         {
-            for (Consumer<BaseValue> callback : this.callbacks)
+            for (Consumer<BaseValue> callback : this.preCallbacks)
+            {
+                callback.accept(this);
+            }
+        }
+    }
+
+    @Override
+    public void postNotifyParent(IValue value)
+    {
+        if (this.parent != null)
+        {
+            this.parent.postNotifyParent(this);
+        }
+
+        if (this.postCallbacks != null)
+        {
+            for (Consumer<BaseValue> callback : this.postCallbacks)
             {
                 callback.accept(this);
             }

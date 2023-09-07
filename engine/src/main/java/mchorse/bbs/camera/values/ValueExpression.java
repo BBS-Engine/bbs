@@ -57,13 +57,6 @@ public class ValueExpression extends BaseValue
     }
 
     @Override
-    public void reset()
-    {
-        this.expression = null;
-        this.lastError = false;
-    }
-
-    @Override
     public BaseType toData()
     {
         return new StringType(this.expression == null ? "" : this.expression.toString());

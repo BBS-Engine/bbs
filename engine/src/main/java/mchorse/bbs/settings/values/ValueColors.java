@@ -1,17 +1,15 @@
 package mchorse.bbs.settings.values;
 
-import mchorse.bbs.utils.colors.Colors;
-import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.settings.values.base.IParseableValue;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.utils.colors.Color;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class ValueColors extends BaseValue implements IParseableValue
+public class ValueColors extends BaseValue
 {
     private List<Color> colors = new ArrayList<>();
 
@@ -25,10 +23,23 @@ public class ValueColors extends BaseValue implements IParseableValue
         return this.colors;
     }
 
-    @Override
-    public void reset()
+    public void addColor(Color color)
     {
-        this.colors.clear();
+        int i = this.colors.indexOf(color);
+
+        if (i == -1)
+        {
+            this.preNotifyParent(this);
+            this.colors.add(color.copy());
+            this.postNotifyParent(this);
+        }
+    }
+
+    public void remove(int index)
+    {
+        this.preNotifyParent(this);
+        this.colors.remove(index);
+        this.postNotifyParent(this);
     }
 
     @Override
@@ -61,33 +72,6 @@ public class ValueColors extends BaseValue implements IParseableValue
                 this.colors.add(new Color().set(color.asNumeric().intValue()));
             }
         }
-    }
-
-    @Override
-    public boolean parse(String value)
-    {
-        String[] splits = value.split(",");
-        List<Color> colors = new ArrayList<>();
-
-        for (String split : splits)
-        {
-            try
-            {
-                int color = Colors.parseWithException(split.trim());
-
-                colors.add(new Color().set(color));
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
-
-        this.colors.clear();
-        this.colors.addAll(colors);
-        this.notifyParent();
-
-        return true;
     }
 
     @Override

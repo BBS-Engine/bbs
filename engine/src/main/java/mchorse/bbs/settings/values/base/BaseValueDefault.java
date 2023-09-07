@@ -9,13 +9,5 @@ public abstract class BaseValueDefault <T> extends BaseValueBasic<T>
         super(id);
 
         this.defaultValue = defaultValue;
-
-        this.reset();
-    }
-
-    @Override
-    public void reset()
-    {
-        this.set(this.defaultValue);
     }
 }

@@ -14,12 +14,6 @@ public class ValueAngle extends BaseValueBasic<Angle>
     }
 
     @Override
-    public void reset()
-    {
-        this.value.set(0, 0, 0, 70);
-    }
-
-    @Override
     public BaseType toData()
     {
         return this.value.toData();

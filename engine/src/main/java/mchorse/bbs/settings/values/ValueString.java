@@ -1,18 +1,17 @@
 package mchorse.bbs.settings.values;
 
-import mchorse.bbs.settings.ui.UIValueFactory;
-import mchorse.bbs.settings.values.base.BaseValueDefault;
-import mchorse.bbs.settings.values.base.IParseableValue;
-import mchorse.bbs.settings.values.base.IValueUIProvider;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.StringType;
+import mchorse.bbs.settings.ui.UIValueFactory;
+import mchorse.bbs.settings.values.base.BaseValueDefault;
+import mchorse.bbs.settings.values.base.IValueUIProvider;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueString extends BaseValueDefault<String> implements IParseableValue, IValueUIProvider
+public class ValueString extends BaseValueDefault<String> implements IValueUIProvider
 {
     public ValueString(String id, String defaultValue)
     {
@@ -42,14 +41,6 @@ public class ValueString extends BaseValueDefault<String> implements IParseableV
         {
             this.set(((StringType) data).value);
         }
-    }
-
-    @Override
-    public boolean parse(String value)
-    {
-        this.set(value);
-
-        return true;
     }
 
     @Override

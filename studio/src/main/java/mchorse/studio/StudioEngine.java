@@ -76,7 +76,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
     public ScreenshotRecorder screenshot;
 
     private WatchDog watchDog;
-    private WatchDog watchDog2;
+    private WatchDog watchDogStudio;
 
     private Map<Class, Object> apis = new HashMap<>();
 
@@ -110,9 +110,9 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         this.watchDog.register(BBS.getFonts());
         this.watchDog.start();
 
-        this.watchDog2 = new WatchDog(BBS.getGamePath("studio"));
-        this.watchDog2.register(BBS.getShaders());
-        this.watchDog2.start();
+        this.watchDogStudio = new WatchDog(BBS.getGamePath("studio"));
+        this.watchDogStudio.register(BBS.getShaders());
+        this.watchDogStudio.start();
 
         BBS.getShaders().setReloadCallback(this.renderer::reloadShaders);
     }
@@ -300,16 +300,16 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
 
     private void registerSettingsCallbacks()
     {
-        StudioSettings.renderFrameRate.callback((v) -> this.frameRate = ((ValueInt) v).get());
-        StudioSettings.renderVsync.callback((v) -> Window.setVSync(((ValueBoolean) v).get()));
-        StudioSettings.renderQuality.callback((v) -> this.resize(Window.width, Window.height));
+        StudioSettings.renderFrameRate.postCallback((v) -> this.frameRate = ((ValueInt) v).get());
+        StudioSettings.renderVsync.postCallback((v) -> Window.setVSync(((ValueBoolean) v).get()));
+        StudioSettings.renderQuality.postCallback((v) -> BBS.getEngine().needsResize());
 
-        BBSSettings.language.callback((v) ->
+        BBSSettings.language.postCallback((v) ->
         {
             this.reloadSupportedLanguages();
             BBS.getL10n().reload(((ValueLanguage) v).get(), BBS.getProvider());
         });
-        BBSSettings.userIntefaceScale.callback((v) -> BBS.getEngine().needsResize());
+        BBSSettings.userIntefaceScale.postCallback((v) -> BBS.getEngine().needsResize());
     }
 
     private void reloadSupportedLanguages()
@@ -325,7 +325,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         this.screen.delete();
         this.world.delete();
         this.watchDog.stop();
-        this.watchDog2.stop();
+        this.watchDogStudio.stop();
 
         BBSData.delete();
         BBS.terminate();

@@ -3,6 +3,7 @@ package mchorse.bbs.ui.framework.elements.input.color;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
+import mchorse.bbs.settings.values.ValueColors;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
@@ -16,8 +17,6 @@ import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.MathUtils;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -29,7 +28,7 @@ public class UIColorPicker extends UIElement
 {
     public static final int COLOR_SLIDER_HEIGHT = 50;
 
-    public static List<Color> recentColors = new ArrayList<>();
+    public static ValueColors recentColors = new ValueColors("recent");
 
     public Color color = new Color();
     public Consumer<Integer> callback;
@@ -77,7 +76,7 @@ public class UIColorPicker extends UIElement
         {
             this.setColor(color.getARGBColor());
             this.updateColor();
-        }).colors(recentColors);
+        }).colors(recentColors.getCurrentColors());
 
         this.recent.context((menu) ->
         {
@@ -186,13 +185,12 @@ public class UIColorPicker extends UIElement
 
     private void addToRecent()
     {
-        this.addColor(recentColors, this.color);
+        recentColors.addColor(this.color);
     }
 
     private void addToFavorites(Color color)
     {
-        this.addColor(BBSSettings.favoriteColors.getCurrentColors(), color);
-        BBSSettings.favoriteColors.notifyParent();
+        BBSSettings.favoriteColors.addColor(color);
 
         this.setupSize();
         this.resize();
@@ -200,25 +198,10 @@ public class UIColorPicker extends UIElement
 
     private void removeFromFavorites(int index)
     {
-        BBSSettings.favoriteColors.getCurrentColors().remove(index);
-        BBSSettings.favoriteColors.notifyParent();
+        BBSSettings.favoriteColors.remove(index);
 
         this.setupSize();
         this.resize();
-    }
-
-    private void addColor(List<Color> colors, Color color)
-    {
-        int i = colors.indexOf(color);
-
-        if (i == -1)
-        {
-            colors.add(color.copy());
-        }
-        else
-        {
-            colors.add(colors.remove(i));
-        }
     }
 
     /* GuiElement overrides */

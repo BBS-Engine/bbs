@@ -14,12 +14,6 @@ public class ValueTransform extends BaseValueBasic<Transform>
     }
 
     @Override
-    public void reset()
-    {
-        this.set(new Transform());
-    }
-
-    @Override
     public BaseType toData()
     {
         return this.value.toData();

@@ -6,7 +6,9 @@ public interface IValue
 {
     public String getId();
 
-    public void notifyParent();
+    public void preNotifyParent(IValue value);
+
+    public void postNotifyParent(IValue value);
 
     public IValue getParent();
 

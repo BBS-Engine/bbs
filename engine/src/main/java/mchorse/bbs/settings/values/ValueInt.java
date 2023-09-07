@@ -1,13 +1,11 @@
 package mchorse.bbs.settings.values;
 
-import mchorse.bbs.utils.colors.Colors;
-import mchorse.bbs.settings.ui.UIValueFactory;
-import mchorse.bbs.settings.values.base.BaseValueNumber;
-import mchorse.bbs.settings.values.base.IParseableValue;
-import mchorse.bbs.settings.values.base.IValueUIProvider;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.IntType;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.ui.UIValueFactory;
+import mchorse.bbs.settings.values.base.BaseValueNumber;
+import mchorse.bbs.settings.values.base.IValueUIProvider;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UICirculate;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
@@ -19,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ValueInt extends BaseValueNumber<Integer> implements IParseableValue, IValueUIProvider
+public class ValueInt extends BaseValueNumber<Integer> implements IValueUIProvider
 {
     private Subtype subtype = Subtype.INTEGER;
     private List<IKey> labels;
@@ -117,28 +115,6 @@ public class ValueInt extends BaseValueNumber<Integer> implements IParseableValu
         {
             this.set(data.asNumeric().intValue());
         }
-    }
-
-    @Override
-    public boolean parse(String value)
-    {
-        try
-        {
-            if (this.subtype == Subtype.COLOR || this.subtype == Subtype.COLOR_ALPHA)
-            {
-                this.set(Colors.parseWithException(value));
-            }
-            else
-            {
-                this.set(Integer.parseInt(value));
-            }
-
-            return true;
-        }
-        catch (Exception e)
-        {}
-
-        return false;
     }
 
     @Override

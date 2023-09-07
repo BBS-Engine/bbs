@@ -1,8 +1,8 @@
 package mchorse.bbs.camera.values;
 
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.data.types.BaseType;
+import mchorse.bbs.settings.values.ValueGroup;
 
 public class ValuePosition extends ValueGroup
 {
@@ -45,12 +45,6 @@ public class ValuePosition extends ValueGroup
     public void set(Position position)
     {
         this.position.set(position);
-    }
-
-    @Override
-    public void reset()
-    {
-        this.position.set(new Position());
     }
 
     @Override

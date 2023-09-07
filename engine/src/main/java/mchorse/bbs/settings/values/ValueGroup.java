@@ -86,15 +86,6 @@ public class ValueGroup extends BaseValue
     }
 
     @Override
-    public void reset()
-    {
-        for (BaseValue value : this.children.values())
-        {
-            value.reset();
-        }
-    }
-
-    @Override
     public BaseType toData()
     {
         MapType data = new MapType();
@@ -121,7 +112,6 @@ public class ValueGroup extends BaseValue
 
             if (value != null)
             {
-                value.reset();
                 value.setParent(this);
                 value.fromData(entry.getValue());
             }

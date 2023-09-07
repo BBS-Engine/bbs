@@ -1,11 +1,10 @@
 package mchorse.bbs.settings.values;
 
-import mchorse.bbs.settings.ui.UIValueFactory;
-import mchorse.bbs.settings.values.base.BaseValueNumber;
-import mchorse.bbs.settings.values.base.IParseableValue;
-import mchorse.bbs.settings.values.base.IValueUIProvider;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.FloatType;
+import mchorse.bbs.settings.ui.UIValueFactory;
+import mchorse.bbs.settings.values.base.BaseValueNumber;
+import mchorse.bbs.settings.values.base.IValueUIProvider;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.utils.math.MathUtils;
@@ -13,7 +12,7 @@ import mchorse.bbs.utils.math.MathUtils;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueFloat extends BaseValueNumber<Float> implements IParseableValue, IValueUIProvider
+public class ValueFloat extends BaseValueNumber<Float> implements IValueUIProvider
 {
     public ValueFloat(String id, Float defaultValue)
     {
@@ -54,19 +53,6 @@ public class ValueFloat extends BaseValueNumber<Float> implements IParseableValu
         {
             this.set(data.asNumeric().floatValue());
         }
-    }
-
-    @Override
-    public boolean parse(String value)
-    {
-        try
-        {
-            this.set(Float.parseFloat(value));
-        }
-        catch (Exception e)
-        {}
-
-        return false;
     }
 
     @Override

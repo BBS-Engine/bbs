@@ -1,9 +1,8 @@
 package mchorse.bbs.settings.values;
 
 import mchorse.bbs.BBS;
-import mchorse.bbs.settings.ui.UIValueFactory;
-import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.l10n.L10n;
+import mchorse.bbs.settings.ui.UIValueFactory;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
@@ -46,16 +45,5 @@ public class ValueLanguage extends ValueString
         UIText credits = new UIText().text(UIKeys.LANGUAGE_CREDITS).updates();
 
         return Arrays.asList(UIValueFactory.column(button, this), credits.marginBottom(8));
-    }
-
-    @Override
-    public void fromData(BaseType data)
-    {
-        super.fromData(data);
-
-        if (!BBS.getL10n().getSupportedLanguageCodes().contains(this.value))
-        {
-            this.reset();
-        }
     }
 }

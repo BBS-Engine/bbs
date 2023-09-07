@@ -1,11 +1,10 @@
 package mchorse.bbs.settings.values;
 
-import mchorse.bbs.settings.ui.UIValueFactory;
-import mchorse.bbs.settings.values.base.BaseValueNumber;
-import mchorse.bbs.settings.values.base.IParseableValue;
-import mchorse.bbs.settings.values.base.IValueUIProvider;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.LongType;
+import mchorse.bbs.settings.ui.UIValueFactory;
+import mchorse.bbs.settings.values.base.BaseValueNumber;
+import mchorse.bbs.settings.values.base.IValueUIProvider;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.utils.math.MathUtils;
@@ -13,7 +12,7 @@ import mchorse.bbs.utils.math.MathUtils;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueLong extends BaseValueNumber<Long> implements IParseableValue, IValueUIProvider
+public class ValueLong extends BaseValueNumber<Long> implements IValueUIProvider
 {
     public ValueLong(String id, Long defaultValue)
     {
@@ -54,21 +53,6 @@ public class ValueLong extends BaseValueNumber<Long> implements IParseableValue,
         {
             this.set(data.asNumeric().longValue());
         }
-    }
-
-    @Override
-    public boolean parse(String value)
-    {
-        try
-        {
-            this.set(Long.parseLong(value));
-
-            return true;
-        }
-        catch (Exception e)
-        {}
-
-        return false;
     }
 
     @Override

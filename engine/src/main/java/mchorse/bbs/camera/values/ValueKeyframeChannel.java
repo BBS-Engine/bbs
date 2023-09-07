@@ -1,7 +1,7 @@
 package mchorse.bbs.camera.values;
 
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.data.types.BaseType;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 
 public class ValueKeyframeChannel extends BaseValue
@@ -28,12 +28,6 @@ public class ValueKeyframeChannel extends BaseValue
     public void set(KeyframeChannel channel)
     {
         this.channel.copy(channel);
-    }
-
-    @Override
-    public void reset()
-    {
-        this.channel.copy(new KeyframeChannel());
     }
 
     @Override
