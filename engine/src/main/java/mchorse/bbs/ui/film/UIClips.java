@@ -17,11 +17,11 @@ import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.ValueInt;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.clips.renderer.IUIClipRenderer;
 import mchorse.bbs.ui.film.clips.renderer.UIClipRenderers;
-import mchorse.bbs.ui.film.utils.undo.IUndoSelection;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
@@ -85,10 +85,6 @@ public class UIClips extends UIElement
     /* Selection */
     private boolean selecting;
     private List<Integer> selection = new ArrayList<>();
-
-    /* Undo/redo cache */
-    private List<Integer> cachedSelection = new ArrayList<>();
-    private BaseType cache;
 
     /* Embedded view */
     private UIIcon embeddedClose;
@@ -188,63 +184,12 @@ public class UIClips extends UIElement
             }
         }
 
-        List<IUndo> undos = new ArrayList<>();
-
         for (Clip clip : clips)
         {
             ValueInt clipValue = (ValueInt) clip.get(property.getId());
 
-            undos.add(this.delegate.createUndo(clipValue, (v) -> v.set(clipValue.get() + difference)));
+            clipValue.set(clipValue.get() + difference);
         }
-
-        this.delegate.postUndo(new CompoundUndo(undos));
-    }
-
-    /* Undo/redo helpers */
-
-    private void resetCache()
-    {
-        this.cache = null;
-        this.cachedSelection.clear();
-    }
-
-    private void cache()
-    {
-        this.cacheSelection();
-
-        if (this.cache == null)
-        {
-            this.cache = this.clips.toData();
-        }
-    }
-
-    private void postUndo()
-    {
-        IUndo undo = this.createCachedUndo();
-
-        if (undo != null)
-        {
-            this.delegate.postUndo(undo, false);
-            this.delegate.fillData();
-            this.resetCache();
-        }
-    }
-
-    private IUndo createCachedUndo()
-    {
-        if (this.cache == null)
-        {
-            return null;
-        }
-
-        IUndo undo = this.delegate.createUndo(this.clips, this.cache, this.clips.toData()).noMerging();
-
-        if (undo instanceof IUndoSelection)
-        {
-            ((IUndoSelection) undo).selectedBefore(this.cachedSelection);
-        }
-
-        return undo;
     }
 
     /* Tools */
@@ -263,7 +208,7 @@ public class UIClips extends UIElement
                 add.action(Icons.UPLOAD, UIKeys.CAMERA_TIMELINE_CONTEXT_ADD_ON_TOP, this::showAddsOnTop);
             }
 
-            add.action(Icons.EDITOR, UIKeys.CAMERA_TIMELINE_CONTEXT_FROM_PLAYER_RECORDING, () -> this.fromPlayerRecording(mouseX, mouseY));
+            add.action(Icons.EDITOR, UIKeys.CAMERA_TIMELINE_CONTEXT_FROM_PLAYER_RECORDING, () -> this.fromReplay(mouseX, mouseY));
         });
     }
 
@@ -361,10 +306,9 @@ public class UIClips extends UIElement
         clip.tick.set(tick);
         clip.duration.set(duration);
 
-        this.cache();
-        this.clips.addClip(clip);
+        BaseValue.edit(this.clips, (clips) -> clips.addClip(clip));
+
         this.pickClip(clip);
-        this.postUndo();
     }
 
     private void copyClips()
@@ -397,32 +341,33 @@ public class UIClips extends UIElement
      */
     private void paste(MapType data, int tick)
     {
-        ListType clipsList = data.getList("clips");
-        List<Clip> clips = new ArrayList<>();
-        int min = Integer.MAX_VALUE;
-
-        this.cache();
         this.clearSelection();
 
-        for (BaseType type : clipsList)
+        BaseValue.edit(this.clips, (clips) ->
         {
-            MapType typeMap = type.asMap();
-            Clip clip = this.factory.fromData(typeMap);
+            ListType clipsList = data.getList("clips");
+            List<Clip> newClips = new ArrayList<>();
+            int min = Integer.MAX_VALUE;
 
-            min = Math.min(min, clip.tick.get());
+            for (BaseType type : clipsList)
+            {
+                MapType typeMap = type.asMap();
+                Clip clip = this.factory.fromData(typeMap);
 
-            clips.add(clip);
-        }
+                min = Math.min(min, clip.tick.get());
 
-        for (Clip clip : clips)
-        {
-            clip.tick.set(tick + (clip.tick.get() - min));
-            this.clips.addClip(clip);
-            this.addSelected(clip);
-        }
+                newClips.add(clip);
+            }
+
+            for (Clip clip : newClips)
+            {
+                clip.tick.set(tick + (clip.tick.get() - min));
+                clips.addClip(clip);
+                this.addSelected(clip);
+            }
+        });
 
         this.pickLastSelectedClip();
-        this.postUndo();
     }
 
     /**
@@ -430,29 +375,29 @@ public class UIClips extends UIElement
      */
     private void cut()
     {
-        List<Clip> clips = this.isSelecting() ? this.getClipsFromSelection() : new ArrayList<>(this.clips.get());
-        Clip original = this.delegate.getClip();
-        int offset = this.delegate.getCursor();
-
-        for (Clip clip : clips)
+        BaseValue.edit(this.clips, (clips) ->
         {
-            if (!clip.isInside(offset))
+            List<Clip> selectedClips = this.isSelecting() ? this.getClipsFromSelection() : new ArrayList<>(clips.get());
+            Clip original = this.delegate.getClip();
+            int offset = this.delegate.getCursor();
+
+            for (Clip clip : selectedClips)
             {
-                continue;
+                if (!clip.isInside(offset))
+                {
+                    continue;
+                }
+
+                Clip copy = clip.breakDown(offset - clip.tick.get());
+
+                clip.duration.set(clip.duration.get() - copy.duration.get());
+                copy.tick.set(copy.tick.get() + clip.duration.get());
+                clips.addClip(copy);
+                this.addSelected(copy);
             }
 
-            this.cache();
-
-            Clip copy = clip.breakDown(offset - clip.tick.get());
-
-            clip.duration.set(clip.duration.get() - copy.duration.get());
-            copy.tick.set(copy.tick.get() + clip.duration.get());
-            this.clips.addClip(copy);
-            this.addSelected(copy);
-        }
-
-        this.addSelected(original);
-        this.postUndo();
+            this.addSelected(original);
+        });
     }
 
     /**
@@ -497,14 +442,15 @@ public class UIClips extends UIElement
             return;
         }
 
-        this.cache();
-        this.clips.remove(original);
-        this.clips.addClip(converted);
-        this.pickClip(converted);
-        this.postUndo();
+        BaseValue.edit(this.clips, (clips) ->
+        {
+            clips.remove(original);
+            clips.addClip(converted);
+            this.pickClip(converted);
+        });
     }
 
-    private void fromPlayerRecording(int mouseX, int mouseY)
+    private void fromReplay(int mouseX, int mouseY)
     {
         Film film = this.delegate.getFilm();
 
@@ -582,7 +528,7 @@ public class UIClips extends UIElement
 
         for (Clip clip : clips)
         {
-            undos.add(this.delegate.createUndo(clip.tick, (tick) -> tick.set(clip.tick.get() + diff)));
+            clip.tick.set(clip.tick.get() + diff);
         }
 
         this.delegate.postUndoCallback(new CompoundUndo<>(undos));
@@ -608,14 +554,12 @@ public class UIClips extends UIElement
 
             if (this.delegate.getCursor() > offset)
             {
-                undos.add(this.delegate.createUndo(clip.duration, (duration) -> duration.set(this.delegate.getCursor() - offset)));
+                clip.duration.set(this.delegate.getCursor() - offset);
             }
             else if (this.delegate.getCursor() < offset + clip.duration.get())
             {
-                undos.add(new CompoundUndo<>(
-                    this.delegate.createUndo(clip.tick, (tick) -> tick.set(this.delegate.getCursor())),
-                    this.delegate.createUndo(clip.duration, (duration) -> duration.set(clip.duration.get() + offset - this.delegate.getCursor()))
-                ));
+                clip.tick.set(this.delegate.getCursor());
+                clip.duration.set(clip.duration.get() + offset - this.delegate.getCursor());
             }
         }
 
@@ -627,20 +571,22 @@ public class UIClips extends UIElement
      */
     private void removeSelected()
     {
-        List<Clip> clips = this.getClipsFromSelection();
+        List<Clip> selectedClips = this.getClipsFromSelection();
 
-        if (!clips.isEmpty())
+        if (selectedClips.isEmpty())
         {
-            this.cache();
+            return;
+        }
 
-            for (Clip clip : clips)
+        BaseValue.edit(this.clips, (clips) ->
+        {
+            for (Clip clip : selectedClips)
             {
                 this.clips.remove(clip);
             }
 
             this.pickClip(null);
-            this.postUndo();
-        }
+        });
     }
 
     /**
@@ -655,14 +601,11 @@ public class UIClips extends UIElement
             return;
         }
 
-        List<IUndo<ValueGroup>> undos = new ArrayList<>();
-
         for (Clip clip : clips)
         {
-            undos.add(this.delegate.createUndo(clip.enabled, (enabled) -> enabled.set(!clip.enabled.get())));
+            clip.enabled.set(!clip.enabled.get());
         }
 
-        this.delegate.postUndo(new CompoundUndo<>(undos));
         this.delegate.fillData();
     }
 
@@ -711,14 +654,6 @@ public class UIClips extends UIElement
         this.selection.addAll(selection);
     }
 
-    public void cacheSelection()
-    {
-        if (this.cachedSelection.isEmpty())
-        {
-            this.cachedSelection.addAll(this.selection);
-        }
-    }
-
     public void clearSelection()
     {
         this.selection.clear();
@@ -764,7 +699,6 @@ public class UIClips extends UIElement
         this.clips = clips;
         this.addPreview = null;
 
-        this.resetCache();
         this.updateScrollSize();
         this.vertical.scrollToEnd();
         this.clearSelection();
@@ -1142,20 +1076,15 @@ public class UIClips extends UIElement
             }
 
             /* Move clips */
-            List<IUndo> undos = new ArrayList<>();
-
             for (Clip clip : clips)
             {
                 int newTick = clip.tick.get() + relativeX;
                 int newLayer = clip.layer.get() + relativeY;
 
-                undos.add(this.delegate.createUndo(clip.tick, (tick) -> tick.set(newTick)));
-                undos.add(this.delegate.createUndo(clip.layer, (layer) -> layer.set(newLayer)));
                 clip.tick.set(newTick);
                 clip.layer.set(newLayer);
             }
 
-            this.delegate.postUndo(new CompoundUndo(undos), false);
             this.delegate.fillData();
 
             this.lastX = mouseX;

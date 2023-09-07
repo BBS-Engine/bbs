@@ -37,10 +37,6 @@ public interface IUIClipsDelegate
 
     /* Undo/redo */
 
-    public <T extends BaseValue> IUndo createUndo(T property, Consumer<T> consumer);
-
-    public <T extends BaseValue> IUndo createUndo(T property, BaseType oldValue, BaseType newValue);
-
     public default void postUndo(IUndo undo)
     {
         this.postUndo(undo, true, false);

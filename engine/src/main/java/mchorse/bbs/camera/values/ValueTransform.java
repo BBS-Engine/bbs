@@ -8,9 +8,7 @@ public class ValueTransform extends BaseValueBasic<Transform>
 {
     public ValueTransform(String id, Transform transform)
     {
-        super(id);
-
-        this.set(transform);
+        super(id, transform);
     }
 
     @Override

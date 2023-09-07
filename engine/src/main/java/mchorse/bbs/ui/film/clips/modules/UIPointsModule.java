@@ -2,8 +2,8 @@ package mchorse.bbs.ui.film.clips.modules;
 
 import mchorse.bbs.camera.clips.overwrite.PathClip;
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.camera.values.ValuePositions;
 import mchorse.bbs.graphics.window.Window;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.UIContext;
@@ -12,7 +12,6 @@ import mchorse.bbs.ui.utils.ScrollDirection;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.MathUtils;
-import mchorse.bbs.utils.undo.IUndo;
 
 import java.util.function.Consumer;
 
@@ -54,11 +53,6 @@ public class UIPointsModule extends UIAbstractModule
         });
     }
 
-    private IUndo undo(Consumer<ValuePositions> consumer)
-    {
-        return this.editor.createUndo(this.path.points, consumer).noMerging();
-    }
-
     public void setIndex(int index)
     {
         this.index = index;
@@ -72,10 +66,11 @@ public class UIPointsModule extends UIAbstractModule
             return;
         }
 
-        this.editor.postUndo(this.undo((positions) ->
+        BaseValue.edit(this.path.points, (positions) ->
         {
             positions.get().add(this.index, positions.get().remove(this.index - 1));
-        }));
+        });
+
         this.index = this.index - 1;
     }
 
@@ -86,10 +81,11 @@ public class UIPointsModule extends UIAbstractModule
             return;
         }
 
-        this.editor.postUndo(this.undo((positions) ->
+        BaseValue.edit(this.path.points, (positions) ->
         {
             positions.get().add(this.index, positions.get().remove(this.index + 1));
-        }));
+        });
+
         this.index = this.index - 1;
     }
 
@@ -97,18 +93,20 @@ public class UIPointsModule extends UIAbstractModule
     {
         if (this.index + 1 >= this.path.size())
         {
-            this.editor.postUndo(this.undo((positions) ->
-            {
-                positions.get().add(new Position(this.editor.getCamera()));
-            }));
+            BaseValue.edit(this.path.points, (positions) ->
+                {
+                    positions.get().add(new Position(this.editor.getCamera()));
+                });
+
             this.index = MathUtils.clamp(this.index + 1, 0, this.path.points.get().size() - 1);
         }
         else
         {
-            this.editor.postUndo(this.undo((positions) ->
-            {
-                positions.get().add(this.index + 1, new Position(this.editor.getCamera()));
-            }));
+            BaseValue.edit(this.path.points, (positions) ->
+                {
+                    positions.get().add(this.index + 1, new Position(this.editor.getCamera()));
+                });
+
             this.index = this.index + 1;
         }
 
@@ -128,10 +126,10 @@ public class UIPointsModule extends UIAbstractModule
             return;
         }
 
-        this.editor.postUndo(this.undo((positions) ->
+        BaseValue.edit(this.path.points, (positions) ->
         {
             positions.get().remove(this.index);
-        }));
+        });
 
         this.index = this.index > 0 ? this.index - 1 : this.index;
         this.scroll.setSize(this.path.size());

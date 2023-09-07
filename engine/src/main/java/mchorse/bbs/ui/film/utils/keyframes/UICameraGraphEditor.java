@@ -34,8 +34,5 @@ public class UICameraGraphEditor extends UICameraKeyframesEditor<UIGraphView>
         this.keyframes.clearSelection();
         this.keyframes.setChannel(keyframe.get(), color);
         this.frameButtons.setVisible(false);
-
-        this.valueChannels.clear();
-        this.valueChannels.add(value);
     }
 }

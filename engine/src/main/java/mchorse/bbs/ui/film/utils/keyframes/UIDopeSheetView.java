@@ -2,7 +2,6 @@ package mchorse.bbs.ui.film.utils.keyframes;
 
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.input.keyframes.Selection;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIDopeSheet;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.Keyframe;
@@ -51,24 +50,6 @@ public class UIDopeSheetView extends UIDopeSheet
     }
 
     @Override
-    protected void pickedKeyframe(int amount)
-    {
-        super.pickedKeyframe(amount);
-
-        if (amount > 0)
-        {
-            this.keyframeEditor.markUndo(100);
-        }
-    }
-
-    @Override
-    protected void keepMoving()
-    {
-        super.keepMoving();
-        this.keyframeEditor.markUndo(100);
-    }
-
-    @Override
     protected void moveNoKeyframe(UIContext context, Keyframe frame, double x, double y)
     {
         if (this.editor != null)
@@ -77,22 +58,6 @@ public class UIDopeSheetView extends UIDopeSheet
 
             this.editor.setCursor((int) (x + offset));
         }
-    }
-
-    @Override
-    protected void resetMouseReleased(UIContext context)
-    {
-        if (this.keyframeEditor.getUndo() == 100)
-        {
-            Keyframe keyframe = this.getCurrent();
-
-            if (!this.moving || this.which == Selection.NOT_SELECTED || this.which.getX(keyframe) == this.lastT)
-            {
-                this.keyframeEditor.cancelUndo();
-            }
-        }
-
-        super.resetMouseReleased(context);
     }
 
     @Override

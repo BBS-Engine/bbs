@@ -35,11 +35,8 @@ public class UICameraDopeSheetEditor extends UICameraKeyframesEditor<UIDopeSheet
         sheets.clear();
         this.keyframes.clearSelection();
 
-        this.valueChannels.clear();
-
         for (int i = 0; i < clip.channels.length; i++)
         {
-            this.valueChannels.add(clip.channels[i]);
             sheets.add(new UISheet(String.valueOf(i), TITLES[i + 1], COLORS[i], clip.channels[i].get()));
         }
 
@@ -53,13 +50,10 @@ public class UICameraDopeSheetEditor extends UICameraKeyframesEditor<UIDopeSheet
         sheets.clear();
         this.keyframes.clearSelection();
 
-        this.valueChannels.clear();
-
         for (int i = 0; i < channels.size(); i++)
         {
             ValueKeyframeChannel channel = channels.get(i);
 
-            this.valueChannels.add(channel);
             sheets.add(new UISheet(channel.getId(), IKey.raw(channel.getId()), colors.get(i), channel.get()));
         }
 

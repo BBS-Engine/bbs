@@ -4,7 +4,7 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.ui.UIValueFactory;
-import mchorse.bbs.settings.values.base.BaseValueDefault;
+import mchorse.bbs.settings.values.base.BaseValueBasic;
 import mchorse.bbs.settings.values.base.IValueUIProvider;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.elements.UIElement;
@@ -15,7 +15,7 @@ import mchorse.bbs.utils.resources.LinkUtils;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueLink extends BaseValueDefault<Link> implements IValueUIProvider
+public class ValueLink extends BaseValueBasic<Link> implements IValueUIProvider
 {
     public ValueLink(String id, Link defaultValue)
     {

@@ -3,7 +3,7 @@ package mchorse.bbs.settings.values;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.StringType;
 import mchorse.bbs.settings.ui.UIValueFactory;
-import mchorse.bbs.settings.values.base.BaseValueDefault;
+import mchorse.bbs.settings.values.base.BaseValueBasic;
 import mchorse.bbs.settings.values.base.IValueUIProvider;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
@@ -11,7 +11,7 @@ import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueString extends BaseValueDefault<String> implements IValueUIProvider
+public class ValueString extends BaseValueBasic<String> implements IValueUIProvider
 {
     public ValueString(String id, String defaultValue)
     {
@@ -39,7 +39,7 @@ public class ValueString extends BaseValueDefault<String> implements IValueUIPro
     {
         if (BaseType.isString(data))
         {
-            this.set(((StringType) data).value);
+            this.value = data.asString();
         }
     }
 

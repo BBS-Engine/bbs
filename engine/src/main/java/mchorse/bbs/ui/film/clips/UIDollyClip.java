@@ -8,14 +8,12 @@ import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.clips.modules.UIAngleModule;
 import mchorse.bbs.ui.film.clips.modules.UIPointModule;
 import mchorse.bbs.ui.film.utils.UICameraUtils;
-import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.tooltips.InterpolationTooltip;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.utils.undo.CompoundUndo;
 
 public class UIDollyClip extends UIClip<DollyClip>
 {
@@ -41,21 +39,18 @@ public class UIDollyClip extends UIClip<DollyClip>
 
         this.point = new UIPointModule(editor);
         this.angle = new UIAngleModule(editor);
-        this.distance = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.distance, (distance) -> distance.set(value.floatValue()))));
+        this.distance = new UITrackpad((value) -> this.clip.distance.set(value.floatValue()));
         this.distance.tooltip(UIKeys.CAMERA_PANELS_DOLLY_DISTANCE);
         this.reverse = new UIIcon(Icons.REVERSE, (b) -> this.reverse());
         this.reverse.tooltip(UIKeys.CAMERA_PANELS_DOLLY_REVERSE);
-        this.yaw = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.yaw, (yaw) -> yaw.set(value.floatValue()))));
+        this.yaw = new UITrackpad((value) -> this.clip.yaw.set(value.floatValue()));
         this.yaw.tooltip(UIKeys.CAMERA_PANELS_DOLLY_YAW);
-        this.pitch = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.pitch, (pitch) -> pitch.set(value.floatValue()))));
+        this.pitch = new UITrackpad((value) -> this.clip.pitch.set(value.floatValue()));
         this.pitch.tooltip(UIKeys.CAMERA_PANELS_DOLLY_PITCH);
 
         this.interp = new UIButton(UIKeys.CAMERA_PANELS_INTERPOLATION, (b) ->
         {
-            UICameraUtils.interps(this.getContext(), this.clip.interp.get(), (i) ->
-            {
-                this.editor.postUndo(this.undo(this.clip.interp, (interp) -> interp.set(i)));
-            });
+            UICameraUtils.interps(this.getContext(), this.clip.interp.get(), (i) -> this.clip.interp.set(i));
         });
         this.interp.tooltip(new InterpolationTooltip(1F, 0.5F, () -> this.clip.interp.get()));
     }
@@ -77,11 +72,8 @@ public class UIDollyClip extends UIClip<DollyClip>
         Position position = new Position();
 
         this.clip.applyLast(new CameraClipContext(), position);
-
-        this.editor.postUndo(new CompoundUndo<>(
-            this.undo(this.clip.position, position.toData()),
-            this.undo(this.clip.distance, (distance) -> distance.set(-this.clip.distance.get()))
-        ));
+        this.clip.position.set(position);
+        this.clip.distance.set(-this.clip.distance.get());
 
         this.fillData();
     }
@@ -89,11 +81,9 @@ public class UIDollyClip extends UIClip<DollyClip>
     @Override
     public void editClip(Position position)
     {
-        this.editor.postUndo(new CompoundUndo<>(
-            this.undo(this.clip.position, position.toData()),
-            this.undo(this.clip.yaw, (yaw) -> yaw.set(position.angle.yaw)),
-            this.undo(this.clip.pitch, (pitch) -> pitch.set(position.angle.pitch))
-        ));
+        this.clip.position.set(position);
+        this.clip.yaw.set(position.angle.yaw);
+        this.clip.pitch.set(position.angle.pitch);
 
         super.editClip(position);
     }
@@ -109,16 +99,5 @@ public class UIDollyClip extends UIClip<DollyClip>
         this.yaw.setValue(this.clip.yaw.get());
         this.pitch.setValue(this.clip.pitch.get());
         this.distance.setValue(this.clip.distance.get());
-    }
-
-    @Override
-    public void render(UIContext context)
-    {
-        double speed = this.clip.distance.get() / (this.clip.duration.get() / 20D);
-        String label = UIKeys.CAMERA_PANELS_DOLLY_SPEED.formatString(UITrackpad.format(speed));
-
-        context.batcher.textCard(context.font, label, this.area.mx(context.font.getWidth(label)), this.area.ey() - context.font.getHeight() - 20);
-
-        super.render(context);
     }
 }

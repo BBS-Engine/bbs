@@ -4,7 +4,7 @@ import mchorse.bbs.camera.clips.overwrite.KeyframeClip;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.settings.values.ValueGroup;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
@@ -13,9 +13,6 @@ import mchorse.bbs.ui.film.utils.keyframes.UICameraKeyframesEditor;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.utils.keyframes.KeyframeChannel;
-import mchorse.bbs.utils.undo.CompoundUndo;
-import mchorse.bbs.utils.undo.IUndo;
 
 public class UIKeyframeClip extends UIClip<KeyframeClip>
 {
@@ -84,31 +81,18 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     {
         long tick = this.editor.getCursor() - this.clip.tick.get();
 
-        CompoundUndo<ValueGroup> undo = new CompoundUndo<>(
-            this.undoKeyframes(this.clip.x, tick, position.point.x),
-            this.undoKeyframes(this.clip.y, tick, position.point.y),
-            this.undoKeyframes(this.clip.z, tick, position.point.z),
-            this.undoKeyframes(this.clip.yaw, tick, position.angle.yaw),
-            this.undoKeyframes(this.clip.pitch, tick, position.angle.pitch),
-            this.undoKeyframes(this.clip.roll, tick, position.angle.roll),
-            this.undoKeyframes(this.clip.fov, tick, position.angle.fov)
-        );
-
-        this.editor.postUndo(undo, false);
+        this.editKeyframes(this.clip.x, tick, position.point.x);
+        this.editKeyframes(this.clip.y, tick, position.point.y);
+        this.editKeyframes(this.clip.z, tick, position.point.z);
+        this.editKeyframes(this.clip.yaw, tick, position.angle.yaw);
+        this.editKeyframes(this.clip.pitch, tick, position.angle.pitch);
+        this.editKeyframes(this.clip.roll, tick, position.angle.roll);
+        this.editKeyframes(this.clip.fov, tick, position.angle.fov);
     }
 
-    private IUndo<ValueGroup> undoKeyframes(ValueKeyframeChannel channel, long tick, double value)
+    private void editKeyframes(ValueKeyframeChannel channel, long tick, double value)
     {
-        KeyframeChannel c = new KeyframeChannel();
-
-        c.copy(channel.get());
-        c.insert(tick, value);
-
-        IUndo<ValueGroup> undo = this.undo(channel, c.toData());
-
-        channel.get().insert(tick, value);
-
-        return undo;
+        BaseValue.edit(channel, (c) -> c.get().insert(tick, value));
     }
 
     @Override

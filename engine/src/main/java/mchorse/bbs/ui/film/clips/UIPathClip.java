@@ -5,7 +5,6 @@ import mchorse.bbs.camera.data.InterpolationType;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValuePosition;
 import mchorse.bbs.graphics.window.Window;
-import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
@@ -22,8 +21,6 @@ import mchorse.bbs.utils.keyframes.KeyframeInterpolations;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.utils.math.Interpolation;
 import mchorse.bbs.utils.math.MathUtils;
-import mchorse.bbs.utils.undo.CompoundUndo;
-import mchorse.bbs.utils.undo.IUndo;
 import org.joml.Vector2d;
 
 /**
@@ -63,24 +60,18 @@ public class UIPathClip extends UIClip<PathClip>
         this.angle = new UIAngleModule(editor);
         this.interpPoint = new UIButton(UIKeys.CAMERA_PANELS_POINT, (b) ->
         {
-            UICameraUtils.interpTypes(this.getContext(), this.clip.interpolationPoint.get(), (i) ->
-            {
-                this.editor.postUndo(this.undo(this.clip.interpolationPoint, (interp) -> interp.set(i)));
-            });
+            UICameraUtils.interpTypes(this.getContext(), this.clip.interpolationPoint.get(), this.clip.interpolationPoint::set);
         });
         this.interpPoint.tooltip(new InterpolationTooltip(1F, 0.5F, () -> this.getInterp(this.clip.interpolationPoint.get())));
         this.interpAngle = new UIButton(UIKeys.CAMERA_PANELS_ANGLE, (b) ->
         {
-            UICameraUtils.interpTypes(this.getContext(), this.clip.interpolationAngle.get(), (i) ->
-            {
-                this.editor.postUndo(this.undo(this.clip.interpolationAngle, (interp) -> interp.set(i)));
-            });
+            UICameraUtils.interpTypes(this.getContext(), this.clip.interpolationAngle.get(), this.clip.interpolationAngle::set);
         });
         this.interpAngle.tooltip(new InterpolationTooltip(1F, 0.5F, () -> this.getInterp(this.clip.interpolationAngle.get())));
 
         this.autoCenter = new UIToggle(UIKeys.CAMERA_PANELS_AUTO_CENTER, (b) ->
         {
-            IUndo<ValueGroup> undo = this.undo(this.clip.circularAutoCenter, (autoCenter) -> autoCenter.set(b.getValue()));
+            this.clip.circularAutoCenter.set(b.getValue());
 
             if (!b.getValue())
             {
@@ -88,21 +79,14 @@ public class UIPathClip extends UIClip<PathClip>
 
                 this.circularX.setValue(center.x);
                 this.circularZ.setValue(center.y);
-                this.editor.postUndo(new CompoundUndo<>(
-                    undo,
-                    this.undo(this.clip.circularX, (circularX) -> circularX.set(center.x)),
-                    this.undo(this.clip.circularZ, (circularZ) -> circularZ.set(center.y))
-                ).noMerging());
-            }
-            else
-            {
-                this.editor.postUndo(undo);
+                this.clip.circularX.set(center.x);
+                this.clip.circularZ.set(center.y);
             }
         });
 
-        this.circularX = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.circularX, (circularX) -> circularX.set(value))));
+        this.circularX = new UITrackpad((value) -> this.clip.circularX.set(value));
         this.circularX.tooltip(UIKeys.CAMERA_PANELS_CIRCULAR_X);
-        this.circularZ = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.circularZ, (circularZ) -> circularZ.set(value))));
+        this.circularZ = new UITrackpad((value) -> this.clip.circularZ.set(value));
         this.circularZ.tooltip(UIKeys.CAMERA_PANELS_CIRCULAR_Z);
 
         this.points = new UIPointsModule(this.editor, this::pickPoint);
@@ -175,7 +159,7 @@ public class UIPathClip extends UIClip<PathClip>
     {
         if (this.position != null)
         {
-            this.editor.postUndo(this.undo(this.position, position.toData()));
+            this.position.set(position);
 
             super.editClip(position);
         }

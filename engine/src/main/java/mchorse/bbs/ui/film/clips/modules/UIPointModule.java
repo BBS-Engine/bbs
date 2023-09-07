@@ -3,6 +3,7 @@ package mchorse.bbs.ui.film.clips.modules;
 import mchorse.bbs.camera.data.Point;
 import mchorse.bbs.camera.values.ValuePoint;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.clips.UIClip;
@@ -32,22 +33,13 @@ public class UIPointModule extends UIAbstractModule
     {
         super(editor);
 
-        this.x = new UITrackpad((value) ->
-        {
-            this.editor.postUndo(this.editor.createUndo(this.point, (point) -> point.get().x = value));
-        });
+        this.x = new UITrackpad((value) -> BaseValue.edit(this.point, (point) -> point.get().x = value));
         this.x.tooltip(UIKeys.X);
 
-        this.y = new UITrackpad((value) ->
-        {
-            this.editor.postUndo(this.editor.createUndo(this.point, (point) -> point.get().y = value));
-        });
+        this.y = new UITrackpad((value) -> BaseValue.edit(this.point, (point) -> point.get().y = value));
         this.y.tooltip(UIKeys.Y);
 
-        this.z = new UITrackpad((value) ->
-        {
-            this.editor.postUndo(this.editor.createUndo(this.point, (point) -> point.get().z = value));
-        });
+        this.z = new UITrackpad((value) -> BaseValue.edit(this.point, (point) -> point.get().z = value));
         this.z.tooltip(UIKeys.Z);
 
         this.x.values(0.1F);

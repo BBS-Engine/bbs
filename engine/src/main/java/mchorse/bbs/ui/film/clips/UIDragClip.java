@@ -27,20 +27,20 @@ public class UIDragClip extends UIClip<DragClip>
 
         this.deterministic = new UIToggle(UIKeys.CAMERA_PANELS_DETERMINISTIC, (b) ->
         {
-            this.editor.postUndo(this.undo(this.clip.deterministic, (deterministic) -> deterministic.set(b.getValue())));
+            this.clip.deterministic.set(b.getValue());
             this.clip.resetCache();
         });
         this.deterministic.tooltip(UIKeys.CAMERA_PANELS_DETERMINISTIC_TOOLTIP);
 
-        this.factor = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.factor, (factor) -> factor.set(value.floatValue()))));
+        this.factor = new UITrackpad((value) -> this.clip.factor.set(value.floatValue()));
         this.factor.limit(this.clip.factor).values(0.05F, 0.01F, 0.2F).increment(0.1F).tooltip(UIKeys.CAMERA_PANELS_FACTOR_TOOLTIP);
 
-        this.rate = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.rate, (rate) -> rate.set(value.intValue()))));
+        this.rate = new UITrackpad((value) -> this.clip.rate.set(value.intValue()));
         this.rate.limit(this.clip.rate).tooltip(UIKeys.CAMERA_PANELS_RATE_TOOLTIP);
 
         this.active = new UIBitToggle((value) ->
         {
-            this.editor.postUndo(this.undo(this.clip.active, (active) -> active.set(value)));
+            this.clip.active.set(value);
             this.clip.resetCache();
         }).all();
     }

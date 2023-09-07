@@ -51,7 +51,7 @@ public class ValueDouble extends BaseValueNumber<Double> implements IValueUIProv
     {
         if (data.isNumeric())
         {
-            this.set(data.asNumeric().doubleValue());
+            this.value = data.asNumeric().doubleValue();
         }
     }
 

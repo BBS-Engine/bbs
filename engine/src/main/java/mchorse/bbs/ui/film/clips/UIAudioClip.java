@@ -1,7 +1,7 @@
 package mchorse.bbs.ui.film.clips;
 
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.camera.clips.misc.AudioClip;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
@@ -24,10 +24,7 @@ public class UIAudioClip extends UIClip<AudioClip>
 
         this.pickAudio = new UIButton(UIKeys.CAMERA_PANELS_AUDIO_PICK_AUDIO, (b) ->
         {
-            UISoundOverlayPanel panel = new UISoundOverlayPanel((l) ->
-            {
-                editor.postUndo(this.undo(this.clip.audio, (audio) -> audio.set(l)));
-            });
+            UISoundOverlayPanel panel = new UISoundOverlayPanel((l) -> this.clip.audio.set(l));
 
             UIOverlay.addOverlay(this.getContext(), panel.set(this.clip.audio.get()));
         });

@@ -51,7 +51,7 @@ public class ValueFloat extends BaseValueNumber<Float> implements IValueUIProvid
     {
         if (data.isNumeric())
         {
-            this.set(data.asNumeric().floatValue());
+            this.value = data.asNumeric().floatValue();
         }
     }
 

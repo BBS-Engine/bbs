@@ -58,10 +58,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSupported, IUIClipsDelegate
@@ -99,6 +99,8 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     private UIFilmController controller = new UIFilmController(this);
 
     private UndoManager<ValueGroup> undoManager;
+    private List<Integer> cachedSelection = new ArrayList<>();
+    private Map<BaseValue, BaseType> cachedUndo = new HashMap<>();
 
     /**
      * Initialize the camera editor with a camera profile.
@@ -123,7 +125,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.replays.relative(this.main).full();
         this.replays.setVisible(false);
 
-        this.screenplay = new UITextEditor((t) -> this.postUndo(this.createUndo(this.data.screenplay, (screenplay) -> screenplay.set(t))));
+        this.screenplay = new UITextEditor((t) -> this.data.screenplay.set(t));
         this.screenplay.highlighter(new FountainSyntaxHighlighter()).background().relative(this.editor).full();
         this.screenplay.relative(this.main).full();
         this.screenplay.wrap().setVisible(false);
@@ -385,6 +387,12 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
             this.disableContext();
         }
 
+        if (data != null)
+        {
+            data.preCallback(this::handlePreValues);
+            data.postCallback(this::handlePostValues);
+        }
+
         this.undoManager = data == null ? null : new UndoManager<>(50);
 
         super.fill(data);
@@ -402,6 +410,55 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
         this.fillData();
         this.controller.createEntities();
+    }
+
+    private void handlePreValues(BaseValue baseValue)
+    {
+        if (this.cachedSelection.isEmpty())
+        {
+            this.cachedSelection.addAll(this.timeline.getSelection());
+        }
+
+        if (!this.cachedUndo.containsKey(baseValue))
+        {
+            this.cachedUndo.put(baseValue, baseValue.toData());
+        }
+    }
+
+    private void handlePostValues(BaseValue baseValue)
+    {}
+
+    private void submitUndo()
+    {
+        if (this.cachedUndo.isEmpty())
+        {
+            return;
+        }
+
+        List<ValueChangeUndo> changeUndos = new ArrayList<>();
+
+        for (Map.Entry<BaseValue, BaseType> entry : this.cachedUndo.entrySet())
+        {
+            BaseValue value = entry.getKey();
+            ValueChangeUndo undo = new ValueChangeUndo(value.getPath(), entry.getValue(), value.toData());
+
+            undo.editor(this);
+            undo.selectedBefore(this.cachedSelection);
+            changeUndos.add(undo);
+        }
+
+        if (changeUndos.size() == 1)
+        {
+            this.postUndo(changeUndos.get(0));
+        }
+        else
+        {
+            this.postUndo(new CompoundUndo<>(changeUndos.toArray(new IUndo[0])));
+        }
+
+        this.cachedUndo.clear();
+
+        System.out.println("Hello");
     }
 
     private void handleUndos(IUndo<ValueGroup> undo, boolean redo)
@@ -513,6 +570,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     @Override
     public void render(UIContext context)
     {
+        this.submitUndo();
         this.updateLogic(context);
         this.renderOverlays(context);
 
@@ -853,31 +911,6 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public void embedView(UIElement element)
     {
         this.timeline.embedView(element);
-    }
-
-    @Override
-    public <T extends BaseValue> IUndo createUndo(T property, Consumer<T> consumer)
-    {
-        BaseType oldValue = property.toData();
-
-        consumer.accept(property);
-
-        BaseType newValue = property.toData();
-        ValueChangeUndo undo = new ValueChangeUndo(property.getPath(), oldValue, newValue);
-
-        undo.editor(this);
-
-        return undo;
-    }
-
-    @Override
-    public <T extends BaseValue> IUndo createUndo(T property, BaseType oldValue, BaseType newValue)
-    {
-        ValueChangeUndo undo = new ValueChangeUndo(property.getPath(), oldValue, newValue);
-
-        undo.editor(this);
-
-        return undo;
     }
 
     @Override

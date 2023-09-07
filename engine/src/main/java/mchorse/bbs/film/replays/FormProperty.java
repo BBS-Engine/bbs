@@ -12,7 +12,7 @@ public class FormProperty extends BaseValueBasic<GenericKeyframeChannel>
 {
     public FormProperty(String id)
     {
-        super(id);
+        super(id, null);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class FormProperty extends BaseValueBasic<GenericKeyframeChannel>
             GenericKeyframeChannel channel = new GenericKeyframeChannel(serializer);
 
             channel.fromData(map.getList("keyframes"));
-            this.set(channel);
+            this.value = channel;
         }
         else
         {

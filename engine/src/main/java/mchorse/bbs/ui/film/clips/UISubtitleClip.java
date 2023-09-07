@@ -36,29 +36,29 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
     {
         super.registerUI();
 
-        this.x = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.x, (x) -> x.set(v.intValue()))));
+        this.x = new UITrackpad((v) -> this.clip.x.set(v.intValue()));
         this.x.integer();
-        this.y = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.y, (y) -> y.set(v.intValue()))));
+        this.y = new UITrackpad((v) -> this.clip.y.set(v.intValue()));
         this.y.integer();
 
-        this.size = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.size, (size) -> size.set(v.floatValue()))));
-        this.anchorX = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.anchorX, (anchorX) -> anchorX.set(v.floatValue()))));
-        this.anchorY = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.anchorY, (anchorY) -> anchorY.set(v.floatValue()))));
-        this.color = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.color, (color) -> color.set(c))));
+        this.size = new UITrackpad((v) -> this.clip.size.set(v.floatValue()));
+        this.anchorX = new UITrackpad((v) -> this.clip.anchorX.set(v.floatValue()));
+        this.anchorY = new UITrackpad((v) -> this.clip.anchorY.set(v.floatValue()));
+        this.color = new UIColor((c) -> this.clip.color.set(c));
 
-        this.windowX = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.windowX, (windowX) -> windowX.set(v.floatValue()))));
-        this.windowY = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.windowY, (windowY) -> windowY.set(v.floatValue()))));
+        this.windowX = new UITrackpad((v) -> this.clip.windowX.set(v.floatValue()));
+        this.windowY = new UITrackpad((v) -> this.clip.windowY.set(v.floatValue()));
 
-        this.background = new UIColor((c) -> this.editor.postUndo(this.undo(this.clip.background, (background) -> background.set(c)))).withAlpha();
-        this.backgroundOffset = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.backgroundOffset, (backgroundOffset) -> backgroundOffset.set(v.floatValue()))));
-        this.shadow = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.shadow, (shadow) -> shadow.set(v.floatValue())))).limit(0);
+        this.background = new UIColor((c) -> this.clip.background.set(c)).withAlpha();
+        this.backgroundOffset = new UITrackpad((v) -> this.clip.backgroundOffset.set(v.floatValue()));
+        this.shadow = new UITrackpad((v) -> this.clip.shadow.set(v.floatValue())).limit(0);
 
-        this.transform = new UIPropTransform((t) -> this.editor.postUndo(this.undo(this.clip.transform, (transform) -> transform.set(t.copy()))));
+        this.transform = new UIPropTransform((t) -> this.clip.transform.set(t.copy()));
         this.transform.noLabels();
 
-        this.lineHeight = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.lineHeight, (lineHeight) -> lineHeight.set(v.intValue()))));
+        this.lineHeight = new UITrackpad((v) -> this.clip.lineHeight.set(v.intValue()));
         this.lineHeight.limit(0).integer().tooltip(IKey.lazy("Line height"), Direction.BOTTOM);
-        this.maxWidth = new UITrackpad((v) -> this.editor.postUndo(this.undo(this.clip.maxWidth, (maxWidth) -> maxWidth.set(v.intValue()))));
+        this.maxWidth = new UITrackpad((v) -> this.clip.maxWidth.set(v.intValue()));
         this.maxWidth.limit(0).integer().tooltip(IKey.lazy("Max width"), Direction.BOTTOM);
     }
 

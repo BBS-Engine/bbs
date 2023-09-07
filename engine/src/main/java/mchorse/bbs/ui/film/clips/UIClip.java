@@ -3,10 +3,8 @@ package mchorse.bbs.ui.film.clips;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.utils.TimeUtils;
-import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.ValueGroup;
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.clips.widgets.UIEnvelope;
@@ -21,8 +19,6 @@ import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.undo.IUndo;
-
-import java.util.function.Consumer;
 
 public abstract class UIClip <T extends Clip> extends UIElement
 {
@@ -51,8 +47,8 @@ public abstract class UIClip <T extends Clip> extends UIElement
         this.clip = clip;
         this.editor = editor;
 
-        this.enabled = new UIToggle(UIKeys.CAMERA_PANELS_ENABLED, (b) -> this.editor.postUndo(this.undo(this.clip.enabled, (enabled) -> enabled.set(b.getValue()))));
-        this.title = new UITextbox(1000, (t) -> this.editor.postUndo(this.undo(this.clip.title, (title) -> title.set(t))));
+        this.enabled = new UIToggle(UIKeys.CAMERA_PANELS_ENABLED, (b) -> this.clip.enabled.set(b.getValue()));
+        this.title = new UITextbox(1000, (t) -> this.clip.title.set(t));
         this.title.tooltip(UIKeys.CAMERA_PANELS_TITLE_TOOLTIP);
         this.layer = new UITrackpad((v) -> this.editor.updateClipProperty(this.clip.layer, v.intValue()));
         this.layer.limit(0, Integer.MAX_VALUE, true).tooltip(UIKeys.CAMERA_PANELS_LAYER);
@@ -96,16 +92,6 @@ public abstract class UIClip <T extends Clip> extends UIElement
     public void handleUndo(IUndo<ValueGroup> undo, boolean redo)
     {
         this.fillData();
-    }
-
-    public <T extends BaseValue> IUndo undo(T property, BaseType newValue)
-    {
-        return this.editor.createUndo(property, property.toData(), newValue);
-    }
-
-    public <T extends BaseValue> IUndo undo(T property, Consumer<T> consumer)
-    {
-        return this.editor.createUndo(property, consumer);
     }
 
     protected void updateDuration(int duration)

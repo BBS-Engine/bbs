@@ -5,7 +5,6 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.settings.values.base.IValue;
 import mchorse.bbs.ui.utils.icons.Icon;
 import mchorse.bbs.utils.IOUtils;
 
@@ -30,11 +29,7 @@ public class Settings extends BaseValue
     }
 
     @Override
-    public void preNotifyParent(IValue value)
-    {}
-
-    @Override
-    public void postNotifyParent(IValue value)
+    public void postNotifyParent(BaseValue value)
     {
         this.saveLater();
     }

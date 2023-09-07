@@ -8,9 +8,15 @@ public class ValuePoint extends BaseValueBasic<Point>
 {
     public ValuePoint(String id, Point point)
     {
-        super(id);
+        super(id, point);
+    }
 
-        this.value = point;
+    @Override
+    public void set(Point value)
+    {
+        this.preNotifyParent();
+        this.value.set(value);
+        this.postNotifyParent();
     }
 
     @Override

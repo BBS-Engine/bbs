@@ -9,7 +9,7 @@ public class ValueForm extends BaseValueBasic<Form>
 {
     public ValueForm(String id)
     {
-        super(id);
+        super(id, null);
     }
 
     @Override
@@ -23,11 +23,11 @@ public class ValueForm extends BaseValueBasic<Form>
     {
         if (data != null && data.isMap())
         {
-            this.set(FormUtils.fromData(data.asMap()));
+            this.value = FormUtils.fromData(data.asMap());
         }
         else
         {
-            this.set(null);
+            this.value = null;
         }
     }
 }

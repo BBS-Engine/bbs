@@ -102,7 +102,7 @@ public class UICameraUtils
                 position.point.set(point);
                 position.angle.set(angle);
 
-                editor.postUndo(editor.createUndo(value, value.toData(), position.toData()));
+                value.set(position);
                 editor.fillData();
             }
         });
@@ -127,7 +127,7 @@ public class UICameraUtils
 
             if (point != null)
             {
-                editor.postUndo(editor.createUndo(value, value.toData(), point.toData()));
+                value.set(point);
                 editor.fillData();
             }
         });
@@ -172,7 +172,7 @@ public class UICameraUtils
 
             if (angle != null)
             {
-                editor.postUndo(editor.createUndo(value, value.toData(), angle.toData()));
+                value.set(angle);
                 editor.fillData();
             }
         });

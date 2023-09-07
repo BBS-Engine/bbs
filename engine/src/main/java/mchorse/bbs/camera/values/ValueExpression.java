@@ -36,6 +36,13 @@ public class ValueExpression extends BaseValue
 
     public void setExpression(String string)
     {
+        this.preNotifyParent();
+        this.setExpressionPrivate(string);
+        this.postNotifyParent();
+    }
+
+    private void setExpressionPrivate(String string)
+    {
         try
         {
             if (string.isEmpty())
@@ -59,13 +66,13 @@ public class ValueExpression extends BaseValue
     @Override
     public BaseType toData()
     {
-        return new StringType(this.expression == null ? "" : this.expression.toString());
+        return new StringType(this.toString());
     }
 
     @Override
     public void fromData(BaseType data)
     {
-        this.setExpression(data.asString());
+        this.setExpressionPrivate(data.asString());
     }
 
     @Override

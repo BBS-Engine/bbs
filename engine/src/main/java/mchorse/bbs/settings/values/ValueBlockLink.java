@@ -19,7 +19,7 @@ public class ValueBlockLink extends BaseValueBasic<BlockLink> implements IValueU
 {
     public ValueBlockLink(String id)
     {
-        super(id);
+        super(id, null);
     }
 
     public IBlockVariant get(BlockSet set)
@@ -56,7 +56,7 @@ public class ValueBlockLink extends BaseValueBasic<BlockLink> implements IValueU
     {
         if (data.isString())
         {
-            this.set(BlockLink.create(data.asString()));
+            this.value = BlockLink.create(data.asString());
         }
     }
 }

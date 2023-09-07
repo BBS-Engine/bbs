@@ -4,9 +4,11 @@ public abstract class BaseValueBasic <T> extends BaseValue
 {
     protected T value;
 
-    public BaseValueBasic(String id)
+    public BaseValueBasic(String id, T value)
     {
         super(id);
+
+        this.value = value;
     }
 
     public T get()

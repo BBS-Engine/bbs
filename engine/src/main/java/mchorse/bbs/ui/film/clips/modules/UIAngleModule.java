@@ -2,6 +2,7 @@ package mchorse.bbs.ui.film.clips.modules;
 
 import mchorse.bbs.camera.data.Angle;
 import mchorse.bbs.camera.values.ValueAngle;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.clips.UIClip;
@@ -27,28 +28,16 @@ public class UIAngleModule extends UIAbstractModule
     {
         super(editor);
 
-        this.yaw = new UITrackpad((value) ->
-        {
-            this.editor.postUndo(this.editor.createUndo(this.angle, (angle) -> angle.get().yaw = value.floatValue()));
-        });
+        this.yaw = new UITrackpad((v) -> BaseValue.edit(this.angle, (value) -> value.get().yaw = v.floatValue()));
         this.yaw.tooltip(UIKeys.CAMERA_PANELS_YAW);
 
-        this.pitch = new UITrackpad((value) ->
-        {
-            this.editor.postUndo(this.editor.createUndo(this.angle, (angle) -> angle.get().pitch = value.floatValue()));
-        });
+        this.pitch = new UITrackpad((v) -> BaseValue.edit(this.angle, (value) -> value.get().pitch = v.floatValue()));
         this.pitch.tooltip(UIKeys.CAMERA_PANELS_PITCH);
 
-        this.roll = new UITrackpad((value) ->
-        {
-            this.editor.postUndo(this.editor.createUndo(this.angle, (angle) -> angle.get().roll = value.floatValue()));
-        });
+        this.roll = new UITrackpad((v) -> BaseValue.edit(this.angle, (value) -> value.get().roll = v.floatValue()));
         this.roll.tooltip(UIKeys.CAMERA_PANELS_ROLL);
 
-        this.fov = new UITrackpad((value) ->
-        {
-            this.editor.postUndo(this.editor.createUndo(this.angle, (angle) -> angle.get().fov = value.floatValue()));
-        });
+        this.fov = new UITrackpad((v) -> BaseValue.edit(this.angle, (value) -> value.get().fov = v.floatValue()));
         this.fov.tooltip(UIKeys.CAMERA_PANELS_FOV);
 
         this.column().vertical().stretch().height(20);

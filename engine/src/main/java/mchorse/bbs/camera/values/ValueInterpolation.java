@@ -1,11 +1,11 @@
 package mchorse.bbs.camera.values;
 
-import mchorse.bbs.settings.values.base.BaseValueDefault;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.StringType;
+import mchorse.bbs.settings.values.base.BaseValueBasic;
 import mchorse.bbs.utils.math.Interpolation;
 
-public class ValueInterpolation extends BaseValueDefault<Interpolation>
+public class ValueInterpolation extends BaseValueBasic<Interpolation>
 {
     public ValueInterpolation(String id)
     {

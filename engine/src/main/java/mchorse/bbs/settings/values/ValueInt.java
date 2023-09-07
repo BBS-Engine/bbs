@@ -113,7 +113,7 @@ public class ValueInt extends BaseValueNumber<Integer> implements IValueUIProvid
     {
         if (data.isNumeric())
         {
-            this.set(data.asNumeric().intValue());
+            this.value = data.asNumeric().intValue();
         }
     }
 

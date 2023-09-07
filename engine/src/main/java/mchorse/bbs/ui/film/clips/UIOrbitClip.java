@@ -31,23 +31,22 @@ public class UIOrbitClip extends UIClip<OrbitClip>
 
         this.selector = new UITextboxHelp(500, (str) ->
         {
-            this.editor.postUndo(this.undo(this.clip.selector, (selector) -> selector.set(str)));
+            this.clip.selector.set(str);
             this.clip.tryFindingEntity(this.getContext().menu.bridge.get(IBridgeWorld.class).getWorld());
         });
         this.selector.link(UILookClip.SELECTOR_HELP).tooltip(UIKeys.CAMERA_PANELS_SELECTOR_TOOLTIP);
 
-        this.copy = new UIToggle(UIKeys.CAMERA_PANELS_COPY_ENTITY, false, (b) -> this.editor.postUndo(this.undo(this.clip.copy, (copy) -> copy.set(b.getValue()))));
+        this.copy = new UIToggle(UIKeys.CAMERA_PANELS_COPY_ENTITY, false, (b) -> this.clip.copy.set(b.getValue()));
         this.copy.tooltip(UIKeys.CAMERA_PANELS_COPY_ENTITY_TOOLTIP);
 
-        this.yaw = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.yaw, (yaw) -> yaw.set(value.floatValue()))));
+        this.yaw = new UITrackpad((value) -> this.clip.yaw.set(value.floatValue()));
         this.yaw.tooltip(UIKeys.CAMERA_PANELS_YAW);
 
-        this.pitch = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.pitch, (pitch) -> pitch.set(value.floatValue()))));
+        this.pitch = new UITrackpad((value) -> this.clip.pitch.set(value.floatValue()));
         this.pitch.tooltip(UIKeys.CAMERA_PANELS_PITCH);
 
         this.offset = new UIPointModule(editor, UIKeys.CAMERA_PANELS_OFFSET).contextMenu();
-
-        this.distance = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.distance, (distance) -> distance.set(value.floatValue()))));
+        this.distance = new UITrackpad((value) -> this.clip.distance.set(value.floatValue()));
     }
 
     @Override

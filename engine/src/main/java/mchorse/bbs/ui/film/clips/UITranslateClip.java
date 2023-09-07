@@ -21,7 +21,7 @@ public class UITranslateClip extends UIClip<TranslateClip>
         super.registerUI();
 
         this.point = new UIPointModule(this.editor);
-        this.active = new UIBitToggle((value) -> this.editor.postUndo(this.undo(this.clip.active, (active) -> active.set(value)))).point();
+        this.active = new UIBitToggle((value) -> this.clip.active.set(value)).point();
     }
 
     @Override

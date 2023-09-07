@@ -2,7 +2,6 @@ package mchorse.bbs.ui.film.utils.keyframes;
 
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.input.keyframes.Selection;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIGraph;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.Keyframe;
@@ -48,40 +47,6 @@ public class UIGraphView extends UIGraph
         }
 
         return (int) (this.editor.getCursor() - this.getFixtureOffset());
-    }
-
-    @Override
-    protected void pickedKeyframe(int amount)
-    {
-        super.pickedKeyframe(amount);
-
-        if (amount > 0)
-        {
-            this.keyframeEditor.markUndo(100);
-        }
-    }
-
-    @Override
-    protected void keepMoving()
-    {
-        super.keepMoving();
-        this.keyframeEditor.markUndo(100);
-    }
-
-    @Override
-    protected void resetMouseReleased(UIContext context)
-    {
-        if (this.keyframeEditor.getUndo() == 100)
-        {
-            Keyframe keyframe = this.getCurrent();
-
-            if (!this.moving || this.which == Selection.NOT_SELECTED || (this.which.getX(keyframe) == this.lastT && this.which.getY(keyframe) == this.lastV))
-            {
-                this.keyframeEditor.cancelUndo();
-            }
-        }
-
-        super.resetMouseReleased(context);
     }
 
     @Override

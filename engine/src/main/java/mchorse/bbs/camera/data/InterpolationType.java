@@ -32,6 +32,19 @@ public enum InterpolationType
     public KeyframeEasing easing = KeyframeEasing.IN;
     private int keybind;
 
+    public static InterpolationType fromInterp(Interpolation interp)
+    {
+        for (InterpolationType type : values())
+        {
+            if (type.function == interp)
+            {
+                return type;
+            }
+        }
+
+        return LINEAR;
+    }
+
     private InterpolationType(String name)
     {
         this.name = name;
@@ -73,19 +86,6 @@ public enum InterpolationType
         this.function = function;
         this.interp = interp;
         this.easing = easing;
-    }
-
-    public static InterpolationType fromInterp(Interpolation interp)
-    {
-        for (InterpolationType type : values())
-        {
-            if (type.function == interp)
-            {
-                return type;
-            }
-        }
-
-        return LINEAR;
     }
 
     public void setupKeybind(ContextAction action, IKey category)

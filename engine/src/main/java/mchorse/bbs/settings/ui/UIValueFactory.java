@@ -1,13 +1,13 @@
 package mchorse.bbs.settings.ui;
 
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueDouble;
 import mchorse.bbs.settings.values.ValueFloat;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.ValueLong;
 import mchorse.bbs.settings.values.ValueString;
-import mchorse.bbs.settings.values.base.IValue;
-import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
@@ -23,22 +23,22 @@ public class UIValueFactory
 {
     /* Language key factories */
 
-    public static String getTitleKey(IValue value)
+    public static String getTitleKey(BaseValue value)
     {
         return value.getId() + ".config.title";
     }
 
-    public static String getCategoryTitleKey(IValue value)
+    public static String getCategoryTitleKey(BaseValue value)
     {
         return getValueLabelKey(value) + ".title";
     }
 
-    public static String getCategoryTooltipKey(IValue value)
+    public static String getCategoryTooltipKey(BaseValue value)
     {
         return getValueLabelKey(value) + ".tooltip";
     }
 
-    public static String getValueLabelKey(IValue value)
+    public static String getValueLabelKey(BaseValue value)
     {
         List<String> segments = value.getPathSegments();
         String prefix = segments.remove(0);
@@ -46,7 +46,7 @@ public class UIValueFactory
         return prefix + ".config." + String.join(".", segments);
     }
 
-    public static String getValueCommentKey(IValue value)
+    public static String getValueCommentKey(BaseValue value)
     {
         List<String> segments = value.getPathSegments();
         String prefix = segments.remove(0);
@@ -163,7 +163,7 @@ public class UIValueFactory
         return textbox;
     }
 
-    public static UIElement column(UIElement control, IValue value)
+    public static UIElement column(UIElement control, BaseValue value)
     {
         UIElement element = new UIElement();
 
@@ -174,12 +174,12 @@ public class UIValueFactory
         return commetTooltip(element, value);
     }
 
-    public static UILabel label(IValue value)
+    public static UILabel label(BaseValue value)
     {
         return UI.label(IKey.lang(UIValueFactory.getValueLabelKey(value)), 0).labelAnchor(0, 0.5F);
     }
 
-    public static UIElement commetTooltip(UIElement element, IValue value)
+    public static UIElement commetTooltip(UIElement element, BaseValue value)
     {
         element.tooltip(IKey.lang(UIValueFactory.getValueCommentKey(value)));
 

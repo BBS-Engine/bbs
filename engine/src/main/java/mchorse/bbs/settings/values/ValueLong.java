@@ -51,7 +51,7 @@ public class ValueLong extends BaseValueNumber<Long> implements IValueUIProvider
     {
         if (data.isNumeric())
         {
-            this.set(data.asNumeric().longValue());
+            this.value = data.asNumeric().longValue();
         }
     }
 

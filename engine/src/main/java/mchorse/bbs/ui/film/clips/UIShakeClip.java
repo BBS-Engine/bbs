@@ -25,13 +25,13 @@ public class UIShakeClip extends UIClip<ShakeClip>
     {
         super.registerUI();
 
-        this.shake = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.shake, (shake) -> shake.set(value.floatValue()))));
+        this.shake = new UITrackpad((value) -> this.clip.shake.set(value.floatValue()));
         this.shake.tooltip(UIKeys.CAMERA_PANELS_SHAKE, Direction.BOTTOM);
 
-        this.shakeAmount = new UITrackpad((value) -> this.editor.postUndo(this.undo(this.clip.shakeAmount, (shakeAmount) -> shakeAmount.set(value.floatValue()))));
+        this.shakeAmount = new UITrackpad((value) -> this.clip.shakeAmount.set(value.floatValue()));
         this.shakeAmount.tooltip(UIKeys.CAMERA_PANELS_SHAKE_AMOUNT, Direction.BOTTOM);
 
-        this.active = new UIBitToggle((value) -> this.editor.postUndo(this.undo(this.clip.active, (active) -> active.set(value)))).all();
+        this.active = new UIBitToggle((value) -> this.clip.active.set(value)).all();
     }
 
     @Override

@@ -37,33 +37,21 @@ public class UIEnvelope extends UIElement
 
         InterpolationTooltip tooltip = new InterpolationTooltip(1F, 0.5F, () -> this.get().interpolation.get(), null);
 
-        this.enabled = new UIToggle(UIKeys.CAMERA_PANELS_ENABLED, (b) ->
-        {
-            this.panel.editor.postUndo(this.panel.undo(this.get().enabled, (enabled) -> enabled.set(b.getValue())));
-        });
+        this.enabled = new UIToggle(UIKeys.CAMERA_PANELS_ENABLED, (b) -> this.get().enabled.set(b.getValue()));
         this.pickInterpolation = new UIButton(UIKeys.CAMERA_PANELS_INTERPOLATION, (b) ->
         {
-            UICameraUtils.interps(this.getContext(), this.get().interpolation.get(), (i) ->
-            {
-                this.panel.editor.postUndo(this.panel.undo(this.get().interpolation, (interp) -> interp.set(i)));
-            });
+            UICameraUtils.interps(this.getContext(), this.get().interpolation.get(), this.get().interpolation::set);
         });
         this.pickInterpolation.tooltip(tooltip);
 
-        this.fadeIn = new UITrackpad((value) ->
-        {
-            this.panel.editor.postUndo(this.panel.undo(this.get().fadeIn, (fadeIn) -> fadeIn.set((float) TimeUtils.fromTime(value.floatValue()))));
-        });
+        this.fadeIn = new UITrackpad((value) -> this.get().fadeIn.set((float) TimeUtils.fromTime(value.floatValue())));
         this.fadeIn.tooltip(UIKeys.CAMERA_PANELS_ENVELOPES_START_D, Direction.TOP);
-        this.fadeOut = new UITrackpad((value) ->
-        {
-            this.panel.editor.postUndo(this.panel.undo(this.get().fadeOut, (active) -> active.set((float) TimeUtils.fromTime(value.floatValue()))));
-        });
+        this.fadeOut = new UITrackpad((value) -> this.get().fadeOut.set((float) TimeUtils.fromTime(value.floatValue())));
         this.fadeOut.tooltip(UIKeys.CAMERA_PANELS_ENVELOPES_END_D, Direction.TOP);
 
         this.keyframes = new UIToggle(UIKeys.CAMERA_PANELS_KEYFRAMES, (b) ->
         {
-            this.panel.editor.postUndo(this.panel.undo(this.get().keyframes, (keyframes) -> keyframes.set(b.getValue())));
+            this.get().keyframes.set(b.getValue());
             this.toggleKeyframes(b.getValue());
         });
         this.editKeyframes = new UIButton(UIKeys.CAMERA_PANELS_EDIT_KEYFRAMES, (b) ->

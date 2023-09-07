@@ -17,9 +17,7 @@ public class ValueKeyCombo extends BaseValueBasic<KeyCombo> implements IValueUIP
 {
     public ValueKeyCombo(String id, KeyCombo combo)
     {
-        super(id);
-
-        this.value = combo;
+        super(id, combo);
     }
 
     @Override

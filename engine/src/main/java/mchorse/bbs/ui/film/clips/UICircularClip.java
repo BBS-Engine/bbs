@@ -36,7 +36,7 @@ public class UICircularClip extends UIClip<CircularClip>
     @Override
     public void editClip(Position position)
     {
-        this.editor.postUndo(this.undo(this.clip.start, position.point.toData()));
+        this.clip.start.set(position.point.copy());
 
         super.editClip(position);
     }

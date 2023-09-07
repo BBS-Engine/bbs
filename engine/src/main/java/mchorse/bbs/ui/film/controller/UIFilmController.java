@@ -40,7 +40,6 @@ import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.math.MathUtils;
-import mchorse.bbs.utils.undo.IUndo;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.BasicComponent;
@@ -258,9 +257,12 @@ public class UIFilmController extends UIElement
                 }
             }
 
-            IUndo undo = this.panel.createUndo(replay.keyframes, this.recordingOld, replay.keyframes.toData());
+            BaseType newData = replay.keyframes.toData();
 
-            this.panel.postUndo(undo.noMerging(), false, false);
+            replay.keyframes.fromData(this.recordingOld);
+            replay.keyframes.preNotifyParent();
+            replay.keyframes.fromData(newData);
+            replay.keyframes.postNotifyParent();
 
             this.recordingOld = null;
         }
@@ -446,16 +448,15 @@ public class UIFilmController extends UIElement
             {
                 Replay replay = this.getReplay();
 
-                if (replay != null)
+                if (replay == null)
                 {
-                    IUndo undo = this.panel.createUndo(replay.keyframes, (keyframes) ->
-                    {
-                        keyframes.record(this.getTick(), this.controlled, groups);
-                    });
-
-                    undo.noMerging();
-                    this.panel.postUndo(undo);
+                    return;
                 }
+
+                BaseValue.edit(replay.keyframes, (keyframes) ->
+                {
+                    keyframes.record(this.getTick(), this.controlled, groups);
+                });
             }
         );
 

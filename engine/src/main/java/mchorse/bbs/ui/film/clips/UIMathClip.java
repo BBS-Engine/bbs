@@ -24,12 +24,12 @@ public class UIMathClip extends UIClip<MathClip>
 
         this.expression = new UITextboxHelp(1000, (str) ->
         {
-            this.editor.postUndo(this.undo(this.clip.expression, (active) -> active.setExpression(str)));
+            this.clip.expression.setExpression(str);
             this.expression.setColor(!this.clip.expression.isErrored() ? Colors.WHITE : Colors.RED);
         });
         this.expression.link("https://github.com/mchorse/aperture/wiki/Math-Expressions").tooltip(UIKeys.CAMERA_PANELS_MATH);
 
-        this.active = new UIBitToggle((value) -> this.editor.postUndo(this.undo(this.clip.active, (active) -> active.set(value)))).all();
+        this.active = new UIBitToggle((value) -> this.clip.active.set(value)).all();
     }
 
     @Override

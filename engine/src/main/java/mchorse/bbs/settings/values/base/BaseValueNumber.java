@@ -1,6 +1,6 @@
 package mchorse.bbs.settings.values.base;
 
-public abstract class BaseValueNumber <T extends Number> extends BaseValueDefault<T>
+public abstract class BaseValueNumber <T extends Number> extends BaseValueBasic<T>
 {
     protected T min;
     protected T max;

@@ -44,7 +44,9 @@ public class ValuePosition extends ValueGroup
 
     public void set(Position position)
     {
+        this.preNotifyParent();
         this.position.set(position);
+        this.postNotifyParent();
     }
 
     @Override
