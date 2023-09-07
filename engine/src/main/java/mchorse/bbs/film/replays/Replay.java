@@ -1,8 +1,9 @@
-package mchorse.bbs.film.values;
+package mchorse.bbs.film.replays;
 
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.forms.properties.IFormProperty;
+import mchorse.bbs.settings.values.ValueForm;
 import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.utils.Pair;
@@ -12,13 +13,13 @@ import mchorse.bbs.world.entities.components.FormComponent;
 
 import java.util.List;
 
-public class ValueReplay extends ValueGroup
+public class Replay extends ValueGroup
 {
     public final ValueForm form = new ValueForm("form");
-    public final ValueKeyframes keyframes = new ValueKeyframes("keyframes");
-    public final ValueFormProperties properties = new ValueFormProperties("properties");
+    public final ReplayKeyframes keyframes = new ReplayKeyframes("keyframes");
+    public final FormProperties properties = new FormProperties("properties");
 
-    public ValueReplay(String id)
+    public Replay(String id)
     {
         super(id);
 
@@ -48,12 +49,12 @@ public class ValueReplay extends ValueGroup
 
         for (BaseValue value : this.properties.getAll())
         {
-            if (!(value instanceof ValueFormProperty))
+            if (!(value instanceof FormProperty))
             {
                 continue;
             }
 
-            ValueFormProperty formProperty = (ValueFormProperty) value;
+            FormProperty formProperty = (FormProperty) value;
             IFormProperty property = FormUtils.getProperty(form, formProperty.getId());
             Pair segment = formProperty.get().findSegment(tick);
 

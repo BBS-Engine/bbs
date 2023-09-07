@@ -10,7 +10,7 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.film.Film;
-import mchorse.bbs.film.values.ValueReplay;
+import mchorse.bbs.film.replays.Replay;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
@@ -510,7 +510,7 @@ public class UIClips extends UIElement
 
         this.getContext().replaceContextMenu((menu) ->
         {
-            for (ValueReplay replay : film.replays.replays)
+            for (Replay replay : film.replays.replays)
             {
                 Form form = replay.form.get();
 

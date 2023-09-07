@@ -3,8 +3,8 @@ package mchorse.bbs.ui.film.replays;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.film.Film;
-import mchorse.bbs.film.values.ValueForm;
-import mchorse.bbs.film.values.ValueReplay;
+import mchorse.bbs.settings.values.ValueForm;
+import mchorse.bbs.film.replays.Replay;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
@@ -29,11 +29,11 @@ import java.util.function.Consumer;
  * This GUI is responsible for drawing replays available in the 
  * director thing
  */
-public class UIReplayList extends UIList<ValueReplay>
+public class UIReplayList extends UIList<Replay>
 {
     public UIFilmPanel panel;
 
-    public UIReplayList(Consumer<List<ValueReplay>> callback, UIFilmPanel panel)
+    public UIReplayList(Consumer<List<Replay>> callback, UIFilmPanel panel)
     {
         super(callback);
 
@@ -80,7 +80,7 @@ public class UIReplayList extends UIList<ValueReplay>
     private void addReplay()
     {
         Film film = this.panel.getData();
-        ValueReplay replay = film.replays.add();
+        Replay replay = film.replays.add();
         World world = this.getContext().menu.bridge.get(IBridgeWorld.class).getWorld();
         RayTraceResult result = new RayTraceResult();
         Camera camera = this.panel.getCamera();
@@ -130,9 +130,9 @@ public class UIReplayList extends UIList<ValueReplay>
             return;
         }
 
-        ValueReplay currentFirst = this.getCurrentFirst();
+        Replay currentFirst = this.getCurrentFirst();
         Film film = this.panel.getData();
-        ValueReplay replay = film.replays.add();
+        Replay replay = film.replays.add();
 
         replay.copy(currentFirst);
 
@@ -175,7 +175,7 @@ public class UIReplayList extends UIList<ValueReplay>
     }
 
     @Override
-    protected String elementToString(UIContext context, int i, ValueReplay element)
+    protected String elementToString(UIContext context, int i, Replay element)
     {
         Form form = element.form.get();
 
@@ -183,7 +183,7 @@ public class UIReplayList extends UIList<ValueReplay>
     }
 
     @Override
-    protected void renderElementPart(UIContext context, ValueReplay element, int i, int x, int y, boolean hover, boolean selected)
+    protected void renderElementPart(UIContext context, Replay element, int i, int x, int y, boolean hover, boolean selected)
     {
         super.renderElementPart(context, element, i, x, y, hover, selected);
 

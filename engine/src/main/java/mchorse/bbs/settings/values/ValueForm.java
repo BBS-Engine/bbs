@@ -1,4 +1,4 @@
-package mchorse.bbs.film.values;
+package mchorse.bbs.settings.values;
 
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.forms.FormUtils;

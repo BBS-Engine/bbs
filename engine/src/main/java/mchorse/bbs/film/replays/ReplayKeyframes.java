@@ -1,4 +1,4 @@
-package mchorse.bbs.film.values;
+package mchorse.bbs.film.replays;
 
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.game.entities.components.PlayerComponent;
@@ -9,7 +9,7 @@ import mchorse.bbs.world.entities.components.BasicComponent;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueKeyframes extends ValueGroup
+public class ReplayKeyframes extends ValueGroup
 {
     public static final String GROUP_POSITION = "position";
     public static final String GROUP_ROTATION = "rotation";
@@ -17,7 +17,7 @@ public class ValueKeyframes extends ValueGroup
     public static final String GROUP_RIGHT_STICK = "rstick";
     public static final String GROUP_TRIGGERS = "triggers";
 
-    public static final List<String> CURATED_CHANNELS = Arrays.asList("x", "y", "z", "pitch", "yaw", "bodyYaw", "sneaking", "stick_lx", "stick_ly", "stick_rx", "stick_ry", "trigger_l", "trigger_r");
+    public static final List<String> CURATED_CHANNELS = Arrays.asList("x", "y", "z", "pitch", "yaw", "bodyYaw", "sneaking", "stick_lx", "stick_ly", "stick_rx", "stick_ry", "trigger_l", "trigger_r", "vX", "vY", "vZ");
 
     public final ValueKeyframeChannel x = new ValueKeyframeChannel("x");
     public final ValueKeyframeChannel y = new ValueKeyframeChannel("y");
@@ -42,7 +42,7 @@ public class ValueKeyframes extends ValueGroup
     public final ValueKeyframeChannel triggerLeft = new ValueKeyframeChannel("trigger_l");
     public final ValueKeyframeChannel triggerRight = new ValueKeyframeChannel("trigger_r");
 
-    public ValueKeyframes(String id)
+    public ReplayKeyframes(String id)
     {
         super(id);
 

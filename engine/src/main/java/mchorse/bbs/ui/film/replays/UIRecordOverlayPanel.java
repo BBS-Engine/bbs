@@ -1,6 +1,6 @@
 package mchorse.bbs.ui.film.replays;
 
-import mchorse.bbs.film.values.ValueKeyframes;
+import mchorse.bbs.film.replays.ReplayKeyframes;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
@@ -32,11 +32,11 @@ public class UIRecordOverlayPanel extends UIMessageOverlayPanel
         this.callback = callback;
 
         this.all = new UIIcon(Icons.SPHERE, (b) -> this.submit(null));
-        this.left = new UIIcon(Icons.LEFT_STICK, (b) -> this.submit(Arrays.asList(ValueKeyframes.GROUP_LEFT_STICK)));
-        this.right = new UIIcon(Icons.RIGHT_STICK, (b) -> this.submit(Arrays.asList(ValueKeyframes.GROUP_RIGHT_STICK)));
-        this.triggers = new UIIcon(Icons.TRIGGER, (b) -> this.submit(Arrays.asList(ValueKeyframes.GROUP_TRIGGERS)));
-        this.position = new UIIcon(Icons.ALL_DIRECTIONS, (b) -> this.submit(Arrays.asList(ValueKeyframes.GROUP_POSITION)));
-        this.rotation = new UIIcon(Icons.REFRESH, (b) -> this.submit(Arrays.asList(ValueKeyframes.GROUP_ROTATION)));
+        this.left = new UIIcon(Icons.LEFT_STICK, (b) -> this.submit(Arrays.asList(ReplayKeyframes.GROUP_LEFT_STICK)));
+        this.right = new UIIcon(Icons.RIGHT_STICK, (b) -> this.submit(Arrays.asList(ReplayKeyframes.GROUP_RIGHT_STICK)));
+        this.triggers = new UIIcon(Icons.TRIGGER, (b) -> this.submit(Arrays.asList(ReplayKeyframes.GROUP_TRIGGERS)));
+        this.position = new UIIcon(Icons.ALL_DIRECTIONS, (b) -> this.submit(Arrays.asList(ReplayKeyframes.GROUP_POSITION)));
+        this.rotation = new UIIcon(Icons.REFRESH, (b) -> this.submit(Arrays.asList(ReplayKeyframes.GROUP_ROTATION)));
 
         this.all.tooltip(IKey.lazy("All groups"));
         this.left.tooltip(IKey.lazy("Left stick"));

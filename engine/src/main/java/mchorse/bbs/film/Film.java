@@ -2,7 +2,7 @@ package mchorse.bbs.film;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.film.tts.ScreenplayReply;
-import mchorse.bbs.film.values.ValueReplays;
+import mchorse.bbs.film.replays.Replays;
 import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.ValueString;
 import mchorse.bbs.utils.clips.Clips;
@@ -19,7 +19,7 @@ public class Film extends ValueGroup
     public static final Pattern METADATA = Pattern.compile("^[\\w\\d_-]+\\:.*$");
 
     public final Clips camera = new Clips("camera", BBS.getFactoryCameraClips());
-    public final ValueReplays replays = new ValueReplays("replays");
+    public final Replays replays = new Replays("replays");
     public final ValueString screenplay = new ValueString("screenplay", "");
 
     public Film()

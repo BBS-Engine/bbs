@@ -1,4 +1,4 @@
-package mchorse.bbs.film.values;
+package mchorse.bbs.film.replays;
 
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
@@ -7,18 +7,18 @@ import mchorse.bbs.settings.values.ValueGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValueReplays extends ValueGroup
+public class Replays extends ValueGroup
 {
-    public final List<ValueReplay> replays = new ArrayList<>();
+    public final List<Replay> replays = new ArrayList<>();
 
-    public ValueReplays(String id)
+    public Replays(String id)
     {
         super(id);
     }
 
-    public ValueReplay add()
+    public Replay add()
     {
-        ValueReplay replay = new ValueReplay(String.valueOf(this.replays.size()));
+        Replay replay = new Replay(String.valueOf(this.replays.size()));
 
         this.replays.add(replay);
         this.add(replay);
@@ -26,7 +26,7 @@ public class ValueReplays extends ValueGroup
         return replay;
     }
 
-    public void remove(ValueReplay replay)
+    public void remove(Replay replay)
     {
         this.replays.remove(replay);
 
@@ -39,7 +39,7 @@ public class ValueReplays extends ValueGroup
 
         int i = 0;
 
-        for (ValueReplay replay : this.replays)
+        for (Replay replay : this.replays)
         {
             replay.setId(String.valueOf(i));
             this.add(replay);

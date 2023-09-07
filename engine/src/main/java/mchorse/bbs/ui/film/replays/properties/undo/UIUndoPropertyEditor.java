@@ -1,7 +1,7 @@
 package mchorse.bbs.ui.film.replays.properties.undo;
 
 import mchorse.bbs.data.types.BaseType;
-import mchorse.bbs.film.values.ValueFormProperty;
+import mchorse.bbs.film.replays.FormProperty;
 import mchorse.bbs.forms.properties.IFormProperty;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
@@ -42,7 +42,7 @@ public class UIUndoPropertyEditor extends UIPropertyEditor
         return new UIMultiUndoProperties(delegate, this);
     }
 
-    public void setChannels(List<ValueFormProperty> properties, List<IFormProperty> property, List<Integer> colors)
+    public void setChannels(List<FormProperty> properties, List<IFormProperty> property, List<Integer> colors)
     {
         List<UIProperty> sheets = this.properties.properties;
 
@@ -53,7 +53,7 @@ public class UIUndoPropertyEditor extends UIPropertyEditor
 
         for (int i = 0; i < properties.size(); i++)
         {
-            ValueFormProperty channel = properties.get(i);
+            FormProperty channel = properties.get(i);
 
             this.valueChannels.add(channel);
             sheets.add(new UIProperty(channel.getId(), IKey.raw(channel.getId()), colors.get(i), channel.get(), property.get(i)));

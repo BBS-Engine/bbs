@@ -1,4 +1,4 @@
-package mchorse.bbs.film.values;
+package mchorse.bbs.film.replays;
 
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
@@ -8,9 +8,9 @@ import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
 import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
 import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 
-public class ValueFormProperty extends BaseValueBasic<GenericKeyframeChannel>
+public class FormProperty extends BaseValueBasic<GenericKeyframeChannel>
 {
-    public ValueFormProperty(String id)
+    public FormProperty(String id)
     {
         super(id);
     }

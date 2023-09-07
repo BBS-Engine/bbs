@@ -2,9 +2,9 @@ package mchorse.bbs.ui.film.replays;
 
 import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.film.Film;
-import mchorse.bbs.film.values.ValueFormProperty;
-import mchorse.bbs.film.values.ValueKeyframes;
-import mchorse.bbs.film.values.ValueReplay;
+import mchorse.bbs.film.replays.FormProperty;
+import mchorse.bbs.film.replays.ReplayKeyframes;
+import mchorse.bbs.film.replays.Replay;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.forms.properties.IFormProperty;
@@ -48,11 +48,11 @@ public class UIReplaysEditor extends UIElement
     /* Clips */
     private UIFilmPanel delegate;
     private Film film;
-    private ValueReplay replay;
+    private Replay replay;
 
     private List<ValueKeyframeChannel> tempKeyframes = new ArrayList<>();
     private List<Integer> tempColors = new ArrayList<>();
-    private List<ValueFormProperty> tempProperties = new ArrayList<>();
+    private List<FormProperty> tempProperties = new ArrayList<>();
     private List<IFormProperty> tempFormProperties = new ArrayList<>();
 
     static
@@ -210,7 +210,7 @@ public class UIReplaysEditor extends UIElement
             }
             else
             {
-                ValueFormProperty property = this.replay.properties.getOrCreate(this.replay.form.get(), key);
+                FormProperty property = this.replay.properties.getOrCreate(this.replay.form.get(), key);
 
                 if (property != null)
                 {
@@ -236,7 +236,7 @@ public class UIReplaysEditor extends UIElement
         }
     }
 
-    public void setReplay(ValueReplay replay)
+    public void setReplay(Replay replay)
     {
         this.replay = replay;
 
@@ -252,7 +252,7 @@ public class UIReplaysEditor extends UIElement
 
         if (this.replay != null)
         {
-            for (String key : ValueKeyframes.CURATED_CHANNELS)
+            for (String key : ReplayKeyframes.CURATED_CHANNELS)
             {
                 this.channels.add(key);
             }

@@ -10,8 +10,8 @@ import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.core.input.MouseInput;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.film.Film;
-import mchorse.bbs.film.values.ValueKeyframes;
-import mchorse.bbs.film.values.ValueReplay;
+import mchorse.bbs.film.replays.ReplayKeyframes;
+import mchorse.bbs.film.replays.Replay;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.game.entities.components.PlayerComponent;
@@ -93,7 +93,7 @@ public class UIFilmController extends UIElement
         return this.panel.getRunner().ticks;
     }
 
-    private ValueReplay getReplay()
+    private Replay getReplay()
     {
         return this.panel.replays.replays.getCurrentFirst();
     }
@@ -143,7 +143,7 @@ public class UIFilmController extends UIElement
 
         if (context != null && film != null)
         {
-            for (ValueReplay replay : film.replays.replays)
+            for (Replay replay : film.replays.replays)
             {
                 World world = context.menu.bridge.get(IBridgeWorld.class).getWorld();
                 Entity entity = world.architect.create(Link.bbs("player"));
@@ -202,15 +202,15 @@ public class UIFilmController extends UIElement
 
         if (groups != null)
         {
-            if (groups.contains(ValueKeyframes.GROUP_LEFT_STICK))
+            if (groups.contains(ReplayKeyframes.GROUP_LEFT_STICK))
             {
                 this.setMouseMode(1);
             }
-            else if (groups.contains(ValueKeyframes.GROUP_RIGHT_STICK))
+            else if (groups.contains(ReplayKeyframes.GROUP_RIGHT_STICK))
             {
                 this.setMouseMode(2);
             }
-            else if (groups.contains(ValueKeyframes.GROUP_TRIGGERS))
+            else if (groups.contains(ReplayKeyframes.GROUP_TRIGGERS))
             {
                 this.setMouseMode(3);
             }
@@ -246,7 +246,7 @@ public class UIFilmController extends UIElement
             return;
         }
 
-        ValueReplay replay = this.getReplay();
+        Replay replay = this.getReplay();
 
         if (replay != null && this.recordingOld != null)
         {
@@ -444,7 +444,7 @@ public class UIFilmController extends UIElement
             IKey.lazy("Pick a keyframe group that you want to insert:"),
             (groups) ->
             {
-                ValueReplay replay = this.getReplay();
+                Replay replay = this.getReplay();
 
                 if (replay != null)
                 {
@@ -521,7 +521,7 @@ public class UIFilmController extends UIElement
 
             if (CollectionUtils.inRange(film.replays.replays, i))
             {
-                ValueReplay replay = film.replays.replays.get(i);
+                Replay replay = film.replays.replays.get(i);
                 int ticks = runner.ticks;
 
                 if (entity != this.controlled || (this.recording && this.recordingCountdown <= 0 && this.recordingGroups != null))

@@ -1,4 +1,4 @@
-package mchorse.bbs.film.values;
+package mchorse.bbs.film.replays;
 
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
@@ -12,22 +12,22 @@ import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ValueFormProperties extends ValueGroup
+public class FormProperties extends ValueGroup
 {
-    public final Map<String, ValueFormProperty> properties = new HashMap<>();
+    public final Map<String, FormProperty> properties = new HashMap<>();
 
-    public ValueFormProperties(String id)
+    public FormProperties(String id)
     {
         super(id);
     }
 
-    public ValueFormProperty getOrCreate(Form form, String key)
+    public FormProperty getOrCreate(Form form, String key)
     {
         BaseValue value = this.get(key);
 
-        if (value instanceof ValueFormProperty)
+        if (value instanceof FormProperty)
         {
-            return (ValueFormProperty) value;
+            return (FormProperty) value;
         }
 
         IFormProperty property = FormUtils.getProperty(form, key);
@@ -35,13 +35,13 @@ public class ValueFormProperties extends ValueGroup
         return property != null ? this.create(property) : null;
     }
 
-    public ValueFormProperty create(IFormProperty property)
+    public FormProperty create(IFormProperty property)
     {
         if (property.canCreateChannel())
         {
             GenericKeyframeChannel channel = property.createChannel();
             String key = FormUtils.getPropertyPath(property);
-            ValueFormProperty valueFormProperty = new ValueFormProperty(key);
+            FormProperty valueFormProperty = new FormProperty(key);
 
             valueFormProperty.set(channel);
             this.properties.put(key, valueFormProperty);
@@ -76,7 +76,7 @@ public class ValueFormProperties extends ValueGroup
                 continue;
             }
 
-            ValueFormProperty property = new ValueFormProperty(key);
+            FormProperty property = new FormProperty(key);
 
             property.fromData(mapType);
 
