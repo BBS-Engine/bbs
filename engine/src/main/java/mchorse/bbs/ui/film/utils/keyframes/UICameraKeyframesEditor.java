@@ -1,7 +1,5 @@
 package mchorse.bbs.ui.film.utils.keyframes;
 
-import mchorse.bbs.camera.values.ValueKeyframeChannel;
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.utils.CameraAxisConverter;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframes;
@@ -22,11 +20,6 @@ public abstract class UICameraKeyframesEditor <E extends UIKeyframes> extends UI
         super();
 
         this.editor = editor;
-    }
-
-    protected ValueKeyframeChannel get(BaseValue value)
-    {
-        return value instanceof ValueKeyframeChannel ? (ValueKeyframeChannel) value : null;
     }
 
     public void updateConverter()

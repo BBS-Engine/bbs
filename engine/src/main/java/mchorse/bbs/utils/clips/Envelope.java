@@ -2,10 +2,10 @@ package mchorse.bbs.utils.clips;
 
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.values.ValueInterpolation;
-import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueFloat;
 import mchorse.bbs.settings.values.ValueGroup;
+import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.Interpolations;
 import mchorse.bbs.utils.math.MathUtils;
 
@@ -19,7 +19,7 @@ public class Envelope extends ValueGroup
     public final ValueInterpolation interpolation = new ValueInterpolation("interpolation");
 
     public final ValueBoolean keyframes = new ValueBoolean("keyframes");
-    public final ValueKeyframeChannel channel = new ValueKeyframeChannel("channel");
+    public final KeyframeChannel channel = new KeyframeChannel("channel");
 
     public Envelope(String id)
     {
@@ -32,8 +32,8 @@ public class Envelope extends ValueGroup
         this.add(this.keyframes);
         this.add(this.channel);
 
-        this.channel.get().insert(0, 0);
-        this.channel.get().insert(BBSSettings.getDefaultDuration(), 1);
+        this.channel.insert(0, 0);
+        this.channel.insert(BBSSettings.getDefaultDuration(), 1);
     }
 
     public float getStartX(int duration)
@@ -72,9 +72,9 @@ public class Envelope extends ValueGroup
 
         if (this.keyframes.get())
         {
-            if (!this.channel.get().isEmpty())
+            if (!this.channel.isEmpty())
             {
-                envelope = MathUtils.clamp((float) this.channel.get().interpolate(tick), 0, 1);
+                envelope = MathUtils.clamp((float) this.channel.interpolate(tick), 0, 1);
             }
         }
         else
@@ -91,6 +91,6 @@ public class Envelope extends ValueGroup
         this.fadeIn.set(0F);
         original.envelope.fadeOut.set(0F);
 
-        this.channel.get().moveX(-offset);
+        this.channel.moveX(-offset);
     }
 }

@@ -85,6 +85,14 @@ public class ValueGroup extends BaseValue
         return current.getPath().equals(name) ? current : null;
     }
 
+    public void copy(ValueGroup group)
+    {
+        for (Map.Entry<String, BaseValue> entry : group.children.entrySet())
+        {
+            this.children.get(entry.getKey()).copy(entry.getValue());
+        }
+    }
+
     @Override
     public BaseType toData()
     {
@@ -115,14 +123,6 @@ public class ValueGroup extends BaseValue
                 value.setParent(this);
                 value.fromData(entry.getValue());
             }
-        }
-    }
-
-    public void copy(ValueGroup group)
-    {
-        for (Map.Entry<String, BaseValue> entry : group.children.entrySet())
-        {
-            this.children.get(entry.getKey()).copy(entry.getValue());
         }
     }
 }

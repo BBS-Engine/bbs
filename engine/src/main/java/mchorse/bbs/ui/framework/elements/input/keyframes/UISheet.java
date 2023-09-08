@@ -1,6 +1,7 @@
 package mchorse.bbs.ui.framework.elements.input.keyframes;
 
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.utils.keyframes.Keyframe;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.keyframes.KeyframeEasing;
@@ -144,53 +145,59 @@ public class UISheet
 
         this.clearSelection();
 
-        for (int index : sorted)
+        BaseValue.edit(this.channel, (channel) ->
         {
-            this.channel.remove(index);
-        }
+            for (int index : sorted)
+            {
+                channel.remove(index);
+            }
+        });
 
         this.clearSelection();
     }
 
     public void duplicate(long tick)
     {
-        List<Keyframe> selected = new ArrayList<>();
-        List<Keyframe> created = new ArrayList<>();
-
-        long minTick = Integer.MAX_VALUE;
-
-        for (int index : this.selected)
+        BaseValue.edit(this.channel, (channel) ->
         {
-            Keyframe keyframe = this.channel.get(index);
+            List<Keyframe> selected = new ArrayList<>();
+            List<Keyframe> created = new ArrayList<>();
 
-            if (keyframe != null)
+            long minTick = Integer.MAX_VALUE;
+
+            for (int index : this.selected)
             {
-                selected.add(keyframe);
-                minTick = Math.min(keyframe.tick, minTick);
+                Keyframe keyframe = channel.get(index);
+
+                if (keyframe != null)
+                {
+                    selected.add(keyframe);
+                    minTick = Math.min(keyframe.getTick(), minTick);
+                }
             }
-        }
 
-        selected.sort(Comparator.comparingLong(a -> a.tick));
+            selected.sort(Comparator.comparingLong(a -> a.getTick()));
 
-        long diff = tick - minTick;
+            long diff = tick - minTick;
 
-        for (Keyframe keyframe : selected)
-        {
-            long fin = keyframe.tick + diff;
-            int index = this.channel.insert(fin, keyframe.value);
-            Keyframe current = this.channel.get(index);
+            for (Keyframe keyframe : selected)
+            {
+                long fin = keyframe.getTick() + diff;
+                int index = channel.insert(fin, keyframe.getValue());
+                Keyframe current = channel.get(index);
 
-            current.copy(keyframe);
-            current.tick = fin;
-            created.add(current);
-        }
+                current.copy(keyframe);
+                current.setTick(fin);
+                created.add(current);
+            }
 
-        this.clearSelection();
+            this.clearSelection();
 
-        for (Keyframe keyframe : created)
-        {
-            this.selected.add(this.channel.getKeyframes().indexOf(keyframe));
-        }
+            for (Keyframe keyframe : created)
+            {
+                this.selected.add(channel.getKeyframes().indexOf(keyframe));
+            }
+        });
     }
 
     public void selectAll()

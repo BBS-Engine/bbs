@@ -464,22 +464,22 @@ public class UIClips extends UIElement
                 {
                     KeyframeClip clip = new KeyframeClip();
 
-                    clip.fov.get().insert(0, 50);
+                    clip.fov.insert(0, 50);
 
-                    clip.x.get().copy(replay.keyframes.x.get());
-                    clip.y.get().copy(replay.keyframes.y.get());
-                    clip.z.get().copy(replay.keyframes.z.get());
+                    clip.x.copy(replay.keyframes.x);
+                    clip.y.copy(replay.keyframes.y);
+                    clip.z.copy(replay.keyframes.z);
 
-                    this.copyKeyframes(clip.yaw.get(), replay.keyframes.yaw.get());
-                    this.copyKeyframes(clip.pitch.get(), replay.keyframes.pitch.get());
+                    this.copyKeyframes(clip.yaw, replay.keyframes.yaw);
+                    this.copyKeyframes(clip.pitch, replay.keyframes.pitch);
 
                     int size = Math.max(
-                        clip.x.get().getLength(),
+                        clip.x.getLength(),
                         Math.max(
-                            clip.y.get().getLength(),
+                            clip.y.getLength(),
                             Math.max(
-                                clip.z.get().getLength(),
-                                Math.max(clip.yaw.get().getLength(), clip.pitch.get().getLength())
+                                clip.z.getLength(),
+                                Math.max(clip.yaw.getLength(), clip.pitch.getLength())
                             )
                         )
                     );
@@ -496,12 +496,14 @@ public class UIClips extends UIElement
         {
             Keyframe copy = keyframe.copy();
 
-            copy.value = Math.toDegrees(copy.value);
-            copy.ly = MathUtils.toDeg(copy.ly);
-            copy.ry = MathUtils.toDeg(copy.ry);
+            copy.setValue(Math.toDegrees(copy.getValue()));
+            copy.setLy(MathUtils.toDeg(copy.getLy()));
+            copy.setRy(MathUtils.toDeg(copy.getRy()));
 
             a.getKeyframes().add(copy);
         }
+
+        a.sort();
     }
 
     /**

@@ -35,13 +35,13 @@ public enum Selection
         @Override
         public double getX(Keyframe keyframe)
         {
-            return keyframe.tick;
+            return keyframe.getTick();
         }
 
         @Override
         public double getY(Keyframe keyframe)
         {
-            return keyframe.value;
+            return keyframe.getValue();
         }
 
         @Override
@@ -61,34 +61,34 @@ public enum Selection
         @Override
         public double getX(Keyframe keyframe)
         {
-            return keyframe.lx;
+            return keyframe.getLx();
         }
 
         @Override
         public double getY(Keyframe keyframe)
         {
-            return keyframe.ly;
+            return keyframe.getLy();
         }
 
         @Override
         public void setX(Keyframe keyframe, double x, boolean opposite)
         {
-            keyframe.lx = (float) x;
+            keyframe.setLx((float) x);
 
             if (opposite)
             {
-                keyframe.rx = keyframe.lx;
+                keyframe.setRx(keyframe.getLx());
             }
         }
 
         @Override
         public void setY(Keyframe keyframe, double y, boolean opposite)
         {
-            keyframe.ly = (float) y;
+            keyframe.setLy((float) y);
 
             if (opposite)
             {
-                keyframe.ry = -keyframe.ly;
+                keyframe.setRy(-keyframe.getLy());
             }
         }
     },
@@ -97,34 +97,34 @@ public enum Selection
         @Override
         public double getX(Keyframe keyframe)
         {
-            return keyframe.rx;
+            return keyframe.getRx();
         }
 
         @Override
         public double getY(Keyframe keyframe)
         {
-            return keyframe.ry;
+            return keyframe.getRy();
         }
 
         @Override
         public void setX(Keyframe keyframe, double x, boolean opposite)
         {
-            keyframe.rx = (float) x;
+            keyframe.setRx((float) x);
 
             if (opposite)
             {
-                keyframe.lx = keyframe.rx;
+                keyframe.setLx(keyframe.getRx());
             }
         }
 
         @Override
         public void setY(Keyframe keyframe, double y, boolean opposite)
         {
-            keyframe.ry = (float) y;
+            keyframe.setRy((float) y);
 
             if (opposite)
             {
-                keyframe.ly = -keyframe.ry;
+                keyframe.setLy(-keyframe.getRy());
             }
         }
     };

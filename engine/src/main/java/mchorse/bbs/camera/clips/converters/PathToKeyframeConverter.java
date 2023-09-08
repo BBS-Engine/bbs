@@ -35,21 +35,21 @@ public class PathToKeyframeConverter implements IClipConverter<PathClip, Keyfram
 
             x = (int) (i / (c - 1F) * duration);
 
-            int index = keyframe.x.get().insert(x, (float) point.point.x);
-            keyframe.y.get().insert(x, (float) point.point.y);
-            keyframe.z.get().insert(x, (float) point.point.z);
-            keyframe.yaw.get().insert(x, point.angle.yaw);
-            keyframe.pitch.get().insert(x, point.angle.pitch);
-            keyframe.roll.get().insert(x, point.angle.roll);
-            keyframe.fov.get().insert(x, point.angle.fov);
+            int index = keyframe.x.insert(x, (float) point.point.x);
+            keyframe.y.insert(x, (float) point.point.y);
+            keyframe.z.insert(x, (float) point.point.z);
+            keyframe.yaw.insert(x, point.angle.yaw);
+            keyframe.pitch.insert(x, point.angle.pitch);
+            keyframe.roll.insert(x, point.angle.roll);
+            keyframe.fov.insert(x, point.angle.fov);
 
-            keyframe.x.get().get(index).setInterpolation(pos, posEasing);
-            keyframe.y.get().get(index).setInterpolation(pos, posEasing);
-            keyframe.z.get().get(index).setInterpolation(pos, posEasing);
-            keyframe.yaw.get().get(index).setInterpolation(angle, angleEasing);
-            keyframe.pitch.get().get(index).setInterpolation(angle, angleEasing);
-            keyframe.roll.get().get(index).setInterpolation(angle, angleEasing);
-            keyframe.fov.get().get(index).setInterpolation(angle, angleEasing);
+            keyframe.x.get(index).setInterpolation(pos, posEasing);
+            keyframe.y.get(index).setInterpolation(pos, posEasing);
+            keyframe.z.get(index).setInterpolation(pos, posEasing);
+            keyframe.yaw.get(index).setInterpolation(angle, angleEasing);
+            keyframe.pitch.get(index).setInterpolation(angle, angleEasing);
+            keyframe.roll.get(index).setInterpolation(angle, angleEasing);
+            keyframe.fov.get(index).setInterpolation(angle, angleEasing);
         }
 
         return keyframe;

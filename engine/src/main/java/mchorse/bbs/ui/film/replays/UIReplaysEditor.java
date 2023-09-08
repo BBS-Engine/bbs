@@ -1,6 +1,5 @@
 package mchorse.bbs.ui.film.replays;
 
-import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.replays.FormProperty;
 import mchorse.bbs.film.replays.Replay;
@@ -26,6 +25,7 @@ import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.StringUtils;
 import mchorse.bbs.utils.colors.Colors;
+import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class UIReplaysEditor extends UIElement
     private Film film;
     private Replay replay;
 
-    private List<ValueKeyframeChannel> tempKeyframes = new ArrayList<>();
+    private List<KeyframeChannel> tempKeyframes = new ArrayList<>();
     private List<Integer> tempColors = new ArrayList<>();
     private List<FormProperty> tempProperties = new ArrayList<>();
     private List<IFormProperty> tempFormProperties = new ArrayList<>();
@@ -203,9 +203,9 @@ public class UIReplaysEditor extends UIElement
         {
             BaseValue value = this.replay.keyframes.get(key);
 
-            if (value instanceof ValueKeyframeChannel)
+            if (value instanceof KeyframeChannel)
             {
-                this.tempKeyframes.add((ValueKeyframeChannel) value);
+                this.tempKeyframes.add((KeyframeChannel) value);
                 this.tempColors.add(COLORS.getOrDefault(key, Colors.ACTIVE));
             }
             else

@@ -1,6 +1,7 @@
 package mchorse.bbs.settings.values;
 
 import mchorse.bbs.data.types.BaseType;
+import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.settings.values.base.BaseValue;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public abstract class ValueList <T extends BaseValue> extends ValueGroup
 {
-    protected List<T> list = new ArrayList<T>();
+    protected final List<T> list = new ArrayList<T>();
 
     public ValueList(String id)
     {
@@ -23,7 +24,7 @@ public abstract class ValueList <T extends BaseValue> extends ValueGroup
 
     protected abstract T create(String id);
 
-    protected void sync()
+    public void sync()
     {
         this.removeAll();
 
@@ -39,18 +40,50 @@ public abstract class ValueList <T extends BaseValue> extends ValueGroup
     }
 
     @Override
-    public void fromData(BaseType data)
+    public BaseType toData()
     {
-        this.removeAll();
+        ListType list = new ListType();
 
-        for (String key : data.asMap().keys())
+        for (T value : this.list)
         {
-            T value = this.create(key);
-
-            this.list.add(value);
-            this.add(value);
+            list.add(value.toData());
         }
 
-        super.fromData(data);
+        return list;
+    }
+
+    @Override
+    public void fromData(BaseType data)
+    {
+        this.list.clear();
+        this.removeAll();
+
+        if (data.isMap())
+        {
+            /* Backward compatibility with maps */
+            for (String key : data.asMap().keys())
+            {
+                T value = this.create(key);
+
+                this.list.add(value);
+                this.add(value);
+            }
+
+            super.fromData(data);
+        }
+        else if (data.isList())
+        {
+            ListType list = data.asList();
+
+            for (int i = 0; i < list.size(); i++)
+            {
+                T value = this.create(String.valueOf(i));
+
+                this.list.add(value);
+                this.add(value);
+
+                value.fromData(list.get(i));
+            }
+        }
     }
 }

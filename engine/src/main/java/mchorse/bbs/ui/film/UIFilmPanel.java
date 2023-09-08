@@ -60,6 +60,7 @@ import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -435,6 +436,31 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
             return;
         }
 
+        Iterator<BaseValue> it = this.cachedUndo.keySet().iterator();
+
+        while (it.hasNext())
+        {
+            BaseValue value = it.next().getParent();
+            boolean remove = false;
+
+            while (value != null)
+            {
+                if (this.cachedUndo.containsKey(value))
+                {
+                    remove = true;
+
+                    break;
+                }
+
+                value = value.getParent();
+            }
+
+            if (remove)
+            {
+                it.remove();
+            }
+        }
+
         List<ValueChangeUndo> changeUndos = new ArrayList<>();
 
         for (Map.Entry<BaseValue, BaseType> entry : this.cachedUndo.entrySet())
@@ -457,8 +483,6 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         }
 
         this.cachedUndo.clear();
-
-        System.out.println("Hello");
     }
 
     private void handleUndos(IUndo<ValueGroup> undo, boolean redo)

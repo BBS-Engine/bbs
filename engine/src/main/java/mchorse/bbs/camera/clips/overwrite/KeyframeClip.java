@@ -2,10 +2,10 @@ package mchorse.bbs.camera.clips.overwrite;
 
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.CameraClip;
+import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.clips.ClipContext;
-import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.camera.values.ValueKeyframeChannel;
+import mchorse.bbs.utils.keyframes.KeyframeChannel;
 
 /**
  * Keyframe fixture
@@ -15,23 +15,23 @@ import mchorse.bbs.camera.values.ValueKeyframeChannel;
  */
 public class KeyframeClip extends CameraClip
 {
-    public final ValueKeyframeChannel x = new ValueKeyframeChannel("x");
-    public final ValueKeyframeChannel y = new ValueKeyframeChannel("y");
-    public final ValueKeyframeChannel z = new ValueKeyframeChannel("z");
-    public final ValueKeyframeChannel yaw = new ValueKeyframeChannel("yaw");
-    public final ValueKeyframeChannel pitch = new ValueKeyframeChannel("pitch");
-    public final ValueKeyframeChannel roll = new ValueKeyframeChannel("roll");
-    public final ValueKeyframeChannel fov = new ValueKeyframeChannel("fov");
+    public final KeyframeChannel x = new KeyframeChannel("x");
+    public final KeyframeChannel y = new KeyframeChannel("y");
+    public final KeyframeChannel z = new KeyframeChannel("z");
+    public final KeyframeChannel yaw = new KeyframeChannel("yaw");
+    public final KeyframeChannel pitch = new KeyframeChannel("pitch");
+    public final KeyframeChannel roll = new KeyframeChannel("roll");
+    public final KeyframeChannel fov = new KeyframeChannel("fov");
 
-    public ValueKeyframeChannel[] channels;
+    public KeyframeChannel[] channels;
 
     public KeyframeClip()
     {
         super();
 
-        this.channels = new ValueKeyframeChannel[] {this.x, this.y, this.z, this.yaw, this.pitch, this.roll, this.fov};
+        this.channels = new KeyframeChannel[] {this.x, this.y, this.z, this.yaw, this.pitch, this.roll, this.fov};
 
-        for (ValueKeyframeChannel channel : this.channels)
+        for (KeyframeChannel channel : this.channels)
         {
             this.add(channel);
         }
@@ -42,13 +42,13 @@ public class KeyframeClip extends CameraClip
     {
         Position pos = new Position(camera);
 
-        this.x.get().insert(0, pos.point.x);
-        this.y.get().insert(0, pos.point.y);
-        this.z.get().insert(0, pos.point.z);
-        this.yaw.get().insert(0, pos.angle.yaw);
-        this.pitch.get().insert(0, pos.angle.pitch);
-        this.roll.get().insert(0, pos.angle.roll);
-        this.fov.get().insert(0, pos.angle.fov);
+        this.x.insert(0, pos.point.x);
+        this.y.insert(0, pos.point.y);
+        this.z.insert(0, pos.point.z);
+        this.yaw.insert(0, pos.angle.yaw);
+        this.pitch.insert(0, pos.angle.pitch);
+        this.roll.insert(0, pos.angle.roll);
+        this.fov.insert(0, pos.angle.fov);
     }
 
     @Override
@@ -56,13 +56,13 @@ public class KeyframeClip extends CameraClip
     {
         float t = context.relativeTick + context.transition;
 
-        if (!this.x.get().isEmpty()) position.point.x = this.x.get().interpolate(t);
-        if (!this.y.get().isEmpty()) position.point.y = this.y.get().interpolate(t);
-        if (!this.z.get().isEmpty()) position.point.z = this.z.get().interpolate(t);
-        if (!this.yaw.get().isEmpty()) position.angle.yaw = (float) this.yaw.get().interpolate(t);
-        if (!this.pitch.get().isEmpty()) position.angle.pitch = (float) this.pitch.get().interpolate(t);
-        if (!this.roll.get().isEmpty()) position.angle.roll = (float) this.roll.get().interpolate(t);
-        if (!this.fov.get().isEmpty()) position.angle.fov = (float) this.fov.get().interpolate(t);
+        if (!this.x.isEmpty()) position.point.x = this.x.interpolate(t);
+        if (!this.y.isEmpty()) position.point.y = this.y.interpolate(t);
+        if (!this.z.isEmpty()) position.point.z = this.z.interpolate(t);
+        if (!this.yaw.isEmpty()) position.angle.yaw = (float) this.yaw.interpolate(t);
+        if (!this.pitch.isEmpty()) position.angle.pitch = (float) this.pitch.interpolate(t);
+        if (!this.roll.isEmpty()) position.angle.roll = (float) this.roll.interpolate(t);
+        if (!this.fov.isEmpty()) position.angle.fov = (float) this.fov.interpolate(t);
     }
 
     @Override
@@ -76,9 +76,9 @@ public class KeyframeClip extends CameraClip
     {
         super.breakDownClip(original, offset);
 
-        for (ValueKeyframeChannel channel : this.channels)
+        for (KeyframeChannel channel : this.channels)
         {
-            channel.get().moveX(-offset);
+            channel.moveX(-offset);
         }
     }
 }

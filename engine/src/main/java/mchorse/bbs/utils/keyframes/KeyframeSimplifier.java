@@ -30,8 +30,8 @@ public class KeyframeSimplifier
             Keyframe first = keyframes.get(0);
             Keyframe last = keyframes.get(keyframes.size() - 1);
 
-            newChannel.insert(first.tick, first.value);
-            newChannel.insert(last.tick, last.value);
+            newChannel.insert(first.getTick(), first.getValue());
+            newChannel.insert(last.getTick(), last.getValue());
         }
 
         return newChannel;
@@ -49,16 +49,17 @@ public class KeyframeSimplifier
         {
             Pair<Keyframe, Keyframe> pair = fitKeyframes(keyframes, 100);
 
-            int a = newChannel.insert(pair.a.tick, pair.a.value);
-            int b = newChannel.insert(pair.b.tick, pair.b.value);
+            int a = newChannel.insert(pair.a.getTick(), pair.a.getValue());
+            int b = newChannel.insert(pair.b.getTick(), pair.b.getValue());
             Keyframe left = newChannel.get(a);
             Keyframe right = newChannel.get(b);
 
-            left.interp = right.interp = KeyframeInterpolation.BEZIER;
-            left.rx = pair.a.rx;
-            left.ry = pair.a.ry;
-            right.lx = pair.b.lx;
-            right.ly = pair.b.ly;
+            left.setInterpolation(KeyframeInterpolation.BEZIER);
+            right.setInterpolation(KeyframeInterpolation.BEZIER);
+            left.setRx(pair.a.getRx());
+            left.setRy(pair.a.getRy());
+            right.setLx(pair.b.getLx());
+            right.setLy(pair.b.getLy());
         }
 
         return newChannel;
@@ -71,25 +72,26 @@ public class KeyframeSimplifier
     private static Pair<Keyframe, Keyframe> fitKeyframes(List<Keyframe> keyframes, int iterations)
     {
         KeyframeChannel channel = new KeyframeChannel();
-        Keyframe left = new Keyframe();
-        Keyframe right = new Keyframe();
+        Keyframe left = new Keyframe("");
+        Keyframe right = new Keyframe("");
 
         channel.getKeyframes().addAll(keyframes);
         channel.sort();
 
         left.copy(keyframes.get(0));
         right.copy(keyframes.get(keyframes.size() - 1));
-        left.interp = right.interp = KeyframeInterpolation.BEZIER;
-        left.rx = 5;
-        left.ry = 0;
-        right.lx = 5;
-        right.ly = 0;
+        left.setInterpolation(KeyframeInterpolation.BEZIER);
+        right.setInterpolation(KeyframeInterpolation.BEZIER);
+        left.setRx(5);
+        left.setRy(0);
+        right.setLx(5);
+        right.setLy(0);
 
         double score = Double.MAX_VALUE;
         double speed = 1D;
 
-        Keyframe leftTmp = new Keyframe();
-        Keyframe rightTmp = new Keyframe();
+        Keyframe leftTmp = new Keyframe("");
+        Keyframe rightTmp = new Keyframe("");
 
         /* Brute force find the control point that fit the keyframes */
         for (; iterations > 0; iterations--)
@@ -98,39 +100,39 @@ public class KeyframeSimplifier
             rightTmp.copy(right);
 
             double newScore = score;
-            float rx = left.rx;
-            float ry = left.ry;
-            float lx = rightTmp.lx;
-            float ly = rightTmp.ly;
+            float rx = left.getRx();
+            float ry = left.getRy();
+            float lx = rightTmp.getLx();
+            float ly = rightTmp.getLy();
 
             for (Vector2d d1 : directions)
             {
                 for (Vector2d d2 : directions)
                 {
-                    leftTmp.rx = (float) (left.rx + d1.x * speed);
-                    leftTmp.ry = (float) (left.ry + d1.y * speed);
-                    rightTmp.lx = (float) (right.lx + d2.x * speed);
-                    rightTmp.ly = (float) (right.ly + d2.y * speed);
+                    leftTmp.setRx((float) (left.getRx() + d1.x * speed));
+                    leftTmp.setRy((float) (left.getRy() + d1.y * speed));
+                    rightTmp.setLx((float) (right.getLx() + d2.x * speed));
+                    rightTmp.setLy((float) (right.getLy() + d2.y * speed));
 
                     double currentScore = getScore(channel, leftTmp, rightTmp);
 
                     if (currentScore < newScore)
                     {
                         newScore = currentScore;
-                        rx = leftTmp.rx;
-                        ry = leftTmp.ry;
-                        lx = rightTmp.lx;
-                        ly = rightTmp.ly;
+                        rx = leftTmp.getRx();
+                        ry = leftTmp.getRy();
+                        lx = rightTmp.getLx();
+                        ly = rightTmp.getLy();
                     }
                 }
             }
 
             if (newScore < score)
             {
-                left.rx = rx;
-                left.ry = ry;
-                right.lx = lx;
-                right.ly = ly;
+                left.setRx(rx);
+                left.setRy(ry);
+                right.setLx(lx);
+                right.setLy(ly);
                 score = newScore;
             }
             else
@@ -160,8 +162,8 @@ public class KeyframeSimplifier
 
         for (int i = 0; i < 10; i++)
         {
-            float tick = Interpolations.lerp(left.tick, right.tick, i / 10F);
-            double value = left.interpolate(right, (tick - left.tick) / (double) (right.tick - left.tick));
+            float tick = Interpolations.lerp(left.getTick(), right.getTick(), i / 10F);
+            double value = left.interpolate(right, (tick - left.getTick()) / (double) (right.getTick() - left.getTick()));
             double channelValue = channel.interpolate(tick);
 
             score += Math.abs(channelValue - value);
@@ -201,7 +203,7 @@ public class KeyframeSimplifier
             if (!segment.isEmpty())
             {
                 Keyframe lastPoint = segment.get(segment.size() - 1);
-                double newDirection = Math.copySign(1D, lastPoint.value - point.value);
+                double newDirection = Math.copySign(1D, lastPoint.getValue() - point.getValue());
 
                 if (Math.abs(direction - newDirection) > 1)
                 {

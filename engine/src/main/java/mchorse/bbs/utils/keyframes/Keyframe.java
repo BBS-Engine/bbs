@@ -1,62 +1,161 @@
 package mchorse.bbs.utils.keyframes;
 
-import mchorse.bbs.data.IMapSerializable;
+import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.settings.values.base.BaseValue;
 
-public class Keyframe implements IMapSerializable
+public class Keyframe extends BaseValue
 {
     public Keyframe prev;
     public Keyframe next;
 
-    public long tick;
-    public double value;
+    private long tick;
+    private double value;
 
-    public KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
-    public KeyframeEasing easing = KeyframeEasing.IN;
+    private KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
+    private KeyframeEasing easing = KeyframeEasing.IN;
 
-    public float rx = 5;
-    public float ry;
-    public float lx = 5;
-    public float ly;
+    private float rx = 5;
+    private float ry;
+    private float lx = 5;
+    private float ly;
 
-    public Keyframe(long tick, double value)
+    public Keyframe(String id, long tick, double value)
     {
-        this();
+        this(id);
 
         this.tick = tick;
         this.value = value;
     }
 
-    public Keyframe()
+    public Keyframe(String id)
     {
+        super(id);
+
         this.prev = this;
         this.next = this;
     }
 
+    public long getTick()
+    {
+        return this.tick;
+    }
+
     public void setTick(long tick)
     {
+        this.preNotifyParent();
+
         this.tick = tick;
+
+        this.postNotifyParent();
+    }
+
+    public double getValue()
+    {
+        return this.value;
     }
 
     public void setValue(double value)
     {
+        this.preNotifyParent();
+
         this.value = value;
+
+        this.postNotifyParent();
+    }
+
+    public KeyframeInterpolation getInterpolation()
+    {
+        return this.interp;
     }
 
     public void setInterpolation(KeyframeInterpolation interp)
     {
+        this.preNotifyParent();
+
         this.interp = interp;
+
+        this.postNotifyParent();
     }
 
     public void setInterpolation(KeyframeInterpolation interp, KeyframeEasing easing)
     {
+        this.preNotifyParent();
+
         this.interp = interp;
-        this.setEasing(easing);
+        this.easing = easing;
+
+        this.postNotifyParent();
+    }
+
+    public KeyframeEasing getEasing()
+    {
+        return this.easing;
     }
 
     public void setEasing(KeyframeEasing easing)
     {
+        this.preNotifyParent();
+
         this.easing = easing;
+
+        this.postNotifyParent();
+    }
+
+    public float getRx()
+    {
+        return this.rx;
+    }
+
+    public void setRx(float rx)
+    {
+        this.preNotifyParent();
+
+        this.rx = rx;
+
+        this.postNotifyParent();
+    }
+
+    public float getRy()
+    {
+        return this.ry;
+    }
+
+    public void setRy(float ry)
+    {
+        this.preNotifyParent();
+
+        this.ry = ry;
+
+        this.postNotifyParent();
+    }
+
+    public float getLx()
+    {
+        return this.lx;
+    }
+
+    public void setLx(float lx)
+    {
+        this.preNotifyParent();
+
+        this.lx = lx;
+
+        this.postNotifyParent();
+    }
+
+    public float getLy()
+    {
+        return this.ly;
+    }
+
+    public void setLy(float ly)
+    {
+        this.preNotifyParent();
+
+        this.ly = ly;
+
+        this.postNotifyParent();
     }
 
     public double interpolateTicks(Keyframe frame, double ticks)
@@ -71,7 +170,7 @@ public class Keyframe implements IMapSerializable
 
     public Keyframe copy()
     {
-        Keyframe frame = new Keyframe(this.tick, this.value);
+        Keyframe frame = new Keyframe("", this.tick, this.value);
 
         frame.copy(this);
 
@@ -91,8 +190,10 @@ public class Keyframe implements IMapSerializable
     }
 
     @Override
-    public void toData(MapType data)
+    public BaseType toData()
     {
+        MapType data = new MapType();
+
         data.putLong("tick", this.tick);
         data.putDouble("value", this.value);
 
@@ -102,18 +203,27 @@ public class Keyframe implements IMapSerializable
         if (this.ry != 0) data.putFloat("ry", this.ry);
         if (this.lx != 5) data.putFloat("lx", this.lx);
         if (this.ly != 0) data.putFloat("ly", this.ly);
+
+        return data;
     }
 
     @Override
-    public void fromData(MapType data)
+    public void fromData(BaseType data)
     {
-        if (data.has("tick")) this.tick = data.getLong("tick");
-        if (data.has("value")) this.value = data.getDouble("value");
-        if (data.has("interp")) this.interp = KeyframeInterpolation.values()[data.getInt("interp")];
-        if (data.has("easing")) this.easing = KeyframeEasing.values()[data.getInt("easing")];
-        if (data.has("rx")) this.rx = data.getFloat("rx");
-        if (data.has("ry")) this.ry = data.getFloat("ry");
-        if (data.has("lx")) this.lx = data.getFloat("lx");
-        if (data.has("ly")) this.ly = data.getFloat("ly");
+        if (!data.isMap())
+        {
+            return;
+        }
+
+        MapType map = data.asMap();
+
+        if (map.has("tick")) this.tick = map.getLong("tick");
+        if (map.has("value")) this.value = map.getDouble("value");
+        if (map.has("interp")) this.interp = KeyframeInterpolation.values()[map.getInt("interp")];
+        if (map.has("easing")) this.easing = KeyframeEasing.values()[map.getInt("easing")];
+        if (map.has("rx")) this.rx = map.getFloat("rx");
+        if (map.has("ry")) this.ry = map.getFloat("ry");
+        if (map.has("lx")) this.lx = map.getFloat("lx");
+        if (map.has("ly")) this.ly = map.getFloat("ly");
     }
 }

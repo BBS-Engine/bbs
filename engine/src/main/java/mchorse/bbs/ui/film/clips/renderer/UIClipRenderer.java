@@ -80,11 +80,9 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
 
         if (envelope.keyframes.get())
         {
-            KeyframeChannel channel = envelope.channel.get();
-
-            if (!channel.isEmpty())
+            if (!envelope.channel.isEmpty())
             {
-                this.renderEnvelopesKeyframes(builder, channel, duration, x1, y1, x2, y2);
+                this.renderEnvelopesKeyframes(builder, envelope.channel, duration, x1, y1, x2, y2);
             }
         }
         else
@@ -106,8 +104,8 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
         {
             if (prevKeyframe != null)
             {
-                Vector2f point = this.calculateEnvelopePoint(vector, (int) keyframe.tick, (float) keyframe.value, duration, x1, y1, x2, y2);
-                Vector2f prevPoint = this.calculateEnvelopePoint(previous, (int) prevKeyframe.tick, (float) prevKeyframe.value, duration, x1, y1, x2, y2);
+                Vector2f point = this.calculateEnvelopePoint(vector, (int) keyframe.getTick(), (float) keyframe.getValue(), duration, x1, y1, x2, y2);
+                Vector2f prevPoint = this.calculateEnvelopePoint(previous, (int) prevKeyframe.getTick(), (float) prevKeyframe.getValue(), duration, x1, y1, x2, y2);
 
                 builder.xy(prevPoint.x, y2).rgba(ENVELOPE_COLOR);
                 builder.xy(point.x, point.y).rgba(ENVELOPE_COLOR);
@@ -122,9 +120,9 @@ public class UIClipRenderer <T extends Clip> implements IUIClipRenderer<T>
         }
 
         /* Finish the end */
-        if (prevKeyframe != null && prevKeyframe.tick < duration)
+        if (prevKeyframe != null && prevKeyframe.getTick() < duration)
         {
-            Vector2f point = this.calculateEnvelopePoint(vector, (int) prevKeyframe.tick, (float) prevKeyframe.value, duration, x1, y1, x2, y2);
+            Vector2f point = this.calculateEnvelopePoint(vector, (int) prevKeyframe.getTick(), (float) prevKeyframe.getValue(), duration, x1, y1, x2, y2);
 
             builder.xy(point.x, y2).rgba(ENVELOPE_COLOR);
             builder.xy(x2, point.y).rgba(ENVELOPE_COLOR);

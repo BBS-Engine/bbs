@@ -1,8 +1,8 @@
 package mchorse.bbs.ui.film.utils.keyframes;
 
-import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
+import mchorse.bbs.utils.keyframes.KeyframeChannel;
 
 /**
  * Graph editor GUI designed specifically for keyframe fixture panel
@@ -24,7 +24,7 @@ public class UICameraGraphEditor extends UICameraKeyframesEditor<UIGraphView>
 
     public void setChannel(BaseValue value, int color)
     {
-        ValueKeyframeChannel keyframe = this.get(value);
+        KeyframeChannel keyframe = value instanceof KeyframeChannel ? (KeyframeChannel) value : null;
 
         if (keyframe == null)
         {
@@ -32,7 +32,7 @@ public class UICameraGraphEditor extends UICameraKeyframesEditor<UIGraphView>
         }
 
         this.keyframes.clearSelection();
-        this.keyframes.setChannel(keyframe.get(), color);
+        this.keyframes.setChannel(keyframe, color);
         this.frameButtons.setVisible(false);
     }
 }

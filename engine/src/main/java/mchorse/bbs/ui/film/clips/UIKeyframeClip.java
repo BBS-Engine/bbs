@@ -2,7 +2,6 @@ package mchorse.bbs.ui.film.clips;
 
 import mchorse.bbs.camera.clips.overwrite.KeyframeClip;
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
@@ -13,6 +12,7 @@ import mchorse.bbs.ui.film.utils.keyframes.UICameraKeyframesEditor;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.utils.UI;
+import mchorse.bbs.utils.keyframes.KeyframeChannel;
 
 public class UIKeyframeClip extends UIClip<KeyframeClip>
 {
@@ -90,9 +90,9 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
         this.editKeyframes(this.clip.fov, tick, position.angle.fov);
     }
 
-    private void editKeyframes(ValueKeyframeChannel channel, long tick, double value)
+    private void editKeyframes(KeyframeChannel channel, long tick, double value)
     {
-        BaseValue.edit(channel, (c) -> c.get().insert(tick, value));
+        BaseValue.edit(channel, (c) -> c.insert(tick, value));
     }
 
     @Override
@@ -108,7 +108,7 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
         this.dope.setClip(this.clip);
     }
 
-    public void selectChannel(ValueKeyframeChannel channel, int id)
+    public void selectChannel(KeyframeChannel channel, int id)
     {
         this.title = UICameraDopeSheetEditor.TITLES[id];
         this.dope.setVisible(id == 0);

@@ -4,6 +4,7 @@ import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
@@ -53,7 +54,7 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
                 return null;
             }
 
-            return keyframe.interp.from(keyframe.easing);
+            return keyframe.getInterpolation().from(keyframe.getEasing());
         }, null);
 
         this.frameButtons = new UIElement();
@@ -65,7 +66,7 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
         this.value.tooltip(UIKeys.KEYFRAMES_VALUE);
         this.interp = new UIIcon(Icons.GRAPH, (b) ->
         {
-            UI.keyframeInterps(this.getContext(), this.keyframes.getCurrent().interp, (i) ->
+            UI.keyframeInterps(this.getContext(), this.keyframes.getCurrent().getInterpolation(), (i) ->
             {
                 this.keyframes.setInterpolation(i);
             });
@@ -207,7 +208,7 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
             for (int i = 0, c = list.size(); i < c; i++)
             {
                 List<Keyframe> keyframes = temp.computeIfAbsent(key, k -> new ArrayList<>());
-                Keyframe keyframe = new Keyframe();
+                Keyframe keyframe = new Keyframe("");
 
                 keyframe.fromData(list.getMap(i));
                 keyframes.add(keyframe);
@@ -288,29 +289,31 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
 
     private void pasteKeyframesTo(UISheet sheet, List<Keyframe> keyframes, long offset)
     {
-        long firstX = keyframes.get(0).tick;
+        long firstX = keyframes.get(0).getTick();
         List<Keyframe> toSelect = new ArrayList<>();
 
-        if (Window.isCtrlPressed())
+        BaseValue.edit(sheet.channel, (channel) ->
         {
-            offset = firstX;
-        }
+            long newOffset = Window.isCtrlPressed() ? firstX : offset;
 
-        for (Keyframe keyframe : keyframes)
-        {
-            keyframe.tick = keyframe.tick - firstX + offset;
+            for (Keyframe keyframe : keyframes)
+            {
+                keyframe.setTick(keyframe.getTick() - firstX + newOffset);
 
-            int index = sheet.channel.insert(keyframe.tick, keyframe.value);
-            Keyframe inserted = sheet.channel.get(index);
+                int index = channel.insert(keyframe.getTick(), keyframe.getValue());
+                Keyframe inserted = channel.get(index);
 
-            inserted.copy(keyframe);
-            toSelect.add(inserted);
-        }
+                inserted.copy(keyframe);
+                toSelect.add(inserted);
+            }
 
-        for (Keyframe select : toSelect)
-        {
-            sheet.selected.add(sheet.channel.getKeyframes().indexOf(select));
-        }
+            for (Keyframe select : toSelect)
+            {
+                sheet.selected.add(channel.getKeyframes().indexOf(select));
+            }
+
+            channel.sync();
+        });
 
         this.keyframes.which = Selection.KEYFRAME;
         this.keyframes.setKeyframe(this.keyframes.getCurrent());
@@ -383,6 +386,6 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
         this.tick.integer = this.converter == null ? forceInteger : this.converter.forceInteger(frame, this.keyframes.which, forceInteger);
         this.tick.setValue(this.converter == null ? tick : this.converter.to(tick));
         this.value.setValue(this.keyframes.which.getY(frame));
-        this.e = frame.easing;
+        this.e = frame.getEasing();
     }
 }

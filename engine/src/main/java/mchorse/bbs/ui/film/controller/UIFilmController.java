@@ -6,7 +6,6 @@ import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.controller.CameraController;
 import mchorse.bbs.camera.controller.RunnerCameraController;
-import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.core.input.MouseInput;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.film.Film;
@@ -39,6 +38,7 @@ import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Matrices;
+import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
@@ -251,9 +251,9 @@ public class UIFilmController extends UIElement
         {
             for (BaseValue value : replay.keyframes.getAll())
             {
-                if (value instanceof ValueKeyframeChannel)
+                if (value instanceof KeyframeChannel)
                 {
-                    ((ValueKeyframeChannel) value).get().simplify();
+                    ((KeyframeChannel) value).simplify();
                 }
             }
 

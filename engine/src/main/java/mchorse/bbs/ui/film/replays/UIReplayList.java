@@ -89,22 +89,22 @@ public class UIReplayList extends UIList<Replay>
 
         if (result.type == RayTraceType.BLOCK)
         {
-            replay.keyframes.x.get().insert(0, result.hit.x);
-            replay.keyframes.y.get().insert(0, result.hit.y);
-            replay.keyframes.z.get().insert(0, result.hit.z);
+            replay.keyframes.x.insert(0, result.hit.x);
+            replay.keyframes.y.insert(0, result.hit.y);
+            replay.keyframes.z.insert(0, result.hit.z);
         }
         else
         {
             Vector3d position = new Vector3d(camera.getLookDirection()).mul(5F).add(camera.position);
 
-            replay.keyframes.x.get().insert(0, position.x);
-            replay.keyframes.y.get().insert(0, position.y);
-            replay.keyframes.z.get().insert(0, position.z);
+            replay.keyframes.x.insert(0, position.x);
+            replay.keyframes.y.insert(0, position.y);
+            replay.keyframes.z.insert(0, position.z);
         }
 
-        replay.keyframes.pitch.get().insert(0, camera.rotation.x);
-        replay.keyframes.yaw.get().insert(0, camera.rotation.y + Math.PI);
-        replay.keyframes.bodyYaw.get().insert(0, camera.rotation.y + Math.PI);
+        replay.keyframes.pitch.insert(0, camera.rotation.x);
+        replay.keyframes.yaw.insert(0, camera.rotation.y + Math.PI);
+        replay.keyframes.bodyYaw.insert(0, camera.rotation.y + Math.PI);
 
         this.update();
         this.panel.replays.setReplay(replay);

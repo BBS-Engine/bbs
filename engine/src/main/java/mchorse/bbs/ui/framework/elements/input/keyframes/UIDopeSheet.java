@@ -3,6 +3,7 @@ package mchorse.bbs.ui.framework.elements.input.keyframes;
 import mchorse.bbs.graphics.line.LineBuilder;
 import mchorse.bbs.graphics.line.SolidColorLineRenderer;
 import mchorse.bbs.graphics.window.Window;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.utils.colors.Colors;
@@ -112,8 +113,8 @@ public class UIDopeSheet extends UIKeyframes
         {
             for (Keyframe frame : sheet.channel.getKeyframes())
             {
-                min = Integer.min((int) frame.tick, min);
-                max = Integer.max((int) frame.tick, max);
+                min = Integer.min((int) frame.getTick(), min);
+                max = Integer.max((int) frame.getTick(), max);
             }
 
             c = Math.max(c, sheet.channel.getKeyframes().size());
@@ -231,34 +232,33 @@ public class UIDopeSheet extends UIKeyframes
         }
 
         UISheet sheet = this.sheets.get(i);
-        KeyframeEasing easing = KeyframeEasing.IN;
-        KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
-        Keyframe frame = this.getCurrent();
-        long tick = Math.round(this.fromGraphX(mouseX));
-        long oldTick = tick;
 
-        if (frame != null)
+        BaseValue.edit(sheet.channel, (channel) ->
         {
-            easing = frame.easing;
-            interp = frame.interp;
-            oldTick = frame.tick;
-        }
+            KeyframeEasing easing = KeyframeEasing.IN;
+            KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
+            Keyframe frame = this.getCurrent();
+            long tick = Math.round(this.fromGraphX(mouseX));
+            long oldTick = tick;
 
-        sheet.selected.clear();
-        sheet.selected.add(sheet.channel.insert(tick, sheet.channel.interpolate(tick)));
-        frame = this.getCurrent();
+            if (frame != null)
+            {
+                easing = frame.getEasing();
+                interp = frame.getInterpolation();
+                oldTick = frame.getTick();
+            }
 
-        if (oldTick != tick)
-        {
-            frame.setEasing(easing);
-            frame.setInterpolation(interp);
-        }
+            sheet.selected.clear();
+            sheet.selected.add(channel.insert(tick, channel.interpolate(tick)));
+            frame = this.getCurrent();
 
-        this.addedDoubleClick(frame, tick, mouseX, mouseY);
+            if (oldTick != tick)
+            {
+                frame.setEasing(easing);
+                frame.setInterpolation(interp);
+            }
+        });
     }
-
-    protected void addedDoubleClick(Keyframe frame, long tick, int mouseX, int mouseY)
-    {}
 
     @Override
     public void removeCurrent()
@@ -272,8 +272,10 @@ public class UIDopeSheet extends UIKeyframes
 
         UISheet current = this.getCurrentSheet();
 
-        current.channel.remove(current.selected.get(0));
+        BaseValue.edit(current.channel, (channel) -> channel.remove(current.selected.get(0)));
+
         current.selected.clear();
+
         this.which = Selection.NOT_SELECTED;
     }
 
@@ -322,9 +324,9 @@ public class UIDopeSheet extends UIKeyframes
 
             for (Keyframe frame : sheet.channel.getKeyframes())
             {
-                boolean left = sheet.handles && prev != null && prev.interp == KeyframeInterpolation.BEZIER && this.isInside(this.toGraphX(frame.tick - frame.lx), y + h / 2, mouseX, mouseY);
-                boolean right = sheet.handles && frame.interp == KeyframeInterpolation.BEZIER && this.isInside(this.toGraphX(frame.tick + frame.rx), y + h / 2, mouseX, mouseY) && index != count - 1;
-                boolean point = this.isInside(this.toGraphX(frame.tick), alt ? mouseY : y + h / 2, mouseX, mouseY);
+                boolean left = sheet.handles && prev != null && prev.getInterpolation() == KeyframeInterpolation.BEZIER && this.isInside(this.toGraphX(frame.getTick() - frame.getLx()), y + h / 2, mouseX, mouseY);
+                boolean right = sheet.handles && frame.getInterpolation() == KeyframeInterpolation.BEZIER && this.isInside(this.toGraphX(frame.getTick() + frame.getRx()), y + h / 2, mouseX, mouseY) && index != count - 1;
+                boolean point = this.isInside(this.toGraphX(frame.getTick()), alt ? mouseY : y + h / 2, mouseX, mouseY);
 
                 if (left || right || point)
                 {
@@ -361,8 +363,8 @@ public class UIDopeSheet extends UIKeyframes
 
                     if (frame != null)
                     {
-                        this.lastT = left ? frame.tick - frame.lx : (right ? frame.tick + frame.rx : frame.tick);
-                        this.lastV = left ? frame.value + frame.ly : (right ? frame.value + frame.ry : frame.value);
+                        this.lastT = left ? frame.getTick() - frame.getLx() : (right ? frame.getTick() + frame.getRx() : frame.getTick());
+                        this.lastV = left ? frame.getValue() + frame.getLy() : (right ? frame.getValue() + frame.getRy() : frame.getValue());
                     }
 
                     if (alt)
@@ -416,7 +418,7 @@ public class UIDopeSheet extends UIKeyframes
 
                 for (Keyframe keyframe : sheet.channel.getKeyframes())
                 {
-                    if (area.isInside(this.toGraphX(keyframe.tick), y + h / 2) && !sheet.selected.contains(i))
+                    if (area.isInside(this.toGraphX(keyframe.getTick()), y + h / 2) && !sheet.selected.contains(i))
                     {
                         sheet.selected.add(i);
                         c++;
@@ -471,16 +473,16 @@ public class UIDopeSheet extends UIKeyframes
 
             for (Keyframe frame : sheet.channel.getKeyframes())
             {
-                this.renderRect(context, this.toGraphX(frame.tick), y + h / 2, 3, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
+                this.renderRect(context, this.toGraphX(frame.getTick()), y + h / 2, 3, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
 
-                if (frame.interp == KeyframeInterpolation.BEZIER && sheet.handles && index != count - 1)
+                if (frame.getInterpolation() == KeyframeInterpolation.BEZIER && sheet.handles && index != count - 1)
                 {
-                    this.renderRect(context, this.toGraphX(frame.tick + frame.rx), y + h / 2, 2, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
+                    this.renderRect(context, this.toGraphX(frame.getTick() + frame.getRx()), y + h / 2, 2, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
                 }
 
-                if (prev != null && prev.interp == KeyframeInterpolation.BEZIER && sheet.handles)
+                if (prev != null && prev.getInterpolation() == KeyframeInterpolation.BEZIER && sheet.handles)
                 {
-                    this.renderRect(context, this.toGraphX(frame.tick - frame.lx), y + h / 2, 2, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
+                    this.renderRect(context, this.toGraphX(frame.getTick() - frame.getLx()), y + h / 2, 2, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
                 }
 
                 prev = frame;
@@ -492,16 +494,16 @@ public class UIDopeSheet extends UIKeyframes
 
             for (Keyframe frame : sheet.channel.getKeyframes())
             {
-                this.renderRect(context, this.toGraphX(frame.tick), y + h / 2, 2, this.which == Selection.KEYFRAME && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
+                this.renderRect(context, this.toGraphX(frame.getTick()), y + h / 2, 2, this.which == Selection.KEYFRAME && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
 
-                if (frame.interp == KeyframeInterpolation.BEZIER && sheet.handles && index != count - 1)
+                if (frame.getInterpolation() == KeyframeInterpolation.BEZIER && sheet.handles && index != count - 1)
                 {
-                    this.renderRect(context, this.toGraphX(frame.tick + frame.rx), y + h / 2, 1, this.which == Selection.RIGHT_HANDLE && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
+                    this.renderRect(context, this.toGraphX(frame.getTick() + frame.getRx()), y + h / 2, 1, this.which == Selection.RIGHT_HANDLE && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
                 }
 
-                if (prev != null && prev.interp == KeyframeInterpolation.BEZIER && sheet.handles)
+                if (prev != null && prev.getInterpolation() == KeyframeInterpolation.BEZIER && sheet.handles)
                 {
-                    this.renderRect(context, this.toGraphX(frame.tick - frame.lx), y + h / 2, 1, this.which == Selection.LEFT_HANDLE && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
+                    this.renderRect(context, this.toGraphX(frame.getTick() - frame.getLx()), y + h / 2, 1, this.which == Selection.LEFT_HANDLE && sheet.hasSelected(index) ? Colors.ACTIVE : 0);
                 }
 
                 prev = frame;
@@ -540,11 +542,11 @@ public class UIDopeSheet extends UIKeyframes
 
             if (this.which == Selection.LEFT_HANDLE)
             {
-                x = (int) -(x - frame.tick);
+                x = (int) -(x - frame.getTick());
             }
             else if (this.which == Selection.RIGHT_HANDLE)
             {
-                x = (int) x - frame.tick;
+                x = (int) x - frame.getTick();
             }
 
             this.setTick(x, !Window.isAltPressed());

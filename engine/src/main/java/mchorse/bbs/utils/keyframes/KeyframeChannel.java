@@ -1,12 +1,9 @@
 package mchorse.bbs.utils.keyframes;
 
-import mchorse.bbs.data.IDataSerializable;
 import mchorse.bbs.data.types.BaseType;
-import mchorse.bbs.data.types.ListType;
-import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.settings.values.ValueList;
 import mchorse.bbs.utils.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,53 +12,58 @@ import java.util.List;
  * <p>This class is responsible for storing individual keyframes and also
  * interpolating between them.</p>
  */
-public class KeyframeChannel implements IDataSerializable<ListType>
+public class KeyframeChannel extends ValueList<Keyframe>
 {
     private static final Pair<Keyframe, Keyframe> segment = new Pair<>();
 
-    private final List<Keyframe> keyframes = new ArrayList<>();
+    public KeyframeChannel()
+    {
+        super("");
+    }
+
+    public KeyframeChannel(String id)
+    {
+        super(id);
+    }
 
     public int getLength()
     {
-        return this.keyframes.isEmpty() ? 0 : (int) this.keyframes.get(this.keyframes.size() - 1).tick;
-    }
-
-    protected Keyframe create(long tick, double value)
-    {
-        return new Keyframe(tick, value);
+        return this.list.isEmpty() ? 0 : (int) this.list.get(this.list.size() - 1).getTick();
     }
 
     public boolean isEmpty()
     {
-        return this.keyframes.isEmpty();
+        return this.list.isEmpty();
     }
 
     public List<Keyframe> getKeyframes()
     {
-        return this.keyframes;
+        return this.list;
     }
 
     public boolean has(int index)
     {
-        return index >= 0 && index < this.keyframes.size();
+        return index >= 0 && index < this.list.size();
     }
 
     public Keyframe get(int index)
     {
-        return this.has(index) ? this.keyframes.get(index) : null;
+        return this.has(index) ? this.list.get(index) : null;
     }
 
     public void remove(int index)
     {
-        if (index < 0 || index > this.keyframes.size() - 1)
+        if (index < 0 || index > this.list.size() - 1)
         {
             return;
         }
 
-        Keyframe frame = this.keyframes.remove(index);
+        Keyframe frame = this.list.remove(index);
 
         frame.prev.next = frame.next;
         frame.next.prev = frame.prev;
+
+        this.sync();
     }
 
     /**
@@ -78,7 +80,7 @@ public class KeyframeChannel implements IDataSerializable<ListType>
 
         if (segment.a == segment.b)
         {
-            return segment.a.value;
+            return segment.a.getValue();
         }
 
         return segment.a.interpolateTicks(segment.b, ticks);
@@ -90,25 +92,25 @@ public class KeyframeChannel implements IDataSerializable<ListType>
     public Pair<Keyframe, Keyframe> findSegment(float ticks)
     {
         /* No keyframes, no values */
-        if (this.keyframes.isEmpty())
+        if (this.list.isEmpty())
         {
             return null;
         }
 
         /* Check whether given ticks are outside keyframe channel's range */
-        Keyframe prev = this.keyframes.get(0);
+        Keyframe prev = this.list.get(0);
 
-        if (ticks <= prev.tick)
+        if (ticks <= prev.getTick())
         {
             segment.set(prev, prev);
 
             return segment;
         }
 
-        int size = this.keyframes.size();
-        Keyframe last = this.keyframes.get(size - 1);
+        int size = this.list.size();
+        Keyframe last = this.list.get(size - 1);
 
-        if (ticks >= last.tick)
+        if (ticks >= last.getTick())
         {
             segment.set(last, last);
 
@@ -123,7 +125,7 @@ public class KeyframeChannel implements IDataSerializable<ListType>
         {
             int mid = low + (high - low) / 2;
 
-            if (this.keyframes.get(mid).tick < ticks)
+            if (this.list.get(mid).getTick() < ticks)
             {
                 low = mid + 1;
             }
@@ -133,8 +135,8 @@ public class KeyframeChannel implements IDataSerializable<ListType>
             }
         }
 
-        Keyframe b = this.keyframes.get(low);
-        Keyframe a = low - 1 >= 0 ? this.keyframes.get(low - 1) : b;
+        Keyframe b = this.list.get(low);
+        Keyframe a = low - 1 >= 0 ? this.list.get(low - 1) : b;
 
         segment.set(a, b);
 
@@ -154,13 +156,15 @@ public class KeyframeChannel implements IDataSerializable<ListType>
     {
         Keyframe prev;
 
-        if (!this.keyframes.isEmpty())
+        if (!this.list.isEmpty())
         {
-            prev = this.keyframes.get(0);
+            prev = this.list.get(0);
 
-            if (tick < prev.tick)
+            if (tick < prev.getTick())
             {
-                this.keyframes.add(0, this.create(tick, value));
+                this.list.add(0, new Keyframe("", tick, value));
+
+                this.sort();
 
                 return 0;
             }
@@ -169,16 +173,16 @@ public class KeyframeChannel implements IDataSerializable<ListType>
         prev = null;
         int index = 0;
 
-        for (Keyframe frame : this.keyframes)
+        for (Keyframe frame : this.list)
         {
-            if (frame.tick == tick)
+            if (frame.getTick() == tick)
             {
-                frame.value = value;
+                frame.setValue(value);
 
                 return index;
             }
 
-            if (prev != null && tick > prev.tick && tick < frame.tick)
+            if (prev != null && tick > prev.getTick() && tick < frame.getTick())
             {
                 break;
             }
@@ -187,23 +191,25 @@ public class KeyframeChannel implements IDataSerializable<ListType>
             prev = frame;
         }
 
-        Keyframe frame = this.create(tick, value);
-        this.keyframes.add(index, frame);
+        Keyframe frame = new Keyframe("", tick, value);
+        this.list.add(index, frame);
 
-        if (this.keyframes.size() > 1)
+        if (this.list.size() > 1)
         {
-            frame.prev = this.keyframes.get(Math.max(index - 1, 0));
-            frame.next = this.keyframes.get(Math.min(index + 1, this.keyframes.size() - 1));
+            frame.prev = this.list.get(Math.max(index - 1, 0));
+            frame.next = this.list.get(Math.min(index + 1, this.list.size() - 1));
         }
+
+        this.sync();
 
         return index;
     }
 
     public void moveX(long offset)
     {
-        for (Keyframe keyframe : this.keyframes)
+        for (Keyframe keyframe : this.list)
         {
-            keyframe.tick += offset;
+            keyframe.setTick(keyframe.getTick() + offset);
         }
     }
 
@@ -215,13 +221,13 @@ public class KeyframeChannel implements IDataSerializable<ListType>
      */
     public void sort()
     {
-        this.keyframes.sort((a, b) -> (int) (a.tick - b.tick));
+        this.list.sort((a, b) -> (int) (a.getTick() - b.getTick()));
 
-        if (!this.keyframes.isEmpty())
+        if (!this.list.isEmpty())
         {
-            Keyframe prev = this.keyframes.get(0);
+            Keyframe prev = this.list.get(0);
 
-            for (Keyframe frame : this.keyframes)
+            for (Keyframe frame : this.list)
             {
                 frame.prev = prev;
                 prev.next = frame;
@@ -231,77 +237,50 @@ public class KeyframeChannel implements IDataSerializable<ListType>
 
             prev.next = prev;
         }
+
+        this.sync();
     }
 
     public void simplify()
     {
-        if (this.keyframes.size() <= 2)
+        if (this.list.size() <= 2)
         {
             return;
         }
 
-        for (int i = 1; i < this.keyframes.size(); i++)
+        for (int i = 1; i < this.list.size(); i++)
         {
-            if (i >= this.keyframes.size() - 1)
+            if (i >= this.list.size() - 1)
             {
                 continue;
             }
 
-            Keyframe prev = this.keyframes.get(i - 1);
-            Keyframe current = this.keyframes.get(i);
-            Keyframe next = this.keyframes.get(i + 1);
+            Keyframe prev = this.list.get(i - 1);
+            Keyframe current = this.list.get(i);
+            Keyframe next = this.list.get(i + 1);
 
-            if (current.value == prev.value && current.value == next.value)
+            if (current.getValue() == prev.getValue() && current.getValue() == next.getValue())
             {
-                this.keyframes.remove(i);
+                this.list.remove(i);
 
                 i -= 1;
             }
         }
+
+        this.sync();
     }
 
-    public void copy(KeyframeChannel channel)
+    @Override
+    protected Keyframe create(String id)
     {
-        this.keyframes.clear();
+        return new Keyframe(id);
+    }
 
-        for (Keyframe frame : channel.keyframes)
-        {
-            this.keyframes.add(frame.copy());
-        }
+    @Override
+    public void fromData(BaseType data)
+    {
+        super.fromData(data);
 
         this.sort();
-    }
-
-    @Override
-    public ListType toData()
-    {
-        ListType list = new ListType();
-
-        for (Keyframe keyframe : this.keyframes)
-        {
-            list.add(keyframe.toData());
-        }
-
-        return list;
-    }
-
-    @Override
-    public void fromData(ListType data)
-    {
-        this.keyframes.clear();
-
-        for (BaseType element : data)
-        {
-            if (!element.isMap())
-            {
-                continue;
-            }
-
-            MapType object = element.asMap();
-            Keyframe keyframe = this.create(0, 0);
-
-            keyframe.fromData(object);
-            this.keyframes.add(keyframe);
-        }
     }
 }

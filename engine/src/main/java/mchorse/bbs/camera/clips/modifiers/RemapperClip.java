@@ -3,14 +3,14 @@ package mchorse.bbs.camera.clips.modifiers;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.camera.values.ValueKeyframeChannel;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.clips.ClipContext;
+import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.MathUtils;
 
 public class RemapperClip extends CameraClip
 {
-    public final ValueKeyframeChannel channel = new ValueKeyframeChannel("channel");
+    public final KeyframeChannel channel = new KeyframeChannel("channel");
 
     public RemapperClip()
     {
@@ -18,14 +18,14 @@ public class RemapperClip extends CameraClip
 
         this.add(this.channel);
 
-        this.channel.get().insert(0, 0);
-        this.channel.get().insert(BBSSettings.getDefaultDuration(), 1);
+        this.channel.insert(0, 0);
+        this.channel.insert(BBSSettings.getDefaultDuration(), 1);
     }
 
     @Override
     public void applyClip(ClipContext context, Position position)
     {
-        double factor = this.channel.get().interpolate(context.relativeTick + context.transition);
+        double factor = this.channel.interpolate(context.relativeTick + context.transition);
         int duration = this.duration.get();
 
         factor *= duration;
@@ -45,6 +45,6 @@ public class RemapperClip extends CameraClip
     {
         super.breakDownClip(original, offset);
 
-        this.channel.get().moveX(-offset);
+        this.channel.moveX(-offset);
     }
 }

@@ -66,10 +66,10 @@ public enum KeyframeInterpolation
         @Override
         public double interpolate(Keyframe a, Keyframe b, double x)
         {
-            double v0 = a.prev.value;
-            double v1 = a.value;
-            double v2 = b.value;
-            double v3 = b.next.value;
+            double v0 = a.prev.getValue();
+            double v1 = a.getValue();
+            double v2 = b.getValue();
+            double v3 = b.next.getValue();
 
             return Interpolations.cubicHermite(v0, v1, v2, v3, x);
         }
@@ -102,27 +102,27 @@ public enum KeyframeInterpolation
         @Override
         public double interpolate(Keyframe a, Keyframe b, double x)
         {
-            if (x <= 0) return a.value;
-            if (x >= 1) return b.value;
+            if (x <= 0) return a.getValue();
+            if (x >= 1) return b.getValue();
 
             /* Transform input to 0..1 */
-            double w = b.tick - a.tick;
-            double h = b.value - a.value;
+            double w = b.getTick() - a.getTick();
+            double h = b.getValue() - a.getValue();
 
             /* In case if there is no slope whatsoever */
             if (h == 0) h = 0.00001;
 
-            double x1 = a.rx / w;
-            double y1 = a.ry / h;
-            double x2 = (w - b.lx) / w;
-            double y2 = (h + b.ly) / h;
+            double x1 = a.getRx() / w;
+            double y1 = a.getRy() / h;
+            double x2 = (w - b.getLx()) / w;
+            double y2 = (h + b.getLy()) / h;
             double e = 0.0005;
 
             e = h == 0 ? e : Math.max(Math.min(e, 1 / h * e), 0.00001);
             x1 = MathUtils.clamp(x1, 0, 1);
             x2 = MathUtils.clamp(x2, 0, 1);
 
-            return Interpolations.bezier(0, y1, y2, 1, Interpolations.bezierX(x1, x2, x, e)) * h + a.value;
+            return Interpolations.bezier(0, y1, y2, 1, Interpolations.bezierX(x1, x2, x, e)) * h + a.getValue();
         }
 
         @Override
@@ -228,9 +228,9 @@ public enum KeyframeInterpolation
 
     public double interpolate(Keyframe a, Keyframe b, double x)
     {
-        IInterpolation interpolation = this.from(a.easing);
+        IInterpolation interpolation = this.from(a.getEasing());
 
-        return interpolation == null ? a.value : interpolation.interpolate(a.value, b.value, x);
+        return interpolation == null ? a.getValue() : interpolation.interpolate(a.getValue(), b.getValue(), x);
     }
 
     public void setupKeybind(ContextAction action, IKey category)

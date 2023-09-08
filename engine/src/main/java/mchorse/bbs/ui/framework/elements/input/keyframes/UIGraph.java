@@ -5,6 +5,7 @@ import mchorse.bbs.graphics.line.LineBuilder;
 import mchorse.bbs.graphics.line.SolidColorLineRenderer;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.Scale;
@@ -132,10 +133,10 @@ public class UIGraph extends UIKeyframes
         {
             for (Keyframe frame : channel.getKeyframes())
             {
-                minX = Math.min(minX, frame.tick);
-                minY = Math.min(minY, frame.value);
-                maxX = Math.max(maxX, frame.tick);
-                maxY = Math.max(maxY, frame.value);
+                minX = Math.min(minX, frame.getTick());
+                minY = Math.min(minY, frame.getValue());
+                maxX = Math.max(maxX, frame.getTick());
+                maxY = Math.max(maxY, frame.getValue());
             }
         }
         else
@@ -149,9 +150,9 @@ public class UIGraph extends UIKeyframes
             {
                 Keyframe first = channel.get(0);
 
-                minX = Math.min(0, first.tick);
-                maxX = Math.max(this.duration, first.tick);
-                minY = maxY = first.value;
+                minX = Math.min(0, first.getTick());
+                maxX = Math.max(this.duration, first.getTick());
+                minY = maxY = first.getValue();
             }
         }
 
@@ -212,30 +213,33 @@ public class UIGraph extends UIKeyframes
     @Override
     public void addCurrent(int mouseX, int mouseY)
     {
-        long tick = Math.round(this.fromGraphX(mouseX));
-        double value = this.fromGraphY(mouseY);
-
-        KeyframeEasing easing = KeyframeEasing.IN;
-        KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
-        Keyframe frame = this.getCurrent();
-        long oldTick = tick;
-
-        if (frame != null)
+        BaseValue.edit(this.sheet.channel, (channel) ->
         {
-            easing = frame.easing;
-            interp = frame.interp;
-            oldTick = frame.tick;
-        }
+            long tick = Math.round(this.fromGraphX(mouseX));
+            double value = this.fromGraphY(mouseY);
 
-        this.sheet.selected.clear();
-        this.sheet.selected.add(this.sheet.channel.insert(tick, value));
+            KeyframeEasing easing = KeyframeEasing.IN;
+            KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
+            Keyframe frame = this.getCurrent();
+            long oldTick = tick;
 
-        if (oldTick != tick)
-        {
-            frame = this.getCurrent();
-            frame.setEasing(easing);
-            frame.setInterpolation(interp);
-        }
+            if (frame != null)
+            {
+                easing = frame.getEasing();
+                interp = frame.getInterpolation();
+                oldTick = frame.getTick();
+            }
+
+            this.sheet.selected.clear();
+            this.sheet.selected.add(channel.insert(tick, value));
+
+            if (oldTick != tick)
+            {
+                frame = this.getCurrent();
+                frame.setEasing(easing);
+                frame.setInterpolation(interp);
+            }
+        });
     }
 
     @Override
@@ -248,7 +252,8 @@ public class UIGraph extends UIKeyframes
             return;
         }
 
-        this.sheet.channel.remove(this.sheet.selected.get(0));
+        BaseValue.edit(this.sheet.channel, (channel) -> channel.remove(this.sheet.selected.get(0)));
+
         this.sheet.clearSelection();
         this.which = Selection.NOT_SELECTED;
     }
@@ -276,7 +281,7 @@ public class UIGraph extends UIKeyframes
 
         for (Keyframe frame : this.sheet.channel.getKeyframes())
         {
-            if (frame.tick >= duration)
+            if (frame.getTick() >= duration)
             {
                 this.sheet.selected.add(i);
 
@@ -307,9 +312,9 @@ public class UIGraph extends UIKeyframes
 
         for (Keyframe frame : this.sheet.channel.getKeyframes())
         {
-            boolean left = prev != null && prev.interp == KeyframeInterpolation.BEZIER && this.isInside(frame.tick - frame.lx, frame.value + frame.ly, mouseX, mouseY);
-            boolean right = frame.interp == KeyframeInterpolation.BEZIER && this.isInside(frame.tick + frame.rx, frame.value + frame.ry, mouseX, mouseY) && index != count - 1;
-            boolean point = this.isInside(frame.tick, frame.value, mouseX, mouseY);
+            boolean left = prev != null && prev.getInterpolation() == KeyframeInterpolation.BEZIER && this.isInside(frame.getTick() - frame.getLx(), frame.getValue() + frame.getLy(), mouseX, mouseY);
+            boolean right = frame.getInterpolation() == KeyframeInterpolation.BEZIER && this.isInside(frame.getTick() + frame.getRx(), frame.getValue() + frame.getRy(), mouseX, mouseY) && index != count - 1;
+            boolean point = this.isInside(frame.getTick(), frame.getValue(), mouseX, mouseY);
 
             if (left || right || point)
             {
@@ -346,8 +351,8 @@ public class UIGraph extends UIKeyframes
 
                 if (frame != null)
                 {
-                    this.lastT = left ? frame.tick - frame.lx : (right ? frame.tick + frame.rx : frame.tick);
-                    this.lastV = left ? frame.value + frame.ly : (right ? frame.value + frame.ry : frame.value);
+                    this.lastT = left ? frame.getTick() - frame.getLx() : (right ? frame.getTick() + frame.getRx() : frame.getTick());
+                    this.lastV = left ? frame.getValue() + frame.getLy() : (right ? frame.getValue() + frame.getRy() : frame.getValue());
                 }
 
                 return true;
@@ -412,7 +417,7 @@ public class UIGraph extends UIKeyframes
             {
                 Keyframe keyframe = channel.get(i);
 
-                if (area.isInside(this.toGraphX(keyframe.tick), this.toGraphY(keyframe.value)) && !this.sheet.selected.contains(i))
+                if (area.isInside(this.toGraphX(keyframe.getTick()), this.toGraphY(keyframe.getValue())) && !this.sheet.selected.contains(i))
                 {
                     this.sheet.selected.add(i);
                 }
@@ -490,20 +495,20 @@ public class UIGraph extends UIKeyframes
         {
             if (prev != null)
             {
-                int px = this.toGraphX(prev.tick);
-                int fx = this.toGraphX(frame.tick);
+                int px = this.toGraphX(prev.getTick());
+                int fx = this.toGraphX(frame.getTick());
 
                 /* Main line */
-                if (prev.interp == KeyframeInterpolation.LINEAR)
+                if (prev.getInterpolation() == KeyframeInterpolation.LINEAR)
                 {
-                    main.add(px, this.toGraphY(prev.value))
-                        .add(fx, this.toGraphY(frame.value));
+                    main.add(px, this.toGraphY(prev.getValue()))
+                        .add(fx, this.toGraphY(frame.getValue()));
                 }
                 else
                 {
                     float seg = 10;
 
-                    if (prev.interp == KeyframeInterpolation.BOUNCE || prev.interp == KeyframeInterpolation.ELASTIC)
+                    if (prev.getInterpolation() == KeyframeInterpolation.BOUNCE || prev.getInterpolation() == KeyframeInterpolation.ELASTIC)
                     {
                         seg = 30;
                     }
@@ -515,27 +520,27 @@ public class UIGraph extends UIKeyframes
                     }
                 }
 
-                if (prev.interp == KeyframeInterpolation.BEZIER)
+                if (prev.getInterpolation() == KeyframeInterpolation.BEZIER)
                 {
                     /* Left bezier handle */
                     lines.push()
-                        .add(this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly))
-                        .add(this.toGraphX(frame.tick), this.toGraphY(frame.value));
+                        .add(this.toGraphX(frame.getTick() - frame.getLx()), this.toGraphY(frame.getValue() + frame.getLy()))
+                        .add(this.toGraphX(frame.getTick()), this.toGraphY(frame.getValue()));
                 }
             }
             else
             {
                 /* Left edge line */
-                main.add(0, this.toGraphY(frame.value))
-                    .add(this.toGraphX(frame.tick), this.toGraphY(frame.value));
+                main.add(0, this.toGraphY(frame.getValue()))
+                    .add(this.toGraphX(frame.getTick()), this.toGraphY(frame.getValue()));
             }
 
-            if (frame.interp == KeyframeInterpolation.BEZIER && index != count - 1)
+            if (frame.getInterpolation() == KeyframeInterpolation.BEZIER && index != count - 1)
             {
                 /* Right bezier handle */
                 lines.push()
-                    .add(this.toGraphX(frame.tick), this.toGraphY(frame.value))
-                    .add(this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry));
+                    .add(this.toGraphX(frame.getTick()), this.toGraphY(frame.getValue()))
+                    .add(this.toGraphX(frame.getTick() + frame.getRx()), this.toGraphY(frame.getValue() + frame.getRy()));
             }
 
             prev = frame;
@@ -543,8 +548,8 @@ public class UIGraph extends UIKeyframes
         }
 
         /* Right edge line */
-        main.add(this.toGraphX(prev.tick), this.toGraphY(prev.value))
-            .add(this.area.ex(), this.toGraphY(prev.value));
+        main.add(this.toGraphX(prev.getTick()), this.toGraphY(prev.getValue()))
+            .add(this.area.ex(), this.toGraphY(prev.getValue()));
 
         lines.push(main).render(context.batcher, SolidColorLineRenderer.get(r, g, b, 0.65F));
 
@@ -554,16 +559,16 @@ public class UIGraph extends UIKeyframes
 
         for (Keyframe frame : channel.getKeyframes())
         {
-            this.renderRect(context, this.toGraphX(frame.tick), this.toGraphY(frame.value), 3, Colors.WHITE);
+            this.renderRect(context, this.toGraphX(frame.getTick()), this.toGraphY(frame.getValue()), 3, Colors.WHITE);
 
-            if (frame.interp == KeyframeInterpolation.BEZIER && index != count - 1)
+            if (frame.getInterpolation() == KeyframeInterpolation.BEZIER && index != count - 1)
             {
-                this.renderRect(context, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 3, Colors.WHITE);
+                this.renderRect(context, this.toGraphX(frame.getTick() + frame.getRx()), this.toGraphY(frame.getValue() + frame.getRy()), 3, Colors.WHITE);
             }
 
-            if (prev != null && prev.interp == KeyframeInterpolation.BEZIER)
+            if (prev != null && prev.getInterpolation() == KeyframeInterpolation.BEZIER)
             {
-                this.renderRect(context, this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly), 3, Colors.WHITE);
+                this.renderRect(context, this.toGraphX(frame.getTick() - frame.getLx()), this.toGraphY(frame.getValue() + frame.getLy()), 3, Colors.WHITE);
             }
 
             prev = frame;
@@ -577,16 +582,16 @@ public class UIGraph extends UIKeyframes
         {
             boolean has = this.sheet.selected.contains(index);
 
-            this.renderRect(context, this.toGraphX(frame.tick), this.toGraphY(frame.value), 2, has && this.which == Selection.KEYFRAME ? Colors.ACTIVE : 0);
+            this.renderRect(context, this.toGraphX(frame.getTick()), this.toGraphY(frame.getValue()), 2, has && this.which == Selection.KEYFRAME ? Colors.ACTIVE : 0);
 
-            if (frame.interp == KeyframeInterpolation.BEZIER && index != count - 1)
+            if (frame.getInterpolation() == KeyframeInterpolation.BEZIER && index != count - 1)
             {
-                this.renderRect(context, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 2, has && this.which == Selection.RIGHT_HANDLE ? Colors.ACTIVE : 0);
+                this.renderRect(context, this.toGraphX(frame.getTick() + frame.getRx()), this.toGraphY(frame.getValue() + frame.getRy()), 2, has && this.which == Selection.RIGHT_HANDLE ? Colors.ACTIVE : 0);
             }
 
-            if (prev != null && prev.interp == KeyframeInterpolation.BEZIER)
+            if (prev != null && prev.getInterpolation() == KeyframeInterpolation.BEZIER)
             {
-                this.renderRect(context, this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly), 2, has && this.which == Selection.LEFT_HANDLE ? Colors.ACTIVE : 0);
+                this.renderRect(context, this.toGraphX(frame.getTick() - frame.getLx()), this.toGraphY(frame.getValue() + frame.getLy()), 2, has && this.which == Selection.LEFT_HANDLE ? Colors.ACTIVE : 0);
             }
 
             prev = frame;
@@ -634,13 +639,13 @@ public class UIGraph extends UIKeyframes
 
             if (this.which == Selection.LEFT_HANDLE)
             {
-                x = -(x - frame.tick);
-                y = y - frame.value;
+                x = -(x - frame.getTick());
+                y = y - frame.getValue();
             }
             else if (this.which == Selection.RIGHT_HANDLE)
             {
-                x = x - frame.tick;
-                y = y - frame.value;
+                x = x - frame.getTick();
+                y = y - frame.getValue();
             }
 
             boolean altPressed = Window.isAltPressed();

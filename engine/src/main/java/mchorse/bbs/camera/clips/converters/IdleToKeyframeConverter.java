@@ -13,13 +13,13 @@ public class IdleToKeyframeConverter implements IClipConverter<IdleClip, Keyfram
 
         keyframeClip.copy(clip);
 
-        this.insert(keyframeClip.x.get(), clip.position.get().point.x);
-        this.insert(keyframeClip.y.get(), clip.position.get().point.y);
-        this.insert(keyframeClip.z.get(), clip.position.get().point.z);
-        this.insert(keyframeClip.yaw.get(), clip.position.get().angle.yaw);
-        this.insert(keyframeClip.pitch.get(), clip.position.get().angle.pitch);
-        this.insert(keyframeClip.roll.get(), clip.position.get().angle.roll);
-        this.insert(keyframeClip.fov.get(), clip.position.get().angle.fov);
+        this.insert(keyframeClip.x, clip.position.get().point.x);
+        this.insert(keyframeClip.y, clip.position.get().point.y);
+        this.insert(keyframeClip.z, clip.position.get().point.z);
+        this.insert(keyframeClip.yaw, clip.position.get().angle.yaw);
+        this.insert(keyframeClip.pitch, clip.position.get().angle.pitch);
+        this.insert(keyframeClip.roll, clip.position.get().angle.roll);
+        this.insert(keyframeClip.fov, clip.position.get().angle.fov);
 
         return keyframeClip;
     }
