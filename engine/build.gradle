@@ -7,9 +7,6 @@ version = '0.1'
 repositories {
     mavenCentral()
     maven {
-        url "https://repo.spongepowered.org/maven/"
-    }
-    maven {
         url "https://jitpack.io/"
     }
 }
