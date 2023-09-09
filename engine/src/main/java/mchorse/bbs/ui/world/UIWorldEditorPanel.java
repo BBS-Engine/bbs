@@ -640,7 +640,7 @@ public class UIWorldEditorPanel extends UIWorldPanel
     @Override
     public boolean subMouseClicked(UIContext context)
     {
-        if ((context.mouseButton == 0 || context.mouseButton == 1) && !this.result.type.isMissed())
+        if (((context.mouseButton == 0 && !Window.isKeyPressed(GLFW.GLFW_KEY_SPACE)) || context.mouseButton == 1) && !this.result.type.isMissed())
         {
             if (Window.isCtrlPressed() && context.mouseButton == 0)
             {

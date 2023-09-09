@@ -28,8 +28,8 @@ public class UIKeysApp
     public static final IKey WELCOME_DISCORD = IKey.lang("studio.ui.welcome.discord");
     public static final IKey WELCOME_FEATURES_BLOCKBENCH = IKey.lang("studio.ui.welcome.main_features.blockbench");
     public static final IKey WELCOME_FEATURES_BLOCKBENCH_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.blockbench-description");
-    public static final IKey WELCOME_FEATURES_CAMERA = IKey.lang("studio.ui.welcome.main_features.camera");
-    public static final IKey WELCOME_FEATURES_CAMERA_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.camera-description");
+    public static final IKey WELCOME_FEATURES_FILM_EDITOR = IKey.lang("studio.ui.welcome.main_features.film_editor");
+    public static final IKey WELCOME_FEATURES_FILM_EDITOR_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.film_editor-description");
     public static final IKey WELCOME_FEATURES_DIALOGUES = IKey.lang("studio.ui.welcome.main_features.dialogues");
     public static final IKey WELCOME_FEATURES_DIALOGUES_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.dialogues-description");
     public static final IKey WELCOME_FEATURES_MORE = IKey.lang("studio.ui.welcome.main_features.and_more");

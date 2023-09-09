@@ -115,7 +115,7 @@ public class BBSSettings
         builder.category("appearance");
 
         language = new ValueLanguage("language");
-        primaryColor = builder.register(language).getInt("primary_color", Colors.ACTIVE).color();
+        primaryColor = builder.getInt("primary_color", Colors.ACTIVE).color();
         enableTrackpadIncrements = builder.getBoolean("trackpad_increments", true);
         userIntefaceScale = builder.getInt("ui_scale", 2, 0, 4);
         tooltipStyle = builder.getInt("tooltip_style", 1).modes(

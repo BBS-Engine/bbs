@@ -1,10 +1,5 @@
 package mchorse.studio.ui.welcome;
 
-import mchorse.studio.Studio;
-import mchorse.studio.StudioEngine;
-import mchorse.studio.settings.StudioSettings;
-import mchorse.studio.ui.KeysApp;
-import mchorse.studio.ui.UIKeysApp;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.graphics.text.FontRenderer;
@@ -26,6 +21,11 @@ import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.Interpolation;
+import mchorse.studio.Studio;
+import mchorse.studio.StudioEngine;
+import mchorse.studio.settings.StudioSettings;
+import mchorse.studio.ui.KeysApp;
+import mchorse.studio.ui.UIKeysApp;
 import org.lwjgl.opengl.GL11;
 
 public class UIWelcomeMenu extends UIBaseMenu
@@ -44,11 +44,9 @@ public class UIWelcomeMenu extends UIBaseMenu
     public UIIcon next;
 
     public UIElement keys;
-    public UITextureRect keyEscape;
     public UITextureRect keyF1;
     public UITextureRect keyF2;
     public UITextureRect keyF3;
-    public UITextureRect keyF4;
     public UITextureRect keyF6;
     public UITextureRect keyF9;
     public UITextureRect keyF11;
@@ -84,16 +82,12 @@ public class UIWelcomeMenu extends UIBaseMenu
         this.keys.relative(this.main).xy(0.5F, 0.5F).wh(375, 151).anchor(0.5F, 0.5F);
 
         /* Keys */
-        this.keyEscape = new UITextureRect(KEYBOARD, new Area(2, 2, 21, 21), "Esc");
-        this.keyEscape.tooltip(UIKeysApp.WELCOME_KEYS_ESCAPE);
         this.keyF1 = new UITextureRect(KEYBOARD, new Area(52, 2, 21, 21), "F1");
         this.keyF1.tooltip(UIKeysApp.WELCOME_KEYS_F1);
         this.keyF2 = new UITextureRect(KEYBOARD, new Area(77, 2, 21, 21), "F2");
         this.keyF2.tooltip(UIKeysApp.WELCOME_KEYS_F2);
         this.keyF3 = new UITextureRect(KEYBOARD, new Area(102, 2, 21, 21), "F3");
         this.keyF3.tooltip(UIKeysApp.WELCOME_KEYS_F3);
-        this.keyF4 = new UITextureRect(KEYBOARD, new Area(127, 2, 21, 21), "F4");
-        this.keyF4.tooltip(UIKeysApp.WELCOME_KEYS_F4);
         this.keyF6 = new UITextureRect(KEYBOARD, new Area(191, 2, 21, 21), "F6");
         this.keyF6.tooltip(UIKeysApp.WELCOME_KEYS_F6);
         this.keyF9 = new UITextureRect(KEYBOARD, new Area(277, 2, 21, 21), "F9");
@@ -103,7 +97,7 @@ public class UIWelcomeMenu extends UIBaseMenu
         this.keyBackslash = new UITextureRect(KEYBOARD, new Area(297, 82, 21, 21), "\\");
         this.keyBackslash.tooltip(UIKeysApp.WELCOME_KEYS_BACKSLASH);
 
-        this.keys.add(this.keyEscape, this.keyF1, this.keyF2, this.keyF3, this.keyF4, this.keyF6, this.keyF9, this.keyF11, this.keyBackslash);
+        this.keys.add(this.keyF1, this.keyF2, this.keyF3, this.keyF6, this.keyF9, this.keyF11, this.keyBackslash);
 
         for (UITextureRect rect : this.keys.getChildren(UITextureRect.class))
         {
@@ -128,24 +122,12 @@ public class UIWelcomeMenu extends UIBaseMenu
             new LinkDescription(Studio.link("textures/features/particles.png"), UIKeysApp.WELCOME_FEATURES_PARTICLES_DESCRIPTION)
         ));
         this.featureList.add(new Label<>(
-            UIKeysApp.WELCOME_FEATURES_CAMERA,
-            new LinkDescription(Studio.link("textures/features/camera.png"), UIKeysApp.WELCOME_FEATURES_CAMERA_DESCRIPTION)
+            UIKeysApp.WELCOME_FEATURES_FILM_EDITOR,
+            new LinkDescription(Studio.link("textures/features/film_editor.png"), UIKeysApp.WELCOME_FEATURES_FILM_EDITOR_DESCRIPTION)
         ));
         this.featureList.add(new Label<>(
             UIKeysApp.WELCOME_FEATURES_BLOCKBENCH,
             new LinkDescription(Studio.link("textures/features/blockbench.png"), UIKeysApp.WELCOME_FEATURES_BLOCKBENCH_DESCRIPTION)
-        ));
-        this.featureList.add(new Label<>(
-            UIKeysApp.WELCOME_FEATURES_TRIGGERS,
-            new LinkDescription(Studio.link("textures/features/triggers.png"), UIKeysApp.WELCOME_FEATURES_TRIGGERS_DESCRIPTION)
-        ));
-        this.featureList.add(new Label<>(
-            UIKeysApp.WELCOME_FEATURES_SCRIPTS,
-            new LinkDescription(Studio.link("textures/features/scripts.png"), UIKeysApp.WELCOME_FEATURES_SCRIPTS_DESCRIPTION)
-        ));
-        this.featureList.add(new Label<>(
-            UIKeysApp.WELCOME_FEATURES_DIALOGUES,
-            new LinkDescription(Studio.link("textures/features/dialogues.png"), UIKeysApp.WELCOME_FEATURES_DIALOGUES_DESCRIPTION)
         ));
         this.featureList.background(Colors.A25).sort();
         this.featureList.add(new Label<>(
@@ -339,10 +321,10 @@ public class UIWelcomeMenu extends UIBaseMenu
 
                 this.features.area.render(context.batcher, Colors.A50);
 
-                context.batcher.fullTexturedBox(texture, ex, ey, texture.width / 2, texture.height / 2);
+                context.batcher.texturedBox(texture, Colors.WHITE, ex, ey, 280, 140, 0, 0, 560, 280, 560, 280);
 
                 int lx = ex + 8;
-                int ly = ey + texture.height / 2 + 8;
+                int ly = ey + 140 + 8;
 
                 for (String line : font.split(this.description.description.get(), this.features.area.w - this.featureList.area.w - 16))
                 {
