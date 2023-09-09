@@ -14,10 +14,12 @@ import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.tooltips.InterpolationTooltip;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.keyframes.Keyframe;
 import mchorse.bbs.utils.keyframes.KeyframeEasing;
 import mchorse.bbs.utils.keyframes.KeyframeSimplifier;
 import mchorse.bbs.utils.math.MathUtils;
+import org.joml.Vector2i;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -378,5 +380,42 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
         this.tick.setValue(this.converter == null ? tick : this.converter.to(tick));
         this.value.setValue(this.keyframes.which.getY(frame));
         this.e = frame.getEasing();
+    }
+
+    public void select(List<List<Integer>> selection, Vector2i selected)
+    {
+        int i = 0;
+        boolean deselect = true;
+
+        for (UISheet sheet : this.keyframes.getSheets())
+        {
+            List<Integer> sheetSelection = CollectionUtils.inRange(selection, i) ? selection.get(i) : null;
+
+            if (sheetSelection != null)
+            {
+                sheet.selected.clear();
+                sheet.selected.addAll(sheetSelection);
+                this.keyframes.which = Selection.KEYFRAME;
+            }
+
+            if (i == selected.x)
+            {
+                Keyframe keyframe = sheet.channel.get(selected.y);
+
+                if (keyframe != null)
+                {
+                    this.fillData(keyframe);
+
+                    deselect = false;
+                }
+            }
+
+            i += 1;
+        }
+
+        if (deselect)
+        {
+            this.fillData(null);
+        }
     }
 }

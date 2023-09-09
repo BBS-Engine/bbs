@@ -23,6 +23,7 @@ import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
 import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.utils.math.Interpolation;
+import org.joml.Vector2i;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -385,6 +386,42 @@ public class UIPropertyEditor extends UIElement
 
                 i += 1;
             }
+        }
+    }
+
+    public void select(List<List<Integer>> selection, Vector2i selected)
+    {
+        int i = 0;
+        boolean deselect = true;
+
+        for (UIProperty property : this.properties.getProperties())
+        {
+            List<Integer> sheetSelection = CollectionUtils.inRange(selection, i) ? selection.get(i) : null;
+
+            if (sheetSelection != null)
+            {
+                property.selected.clear();
+                property.selected.addAll(sheetSelection);
+            }
+
+            if (i == selected.x)
+            {
+                GenericKeyframe keyframe = property.channel.get(selected.y);
+
+                if (keyframe != null)
+                {
+                    this.fillData(keyframe);
+
+                    deselect = false;
+                }
+            }
+
+            i += 1;
+        }
+
+        if (deselect)
+        {
+            this.fillData(null);
         }
     }
 }
