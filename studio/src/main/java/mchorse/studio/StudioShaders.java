@@ -88,11 +88,9 @@ public class StudioShaders
             {
                 int i = this.getTextureIndex();
 
-                UniformInt lightmap = shader.getUniform("u_lightmap", UniformInt.class);
                 UniformInt shadowmap = shader.getUniform("u_shadowmap", UniformInt.class);
 
-                if (lightmap != null) lightmap.set(0);
-                if (shadowmap != null) shadowmap.set(1);
+                if (shadowmap != null) shadowmap.set(0);
 
                 for (ShaderBuffer buffer : this.pipeline.gbuffers)
                 {
@@ -137,7 +135,7 @@ public class StudioShaders
 
     public int getTextureIndex()
     {
-        return this.pipeline.shadowMap ? 2 : 1;
+        return this.pipeline.shadowMap ? 1 : 0;
     }
 
     private List<Texture> setupTextures(List<ShaderBuffer> buffers)

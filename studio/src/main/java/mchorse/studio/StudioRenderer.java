@@ -49,7 +49,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
@@ -282,20 +281,9 @@ public class StudioRenderer implements IComponent
 
     private void renderFinal(Camera camera, StudioShaders shaders)
     {
-        Link lightmap = this.engine.world.settings.lightmap;
-
-        if (lightmap != null)
-        {
-            Texture texture = this.context.getTextures().getTexture(lightmap);
-
-            texture.bind(0);
-            texture.setFilter(GL11.GL_LINEAR);
-            texture.setWrap(GL12.GL_CLAMP_TO_EDGE);
-        }
-
         if (shaders.shadow != null)
         {
-            shaders.shadow.getMainTexture().bind(1);
+            shaders.shadow.getMainTexture().bind(0);
         }
 
         for (StudioShaders.Stage stage : shaders.stages)
@@ -517,16 +505,13 @@ public class StudioRenderer implements IComponent
 
     private void updateSky(Shader shader, WorldSettings settings)
     {
-        UniformVector3 zenith = shader.getUniform("u_zenith", UniformVector3.class);
+        UniformVector3 lightmap00 = shader.getUniform("u_lightmap00", UniformVector3.class);
+        UniformVector3 lightmap10 = shader.getUniform("u_lightmap10", UniformVector3.class);
 
-        if (zenith != null)
+        if (lightmap00 != null)
         {
-            UniformVector3 horizon = shader.getUniform("u_horizon", UniformVector3.class);
-            UniformVector3 bottom = shader.getUniform("u_bottom", UniformVector3.class);
-
-            zenith.set(settings.zenith);
-            horizon.set(settings.horizon);
-            bottom.set(settings.bottom);
+            lightmap00.set(settings.lightmap00);
+            lightmap10.set(settings.lightmap10);
         }
 
         UniformVector3 shadingDirection = shader.getUniform("u_shading", UniformVector3.class);

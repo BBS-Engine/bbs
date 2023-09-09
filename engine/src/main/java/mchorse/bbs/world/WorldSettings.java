@@ -5,25 +5,19 @@ import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
-import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.colors.Color;
-import mchorse.bbs.utils.resources.LinkUtils;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 public class WorldSettings implements IMapSerializable
 {
-    public static final Link DEFAULT_LIGHTMAP = Link.assets("textures/lightmap.png");
-
     public boolean sky = true;
     public boolean fog = true;
 
     public Form skyForm;
-    public Color zenith = new Color(50F / 255F, 88F / 255F, 187F / 255F, 1F);
-    public Color horizon = new Color(187F / 255F, 237F / 255F, 255F / 255F, 1F);
-    public Color bottom = new Color(69F / 255F, 61F / 255F, 120F / 255F, 1F);
+    public Color lightmap00 = new Color(1F, 1F, 1F);
+    public Color lightmap10 = new Color(1F, 0F, 0F);
     public final Vector3f shadingDirection = new Vector3f(0, -1, 0);
-    public Link lightmap = DEFAULT_LIGHTMAP;
     public float dayCycle;
     public float dayYaw;
 
@@ -41,18 +35,11 @@ public class WorldSettings implements IMapSerializable
             this.skyForm = FormUtils.fromData(data.getMap("skyForm"));
         }
 
-        this.zenith.set(data.getInt("zenith", this.zenith.getRGBColor()), false);
-        this.horizon.set(data.getInt("horizon", this.horizon.getRGBColor()), false);
-        this.bottom.set(data.getInt("bottom", this.bottom.getRGBColor()), false);
+        this.lightmap00.set(data.getInt("lightmap00", this.lightmap00.getRGBColor()), false);
+        this.lightmap10.set(data.getInt("lightmap10", this.lightmap10.getRGBColor()), false);
         this.shadingDirection.set(DataStorageUtils.vector3fFromData(data.getList("shadingDirection"), this.shadingDirection));
-        this.lightmap = LinkUtils.create(data.get("lightmap"));
         this.dayCycle = data.getFloat("dayCycle");
         this.dayYaw = data.getFloat("dayYaw");
-
-        if (this.lightmap == null)
-        {
-            this.lightmap = DEFAULT_LIGHTMAP;
-        }
 
         this.cameraPosition.set(DataStorageUtils.vector3dFromData(data.getList("cameraPosition"), this.cameraPosition));
         this.cameraRotation.set(DataStorageUtils.vector3fFromData(data.getList("cameraRotation"), this.cameraRotation));
@@ -69,11 +56,9 @@ public class WorldSettings implements IMapSerializable
             data.put("skyForm", FormUtils.toData(this.skyForm));
         }
 
-        data.putInt("zenith", this.zenith.getRGBColor());
-        data.putInt("horizon", this.horizon.getRGBColor());
-        data.putInt("bottom", this.bottom.getRGBColor());
+        data.putInt("lightmap00", this.lightmap00.getRGBColor());
+        data.putInt("lightmap10", this.lightmap10.getRGBColor());
         data.put("shadingDirection", DataStorageUtils.vector3fToData(this.shadingDirection));
-        data.put("lightmap", LinkUtils.toData(this.lightmap == null ? DEFAULT_LIGHTMAP : this.lightmap));
         data.putFloat("dayCycle", this.dayCycle);
         data.putFloat("dayYaw", this.dayYaw);
 

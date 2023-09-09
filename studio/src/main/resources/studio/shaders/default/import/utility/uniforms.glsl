@@ -2,7 +2,6 @@ uniform sampler2D u_texture;
 uniform sampler2D u_position;
 uniform sampler2D u_normal;
 uniform sampler2D u_lighting;
-uniform sampler2D u_lightmap;
 uniform sampler2D u_depth;
 
 uniform vec3 u_camera;

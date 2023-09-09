@@ -28,6 +28,8 @@ uniform sampler2D u_texture1;
 uniform sampler2D u_texture2;
 
 uniform int u_fog;
+uniform vec3 u_lightmap00;
+uniform vec3 u_lightmap10;
 
 uniform float u_day_yaw;
 
@@ -56,7 +58,7 @@ vec3 worldToShadow(vec3 worldPosition) {
 
 void apply_lightmap(inout vec4 result, vec3 color, vec2 coords)
 {
-    result.rgb = mix(result.rgb, color * texture(u_lightmap, coords).rgb, coords.x);
+    result.rgb = mix(result.rgb, color * mix(u_lightmap00, u_lightmap10, coords.x), coords.x);
 }
 
 void main()

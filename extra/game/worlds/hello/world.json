@@ -1,0 +1,7 @@
+{
+    "sky": true,
+    "fog": true,
+    "shadingDirection": [0.6, -1.0, -1.5],
+    "dayYaw": 0,
+    "dayCycle": 6.0
+}
