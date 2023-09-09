@@ -17,7 +17,7 @@ fi
 printf "\nCopying assets..."
 
 mkdir -p "$FOLDER"
-mkdir -p "$FOLDER/game"
+cp -r extra/game/ "$FOLDER/game/"
 cp studio/build/libs/launcher.jar "$FOLDER/"
 cp -r engine/build/dependencies/ "$FOLDER/dependencies/"
 cp engine/build/libs/bbs-engine-0.1.jar "$FOLDER/dependencies/"

@@ -1,0 +1,15 @@
+{
+    "name": "Flat world",
+    "generator": "bbs:flat",
+    "seed": 709528061,
+    "chunks": 35,
+    "chunk_size": 16,
+    "compress": true,
+    "column": true,
+    "column_base": -2,
+    "column_height": 6,
+    "generator.primary": "bbs:grass#0",
+    "generator.secondary": "bbs:dirt#0",
+    "generator.foliage1": "bbs:foliage_grass#1",
+    "generator.foliage2": "bbs:foliage_grass#0"
+}
