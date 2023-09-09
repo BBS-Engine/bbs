@@ -15,9 +15,7 @@ import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
-import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.ValueInt;
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.clips.renderer.IUIClipRenderer;
@@ -40,8 +38,6 @@ import mchorse.bbs.utils.factory.IFactory;
 import mchorse.bbs.utils.keyframes.Keyframe;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.MathUtils;
-import mchorse.bbs.utils.undo.CompoundUndo;
-import mchorse.bbs.utils.undo.IUndo;
 import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFW;
 
@@ -306,8 +302,7 @@ public class UIClips extends UIElement
         clip.tick.set(tick);
         clip.duration.set(duration);
 
-        BaseValue.edit(this.clips, (clips) -> clips.addClip(clip));
-
+        this.clips.addClip(clip);
         this.pickClip(clip);
     }
 
@@ -343,29 +338,26 @@ public class UIClips extends UIElement
     {
         this.clearSelection();
 
-        BaseValue.edit(this.clips, (clips) ->
+        ListType clipsList = data.getList("clips");
+        List<Clip> newClips = new ArrayList<>();
+        int min = Integer.MAX_VALUE;
+
+        for (BaseType type : clipsList)
         {
-            ListType clipsList = data.getList("clips");
-            List<Clip> newClips = new ArrayList<>();
-            int min = Integer.MAX_VALUE;
+            MapType typeMap = type.asMap();
+            Clip clip = this.factory.fromData(typeMap);
 
-            for (BaseType type : clipsList)
-            {
-                MapType typeMap = type.asMap();
-                Clip clip = this.factory.fromData(typeMap);
+            min = Math.min(min, clip.tick.get());
 
-                min = Math.min(min, clip.tick.get());
+            newClips.add(clip);
+        }
 
-                newClips.add(clip);
-            }
-
-            for (Clip clip : newClips)
-            {
-                clip.tick.set(tick + (clip.tick.get() - min));
-                clips.addClip(clip);
-                this.addSelected(clip);
-            }
-        });
+        for (Clip clip : newClips)
+        {
+            clip.tick.set(tick + (clip.tick.get() - min));
+            this.clips.addClip(clip);
+            this.addSelected(clip);
+        }
 
         this.pickLastSelectedClip();
     }
@@ -375,29 +367,30 @@ public class UIClips extends UIElement
      */
     private void cut()
     {
-        BaseValue.edit(this.clips, (clips) ->
+        List<Clip> selectedClips = this.isSelecting() ? this.getClipsFromSelection() : new ArrayList<>(this.clips.get());
+        Clip original = this.delegate.getClip();
+        int offset = this.delegate.getCursor();
+
+        this.clips.preNotifyParent();
+
+        for (Clip clip : selectedClips)
         {
-            List<Clip> selectedClips = this.isSelecting() ? this.getClipsFromSelection() : new ArrayList<>(clips.get());
-            Clip original = this.delegate.getClip();
-            int offset = this.delegate.getCursor();
-
-            for (Clip clip : selectedClips)
+            if (!clip.isInside(offset))
             {
-                if (!clip.isInside(offset))
-                {
-                    continue;
-                }
-
-                Clip copy = clip.breakDown(offset - clip.tick.get());
-
-                clip.duration.set(clip.duration.get() - copy.duration.get());
-                copy.tick.set(copy.tick.get() + clip.duration.get());
-                clips.addClip(copy);
-                this.addSelected(copy);
+                continue;
             }
 
-            this.addSelected(original);
-        });
+            Clip copy = clip.breakDown(offset - clip.tick.get());
+
+            clip.duration.set(clip.duration.get() - copy.duration.get());
+            copy.tick.set(copy.tick.get() + clip.duration.get());
+            this.clips.addClip(copy);
+            this.addSelected(copy);
+        }
+
+        this.clips.postNotifyParent();
+
+        this.addSelected(original);
     }
 
     /**
@@ -442,12 +435,9 @@ public class UIClips extends UIElement
             return;
         }
 
-        BaseValue.edit(this.clips, (clips) ->
-        {
-            clips.remove(original);
-            clips.addClip(converted);
-            this.pickClip(converted);
-        });
+        this.clips.remove(original);
+        this.clips.addClip(converted);
+        this.pickClip(converted);
     }
 
     private void fromReplay(int mouseX, int mouseY)
@@ -518,7 +508,6 @@ public class UIClips extends UIElement
             return;
         }
 
-        List<IUndo<ValueGroup>> undos = new ArrayList<>();
         int min = Integer.MAX_VALUE;
 
         for (Clip clip : clips)
@@ -532,8 +521,6 @@ public class UIClips extends UIElement
         {
             clip.tick.set(clip.tick.get() + diff);
         }
-
-        this.delegate.postUndoCallback(new CompoundUndo<>(undos));
     }
 
     /**
@@ -547,8 +534,6 @@ public class UIClips extends UIElement
         {
             return;
         }
-
-        List<IUndo> undos = new ArrayList<>();
 
         for (Clip clip : clips)
         {
@@ -564,8 +549,6 @@ public class UIClips extends UIElement
                 clip.duration.set(clip.duration.get() + offset - this.delegate.getCursor());
             }
         }
-
-        this.delegate.postUndoCallback(new CompoundUndo(undos));
     }
 
     /**
@@ -580,15 +563,12 @@ public class UIClips extends UIElement
             return;
         }
 
-        BaseValue.edit(this.clips, (clips) ->
+        for (Clip clip : selectedClips)
         {
-            for (Clip clip : selectedClips)
-            {
-                this.clips.remove(clip);
-            }
+            this.clips.remove(clip);
+        }
 
-            this.pickClip(null);
-        });
+        this.pickClip(null);
     }
 
     /**

@@ -14,20 +14,20 @@ import java.util.Map;
 
 public class FormProperties extends ValueGroup
 {
-    public final Map<String, FormProperty> properties = new HashMap<>();
+    public final Map<String, GenericKeyframeChannel> properties = new HashMap<>();
 
     public FormProperties(String id)
     {
         super(id);
     }
 
-    public FormProperty getOrCreate(Form form, String key)
+    public GenericKeyframeChannel getOrCreate(Form form, String key)
     {
         BaseValue value = this.get(key);
 
-        if (value instanceof FormProperty)
+        if (value instanceof GenericKeyframeChannel)
         {
-            return (FormProperty) value;
+            return (GenericKeyframeChannel) value;
         }
 
         IFormProperty property = FormUtils.getProperty(form, key);
@@ -35,19 +35,17 @@ public class FormProperties extends ValueGroup
         return property != null ? this.create(property) : null;
     }
 
-    public FormProperty create(IFormProperty property)
+    public GenericKeyframeChannel create(IFormProperty property)
     {
         if (property.canCreateChannel())
         {
-            GenericKeyframeChannel channel = property.createChannel();
             String key = FormUtils.getPropertyPath(property);
-            FormProperty valueFormProperty = new FormProperty(key);
+            GenericKeyframeChannel channel = property.createChannel(key);
 
-            valueFormProperty.set(channel);
-            this.properties.put(key, valueFormProperty);
-            this.add(valueFormProperty);
+            this.properties.put(key, channel);
+            this.add(channel);
 
-            return valueFormProperty;
+            return channel;
         }
 
         return null;
@@ -76,11 +74,11 @@ public class FormProperties extends ValueGroup
                 continue;
             }
 
-            FormProperty property = new FormProperty(key);
+            GenericKeyframeChannel property = new GenericKeyframeChannel(key, null);
 
             property.fromData(mapType);
 
-            if (property.get().getFactory() != null)
+            if (property.getFactory() != null)
             {
                 this.properties.put(key, property);
                 this.add(property);

@@ -39,9 +39,9 @@ public abstract class BaseTweenProperty <T> extends BaseProperty<T>
     }
 
     @Override
-    public GenericKeyframeChannel createChannel()
+    public GenericKeyframeChannel createChannel(String key)
     {
-        return new GenericKeyframeChannel(this.factory);
+        return new GenericKeyframeChannel(key, this.factory);
     }
 
     @Override

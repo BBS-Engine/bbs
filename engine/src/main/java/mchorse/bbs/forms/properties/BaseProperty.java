@@ -112,7 +112,7 @@ public abstract class BaseProperty <T> implements IFormProperty<T>
     }
 
     @Override
-    public GenericKeyframeChannel createChannel()
+    public GenericKeyframeChannel createChannel(String key)
     {
         return null;
     }

@@ -66,10 +66,7 @@ public class UIPointsModule extends UIAbstractModule
             return;
         }
 
-        BaseValue.edit(this.path.points, (positions) ->
-        {
-            positions.get().add(this.index, positions.get().remove(this.index - 1));
-        });
+        BaseValue.edit(this.path.points, (positions) -> positions.get().add(this.index, positions.get().remove(this.index - 1)));
 
         this.index = this.index - 1;
     }
@@ -81,10 +78,7 @@ public class UIPointsModule extends UIAbstractModule
             return;
         }
 
-        BaseValue.edit(this.path.points, (positions) ->
-        {
-            positions.get().add(this.index, positions.get().remove(this.index + 1));
-        });
+        BaseValue.edit(this.path.points, (positions) -> positions.get().add(this.index, positions.get().remove(this.index + 1)));
 
         this.index = this.index - 1;
     }
@@ -93,19 +87,13 @@ public class UIPointsModule extends UIAbstractModule
     {
         if (this.index + 1 >= this.path.size())
         {
-            BaseValue.edit(this.path.points, (positions) ->
-                {
-                    positions.get().add(new Position(this.editor.getCamera()));
-                });
+            BaseValue.edit(this.path.points, (positions) -> positions.get().add(new Position(this.editor.getCamera())));
 
             this.index = MathUtils.clamp(this.index + 1, 0, this.path.points.get().size() - 1);
         }
         else
         {
-            BaseValue.edit(this.path.points, (positions) ->
-                {
-                    positions.get().add(this.index + 1, new Position(this.editor.getCamera()));
-                });
+            BaseValue.edit(this.path.points, (positions) -> positions.get().add(this.index + 1, new Position(this.editor.getCamera())));
 
             this.index = this.index + 1;
         }
@@ -126,10 +114,7 @@ public class UIPointsModule extends UIAbstractModule
             return;
         }
 
-        BaseValue.edit(this.path.points, (positions) ->
-        {
-            positions.get().remove(this.index);
-        });
+        BaseValue.edit(this.path.points, (positions) -> positions.get().remove(this.index));
 
         this.index = this.index > 0 ? this.index - 1 : this.index;
         this.scroll.setSize(this.path.size());

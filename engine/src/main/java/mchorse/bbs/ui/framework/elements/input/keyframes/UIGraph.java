@@ -5,7 +5,6 @@ import mchorse.bbs.graphics.line.LineBuilder;
 import mchorse.bbs.graphics.line.SolidColorLineRenderer;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.Scale;
@@ -213,33 +212,30 @@ public class UIGraph extends UIKeyframes
     @Override
     public void addCurrent(int mouseX, int mouseY)
     {
-        BaseValue.edit(this.sheet.channel, (channel) ->
+        long tick = Math.round(this.fromGraphX(mouseX));
+        double value = this.fromGraphY(mouseY);
+
+        KeyframeEasing easing = KeyframeEasing.IN;
+        KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
+        Keyframe frame = this.getCurrent();
+        long oldTick = tick;
+
+        if (frame != null)
         {
-            long tick = Math.round(this.fromGraphX(mouseX));
-            double value = this.fromGraphY(mouseY);
+            easing = frame.getEasing();
+            interp = frame.getInterpolation();
+            oldTick = frame.getTick();
+        }
 
-            KeyframeEasing easing = KeyframeEasing.IN;
-            KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
-            Keyframe frame = this.getCurrent();
-            long oldTick = tick;
+        this.sheet.selected.clear();
+        this.sheet.selected.add(this.sheet.channel.insert(tick, value));
 
-            if (frame != null)
-            {
-                easing = frame.getEasing();
-                interp = frame.getInterpolation();
-                oldTick = frame.getTick();
-            }
-
-            this.sheet.selected.clear();
-            this.sheet.selected.add(channel.insert(tick, value));
-
-            if (oldTick != tick)
-            {
-                frame = this.getCurrent();
-                frame.setEasing(easing);
-                frame.setInterpolation(interp);
-            }
-        });
+        if (oldTick != tick)
+        {
+            frame = this.getCurrent();
+            frame.setEasing(easing);
+            frame.setInterpolation(interp);
+        }
     }
 
     @Override
@@ -252,9 +248,9 @@ public class UIGraph extends UIKeyframes
             return;
         }
 
-        BaseValue.edit(this.sheet.channel, (channel) -> channel.remove(this.sheet.selected.get(0)));
-
+        this.sheet.channel.remove(this.sheet.selected.get(0));
         this.sheet.clearSelection();
+
         this.which = Selection.NOT_SELECTED;
     }
 

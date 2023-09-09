@@ -225,6 +225,11 @@ public class UIFilmController extends UIElement
 
     public void stopRecording()
     {
+        if (!this.recording)
+        {
+            return;
+        }
+
         this.recording = false;
         this.recordingGroups = null;
 
@@ -453,10 +458,7 @@ public class UIFilmController extends UIElement
                     return;
                 }
 
-                BaseValue.edit(replay.keyframes, (keyframes) ->
-                {
-                    keyframes.record(this.getTick(), this.controlled, groups);
-                });
+                BaseValue.edit(replay.keyframes, (keyframes) -> keyframes.record(this.getTick(), this.controlled, groups));
             }
         );
 
@@ -772,6 +774,13 @@ public class UIFilmController extends UIElement
 
     private void renderStencil(UIContext context)
     {
+        Area viewport = this.panel.getFramebufferArea(this.panel.getViewportArea());
+
+        if (!viewport.isInside(context))
+        {
+            return;
+        }
+
         int index = this.panel.replays.replays.getIndex();
 
         if (!CollectionUtils.inRange(this.entities, index))

@@ -41,7 +41,7 @@ public class UIMultiProperties extends UIProperties
         {
             tick = (long) tick;
 
-            double dx = tick - this.getCurrent().tick;
+            double dx = tick - this.getCurrent().getTick();
 
             for (UIProperty property : this.properties)
             {
@@ -50,7 +50,7 @@ public class UIMultiProperties extends UIProperties
         }
         else
         {
-            this.getCurrent().tick = (long) tick;
+            this.getCurrent().setTick((long) tick);
         }
 
         this.sliding = true;
@@ -67,13 +67,13 @@ public class UIMultiProperties extends UIProperties
             {
                 if (current.getFactory() == property.channel.getFactory())
                 {
-                    property.setValue(current.value);
+                    property.setValue(current.getValue());
                 }
             }
         }
         else
         {
-            current.value = value;
+            current.setValue(value);
         }
     }
 
@@ -105,8 +105,8 @@ public class UIMultiProperties extends UIProperties
             {
                 GenericKeyframe frame = (GenericKeyframe) object;
 
-                min = Integer.min((int) frame.tick, min);
-                max = Integer.max((int) frame.tick, max);
+                min = Integer.min((int) frame.getTick(), min);
+                max = Integer.max((int) frame.getTick(), max);
             }
 
             c = Math.max(c, property.channel.getKeyframes().size());
@@ -233,8 +233,8 @@ public class UIMultiProperties extends UIProperties
 
         if (frame != null)
         {
-            interp = frame.interp;
-            oldTick = frame.tick;
+            interp = frame.getInterpolation();
+            oldTick = frame.getTick();
         }
 
         Object value;
@@ -251,11 +251,11 @@ public class UIMultiProperties extends UIProperties
 
             if (a == b)
             {
-                value = a.value;
+                value = a.getValue();
             }
             else
             {
-                value = factory.interpolate(a.value, b.value, a.interp, (tick - a.tick) / (float) (b.tick - a.tick));
+                value = factory.interpolate(a.getValue(), b.getValue(), a.getInterpolation(), (tick - a.getTick()) / (float) (b.getTick() - a.getTick()));
             }
 
             value = factory.copy(value);
@@ -269,12 +269,7 @@ public class UIMultiProperties extends UIProperties
         {
             frame.setInterpolation(interp);
         }
-
-        this.addedDoubleClick(frame, tick, mouseX, mouseY);
     }
-
-    protected void addedDoubleClick(GenericKeyframe frame, long tick, int mouseX, int mouseY)
-    {}
 
     @Override
     public void removeCurrent()
@@ -339,7 +334,7 @@ public class UIMultiProperties extends UIProperties
             for (Object object : property.channel.getKeyframes())
             {
                 GenericKeyframe frame = (GenericKeyframe) object;
-                boolean point = this.isInside(this.toGraphX(frame.tick), alt ? mouseY : y + h / 2, mouseX, mouseY);
+                boolean point = this.isInside(this.toGraphX(frame.getTick()), alt ? mouseY : y + h / 2, mouseX, mouseY);
 
                 if (point)
                 {
@@ -369,7 +364,7 @@ public class UIMultiProperties extends UIProperties
 
                     if (frame != null)
                     {
-                        this.lastT = frame.tick;
+                        this.lastT = frame.getTick();
                     }
 
                     if (alt)
@@ -424,7 +419,7 @@ public class UIMultiProperties extends UIProperties
                 {
                     GenericKeyframe keyframe = (GenericKeyframe) object;
 
-                    if (area.isInside(this.toGraphX(keyframe.tick), y + h / 2) && !property.selected.contains(i))
+                    if (area.isInside(this.toGraphX(keyframe.getTick()), y + h / 2) && !property.selected.contains(i))
                     {
                         property.selected.add(i);
                         c++;
@@ -480,7 +475,7 @@ public class UIMultiProperties extends UIProperties
             {
                 GenericKeyframe frame = (GenericKeyframe) object;
 
-                this.renderRect(context, this.toGraphX(frame.tick), y + h / 2, 3, property.hasSelected(index) ? Colors.WHITE : property.color);
+                this.renderRect(context, this.toGraphX(frame.getTick()), y + h / 2, 3, property.hasSelected(index) ? Colors.WHITE : property.color);
 
                 index++;
             }
@@ -491,7 +486,7 @@ public class UIMultiProperties extends UIProperties
             {
                 GenericKeyframe frame = (GenericKeyframe) object;
 
-                this.renderRect(context, this.toGraphX(frame.tick), y + h / 2, 2, property.hasSelected(index) ? Colors.ACTIVE : 0);
+                this.renderRect(context, this.toGraphX(frame.getTick()), y + h / 2, 2, property.hasSelected(index) ? Colors.ACTIVE : 0);
 
                 index++;
             }

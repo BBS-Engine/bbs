@@ -37,23 +37,6 @@ public interface IUIClipsDelegate
 
     /* Undo/redo */
 
-    public default void postUndo(IUndo undo)
-    {
-        this.postUndo(undo, true, false);
-    }
-
-    public default void postUndo(IUndo undo, boolean apply)
-    {
-        this.postUndo(undo, apply, false);
-    }
-
-    public void postUndo(IUndo undo, boolean apply, boolean callback);
-
-    public default void postUndoCallback(IUndo undo)
-    {
-        this.postUndo(undo, true, true);
-    }
-
     public void markLastUndoNoMerging();
 
     public void updateClipProperty(ValueInt property, int value);

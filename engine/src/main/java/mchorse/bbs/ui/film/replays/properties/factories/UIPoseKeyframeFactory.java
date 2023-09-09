@@ -5,6 +5,7 @@ import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.ModelForm;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.film.replays.properties.UIProperty;
 import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
@@ -29,7 +30,7 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
         {
             menu.action(Icons.COPY, IKey.lazy("Copy pose"), () ->
             {
-                Window.setClipboard(this.keyframe.value.toData(), "_ModelCopyPose");
+                Window.setClipboard(this.keyframe.getValue().toData(), "_ModelCopyPose");
             });
 
             MapType data = Window.getClipboardMap("_ModelCopyPose");
@@ -40,7 +41,7 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
                 {
                     String current = this.groups.getCurrentFirst();
 
-                    this.keyframe.value.fromData(data);
+                    BaseValue.edit(this.keyframe, (kf) -> kf.getValue().fromData(data));
                     this.pickBone(current);
                 });
             }
@@ -49,11 +50,11 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
             {
                 String current = this.groups.getCurrentFirst();
 
-                this.keyframe.value.transforms.clear();
+                BaseValue.edit(this.keyframe, (kf) -> kf.getValue().transforms.clear());
                 this.pickBone(current);
             });
         });
-        this.transform = new UIPropTransform();
+        this.transform = new UIPoseTransforms(this.keyframe);
         this.transform.verticalCompact();
 
         UIProperty property = editor.properties.getProperty(keyframe);
@@ -74,12 +75,48 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
 
     private void pickBone(String bone)
     {
-        this.transform.setTransform(this.keyframe.value.get(bone));
+        this.transform.setTransform(this.keyframe.getValue().get(bone));
     }
 
     public void selectBone(String bone)
     {
         this.groups.setCurrentScroll(bone);
         this.pickBone(bone);
+    }
+
+    public static class UIPoseTransforms extends UIPropTransform
+    {
+        private GenericKeyframe<Pose> keyframe;
+
+        public UIPoseTransforms(GenericKeyframe<Pose> keyframe)
+        {
+            super();
+
+            this.keyframe = keyframe;
+        }
+
+        @Override
+        public void setT(double x, double y, double z)
+        {
+            this.keyframe.preNotifyParent();
+            super.setT(x, y, z);
+            this.keyframe.postNotifyParent();
+        }
+
+        @Override
+        public void setS(double x, double y, double z)
+        {
+            this.keyframe.preNotifyParent();
+            super.setS(x, y, z);
+            this.keyframe.postNotifyParent();
+        }
+
+        @Override
+        public void setR(double x, double y, double z)
+        {
+            this.keyframe.preNotifyParent();
+            super.setR(x, y, z);
+            this.keyframe.postNotifyParent();
+        }
     }
 }

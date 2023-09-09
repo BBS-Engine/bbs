@@ -233,31 +233,28 @@ public class UIDopeSheet extends UIKeyframes
 
         UISheet sheet = this.sheets.get(i);
 
-        BaseValue.edit(sheet.channel, (channel) ->
+        KeyframeEasing easing = KeyframeEasing.IN;
+        KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
+        Keyframe frame = this.getCurrent();
+        long tick = Math.round(this.fromGraphX(mouseX));
+        long oldTick = tick;
+
+        if (frame != null)
         {
-            KeyframeEasing easing = KeyframeEasing.IN;
-            KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
-            Keyframe frame = this.getCurrent();
-            long tick = Math.round(this.fromGraphX(mouseX));
-            long oldTick = tick;
+            easing = frame.getEasing();
+            interp = frame.getInterpolation();
+            oldTick = frame.getTick();
+        }
 
-            if (frame != null)
-            {
-                easing = frame.getEasing();
-                interp = frame.getInterpolation();
-                oldTick = frame.getTick();
-            }
+        sheet.selected.clear();
+        sheet.selected.add(sheet.channel.insert(tick, sheet.channel.interpolate(tick)));
+        frame = this.getCurrent();
 
-            sheet.selected.clear();
-            sheet.selected.add(channel.insert(tick, channel.interpolate(tick)));
-            frame = this.getCurrent();
-
-            if (oldTick != tick)
-            {
-                frame.setEasing(easing);
-                frame.setInterpolation(interp);
-            }
-        });
+        if (oldTick != tick)
+        {
+            frame.setEasing(easing);
+            frame.setInterpolation(interp);
+        }
     }
 
     @Override
@@ -272,8 +269,7 @@ public class UIDopeSheet extends UIKeyframes
 
         UISheet current = this.getCurrentSheet();
 
-        BaseValue.edit(current.channel, (channel) -> channel.remove(current.selected.get(0)));
-
+        current.channel.remove(current.selected.get(0));
         current.selected.clear();
 
         this.which = Selection.NOT_SELECTED;

@@ -17,14 +17,16 @@ public class UIVector4fKeyframeFactory extends UIKeyframeFactory<Vector4f>
     {
         super(keyframe, editor);
 
+        Vector4f value = keyframe.getValue();
+
         this.x = new UITrackpad((v) -> this.editor.setValue(this.getValue()));
-        this.x.setValue(keyframe.value.x);
+        this.x.setValue(value.x);
         this.y = new UITrackpad((v) -> this.editor.setValue(this.getValue()));
-        this.y.setValue(keyframe.value.y);
+        this.y.setValue(value.y);
         this.z = new UITrackpad((v) -> this.editor.setValue(this.getValue()));
-        this.z.setValue(keyframe.value.z);
+        this.z.setValue(value.z);
         this.w = new UITrackpad((v) -> this.editor.setValue(this.getValue()));
-        this.w.setValue(keyframe.value.w);
+        this.w.setValue(value.w);
 
         this.add(UI.row(this.x, this.y), UI.row(this.z, this.w));
     }

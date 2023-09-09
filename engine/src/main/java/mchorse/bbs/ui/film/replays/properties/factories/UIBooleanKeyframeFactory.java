@@ -14,7 +14,7 @@ public class UIBooleanKeyframeFactory extends UIKeyframeFactory<Boolean>
         super(keyframe, editor);
 
         this.toggle = new UIToggle(IKey.lazy("True"), (t) -> this.editor.setValue(t));
-        this.toggle.setValue(keyframe.value);
+        this.toggle.setValue(keyframe.getValue());
 
         this.add(this.toggle);
     }

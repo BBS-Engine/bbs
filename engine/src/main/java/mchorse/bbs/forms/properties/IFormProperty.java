@@ -60,5 +60,5 @@ public interface IFormProperty <T> extends IMapSerializable
     /**
      * Create a generic keyframe channel that can be used with this property
      */
-    public GenericKeyframeChannel createChannel();
+    public GenericKeyframeChannel createChannel(String key);
 }

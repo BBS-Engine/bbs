@@ -13,7 +13,7 @@ public class UIFloatKeyframeFactory extends UIKeyframeFactory<Float>
         super(keyframe, editor);
 
         this.value = new UITrackpad((v) -> this.editor.setValue(v.floatValue()));
-        this.value.setValue(keyframe.value);
+        this.value.setValue(keyframe.getTick());
 
         this.add(this.value);
     }

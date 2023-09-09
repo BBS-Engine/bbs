@@ -1,7 +1,6 @@
 package mchorse.bbs.ui.film.replays;
 
 import mchorse.bbs.film.Film;
-import mchorse.bbs.film.replays.FormProperty;
 import mchorse.bbs.film.replays.Replay;
 import mchorse.bbs.film.replays.ReplayKeyframes;
 import mchorse.bbs.forms.FormUtils;
@@ -27,6 +26,7 @@ import mchorse.bbs.utils.StringUtils;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class UIReplaysEditor extends UIElement
 
     private List<KeyframeChannel> tempKeyframes = new ArrayList<>();
     private List<Integer> tempColors = new ArrayList<>();
-    private List<FormProperty> tempProperties = new ArrayList<>();
+    private List<GenericKeyframeChannel> tempProperties = new ArrayList<>();
     private List<IFormProperty> tempFormProperties = new ArrayList<>();
 
     static
@@ -210,7 +210,7 @@ public class UIReplaysEditor extends UIElement
             }
             else
             {
-                FormProperty property = this.replay.properties.getOrCreate(this.replay.form.get(), key);
+                GenericKeyframeChannel property = this.replay.properties.getOrCreate(this.replay.form.get(), key);
 
                 if (property != null)
                 {
@@ -323,7 +323,7 @@ public class UIReplaysEditor extends UIElement
             {
                 GenericKeyframe a = (GenericKeyframe) segment.a;
                 GenericKeyframe b = (GenericKeyframe) segment.b;
-                GenericKeyframe closest = Math.abs(a.tick - ticks) > Math.abs(b.tick - ticks) ? b : a;
+                GenericKeyframe closest = Math.abs(a.getTick() - ticks) > Math.abs(b.getTick() - ticks) ? b : a;
 
                 this.propertyEditor.pickKeyframe(closest);
 
@@ -332,7 +332,7 @@ public class UIReplaysEditor extends UIElement
                     ((UIPoseKeyframeFactory) this.propertyEditor.editor).selectBone(bone);
                 }
 
-                this.delegate.setCursor((int) closest.tick);
+                this.delegate.setCursor((int) closest.getTick());
             }
         }
     }

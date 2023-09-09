@@ -26,6 +26,8 @@ public class KeyframeChannel extends ValueList<Keyframe>
         super(id);
     }
 
+    /* Read only */
+
     public int getLength()
     {
         return this.list.isEmpty() ? 0 : (int) this.list.get(this.list.size() - 1).getTick();
@@ -49,21 +51,6 @@ public class KeyframeChannel extends ValueList<Keyframe>
     public Keyframe get(int index)
     {
         return this.has(index) ? this.list.get(index) : null;
-    }
-
-    public void remove(int index)
-    {
-        if (index < 0 || index > this.list.size() - 1)
-        {
-            return;
-        }
-
-        Keyframe frame = this.list.remove(index);
-
-        frame.prev.next = frame.next;
-        frame.next.prev = frame.prev;
-
-        this.sync();
     }
 
     /**
@@ -143,6 +130,27 @@ public class KeyframeChannel extends ValueList<Keyframe>
         return segment;
     }
 
+    /* Write only */
+
+    public void remove(int index)
+    {
+        if (index < 0 || index > this.list.size() - 1)
+        {
+            return;
+        }
+
+        this.preNotifyParent();
+
+        Keyframe frame = this.list.remove(index);
+
+        frame.prev.next = frame.next;
+        frame.next.prev = frame.prev;
+
+        this.sync();
+
+        this.postNotifyParent();
+    }
+
     /**
      * Insert a keyframe at given tick with given value
      *
@@ -154,6 +162,8 @@ public class KeyframeChannel extends ValueList<Keyframe>
      */
     public int insert(long tick, double value)
     {
+        this.preNotifyParent();
+
         Keyframe prev;
 
         if (!this.list.isEmpty())
@@ -165,6 +175,7 @@ public class KeyframeChannel extends ValueList<Keyframe>
                 this.list.add(0, new Keyframe("", tick, value));
 
                 this.sort();
+                this.postNotifyParent();
 
                 return 0;
             }
@@ -178,6 +189,7 @@ public class KeyframeChannel extends ValueList<Keyframe>
             if (frame.getTick() == tick)
             {
                 frame.setValue(value);
+                this.postNotifyParent();
 
                 return index;
             }
@@ -201,16 +213,21 @@ public class KeyframeChannel extends ValueList<Keyframe>
         }
 
         this.sync();
+        this.postNotifyParent();
 
         return index;
     }
 
     public void moveX(long offset)
     {
+        this.preNotifyParent();
+
         for (Keyframe keyframe : this.list)
         {
             keyframe.setTick(keyframe.getTick() + offset);
         }
+
+        this.postNotifyParent();
     }
 
     /**
@@ -248,6 +265,8 @@ public class KeyframeChannel extends ValueList<Keyframe>
             return;
         }
 
+        this.preNotifyParent();
+
         for (int i = 1; i < this.list.size(); i++)
         {
             if (i >= this.list.size() - 1)
@@ -268,6 +287,7 @@ public class KeyframeChannel extends ValueList<Keyframe>
         }
 
         this.sync();
+        this.postNotifyParent();
     }
 
     @Override

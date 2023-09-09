@@ -56,7 +56,7 @@ public class UIPropertyEditor extends UIElement
                 return null;
             }
 
-            return keyframe.interp;
+            return keyframe.getInterpolation();
         }, null);
 
         this.frameButtons = new UIElement();
@@ -66,7 +66,7 @@ public class UIPropertyEditor extends UIElement
         this.tick.limit(Integer.MIN_VALUE, Integer.MAX_VALUE, true).tooltip(UIKeys.KEYFRAMES_TICK);
         this.interp = new UIIcon(Icons.GRAPH, (b) ->
         {
-            UICameraUtils.interps(this.getContext(), (Interpolation) this.properties.getCurrent().interp, this::pickInterpolation);
+            UICameraUtils.interps(this.getContext(), (Interpolation) this.properties.getCurrent().getInterpolation(), this::pickInterpolation);
         });
         this.interp.tooltip(tooltip);
 
@@ -183,12 +183,12 @@ public class UIPropertyEditor extends UIElement
         {
             MapType map = data.getMap(key);
             ListType list = map.getList("keyframes");
-            IGenericKeyframeFactory serializer = KeyframeFactories.SERIALIZERS.get(map.getString("type"));
+            IGenericKeyframeFactory serializer = KeyframeFactories.FACTORIES.get(map.getString("type"));
 
             for (int i = 0, c = list.size(); i < c; i++)
             {
                 List<GenericKeyframe> keyframes = temp.computeIfAbsent(key, k -> new ArrayList<>());
-                GenericKeyframe keyframe = new GenericKeyframe(serializer);
+                GenericKeyframe keyframe = new GenericKeyframe("", serializer);
 
                 keyframe.fromData(list.getMap(i));
                 keyframes.add(keyframe);
@@ -214,7 +214,7 @@ public class UIPropertyEditor extends UIElement
                 MapType data = new MapType();
                 ListType list = new ListType();
 
-                data.putString("type", CollectionUtils.getKey(KeyframeFactories.SERIALIZERS, property.channel.getFactory()));
+                data.putString("type", CollectionUtils.getKey(KeyframeFactories.FACTORIES, property.channel.getFactory()));
                 data.put("keyframes", list);
 
                 for (int i = 0; i < c; i++)
@@ -273,19 +273,15 @@ public class UIPropertyEditor extends UIElement
 
     private void pasteKeyframesTo(UIProperty property, List<GenericKeyframe> keyframes, long offset)
     {
-        long firstX = keyframes.get(0).tick;
+        long firstX = keyframes.get(0).getTick();
         List<GenericKeyframe> toSelect = new ArrayList<>();
-
-        if (Window.isCtrlPressed())
-        {
-            offset = firstX;
-        }
+        long newOffset = Window.isCtrlPressed() ? firstX : offset;
 
         for (GenericKeyframe keyframe : keyframes)
         {
-            keyframe.tick = keyframe.tick - firstX + offset;
+            keyframe.setTick(keyframe.getTick() - firstX + newOffset);
 
-            int index = property.channel.insert(keyframe.tick, keyframe.value);
+            int index = property.channel.insert(keyframe.getTick(), keyframe.getValue());
             GenericKeyframe inserted = property.channel.get(index);
 
             inserted.copy(keyframe);
@@ -348,7 +344,7 @@ public class UIPropertyEditor extends UIElement
             return;
         }
 
-        double tick = frame.tick;
+        double tick = frame.getTick();
 
         if (this.editor != null)
         {

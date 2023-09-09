@@ -100,16 +100,22 @@ public class Clips extends ValueGroup
 
     public void addClip(Clip clip)
     {
-        this.clips.add(clip);
+        this.preNotifyParent();
 
+        this.clips.add(clip);
         this.sync();
+
+        this.postNotifyParent();
     }
 
     public void remove(Clip clip)
     {
-        this.clips.remove(clip);
+        this.preNotifyParent();
 
+        this.clips.remove(clip);
         this.sync();
+
+        this.postNotifyParent();
     }
 
     /* New value methods */

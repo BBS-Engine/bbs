@@ -392,9 +392,14 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         {
             data.preCallback(this::handlePreValues);
             data.postCallback(this::handlePostValues);
-        }
 
-        this.undoManager = data == null ? null : new UndoManager<>(50);
+            this.undoManager = new UndoManager<>(50);
+            this.undoManager.setCallback(this::handleUndos);
+        }
+        else
+        {
+            this.undoManager = null;
+        }
 
         super.fill(data);
 
@@ -475,11 +480,11 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
         if (changeUndos.size() == 1)
         {
-            this.postUndo(changeUndos.get(0));
+            this.undoManager.pushUndo(changeUndos.get(0));
         }
         else
         {
-            this.postUndo(new CompoundUndo<>(changeUndos.toArray(new IUndo[0])));
+            this.undoManager.pushUndo(new CompoundUndo<>(changeUndos.toArray(new IUndo[0])));
         }
 
         this.cachedUndo.clear();
@@ -517,6 +522,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
             this.timeline.scale.view(change.viewMin, change.viewMax);
             this.setCursor(change.tick);
             this.timeline.vertical.scrollTo(change.scroll);
+            this.controller.createEntities();
         }
 
         if (this.panel != null)
@@ -935,28 +941,6 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public void embedView(UIElement element)
     {
         this.timeline.embedView(element);
-    }
-
-    @Override
-    public void postUndo(IUndo undo, boolean apply, boolean callback)
-    {
-        if (undo == null)
-        {
-            throw new RuntimeException("Given undo is null!");
-        }
-
-        this.undoManager.setCallback(callback ? this::handleUndos : null);
-
-        if (apply)
-        {
-            this.undoManager.pushApplyUndo(undo, this.data);
-        }
-        else
-        {
-            this.undoManager.pushUndo(undo);
-        }
-
-        this.undoManager.setCallback(this::handleUndos);
     }
 
     @Override

@@ -1,13 +1,13 @@
 package mchorse.bbs.utils.keyframes.generic;
 
-import mchorse.bbs.data.IDataSerializable;
 import mchorse.bbs.data.types.BaseType;
-import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.settings.values.ValueList;
+import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
+import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,13 +16,14 @@ import java.util.List;
  * This class is responsible for storing individual keyframes and also
  * interpolating between them.
  */
-public class GenericKeyframeChannel <T> implements IDataSerializable<ListType>
+public class GenericKeyframeChannel <T> extends ValueList<GenericKeyframe<T>>
 {
-    private final List<GenericKeyframe<T>> keyframes = new ArrayList<>();
-    private final IGenericKeyframeFactory<T> factory;
+    private IGenericKeyframeFactory<T> factory;
 
-    public GenericKeyframeChannel(IGenericKeyframeFactory<T> factory)
+    public GenericKeyframeChannel(String id, IGenericKeyframeFactory<T> factory)
     {
+        super(id);
+
         this.factory = factory;
     }
 
@@ -31,44 +32,26 @@ public class GenericKeyframeChannel <T> implements IDataSerializable<ListType>
         return this.factory;
     }
 
-    protected GenericKeyframe<T> create(long tick, T value)
-    {
-        GenericKeyframe<T> keyframe = new GenericKeyframe<>(this.factory);
-
-        keyframe.tick = tick;
-        keyframe.value = value;
-
-        return keyframe;
-    }
+    /* Read only */
 
     public boolean isEmpty()
     {
-        return this.keyframes.isEmpty();
+        return this.list.isEmpty();
     }
 
     public List<GenericKeyframe<T>> getKeyframes()
     {
-        return this.keyframes;
+        return this.list;
     }
 
     public boolean has(int index)
     {
-        return index >= 0 && index < this.keyframes.size();
+        return index >= 0 && index < this.list.size();
     }
 
     public GenericKeyframe<T> get(int index)
     {
-        return this.has(index) ? this.keyframes.get(index) : null;
-    }
-
-    public void remove(int index)
-    {
-        if (index < 0 || index > this.keyframes.size() - 1)
-        {
-            return;
-        }
-
-        this.keyframes.remove(index);
+        return this.has(index) ? this.list.get(index) : null;
     }
 
     /**
@@ -77,23 +60,23 @@ public class GenericKeyframeChannel <T> implements IDataSerializable<ListType>
     public Pair<GenericKeyframe<T>, GenericKeyframe<T>> findSegment(float ticks)
     {
         /* No keyframes, no values */
-        if (this.keyframes.isEmpty())
+        if (this.list.isEmpty())
         {
             return null;
         }
 
         /* Check whether given ticks are outside keyframe channel's range */
-        GenericKeyframe<T> prev = this.keyframes.get(0);
+        GenericKeyframe<T> prev = this.list.get(0);
 
-        if (ticks <= prev.tick)
+        if (ticks <= prev.getTick())
         {
             return new Pair<>(prev, prev);
         }
 
-        int size = this.keyframes.size();
-        GenericKeyframe<T> last = this.keyframes.get(size - 1);
+        int size = this.list.size();
+        GenericKeyframe<T> last = this.list.get(size - 1);
 
-        if (ticks >= last.tick)
+        if (ticks >= last.getTick())
         {
             return new Pair<>(last, last);
         }
@@ -106,7 +89,7 @@ public class GenericKeyframeChannel <T> implements IDataSerializable<ListType>
         {
             int mid = low + (high - low) / 2;
 
-            if (this.keyframes.get(mid).tick < ticks)
+            if (this.list.get(mid).getTick() < ticks)
             {
                 low = mid + 1;
             }
@@ -116,10 +99,24 @@ public class GenericKeyframeChannel <T> implements IDataSerializable<ListType>
             }
         }
 
-        GenericKeyframe<T> b = this.keyframes.get(low);
-        GenericKeyframe<T> a = low - 1 >= 0 ? this.keyframes.get(low - 1) : b;
+        GenericKeyframe<T> b = this.list.get(low);
+        GenericKeyframe<T> a = low - 1 >= 0 ? this.list.get(low - 1) : b;
 
         return new Pair<>(a, b);
+    }
+
+    /* Write only */
+
+    public void remove(int index)
+    {
+        if (index < 0 || index > this.list.size() - 1)
+        {
+            return;
+        }
+
+        this.preNotifyParent();
+        this.list.remove(index);
+        this.postNotifyParent();
     }
 
     /**
@@ -133,15 +130,20 @@ public class GenericKeyframeChannel <T> implements IDataSerializable<ListType>
      */
     public int insert(long tick, T value)
     {
+        this.preNotifyParent();
+
         GenericKeyframe<T> prev;
 
-        if (!this.keyframes.isEmpty())
+        if (!this.list.isEmpty())
         {
-            prev = this.keyframes.get(0);
+            prev = this.list.get(0);
 
-            if (tick < prev.tick)
+            if (tick < prev.getTick())
             {
-                this.keyframes.add(0, this.create(tick, value));
+                this.list.add(0, new GenericKeyframe<>("", this.factory, tick, value));
+                this.sort();
+
+                this.postNotifyParent();
 
                 return 0;
             }
@@ -150,16 +152,17 @@ public class GenericKeyframeChannel <T> implements IDataSerializable<ListType>
         prev = null;
         int index = 0;
 
-        for (GenericKeyframe<T> frame : this.keyframes)
+        for (GenericKeyframe<T> frame : this.list)
         {
-            if (frame.tick == tick)
+            if (frame.getTick() == tick)
             {
-                frame.value = value;
+                frame.setValue(value);
+                this.postNotifyParent();
 
                 return index;
             }
 
-            if (prev != null && tick > prev.tick && tick < frame.tick)
+            if (prev != null && tick > prev.getTick() && tick < frame.getTick())
             {
                 break;
             }
@@ -168,67 +171,54 @@ public class GenericKeyframeChannel <T> implements IDataSerializable<ListType>
             prev = frame;
         }
 
-        GenericKeyframe<T> frame = this.create(tick, value);
-        this.keyframes.add(index, frame);
+        GenericKeyframe<T> frame = new GenericKeyframe<>("", this.factory, tick, value);
+        this.list.add(index, frame);
+
+        this.sort();
+        this.postNotifyParent();
 
         return index;
     }
 
-    public void moveX(long offset)
-    {
-        for (GenericKeyframe<T> keyframe : this.keyframes)
-        {
-            keyframe.tick += offset;
-        }
-    }
-
     public void sort()
     {
-        this.keyframes.sort((a, b) -> (int) (a.tick - b.tick));
+        this.list.sort((a, b) -> (int) (a.getTick() - b.getTick()));
+
+        this.sync();
     }
 
-    public void copy(GenericKeyframeChannel<T> channel)
+    @Override
+    protected GenericKeyframe<T> create(String id)
     {
-        this.keyframes.clear();
+        return new GenericKeyframe<>(id, this.factory);
+    }
 
-        for (GenericKeyframe<T> frame : channel.keyframes)
+    @Override
+    public BaseType toData()
+    {
+        MapType data = new MapType();
+
+        data.put("keyframes", super.toData());
+        data.putString("type", CollectionUtils.getKey(KeyframeFactories.FACTORIES, this.factory));
+
+        return data;
+    }
+
+    @Override
+    public void fromData(BaseType data)
+    {
+        if (!data.isMap())
         {
-            this.keyframes.add(frame.copy());
+            return;
         }
+
+        MapType map = data.asMap();
+        IGenericKeyframeFactory<T> factory = KeyframeFactories.FACTORIES.get(map.getString("type"));
+
+        this.factory = factory;
+
+        super.fromData(map.getList("keyframes"));
 
         this.sort();
-    }
-
-    @Override
-    public ListType toData()
-    {
-        ListType list = new ListType();
-
-        for (GenericKeyframe<T> keyframe : this.keyframes)
-        {
-            list.add(keyframe.toData());
-        }
-
-        return list;
-    }
-
-    @Override
-    public void fromData(ListType data)
-    {
-        this.keyframes.clear();
-
-        for (BaseType element : data)
-        {
-            if (!element.isMap())
-            {
-                continue;
-            }
-
-            MapType object = element.asMap();
-            GenericKeyframe<T> keyframe = this.create(0, null);
-
-            keyframe.fromData(object);
-            this.keyframes.add(keyframe);
-        }
     }
 }

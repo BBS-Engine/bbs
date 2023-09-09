@@ -31,8 +31,8 @@ public class StringProperty extends BaseProperty<String>
     }
 
     @Override
-    public GenericKeyframeChannel createChannel()
+    public GenericKeyframeChannel createChannel(String key)
     {
-        return new GenericKeyframeChannel(KeyframeFactories.STRING);
+        return new GenericKeyframeChannel(key, KeyframeFactories.STRING);
     }
 }

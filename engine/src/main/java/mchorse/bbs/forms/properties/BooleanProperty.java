@@ -31,8 +31,8 @@ public class BooleanProperty extends BaseProperty<Boolean>
     }
 
     @Override
-    public GenericKeyframeChannel createChannel()
+    public GenericKeyframeChannel createChannel(String key)
     {
-        return new GenericKeyframeChannel(KeyframeFactories.BOOLEAN);
+        return new GenericKeyframeChannel(key, KeyframeFactories.BOOLEAN);
     }
 }

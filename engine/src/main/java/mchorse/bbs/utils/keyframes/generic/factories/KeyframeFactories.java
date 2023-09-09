@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class KeyframeFactories
 {
-    public static final Map<String, IGenericKeyframeFactory> SERIALIZERS = new HashMap<>();
+    public static final Map<String, IGenericKeyframeFactory> FACTORIES = new HashMap<>();
     public static final ColorKeyframeFactory COLOR = new ColorKeyframeFactory();
     public static final TransformKeyframeFactory TRANSFORM = new TransformKeyframeFactory();
     public static final PoseKeyframeFactory POSE = new PoseKeyframeFactory();
@@ -18,14 +18,14 @@ public class KeyframeFactories
 
     static
     {
-        SERIALIZERS.put("color", COLOR);
-        SERIALIZERS.put("transform", TRANSFORM);
-        SERIALIZERS.put("pose", POSE);
-        SERIALIZERS.put("boolean", BOOLEAN);
-        SERIALIZERS.put("string", STRING);
-        SERIALIZERS.put("float", FLOAT);
-        SERIALIZERS.put("integer", INTEGER);
-        SERIALIZERS.put("link", LINK);
-        SERIALIZERS.put("vector4f", VECTOR4F);
+        FACTORIES.put("color", COLOR);
+        FACTORIES.put("transform", TRANSFORM);
+        FACTORIES.put("pose", POSE);
+        FACTORIES.put("boolean", BOOLEAN);
+        FACTORIES.put("string", STRING);
+        FACTORIES.put("float", FLOAT);
+        FACTORIES.put("integer", INTEGER);
+        FACTORIES.put("link", LINK);
+        FACTORIES.put("vector4f", VECTOR4F);
     }
 }

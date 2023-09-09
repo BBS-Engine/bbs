@@ -3,7 +3,6 @@ package mchorse.bbs.ui.film.clips;
 import mchorse.bbs.camera.clips.overwrite.KeyframeClip;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
@@ -81,18 +80,13 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
     {
         long tick = this.editor.getCursor() - this.clip.tick.get();
 
-        this.editKeyframes(this.clip.x, tick, position.point.x);
-        this.editKeyframes(this.clip.y, tick, position.point.y);
-        this.editKeyframes(this.clip.z, tick, position.point.z);
-        this.editKeyframes(this.clip.yaw, tick, position.angle.yaw);
-        this.editKeyframes(this.clip.pitch, tick, position.angle.pitch);
-        this.editKeyframes(this.clip.roll, tick, position.angle.roll);
-        this.editKeyframes(this.clip.fov, tick, position.angle.fov);
-    }
-
-    private void editKeyframes(KeyframeChannel channel, long tick, double value)
-    {
-        BaseValue.edit(channel, (c) -> c.insert(tick, value));
+        this.clip.x.insert(tick, position.point.x);
+        this.clip.y.insert(tick, position.point.y);
+        this.clip.z.insert(tick, position.point.z);
+        this.clip.yaw.insert(tick, position.angle.yaw);
+        this.clip.pitch.insert(tick, position.angle.pitch);
+        this.clip.roll.insert(tick, position.angle.roll);
+        this.clip.fov.insert(tick, position.angle.fov);
     }
 
     @Override

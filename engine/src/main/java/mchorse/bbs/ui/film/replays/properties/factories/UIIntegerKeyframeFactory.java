@@ -13,7 +13,7 @@ public class UIIntegerKeyframeFactory extends UIKeyframeFactory<Integer>
         super(keyframe, editor);
 
         this.value = new UITrackpad((v) -> this.editor.setValue(v.intValue()));
-        this.value.integer().setValue(keyframe.value);
+        this.value.integer().setValue(keyframe.getValue());
 
         this.add(this.value);
     }

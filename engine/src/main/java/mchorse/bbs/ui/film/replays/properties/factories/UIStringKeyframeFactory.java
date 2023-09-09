@@ -13,7 +13,7 @@ public class UIStringKeyframeFactory extends UIKeyframeFactory<String>
         super(keyframe, editor);
 
         this.string = new UITextbox(1000, (t) -> this.editor.setValue(t));
-        this.string.setText(keyframe.value);
+        this.string.setText(keyframe.getValue());
 
         this.add(this.string);
     }

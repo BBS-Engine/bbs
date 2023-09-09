@@ -16,7 +16,6 @@ import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.keyframes.Keyframe;
 import mchorse.bbs.utils.keyframes.KeyframeEasing;
-import mchorse.bbs.utils.keyframes.KeyframeInterpolation;
 import mchorse.bbs.utils.keyframes.KeyframeSimplifier;
 import mchorse.bbs.utils.math.MathUtils;
 
@@ -66,10 +65,7 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
         this.value.tooltip(UIKeys.KEYFRAMES_VALUE);
         this.interp = new UIIcon(Icons.GRAPH, (b) ->
         {
-            UI.keyframeInterps(this.getContext(), this.keyframes.getCurrent().getInterpolation(), (i) ->
-            {
-                this.keyframes.setInterpolation(i);
-            });
+            UI.keyframeInterps(this.getContext(), this.keyframes.getCurrent().getInterpolation(), this.keyframes::setInterpolation);
         });
         this.interp.tooltip(tooltip);
 
@@ -292,28 +288,25 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
         long firstX = keyframes.get(0).getTick();
         List<Keyframe> toSelect = new ArrayList<>();
 
-        BaseValue.edit(sheet.channel, (channel) ->
+        long newOffset = Window.isCtrlPressed() ? firstX : offset;
+
+        for (Keyframe keyframe : keyframes)
         {
-            long newOffset = Window.isCtrlPressed() ? firstX : offset;
+            keyframe.setTick(keyframe.getTick() - firstX + newOffset);
 
-            for (Keyframe keyframe : keyframes)
-            {
-                keyframe.setTick(keyframe.getTick() - firstX + newOffset);
+            int index = sheet.channel.insert(keyframe.getTick(), keyframe.getValue());
+            Keyframe inserted = sheet.channel.get(index);
 
-                int index = channel.insert(keyframe.getTick(), keyframe.getValue());
-                Keyframe inserted = channel.get(index);
+            inserted.copy(keyframe);
+            toSelect.add(inserted);
+        }
 
-                inserted.copy(keyframe);
-                toSelect.add(inserted);
-            }
+        for (Keyframe select : toSelect)
+        {
+            sheet.selected.add(sheet.channel.getKeyframes().indexOf(select));
+        }
 
-            for (Keyframe select : toSelect)
-            {
-                sheet.selected.add(channel.getKeyframes().indexOf(select));
-            }
-
-            channel.sync();
-        });
+        sheet.channel.sync();
 
         this.keyframes.which = Selection.KEYFRAME;
         this.keyframes.setKeyframe(this.keyframes.getCurrent());
@@ -339,8 +332,11 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
     {
         for (UISheet sheet : this.keyframes.getSheets())
         {
-            sheet.channel.simplify();
-            sheet.channel.copy(KeyframeSimplifier.simplify(sheet.channel));
+            BaseValue.edit(sheet.channel, (channel) ->
+            {
+                channel.simplify();
+                channel.copy(KeyframeSimplifier.simplify(channel));
+            });
         }
     }
 
@@ -357,11 +353,6 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
     public void setValue(double value)
     {
         this.keyframes.setValue(value, false);
-    }
-
-    public void pickInterpolation(KeyframeInterpolation interp)
-    {
-        this.keyframes.setInterpolation(interp);
     }
 
     public void changeEasing()

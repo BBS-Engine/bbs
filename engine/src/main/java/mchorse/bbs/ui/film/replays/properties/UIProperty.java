@@ -43,7 +43,9 @@ public class UIProperty
             }
         }
 
+        this.channel.preNotifyParent();
         this.channel.sort();
+        this.channel.postNotifyParent();
         this.selected.clear();
 
         for (GenericKeyframe keyframe : keyframes)
@@ -60,7 +62,7 @@ public class UIProperty
 
             if (keyframe != null)
             {
-                keyframe.tick += dx;
+                keyframe.setTick(keyframe.getTick() + (long) dx);
             }
         }
     }
@@ -73,7 +75,7 @@ public class UIProperty
 
             if (keyframe != null)
             {
-                keyframe.value = this.channel.getFactory().copy(object);
+                keyframe.setValue(this.channel.getFactory().copy(object));
             }
         }
     }
@@ -147,22 +149,22 @@ public class UIProperty
             if (keyframe != null)
             {
                 selected.add(keyframe);
-                minTick = Math.min(keyframe.tick, minTick);
+                minTick = Math.min(keyframe.getTick(), minTick);
             }
         }
 
-        selected.sort(Comparator.comparingLong(a -> a.tick));
+        selected.sort(Comparator.comparingLong(GenericKeyframe::getTick));
 
         long diff = tick - minTick;
 
         for (GenericKeyframe keyframe : selected)
         {
-            long fin = keyframe.tick + diff;
-            int index = this.channel.insert(fin, keyframe.value);
+            long fin = keyframe.getTick() + diff;
+            int index = this.channel.insert(fin, keyframe.getValue());
             GenericKeyframe current = this.channel.get(index);
 
             current.copy(keyframe);
-            current.tick = fin;
+            current.setTick(fin);
             created.add(current);
         }
 

@@ -44,9 +44,7 @@ public class Keyframe extends BaseValue
     public void setTick(long tick)
     {
         this.preNotifyParent();
-
         this.tick = tick;
-
         this.postNotifyParent();
     }
 
@@ -58,9 +56,7 @@ public class Keyframe extends BaseValue
     public void setValue(double value)
     {
         this.preNotifyParent();
-
         this.value = value;
-
         this.postNotifyParent();
     }
 
@@ -72,19 +68,15 @@ public class Keyframe extends BaseValue
     public void setInterpolation(KeyframeInterpolation interp)
     {
         this.preNotifyParent();
-
         this.interp = interp;
-
         this.postNotifyParent();
     }
 
     public void setInterpolation(KeyframeInterpolation interp, KeyframeEasing easing)
     {
         this.preNotifyParent();
-
         this.interp = interp;
         this.easing = easing;
-
         this.postNotifyParent();
     }
 
@@ -96,9 +88,7 @@ public class Keyframe extends BaseValue
     public void setEasing(KeyframeEasing easing)
     {
         this.preNotifyParent();
-
         this.easing = easing;
-
         this.postNotifyParent();
     }
 
@@ -110,9 +100,7 @@ public class Keyframe extends BaseValue
     public void setRx(float rx)
     {
         this.preNotifyParent();
-
         this.rx = rx;
-
         this.postNotifyParent();
     }
 
@@ -124,9 +112,7 @@ public class Keyframe extends BaseValue
     public void setRy(float ry)
     {
         this.preNotifyParent();
-
         this.ry = ry;
-
         this.postNotifyParent();
     }
 
@@ -138,9 +124,7 @@ public class Keyframe extends BaseValue
     public void setLx(float lx)
     {
         this.preNotifyParent();
-
         this.lx = lx;
-
         this.postNotifyParent();
     }
 
@@ -152,9 +136,7 @@ public class Keyframe extends BaseValue
     public void setLy(float ly)
     {
         this.preNotifyParent();
-
         this.ly = ly;
-
         this.postNotifyParent();
     }
 

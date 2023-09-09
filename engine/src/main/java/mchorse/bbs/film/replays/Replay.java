@@ -8,6 +8,7 @@ import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.FormComponent;
 
@@ -49,43 +50,46 @@ public class Replay extends ValueGroup
 
         for (BaseValue value : this.properties.getAll())
         {
-            if (!(value instanceof FormProperty))
+            if (value instanceof GenericKeyframeChannel)
             {
-                continue;
+                this.applyProperty(tick, playing, form, (GenericKeyframeChannel) value);
             }
+        }
+    }
 
-            FormProperty formProperty = (FormProperty) value;
-            IFormProperty property = FormUtils.getProperty(form, formProperty.getId());
-            Pair segment = formProperty.get().findSegment(tick);
+    private void applyProperty(int tick, boolean playing, Form form, GenericKeyframeChannel value)
+    {
+        GenericKeyframeChannel formProperty = value;
+        IFormProperty property = FormUtils.getProperty(form, formProperty.getId());
+        Pair segment = formProperty.findSegment(tick);
 
-            if (segment != null)
+        if (segment != null)
+        {
+            GenericKeyframe a = (GenericKeyframe) segment.a;
+            GenericKeyframe b = (GenericKeyframe) segment.b;
+            int duration = (int) (b.getTick() - a.getTick());
+            int offset = (int) (tick - a.getTick());
+
+            if (a == b)
             {
-                GenericKeyframe a = (GenericKeyframe) segment.a;
-                GenericKeyframe b = (GenericKeyframe) segment.b;
-                int duration = (int) (b.tick - a.tick);
-                int offset = (int) (tick - a.tick);
-
-                if (a == b)
-                {
-                    property.set(a.value);
-                }
-                else
-                {
-                    property.tween(b.value, a.value, duration, a.interp, offset, playing);
-                }
+                property.set(a.getValue());
             }
             else
             {
-                Form replayForm = this.form.get();
+                property.tween(b.getValue(), a.getValue(), duration, a.getInterpolation(), offset, playing);
+            }
+        }
+        else
+        {
+            Form replayForm = this.form.get();
 
-                if (replayForm != null)
+            if (replayForm != null)
+            {
+                IFormProperty replayProperty = FormUtils.getProperty(replayForm, formProperty.getId());
+
+                if (replayProperty != null)
                 {
-                    IFormProperty replayProperty = FormUtils.getProperty(replayForm, formProperty.getId());
-
-                    if (replayProperty != null)
-                    {
-                        property.set(replayProperty.get());
-                    }
+                    property.set(replayProperty.get());
                 }
             }
         }
