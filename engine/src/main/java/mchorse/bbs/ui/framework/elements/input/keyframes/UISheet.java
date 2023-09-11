@@ -31,7 +31,7 @@ public class UISheet
     {
         this.id = id;
         this.title = title;
-        this.color = color;
+        this.color = color & 0xffffff;
         this.channel = channel;
     }
 

@@ -172,9 +172,6 @@ public abstract class UIKeyframes extends UIElement
 
     /* Common hooks */
 
-    protected void updateMoved()
-    {}
-
     protected void moveNoKeyframe(UIContext context, Keyframe frame, double x, double y)
     {}
 
@@ -219,7 +216,6 @@ public abstract class UIKeyframes extends UIElement
                 }
 
                 this.dragging = true;
-                this.pickedKeyframe(this.getSelectedCount());
             }
             else if (context.mouseButton == 2)
             {
@@ -231,9 +227,6 @@ public abstract class UIKeyframes extends UIElement
 
         return super.subMouseClicked(context);
     }
-
-    protected void pickedKeyframe(int amount)
-    {}
 
     protected abstract void duplicateKeyframe(UIContext context, int mouseX, int mouseY);
 
@@ -290,11 +283,6 @@ public abstract class UIKeyframes extends UIElement
 
                 this.sliding = false;
             }
-
-            if (this.moving)
-            {
-                this.updateMoved();
-            }
         }
 
         this.resetMouseReleased(context);
@@ -324,7 +312,7 @@ public abstract class UIKeyframes extends UIElement
         this.renderCursor(context);
 
         /* Draw graph of the keyframe channel */
-        this.renderGraph(context, context.mouseX, context.mouseY);
+        this.renderGraph(context);
 
         /* Draw selection box */
         if (this.isGrabbing())
@@ -374,7 +362,7 @@ public abstract class UIKeyframes extends UIElement
         }
     }
 
-    protected abstract void renderGraph(UIContext context, int mouseX, int mouseY);
+    protected abstract void renderGraph(UIContext context);
 
     protected void renderRect(UIContext context, int x, int y, int offset, int c)
     {
@@ -401,12 +389,8 @@ public abstract class UIKeyframes extends UIElement
         else if (this.moving && !this.grabbing)
         {
             this.setKeyframe(this.moving(context, mouseX, mouseY));
-            this.keepMoving();
         }
     }
-
-    protected void keepMoving()
-    {}
 
     protected void scrolling(int mouseX, int mouseY)
     {

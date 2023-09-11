@@ -15,16 +15,13 @@ import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
 import mchorse.bbs.ui.film.replays.properties.factories.UIPoseKeyframeFactory;
 import mchorse.bbs.ui.film.replays.properties.undo.UIUndoPropertyEditor;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
-import mchorse.bbs.ui.film.utils.keyframes.UICameraGraphEditor;
 import mchorse.bbs.ui.film.utils.undo.ValueChangeUndo;
 import mchorse.bbs.ui.framework.elements.UIElement;
-import mchorse.bbs.ui.framework.elements.input.keyframes.Selection;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframesEditor;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UISheet;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
 import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.StringUtils;
 import mchorse.bbs.utils.colors.Colors;
@@ -234,21 +231,12 @@ public class UIReplaysEditor extends UIElement
 
             this.propertyEditor = editor;
         }
-        else if (this.tempKeyframes.size() > 1)
+        else if (!this.tempKeyframes.isEmpty())
         {
             UICameraDopeSheetEditor editor = new UICameraDopeSheetEditor(this.delegate);
 
             editor.keyframes.absolute();
             editor.setChannels(this.tempKeyframes, this.tempColors);
-
-            this.keyframeEditor = editor;
-        }
-        else if (!this.tempKeyframes.isEmpty())
-        {
-            UICameraGraphEditor editor = new UICameraGraphEditor(this.delegate);
-
-            editor.keyframes.absolute();
-            editor.setChannel(this.tempKeyframes.get(0), this.tempColors.get(0));
 
             this.keyframeEditor = editor;
         }

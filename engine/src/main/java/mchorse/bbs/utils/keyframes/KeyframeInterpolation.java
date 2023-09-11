@@ -242,4 +242,9 @@ public enum KeyframeInterpolation
             ((Interpolation) interpolation).setupKeybind(action, category);
         }
     }
+
+    public boolean isBezier()
+    {
+        return this == BEZIER;
+    }
 }

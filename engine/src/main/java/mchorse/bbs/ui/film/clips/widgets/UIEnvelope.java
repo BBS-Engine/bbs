@@ -4,7 +4,7 @@ import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.clips.UIClip;
 import mchorse.bbs.ui.film.utils.UICameraUtils;
-import mchorse.bbs.ui.film.utils.keyframes.UICameraGraphEditor;
+import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
@@ -27,7 +27,7 @@ public class UIEnvelope extends UIElement
 
     public UIToggle keyframes;
     public UIButton editKeyframes;
-    public UICameraGraphEditor channel;
+    public UICameraDopeSheetEditor channel;
 
     public UIEnvelope(UIClip<? extends Clip> panel)
     {
@@ -59,7 +59,7 @@ public class UIEnvelope extends UIElement
             this.panel.editor.embedView(this.channel);
             this.channel.resetView();
         });
-        this.channel = new UICameraGraphEditor(panel.editor);
+        this.channel = new UICameraDopeSheetEditor(panel.editor);
 
         this.column().vertical().stretch();
     }

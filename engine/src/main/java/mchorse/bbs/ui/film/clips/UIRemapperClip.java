@@ -4,13 +4,13 @@ import mchorse.bbs.camera.clips.modifiers.RemapperClip;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
-import mchorse.bbs.ui.film.utils.keyframes.UICameraGraphEditor;
+import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.utils.colors.Colors;
 
 public class UIRemapperClip extends UIClip<RemapperClip>
 {
-    public UICameraGraphEditor channel;
+    public UICameraDopeSheetEditor channel;
     public UIButton editChannel;
 
     public UIRemapperClip(RemapperClip clip, IUIClipsDelegate editor)
@@ -23,7 +23,7 @@ public class UIRemapperClip extends UIClip<RemapperClip>
     {
         super.registerUI();
 
-        this.channel = new UICameraGraphEditor(editor);
+        this.channel = new UICameraDopeSheetEditor(this.editor);
 
         this.editChannel = new UIButton(UIKeys.CAMERA_PANELS_EDIT_KEYFRAMES, (b) ->
         {

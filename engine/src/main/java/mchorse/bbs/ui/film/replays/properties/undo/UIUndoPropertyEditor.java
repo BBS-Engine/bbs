@@ -7,7 +7,7 @@ import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.replays.properties.UIMultiProperties;
 import mchorse.bbs.ui.film.replays.properties.UIProperty;
 import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
-import mchorse.bbs.ui.film.utils.keyframes.UICameraKeyframesEditor;
+import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
 
 import java.util.ArrayList;
@@ -55,6 +55,6 @@ public class UIUndoPropertyEditor extends UIPropertyEditor
 
     public void updateConverter()
     {
-        this.setConverter(UICameraKeyframesEditor.CONVERTER);
+        this.setConverter(UICameraDopeSheetEditor.CONVERTER);
     }
 }
