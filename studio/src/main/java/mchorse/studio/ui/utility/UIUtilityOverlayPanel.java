@@ -21,6 +21,8 @@ import mchorse.bbs.utils.StringUtils;
 import mchorse.studio.ui.UIKeysApp;
 import mchorse.studio.ui.l10n.UILanguageEditorOverlayPanel;
 
+import java.io.File;
+
 public class UIUtilityOverlayPanel extends UIOverlayPanel
 {
     public Runnable callback;
@@ -38,9 +40,9 @@ public class UIUtilityOverlayPanel extends UIOverlayPanel
         this.view = UI.scrollView(5, 10, 140);
         this.view.relative(this.content).full();
 
-        UIButton openGameDirectory = new UIButton(IKey.lazy("Game"), (b) -> UIUtils.openFolder(BBS.getGameFolder()));
-        UIButton openAudioDirectory = new UIButton(IKey.lazy("Audio"), (b) -> UIUtils.openFolder(BBS.getAssetsPath("audio")));
-        UIButton openModelsDirectory = new UIButton(IKey.lazy("Models"), (b) -> UIUtils.openFolder(BBS.getAssetsPath("models")));
+        UIButton openGameDirectory = new UIButton(IKey.lazy("Game"), (b) -> this.openFolder(BBS.getGameFolder()));
+        UIButton openAudioDirectory = new UIButton(IKey.lazy("Audio"), (b) -> this.openFolder(BBS.getAssetsPath("audio")));
+        UIButton openModelsDirectory = new UIButton(IKey.lazy("Models"), (b) -> this.openFolder(BBS.getAssetsPath("models")));
 
         UIIcon shaders = new UIIcon(Icons.SPHERE, (b) ->
         {
@@ -106,6 +108,13 @@ public class UIUtilityOverlayPanel extends UIOverlayPanel
        this.view.add(UI.column(UI.label(UIKeysApp.UTILITY_RESIZE_WINDOW), UI.row(this.width, this.height)).marginBottom(8));
        this.view.add(UI.label(UIKeysApp.UTILITY_LANG_LABEL), UI.row(analyze, compile), langEditor);
        this.content.add(this.view);
+    }
+
+    private void openFolder(File gameFolder)
+    {
+        gameFolder.mkdirs();
+
+        UIUtils.openFolder(gameFolder);
     }
 
     private void openLangEditor()

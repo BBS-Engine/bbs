@@ -28,6 +28,8 @@ hs_err_pid*.log
 
 # Project specific
 docs.json
+/extra/game/assets/models/
+/extra/game/config/
 /launcher.jar
 /fabricloader.log
 /zips

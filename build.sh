@@ -5,6 +5,7 @@ rm -rf engine/build/dependencies/
 printf "Building...\n\n"
 
 FOLDER="release"
+VERSION="0.1"
 
 if [ "$#" -lt 1 ]; then
     gradle :studio:build :engine:build :engine:copyRuntimeLibs
@@ -30,4 +31,4 @@ else
 fi
 
 mkdir -p "zips"
-zip -r "zips/bbs-$FOLDER.zip" "$FOLDER/"
+zip -r "zips/bbs-$FOLDER-$VERSION.zip" "$FOLDER/"

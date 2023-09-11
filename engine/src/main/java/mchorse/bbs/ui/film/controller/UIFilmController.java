@@ -776,8 +776,10 @@ public class UIFilmController extends UIElement
     {
         Area viewport = this.panel.getFramebufferArea(this.panel.getViewportArea());
 
-        if (!viewport.isInside(context))
+        if (!viewport.isInside(context) || this.controlled != null)
         {
+            this.stencil.clearPicking();
+
             return;
         }
 
