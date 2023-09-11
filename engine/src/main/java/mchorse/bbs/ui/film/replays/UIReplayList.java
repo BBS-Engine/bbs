@@ -166,7 +166,7 @@ public class UIReplayList extends UIList<Replay>
     {
         this.area.render(context.batcher, Colors.A100);
 
-        if (this.getList().isEmpty())
+        if (this.getList().size() < 3)
         {
             UIDataUtils.renderRightClickHere(context, this.area);
         }

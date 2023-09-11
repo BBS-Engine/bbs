@@ -90,6 +90,27 @@ public class UIClips extends UIElement
 
     private UIClipRenderers renderers = new UIClipRenderers();
 
+    /**
+     * Render cursor that displays the full duration of the camera work,
+     * and also current tick within the camera work.
+     */
+    public static void renderCursor(UIContext context, String label, Area area, int x)
+    {
+        /* Draw the marker */
+        int width = context.font.getWidth(label) + 3;
+
+        context.batcher.box(x, area.y, x + 2, area.ey(), Colors.CURSOR);
+
+        /* Move the tick line left, so it won't overflow the timeline */
+        if (x + 2 + width > area.ex())
+        {
+            x -= width + 1;
+        }
+
+        /* Draw the tick label */
+        context.batcher.textCard(context.font, label, x + 4, area.ey() - 2 - context.font.getHeight(), Colors.WHITE, Colors.setA(Colors.CURSOR, 0.75F), 2);
+    }
+
     public UIClips(IUIClipsDelegate delegate, IFactory<Clip, ClipFactoryData> factory)
     {
         super();
@@ -1175,7 +1196,9 @@ public class UIClips extends UIElement
         batcher.unclip(context);
         batcher.clip(this.area, context);
 
-        this.renderCursor(context, area.y);
+        String label = TimeUtils.formatTime(this.delegate.getCursor()) + "/" + TimeUtils.formatTime(this.clips.calculateDuration());
+
+        renderCursor(context, label, area, this.toGraphX(this.delegate.getCursor()));
         this.renderSelection(context);
 
         batcher.unclip(context);
@@ -1233,29 +1256,6 @@ public class UIClips extends UIElement
                 context.batcher.textShadow(value, xx + 3, y + h - 2 - context.font.getHeight(), c);
             }
         }
-    }
-
-    /**
-     * Render cursor that displays the full duration of the camera work,
-     * and also current tick within the camera work.
-     */
-    private void renderCursor(UIContext context, int y)
-    {
-        /* Draw the marker */
-        String label = TimeUtils.formatTime(this.delegate.getCursor()) + "/" + TimeUtils.formatTime(this.clips.calculateDuration());
-        int cursorX = this.toGraphX(this.delegate.getCursor());
-        int width = context.font.getWidth(label) + 3;
-
-        context.batcher.box(cursorX, y, cursorX + 2, this.area.ey(), Colors.CURSOR);
-
-        /* Move the tick line left, so it won't overflow the timeline */
-        if (cursorX + 2 + width > this.area.ex())
-        {
-            cursorX -= width + 1;
-        }
-
-        /* Draw the tick label */
-        context.batcher.textCard(context.font, label, cursorX + 4, this.area.ey() - 2 - context.font.getHeight(), Colors.WHITE, Colors.setA(Colors.CURSOR, 0.75F), 2);
     }
 
     /**

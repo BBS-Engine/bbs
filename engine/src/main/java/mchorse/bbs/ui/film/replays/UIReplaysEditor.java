@@ -9,17 +9,18 @@ import mchorse.bbs.forms.properties.IFormProperty;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.ui.dashboard.panels.UIDashboardPanels;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.film.replays.properties.UIProperty;
 import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
 import mchorse.bbs.ui.film.replays.properties.factories.UIPoseKeyframeFactory;
-import mchorse.bbs.ui.film.replays.properties.undo.UIUndoPropertyEditor;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.film.utils.undo.ValueChangeUndo;
+import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
-import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframesEditor;
+import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UISheet;
-import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
+import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Pair;
@@ -40,23 +41,21 @@ public class UIReplaysEditor extends UIElement
 {
     private static final Map<String, Integer> COLORS = new HashMap<>();
 
+    public UIIcon toggleKeyframes;
+    public UIIcon toggleProperties;
+    public UIIcon record;
+    public UIElement icons;
     public UIReplayList replays;
 
     /* Keyframes */
     public UIElement keyframes;
-    public UIStringList channels;
-    public UIKeyframesEditor keyframeEditor;
+    public UICameraDopeSheetEditor keyframeEditor;
     public UIPropertyEditor propertyEditor;
 
     /* Clips */
     private UIFilmPanel delegate;
     private Film film;
     private Replay replay;
-
-    private List<KeyframeChannel> tempKeyframes = new ArrayList<>();
-    private List<Integer> tempColors = new ArrayList<>();
-    private List<GenericKeyframeChannel> tempProperties = new ArrayList<>();
-    private List<IFormProperty> tempFormProperties = new ArrayList<>();
 
     static
     {
@@ -73,6 +72,10 @@ public class UIReplaysEditor extends UIElement
         COLORS.put("stick_ry", Colors.GREEN);
         COLORS.put("trigger_l", Colors.RED);
         COLORS.put("trigger_r", Colors.GREEN);
+
+        COLORS.put("pose", Colors.RED);
+        COLORS.put("transform", Colors.GREEN);
+        COLORS.put("color", Colors.INACTIVE);
     }
 
     public UIReplaysEditor(UIFilmPanel delegate)
@@ -80,41 +83,37 @@ public class UIReplaysEditor extends UIElement
         this.delegate = delegate;
 
         int w = 120;
-        int h = 140;
+
+        this.record = new UIIcon(Icons.SPHERE, (b) -> this.delegate.getController().pickRecording());
+        this.toggleKeyframes = new UIIcon(Icons.GRAPH, (b) -> this.toggleProperties(false));
+        this.toggleProperties = new UIIcon(Icons.MORE, (b) -> this.toggleProperties(true));
 
         this.keyframes = new UIElement();
         this.keyframes.relative(this).w(1F, -w).h(1F);
 
         this.replays = new UIReplayList((l) -> this.setReplay(l.get(0)), this.delegate);
-        this.replays.relative(this).x(1F, -w).w(w).h(h);
+        this.replays.relative(this).x(1F, -w).y(20).w(w).h(1F, -20);
 
-        this.channels = new UIStringList(this::selectChannels);
-        this.channels.background(Colors.A75).multi().context((menu) ->
-        {
-            menu.action(Icons.ALL_DIRECTIONS, IKey.lazy("Select position"), () -> this.pick("x", "y", "z"));
-            menu.action(Icons.REFRESH, IKey.lazy("Select rotations"), () -> this.pick("yaw", "pitch", "bodyYaw"));
-            menu.action(Icons.LEFT_STICK, IKey.lazy("Select left stick"), () -> this.pick("stick_lx", "stick_ly"));
-            menu.action(Icons.RIGHT_STICK, IKey.lazy("Select right stick"), () -> this.pick("stick_rx", "stick_ry"));
-            menu.action(Icons.TRIGGER, IKey.lazy("Select triggers"), () -> this.pick("trigger_l", "trigger_r"));
-        });
+        this.icons = UI.row(0, this.record, this.toggleKeyframes, this.toggleProperties);
+        this.icons.relative(this.replays).y(-20).w(60).h(20);
 
-        this.channels.relative(this).x(1F, -w).y(h).w(w).h(1F, -h);
-
-        this.add(this.replays, this.channels, this.keyframes);
+        this.add(this.replays, this.icons, this.keyframes);
 
         this.markContainer();
     }
 
-    /* TODO: This looks so bad, but I'll clean it up later */
+    private void toggleProperties(boolean properties)
+    {
+        if (this.propertyEditor != null)
+        {
+            this.keyframeEditor.setVisible(!properties);
+            this.propertyEditor.setVisible(properties);
+        }
+    }
 
     public void handleUndo(ValueChangeUndo change, boolean redo)
     {
-        List<String> current = this.channels.getCurrent();
-
-        if (!change.keyframeKeys.equals(current))
-        {
-            this.pick(change.keyframeKeys.toArray(new String[0]));
-        }
+        /* TODO: wrap up undo/redo handler */
 
         List<List<Integer>> selection = change.getKeyframeSelection(redo);
         Vector2i selected = change.getKeyframeSelected(redo);
@@ -187,119 +186,6 @@ public class UIReplaysEditor extends UIElement
         return list;
     }
 
-    private void pick(String... channels)
-    {
-        this.channels.deselect();
-
-        List<String> channelsList = this.channels.getList();
-
-        for (int i = 0; i < channelsList.size(); i++)
-        {
-            for (String key : channels)
-            {
-                if (key.equals(channelsList.get(i)))
-                {
-                    this.channels.addIndex(i);
-                }
-            }
-        }
-
-        this.selectChannels(this.channels.getCurrent());
-    }
-
-    private void selectChannels(List<String> l)
-    {
-        if (this.keyframeEditor != null)
-        {
-            this.keyframeEditor.removeFromParent();
-            this.keyframeEditor = null;
-        }
-
-        if (this.propertyEditor != null)
-        {
-            this.propertyEditor.removeFromParent();
-            this.propertyEditor = null;
-        }
-
-        this.collectChannels(l);
-
-        if (!this.tempProperties.isEmpty())
-        {
-            UIUndoPropertyEditor editor = new UIUndoPropertyEditor(this.delegate);
-
-            editor.setChannels(this.tempProperties, this.tempFormProperties, this.tempColors);
-
-            this.propertyEditor = editor;
-        }
-        else if (!this.tempKeyframes.isEmpty())
-        {
-            UICameraDopeSheetEditor editor = new UICameraDopeSheetEditor(this.delegate);
-
-            editor.keyframes.absolute();
-            editor.setChannels(this.tempKeyframes, this.tempColors);
-
-            this.keyframeEditor = editor;
-        }
-
-        if (this.keyframeEditor != null)
-        {
-            this.keyframeEditor.relative(this.keyframes).full();
-            this.keyframes.add(this.keyframeEditor);
-        }
-
-        if (this.propertyEditor != null)
-        {
-            this.propertyEditor.relative(this.keyframes).full();
-            this.keyframes.add(this.propertyEditor);
-        }
-
-        this.resize();
-
-        if (this.keyframeEditor != null)
-        {
-            this.keyframeEditor.keyframes.duration = this.film.camera.calculateDuration();
-            this.keyframeEditor.resetView();
-        }
-
-        if (this.propertyEditor != null)
-        {
-            this.propertyEditor.properties.duration = this.film.camera.calculateDuration();
-            this.propertyEditor.resetView();
-        }
-    }
-
-    private void collectChannels(List<String> keys)
-    {
-        this.tempKeyframes.clear();
-        this.tempColors.clear();
-        this.tempProperties.clear();
-        this.tempFormProperties.clear();
-
-        for (String key : keys)
-        {
-            BaseValue value = this.replay.keyframes.get(key);
-
-            if (value instanceof KeyframeChannel)
-            {
-                this.tempKeyframes.add((KeyframeChannel) value);
-                this.tempColors.add(COLORS.getOrDefault(key, Colors.ACTIVE));
-            }
-            else
-            {
-                GenericKeyframeChannel property = this.replay.properties.getOrCreate(this.replay.form.get(), key);
-
-                if (property != null)
-                {
-                    IFormProperty formProperty = FormUtils.getProperty(this.replay.form.get(), key);
-
-                    this.tempProperties.add(property);
-                    this.tempColors.add(COLORS.getOrDefault(StringUtils.fileName(key), Colors.ACTIVE));
-                    this.tempFormProperties.add(formProperty);
-                }
-            }
-        }
-    }
-
     public void setFilm(Film film)
     {
         this.film = film;
@@ -325,20 +211,72 @@ public class UIReplaysEditor extends UIElement
 
     public void updateChannelsList()
     {
-        this.channels.clear();
+        if (this.keyframeEditor != null) this.keyframeEditor.removeFromParent();
+        if (this.propertyEditor != null) this.propertyEditor.removeFromParent();
 
-        if (this.replay != null)
+        if (this.replay == null)
         {
-            for (String key : ReplayKeyframes.CURATED_CHANNELS)
-            {
-                this.channels.add(key);
-            }
-
-            this.channels.add(FormUtils.collectPropertyPaths(replay.form.get()));
-            this.channels.setIndex(0);
-
-            this.selectChannels(this.channels.getCurrent());
+            return;
         }
+
+        int duration = this.film.camera.calculateDuration();
+
+        /* Replay keyframes */
+        List<KeyframeChannel> keyframes = new ArrayList<>();
+        List<Integer> tempKeyframesColors = new ArrayList<>();
+
+        for (String key : ReplayKeyframes.CURATED_CHANNELS)
+        {
+            BaseValue value = this.replay.keyframes.get(key);
+
+            keyframes.add((KeyframeChannel) value);
+            tempKeyframesColors.add(COLORS.getOrDefault(key, Colors.ACTIVE));
+        }
+
+        this.keyframeEditor = new UICameraDopeSheetEditor(this.delegate);
+        this.keyframeEditor.setChannels(keyframes, tempKeyframesColors);
+        this.keyframeEditor.relative(this.keyframes).full();
+
+        this.keyframeEditor.keyframes.absolute();
+        this.keyframeEditor.keyframes.duration = duration;
+        this.keyframeEditor.resetView();
+
+        this.keyframes.add(this.keyframeEditor);
+
+        /* Form properties */
+        List<GenericKeyframeChannel> properties = new ArrayList<>();
+        List<Integer> propertiesColors = new ArrayList<>();
+        List<IFormProperty> formProperties = new ArrayList<>();
+
+        for (String key : FormUtils.collectPropertyPaths(this.replay.form.get()))
+        {
+            GenericKeyframeChannel property = this.replay.properties.getOrCreate(this.replay.form.get(), key);
+
+            if (property != null)
+            {
+                IFormProperty formProperty = FormUtils.getProperty(this.replay.form.get(), key);
+
+                properties.add(property);
+                propertiesColors.add(COLORS.getOrDefault(StringUtils.fileName(key), Colors.ACTIVE));
+                formProperties.add(formProperty);
+            }
+        }
+
+        if (!properties.isEmpty())
+        {
+            this.propertyEditor = new UIPropertyEditor(this.delegate);
+            this.propertyEditor.setChannels(properties, formProperties, propertiesColors);
+            this.propertyEditor.relative(this.keyframes).full();
+            this.propertyEditor.setVisible(false);
+
+            this.propertyEditor.properties.duration = duration;
+            this.propertyEditor.resetView();
+
+            this.keyframes.add(this.propertyEditor);
+        }
+
+        this.toggleProperties.setEnabled(this.propertyEditor != null);
+        this.keyframes.resize();
     }
 
     public void pickForm(Form form, String bone)
@@ -355,7 +293,7 @@ public class UIReplaysEditor extends UIElement
                 {
                     manager.action(Icons.POINTER, IKey.raw(property.getKey()), () ->
                     {
-                        this.pick(StringUtils.combinePaths(path, property.getKey()));
+                        /* TODO: ... */
                     });
                 }
             }
@@ -364,11 +302,13 @@ public class UIReplaysEditor extends UIElement
         }
         else if (!bone.isEmpty())
         {
+            this.toggleProperties(true);
+
             String key = StringUtils.combinePaths(path, "pose");
 
             if (this.propertyEditor == null)
             {
-                this.pick(key);
+                return;
             }
 
             List<UIProperty> properties = this.propertyEditor.properties.getProperties();
@@ -382,13 +322,6 @@ public class UIReplaysEditor extends UIElement
 
                     break;
                 }
-            }
-
-            if (poseProperty == null)
-            {
-                this.pick(key);
-
-                poseProperty = this.propertyEditor.properties.getProperties().get(0);
             }
 
             int ticks = this.delegate.getRunner().ticks;
@@ -411,5 +344,22 @@ public class UIReplaysEditor extends UIElement
                 this.delegate.setCursor((int) closest.getTick());
             }
         }
+    }
+
+    @Override
+    public void render(UIContext context)
+    {
+        context.batcher.box(this.icons.area.x, this.icons.area.y, this.replays.area.ex(), this.icons.area.ey(), Colors.CONTROL_BAR);
+
+        if (this.keyframeEditor.isVisible())
+        {
+            UIDashboardPanels.renderHighlight(context.batcher, this.toggleKeyframes.area);
+        }
+        else if (this.propertyEditor != null && this.propertyEditor.isVisible())
+        {
+            UIDashboardPanels.renderHighlight(context.batcher, this.toggleProperties.area);
+        }
+
+        super.render(context);
     }
 }

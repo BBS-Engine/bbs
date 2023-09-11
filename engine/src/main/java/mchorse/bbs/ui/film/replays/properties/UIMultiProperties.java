@@ -1,9 +1,11 @@
 package mchorse.bbs.ui.film.replays.properties;
 
+import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.graphics.line.LineBuilder;
 import mchorse.bbs.graphics.line.SolidColorLineRenderer;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
+import mchorse.bbs.ui.film.UIClips;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.utils.Pair;
@@ -544,8 +546,9 @@ public class UIMultiProperties extends UIProperties
         if (this.delegate != null)
         {
             int cx = this.toGraphX(this.delegate.getCursor());
+            String label = TimeUtils.formatTime(this.delegate.getCursor()) + "/" + TimeUtils.formatTime(this.duration);
 
-            context.batcher.box(cx - 1, this.area.y, cx + 1, this.area.ey(), Colors.CURSOR);
+            UIClips.renderCursor(context, label, this.area, cx);
         }
     }
 }

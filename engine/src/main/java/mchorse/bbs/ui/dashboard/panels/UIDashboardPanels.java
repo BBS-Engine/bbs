@@ -7,6 +7,7 @@ import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.events.UIEvent;
+import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.ScrollDirection;
@@ -26,6 +27,14 @@ public class UIDashboardPanels extends UIElement
     public UIElement pinned;
     public UIScrollView panelButtons;
 
+    public static void renderHighlight(Batcher2D batcher, Area area)
+    {
+        int color = BBSSettings.primaryColor.get();
+
+        batcher.box(area.x, area.ey() - 2, area.ex(), area.ey(), Colors.A100 | color);
+        batcher.gradientVBox(area.x, area.y, area.ex(), area.ey() - 2, color, Colors.A75 | color);
+    }
+
     public UIDashboardPanels()
     {
         this.taskBar = new UIElement();
@@ -42,11 +51,7 @@ public class UIDashboardPanels extends UIElement
             {
                 if (this.panel == this.panels.get(i))
                 {
-                    Area area = ((UIIcon) this.panelButtons.getChildren().get(i)).area;
-                    int color = BBSSettings.primaryColor.get();
-
-                    context.batcher.box(area.x, area.ey() - 2, area.ex(), area.ey(), Colors.A100 | color);
-                    context.batcher.gradientVBox(area.x, area.y, area.ex(), area.ey() - 2, color, Colors.A75 | color);
+                    renderHighlight(context.batcher, ((UIIcon) this.panelButtons.getChildren().get(i)).area);
                 }
             }
         });

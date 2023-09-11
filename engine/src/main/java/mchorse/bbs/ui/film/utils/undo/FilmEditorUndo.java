@@ -19,7 +19,6 @@ public abstract class FilmEditorUndo implements IUndo<ValueGroup>
     public int panel;
 
     /* Replays */
-    public List<String> keyframeKeys = new ArrayList<String>();
     private List<List<Integer>> keyframesSelectedBefore = new ArrayList<>();
     private List<List<Integer>> keyframesSelectedAfter = new ArrayList<>();
     private Vector2i keyframeSelectedBefore = new Vector2i();
@@ -64,7 +63,6 @@ public abstract class FilmEditorUndo implements IUndo<ValueGroup>
         this.selectedAfter.addAll(timeline.getSelection());
         this.selectedBefore.addAll(this.selectedAfter);
 
-        this.keyframeKeys.addAll(editor.replays.channels.getCurrent());
         this.keyframesSelectedAfter.addAll(editor.replays.collectSelection());
         this.keyframesSelectedBefore.addAll(this.keyframesSelectedAfter);
         this.keyframeSelectedAfter.set(editor.replays.findSelected());

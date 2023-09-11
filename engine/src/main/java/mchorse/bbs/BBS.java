@@ -392,7 +392,7 @@ public class BBS
         KeybindSettings.registerClasses();
 
         setupConfig(Icons.PROCESSOR, "bbs", new File(destination, "bbs.json"), BBSSettings::register);
-        setupConfig(Icons.KEY, "keybinds", new File(destination, "keybinds.json"), KeybindSettings::register);
+        setupConfig(Icons.KEY_CAP, "keybinds", new File(destination, "keybinds.json"), KeybindSettings::register);
 
         events.post(new RegisterSettingsEvent());
         configs.reload();

@@ -2,13 +2,16 @@ package mchorse.bbs.ui.film.replays.properties;
 
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
+import mchorse.bbs.forms.properties.IFormProperty;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.replays.properties.factories.UIKeyframeFactory;
 import mchorse.bbs.ui.film.utils.UICameraUtils;
+import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
@@ -19,6 +22,7 @@ import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
 import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
 import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 import mchorse.bbs.utils.math.IInterpolation;
@@ -44,9 +48,14 @@ public class UIPropertyEditor extends UIElement
 
     private IAxisConverter converter;
 
+    protected IUIClipsDelegate delegate;
+    protected List<BaseValue> valueChannels = new ArrayList<>();
+
     public UIPropertyEditor(IUIClipsDelegate delegate)
     {
         super();
+
+        this.delegate = delegate;
 
         InterpolationTooltip tooltip = new InterpolationTooltip(0F, 1F, () ->
         {
@@ -58,7 +67,7 @@ public class UIPropertyEditor extends UIElement
             }
 
             return keyframe.getInterpolation();
-        }, null);
+        });
 
         this.frameButtons = new UIElement();
         this.frameButtons.relative(this).x(1F).y(1F).w(120).anchor(1F).column().vertical().stretch().padding(5);
@@ -111,6 +120,33 @@ public class UIPropertyEditor extends UIElement
         this.keys().register(Keys.KEYFRAMES_SELECT_ALL, this::selectAll).inside().category(category);
 
         this.interp.keys().register(Keys.KEYFRAMES_INTERP, this.interp::clickItself).category(category);
+
+        this.updateConverter();
+    }
+
+    public void setChannels(List<GenericKeyframeChannel> properties, List<IFormProperty> property, List<Integer> colors)
+    {
+        List<UIProperty> sheets = this.properties.properties;
+
+        sheets.clear();
+        this.properties.clearSelection();
+
+        this.valueChannels.clear();
+
+        for (int i = 0; i < properties.size(); i++)
+        {
+            GenericKeyframeChannel channel = properties.get(i);
+
+            this.valueChannels.add(channel);
+            sheets.add(new UIProperty(channel.getId(), IKey.raw(channel.getId()), colors.get(i), channel, property.get(i)));
+        }
+
+        this.frameButtons.setVisible(false);
+    }
+
+    public void updateConverter()
+    {
+        this.setConverter(UICameraDopeSheetEditor.CONVERTER);
     }
 
     protected UIMultiProperties create(IUIClipsDelegate delegate)

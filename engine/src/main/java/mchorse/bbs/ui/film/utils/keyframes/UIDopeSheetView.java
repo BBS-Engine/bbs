@@ -1,9 +1,10 @@
 package mchorse.bbs.ui.film.utils.keyframes;
 
+import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
+import mchorse.bbs.ui.film.UIClips;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIDopeSheet;
-import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.Keyframe;
 
 import java.util.function.Consumer;
@@ -66,8 +67,9 @@ public class UIDopeSheetView extends UIDopeSheet
         if (this.editor != null)
         {
             int cx = this.toGraphX(this.getOffset());
+            String label = TimeUtils.formatTime(this.getOffset()) + "/" + TimeUtils.formatTime(this.duration);
 
-            context.batcher.box(cx - 1, this.area.y, cx + 1, this.area.ey(), Colors.CURSOR);
+            UIClips.renderCursor(context, label, this.area, cx);
         }
     }
 }

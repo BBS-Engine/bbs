@@ -56,7 +56,7 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
             }
 
             return keyframe.getInterpolation().from(keyframe.getEasing());
-        }, null);
+        });
 
         this.frameButtons = new UIElement();
         this.frameButtons.relative(this).x(1F).y(1F).w(100).anchor(1F).column().vertical().stretch().padding(5);

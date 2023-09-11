@@ -409,7 +409,7 @@ public class UIFilmController extends UIElement
         return super.subKeyPressed(context);
     }
 
-    private void pickRecording()
+    public void pickRecording()
     {
         Window.toggleMousePointer(false);
 

@@ -54,7 +54,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         this.shadow = new UITrackpad((v) -> this.clip.shadow.set(v.floatValue())).limit(0);
 
         this.transform = new UIPropTransform((t) -> this.clip.transform.set(t.copy()));
-        this.transform.noLabels();
+        this.transform.verticalCompact().noLabels();
 
         this.lineHeight = new UITrackpad((v) -> this.clip.lineHeight.set(v.intValue()));
         this.lineHeight.limit(0).integer().tooltip(IKey.lazy("Line height"), Direction.BOTTOM);
