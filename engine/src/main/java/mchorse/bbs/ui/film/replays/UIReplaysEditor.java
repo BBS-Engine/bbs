@@ -89,10 +89,10 @@ public class UIReplaysEditor extends UIElement
         this.toggleProperties = new UIIcon(Icons.MORE, (b) -> this.toggleProperties(true));
 
         this.keyframes = new UIElement();
-        this.keyframes.relative(this).w(1F, -w).h(1F);
+        this.keyframes.relative(this).x(w).w(1F, -w).h(1F);
 
         this.replays = new UIReplayList((l) -> this.setReplay(l.get(0)), this.delegate);
-        this.replays.relative(this).x(1F, -w).y(20).w(w).h(1F, -20);
+        this.replays.relative(this).y(20).w(w).h(1F, -20);
 
         this.icons = UI.row(0, this.record, this.toggleKeyframes, this.toggleProperties);
         this.icons.relative(this.replays).y(-20).w(60).h(20);
@@ -285,64 +285,80 @@ public class UIReplaysEditor extends UIElement
 
         if (Window.isCtrlPressed())
         {
+            boolean shift = Window.isShiftPressed();
             ContextMenuManager manager = new ContextMenuManager();
 
-            for (IFormProperty property : form.getProperties().values())
+            for (IFormProperty formProperty : form.getProperties().values())
             {
-                if (property.canCreateChannel())
+                if (!formProperty.canCreateChannel())
                 {
-                    manager.action(Icons.POINTER, IKey.raw(property.getKey()), () ->
-                    {
-                        /* TODO: ... */
-                    });
+                    continue;
                 }
+
+                manager.action(Icons.POINTER, IKey.raw(formProperty.getKey()), () ->
+                {
+                    this.toggleProperties(true);
+                    this.pickProperty(bone, StringUtils.combinePaths(path, formProperty.getKey()), shift);
+                });
             }
 
             this.getContext().replaceContextMenu(manager.create());
         }
         else if (!bone.isEmpty())
         {
-            this.toggleProperties(true);
-
-            String key = StringUtils.combinePaths(path, "pose");
-
             if (this.propertyEditor == null)
             {
                 return;
             }
 
-            List<UIProperty> properties = this.propertyEditor.properties.getProperties();
-            UIProperty poseProperty = null;
+            this.toggleProperties(true);
+            this.pickProperty(bone, StringUtils.combinePaths(path, "pose"), false);
+        }
+    }
 
-            for (UIProperty property : properties)
+    private void pickProperty(String bone, String key, boolean insert)
+    {
+        List<UIProperty> properties = this.propertyEditor.properties.getProperties();
+
+        for (UIProperty property : properties)
+        {
+            if (FormUtils.getPropertyPath(property.property).equals(key))
             {
-                if (FormUtils.getPropertyPath(property.property).equals(key))
-                {
-                    poseProperty = property;
+                this.pickProperty(bone, property, insert);
 
-                    break;
-                }
+                break;
+            }
+        }
+    }
+
+    private void pickProperty(String bone, UIProperty property, boolean insert)
+    {
+        int tick = this.delegate.getRunner().ticks;
+
+        if (insert)
+        {
+            this.propertyEditor.properties.addCurrent(property, tick);
+            this.propertyEditor.fillData(this.propertyEditor.properties.getCurrent());
+
+            return;
+        }
+
+        Pair segment = property.channel.findSegment(tick);
+
+        if (segment != null)
+        {
+            GenericKeyframe a = (GenericKeyframe) segment.a;
+            GenericKeyframe b = (GenericKeyframe) segment.b;
+            GenericKeyframe closest = Math.abs(a.getTick() - tick) > Math.abs(b.getTick() - tick) ? b : a;
+
+            this.propertyEditor.pickKeyframe(closest);
+
+            if (this.propertyEditor.editor instanceof UIPoseKeyframeFactory)
+            {
+                ((UIPoseKeyframeFactory) this.propertyEditor.editor).selectBone(bone);
             }
 
-            int ticks = this.delegate.getRunner().ticks;
-
-            Pair segment = poseProperty.channel.findSegment(ticks);
-
-            if (segment != null)
-            {
-                GenericKeyframe a = (GenericKeyframe) segment.a;
-                GenericKeyframe b = (GenericKeyframe) segment.b;
-                GenericKeyframe closest = Math.abs(a.getTick() - ticks) > Math.abs(b.getTick() - ticks) ? b : a;
-
-                this.propertyEditor.pickKeyframe(closest);
-
-                if (this.propertyEditor.editor instanceof UIPoseKeyframeFactory)
-                {
-                    ((UIPoseKeyframeFactory) this.propertyEditor.editor).selectBone(bone);
-                }
-
-                this.delegate.setCursor((int) closest.getTick());
-            }
+            this.delegate.setCursor((int) closest.getTick());
         }
     }
 

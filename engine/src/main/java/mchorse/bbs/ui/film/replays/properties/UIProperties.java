@@ -140,7 +140,7 @@ public abstract class UIProperties extends UIElement
         return null;
     }
 
-    public abstract UIProperty getSheet(int mouseY);
+    public abstract UIProperty getProperty(int mouseY);
 
     public boolean isGrabbing()
     {

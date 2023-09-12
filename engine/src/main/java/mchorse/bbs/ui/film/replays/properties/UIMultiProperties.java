@@ -145,23 +145,14 @@ public class UIMultiProperties extends UIProperties
     }
 
     @Override
-    public UIProperty getSheet(int mouseY)
+    public UIProperty getProperty(int mouseY)
     {
-        int propertyCount = this.properties.size();
-        int h = (this.area.h - TOP_MARGIN) / propertyCount;
+        List<UIProperty> properties = this.properties;
+        int sheetCount = properties.size();
+        int h = (this.area.h - TOP_MARGIN) / sheetCount;
+        int i = (mouseY - (this.area.ey() - h * sheetCount)) / h;
 
-        for (int i = 0; i < propertyCount; i++)
-        {
-            UIProperty property = this.properties.get(i);
-            int y = this.area.y + h * i + TOP_MARGIN;
-
-            if (mouseY >= y && mouseY < y + h)
-            {
-                return property;
-            }
-        }
-
-        return null;
+        return i < 0 || i >= sheetCount ? null : properties.get(i);
     }
 
     @Override
@@ -217,20 +208,21 @@ public class UIMultiProperties extends UIProperties
     @Override
     public void addCurrent(int mouseX, int mouseY)
     {
-        int propertyCount = this.properties.size();
-        int h = (this.area.h - TOP_MARGIN) / propertyCount;
-        int i = (mouseY - (this.area.ey() - h * propertyCount)) / h;
+        UIProperty property = this.getProperty(mouseY);
 
-        if (i < 0 || i >= propertyCount)
+        if (property == null)
         {
             return;
         }
 
-        UIProperty property = this.properties.get(i);
+        this.addCurrent(property, Math.round(this.fromGraphX(mouseX)));
+    }
+
+    public void addCurrent(UIProperty property, long tick)
+    {
         IInterpolation interp = Interpolation.LINEAR;
         GenericKeyframe frame = this.getCurrent();
         IGenericKeyframeFactory factory = property.channel.getFactory();
-        long tick = Math.round(this.fromGraphX(mouseX));
         long oldTick = tick;
 
         if (frame != null)
@@ -548,7 +540,7 @@ public class UIMultiProperties extends UIProperties
             int cx = this.toGraphX(this.delegate.getCursor());
             String label = TimeUtils.formatTime(this.delegate.getCursor()) + "/" + TimeUtils.formatTime(this.duration);
 
-            UIClips.renderCursor(context, label, this.area, cx);
+            UIClips.renderCursor(context, label, this.area, cx - 1);
         }
     }
 }

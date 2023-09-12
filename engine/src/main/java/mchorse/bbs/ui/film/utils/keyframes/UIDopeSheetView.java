@@ -69,7 +69,7 @@ public class UIDopeSheetView extends UIDopeSheet
             int cx = this.toGraphX(this.getOffset());
             String label = TimeUtils.formatTime(this.getOffset()) + "/" + TimeUtils.formatTime(this.duration);
 
-            UIClips.renderCursor(context, label, this.area, cx);
+            UIClips.renderCursor(context, label, this.area, cx - 1);
         }
     }
 }

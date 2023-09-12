@@ -282,7 +282,7 @@ public class UIPropertyEditor extends UIElement
 
         if (keyframes.size() == 1)
         {
-            UIProperty current = this.properties.getSheet(mouseY);
+            UIProperty current = this.properties.getProperty(mouseY);
 
             if (current == null)
             {
