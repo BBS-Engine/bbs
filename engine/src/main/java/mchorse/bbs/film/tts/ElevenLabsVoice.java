@@ -9,6 +9,11 @@ public class ElevenLabsVoice implements IMapSerializable
     public String name = "";
     public String category = "";
 
+    public boolean isCloned()
+    {
+        return this.category.equals("cloned");
+    }
+
     @Override
     public void fromData(MapType data)
     {

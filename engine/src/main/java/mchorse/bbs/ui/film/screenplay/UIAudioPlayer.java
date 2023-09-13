@@ -1,5 +1,6 @@
 package mchorse.bbs.ui.film.screenplay;
 
+import mchorse.bbs.audio.ColorCode;
 import mchorse.bbs.audio.SoundBuffer;
 import mchorse.bbs.audio.SoundPlayer;
 import mchorse.bbs.audio.Wave;
@@ -14,6 +15,7 @@ import mchorse.bbs.utils.colors.Colors;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 
 public class UIAudioPlayer extends UIElement implements IUITreeEventListener
 {
@@ -82,10 +84,15 @@ public class UIAudioPlayer extends UIElement implements IUITreeEventListener
 
     public void loadAudio(Wave wave)
     {
+        this.loadAudio(wave, null);
+    }
+
+    public void loadAudio(Wave wave, List<ColorCode> colorCodes)
+    {
         this.wave = wave;
         this.waveform = new Waveform();
 
-        this.waveform.generate(this.wave, null, 20, 20);
+        this.waveform.generate(this.wave, colorCodes, 20, 20);
 
         this.buffer = new SoundBuffer(null, this.wave, this.waveform);
         this.player = new SoundPlayer(this.buffer);

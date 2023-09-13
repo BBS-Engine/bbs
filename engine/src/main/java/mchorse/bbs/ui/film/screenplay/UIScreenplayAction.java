@@ -33,32 +33,7 @@ public class UIScreenplayAction extends UIElement
         this.action = action;
 
         this.content = new UITextbox(10000, (t) -> this.action.content.set(t));
-        this.pickVoice = new UIIcon(Icons.VOICE, (b) ->
-        {
-            this.getContext().replaceContextMenu((menu) ->
-            {
-                for (ElevenLabsVoice voice : ElevenLabsAPI.getVoices().values())
-                {
-                    if (!voice.category.equals("cloned"))
-                    {
-                        continue;
-                    }
-
-                    String name = voice.name;
-
-                    if (name.equalsIgnoreCase(this.action.voice.get()))
-                    {
-                        menu.action(Icons.VOICE, IKey.raw(name), BBSSettings.primaryColor(0), () -> this.setVoice(name));
-                    }
-                    else
-                    {
-                        menu.action(Icons.VOICE, IKey.raw(name), () -> this.setVoice(name));
-                    }
-                }
-
-                menu.action(Icons.CLOSE, IKey.lazy("No voice"), Colors.NEGATIVE, () -> this.setVoice(""));
-            });
-        });
+        this.pickVoice = new UIIcon(Icons.VOICE, (b) -> this.pickVoice());
 
         this.pause = new UITrackpad((v) -> this.action.pause.set(v.floatValue()));
         this.pause.tooltip(IKey.lazy("Pause (silence)")).w(60);
@@ -69,7 +44,7 @@ public class UIScreenplayAction extends UIElement
             {
                 this.editor.generateTTS(Arrays.asList(this.action), (actions) ->
                 {
-                    this.getContext().render.postRunnable(() -> this.load(this.editor.getSoundsFolder()));
+                    this.getContext().render.postRunnable(this::load);
                 });
             });
 
@@ -94,7 +69,7 @@ public class UIScreenplayAction extends UIElement
                         m.action(Icons.SOUND, IKey.raw(file.getName()), () ->
                         {
                             this.action.variant.set(file.getName());
-                            this.load(this.editor.getSoundsFolder());
+                            this.load();
                         });
                     }
                 });
@@ -104,6 +79,33 @@ public class UIScreenplayAction extends UIElement
         this.fillData();
         this.rebuild();
         this.column(5).stretch().vertical();
+    }
+
+    private void pickVoice()
+    {
+        this.getContext().replaceContextMenu((menu) ->
+        {
+            for (ElevenLabsVoice voice : ElevenLabsAPI.getVoices().values())
+            {
+                if (!voice.isCloned())
+                {
+                    continue;
+                }
+
+                String name = voice.name;
+
+                if (name.equalsIgnoreCase(this.action.voice.get()))
+                {
+                    menu.action(Icons.VOICE, IKey.raw(name), BBSSettings.primaryColor(0), () -> this.setVoice(name));
+                }
+                else
+                {
+                    menu.action(Icons.VOICE, IKey.raw(name), () -> this.setVoice(name));
+                }
+            }
+
+            menu.action(Icons.CLOSE, IKey.lazy("No voice"), Colors.NEGATIVE, () -> this.setVoice(""));
+        });
     }
 
     public ScreenplayAction getAction()
@@ -177,8 +179,9 @@ public class UIScreenplayAction extends UIElement
         }
     }
 
-    public void load(File soundsFolder)
+    public void load()
     {
+        File soundsFolder = this.editor.getSoundsFolder();
         File file = new File(soundsFolder, this.action.uuid.get() + "/" + this.action.variant.get());
 
         this.audioPlayer.loadAudio(file);

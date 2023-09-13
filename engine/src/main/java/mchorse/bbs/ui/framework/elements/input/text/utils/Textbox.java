@@ -558,7 +558,7 @@ public class Textbox
 
             if (!clipboard.isEmpty())
             {
-                this.insert(clipboard);
+                this.insert(clipboard.replaceAll("\r", ""));
                 this.acceptText();
             }
 

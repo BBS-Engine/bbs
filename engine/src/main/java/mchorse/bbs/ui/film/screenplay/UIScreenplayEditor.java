@@ -1,11 +1,14 @@
 package mchorse.bbs.ui.film.screenplay;
 
 import mchorse.bbs.BBS;
+import mchorse.bbs.BBSSettings;
 import mchorse.bbs.audio.ColorCode;
 import mchorse.bbs.audio.Wave;
 import mchorse.bbs.audio.wav.WaveWriter;
+import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.ListType;
+import mchorse.bbs.film.Film;
 import mchorse.bbs.film.screenplay.Screenplay;
 import mchorse.bbs.film.screenplay.ScreenplayAction;
 import mchorse.bbs.film.tts.ElevenLabsAPI;
@@ -21,6 +24,8 @@ import mchorse.bbs.ui.framework.elements.overlay.UIMessageFolderOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.Direction;
+import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
 
 import java.io.ByteArrayOutputStream;
@@ -35,9 +40,11 @@ public class UIScreenplayEditor extends UIElement
     public UIElement masterBar;
     public UIAudioPlayer master;
     public UIIcon generate;
+    public UIIcon subtitles;
     public UIIcon save;
 
     public UIScrollView editor;
+    public UIIcon add;
 
     private UIFilmPanel panel;
     private Screenplay screenplay;
@@ -51,21 +58,21 @@ public class UIScreenplayEditor extends UIElement
         this.master = new UIAudioPlayer();
         this.generate = new UIIcon(Icons.SOUND, (b) -> this.generate());
         this.generate.tooltip(IKey.lazy("Compile generated audio"));
+        this.subtitles = new UIIcon(Icons.FONT, (b) -> this.generateSubtitles());
+        this.subtitles.tooltip(IKey.lazy("Generate subtitle clips"));
         this.save = new UIIcon(Icons.SAVED, (b) -> this.saveAudio());
         this.save.tooltip(IKey.lazy("Save compiled audio"));
-        this.masterBar = UI.row(this.master, this.save, this.generate);
+        this.masterBar = UI.row(this.master, this.save, this.subtitles, this.generate);
         this.masterBar.relative(this).x(10).y(10).w(1F, -20).h(20);
 
         this.editor = UI.scrollView(15, 10);
         this.editor.relative(this).y(40).w(1F).h(1F, -40);
-        this.editor.context((menu) ->
+        this.add = new UIIcon(Icons.ADD, (b) ->
         {
-            menu.action(Icons.ADD, IKey.lazy("Add a reply"), () ->
-            {
-                this.editor.add(this.createAction(this.screenplay.addAction()));
-                this.resize();
-            });
+            this.editor.addBefore(this.add, this.createAction(this.screenplay.addAction()));
+            this.resize();
         });
+        this.add.tooltip(IKey.lazy("Add new action..."), Direction.TOP);
 
         this.add(this.editor, this.masterBar);
         this.markContainer();
@@ -107,7 +114,7 @@ public class UIScreenplayEditor extends UIElement
 
                 float time = offset + (pause < 0 ? -pause : 0);
 
-                this.colorCodes.add(new ColorCode(time, time + wave.getDuration(), Colors.HSVtoRGB((float) Math.random(), 1F, 1F).getARGBColor()));
+                this.colorCodes.add(new ColorCode(time, time + wave.getDuration(), BBSSettings.elevenVoiceColors.getColor(action.voice.get())));
 
                 offset += pause + wave.getDuration();
             }
@@ -123,8 +130,48 @@ public class UIScreenplayEditor extends UIElement
         {
             Wave wave = new Wave(lastWave.audioFormat, lastWave.numChannels, lastWave.sampleRate, lastWave.bitsPerSample, output.toByteArray());
 
-            this.master.loadAudio(wave);
+            this.master.loadAudio(wave, this.colorCodes);
         }
+    }
+
+    private void generateSubtitles()
+    {
+        Film data = this.panel.getData();
+        float offset = 0;
+        int layer = 0;
+
+        for (Clip clip : data.camera.get())
+        {
+            layer = Math.max(layer, clip.layer.get());
+        }
+
+        for (UIScreenplayAction uiAction : this.editor.getChildren(UIScreenplayAction.class))
+        {
+            Wave wave = uiAction.audioPlayer.getWave();
+
+            if (wave == null)
+            {
+                continue;
+            }
+
+            ScreenplayAction action = uiAction.getAction();
+            float pause = action.pause.get();
+            float time = offset + (pause < 0 ? -pause : 0);
+
+            SubtitleClip clip = new SubtitleClip();
+
+            clip.title.set(action.content.get());
+            clip.tick.set((int) (time * 20));
+            clip.duration.set((int) (wave.getDuration() * 20));
+            clip.layer.set(layer + 1);
+            clip.color.set(BBSSettings.elevenVoiceColors.getColor(action.voice.get()));
+
+            data.camera.addClip(clip);
+
+            offset += pause + wave.getDuration();
+        }
+
+        this.panel.showPanel(this.panel.clips);
     }
 
     private void saveAudio()
@@ -227,6 +274,7 @@ public class UIScreenplayEditor extends UIElement
             {
                 this.screenplay.removeAction(action);
                 uiAction.removeFromParent();
+                this.editor.resize();
             });
         });
 
@@ -241,7 +289,7 @@ public class UIScreenplayEditor extends UIElement
 
         for (UIScreenplayAction action : this.getChildren(UIScreenplayAction.class))
         {
-            action.load(this.getSoundsFolder());
+            action.load();
         }
     }
 
@@ -254,6 +302,7 @@ public class UIScreenplayEditor extends UIElement
             this.editor.add(this.createAction(action));
         }
 
+        this.editor.add(this.add);
         this.resize();
     }
 
