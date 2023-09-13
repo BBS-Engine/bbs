@@ -12,8 +12,6 @@ import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.film.Film;
-import mchorse.bbs.film.tts.ElevenLabsAPI;
-import mchorse.bbs.film.tts.TTSGenerateResult;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
@@ -32,14 +30,11 @@ import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
 import mchorse.bbs.ui.film.clips.UIClip;
 import mchorse.bbs.ui.film.controller.UIFilmController;
 import mchorse.bbs.ui.film.replays.UIReplaysEditor;
-import mchorse.bbs.ui.film.screenplay.FountainSyntaxHighlighter;
+import mchorse.bbs.ui.film.screenplay.UIScreenplayEditor;
 import mchorse.bbs.ui.film.utils.undo.ValueChangeUndo;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
-import mchorse.bbs.ui.framework.elements.input.text.UITextEditor;
-import mchorse.bbs.ui.framework.elements.overlay.UIMessageFolderOverlayPanel;
-import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.utils.UIDraggable;
 import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
 import mchorse.bbs.ui.utils.Area;
@@ -81,7 +76,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public UIClips timeline;
     public UIReplaysEditor replays;
 
-    public UITextEditor screenplay;
+    public UIScreenplayEditor screenplay;
 
     public UIIcon plause;
     public UIIcon record;
@@ -128,14 +123,9 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.replays.relative(this.main).full();
         this.replays.setVisible(false);
 
-        this.screenplay = new UITextEditor((t) -> this.data.screenplay.set(t));
-        this.screenplay.highlighter(new FountainSyntaxHighlighter()).background().relative(this.editor).full();
+        this.screenplay = new UIScreenplayEditor(this);
         this.screenplay.relative(this.main).full();
-        this.screenplay.wrap().setVisible(false);
-        this.screenplay.context((menu) ->
-        {
-            menu.action(Icons.SOUND, IKey.lazy("Generate audio (ElevenLabs)"), this::generateTTS);
-        });
+        this.screenplay.setVisible(false);
 
         /* Setup elements */
         this.plause = new UIIcon(Icons.PLAY, (b) -> this.togglePlayback());
@@ -198,47 +188,6 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.screenplay.setVisible(false);
 
         element.setVisible(true);
-    }
-
-    private void generateTTS()
-    {
-        try
-        {
-            ElevenLabsAPI.generate(this.data, (result) ->
-            {
-                if (result.status == TTSGenerateResult.Status.INITIALIZED)
-                {
-                    this.getContext().notify(IKey.lazy("Starting TTS generation!"), Colors.BLUE | Colors.A100);
-                }
-                else if (result.status == TTSGenerateResult.Status.GENERATED)
-                {
-                    this.getContext().notify(IKey.lazy(result.message), Colors.BLUE | Colors.A100);
-                }
-                else if (result.status == TTSGenerateResult.Status.ERROR)
-                {
-                    this.getContext().notify(IKey.lazy("An error has occurred when generating a voice line: " + result.message), Colors.RED | Colors.A100);
-                }
-                else if (result.status == TTSGenerateResult.Status.TOKEN_MISSING)
-                {
-                    this.getContext().notify(IKey.lazy("You haven't specified a token in BBS' settings!"), Colors.RED | Colors.A100);
-                }
-                else if (result.status == TTSGenerateResult.Status.VOICE_IS_MISSING)
-                {
-                    this.getContext().notify(!result.missingVoices.isEmpty()
-                        ? IKey.lazy("A voice " + result.missingVoices.get(0) + " provided in the screenplay isn't available!")
-                        : IKey.lazy("A list of voices couldn't get loaded!"),
-                        Colors.RED | Colors.A100);
-                }
-                else /* SUCCESS */
-                {
-                    UIOverlay.addOverlay(this.getContext(), new UIMessageFolderOverlayPanel(UIKeys.SUCCESS, IKey.lazy("Voice lines were successfully generated!"), result.folder));
-                }
-            });
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public UIFilmController getController()
@@ -942,7 +891,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
         if (this.data != null)
         {
-            this.screenplay.setText(this.data.screenplay.get());
+            this.screenplay.setScreenplay(this.data.screenplay);
         }
     }
 

@@ -9,6 +9,16 @@ public class ColorCode implements IDataSerializable<ListType>
     public float end;
     public int color;
 
+    public ColorCode()
+    {}
+
+    public ColorCode(float start, float end, int color)
+    {
+        this.start = start;
+        this.end = end;
+        this.color = color;
+    }
+
     public boolean isInside(float time)
     {
         return time >= this.start && time < this.end;

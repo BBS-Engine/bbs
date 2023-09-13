@@ -1,14 +1,13 @@
 package mchorse.bbs.film.tts;
 
-import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.film.Film;
+import mchorse.bbs.film.screenplay.ScreenplayAction;
 import mchorse.bbs.utils.FFMpegUtils;
-import mchorse.bbs.utils.IOUtils;
+import mchorse.bbs.utils.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -19,7 +18,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,20 +30,22 @@ public class ElevenLabsAPI implements Runnable
 
     private static Thread thread;
 
-    private static Map<String, String> voices = new HashMap<>();
+    private static Map<String, ElevenLabsVoice> voices = new HashMap<>();
 
     private final String token;
-    private final Film screenplay;
-    private final Consumer<TTSGenerateResult> callback;
+    private final File folder;
+    private final List<ScreenplayAction> actions;
+    private final Consumer<ElevenLabsResult> callback;
 
-    public ElevenLabsAPI(String token, Film film, Consumer<TTSGenerateResult> callback)
+    public ElevenLabsAPI(String token, File folder, List<ScreenplayAction> actions, Consumer<ElevenLabsResult> callback)
     {
         this.token = token;
-        this.screenplay = film;
+        this.folder = folder;
+        this.actions = actions;
         this.callback = callback;
     }
 
-    public static Map<String, String> getVoices()
+    public static Map<String, ElevenLabsVoice> getVoices()
     {
         if (voices.isEmpty())
         {
@@ -94,10 +94,10 @@ public class ElevenLabsAPI implements Runnable
                 }
 
                 MapType map = type.asMap();
-                String name = map.getString("name").toLowerCase();
-                String id = map.getString("voice_id");
+                ElevenLabsVoice voice = new ElevenLabsVoice();
 
-                voices.put(name, id);
+                voice.fromData(map);
+                voices.put(voice.name.toLowerCase(), voice);
             }
         }
     }
@@ -110,55 +110,26 @@ public class ElevenLabsAPI implements Runnable
     /**
      * Generate audio voice lines from a film using ElevenLabs API
      */
-    public static void generate(Film film, Consumer<TTSGenerateResult> callback)
+    public static void generate(File folder, List<ScreenplayAction> actions, Consumer<ElevenLabsResult> callback)
     {
         String token = getToken();
 
         if (token.trim().isEmpty())
         {
-            callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.TOKEN_MISSING));
+            callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.TOKEN_MISSING));
 
             return;
         }
 
         if (thread != null)
         {
-            callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.ERROR, "The process is still in progress!"));
+            callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.ERROR, "The process is still in progress!"));
 
             return;
         }
 
-        thread = new Thread(new ElevenLabsAPI(token, film, callback));
+        thread = new Thread(new ElevenLabsAPI(token, folder, actions, callback));
         thread.start();
-    }
-
-    /**
-     * Collect voice IDs specified in screenplay's metadata
-     */
-    private static Map<String, String> collectVoices(List<ScreenplayReply> replies, Map<String, String> metadata)
-    {
-        Map<String, String> voices = new HashMap<>();
-
-        for (ScreenplayReply reply : replies)
-        {
-            String key = reply.name.toLowerCase();
-
-            if (voices.containsKey(key))
-            {
-                continue;
-            }
-
-            String metadataVoice = metadata.get("Voice-" + key.toUpperCase());
-
-            if (metadataVoice == null || metadataVoice.isEmpty())
-            {
-                return null;
-            }
-
-            voices.put(key, metadataVoice);
-        }
-
-        return voices;
     }
 
     /**
@@ -222,25 +193,24 @@ public class ElevenLabsAPI implements Runnable
     @Override
     public void run()
     {
-        List<ScreenplayReply> replies = this.screenplay.parseReplies();
-        Map<String, String> voices = getVoices();
+        Map<String, ElevenLabsVoice> voices = getVoices();
 
         if (voices.isEmpty())
         {
-            this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.VOICE_IS_MISSING));
+            this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.VOICE_IS_MISSING));
 
             thread = null;
 
             return;
         }
 
-        for (ScreenplayReply reply : replies)
+        for (ScreenplayAction reply : this.actions)
         {
-            if (!voices.containsKey(reply.name.toLowerCase()))
+            if (!voices.containsKey(reply.voice.get().toLowerCase()))
             {
-                TTSGenerateResult result = new TTSGenerateResult(TTSGenerateResult.Status.VOICE_IS_MISSING);
+                ElevenLabsResult result = new ElevenLabsResult(ElevenLabsResult.Status.VOICE_IS_MISSING);
 
-                result.missingVoices.add(reply.name);
+                result.missingVoices.add(reply.voice.get());
                 this.callback.accept(result);
 
                 thread = null;
@@ -249,27 +219,15 @@ public class ElevenLabsAPI implements Runnable
             }
         }
 
-        this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.INITIALIZED));
+        this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.INITIALIZED));
 
-        int i = 0;
-        String lastChapter = "";
-        File folder = BBS.getAssetsPath("audio/elevenlabs/" + this.screenplay.getId());
-        List<File> files = new ArrayList<>();
-
-        for (ScreenplayReply reply : replies)
+        for (ScreenplayAction action : this.actions)
         {
-            if (!reply.chapter.equals(lastChapter))
-            {
-                i = 1;
-                lastChapter = reply.chapter;
-            }
-
-            String filename = (reply.chapter + "_" + i + ".mp3").replaceAll("[^\\w\\d. _-]", "_");
-            File file = new File(folder, filename);
+            File file = this.getFile(action);
 
             try
             {
-                String voiceID = voices.get(reply.name.toLowerCase());
+                String voiceID = voices.get(action.voice.get().toLowerCase()).id;
 
                 HttpURLConnection connection = (HttpURLConnection) new URL(TTS_URL + voiceID).openConnection();
 
@@ -279,7 +237,7 @@ public class ElevenLabsAPI implements Runnable
                 connection.setRequestProperty("xi-api-key", this.token);
                 connection.setDoOutput(true);
 
-                fillJSONData(connection, reply.reply);
+                fillJSONData(connection, action.content.get());
 
                 int responseCode = connection.getResponseCode();
 
@@ -287,16 +245,25 @@ public class ElevenLabsAPI implements Runnable
                 {
                     writeToFile(connection, file);
 
-                    i += 1;
-                    lastChapter = reply.chapter;
+                    this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.GENERATED, "Voice line " + action.uuid.get() + " was generated!"));
 
-                    this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.GENERATED, "Voice line " + filename + " was generated!"));
+                    File wav = new File(StringUtils.removeExtension(file.getAbsolutePath()) + ".wav");
 
-                    files.add(file);
+                    try
+                    {
+                        FFMpegUtils.execute(folder, "-i", file.getAbsolutePath(), wav.getAbsolutePath());
+                        file.delete();
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    action.variant.set(wav.getName());
                 }
                 else
                 {
-                    this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.ERROR, "The server returned status code: " + responseCode));
+                    this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.ERROR, "The server returned status code: " + responseCode));
                 }
             }
             catch (Exception e)
@@ -305,32 +272,26 @@ public class ElevenLabsAPI implements Runnable
             }
         }
 
-        /* Concatenate all of these into a single file */
-        StringBuilder list = new StringBuilder();
-        File listFile = new File(folder, "_list.txt");
-
-        for (File file : files)
-        {
-            list.append("file './");
-            list.append(file.getName());
-            list.append("'\n");
-        }
-
-        try
-        {
-            IOUtils.writeText(listFile, list.toString());
-
-            FFMpegUtils.execute(folder, "-f", "concat", "-safe", "0", "-i", listFile.getName(), this.screenplay.getId() + ".wav");
-
-            listFile.delete();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        this.callback.accept(new TTSGenerateResult(TTSGenerateResult.Status.SUCCESS, folder));
+        this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.SUCCESS, folder));
 
         thread = null;
+    }
+
+    private File getFile(ScreenplayAction action)
+    {
+        int i = 1;
+        File folder = new File(this.folder, action.uuid.get());
+        File file = new File(folder, i + ".wav");
+
+        folder.mkdirs();
+
+        while (file.exists())
+        {
+            i += 1;
+
+            file = new File(folder, i + ".wav");
+        }
+
+        return new File(StringUtils.removeExtension(file.getAbsolutePath()) + ".mp3");
     }
 }

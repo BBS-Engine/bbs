@@ -4,25 +4,25 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TTSGenerateResult
+public class ElevenLabsResult
 {
     public Status status;
     public File folder;
     public List<String> missingVoices = new ArrayList<>();
     public String message;
 
-    public TTSGenerateResult(Status status)
+    public ElevenLabsResult(Status status)
     {
         this.status = status;
     }
 
-    public TTSGenerateResult(Status status, File folder)
+    public ElevenLabsResult(Status status, File folder)
     {
         this.status = status;
         this.folder = folder;
     }
 
-    public TTSGenerateResult(Status status, String message)
+    public ElevenLabsResult(Status status, String message)
     {
         this.status = status;
         this.message = message;

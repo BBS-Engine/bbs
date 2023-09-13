@@ -149,6 +149,7 @@ public class Icons
     public static final Icon RIGHT_STICK = register(new Icon(ATLAS, "right_stick", 192, 112));
     public static final Icon TRIGGER = register(new Icon(ATLAS, "trigger", 208, 112));
     public static final Icon KEY = register(new Icon(ATLAS, "key", 224, 112));
+    public static final Icon VOICE = register(new Icon(ATLAS, "voice", 240, 112));
 
     public static final Icon CHECKBOARD = register(new Icon(ATLAS, "checkboard", 0, 240));
     public static final Icon DISABLED = register(new Icon(ATLAS, "disabled", 16, 240));

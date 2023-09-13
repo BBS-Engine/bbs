@@ -49,7 +49,7 @@ public class Wave
 
     public float getDuration()
     {
-        return this.data.length / this.numChannels / this.getBytesPerSample() / (float) this.sampleRate;
+        return this.data.length / (float) this.numChannels / (float) this.getBytesPerSample() / (float) this.sampleRate;
     }
 
     public int getALFormat()

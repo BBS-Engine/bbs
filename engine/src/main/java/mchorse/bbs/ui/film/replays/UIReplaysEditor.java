@@ -367,7 +367,7 @@ public class UIReplaysEditor extends UIElement
     {
         context.batcher.box(this.icons.area.x, this.icons.area.y, this.replays.area.ex(), this.icons.area.ey(), Colors.CONTROL_BAR);
 
-        if (this.keyframeEditor.isVisible())
+        if (this.keyframeEditor != null && this.keyframeEditor.isVisible())
         {
             UIDashboardPanels.renderHighlight(context.batcher, this.toggleKeyframes.area);
         }
