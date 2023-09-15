@@ -90,11 +90,6 @@ void main()
 
     out_color.rgb *= ambient * out_ao.r;
 
-    if (u_fog > 0 && !is_sky)
-    {
-        out_color.rgb = aerial_perspective(out_color.rgb, position, VdotL, u_fog);
-    }
-
     if (normal.x != 0 || normal.y != 0 || normal.z != 0)
     {
         if (lmap.w == 1)
@@ -126,5 +121,10 @@ void main()
 
         // out_color.rgb = mix(out_color.rgb, color.rgb * shadingFactor * clamp(additive, 0, 1), mixFactor * mixFactor * mixFactor);
         out_color.rgb = mix(out_color.rgb, color.rgb * out_ao.r * clamp(additive, 0, 1), clamp(additiveFactor, 0, 1));
+    }
+
+    if (u_fog > 0 && !is_sky)
+    {
+        out_color.rgb = aerial_perspective(out_color.rgb, position, VdotL, u_fog);
     }
 }

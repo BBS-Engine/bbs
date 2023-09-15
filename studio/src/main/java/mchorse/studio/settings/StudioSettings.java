@@ -9,7 +9,6 @@ public class StudioSettings
 {
     public static ValueBoolean welcome;
 
-    public static ValueBoolean renderTerrain;
     public static ValueBoolean renderTerrainDebug;
     public static ValueFloat renderQuality;
     public static ValueBoolean renderVsync;
@@ -20,7 +19,6 @@ public class StudioSettings
         welcome = builder.category("rendering").getBoolean("welcome", false);
         welcome.invisible();
 
-        renderTerrain = builder.getBoolean("terrain", true);
         renderTerrainDebug = builder.getBoolean("terrain_debug", false);
         renderQuality = builder.getFloat("render_quality", 1F, 0.01F, 2F);
         renderVsync = builder.getBoolean("vsync", true);

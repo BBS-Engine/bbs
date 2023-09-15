@@ -17,6 +17,7 @@ import org.joml.Vector3f;
 
 public class UIWorldSettings extends UIElement
 {
+    public UIToggle terrain;
     public UIToggle sky;
     public UIToggle fog;
     public UINestedEdit pickSkyForm;
@@ -32,6 +33,8 @@ public class UIWorldSettings extends UIElement
     {
         this.settings = settings;
 
+        this.terrain = new UIToggle(IKey.lazy("Terrain"), (b) -> this.settings.terrain = b.getValue());
+        this.terrain.setValue(settings.terrain);
         this.sky = new UIToggle(UIKeys.WORLD_SETTINGS_SKY, (b) -> this.settings.sky = b.getValue());
         this.sky.setValue(settings.sky);
         this.fog = new UIToggle(UIKeys.WORLD_SETTINGS_FOG, (b) -> this.settings.fog = b.getValue());
@@ -71,7 +74,7 @@ public class UIWorldSettings extends UIElement
         });
 
         this.add(UI.label(UIKeys.WORLD_SETTINGS_PICK_SKYBOX).background(), this.pickSkyForm);
-        this.add(this.sky.marginTop(8), this.fog, UI.row(this.lightmap00, this.lightmap10));
+        this.add(this.terrain.marginTop(8), this.sky, this.fog, UI.row(this.lightmap00, this.lightmap10));
         this.add(UI.label(IKey.lazy("Day cycle and yaw")).marginTop(8), this.dayCycle, this.dayYaw);
         this.add(UI.label(UIKeys.WORLD_SETTINGS_SHADING).marginTop(8), this.shadingDirection);
 

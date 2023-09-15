@@ -96,27 +96,50 @@ public class UIScreenplayEditor extends UIElement
             }
 
             ScreenplayAction action = uiAction.getAction();
+            float cutoff = action.cutoff.get();
             float pause = action.pause.get();
+            int pauseBytes = (int) (Math.abs(pause) * wave.byteRate);
+
+            pauseBytes -= pauseBytes % wave.getBytesPerSample();
 
             try
             {
                 if (pause < 0)
                 {
-                    output.write(new byte[(int) (-pause * wave.byteRate)]);
+                    output.write(new byte[pauseBytes]);
                 }
 
-                output.write(wave.data);
+                if (cutoff == 0)
+                {
+                    output.write(wave.data);
+                }
+                else
+                {
+                    float newLength = Math.max(wave.getDuration() - Math.abs(cutoff), 0);
+
+                    if (newLength > 0)
+                    {
+                        int newLengthBytes = (int) (newLength * wave.byteRate);
+
+                        newLengthBytes -= newLengthBytes % wave.getBytesPerSample();
+
+                        int newOffset = cutoff < 0 ? wave.data.length - newLengthBytes : 0;
+
+                        output.write(wave.data, newOffset, newLengthBytes);
+                    }
+                }
 
                 if (pause > 0)
                 {
-                    output.write(new byte[(int) (pause * wave.byteRate)]);
+                    output.write(new byte[pauseBytes]);
                 }
 
                 float time = offset + (pause < 0 ? -pause : 0);
+                float waveDuration = Math.max(wave.getDuration() - cutoff, 0);
 
-                this.colorCodes.add(new ColorCode(time, time + wave.getDuration(), BBSSettings.elevenVoiceColors.getColor(action.voice.get())));
+                this.colorCodes.add(new ColorCode(time, time + waveDuration, BBSSettings.elevenVoiceColors.getColor(action.voice.get())));
 
-                offset += pause + wave.getDuration();
+                offset += pause + waveDuration;
             }
             catch (Exception e)
             {
@@ -157,18 +180,19 @@ public class UIScreenplayEditor extends UIElement
             ScreenplayAction action = uiAction.getAction();
             float pause = action.pause.get();
             float time = offset + (pause < 0 ? -pause : 0);
+            float duration = Math.max(wave.getDuration() - action.cutoff.get(), 0);
 
             SubtitleClip clip = new SubtitleClip();
 
             clip.title.set(action.content.get());
             clip.tick.set((int) (time * 20));
-            clip.duration.set((int) (wave.getDuration() * 20));
+            clip.duration.set((int) (duration * 20));
             clip.layer.set(layer + 1);
             clip.color.set(BBSSettings.elevenVoiceColors.getColor(action.voice.get()));
 
             data.camera.addClip(clip);
 
-            offset += pause + wave.getDuration();
+            offset += pause + duration;
         }
 
         this.panel.showPanel(this.panel.clips);

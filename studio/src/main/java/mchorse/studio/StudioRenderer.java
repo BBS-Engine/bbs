@@ -543,7 +543,7 @@ public class StudioRenderer implements IComponent
     {
         World world = context.getWorld();
 
-        if (StudioSettings.renderTerrain.get())
+        if (world.settings.terrain)
         {
             ChunkArrayManager manager = (ChunkArrayManager) world.chunks;
 

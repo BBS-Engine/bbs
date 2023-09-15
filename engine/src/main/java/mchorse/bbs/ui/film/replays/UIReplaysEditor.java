@@ -239,7 +239,6 @@ public class UIReplaysEditor extends UIElement
 
         this.keyframeEditor.keyframes.absolute();
         this.keyframeEditor.keyframes.duration = duration;
-        this.keyframeEditor.resetView();
 
         this.keyframes.add(this.keyframeEditor);
 
@@ -270,13 +269,15 @@ public class UIReplaysEditor extends UIElement
             this.propertyEditor.setVisible(false);
 
             this.propertyEditor.properties.duration = duration;
-            this.propertyEditor.resetView();
 
             this.keyframes.add(this.propertyEditor);
         }
 
         this.toggleProperties.setEnabled(this.propertyEditor != null);
         this.keyframes.resize();
+
+        if (this.keyframeEditor != null) this.keyframeEditor.resetView();
+        if (this.propertyEditor != null) this.propertyEditor.resetView();
     }
 
     public void pickForm(Form form, String bone)

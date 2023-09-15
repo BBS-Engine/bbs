@@ -10,6 +10,7 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.IUITreeEventListener;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
+import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
 
@@ -19,6 +20,8 @@ import java.util.List;
 
 public class UIAudioPlayer extends UIElement implements IUITreeEventListener
 {
+    public static final float PIXELS = 40;
+
     public UIIcon play;
 
     private Wave wave;
@@ -65,6 +68,11 @@ public class UIAudioPlayer extends UIElement implements IUITreeEventListener
 
     public void loadAudio(File file)
     {
+        this.loadAudio(file, 0F);
+    }
+
+    public void loadAudio(File file, float cutoff)
+    {
         if (file == null || !file.exists())
         {
             this.delete();
@@ -73,7 +81,7 @@ public class UIAudioPlayer extends UIElement implements IUITreeEventListener
         {
             try
             {
-                this.loadAudio(new WaveReader().read(new FileInputStream(file)));
+                this.loadAudio(new WaveReader().read(new FileInputStream(file)), null, cutoff);
             }
             catch (Exception e)
             {
@@ -84,15 +92,39 @@ public class UIAudioPlayer extends UIElement implements IUITreeEventListener
 
     public void loadAudio(Wave wave)
     {
-        this.loadAudio(wave, null);
+        this.loadAudio(wave, null, 0F);
     }
 
     public void loadAudio(Wave wave, List<ColorCode> colorCodes)
     {
+        this.loadAudio(wave, colorCodes, 0F);
+    }
+
+    public void loadAudio(Wave wave, List<ColorCode> colorCodes, float cutoff)
+    {
         this.wave = wave;
         this.waveform = new Waveform();
 
-        this.waveform.generate(this.wave, colorCodes, 20, 20);
+        if (cutoff != 0)
+        {
+            float newLength = Math.max(wave.getDuration() - Math.abs(cutoff), 0);
+
+            if (newLength > 0)
+            {
+                int newLengthBytes = (int) (newLength * wave.byteRate);
+
+                newLengthBytes -= newLengthBytes % wave.getBytesPerSample();
+
+                int newOffset = cutoff < 0 ? wave.data.length - newLengthBytes : 0;
+                byte[] bytes = new byte[newLengthBytes];
+
+                System.arraycopy(wave.data, newOffset, bytes, 0, newLengthBytes);
+
+                wave.data = bytes;
+            }
+        }
+
+        this.waveform.generate(this.wave, colorCodes, (int) PIXELS, 20);
 
         this.buffer = new SoundBuffer(null, this.wave, this.waveform);
         this.player = new SoundPlayer(this.buffer);
@@ -126,6 +158,25 @@ public class UIAudioPlayer extends UIElement implements IUITreeEventListener
     }
 
     @Override
+    protected boolean subMouseClicked(UIContext context)
+    {
+        Area.SHARED.set(this.area.x + 20, this.area.y, this.area.w - 20, this.area.h);
+
+        if (this.player != null && Area.SHARED.isInside(context) && context.mouseButton == 0)
+        {
+            float playback = this.player.getPlaybackPosition();
+            float offset = playback > 2F ? playback - 2F : 0F;
+            float newPlayback = (context.mouseX - (this.area.x + 20)) / PIXELS;
+
+            this.player.setPlaybackPosition(newPlayback + offset);
+
+            return true;
+        }
+
+        return super.subMouseClicked(context);
+    }
+
+    @Override
     public void render(UIContext context)
     {
         this.area.render(context.batcher, Colors.A75);
@@ -133,10 +184,12 @@ public class UIAudioPlayer extends UIElement implements IUITreeEventListener
         if (this.waveform != null)
         {
             int w = this.area.w - 20;
+            float playback = this.player.getPlaybackPosition();
+            float offset = playback > 2F ? playback - 2F : 0F;
 
-            this.waveform.render(context.batcher, Colors.WHITE, this.area.x + 20, this.area.y, w, this.area.h, 0, w / 20F);
+            this.waveform.render(context.batcher, Colors.WHITE, this.area.x + 20, this.area.y, w, this.area.h, offset, offset + w / PIXELS);
 
-            int x = this.area.x + 20 + (int) (this.player.getPlaybackPosition() * this.waveform.getPixelsPerSecond());
+            int x = this.area.x + 20 + (int) (playback * this.waveform.getPixelsPerSecond() - offset * PIXELS);
 
             context.batcher.box(x, this.area.y, x + 1, this.area.ey(), Colors.CURSOR);
         }
@@ -144,6 +197,7 @@ public class UIAudioPlayer extends UIElement implements IUITreeEventListener
         if (this.player != null && this.wasPlaying != this.player.isPlaying())
         {
             this.wasPlaying = this.player.isPlaying();
+
             this.updatePlayIcon();
         }
 

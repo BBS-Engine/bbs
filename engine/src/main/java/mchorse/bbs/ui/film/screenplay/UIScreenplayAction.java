@@ -22,6 +22,7 @@ public class UIScreenplayAction extends UIElement
     public UITextbox content;
     public UIIcon pickVoice;
     public UITrackpad pause;
+    public UITrackpad cutoff;
     public UIAudioPlayer audioPlayer;
 
     private ScreenplayAction action;
@@ -37,6 +38,12 @@ public class UIScreenplayAction extends UIElement
 
         this.pause = new UITrackpad((v) -> this.action.pause.set(v.floatValue()));
         this.pause.tooltip(IKey.lazy("Pause (silence)")).w(60);
+        this.cutoff = new UITrackpad((v) ->
+        {
+            this.action.cutoff.set(v.floatValue());
+            this.load();
+        });
+        this.cutoff.delayedInput().tooltip(IKey.lazy("Cutoff")).w(60);
         this.audioPlayer = new UIAudioPlayer();
         this.audioPlayer.context((menu) ->
         {
@@ -125,6 +132,7 @@ public class UIScreenplayAction extends UIElement
     {
         this.content.setText(this.action.content.get());
         this.pause.setValue(this.action.pause.get());
+        this.cutoff.setValue(this.action.cutoff.get());
 
         this.updateVoiceTooltip();
         this.updateVariantTooltip();
@@ -168,7 +176,7 @@ public class UIScreenplayAction extends UIElement
         }
         else
         {
-            this.add(UI.row(this.audioPlayer, this.pickVoice, this.pause), this.content);
+            this.add(UI.row(this.audioPlayer, this.pickVoice, this.pause, this.cutoff), this.content);
         }
 
         UIElement container = this.getParentContainer();
@@ -184,7 +192,7 @@ public class UIScreenplayAction extends UIElement
         File soundsFolder = this.editor.getSoundsFolder();
         File file = new File(soundsFolder, this.action.uuid.get() + "/" + this.action.variant.get());
 
-        this.audioPlayer.loadAudio(file);
+        this.audioPlayer.loadAudio(file, this.action.cutoff.get());
         this.updateVariantTooltip();
     }
 }

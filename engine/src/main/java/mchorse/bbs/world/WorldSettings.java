@@ -11,6 +11,7 @@ import org.joml.Vector3f;
 
 public class WorldSettings implements IMapSerializable
 {
+    public boolean terrain = true;
     public boolean sky = true;
     public boolean fog = true;
 
@@ -27,6 +28,7 @@ public class WorldSettings implements IMapSerializable
     @Override
     public void fromData(MapType data)
     {
+        this.terrain = data.getBool("terrain", this.terrain);
         this.sky = data.getBool("sky", this.sky);
         this.fog = data.getBool("fog", this.fog);
 
@@ -48,6 +50,7 @@ public class WorldSettings implements IMapSerializable
     @Override
     public void toData(MapType data)
     {
+        data.putBool("terrain", this.terrain);
         data.putBool("sky", this.sky);
         data.putBool("fog", this.fog);
 
