@@ -403,10 +403,13 @@ public class UIClips extends UIElement
 
             Clip copy = clip.breakDown(offset - clip.tick.get());
 
-            clip.duration.set(clip.duration.get() - copy.duration.get());
-            copy.tick.set(copy.tick.get() + clip.duration.get());
-            this.clips.addClip(copy);
-            this.addSelected(copy);
+            if (copy != null)
+            {
+                clip.duration.set(clip.duration.get() - copy.duration.get());
+                copy.tick.set(copy.tick.get() + clip.duration.get());
+                this.clips.addClip(copy);
+                this.addSelected(copy);
+            }
         }
 
         this.clips.postNotifyParent();
