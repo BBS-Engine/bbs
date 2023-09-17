@@ -12,6 +12,8 @@
     "bbs.config.title": "BBS",
     "bbs.config.appearance.fov": "FOV",
     "bbs.config.appearance.fov-comment": "This option controls FOV for camera in world menu and animation panel",
+    "bbs.config.appearance.force_qwerty": "Force QWERTY",
+    "bbs.config.appearance.force_qwerty-comment": "For key codes display, force displaying of QWERTY layout instead of currently used layout (like AZERTY, QWERTZ or ЙЦУКЕ)",
     "bbs.config.appearance.hsv_color_picker": "HSV picker",
     "bbs.config.appearance.hsv_color_picker-comment": "When enabled, this option switches all color pickers to use HSV color model instead of RGB, which is more intuitive",
     "bbs.config.appearance.language": "Language",

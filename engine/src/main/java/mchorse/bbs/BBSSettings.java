@@ -23,6 +23,7 @@ public class BBSSettings
     public static ValueInt tooltipStyle;
     public static ValueFloat fov;
     public static ValueBoolean hsvColorPicker;
+    public static ValueBoolean forceQwerty;
 
     /* TODO: hide system cursor */
     public static ValueBoolean enableCursorRendering;
@@ -126,6 +127,7 @@ public class BBSSettings
         );
         fov = builder.getFloat("fov", 40, 0, 180);
         hsvColorPicker = builder.getBoolean("hsv_color_picker", true);
+        forceQwerty = builder.getBoolean("force_qwerty", false);
 
         favoriteColors = new ValueColors("favorite_colors");
         builder.register(favoriteColors);

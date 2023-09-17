@@ -138,6 +138,11 @@ public class UIContext implements IViewportStack
         return this.keyCode;
     }
 
+    public int getScanCode()
+    {
+        return this.scanCode;
+    }
+
     public KeyAction getKeyAction()
     {
         return this.keyAction;
