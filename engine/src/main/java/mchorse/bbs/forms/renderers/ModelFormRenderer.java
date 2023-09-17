@@ -139,6 +139,11 @@ public class ModelFormRenderer extends FormRenderer<ModelForm>
     {
         CubicModel model = this.form.getModel();
 
+        if (model == null || model.model == null)
+        {
+            return;
+        }
+
         for (ModelGroup group : model.model.getOrderedGroups())
         {
             context.getStencil().addPicking(this.form, group.id);
