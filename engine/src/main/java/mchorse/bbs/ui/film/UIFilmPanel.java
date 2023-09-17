@@ -606,7 +606,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
             Position current = new Position(this.getCamera());
 
-            if (this.panel != null)
+            if (this.panel != null && this.clips.isVisible())
             {
                 if (!this.lastPosition.equals(current))
                 {
