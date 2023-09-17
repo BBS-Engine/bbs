@@ -101,12 +101,12 @@ public class UIPropertyEditor extends UIElement
                 menu.action(Icons.COPY, UIKeys.KEYFRAMES_CONTEXT_COPY, this::copyKeyframes);
             }
 
-            Map<String, List<GenericKeyframe>> pasted = this.parseKeyframes();
+            Map<String, PastedKeyframes> pasted = this.parseKeyframes();
 
             if (pasted != null)
             {
                 UIContext context = this.getContext();
-                final Map<String, List<GenericKeyframe>> keyframes = pasted;
+                final Map<String, PastedKeyframes> keyframes = pasted;
                 double offset = this.properties.scaleX.from(context.mouseX);
                 int mouseY = context.mouseY;
 
@@ -205,7 +205,7 @@ public class UIPropertyEditor extends UIElement
     /**
      * Parse keyframes from clipboard
      */
-    private Map<String, List<GenericKeyframe>> parseKeyframes()
+    private Map<String, PastedKeyframes> parseKeyframes()
     {
         MapType data = Window.getClipboardMap("_CopyProperties");
 
@@ -214,7 +214,7 @@ public class UIPropertyEditor extends UIElement
             return null;
         }
 
-        Map<String, List<GenericKeyframe>> temp = new HashMap<>();
+        Map<String, PastedKeyframes> temp = new HashMap<>();
 
         for (String key : data.keys())
         {
@@ -224,11 +224,11 @@ public class UIPropertyEditor extends UIElement
 
             for (int i = 0, c = list.size(); i < c; i++)
             {
-                List<GenericKeyframe> keyframes = temp.computeIfAbsent(key, k -> new ArrayList<>());
+                PastedKeyframes pastedKeyframes = temp.computeIfAbsent(key, k -> new PastedKeyframes(serializer));
                 GenericKeyframe keyframe = new GenericKeyframe("", serializer);
 
                 keyframe.fromData(list.getMap(i));
-                keyframes.add(keyframe);
+                pastedKeyframes.keyframes.add(keyframe);
             }
         }
 
@@ -274,7 +274,7 @@ public class UIPropertyEditor extends UIElement
     /**
      * Paste copied keyframes to clipboard
      */
-    protected void pasteKeyframes(Map<String, List<GenericKeyframe>> keyframes, long offset, int mouseY)
+    protected void pasteKeyframes(Map<String, PastedKeyframes> keyframes, long offset, int mouseY)
     {
         List<UIProperty> properties = this.properties.getProperties();
 
@@ -294,7 +294,7 @@ public class UIPropertyEditor extends UIElement
             return;
         }
 
-        for (Map.Entry<String, List<GenericKeyframe>> entry : keyframes.entrySet())
+        for (Map.Entry<String, PastedKeyframes> entry : keyframes.entrySet())
         {
             for (UIProperty property : properties)
             {
@@ -308,13 +308,18 @@ public class UIPropertyEditor extends UIElement
         }
     }
 
-    private void pasteKeyframesTo(UIProperty property, List<GenericKeyframe> keyframes, long offset)
+    private void pasteKeyframesTo(UIProperty property, PastedKeyframes pastedKeyframes, long offset)
     {
-        long firstX = keyframes.get(0).getTick();
+        if (property.channel.getFactory() != pastedKeyframes.factory)
+        {
+            return;
+        }
+
+        long firstX = pastedKeyframes.keyframes.get(0).getTick();
         List<GenericKeyframe> toSelect = new ArrayList<>();
         long newOffset = Window.isCtrlPressed() ? firstX : offset;
 
-        for (GenericKeyframe keyframe : keyframes)
+        for (GenericKeyframe keyframe : pastedKeyframes.keyframes)
         {
             keyframe.setTick(keyframe.getTick() - firstX + newOffset);
 
@@ -458,6 +463,17 @@ public class UIPropertyEditor extends UIElement
         if (deselect)
         {
             this.fillData(null);
+        }
+    }
+
+    private static class PastedKeyframes
+    {
+        public IGenericKeyframeFactory factory;
+        public List<GenericKeyframe> keyframes = new ArrayList<>();
+
+        public PastedKeyframes(IGenericKeyframeFactory factory)
+        {
+            this.factory = factory;
         }
     }
 }
