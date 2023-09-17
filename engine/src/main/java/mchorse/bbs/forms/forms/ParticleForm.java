@@ -1,6 +1,7 @@
 package mchorse.bbs.forms.forms;
 
 import mchorse.bbs.BBSData;
+import mchorse.bbs.forms.properties.BooleanProperty;
 import mchorse.bbs.forms.properties.StringProperty;
 import mchorse.bbs.forms.renderers.FormRenderer;
 import mchorse.bbs.forms.renderers.ParticleFormRenderer;
@@ -12,6 +13,7 @@ import mchorse.bbs.world.entities.Entity;
 public class ParticleForm extends Form
 {
     public StringProperty effect = new StringProperty(this, "effect", null);
+    public BooleanProperty paused = new BooleanProperty(this, "paused", false);
 
     private ParticleEmitter emitter;
     private boolean checked;
@@ -23,6 +25,7 @@ public class ParticleForm extends Form
         this.effect.cantAnimate();
 
         this.register(this.effect);
+        this.register(this.paused);
     }
 
     public ParticleEmitter getEmitter()
@@ -79,6 +82,8 @@ public class ParticleForm extends Form
 
         if (this.emitter != null)
         {
+            this.emitter.paused = this.paused.get();
+
             this.emitter.update();
         }
     }

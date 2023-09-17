@@ -39,7 +39,6 @@ public class ParticleEmitter
     public World world;
     public boolean lit;
 
-    public int sanityTicks;
     public boolean running = true;
     private Particle uiParticle;
 
@@ -52,6 +51,7 @@ public class ParticleEmitter
     public int age;
     public int lifetime;
     public boolean playing = true;
+    public boolean paused;
 
     public float random1 = (float) Math.random();
     public float random2 = (float) Math.random();
@@ -94,7 +94,7 @@ public class ParticleEmitter
 
     public double getAge(float transition)
     {
-        return (this.age + transition) / 20.0;
+        return !this.paused ? (this.age + transition) / 20.0 : this.age / 20.0;
     }
 
     public void setTarget(Entity target)
@@ -260,8 +260,10 @@ public class ParticleEmitter
         this.setEmitterVariables(0);
         this.updateParticles();
 
-        this.age += 1;
-        this.sanityTicks += 1;
+        if (!this.paused)
+        {
+            this.age += 1;
+        }
     }
 
     /**
