@@ -59,9 +59,13 @@ public class Replay extends ValueGroup
 
     private void applyProperty(int tick, boolean playing, Form form, GenericKeyframeChannel value)
     {
-        GenericKeyframeChannel formProperty = value;
-        IFormProperty property = FormUtils.getProperty(form, formProperty.getId());
-        Pair segment = formProperty.findSegment(tick);
+        IFormProperty property = FormUtils.getProperty(form, value.getId());
+        Pair segment = value.findSegment(tick);
+
+        if (property == null)
+        {
+            return;
+        }
 
         if (segment != null)
         {
@@ -85,7 +89,7 @@ public class Replay extends ValueGroup
 
             if (replayForm != null)
             {
-                IFormProperty replayProperty = FormUtils.getProperty(replayForm, formProperty.getId());
+                IFormProperty replayProperty = FormUtils.getProperty(replayForm, value.getId());
 
                 if (replayProperty != null)
                 {

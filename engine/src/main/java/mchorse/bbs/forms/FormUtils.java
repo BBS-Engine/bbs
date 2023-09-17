@@ -163,6 +163,10 @@ public class FormUtils
                     {
                         form = form.parts.getAll().get(index).getForm();
                     }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 catch (Exception e)
                 {}

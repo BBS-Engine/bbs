@@ -62,7 +62,7 @@ public class UIViewportStack implements IViewportStack
     @Override
     public Area getViewport()
     {
-        return this.viewportStack.peek();
+        return this.viewportStack.isEmpty() ? null : this.viewportStack.peek();
     }
 
     @Override

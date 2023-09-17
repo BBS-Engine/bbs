@@ -182,10 +182,10 @@ public class BBSSettings
         builder.category("audio");
         audioWaveformVisible = builder.getBoolean("waveform_visible", true);
         audioWaveformDensity = builder.getInt("waveform_density", 20, 10, 100);
-        audioWaveformWidth = builder.getFloat("waveform_width", 0.5F, 0F, 1F);
+        audioWaveformWidth = builder.getFloat("waveform_width", 0.8F, 0F, 1F);
         audioWaveformHeight = builder.getInt("waveform_height", 24, 10, 40);
-        audioWaveformFilename = builder.getBoolean("waveform_filename", true);
-        audioWaveformTime = builder.getBoolean("waveform_time", true);
+        audioWaveformFilename = builder.getBoolean("waveform_filename", false);
+        audioWaveformTime = builder.getBoolean("waveform_time", false);
 
         builder.category("elevenlabs");
         elevenLabsToken = builder.getString("token", "");

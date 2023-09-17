@@ -17,7 +17,7 @@ public class ReplayKeyframes extends ValueGroup
     public static final String GROUP_RIGHT_STICK = "rstick";
     public static final String GROUP_TRIGGERS = "triggers";
 
-    public static final List<String> CURATED_CHANNELS = Arrays.asList("x", "y", "z", "pitch", "yaw", "bodyYaw", "sneaking", "stick_lx", "stick_ly", "stick_rx", "stick_ry", "trigger_l", "trigger_r", "vX", "vY", "vZ");
+    public static final List<String> CURATED_CHANNELS = Arrays.asList("x", "y", "z", "pitch", "yaw", "bodyYaw", "sneaking", "stick_lx", "stick_ly", "stick_rx", "stick_ry", "trigger_l", "trigger_r", "grounded", "vX", "vY", "vZ");
 
     public final KeyframeChannel x = new KeyframeChannel("x");
     public final KeyframeChannel y = new KeyframeChannel("y");
