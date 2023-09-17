@@ -21,7 +21,7 @@ public class UIOverlay extends UIElement
     {
         UIOverlay overlay = new UIOverlay();
 
-        panel.relative(overlay).xy(0.5F, 0.5F).wh(0.5F, 0.5F).anchor(0.5F);
+        panel.relative(overlay).xy(0.5F, 0.5F).wh(0.5F, 0.5F).anchor(0.5F).bounds(overlay, 0);
         setupPanel(context, overlay, panel);
 
         return overlay;
@@ -31,7 +31,7 @@ public class UIOverlay extends UIElement
     {
         UIOverlay overlay = new UIOverlay();
 
-        panel.relative(overlay).xy(0.5F, 0.5F).wh(w, h).anchor(0.5F);
+        panel.relative(overlay).xy(0.5F, 0.5F).wh(w, h).anchor(0.5F).bounds(overlay, 0);
         setupPanel(context, overlay, panel);
 
         return overlay;
@@ -41,7 +41,7 @@ public class UIOverlay extends UIElement
     {
         UIOverlay overlay = new UIOverlay();
 
-        panel.relative(overlay).xy(0.5F, 0.5F).wh(w, h).anchor(0.5F);
+        panel.relative(overlay).xy(0.5F, 0.5F).wh(w, h).anchor(0.5F).bounds(overlay, 0);
         setupPanel(context, overlay, panel);
 
         return overlay;
@@ -56,7 +56,7 @@ public class UIOverlay extends UIElement
     {
         UIOverlay overlay = new UIOverlay();
 
-        panel.relative(overlay).x(1F, -padding).y(padding).w(w).h(1F, -padding * 2).anchor(1F, 0F);
+        panel.relative(overlay).x(1F, -padding).y(padding).w(w).h(1F, -padding * 2).anchor(1F, 0F).bounds(overlay, 0);
         setupPanel(context, overlay, panel);
 
         return overlay;
