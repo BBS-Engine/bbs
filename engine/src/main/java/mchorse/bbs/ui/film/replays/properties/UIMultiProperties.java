@@ -468,8 +468,22 @@ public class UIMultiProperties extends UIProperties
             for (Object object : property.channel.getKeyframes())
             {
                 GenericKeyframe frame = (GenericKeyframe) object;
+                int duration = frame.getDuration();
+                long tick = frame.getTick();
+                int x1 = this.toGraphX(tick);
 
-                this.renderRect(context, this.toGraphX(frame.getTick()), y + h / 2, 3, property.hasSelected(index) ? Colors.WHITE : property.color);
+                if (duration > 0)
+                {
+                    int x2 = this.toGraphX(tick + duration);
+                    int y1 = y + h / 2 - 8 + (index % 2 == 1 ? -4 : 0);
+                    int color = property.hasSelected(index) ? Colors.WHITE :  Colors.setA(Colors.mulRGB(property.color, 0.9F), 0.75F);
+
+                    context.batcher.box(x1, y1 - 2, x1 + 1, y1 + 3, color);
+                    context.batcher.box(x2 - 1, y1 - 2, x2, y1 + 3, color);
+                    context.batcher.box(x1 + 1, y1, x2 - 1, y1 + 1, color);
+                }
+
+                this.renderRect(context, x1, y + h / 2, 3, property.hasSelected(index) ? Colors.WHITE : property.color);
 
                 index++;
             }
