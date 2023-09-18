@@ -89,7 +89,12 @@ public class ValueGroup extends BaseValue
     {
         for (Map.Entry<String, BaseValue> entry : group.children.entrySet())
         {
-            this.children.get(entry.getKey()).copy(entry.getValue());
+            BaseValue value = this.children.get(entry.getKey());
+
+            if (value != null)
+            {
+                value.copy(entry.getValue());
+            }
         }
     }
 
