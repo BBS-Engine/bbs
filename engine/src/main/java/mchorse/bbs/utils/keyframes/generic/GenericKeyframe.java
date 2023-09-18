@@ -10,6 +10,13 @@ import mchorse.bbs.utils.math.Interpolation;
 public class GenericKeyframe <T> extends BaseValue
 {
     private long tick;
+
+    /**
+     * Forced duration that would be used instead of the difference
+     * between two keyframes, if not 0
+     */
+    private int duration;
+
     private T value;
     private IInterpolation interp = Interpolation.LINEAR;
 
@@ -47,6 +54,18 @@ public class GenericKeyframe <T> extends BaseValue
         this.postNotifyParent();
     }
 
+    public int getDuration()
+    {
+        return this.duration;
+    }
+
+    public void setDuration(int duration)
+    {
+        this.preNotifyParent();
+        this.duration = duration;
+        this.postNotifyParent();
+    }
+
     public T getValue()
     {
         return this.value;
@@ -74,6 +93,7 @@ public class GenericKeyframe <T> extends BaseValue
     public void copy(GenericKeyframe<T> keyframe)
     {
         this.tick = keyframe.tick;
+        this.duration = keyframe.duration;
         this.value = this.factory.copy(keyframe.value);
         this.interp = keyframe.interp;
     }
@@ -84,6 +104,7 @@ public class GenericKeyframe <T> extends BaseValue
         MapType data = new MapType();
 
         data.putLong("tick", this.tick);
+        data.putInt("duration", this.duration);
         data.put("value", this.factory.toData(this.value));
 
         if (this.interp != Interpolation.LINEAR) data.putString("interp", this.interp.toString());
@@ -102,6 +123,7 @@ public class GenericKeyframe <T> extends BaseValue
         MapType map = data.asMap();
 
         if (map.has("tick")) this.tick = map.getLong("tick");
+        if (map.has("duration")) this.duration = map.getInt("duration");
         if (map.has("value")) this.value = this.factory.fromData(map.get("value"));
         if (map.has("interp")) this.interp = Interpolation.valueOf(map.getString("interp"));
     }

@@ -38,6 +38,7 @@ public class UIPropertyEditor extends UIElement
 {
     public UIElement frameButtons;
     public UITrackpad tick;
+    public UITrackpad duration;
     public UIIcon interp;
     public UIKeyframeFactory editor;
 
@@ -74,6 +75,8 @@ public class UIPropertyEditor extends UIElement
         this.frameButtons.setVisible(false);
         this.tick = new UITrackpad(this::setTick);
         this.tick.limit(Integer.MIN_VALUE, Integer.MAX_VALUE, true).tooltip(UIKeys.KEYFRAMES_TICK);
+        this.duration = new UITrackpad((v) -> this.setDuration(v.intValue()));
+        this.duration.limit(0, Integer.MAX_VALUE, true).tooltip(IKey.lazy("Forced duration"));
         this.interp = new UIIcon(Icons.GRAPH, (b) ->
         {
             UICameraUtils.interps(this.getContext(), (Interpolation) this.properties.getCurrent().getInterpolation(), this::pickInterpolation);
@@ -81,14 +84,11 @@ public class UIPropertyEditor extends UIElement
         this.interp.tooltip(tooltip);
 
         this.properties = this.create(delegate);
-
-        /* Position the elements */
-        this.tick.w(70);
         this.properties.relative(this).full();
 
         /* Add all elements */
         this.add(this.properties, this.frameButtons);
-        this.frameButtons.add(UI.row(0, this.interp, this.tick));
+        this.frameButtons.add(UI.row(5, this.interp, this.tick, this.duration));
 
         this.context((menu) ->
         {
@@ -365,6 +365,16 @@ public class UIPropertyEditor extends UIElement
         this.properties.setTick(this.converter == null ? tick : this.converter.from(tick));
     }
 
+    public void setDuration(int value)
+    {
+        GenericKeyframe current = this.properties.getCurrent();
+
+        if (current != null)
+        {
+            current.setDuration(value);
+        }
+    }
+
     public void setValue(Object value)
     {
         this.properties.setValue(value);
@@ -387,6 +397,7 @@ public class UIPropertyEditor extends UIElement
         }
 
         double tick = frame.getTick();
+        float duration = frame.getDuration();
 
         if (this.editor != null)
         {
@@ -402,6 +413,7 @@ public class UIPropertyEditor extends UIElement
         }
 
         this.tick.setValue(this.converter == null ? tick : this.converter.to(tick));
+        this.duration.setValue(this.converter == null ? duration : this.converter.to(duration));
         this.frameButtons.resize();
     }
 

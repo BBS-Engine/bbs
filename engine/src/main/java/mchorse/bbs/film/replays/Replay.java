@@ -71,7 +71,8 @@ public class Replay extends ValueGroup
         {
             GenericKeyframe a = (GenericKeyframe) segment.a;
             GenericKeyframe b = (GenericKeyframe) segment.b;
-            int duration = (int) (b.getTick() - a.getTick());
+            int forcedDuration = a.getDuration();
+            int duration = forcedDuration > 0 ? forcedDuration : (int) (b.getTick() - a.getTick());
             int offset = (int) (tick - a.getTick());
 
             if (a == b)
