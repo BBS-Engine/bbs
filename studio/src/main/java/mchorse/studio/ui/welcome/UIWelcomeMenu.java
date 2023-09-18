@@ -149,7 +149,7 @@ public class UIWelcomeMenu extends UIBaseMenu
         this.patreon.relative(this.main).x(0.5F).y(0.5F, 75).wh(300, 20).anchorX(0.5F);
 
         this.patrons = new UIText();
-        this.patrons.text(UIKeysApp.WELCOME_PATRONS.format(IKey.raw("Aesthics\nEgor\nFavreMySabre\nLaff\nTerbin\nYcar")));
+        this.patrons.text(UIKeysApp.WELCOME_PATRONS.format(IKey.raw("Дмитрий Танасийчук\nEgor\niSilent3\nWilheries")));
         this.patrons.lineHeight(14);
         this.patrons.relative(this.patreon).y(-10).w(1F).anchor(0, 1F);
 
