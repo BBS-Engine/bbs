@@ -37,6 +37,11 @@ public abstract class ClipContext <T extends Clip, E>
      */
     public boolean playing = true;
 
+    /**
+     * How many camera clips were applied
+     */
+    public int count;
+
     public Map<String, Object> clipData = new HashMap<>();
 
     public IBridge bridge;
@@ -53,6 +58,7 @@ public abstract class ClipContext <T extends Clip, E>
 
     public ClipContext setup(int ticks, int relativeTick, float transition, int currentLayer)
     {
+        this.count = 0;
         this.ticks = ticks;
         this.relativeTick = relativeTick;
         this.transition = transition;

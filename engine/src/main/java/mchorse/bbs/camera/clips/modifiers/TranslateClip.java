@@ -28,9 +28,19 @@ public class TranslateClip extends ComponentClip
     {
         Point point = this.translate.get();
 
-        position.point.x = this.isActive(0) ? point.x : position.point.x + point.x;
-        position.point.y = this.isActive(1) ? point.y : position.point.y + point.y;
-        position.point.z = this.isActive(2) ? point.z : position.point.z + point.z;
+        position.point.x = this.applyProperty(context.count, 0, position.point.x, point.x);
+        position.point.y = this.applyProperty(context.count, 1, position.point.y, point.y);
+        position.point.z = this.applyProperty(context.count, 2, position.point.z, point.z);
+    }
+
+    private double applyProperty(int count, int i, double absolute, double relative)
+    {
+        if (this.isActive(i))
+        {
+            return relative;
+        }
+
+        return count == 0 ? absolute : absolute + relative;
     }
 
     @Override

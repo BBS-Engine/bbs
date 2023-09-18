@@ -16,6 +16,8 @@ public class CameraClipContext extends ClipContext<CameraClip, Position>
 
             ((CameraClip) clip).apply(this, position);
 
+            this.count += 1;
+
             return true;
         }
 

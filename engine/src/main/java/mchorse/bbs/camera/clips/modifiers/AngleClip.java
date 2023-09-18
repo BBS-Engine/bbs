@@ -28,10 +28,20 @@ public class AngleClip extends ComponentClip
     {
         Angle angle = this.angle.get();
 
-        position.angle.yaw = this.isActive(0) ? angle.yaw : position.angle.yaw + angle.yaw;
-        position.angle.pitch = this.isActive(1) ? angle.pitch : position.angle.pitch + angle.pitch;
-        position.angle.roll = this.isActive(2) ? angle.roll : position.angle.roll + angle.roll;
-        position.angle.fov = this.isActive(3) ? angle.fov : position.angle.fov + angle.fov;
+        position.angle.yaw = this.applyProperty(context.count, 0, position.angle.yaw, angle.yaw);
+        position.angle.pitch = this.applyProperty(context.count, 1, position.angle.pitch, angle.pitch);
+        position.angle.roll = this.applyProperty(context.count, 2, position.angle.roll, angle.roll);
+        position.angle.fov = this.applyProperty(context.count, 3, position.angle.fov, angle.fov);
+    }
+
+    private float applyProperty(int count, int i, float absolute, float relative)
+    {
+        if (this.isActive(i))
+        {
+            return relative;
+        }
+
+        return count == 0 ? absolute : absolute + relative;
     }
 
     @Override
