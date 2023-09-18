@@ -20,7 +20,7 @@ import java.io.File;
 
 public class Studio
 {
-    public static final String VERSION = "0.1.1";
+    public static final String VERSION = "0.1.2";
     public static final String GIT_HASH = "@GIT_HASH@";
     public static final String FULL_VERSION = VERSION + (GIT_HASH.startsWith("@") ? " (dev)" : " (" + GIT_HASH + ")");
 

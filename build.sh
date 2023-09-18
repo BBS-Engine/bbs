@@ -5,7 +5,7 @@ rm -rf engine/build/dependencies/
 printf "Building...\n\n"
 
 FOLDER="release"
-VERSION="0.1.1"
+VERSION="0.1.2"
 
 if [ "$#" -lt 1 ]; then
     gradle :studio:build :engine:build :engine:copyRuntimeLibs
