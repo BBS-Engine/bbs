@@ -1,88 +1,105 @@
 package mchorse.bbs.camera.values;
 
 import mchorse.bbs.camera.data.Position;
-import mchorse.bbs.data.types.BaseType;
-import mchorse.bbs.data.types.ListType;
-import mchorse.bbs.settings.values.ValueGroup;
+import mchorse.bbs.settings.values.ValueList;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ValuePositions extends ValueGroup
+public class ValuePositions extends ValueList<ValuePosition>
 {
-    private List<Position> positions = new ArrayList<>();
-
     public ValuePositions(String id)
     {
         super(id);
     }
 
+    /* Setters */
+
     public void add(Position position)
     {
-        this.positions.add(position);
-        this.add(new ValuePosition(String.valueOf(this.positions.size() - 1), position));
+        this.preNotifyParent();
+
+        this.list.add(new ValuePosition("", position));
+        this.sync();
+
+        this.postNotifyParent();
     }
 
-    public List<Position> get()
+    public void add(int index, Position position)
     {
-        return this.positions;
+        if (index >= this.list.size())
+        {
+            this.add(position);
+
+            return;
+        }
+
+        this.preNotifyParent();
+
+        this.list.add(index, new ValuePosition("", position));
+        this.sync();
+
+        this.postNotifyParent();
     }
 
-    public Position get(int index)
+    public void move(int index, int to)
     {
-        return this.positions.get(index);
+        this.preNotifyParent();
+
+        this.list.add(index, this.list.remove(to));
+        this.sync();
+
+        this.postNotifyParent();
     }
 
-    public int size()
+    public void remove(int index)
     {
-        return this.positions.size();
+        this.preNotifyParent();
+
+        this.list.remove(index);
+        this.sync();
+
+        this.postNotifyParent();
     }
 
     public void set(List<Position> positions)
     {
-        this.reset();
+        this.preNotifyParent();
+        this.list.clear();
 
         for (Position position : positions)
         {
             this.add(position.copy());
         }
+
+        this.sync();
+        this.postNotifyParent();
     }
 
     public void reset()
     {
-        this.positions.clear();
-        this.removeAll();
+        this.preNotifyParent();
+
+        this.list.clear();
+        this.sync();
+
+        this.postNotifyParent();
+    }
+
+    /* Getters */
+
+    public Position get(int index)
+    {
+        return this.list.get(index).get();
+    }
+
+    public int size()
+    {
+        return this.list.size();
     }
 
     @Override
-    public BaseType toData()
+    protected ValuePosition create(String id)
     {
-        ListType list = new ListType();
-
-        for (Position position : this.positions)
-        {
-            list.add(position.toData());
-        }
-
-        return list;
-    }
-
-    @Override
-    public void fromData(BaseType data)
-    {
-        this.reset();
-
-        ListType list = data.asList();
-
-        for (BaseType child : list)
-        {
-            if (child.isMap())
-            {
-                Position position = new Position();
-
-                position.fromData(child.asMap());
-                this.add(position);
-            }
-        }
+        return new ValuePosition(id);
     }
 }

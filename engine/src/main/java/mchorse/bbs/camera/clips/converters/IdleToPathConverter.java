@@ -11,7 +11,7 @@ public class IdleToPathConverter implements IClipConverter<IdleClip, PathClip>
         PathClip pathClip = new PathClip();
 
         pathClip.copy(clip);
-        pathClip.points.get().clear();
+        pathClip.points.reset();
         pathClip.points.add(clip.position.get().copy());
 
         return pathClip;

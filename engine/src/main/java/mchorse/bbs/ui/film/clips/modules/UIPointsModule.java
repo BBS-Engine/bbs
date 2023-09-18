@@ -3,7 +3,6 @@ package mchorse.bbs.ui.film.clips.modules;
 import mchorse.bbs.camera.clips.overwrite.PathClip;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.graphics.window.Window;
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.UIContext;
@@ -66,7 +65,7 @@ public class UIPointsModule extends UIAbstractModule
             return;
         }
 
-        BaseValue.edit(this.path.points, (positions) -> positions.get().add(this.index, positions.get().remove(this.index - 1)));
+        this.path.points.move(this.index, this.index - 1);
 
         this.index = this.index - 1;
     }
@@ -78,25 +77,16 @@ public class UIPointsModule extends UIAbstractModule
             return;
         }
 
-        BaseValue.edit(this.path.points, (positions) -> positions.get().add(this.index, positions.get().remove(this.index + 1)));
+        this.path.points.move(this.index, this.index + 1);
 
         this.index = this.index - 1;
     }
 
     public void addPoint()
     {
-        if (this.index + 1 >= this.path.size())
-        {
-            BaseValue.edit(this.path.points, (positions) -> positions.get().add(new Position(this.editor.getCamera())));
+        this.path.points.add(this.index + 1, new Position(this.editor.getCamera()));
 
-            this.index = MathUtils.clamp(this.index + 1, 0, this.path.points.get().size() - 1);
-        }
-        else
-        {
-            BaseValue.edit(this.path.points, (positions) -> positions.get().add(this.index + 1, new Position(this.editor.getCamera())));
-
-            this.index = this.index + 1;
-        }
+        this.index = MathUtils.clamp(this.index + 1, 0, this.path.points.size() - 1);
 
         this.scroll.setSize(this.path.size());
         this.scroll.scrollTo(this.index * this.scroll.scrollItemSize);
@@ -114,9 +104,9 @@ public class UIPointsModule extends UIAbstractModule
             return;
         }
 
-        BaseValue.edit(this.path.points, (positions) -> positions.get().remove(this.index));
+        this.path.points.remove(this.index);
 
-        this.index = this.index > 0 ? this.index - 1 : this.index;
+        this.index = Math.max(this.index - 1, 0);
         this.scroll.setSize(this.path.size());
         this.scroll.scrollTo(this.index * this.scroll.scrollItemSize);
 
