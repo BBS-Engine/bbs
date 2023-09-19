@@ -16,7 +16,10 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 
+import javax.swing.JOptionPane;
 import java.io.File;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileLock;
 
 public class Studio
 {
@@ -37,6 +40,40 @@ public class Studio
     public static Link link(String path)
     {
         return new Link("studio", path);
+    }
+
+    private static boolean canLock(final File file)
+    {
+        try
+        {
+            final RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
+            final FileLock fileLock = randomAccessFile.getChannel().tryLock();
+
+            if (fileLock != null)
+            {
+                Runtime.getRuntime().addShutdownHook(new Thread(() ->
+                {
+                    try
+                    {
+                        fileLock.release();
+                        randomAccessFile.close();
+                        file.delete();
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }));
+
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     public static void main(String[] args)
@@ -61,7 +98,21 @@ public class Studio
         Studio game = new Studio();
 
         game.setup(parser.parse(args));
-        game.launch();
+
+        File lockFile = new File(game.gameDirectory, "instance.lock");
+
+        if (canLock(lockFile))
+        {
+            game.launch();
+        }
+        else
+        {
+            System.err.println("An instance of BBS Studio is already running! Please shut it down.");
+            System.err.println("If you're absolutely sure that it's not running, then remove " + lockFile.getAbsolutePath() + " file, and try launching again!");
+            System.err.println("If you can't remove that file... then it's still running in the background!");
+
+            JOptionPane.showMessageDialog(null, "BBS instance is already running!", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void setup(MapType data)
