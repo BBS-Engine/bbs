@@ -109,25 +109,7 @@ public class UIScreenplayEditor extends UIElement
                     output.write(new byte[pauseBytes]);
                 }
 
-                if (cutoff == 0)
-                {
-                    output.write(wave.data);
-                }
-                else
-                {
-                    float newLength = Math.max(wave.getDuration() - Math.abs(cutoff), 0);
-
-                    if (newLength > 0)
-                    {
-                        int newLengthBytes = (int) (newLength * wave.byteRate);
-
-                        newLengthBytes -= newLengthBytes % wave.getBytesPerSample();
-
-                        int newOffset = cutoff < 0 ? wave.data.length - newLengthBytes : 0;
-
-                        output.write(wave.data, newOffset, newLengthBytes);
-                    }
-                }
+                output.write(wave.data);
 
                 if (pause > 0)
                 {
@@ -135,7 +117,7 @@ public class UIScreenplayEditor extends UIElement
                 }
 
                 float time = offset + (pause < 0 ? -pause : 0);
-                float waveDuration = Math.max(wave.getDuration() - cutoff, 0);
+                float waveDuration = wave.getDuration();
 
                 this.colorCodes.add(new ColorCode(time, time + waveDuration, BBSSettings.elevenVoiceColors.getColor(action.voice.get())));
 
@@ -180,7 +162,7 @@ public class UIScreenplayEditor extends UIElement
             ScreenplayAction action = uiAction.getAction();
             float pause = action.pause.get();
             float time = offset + (pause < 0 ? -pause : 0);
-            float duration = Math.max(wave.getDuration() - action.cutoff.get(), 0);
+            float duration = wave.getDuration();
 
             SubtitleClip clip = new SubtitleClip();
 
