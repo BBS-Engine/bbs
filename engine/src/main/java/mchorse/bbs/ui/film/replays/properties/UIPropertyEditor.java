@@ -118,6 +118,21 @@ public class UIPropertyEditor extends UIElement
 
         this.keys().register(Keys.KEYFRAMES_MAXIMIZE, this::resetView).inside().category(category);
         this.keys().register(Keys.KEYFRAMES_SELECT_ALL, this::selectAll).inside().category(category);
+        this.keys().register(Keys.COPY, this::copyKeyframes).inside().category(category);
+        this.keys().register(Keys.PASTE, () ->
+        {
+            Map<String, PastedKeyframes> pasted = this.parseKeyframes();
+
+            if (pasted != null)
+            {
+                UIContext context = this.getContext();
+                final Map<String, PastedKeyframes> keyframes = pasted;
+                double offset = this.properties.scaleX.from(context.mouseX);
+                int mouseY = context.mouseY;
+
+                this.pasteKeyframes(keyframes, (long) offset, mouseY);
+            }
+        }).inside().category(category);
 
         this.interp.keys().register(Keys.KEYFRAMES_INTERP, this.interp::clickItself).category(category);
 
@@ -317,11 +332,10 @@ public class UIPropertyEditor extends UIElement
 
         long firstX = pastedKeyframes.keyframes.get(0).getTick();
         List<GenericKeyframe> toSelect = new ArrayList<>();
-        long newOffset = Window.isCtrlPressed() ? firstX : offset;
 
         for (GenericKeyframe keyframe : pastedKeyframes.keyframes)
         {
-            keyframe.setTick(keyframe.getTick() - firstX + newOffset);
+            keyframe.setTick(keyframe.getTick() - firstX + offset);
 
             int index = property.channel.insert(keyframe.getTick(), keyframe.getValue());
             GenericKeyframe inserted = property.channel.get(index);

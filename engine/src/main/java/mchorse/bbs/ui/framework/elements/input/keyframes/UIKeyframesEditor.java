@@ -120,6 +120,21 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
 
         this.keys().register(Keys.KEYFRAMES_MAXIMIZE, this::resetView).inside().category(category);
         this.keys().register(Keys.KEYFRAMES_SELECT_ALL, this::selectAll).inside().category(category);
+        this.keys().register(Keys.COPY, this::copyKeyframes).inside().category(category);
+        this.keys().register(Keys.PASTE, () ->
+        {
+            Map<String, List<Keyframe>> pasted = this.parseKeyframes();
+
+            if (pasted != null)
+            {
+                UIContext context = this.getContext();
+                final Map<String, List<Keyframe>> keyframes = pasted;
+                double offset = this.keyframes.scaleX.from(context.mouseX);
+                int mouseY = context.mouseY;
+
+                this.pasteKeyframes(keyframes, (long) offset, mouseY);
+            }
+        }).inside().category(category);
 
         this.interp.keys().register(Keys.KEYFRAMES_INTERP, this::toggleInterpolation).category(category);
         this.easing.keys().register(Keys.KEYFRAMES_EASING, this::toggleEasing).category(category);
@@ -290,11 +305,9 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
         long firstX = keyframes.get(0).getTick();
         List<Keyframe> toSelect = new ArrayList<>();
 
-        long newOffset = Window.isCtrlPressed() ? firstX : offset;
-
         for (Keyframe keyframe : keyframes)
         {
-            keyframe.setTick(keyframe.getTick() - firstX + newOffset);
+            keyframe.setTick(keyframe.getTick() - firstX + offset);
 
             int index = sheet.channel.insert(keyframe.getTick(), keyframe.getValue());
             Keyframe inserted = sheet.channel.get(index);
