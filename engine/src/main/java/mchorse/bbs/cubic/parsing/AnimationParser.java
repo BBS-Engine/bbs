@@ -42,38 +42,27 @@ public class AnimationParser
     {
         AnimationPart part = new AnimationPart();
 
-        if (data.has("translate"))
-        {
-            parseChannel(parser, part.position, data.get("translate"));
-        }
-
-        if (data.has("scale"))
-        {
-            parseChannel(parser, part.scale, data.get("scale"));
-        }
-
-        if (data.has("rotate"))
-        {
-            parseChannel(parser, part.rotation, data.get("rotate"));
-        }
+        if (data.has("translate")) parseChannel(parser, part.position, data.get("translate"), false);
+        if (data.has("scale")) parseChannel(parser, part.scale, data.get("scale"), true);
+        if (data.has("rotate")) parseChannel(parser, part.rotation, data.get("rotate"), false);
 
         return part;
     }
 
-    private static void parseChannel(MolangParser parser, AnimationChannel channel, BaseType data)
+    private static void parseChannel(MolangParser parser, AnimationChannel channel, BaseType data, boolean scale)
     {
         if (BaseType.isList(data))
         {
             for (BaseType keyframe : (ListType) data)
             {
-                channel.keyframes.add(parseAnimationVector(parser, keyframe));
+                channel.keyframes.add(parseAnimationVector(parser, keyframe, scale));
             }
 
             channel.sort();
         }
     }
 
-    private static AnimationVector parseAnimationVector(MolangParser parser, BaseType data)
+    private static AnimationVector parseAnimationVector(MolangParser parser, BaseType data, boolean scale)
     {
         ListType values = (ListType) data;
         AnimationVector vector = new AnimationVector();
@@ -82,15 +71,15 @@ public class AnimationParser
         {
             vector.time = values.getDouble(0);
             vector.interp = AnimationInterpolation.byName(values.getString(1));
-            vector.x = parseValue(parser, values.get(2));
-            vector.y = parseValue(parser, values.get(3));
-            vector.z = parseValue(parser, values.get(4));
+            vector.x = parseValue(parser, values.get(2), scale);
+            vector.y = parseValue(parser, values.get(3), scale);
+            vector.z = parseValue(parser, values.get(4), scale);
         }
 
         return vector;
     }
 
-    private static MolangExpression parseValue(MolangParser parser, BaseType element)
+    private static MolangExpression parseValue(MolangParser parser, BaseType element, boolean scale)
     {
         if (element.isNumeric())
         {
@@ -106,6 +95,6 @@ public class AnimationParser
             e.printStackTrace();
         }
 
-        return MolangParser.ZERO;
+        return scale ? MolangParser.ONE : MolangParser.ZERO;
     }
 }
