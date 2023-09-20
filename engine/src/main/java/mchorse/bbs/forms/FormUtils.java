@@ -141,6 +141,11 @@ public class FormUtils
 
     public static IFormProperty getProperty(Form form, String path)
     {
+        if (form == null)
+        {
+            return null;
+        }
+
         if (!path.contains(PATH_SEPARATOR))
         {
             return form.getProperties().get(path);
@@ -162,6 +167,11 @@ public class FormUtils
                     if (CollectionUtils.inRange(form.parts.getAll(), index))
                     {
                         form = form.parts.getAll().get(index).getForm();
+
+                        if (form == null)
+                        {
+                            return null;
+                        }
                     }
                     else
                     {
