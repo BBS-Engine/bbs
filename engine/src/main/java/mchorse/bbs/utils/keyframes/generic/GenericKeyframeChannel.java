@@ -100,6 +100,13 @@ public class GenericKeyframeChannel <T> extends ValueList<GenericKeyframe<T>>
         }
 
         GenericKeyframe<T> b = this.list.get(low);
+
+        if (b.getTick() == Math.floor(ticks) && low < size - 1)
+        {
+            low += 1;
+            b = this.list.get(low);
+        }
+
         GenericKeyframe<T> a = low - 1 >= 0 ? this.list.get(low - 1) : b;
 
         return new Pair<>(a, b);
