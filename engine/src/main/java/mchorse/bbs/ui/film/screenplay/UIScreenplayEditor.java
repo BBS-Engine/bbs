@@ -96,7 +96,6 @@ public class UIScreenplayEditor extends UIElement
             }
 
             ScreenplayAction action = uiAction.getAction();
-            float cutoff = action.cutoff.get();
             float pause = action.pause.get();
             int pauseBytes = (int) (Math.abs(pause) * wave.byteRate);
 
@@ -121,7 +120,7 @@ public class UIScreenplayEditor extends UIElement
 
                 this.colorCodes.add(new ColorCode(time, time + waveDuration, BBSSettings.elevenVoiceColors.getColor(action.voice.get())));
 
-                offset += pause + waveDuration;
+                offset += Math.abs(pause) + waveDuration;
             }
             catch (Exception e)
             {
