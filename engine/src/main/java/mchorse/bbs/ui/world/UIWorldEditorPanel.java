@@ -777,6 +777,11 @@ public class UIWorldEditorPanel extends UIWorldPanel
     @Override
     public void renderInWorld(RenderingContext context)
     {
+        if (!this.canBeSeen())
+        {
+            return;
+        }
+
         Vector3f direction = context.getCamera().getMouseDirection();
         Vector3d position = context.getCamera().position;
 
