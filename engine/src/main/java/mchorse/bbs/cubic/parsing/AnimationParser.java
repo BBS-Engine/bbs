@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class AnimationParser
 {
-    public static Animation parse(MolangParser parser, String key, MapType data) throws Exception
+    public static Animation parse(MolangParser parser, String key, MapType data)
     {
         Animation animation = new Animation(key);
 
@@ -38,7 +38,7 @@ public class AnimationParser
         return animation;
     }
 
-    private static AnimationPart parsePart(MolangParser parser, MapType data) throws Exception
+    private static AnimationPart parsePart(MolangParser parser, MapType data)
     {
         AnimationPart part = new AnimationPart();
 
@@ -60,7 +60,7 @@ public class AnimationParser
         return part;
     }
 
-    private static void parseChannel(MolangParser parser, AnimationChannel channel, BaseType data) throws Exception
+    private static void parseChannel(MolangParser parser, AnimationChannel channel, BaseType data)
     {
         if (BaseType.isList(data))
         {
@@ -73,7 +73,7 @@ public class AnimationParser
         }
     }
 
-    private static AnimationVector parseAnimationVector(MolangParser parser, BaseType data) throws Exception
+    private static AnimationVector parseAnimationVector(MolangParser parser, BaseType data)
     {
         ListType values = (ListType) data;
         AnimationVector vector = new AnimationVector();
@@ -90,13 +90,22 @@ public class AnimationParser
         return vector;
     }
 
-    private static MolangExpression parseValue(MolangParser parser, BaseType element) throws Exception
+    private static MolangExpression parseValue(MolangParser parser, BaseType element)
     {
         if (element.isNumeric())
         {
             return new MolangValue(parser, new Constant(element.asNumeric().doubleValue()));
         }
 
-        return parser.parseExpression(((StringType) element).value);
+        try
+        {
+            return parser.parseExpression(((StringType) element).value);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return MolangParser.ZERO;
     }
 }

@@ -196,7 +196,7 @@ public class MathBuilder
     public List<Object> breakdownChars(String[] chars)
     {
         List<Object> symbols = new ArrayList<>();
-        String buffer = "";
+        StringBuilder buffer = new StringBuilder();
         int len = chars.length;
         boolean string = false;
 
@@ -212,7 +212,7 @@ public class MathBuilder
 
             if (string)
             {
-                buffer += s;
+                buffer.append(s);
             }
             else if (this.isOperator(s) || longOperator || s.equals(","))
             {
@@ -222,23 +222,23 @@ public class MathBuilder
                 {
                     int size = symbols.size();
 
-                    boolean isEmpty = buffer.trim().isEmpty();
+                    boolean isEmpty = buffer.toString().trim().isEmpty();
                     boolean isFirst = size == 0 && isEmpty;
                     boolean isOperatorBehind = size > 0 && (this.isOperator(symbols.get(size - 1)) || symbols.get(size - 1).equals(",")) && isEmpty;
 
                     if (isFirst || isOperatorBehind)
                     {
-                        buffer += s;
+                        buffer.append(s);
 
                         continue;
                     }
                 }
 
                 /* Push buffer and operator */
-                if (!buffer.isEmpty())
+                if (buffer.length() > 0)
                 {
-                    symbols.add(buffer);
-                    buffer = "";
+                    symbols.add(buffer.toString());
+                    buffer = new StringBuilder();
                 }
 
                 if (longOperator)
@@ -254,10 +254,10 @@ public class MathBuilder
             else if (s.equals("("))
             {
                 /* Push a list of symbols */
-                if (!buffer.isEmpty())
+                if (buffer.length() > 0)
                 {
-                    symbols.add(buffer);
-                    buffer = "";
+                    symbols.add(buffer.toString());
+                    buffer = new StringBuilder();
                 }
 
                 int counter = 1;
@@ -277,29 +277,29 @@ public class MathBuilder
 
                     if (counter == 0)
                     {
-                        symbols.add(this.breakdownChars(buffer.split("(?!^)")));
+                        symbols.add(this.breakdownChars(buffer.toString().split("(?!^)")));
 
                         i = j;
-                        buffer = "";
+                        buffer = new StringBuilder();
 
                         break;
                     }
                     else
                     {
-                        buffer += c;
+                        buffer.append(c);
                     }
                 }
             }
-            else
+            else if (!s.equals(" "))
             {
                 /* Accumulate the buffer */
-                buffer += s;
+                buffer.append(s);
             }
         }
 
-        if (!buffer.isEmpty())
+        if (buffer.length() > 0)
         {
-            symbols.add(buffer);
+            symbols.add(buffer.toString());
         }
 
         return this.trimSymbols(symbols);

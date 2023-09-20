@@ -25,6 +25,26 @@ public class MathBuilderTest
         catch (Exception e)
         {
             e.printStackTrace();
+
+            Assertions.fail();
         }
+    }
+
+    @Test
+    public void testParsingMinusInFront()
+    {
+        MathBuilder builder = new MathBuilder();
+        IExpression expression = null;
+
+        try
+        {
+            expression = builder.parse("- sin(0)");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        Assertions.assertNotNull(expression);
     }
 }
