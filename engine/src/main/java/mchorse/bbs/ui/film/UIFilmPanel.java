@@ -543,6 +543,19 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     }
 
     @Override
+    protected boolean subMouseClicked(UIContext context)
+    {
+        Area area = this.getFramebufferArea(this.getViewportArea());
+
+        if (area.isInside(context) && this.replays.isVisible())
+        {
+            return this.replays.clickViewport(context, area);
+        }
+
+        return super.subMouseClicked(context);
+    }
+
+    @Override
     public void update()
     {
         this.controller.update();

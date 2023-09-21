@@ -3,10 +3,10 @@ package mchorse.bbs.ui.film.replays;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.film.Film;
-import mchorse.bbs.settings.values.ValueForm;
 import mchorse.bbs.film.replays.Replay;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.settings.values.ValueForm;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.forms.UIFormPalette;
@@ -51,70 +51,57 @@ public class UIReplayList extends UIList<Replay>
 
                 if (this.isSelected())
                 {
-                    menu.action(Icons.POSE, IKey.lazy("Pick form..."), () ->
-                    {
-                        ValueForm form = this.getCurrentFirst().form;
-
-                        UIFormPalette.open(this.getParentContainer(), false, form.get(), (f) ->
-                        {
-                            form.set(f);
-                            this.updateFilmEditor();
-                        });
-                    });
-
-                    menu.action(Icons.EDIT, IKey.lazy("Edit form..."), () ->
-                    {
-                        ValueForm form = this.getCurrentFirst().form;
-
-                        UIFormPalette.open(this.getParentContainer(), true, form.get(), (f) ->
-                        {
-                            form.set(f);
-                            this.updateFilmEditor();
-                        });
-                    });
+                    menu.action(Icons.POSE, IKey.lazy("Pick form..."), () -> this.openFormEditor(this.getCurrentFirst().form, false));
+                    menu.action(Icons.EDIT, IKey.lazy("Edit form..."), () -> this.openFormEditor(this.getCurrentFirst().form, true));
                 }
             }
         });
     }
 
+    private void openFormEditor(ValueForm form, boolean editing)
+    {
+        UIFormPalette.open(this.getParentContainer(), editing, form.get(), (f) ->
+        {
+            form.set(f);
+            this.updateFilmEditor();
+        });
+    }
+
     private void addReplay()
     {
-        Film film = this.panel.getData();
-        Replay replay = film.replays.addReplay();
         World world = this.getContext().menu.bridge.get(IBridgeWorld.class).getWorld();
         RayTraceResult result = new RayTraceResult();
         Camera camera = this.panel.getCamera();
 
         RayTracer.trace(result, world.chunks, camera.position, camera.getLookDirection(), 64F);
+        Vector3d position = new Vector3d(result.hit);
 
-        if (result.type == RayTraceType.BLOCK)
+        if (result.type != RayTraceType.BLOCK)
         {
-            replay.keyframes.x.insert(0, result.hit.x);
-            replay.keyframes.y.insert(0, result.hit.y);
-            replay.keyframes.z.insert(0, result.hit.z);
-        }
-        else
-        {
-            Vector3d position = new Vector3d(camera.getLookDirection()).mul(5F).add(camera.position);
-
-            replay.keyframes.x.insert(0, position.x);
-            replay.keyframes.y.insert(0, position.y);
-            replay.keyframes.z.insert(0, position.z);
+            position.set(camera.getLookDirection()).mul(5F).add(camera.position);
         }
 
-        replay.keyframes.pitch.insert(0, camera.rotation.x);
-        replay.keyframes.yaw.insert(0, camera.rotation.y + Math.PI);
-        replay.keyframes.bodyYaw.insert(0, camera.rotation.y + Math.PI);
+        this.addReplay(position, camera.rotation.x, camera.rotation.y + MathUtils.PI);
+    }
+
+    public void addReplay(Vector3d position, float pitch, float yaw)
+    {
+        Film film = this.panel.getData();
+        Replay replay = film.replays.addReplay();
+
+        replay.keyframes.x.insert(0, position.x);
+        replay.keyframes.y.insert(0, position.y);
+        replay.keyframes.z.insert(0, position.z);
+
+        replay.keyframes.pitch.insert(0, pitch);
+        replay.keyframes.yaw.insert(0, yaw);
+        replay.keyframes.bodyYaw.insert(0, yaw);
 
         this.update();
         this.panel.replays.setReplay(replay);
         this.updateFilmEditor();
 
-        UIFormPalette.open(this.getParentContainer(), false, replay.form.get(), (f) ->
-        {
-            replay.form.set(f);
-            this.updateFilmEditor();
-        });
+        this.openFormEditor(replay.form, false);
     }
 
     private void updateFilmEditor()

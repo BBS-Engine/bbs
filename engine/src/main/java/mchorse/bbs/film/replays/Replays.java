@@ -11,13 +11,10 @@ public class Replays extends ValueList<Replay>
 
     public Replay addReplay()
     {
-        this.preNotifyParent();
-
         Replay replay = new Replay(String.valueOf(this.list.size()));
 
-        this.list.add(replay);
+        this.preNotifyParent();
         this.add(replay);
-
         this.postNotifyParent();
 
         return replay;

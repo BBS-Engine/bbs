@@ -8,6 +8,7 @@ import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
 import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public class GenericKeyframeChannel <T> extends ValueList<GenericKeyframe<T>>
 
     public List<GenericKeyframe<T>> getKeyframes()
     {
-        return this.list;
+        return Collections.unmodifiableList(this.list);
     }
 
     public boolean has(int index)
@@ -123,6 +124,7 @@ public class GenericKeyframeChannel <T> extends ValueList<GenericKeyframe<T>>
 
         this.preNotifyParent();
         this.list.remove(index);
+        this.sync();
         this.postNotifyParent();
     }
 
@@ -147,7 +149,7 @@ public class GenericKeyframeChannel <T> extends ValueList<GenericKeyframe<T>>
 
             if (tick < prev.getTick())
             {
-                this.list.add(0, new GenericKeyframe<>("", this.factory, tick, value));
+                this.add(0, new GenericKeyframe<>("", this.factory, tick, value));
                 this.sort();
 
                 this.postNotifyParent();
@@ -178,9 +180,7 @@ public class GenericKeyframeChannel <T> extends ValueList<GenericKeyframe<T>>
             prev = frame;
         }
 
-        GenericKeyframe<T> frame = new GenericKeyframe<>("", this.factory, tick, value);
-        this.list.add(index, frame);
-
+        this.add(index, new GenericKeyframe<T>("", this.factory, tick, value));
         this.sort();
         this.postNotifyParent();
 

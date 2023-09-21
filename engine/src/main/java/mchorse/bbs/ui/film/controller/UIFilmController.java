@@ -97,6 +97,11 @@ public class UIFilmController extends UIElement
         return this.panel.replays.replays.getCurrentFirst();
     }
 
+    public StencilFormFramebuffer getStencil()
+    {
+        return this.stencil;
+    }
+
     private int getMouseMode()
     {
         return this.mouseMode % 4;
@@ -294,17 +299,6 @@ public class UIFilmController extends UIElement
                 }
 
                 return true;
-            }
-            else if (this.stencil.hasPicked())
-            {
-                Pair<Form, String> pair = this.stencil.getPicked();
-
-                if (pair != null)
-                {
-                    this.panel.replays.pickForm(pair.a, pair.b);
-
-                    return true;
-                }
             }
         }
         else if (context.mouseButton == 2)

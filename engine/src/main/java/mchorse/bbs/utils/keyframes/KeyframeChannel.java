@@ -172,8 +172,7 @@ public class KeyframeChannel extends ValueList<Keyframe>
 
             if (tick < prev.getTick())
             {
-                this.list.add(0, new Keyframe("", tick, value));
-
+                this.add(0, new Keyframe("", tick, value));
                 this.sort();
                 this.postNotifyParent();
 
@@ -204,7 +203,7 @@ public class KeyframeChannel extends ValueList<Keyframe>
         }
 
         Keyframe frame = new Keyframe("", tick, value);
-        this.list.add(index, frame);
+        this.add(index, frame);
 
         if (this.list.size() > 1)
         {

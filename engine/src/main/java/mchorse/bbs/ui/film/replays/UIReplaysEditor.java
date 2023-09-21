@@ -1,5 +1,7 @@
 package mchorse.bbs.ui.film.replays;
 
+import mchorse.bbs.bridge.IBridgeWorld;
+import mchorse.bbs.camera.Camera;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.replays.Replay;
 import mchorse.bbs.film.replays.ReplayKeyframes;
@@ -20,6 +22,8 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UISheet;
+import mchorse.bbs.ui.utils.Area;
+import mchorse.bbs.ui.utils.StencilFormFramebuffer;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -30,6 +34,11 @@ import mchorse.bbs.utils.keyframes.Keyframe;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
+import mchorse.bbs.utils.math.MathUtils;
+import mchorse.bbs.voxel.raytracing.RayTraceResult;
+import mchorse.bbs.voxel.raytracing.RayTraceType;
+import mchorse.bbs.voxel.raytracing.RayTracer;
+import mchorse.bbs.world.World;
 import org.joml.Vector2i;
 
 import java.util.ArrayList;
@@ -284,28 +293,7 @@ public class UIReplaysEditor extends UIElement
     {
         String path = FormUtils.getPath(form);
 
-        if (Window.isCtrlPressed())
-        {
-            boolean shift = Window.isShiftPressed();
-            ContextMenuManager manager = new ContextMenuManager();
-
-            for (IFormProperty formProperty : form.getProperties().values())
-            {
-                if (!formProperty.canCreateChannel())
-                {
-                    continue;
-                }
-
-                manager.action(Icons.POINTER, IKey.raw(formProperty.getKey()), () ->
-                {
-                    this.toggleProperties(true);
-                    this.pickProperty(bone, StringUtils.combinePaths(path, formProperty.getKey()), shift);
-                });
-            }
-
-            this.getContext().replaceContextMenu(manager.create());
-        }
-        else if (!bone.isEmpty())
+        if (!bone.isEmpty())
         {
             if (this.propertyEditor == null)
             {
@@ -315,6 +303,29 @@ public class UIReplaysEditor extends UIElement
             this.toggleProperties(true);
             this.pickProperty(bone, StringUtils.combinePaths(path, "pose"), false);
         }
+    }
+
+    public void pickFormProperty(Form form, String bone)
+    {
+        String path = FormUtils.getPath(form);
+        boolean shift = Window.isShiftPressed();
+        ContextMenuManager manager = new ContextMenuManager();
+
+        for (IFormProperty formProperty : form.getProperties().values())
+        {
+            if (!formProperty.canCreateChannel())
+            {
+                continue;
+            }
+
+            manager.action(Icons.POINTER, IKey.raw(formProperty.getKey()), () ->
+            {
+                this.toggleProperties(true);
+                this.pickProperty(bone, StringUtils.combinePaths(path, formProperty.getKey()), shift);
+            });
+        }
+
+        this.getContext().replaceContextMenu(manager.create());
     }
 
     private void pickProperty(String bone, String key, boolean insert)
@@ -361,6 +372,70 @@ public class UIReplaysEditor extends UIElement
 
             this.delegate.setCursor((int) closest.getTick());
         }
+    }
+
+    public boolean clickViewport(UIContext context, Area area)
+    {
+        StencilFormFramebuffer stencil = this.delegate.getController().getStencil();
+
+        if (stencil.hasPicked())
+        {
+            Pair<Form, String> pair = stencil.getPicked();
+
+            if (pair != null)
+            {
+                if (context.mouseButton == 0)
+                {
+                    this.pickForm(pair.a, pair.b);
+
+                    return true;
+                }
+                else if (context.mouseButton == 1)
+                {
+                    this.pickFormProperty(pair.a, pair.b);
+
+                    return true;
+                }
+            }
+        }
+        else if (context.mouseButton == 1)
+        {
+            RayTraceResult traceResult = new RayTraceResult();
+            World world = context.menu.bridge.get(IBridgeWorld.class).getWorld();
+            Camera camera = this.delegate.getCamera();
+
+            RayTracer.trace(traceResult, world.chunks, camera.position, camera.getMouseDirection(context.mouseX, context.mouseY, area), 64F);
+
+            if (traceResult.type == RayTraceType.BLOCK)
+            {
+                context.replaceContextMenu((menu) ->
+                {
+                    float pitch = camera.rotation.x;
+                    float yaw = camera.rotation.y + MathUtils.PI;
+
+                    menu.action(Icons.ADD, IKey.lazy("Add a replay here"), () -> this.replays.addReplay(traceResult.hit, pitch, yaw));
+                    menu.action(Icons.POINTER, IKey.lazy("Move replay here"), () ->
+                    {
+                        if (this.replay != null)
+                        {
+                            int cursor = this.delegate.getCursor();
+
+                            this.replay.keyframes.x.insert(cursor, traceResult.hit.x);
+                            this.replay.keyframes.y.insert(cursor, traceResult.hit.y);
+                            this.replay.keyframes.z.insert(cursor, traceResult.hit.z);
+
+                            this.replay.keyframes.pitch.insert(cursor, pitch);
+                            this.replay.keyframes.yaw.insert(cursor, yaw);
+                            this.replay.keyframes.bodyYaw.insert(cursor, yaw);
+                        }
+                    });
+                });
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

@@ -14,7 +14,7 @@ public class Screenplay extends ValueList<ScreenplayAction>
         ScreenplayAction action = new ScreenplayAction("");
 
         this.preNotifyParent();
-        this.list.add(action);
+        this.add(action);
         this.sync();
         this.postNotifyParent();
 

@@ -3,13 +3,14 @@ package mchorse.bbs.settings.values;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.settings.values.base.BaseValueGroup;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ValueGroup extends BaseValue
+public class ValueGroup extends BaseValueGroup
 {
     private Map<String, BaseValue> children = new LinkedHashMap<>();
 
@@ -23,11 +24,6 @@ public class ValueGroup extends BaseValue
         this.children.clear();
     }
 
-    public List<BaseValue> getAll()
-    {
-        return new ArrayList<>(this.children.values());
-    }
-
     public void add(BaseValue value)
     {
         if (value != null)
@@ -37,63 +33,28 @@ public class ValueGroup extends BaseValue
         }
     }
 
+    @Override
+    public List<BaseValue> getAll()
+    {
+        return new ArrayList<>(this.children.values());
+    }
+
+    @Override
     public BaseValue get(String key)
     {
         return this.children.get(key);
     }
 
-    public BaseValue getRecursively(String path)
+    @Override
+    public void copy(BaseValueGroup group)
     {
-        BaseValue value = this.children.get(path);
-
-        if (value == null && path.contains("."))
+        for (BaseValue groupValue : group.getAll())
         {
-            value = this.searchRecursively(path.split("\\."), path);
-        }
-
-        if (value == null)
-        {
-            throw new IllegalStateException("Property by path " + path + " can't be found!");
-        }
-
-        return value;
-    }
-
-    private BaseValue searchRecursively(String[] splits, String name)
-    {
-        int i = 0;
-        BaseValue current = this;
-
-        while (current != null && i < splits.length - 1)
-        {
-            if (current instanceof ValueGroup)
-            {
-                i += 1;
-                current = ((ValueGroup) current).get(splits[i]);
-            }
-            else
-            {
-                current = null;
-            }
-        }
-
-        if (current == null)
-        {
-            return null;
-        }
-
-        return current.getPath().equals(name) ? current : null;
-    }
-
-    public void copy(ValueGroup group)
-    {
-        for (Map.Entry<String, BaseValue> entry : group.children.entrySet())
-        {
-            BaseValue value = this.children.get(entry.getKey());
+            BaseValue value = this.children.get(groupValue.getId());
 
             if (value != null)
             {
-                value.copy(entry.getValue());
+                value.copy(groupValue);
             }
         }
     }
