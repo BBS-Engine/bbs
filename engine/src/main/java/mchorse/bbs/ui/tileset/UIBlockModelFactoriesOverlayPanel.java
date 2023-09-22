@@ -64,7 +64,7 @@ public class UIBlockModelFactoriesOverlayPanel extends UIOverlayPanel
         });
 
         this.searchList = new UISearchList<>(this.list);
-        this.searchList.label(UIKeys.SEARCH);
+        this.searchList.label(UIKeys.GENERAL_SEARCH);
         this.searchList.relative(this.content).full().x(6).w(1F, -12);
 
         if (this.menu.panel != null)
@@ -133,7 +133,7 @@ public class UIBlockModelFactoriesOverlayPanel extends UIOverlayPanel
     private void removeModel(UIIcon b)
     {
         UIOverlay.addOverlay(this.getContext(), new UIConfirmOverlayPanel(
-            UIKeys.REMOVE,
+            UIKeys.GENERAL_REMOVE,
             UIKeys.TILE_SET_LIST_REMOVE_MODEL_WARNING,
             (confirm) ->
             {

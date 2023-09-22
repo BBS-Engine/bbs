@@ -50,9 +50,9 @@ public class UIParticleSchemeAppearanceSection extends UIParticleSchemeComponent
         this.sizeW = new UIButton(UIKeys.SNOWSTORM_APPEARANCE_WIDTH, (b) -> this.editMoLang("appearance.width", (str) -> this.component.sizeW = this.parse(str, this.component.sizeW), this.component.sizeW));
         this.sizeH = new UIButton(UIKeys.SNOWSTORM_APPEARANCE_HEIGHT, (b) -> this.editMoLang("appearance.height", (str) -> this.component.sizeH = this.parse(str, this.component.sizeH), this.component.sizeH));
 
-        this.uvX = new UIButton(UIKeys.X, (b) -> this.editMoLang("appearance.uv_x", (str) -> this.component.uvX = this.parse(str, this.component.uvX), this.component.uvX));
+        this.uvX = new UIButton(UIKeys.GENERAL_X, (b) -> this.editMoLang("appearance.uv_x", (str) -> this.component.uvX = this.parse(str, this.component.uvX), this.component.uvX));
         this.uvX.tooltip(UIKeys.SNOWSTORM_APPEARANCE_UV_X);
-        this.uvY = new UIButton(UIKeys.Y, (b) -> this.editMoLang("appearance.uv_y", (str) -> this.component.uvY = this.parse(str, this.component.uvY), this.component.uvY));
+        this.uvY = new UIButton(UIKeys.GENERAL_Y, (b) -> this.editMoLang("appearance.uv_y", (str) -> this.component.uvY = this.parse(str, this.component.uvY), this.component.uvY));
         this.uvY.tooltip(UIKeys.SNOWSTORM_APPEARANCE_UV_Y);
         this.uvW = new UIButton(UIKeys.SNOWSTORM_APPEARANCE_WIDTH, (b) -> this.editMoLang("appearance.uv_w", (str) -> this.component.uvW = this.parse(str, this.component.uvW), this.component.uvW));
         this.uvW.tooltip(UIKeys.SNOWSTORM_APPEARANCE_UV_W);

@@ -64,7 +64,7 @@ public class UIFontOverlayPanel extends UIOverlayPanel
             }
         });
         this.searchList = new UISearchList<>(this.glyphsList);
-        this.searchList.label(UIKeys.SEARCH);
+        this.searchList.label(UIKeys.GENERAL_SEARCH);
 
         this.column.relative(this.content).xy(6, 6).w(1F, -12);
         this.searchList.relative(this.column).y(1F, 5).w(1F).hTo(this.content.getFlex(), 1F);
@@ -114,7 +114,7 @@ public class UIFontOverlayPanel extends UIOverlayPanel
         if (glyph < 0)
         {
             UIOverlay.addOverlay(this.getContext(), new UIMessageOverlayPanel(
-                UIKeys.ERROR,
+                UIKeys.GENERAL_ERROR,
                 UIKeys.FONT_EDITOR_ERROR_INVALID_GLYPH.format(string)
             ));
 
@@ -124,7 +124,7 @@ public class UIFontOverlayPanel extends UIOverlayPanel
         if (this.panel.glyphs.containsKey(glyph))
         {
             UIOverlay.addOverlay(this.getContext(), new UIMessageOverlayPanel(
-                UIKeys.ERROR,
+                UIKeys.GENERAL_ERROR,
                 UIKeys.FONT_EDITOR_ERROR_ALREADY_EXISTS.format(string, Character.getName(glyph).toLowerCase())
             ));
 

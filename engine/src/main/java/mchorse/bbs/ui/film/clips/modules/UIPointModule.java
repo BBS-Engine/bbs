@@ -34,13 +34,13 @@ public class UIPointModule extends UIAbstractModule
         super(editor);
 
         this.x = new UITrackpad((value) -> BaseValue.edit(this.point, (point) -> point.get().x = value));
-        this.x.tooltip(UIKeys.X);
+        this.x.tooltip(UIKeys.GENERAL_X);
 
         this.y = new UITrackpad((value) -> BaseValue.edit(this.point, (point) -> point.get().y = value));
-        this.y.tooltip(UIKeys.Y);
+        this.y.tooltip(UIKeys.GENERAL_Y);
 
         this.z = new UITrackpad((value) -> BaseValue.edit(this.point, (point) -> point.get().z = value));
-        this.z.tooltip(UIKeys.Z);
+        this.z.tooltip(UIKeys.GENERAL_Z);
 
         this.x.values(0.1F);
         this.y.values(0.1F);

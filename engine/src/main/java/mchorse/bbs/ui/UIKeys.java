@@ -10,33 +10,11 @@ import mchorse.bbs.utils.math.Interpolation;
 
 public class UIKeys
 {
-    public static final IKey ADD = IKey.lang("bbs.ui.add");
-    public static final IKey CONFIRM = IKey.lang("bbs.ui.confirm");
-    public static final IKey COPY = IKey.lang("bbs.ui.copy");
-    public static final IKey DUPE = IKey.lang("bbs.ui.dupe");
-    public static final IKey EDIT = IKey.lang("bbs.ui.edit");
-    public static final IKey ERROR = IKey.lang("bbs.ui.error");
-    public static final IKey EXPORT = IKey.lang("bbs.ui.export");
-    public static final IKey OK = IKey.lang("bbs.ui.ok");
-    public static final IKey PASTE = IKey.lang("bbs.ui.paste");
-    public static final IKey PICK = IKey.lang("bbs.ui.pick");
-    public static final IKey REMOVE = IKey.lang("bbs.ui.remove");
-    public static final IKey RENAME = IKey.lang("bbs.ui.rename");
-    public static final IKey SEARCH = IKey.lang("bbs.ui.search");
-    public static final IKey SUCCESS = IKey.lang("bbs.ui.success");
-    public static final IKey WARNING = IKey.lang("bbs.ui.warning");
-    public static final IKey SAVE = IKey.lang("bbs.ui.save", "Save", ADD);
-    public static final IKey X = IKey.raw("X");
-    public static final IKey Y = IKey.raw("Y");
-    public static final IKey Z = IKey.raw("Z");
-
-    public static final IKey NONE = IKey.lang("bbs.ui.none");
-    public static final IKey RIGHT_CLICK = IKey.lang("bbs.ui.right_click");
-
     public static final IKey BLOCK_VARIANT_CONTEXT_INSERT_EMPTY = IKey.lang("bbs.ui.block_variant.context.insert_empty");
-
     public static final IKey CAMERA_EDITOR_KEYS_CLIPS_DESELECT = IKey.lang("bbs.ui.camera.editor.keys.clips.deselect");
     public static final IKey CAMERA_EDITOR_KEYS_CLIPS_TITLE = IKey.lang("bbs.ui.camera.editor.keys.clips.title");
+    public static final IKey CAMERA_EDITOR_KEYS_EDITOR_JUMP_BACKWARD = IKey.lang("bbs.ui.camera.editor.keys.editor.jump_backward", "Jump backward", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey CAMERA_EDITOR_KEYS_EDITOR_JUMP_FORWARD = IKey.lang("bbs.ui.camera.editor.keys.editor.jump_forward", "Jump forward", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_NEXT = IKey.lang("bbs.ui.camera.editor.keys.editor.next");
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_NEXT_CLIP = IKey.lang("bbs.ui.camera.editor.keys.editor.next_clip");
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_PLAUSE = IKey.lang("bbs.ui.camera.editor.keys.editor.plause");
@@ -45,14 +23,22 @@ public class UIKeys
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_REDO = IKey.lang("bbs.ui.camera.editor.keys.editor.redo");
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_TITLE = IKey.lang("bbs.ui.camera.editor.keys.editor.title");
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_UNDO = IKey.lang("bbs.ui.camera.editor.keys.editor.undo");
-    public static final IKey CAMERA_EDITOR_KEYS_EDITOR_JUMP_FORWARD = IKey.lang("bbs.ui.camera.editor.keys.editor.jump_forward", "Jump forward", CAMERA_EDITOR_KEYS_EDITOR_TITLE);
-    public static final IKey CAMERA_EDITOR_KEYS_EDITOR_JUMP_BACKWARD = IKey.lang("bbs.ui.camera.editor.keys.editor.jump_backward", "Jump backward", CAMERA_EDITOR_KEYS_EDITOR_TITLE);
     public static final IKey CAMERA_EDITOR_KEYS_LOOPING_SET_MAX = IKey.lang("bbs.ui.camera.editor.keys.looping.set_max");
     public static final IKey CAMERA_EDITOR_KEYS_LOOPING_SET_MIN = IKey.lang("bbs.ui.camera.editor.keys.looping.set_min");
     public static final IKey CAMERA_EDITOR_KEYS_LOOPING_TITLE = IKey.lang("bbs.ui.camera.editor.keys.looping.title");
     public static final IKey CAMERA_EDITOR_KEYS_MODES_FLIGHT = IKey.lang("bbs.ui.camera.editor.keys.modes.flight");
     public static final IKey CAMERA_EDITOR_KEYS_MODES_LOOPING = IKey.lang("bbs.ui.camera.editor.keys.modes.looping");
     public static final IKey CAMERA_EDITOR_KEYS_MODES_TITLE = IKey.lang("bbs.ui.camera.editor.keys.modes.title");
+    public static final IKey CAMERA_FLIGHT_FLIGHT_BACKWARD = IKey.lang("bbs.ui.camera.flight.backward");
+    public static final IKey CAMERA_FLIGHT_FLIGHT_DOWN = IKey.lang("bbs.ui.camera.flight.down");
+    public static final IKey CAMERA_FLIGHT_FLIGHT_FORWARD = IKey.lang("bbs.ui.camera.flight.forward");
+    public static final IKey CAMERA_FLIGHT_FLIGHT_LEFT = IKey.lang("bbs.ui.camera.flight.left");
+    public static final IKey CAMERA_FLIGHT_FLIGHT_PAN_LEFT = IKey.lang("bbs.ui.camera.flight.camera_left");
+    public static final IKey CAMERA_FLIGHT_FLIGHT_PAN_RIGHT = IKey.lang("bbs.ui.camera.flight.camera_right");
+    public static final IKey CAMERA_FLIGHT_FLIGHT_RIGHT = IKey.lang("bbs.ui.camera.flight.right");
+    public static final IKey CAMERA_FLIGHT_FLIGHT_TILT_DOWN = IKey.lang("bbs.ui.camera.flight.camera_down");
+    public static final IKey CAMERA_FLIGHT_FLIGHT_TILT_UP = IKey.lang("bbs.ui.camera.flight.camera_up");
+    public static final IKey CAMERA_FLIGHT_FLIGHT_UP = IKey.lang("bbs.ui.camera.flight.up");
     public static final IKey CAMERA_PANELS_ALL = IKey.lang("bbs.ui.camera.panels.all");
     public static final IKey CAMERA_PANELS_ANGLE = IKey.lang("bbs.ui.camera.panels.angle");
     public static final IKey CAMERA_PANELS_AT_BLOCK = IKey.lang("bbs.ui.camera.panels.at_block");
@@ -64,8 +50,6 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_CIRCULAR = IKey.lang("bbs.ui.camera.panels.circular");
     public static final IKey CAMERA_PANELS_CIRCULAR_X = IKey.lang("bbs.ui.camera.panels.circular_x");
     public static final IKey CAMERA_PANELS_CIRCULAR_Z = IKey.lang("bbs.ui.camera.panels.circular_z");
-    public static final IKey CAMERA_PANELS_COLOR = IKey.lang("bbs.ui.camera.panels.color");
-    public static final IKey CAMERA_PANELS_COLOR_TOOLTIP = IKey.lang("bbs.ui.camera.panels.color_tooltip");
     public static final IKey CAMERA_PANELS_CONTEXT_COPY_ANGLE = IKey.lang("bbs.ui.camera.panels.context.copy_angle");
     public static final IKey CAMERA_PANELS_CONTEXT_COPY_POINT = IKey.lang("bbs.ui.camera.panels.context.copy_point");
     public static final IKey CAMERA_PANELS_CONTEXT_COPY_POSITION = IKey.lang("bbs.ui.camera.panels.context.copy_position");
@@ -82,12 +66,10 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_DOLLY_DISTANCE = IKey.lang("bbs.ui.camera.panels.dolly.distance");
     public static final IKey CAMERA_PANELS_DOLLY_PITCH = IKey.lang("bbs.ui.camera.panels.dolly.pitch");
     public static final IKey CAMERA_PANELS_DOLLY_REVERSE = IKey.lang("bbs.ui.camera.panels.dolly.reverse");
-    public static final IKey CAMERA_PANELS_DOLLY_SPEED = IKey.lang("bbs.ui.camera.panels.dolly.speed");
     public static final IKey CAMERA_PANELS_DOLLY_TITLE = IKey.lang("bbs.ui.camera.panels.dolly.title");
     public static final IKey CAMERA_PANELS_DOLLY_YAW = IKey.lang("bbs.ui.camera.panels.dolly.yaw");
     public static final IKey CAMERA_PANELS_DURATION = IKey.lang("bbs.ui.camera.panels.duration");
     public static final IKey CAMERA_PANELS_EDIT_KEYFRAMES = IKey.lang("bbs.ui.camera.panels.edit_keyframes");
-    public static final IKey CAMERA_PANELS_EDIT_PLAYER_RECORDING = IKey.lang("bbs.ui.camera.panels.edit_player_recording");
     public static final IKey CAMERA_PANELS_ENABLED = IKey.lang("bbs.ui.camera.panels.enabled");
     public static final IKey CAMERA_PANELS_ENVELOPES_END_D = IKey.lang("bbs.ui.camera.panels.envelopes.end_d");
     public static final IKey CAMERA_PANELS_ENVELOPES_START_D = IKey.lang("bbs.ui.camera.panels.envelopes.start_d");
@@ -125,17 +107,16 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_TITLE = IKey.lang("bbs.ui.camera.panels.title");
     public static final IKey CAMERA_PANELS_TITLE_TOOLTIP = IKey.lang("bbs.ui.camera.panels.title_tooltip");
     public static final IKey CAMERA_PANELS_YAW = IKey.lang("bbs.ui.camera.panels.yaw");
-    public static final IKey CAMERA_RECORDING_PREMATURE_STOP = IKey.lang("bbs.ui.camera.recording.premature_stop");
     public static final IKey CAMERA_TIMELINE_CONTEXT_ADD = IKey.lang("bbs.ui.camera.timeline.context.add");
     public static final IKey CAMERA_TIMELINE_CONTEXT_ADD_AT_CURSOR = IKey.lang("bbs.ui.camera.timeline.context.add_at_cursor");
     public static final IKey CAMERA_TIMELINE_CONTEXT_ADD_AT_TICK = IKey.lang("bbs.ui.camera.timeline.context.add_at_tick");
     public static final IKey CAMERA_TIMELINE_CONTEXT_ADD_CLIP_TYPE = IKey.lang("bbs.ui.camera.timeline.context.add_clip_type");
     public static final IKey CAMERA_TIMELINE_CONTEXT_ADD_ON_TOP = IKey.lang("bbs.ui.camera.timeline.context.add_on_top");
-    public static final IKey CAMERA_TIMELINE_CONTEXT_FROM_PLAYER_RECORDING = IKey.lang("bbs.ui.camera.timeline.context.from_player_recording", "From player recording...", CAMERA_TIMELINE_CONTEXT_ADD_ON_TOP);
     public static final IKey CAMERA_TIMELINE_CONTEXT_CONVERT = IKey.lang("bbs.ui.camera.timeline.context.convert");
     public static final IKey CAMERA_TIMELINE_CONTEXT_CONVERT_TO = IKey.lang("bbs.ui.camera.timeline.context.convert_to");
     public static final IKey CAMERA_TIMELINE_CONTEXT_COPY = IKey.lang("bbs.ui.camera.timeline.context.copy");
     public static final IKey CAMERA_TIMELINE_CONTEXT_CUT = IKey.lang("bbs.ui.camera.timeline.context.cut");
+    public static final IKey CAMERA_TIMELINE_CONTEXT_FROM_PLAYER_RECORDING = IKey.lang("bbs.ui.camera.timeline.context.from_player_recording", "From player recording...", CAMERA_TIMELINE_CONTEXT_ADD_ON_TOP);
     public static final IKey CAMERA_TIMELINE_CONTEXT_PASTE = IKey.lang("bbs.ui.camera.timeline.context.paste");
     public static final IKey CAMERA_TIMELINE_CONTEXT_REMOVE_CLIPS = IKey.lang("bbs.ui.camera.timeline.context.remove_clips");
     public static final IKey CAMERA_TIMELINE_CONTEXT_SHIFT = IKey.lang("bbs.ui.camera.timeline.context.shift");
@@ -144,36 +125,18 @@ public class UIKeys
     public static final IKey CAMERA_TIMELINE_KEYS_ENABLED = IKey.lang("bbs.ui.camera.timeline.keys.enabled");
     public static final IKey CAMERA_TOOLTIPS_OPEN_VIDEOS = IKey.lang("bbs.ui.camera.tooltips.open_videos");
     public static final IKey CAMERA_TOOLTIPS_RECORD = IKey.lang("bbs.ui.camera.tooltips.record");
-
-    public static final IKey CAMERA_FLIGHT_FLIGHT_FORWARD = IKey.lang("bbs.ui.camera.flight.forward");
-    public static final IKey CAMERA_FLIGHT_FLIGHT_BACKWARD = IKey.lang("bbs.ui.camera.flight.backward");
-    public static final IKey CAMERA_FLIGHT_FLIGHT_LEFT = IKey.lang("bbs.ui.camera.flight.left");
-    public static final IKey CAMERA_FLIGHT_FLIGHT_RIGHT = IKey.lang("bbs.ui.camera.flight.right");
-    public static final IKey CAMERA_FLIGHT_FLIGHT_UP = IKey.lang("bbs.ui.camera.flight.up");
-    public static final IKey CAMERA_FLIGHT_FLIGHT_DOWN = IKey.lang("bbs.ui.camera.flight.down");
-    public static final IKey CAMERA_FLIGHT_FLIGHT_TILT_UP = IKey.lang("bbs.ui.camera.flight.camera_up");
-    public static final IKey CAMERA_FLIGHT_FLIGHT_TILT_DOWN = IKey.lang("bbs.ui.camera.flight.camera_down");
-    public static final IKey CAMERA_FLIGHT_FLIGHT_PAN_LEFT = IKey.lang("bbs.ui.camera.flight.camera_left");
-    public static final IKey CAMERA_FLIGHT_FLIGHT_PAN_RIGHT = IKey.lang("bbs.ui.camera.flight.camera_right");
-
     public static final IKey CHALKBOARD_KEYS_CLEAR = IKey.lang("bbs.ui.chalkboard.keys.clear");
     public static final IKey CHALKBOARD_KEYS_TOGGLE = IKey.lang("bbs.ui.chalkboard.keys.toggle", "Toggle chalkboard", CHALKBOARD_KEYS_CLEAR);
-
     public static final IKey COLOR_CONTEXT_FAVORITES_ADD = IKey.lang("bbs.ui.color.context.favorites.add");
     public static final IKey COLOR_CONTEXT_FAVORITES_REMOVE = IKey.lang("bbs.ui.color.context.favorites.remove");
     public static final IKey COLOR_FAVORITE = IKey.lang("bbs.ui.color.favorite");
     public static final IKey COLOR_RECENT = IKey.lang("bbs.ui.color.recent");
-
-    public static final IKey CONFIG_RELOAD_TOOLTIP = IKey.lang("bbs.ui.config.reload_tooltip");
     public static final IKey CONFIG_TITLE = IKey.lang("bbs.ui.config.title");
-
     public static final IKey DASHBOARD_CATEGORY = IKey.lang("bbs.ui.dashboard.category");
     public static final IKey DASHBOARD_CONTEXT_TOGGLE_VISIBILITY = IKey.lang("bbs.ui.dashboard.context.toggle_visibility");
-
     public static final IKey EDIT_WORLD_CHUNK_LIMIT = IKey.lang("bbs.ui.edit_world.chunk_limit");
     public static final IKey EDIT_WORLD_SUBMIT = IKey.lang("bbs.ui.edit_world.submit");
     public static final IKey EDIT_WORLD_TITLE = IKey.lang("bbs.ui.edit_world.title");
-
     public static final IKey ENGINE_KEYSTROKES_POSITION_AUTO = IKey.lang("bbs.keystrokes_position.auto");
     public static final IKey ENGINE_KEYSTROKES_POSITION_BOTTOM_LEFT = IKey.lang("bbs.keystrokes_position.bottom_left");
     public static final IKey ENGINE_KEYSTROKES_POSITION_BOTTOM_RIGHT = IKey.lang("bbs.keystrokes_position.bottom_right");
@@ -181,67 +144,64 @@ public class UIKeys
     public static final IKey ENGINE_KEYSTROKES_POSITION_TOP_RIGHT = IKey.lang("bbs.keystrokes_position.top_right");
     public static final IKey ENGINE_TOOLTIP_STYLE_DARK = IKey.lang("bbs.tooltip_style.dark");
     public static final IKey ENGINE_TOOLTIP_STYLE_LIGHT = IKey.lang("bbs.tooltip_style.light");
-
     public static final IKey ENTITIES_COMPONENTS_BASIC_NAME = IKey.lang("bbs.ui.entities.components.basic.name");
     public static final IKey ENTITIES_COMPONENTS_BASIC_POSITION = IKey.lang("bbs.ui.entities.components.basic.position");
     public static final IKey ENTITIES_COMPONENTS_BASIC_ROTATION = IKey.lang("bbs.ui.entities.components.basic.rotation");
+    public static final IKey ENTITIES_COMPONENTS_BASIC_SPEED = IKey.lang("bbs.ui.entities.components.basic.speed", "Movement speed", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey ENTITIES_COMPONENTS_BASIC_VELOCITY = IKey.lang("bbs.ui.entities.components.basic.velocity");
-    public static final IKey ENTITIES_COMPONENTS_BASIC_SPEED = IKey.lang("bbs.ui.entities.components.basic.speed", "Movement speed", ENTITIES_COMPONENTS_BASIC_VELOCITY);
     public static final IKey ENTITIES_COMPONENTS_FORM_FIRST_PERSON = IKey.lang("bbs.ui.entities.components.form.first_person_form");
     public static final IKey ENTITIES_COMPONENTS_FORM_FIRST_PERSON_OFFSET = IKey.lang("bbs.ui.entities.components.form.first_person_offset");
     public static final IKey ENTITIES_CONTEXT_ADD = IKey.lang("bbs.ui.entities.context.add");
-
-    public static final IKey FONT_EDITOR_TITLE = IKey.lang("bbs.font_editor.title");
-    public static final IKey FONT_EDITOR_NAME = IKey.lang("bbs.font_editor.name");
-    public static final IKey FONT_EDITOR_HEIGHT = IKey.lang("bbs.font_editor.height");
-    public static final IKey FONT_EDITOR_HEIGHT_TOOLTIP = IKey.lang("bbs.font_editor.height-tooltip");
-    public static final IKey FONT_EDITOR_GLYPHS = IKey.lang("bbs.font_editor.glyphs");
-    public static final IKey FONT_EDITOR_LOAD = IKey.lang("bbs.font_editor.load");
-    public static final IKey FONT_EDITOR_LOAD_TITLE = IKey.lang("bbs.font_editor.load-title");
-    public static final IKey FONT_EDITOR_SAVE = IKey.lang("bbs.font_editor.save");
-    public static final IKey FONT_EDITOR_SAVE_TITLE = IKey.lang("bbs.font_editor.save-title");
-    public static final IKey FONT_EDITOR_SAVE_DESCRIPTION = IKey.lang("bbs.font_editor.save-description");
     public static final IKey FONT_EDITOR_CODES = IKey.lang("bbs.font_editor.codes");
-    public static final IKey FONT_EDITOR_CODES_TITLE = IKey.lang("bbs.font_editor.codes.title");
     public static final IKey FONT_EDITOR_CODES_ADD = IKey.lang("bbs.font_editor.codes.add");
     public static final IKey FONT_EDITOR_CODES_CONTEXT_ADD = IKey.lang("bbs.font_editor.codes.context.add");
     public static final IKey FONT_EDITOR_CODES_CONTEXT_REMOVE = IKey.lang("bbs.font_editor.codes.context.remove");
+    public static final IKey FONT_EDITOR_CODES_TITLE = IKey.lang("bbs.font_editor.codes.title");
     public static final IKey FONT_EDITOR_CONTEXT_ADD = IKey.lang("bbs.font_editor.context.add");
-    public static final IKey FONT_EDITOR_CONTEXT_ADD_TITLE = IKey.lang("bbs.font_editor.context.add-title");
     public static final IKey FONT_EDITOR_CONTEXT_ADD_DESCRIPTION = IKey.lang("bbs.font_editor.context.add-description");
-    public static final IKey FONT_EDITOR_CONTEXT_COPY_SYMBOL = IKey.lang("bbs.font_editor.context.copy_symbol");
+    public static final IKey FONT_EDITOR_CONTEXT_ADD_TITLE = IKey.lang("bbs.font_editor.context.add-title");
     public static final IKey FONT_EDITOR_CONTEXT_COPY_CODE = IKey.lang("bbs.font_editor.context.copy_code");
+    public static final IKey FONT_EDITOR_CONTEXT_COPY_SYMBOL = IKey.lang("bbs.font_editor.context.copy_symbol");
     public static final IKey FONT_EDITOR_CONTEXT_DUPLICATE = IKey.lang("bbs.font_editor.context.duplicate");
     public static final IKey FONT_EDITOR_CONTEXT_REMOVE = IKey.lang("bbs.font_editor.context.remove");
     public static final IKey FONT_EDITOR_ERROR_ALREADY_EXISTS = IKey.lang("bbs.font_editor.error.already_exists");
     public static final IKey FONT_EDITOR_ERROR_INVALID_GLYPH = IKey.lang("bbs.font_editor.error.invalid_glyph");
+    public static final IKey FONT_EDITOR_GLYPHS = IKey.lang("bbs.font_editor.glyphs");
     public static final IKey FONT_EDITOR_GLYPH_ADVANCE = IKey.lang("bbs.font_editor.glyph.advance");
     public static final IKey FONT_EDITOR_GLYPH_EMOJI = IKey.lang("bbs.font_editor.glyph.emoji");
     public static final IKey FONT_EDITOR_GLYPH_EMOJI_TOOLTIP = IKey.lang("bbs.font_editor.glyph.emoji-tooltip");
     public static final IKey FONT_EDITOR_GLYPH_OFFSET = IKey.lang("bbs.font_editor.glyph.offset");
     public static final IKey FONT_EDITOR_GLYPH_SIZE = IKey.lang("bbs.font_editor.glyph.size");
-    public static final IKey FONT_EDITOR_KERNING_TITLE = IKey.lang("bbs.font_editor.kerning.title");
+    public static final IKey FONT_EDITOR_HEIGHT = IKey.lang("bbs.font_editor.height");
+    public static final IKey FONT_EDITOR_HEIGHT_TOOLTIP = IKey.lang("bbs.font_editor.height-tooltip");
+    public static final IKey FONT_EDITOR_KERNING_ADD = IKey.lang("bbs.font_editor.kerning.add");
     public static final IKey FONT_EDITOR_KERNING_AMOUNT = IKey.lang("bbs.font_editor.kerning.amount");
     public static final IKey FONT_EDITOR_KERNING_CHARACTER = IKey.lang("bbs.font_editor.kerning.character");
-    public static final IKey FONT_EDITOR_KERNING_ADD = IKey.lang("bbs.font_editor.kerning.add");
     public static final IKey FONT_EDITOR_KERNING_REMOVE = IKey.lang("bbs.font_editor.kerning.remove");
-
-    public static final IKey FORMS_CATEGORIES_CONTEXT_OPEN_MODEL_FOLDER = IKey.lang("bbs.ui.forms.categories.context.open_model_form", "Open model's folder...", FONT_EDITOR_KERNING_REMOVE);
+    public static final IKey FONT_EDITOR_KERNING_TITLE = IKey.lang("bbs.font_editor.kerning.title");
+    public static final IKey FONT_EDITOR_LOAD = IKey.lang("bbs.font_editor.load");
+    public static final IKey FONT_EDITOR_LOAD_TITLE = IKey.lang("bbs.font_editor.load-title");
+    public static final IKey FONT_EDITOR_NAME = IKey.lang("bbs.font_editor.name");
+    public static final IKey FONT_EDITOR_SAVE = IKey.lang("bbs.font_editor.save");
+    public static final IKey FONT_EDITOR_SAVE_DESCRIPTION = IKey.lang("bbs.font_editor.save-description");
+    public static final IKey FONT_EDITOR_SAVE_TITLE = IKey.lang("bbs.font_editor.save-title");
+    public static final IKey FONT_EDITOR_TITLE = IKey.lang("bbs.font_editor.title");
+    public static final IKey FORMS_CATEGORIES_ADD_CATEGORY_DESCRIPTION = IKey.lang("bbs.ui.forms.categories.add_category-description", "Type in the name for the form category:", FONT_EDITOR_KERNING_REMOVE);
+    public static final IKey FORMS_CATEGORIES_ADD_CATEGORY_TITLE = IKey.lang("bbs.ui.forms.categories.add_category-title", "Add category", FONT_EDITOR_KERNING_REMOVE);
     public static final IKey FORMS_CATEGORIES_CONTEXT_ADD_CATEGORY = IKey.lang("bbs.ui.forms.categories.context.add_category", "Add category...", FONT_EDITOR_KERNING_REMOVE);
-    public static final IKey FORMS_CATEGORIES_CONTEXT_RENAME_CATEGORY = IKey.lang("bbs.ui.forms.categories.context.rename_category", "Rename category...", FONT_EDITOR_KERNING_REMOVE);
-    public static final IKey FORMS_CATEGORIES_CONTEXT_COPY_TO_CATEGORY = IKey.lang("bbs.ui.forms.categories.context.copy_to_category", "Copy to category...", FONT_EDITOR_KERNING_REMOVE);
-    public static final IKey FORMS_CATEGORIES_CONTEXT_COPY_TO = IKey.lang("bbs.ui.forms.categories.context.copy_to", "Copy to %s", FONT_EDITOR_KERNING_REMOVE);
     public static final IKey FORMS_CATEGORIES_CONTEXT_COPY_FORM = IKey.lang("bbs.ui.forms.categories.context.copy_form");
+    public static final IKey FORMS_CATEGORIES_CONTEXT_COPY_TO = IKey.lang("bbs.ui.forms.categories.context.copy_to", "Copy to %s", FONT_EDITOR_KERNING_REMOVE);
+    public static final IKey FORMS_CATEGORIES_CONTEXT_COPY_TO_CATEGORY = IKey.lang("bbs.ui.forms.categories.context.copy_to_category", "Copy to category...", FONT_EDITOR_KERNING_REMOVE);
+    public static final IKey FORMS_CATEGORIES_CONTEXT_OPEN_MODEL_FOLDER = IKey.lang("bbs.ui.forms.categories.context.open_model_form", "Open model's folder...", FONT_EDITOR_KERNING_REMOVE);
     public static final IKey FORMS_CATEGORIES_CONTEXT_PASTE_FORM = IKey.lang("bbs.ui.forms.categories.context.paste_form");
     public static final IKey FORMS_CATEGORIES_CONTEXT_REMOVE_FORM = IKey.lang("bbs.ui.forms.categories.context.remove_form");
-    public static final IKey FORMS_CATEGORIES_ADD_CATEGORY_TITLE = IKey.lang("bbs.ui.forms.categories.add_category-title", "Add category", FONT_EDITOR_KERNING_REMOVE);
-    public static final IKey FORMS_CATEGORIES_ADD_CATEGORY_DESCRIPTION = IKey.lang("bbs.ui.forms.categories.add_category-description", "Type in the name for the form category:", FONT_EDITOR_KERNING_REMOVE);
-    public static final IKey FORMS_CATEGORIES_RENAME_CATEGORY_TITLE = IKey.lang("bbs.ui.forms.categories.rename_category-title", "Rename category", FONT_EDITOR_KERNING_REMOVE);
-    public static final IKey FORMS_CATEGORIES_RENAME_CATEGORY_DESCRIPTION = IKey.lang("bbs.ui.forms.categories.rename_category-description", "Type in a new name for this form category:", FONT_EDITOR_KERNING_REMOVE);
+    public static final IKey FORMS_CATEGORIES_CONTEXT_RENAME_CATEGORY = IKey.lang("bbs.ui.forms.categories.context.rename_category", "Rename category...", FONT_EDITOR_KERNING_REMOVE);
     public static final IKey FORMS_CATEGORIES_EXTRA = IKey.lang("bbs.ui.forms.categories.extra");
     public static final IKey FORMS_CATEGORIES_MODELS = IKey.lang("bbs.ui.forms.categories.models");
     public static final IKey FORMS_CATEGORIES_PARTICLES = IKey.lang("bbs.ui.forms.categories.particles");
     public static final IKey FORMS_CATEGORIES_RECENT = IKey.lang("bbs.ui.forms.categories.recent");
+    public static final IKey FORMS_CATEGORIES_RENAME_CATEGORY_DESCRIPTION = IKey.lang("bbs.ui.forms.categories.rename_category-description", "Type in a new name for this form category:", FONT_EDITOR_KERNING_REMOVE);
+    public static final IKey FORMS_CATEGORIES_RENAME_CATEGORY_TITLE = IKey.lang("bbs.ui.forms.categories.rename_category-title", "Rename category", FONT_EDITOR_KERNING_REMOVE);
     public static final IKey FORMS_CROP_BOTTOM = IKey.lang("bbs.ui.forms.crop.bottom");
     public static final IKey FORMS_CROP_LEFT = IKey.lang("bbs.ui.forms.crop.left");
     public static final IKey FORMS_CROP_RIGHT = IKey.lang("bbs.ui.forms.crop.right");
@@ -266,10 +226,10 @@ public class UIKeys
     public static final IKey FORMS_EDITORS_GENERAL = IKey.lang("bbs.ui.forms.editors.general");
     public static final IKey FORMS_EDITORS_GENERAL_DISPLAY = IKey.lang("bbs.ui.forms.editors.general.display");
     public static final IKey FORMS_EDITORS_GENERAL_HITBOX = IKey.lang("bbs.ui.forms.editors.general.hitbox");
-    public static final IKey FORMS_EDITORS_GENERAL_HITBOX_WIDTH = IKey.lang("bbs.ui.forms.editors.general.hitbox_width");
+    public static final IKey FORMS_EDITORS_GENERAL_HITBOX_EYE_HEIGHT = IKey.lang("bbs.ui.forms.editors.general.hitbox_eye_height");
     public static final IKey FORMS_EDITORS_GENERAL_HITBOX_HEIGHT = IKey.lang("bbs.ui.forms.editors.general.hitbox_height");
     public static final IKey FORMS_EDITORS_GENERAL_HITBOX_SNEAK_MULTIPLIER = IKey.lang("bbs.ui.forms.editors.general.hitbox_sneak_multiplier");
-    public static final IKey FORMS_EDITORS_GENERAL_HITBOX_EYE_HEIGHT = IKey.lang("bbs.ui.forms.editors.general.hitbox_eye_height");
+    public static final IKey FORMS_EDITORS_GENERAL_HITBOX_WIDTH = IKey.lang("bbs.ui.forms.editors.general.hitbox_width");
     public static final IKey FORMS_EDITORS_LABEL_ANCHOR = IKey.lang("bbs.ui.forms.editors.label.anchor");
     public static final IKey FORMS_EDITORS_LABEL_ANCHOR_LINES = IKey.lang("bbs.ui.forms.editors.label.anchor_lines");
     public static final IKey FORMS_EDITORS_LABEL_BACKGROUND = IKey.lang("bbs.ui.forms.editors.label.background");
@@ -287,21 +247,39 @@ public class UIKeys
     public static final IKey FORMS_EDITOR_CONTEXT_PASTE = IKey.lang("bbs.ui.forms.editor.context.paste");
     public static final IKey FORMS_EDITOR_CONTEXT_REMOVE = IKey.lang("bbs.ui.forms.editor.context.remove");
     public static final IKey FORMS_EDITOR_ENABLED = IKey.lang("bbs.ui.forms.editor.enabled");
-    public static final IKey FORMS_EDITOR_USE_TARGET = IKey.lang("bbs.ui.forms.editor.use_target");
     public static final IKey FORMS_EDITOR_FINISH = IKey.lang("bbs.ui.forms.editor.finish");
     public static final IKey FORMS_EDITOR_MODEL_PICK_TEXTURE = IKey.lang("bbs.ui.forms.editor.model.pick_texture");
     public static final IKey FORMS_EDITOR_MODEL_STATIC_POSE = IKey.lang("bbs.ui.forms.editor.model.static_pose");
     public static final IKey FORMS_EDITOR_PICK_FORM = IKey.lang("bbs.ui.forms.editor.pick_form");
     public static final IKey FORMS_EDITOR_TOGGLE_TREE = IKey.lang("bbs.ui.forms.editor.toggle_tree");
+    public static final IKey FORMS_EDITOR_USE_TARGET = IKey.lang("bbs.ui.forms.editor.use_target");
     public static final IKey FORMS_LIST_CONTEXT_FOCUS = IKey.lang("bbs.ui.forms.list.context.focus");
     public static final IKey FORMS_LIST_EDIT = IKey.lang("bbs.ui.forms.list.edit");
     public static final IKey FORMS_LIST_SEARCH = IKey.lang("bbs.ui.forms.list.search");
-
+    public static final IKey GENERAL_ADD = IKey.lang("bbs.ui.add");
+    public static final IKey GENERAL_CONFIRM = IKey.lang("bbs.ui.confirm");
+    public static final IKey GENERAL_COPY = IKey.lang("bbs.ui.copy");
+    public static final IKey GENERAL_DUPE = IKey.lang("bbs.ui.dupe");
+    public static final IKey GENERAL_EDIT = IKey.lang("bbs.ui.edit");
+    public static final IKey GENERAL_ERROR = IKey.lang("bbs.ui.error");
+    public static final IKey GENERAL_EXPORT = IKey.lang("bbs.ui.export");
+    public static final IKey GENERAL_NONE = IKey.lang("bbs.ui.none");
+    public static final IKey GENERAL_OK = IKey.lang("bbs.ui.ok");
+    public static final IKey GENERAL_PASTE = IKey.lang("bbs.ui.paste");
+    public static final IKey GENERAL_PICK = IKey.lang("bbs.ui.pick");
+    public static final IKey GENERAL_REMOVE = IKey.lang("bbs.ui.remove");
+    public static final IKey GENERAL_RENAME = IKey.lang("bbs.ui.rename");
+    public static final IKey GENERAL_RIGHT_CLICK = IKey.lang("bbs.ui.right_click");
+    public static final IKey GENERAL_SAVE = IKey.lang("bbs.ui.save", "Save", GENERAL_ADD);
+    public static final IKey GENERAL_SEARCH = IKey.lang("bbs.ui.search");
+    public static final IKey GENERAL_SUCCESS = IKey.lang("bbs.ui.success");
+    public static final IKey GENERAL_WARNING = IKey.lang("bbs.ui.warning");
+    public static final IKey GENERAL_X = IKey.raw("X");
+    public static final IKey GENERAL_Y = IKey.raw("Y");
+    public static final IKey GENERAL_Z = IKey.raw("Z");
     public static final IKey GRAPH_HELP = IKey.lang("bbs.ui.graph.help");
     public static final IKey GRAPH_TOOLTIP = IKey.lang("bbs.ui.graph.tooltip");
-
     public static final IKey INTERPOLATIONS_KEY_CATEGORY = IKey.lang("interpolations.key_category");
-
     public static final IKey KEYFRAMES_CONTEXT_COPY = IKey.lang("bbs.ui.keyframes.context.copy");
     public static final IKey KEYFRAMES_CONTEXT_MAXIMIZE = IKey.lang("bbs.ui.keyframes.context.maximize");
     public static final IKey KEYFRAMES_CONTEXT_PASTE = IKey.lang("bbs.ui.keyframes.context.paste");
@@ -313,20 +291,13 @@ public class UIKeys
     public static final IKey KEYFRAMES_TICK = IKey.lang("bbs.ui.keyframes.tick");
     public static final IKey KEYFRAMES_VALUE = IKey.lang("bbs.ui.keyframes.value");
     public static final IKey KEYS_LIST = IKey.lang("bbs.ui.keys.list");
-
     public static final IKey LANGUAGE_CREDITS = IKey.lang("bbs.ui.language.credits");
     public static final IKey LANGUAGE_PICK = IKey.lang("bbs.ui.language.pick");
     public static final IKey LANGUAGE_PICK_TITLE = IKey.lang("bbs.ui.language.pick.title");
-
-    public static final IKey OVERLAYS_CAMERA = IKey.lang("bbs.ui.overlays.camera");
-    public static final IKey OVERLAYS_RECORD = IKey.lang("bbs.ui.overlays.record");
-    public static final IKey OVERLAYS_SCENE = IKey.lang("bbs.ui.overlays.scene");
+    public static final IKey OVERLAYS_PARTICLE_EFFECT = IKey.lang("bbs.ui.overlays.particle_effect", "Pick a particle effect...", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey OVERLAYS_SCRIPT = IKey.lang("bbs.ui.overlays.script");
     public static final IKey OVERLAYS_SOUNDS_MAIN = IKey.lang("bbs.ui.overlays.sounds.main");
-    public static final IKey OVERLAYS_PARTICLE_EFFECT = IKey.lang("bbs.ui.overlays.particle_effect", "Pick a particle effect...", OVERLAYS_SCRIPT);
-
     public static final IKey PANELS_ANIMATIONS = IKey.lang("bbs.ui.panels.animations");
-    public static final IKey PANELS_CAMERAS = IKey.lang("bbs.ui.panels.cameras");
     public static final IKey PANELS_CONTEXT_COPY = IKey.lang("bbs.ui.panels.context.copy");
     public static final IKey PANELS_CONTEXT_OPEN = IKey.lang("bbs.ui.panels.context.open");
     public static final IKey PANELS_CONTEXT_PASTE = IKey.lang("bbs.ui.panels.context.paste");
@@ -343,36 +314,11 @@ public class UIKeys
     public static final IKey PANELS_MODALS_RENAME = IKey.lang("bbs.ui.panels.modals.rename");
     public static final IKey PANELS_MODALS_RENAME_FOLDER = IKey.lang("bbs.ui.panels.modals.rename_folder");
     public static final IKey PANELS_MODALS_RENAME_FOLDER_TITLE = IKey.lang("bbs.ui.panels.modals.rename_folder-title");
-    public static final IKey PANELS_PARTICLES = IKey.lang("bbs.ui.panels.particles");
-    public static final IKey PANELS_RECORDS = IKey.lang("bbs.ui.panels.records");
-    public static final IKey PANELS_SCENES = IKey.lang("bbs.ui.panels.scenes");
     public static final IKey PANELS_OPTIONS_TITLE = IKey.lang("bbs.ui.panels.options-title", "Options", PANELS_ANIMATIONS);
-
-    public static final IKey RECORD_EDITOR_TITLE = IKey.lang("bbs.ui.record_editor.title");
-    public static final IKey RECORD_EDITOR_ACTIONS_FORM_FORM = IKey.lang("bbs.ui.record_editor.actions.form.form");
-    public static final IKey RECORD_EDITOR_ACTIONS_FORM_INTERPOLATION = IKey.lang("bbs.ui.record_editor.actions.form.interpolation");
-    public static final IKey RECORD_EDITOR_ACTIONS_FORM_TWEEN = IKey.lang("bbs.ui.record_editor.actions.form.tween");
-
-    public static final IKey SCENE_EDIT_RECORD = IKey.lang("bbs.ui.scene.edit_record");
-    public static final IKey SCENE_ENABLED = IKey.lang("bbs.ui.scene.enabled");
-    public static final IKey SCENE_ID = IKey.lang("bbs.ui.scene.id");
-    public static final IKey SCENE_INVISIBLE = IKey.lang("bbs.ui.scene.invisible");
-    public static final IKey SCENE_LOOPS = IKey.lang("bbs.ui.scene.loops");
-    public static final IKey SCENE_NAME = IKey.lang("bbs.ui.scene.name");
-    public static final IKey SCENE_NAME_TOOLTIP = IKey.lang("bbs.ui.scene.name_tooltip");
-    public static final IKey SCENE_NO_REPLAYS = IKey.lang("bbs.ui.scene.no_replays");
-    public static final IKey SCENE_RECORD = IKey.lang("bbs.ui.scene.record");
-    public static final IKey SCENE_RECORD_TITLE = IKey.lang("bbs.ui.scene.record-title");
-    public static final IKey SCENE_RECORD_DESCRIPTION = IKey.lang("bbs.ui.scene.record-description");
-    public static final IKey SCENE_RENAME_PREFIX = IKey.lang("bbs.ui.scene.rename_prefix");
-    public static final IKey SCENE_RENAME_PREFIX_POPUP = IKey.lang("bbs.ui.scene.rename_prefix_popup");
+    public static final IKey PANELS_PARTICLES = IKey.lang("bbs.ui.panels.particles");
     public static final IKey SCENE_REPLAYS_CONTEXT_ADD = IKey.lang("bbs.ui.scene.replays.context.add");
     public static final IKey SCENE_REPLAYS_CONTEXT_DUPE = IKey.lang("bbs.ui.scene.replays.context.dupe");
     public static final IKey SCENE_REPLAYS_CONTEXT_REMOVE = IKey.lang("bbs.ui.scene.replays.context.remove");
-    public static final IKey SCENE_TARGET = IKey.lang("bbs.ui.scene.target");
-    public static final IKey SCENE_TARGET_TOOLTIP = IKey.lang("bbs.ui.scene.target_tooltip");
-    public static final IKey SCENE_TP = IKey.lang("bbs.ui.scene.tp");
-
     public static final IKey SNOWSTORM_APPEARANCE_ANIMATED = IKey.lang("bbs.ui.snowstorm.appearance.animated");
     public static final IKey SNOWSTORM_APPEARANCE_FPS = IKey.lang("bbs.ui.snowstorm.appearance.fps");
     public static final IKey SNOWSTORM_APPEARANCE_FRAMES = IKey.lang("bbs.ui.snowstorm.appearance.frames");
@@ -417,7 +363,6 @@ public class UIKeys
     public static final IKey SNOWSTORM_EXPIRATION_MAX_TOOLTIP = IKey.lang("bbs.ui.snowstorm.expiration.max_tooltip");
     public static final IKey SNOWSTORM_EXPIRATION_TITLE = IKey.lang("bbs.ui.snowstorm.expiration.title");
     public static final IKey SNOWSTORM_EXPRESSION = IKey.lang("bbs.ui.snowstorm.expression");
-    public static final IKey SNOWSTORM_FOLDER_TOOLTIP = IKey.lang("bbs.ui.snowstorm.folder_tooltip");
     public static final IKey SNOWSTORM_GENERAL_IDENTIFIER = IKey.lang("bbs.ui.snowstorm.general.identifier");
     public static final IKey SNOWSTORM_GENERAL_PARTICLES_ALPHA = IKey.lang("bbs.ui.snowstorm.general.particles_alpha");
     public static final IKey SNOWSTORM_GENERAL_PARTICLES_BLEND = IKey.lang("bbs.ui.snowstorm.general.particles_blend");
@@ -492,8 +437,9 @@ public class UIKeys
     public static final IKey SNOWSTORM_SPACE_ROTATION = IKey.lang("bbs.ui.snowstorm.space.rotation");
     public static final IKey SNOWSTORM_SPACE_TITLE = IKey.lang("bbs.ui.snowstorm.space.title");
     public static final IKey SNOWSTORM_TITLE = IKey.lang("bbs.ui.snowstorm.title");
-
     public static final IKey TEXTURES_COPY = IKey.lang("bbs.ui.textures.copy");
+    public static final IKey TEXTURES_DISCARD_DESCRIPTION = IKey.lang("bbs.ui.textures.discard-description");
+    public static final IKey TEXTURES_DISCARD_TITLE = IKey.lang("bbs.ui.textures.discard-title");
     public static final IKey TEXTURES_EDIT = IKey.lang("bbs.ui.textures.edit");
     public static final IKey TEXTURES_EDIT_FORBIDDEN = IKey.lang("bbs.ui.textures.edit_forbidden");
     public static final IKey TEXTURES_EXPORT = IKey.lang("bbs.ui.textures.export");
@@ -503,16 +449,14 @@ public class UIKeys
     public static final IKey TEXTURES_EXPORT_OVERLAY_SUCCESS = IKey.lang("bbs.ui.textures.export_overlay.success");
     public static final IKey TEXTURES_EXPORT_OVERLAY_TITLE = IKey.lang("bbs.ui.textures.export_overlay.title");
     public static final IKey TEXTURES_KEYS_CATEGORY = IKey.lang("bbs.ui.textures.keys.category");
-    public static final IKey TEXTURES_KEYS_SWAP = IKey.lang("bbs.ui.textures.keys.swap");
     public static final IKey TEXTURES_KEYS_PICK = IKey.lang("bbs.ui.textures.keys.pick");
-    public static final IKey TEXTURES_KEYS_UNDO = IKey.lang("bbs.ui.textures.keys.undo");
     public static final IKey TEXTURES_KEYS_REDO = IKey.lang("bbs.ui.textures.keys.redo");
+    public static final IKey TEXTURES_KEYS_SWAP = IKey.lang("bbs.ui.textures.keys.swap");
+    public static final IKey TEXTURES_KEYS_UNDO = IKey.lang("bbs.ui.textures.keys.undo");
     public static final IKey TEXTURES_LINEAR = IKey.lang("bbs.ui.textures.linear");
     public static final IKey TEXTURES_REFRESH = IKey.lang("bbs.ui.textures.refresh");
     public static final IKey TEXTURES_SAVE = IKey.lang("bbs.ui.textures.save");
     public static final IKey TEXTURES_SAVE_WRONG_PATH = IKey.lang("bbs.ui.textures.save_wrong_path");
-    public static final IKey TEXTURES_DISCARD_TITLE = IKey.lang("bbs.ui.textures.discard-title");
-    public static final IKey TEXTURES_DISCARD_DESCRIPTION = IKey.lang("bbs.ui.textures.discard-description");
     public static final IKey TEXTURES_TITLE = IKey.lang("bbs.ui.textures.title");
     public static final IKey TEXTURES_TOOLTIP = IKey.lang("bbs.ui.textures.tooltip");
     public static final IKey TEXTURES_VIEWER_BRIGHTNESS = IKey.lang("bbs.ui.textures.viewer.brightness");
@@ -535,7 +479,6 @@ public class UIKeys
     public static final IKey TEXTURE_NO_DATA = IKey.lang( "bbs.ui.texture.no_data");
     public static final IKey TEXTURE_OPEN_FOLDER = IKey.lang("bbs.ui.texture.open_folder");
     public static final IKey TEXTURE_PICK_TEXTURE = IKey.lang("bbs.ui.texture.pick_texture");
-
     public static final IKey TILE_SET_BLOCK_MODELS_TITLE = IKey.lang("bbs.ui.tile_set.block_models.title");
     public static final IKey TILE_SET_COMBINED_CONTEXT_COPY = IKey.lang("bbs.ui.tile_set.combined.context.copy");
     public static final IKey TILE_SET_COMBINED_CONTEXT_PASTE = IKey.lang("bbs.ui.tile_set.combined.context.paste");
@@ -555,24 +498,23 @@ public class UIKeys
     public static final IKey TILE_SET_GENERAL_COLLISION_H = IKey.lang("bbs.ui.tile_set.general.collision_h");
     public static final IKey TILE_SET_GENERAL_COLLISION_W = IKey.lang("bbs.ui.tile_set.general.collision_w");
     public static final IKey TILE_SET_GENERAL_EDIT_UV = IKey.lang("bbs.ui.tile_set.general.edit_uv");
+    public static final IKey TILE_SET_GENERAL_LIGHTING = IKey.lang("bbs.ui.tile_set.general.lighting");
     public static final IKey TILE_SET_GENERAL_OPAQUE = IKey.lang("bbs.ui.tile_set.general.opaque");
     public static final IKey TILE_SET_GENERAL_RENAME = IKey.lang("bbs.ui.tile_set.general.rename");
     public static final IKey TILE_SET_GENERAL_RENAME_DESCRIPTION = IKey.lang("bbs.ui.tile_set.general.rename-description");
     public static final IKey TILE_SET_GENERAL_TINT = IKey.lang("bbs.ui.tile_set.general.tint");
-    public static final IKey TILE_SET_GENERAL_LIGHTING = IKey.lang("bbs.ui.tile_set.general.lighting");
     public static final IKey TILE_SET_GENERAL_X_OFFSET = IKey.lang("bbs.ui.tile_set.general.x_offset");
     public static final IKey TILE_SET_GENERAL_Y_OFFSET = IKey.lang("bbs.ui.tile_set.general.y_offset");
     public static final IKey TILE_SET_GENERAL_Z_OFFSET = IKey.lang("bbs.ui.tile_set.general.z_offset");
     public static final IKey TILE_SET_LIST_ADD_MODEL = IKey.lang("bbs.ui.tile_set.list.add_model");
-    public static final IKey TILE_SET_LIST_REPLACE_MODEL = IKey.lang("bbs.ui.tile_set.list.replace_model");
-    public static final IKey TILE_SET_LIST_REMOVE_MODEL = IKey.lang("bbs.ui.tile_set.list.remove_model");
-    public static final IKey TILE_SET_LIST_REMOVE_MODEL_WARNING = IKey.lang("bbs.ui.tile_set.list.remove_model.warning");
     public static final IKey TILE_SET_LIST_CONTEXT_COPY = IKey.lang("bbs.ui.tile_set.list.context.copy");
     public static final IKey TILE_SET_LIST_CONTEXT_PASTE = IKey.lang("bbs.ui.tile_set.list.context.paste");
+    public static final IKey TILE_SET_LIST_REMOVE_MODEL = IKey.lang("bbs.ui.tile_set.list.remove_model");
+    public static final IKey TILE_SET_LIST_REMOVE_MODEL_WARNING = IKey.lang("bbs.ui.tile_set.list.remove_model.warning");
+    public static final IKey TILE_SET_LIST_REPLACE_MODEL = IKey.lang("bbs.ui.tile_set.list.replace_model");
     public static final IKey TILE_SET_TITLE = IKey.lang("bbs.ui.tile_set.title");
     public static final IKey TILE_SET_VERTICAL_BOTTOM = IKey.lang("bbs.ui.tile_set.vertical.bottom");
     public static final IKey TILE_SET_VERTICAL_TOP = IKey.lang("bbs.ui.tile_set.vertical.top");
-
     public static final IKey TRANSFORMS_CONTEXT_COPY = IKey.lang("bbs.ui.transforms.context.copy");
     public static final IKey TRANSFORMS_CONTEXT_PASTE = IKey.lang("bbs.ui.transforms.context.paste");
     public static final IKey TRANSFORMS_CONTEXT_PASTE_ROTATION = IKey.lang("bbs.ui.transforms.context.paste_rotation");
@@ -585,7 +527,8 @@ public class UIKeys
     public static final IKey TRANSFORMS_X = IKey.lang("bbs.ui.transforms.x");
     public static final IKey TRANSFORMS_Y = IKey.lang("bbs.ui.transforms.y");
     public static final IKey TRANSFORMS_Z = IKey.lang("bbs.ui.transforms.z");
-
+    public static final IKey UV_EDITOR_CONTEXT_PLACE = IKey.lang("bbs.ui.uv_editor.context.place");
+    public static final IKey UV_EDITOR_CONTEXT_VIEW = IKey.lang("bbs.ui.uv_editor.context.view");
     public static final IKey WORLDS_CONVERT = IKey.lang("bbs.ui.worlds.convert");
     public static final IKey WORLDS_CONVERTING = IKey.lang("bbs.ui.worlds.converting");
     public static final IKey WORLDS_CREATE = IKey.lang("bbs.ui.worlds.create");
@@ -610,14 +553,18 @@ public class UIKeys
     public static final IKey WORLDS_OPTIONS_SEED = IKey.lang("bbs.ui.worlds.options.seed");
     public static final IKey WORLDS_OPTIONS_STORAGE = IKey.lang("bbs.ui.worlds.options.storage");
     public static final IKey WORLDS_OPTIONS_TITLE = IKey.lang("bbs.ui.worlds.options.title");
-    public static final IKey WORLDS_OPTIONS_TILE_SET_TITLE = IKey.lang("bbs.ui.worlds.options.tile_set-title");
-    public static final IKey WORLDS_OPTIONS_WARNING_WORLD_ID = IKey.lang("bbs.ui.worlds.options.warning.world_id");
     public static final IKey WORLDS_OPTIONS_WARNING_EMPTY_DATA = IKey.lang("bbs.ui.worlds.options.warning.empty_data");
+    public static final IKey WORLDS_OPTIONS_WARNING_WORLD_ID = IKey.lang("bbs.ui.worlds.options.warning.world_id");
     public static final IKey WORLDS_REMOVE = IKey.lang("bbs.ui.worlds.remove");
     public static final IKey WORLDS_REMOVE_MODAL_TITLE = IKey.lang("bbs.ui.worlds.remove_modal.title");
     public static final IKey WORLDS_REMOVE_MODAL_WARNING_1 = IKey.lang("bbs.ui.worlds.remove_modal.warning_1");
     public static final IKey WORLDS_REMOVE_MODAL_WARNING_2 = IKey.lang("bbs.ui.worlds.remove_modal.warning_2");
-
+    public static final IKey WORLD_CONTEXT_ADD = IKey.lang("bbs.ui.world.context.add");
+    public static final IKey WORLD_CONTEXT_COPY = IKey.lang("bbs.ui.world.context.copy");
+    public static final IKey WORLD_CONTEXT_MOVE_CENTER = IKey.lang("bbs.ui.world.context.move_center");
+    public static final IKey WORLD_CONTEXT_MOVE_TO_CURSOR = IKey.lang("bbs.ui.world.context.move_to_cursor");
+    public static final IKey WORLD_CONTEXT_PASTE = IKey.lang("bbs.ui.world.context.paste");
+    public static final IKey WORLD_CONTEXT_REMOVE = IKey.lang("bbs.ui.world.context.remove");
     public static final IKey WORLD_EDITOR_ACTIONS_AUTO = IKey.lang("bbs.ui.world_editor.actions.auto");
     public static final IKey WORLD_EDITOR_ACTIONS_CLEAR = IKey.lang("bbs.ui.world_editor.actions.clear");
     public static final IKey WORLD_EDITOR_ACTIONS_COPY = IKey.lang("bbs.ui.world_editor.actions.copy");
@@ -626,29 +573,29 @@ public class UIKeys
     public static final IKey WORLD_EDITOR_ACTIONS_FILL_CYLINDER = IKey.lang("bbs.ui.world_editor.actions.fill_cylinder");
     public static final IKey WORLD_EDITOR_ACTIONS_FILL_SPHERE = IKey.lang("bbs.ui.world_editor.actions.fill_sphere");
     public static final IKey WORLD_EDITOR_ACTIONS_FILL_WALL = IKey.lang("bbs.ui.world_editor.actions.fill_wall");
+    public static final IKey WORLD_EDITOR_ACTIONS_FLIP_H = IKey.lang("bbs.ui.world_editor.actions.flip_h");
+    public static final IKey WORLD_EDITOR_ACTIONS_FLIP_V = IKey.lang("bbs.ui.world_editor.actions.flip_v");
     public static final IKey WORLD_EDITOR_ACTIONS_HOLLOW = IKey.lang("bbs.ui.world_editor.actions.hollow");
+    public static final IKey WORLD_EDITOR_ACTIONS_MASK = IKey.lang("bbs.ui.world_editor.actions.mask");
     public static final IKey WORLD_EDITOR_ACTIONS_PASTE = IKey.lang("bbs.ui.world_editor.actions.paste");
     public static final IKey WORLD_EDITOR_ACTIONS_PICK = IKey.lang("bbs.ui.world_editor.actions.pick");
     public static final IKey WORLD_EDITOR_ACTIONS_ROTATE = IKey.lang("bbs.ui.world_editor.actions.rotate");
     public static final IKey WORLD_EDITOR_ACTIONS_ROTATE_CC = IKey.lang("bbs.ui.world_editor.actions.rotate_cc");
-    public static final IKey WORLD_EDITOR_ACTIONS_FLIP_H = IKey.lang("bbs.ui.world_editor.actions.flip_h");
-    public static final IKey WORLD_EDITOR_ACTIONS_FLIP_V = IKey.lang("bbs.ui.world_editor.actions.flip_v");
     public static final IKey WORLD_EDITOR_ACTIONS_VIEW_SELECTION = IKey.lang("bbs.ui.world_editor.actions.view_selection");
-    public static final IKey WORLD_EDITOR_ACTIONS_MASK = IKey.lang("bbs.ui.world_editor.actions.mask");
     public static final IKey WORLD_EDITOR_CONTEXT_DESELECT = IKey.lang("bbs.ui.world_editor.context.deselect");
     public static final IKey WORLD_EDITOR_CONTEXT_MASK = IKey.lang("bbs.ui.world_editor.context.mask");
-    public static final IKey WORLD_EDITOR_CONTEXT_SELECTION_TITLE = IKey.lang("bbs.ui.world_editor.context.selection.title");
-    public static final IKey WORLD_EDITOR_CONTEXT_TOOLS_TITLE = IKey.lang("bbs.ui.world_editor.context.tools.title");
     public static final IKey WORLD_EDITOR_CONTEXT_MOVE_TO_CENTER = IKey.lang("bbs.ui.world_editor.context.move_to_center");
     public static final IKey WORLD_EDITOR_CONTEXT_MOVE_TO_SELECTION = IKey.lang("bbs.ui.world_editor.context.move_to_selection");
-    public static final IKey WORLD_EDITOR_CONTEXT_PICK_BLOCK = IKey.lang("bbs.ui.world_editor.context.pick_block");
     public static final IKey WORLD_EDITOR_CONTEXT_OPEN_BLOCKS = IKey.lang("bbs.ui.world_editor.context.open_blocks");
+    public static final IKey WORLD_EDITOR_CONTEXT_PICK_BLOCK = IKey.lang("bbs.ui.world_editor.context.pick_block");
     public static final IKey WORLD_EDITOR_CONTEXT_SELECTION_SELECT_FLOATING = IKey.lang("bbs.ui.world_editor.context.selection.select_floating");
+    public static final IKey WORLD_EDITOR_CONTEXT_SELECTION_TITLE = IKey.lang("bbs.ui.world_editor.context.selection.title");
+    public static final IKey WORLD_EDITOR_CONTEXT_TOOLS_TITLE = IKey.lang("bbs.ui.world_editor.context.tools.title");
     public static final IKey WORLD_EDITOR_CONTEXT_UTILITY_REDO = IKey.lang("bbs.ui.world_editor.context.utility.redo");
     public static final IKey WORLD_EDITOR_CONTEXT_UTILITY_RELOAD_CHUNKS = IKey.lang("bbs.ui.world_editor.context.utility.reload_chunks");
     public static final IKey WORLD_EDITOR_CONTEXT_UTILITY_UNDO = IKey.lang("bbs.ui.world_editor.context.utility.undo");
-    public static final IKey WORLD_EDITOR_SCHEMATIC_TITLE = IKey.lang("bbs.ui.world_editor.schematic.title");
     public static final IKey WORLD_EDITOR_SCHEMATIC_BLOCK = IKey.lang("bbs.ui.world_editor.schematic.block");
+    public static final IKey WORLD_EDITOR_SCHEMATIC_TITLE = IKey.lang("bbs.ui.world_editor.schematic.title");
     public static final IKey WORLD_EDITOR_SELECTION_ORIGIN = IKey.lang("bbs.ui.world_editor.selection.origin");
     public static final IKey WORLD_EDITOR_SELECTION_SIZE = IKey.lang("bbs.ui.world_editor.selection.size");
     public static final IKey WORLD_EDITOR_TOOLS_ARC = IKey.lang("bbs.ui.world_editor.tools.arc");
@@ -671,57 +618,42 @@ public class UIKeys
     public static final IKey WORLD_EDITOR_TOOLS_PASTE_SAVE_MODAL_TITLE = IKey.lang("bbs.ui.world_editor.tools.paste.save_modal.title");
     public static final IKey WORLD_EDITOR_TOOLS_SELECTION = IKey.lang("bbs.ui.world_editor.tools.selection");
     public static final IKey WORLD_EDITOR_TOOLS_SMOOTH = IKey.lang("bbs.ui.world_editor.tools.smooth");
+    public static final IKey WORLD_EDITOR_TOOLS_SMOOTH_FACTOR = IKey.lang("bbs.ui.world_editor.tools.smooth.factor");
+    public static final IKey WORLD_EDITOR_TOOLS_SMOOTH_RADIUS = IKey.lang("bbs.ui.world_editor.tools.smooth.radius");
     public static final IKey WORLD_EDITOR_TOOLS_SPHERE = IKey.lang("bbs.ui.world_editor.tools.sphere");
     public static final IKey WORLD_EDITOR_TOOLS_SPRAY = IKey.lang("bbs.ui.world_editor.tools.spray");
     public static final IKey WORLD_EDITOR_TOOLS_SPRAY_CHANCE = IKey.lang("bbs.ui.world_editor.tools.spray.chance");
-    public static final IKey WORLD_EDITOR_TOOLS_SMOOTH_RADIUS = IKey.lang("bbs.ui.world_editor.tools.smooth.radius");
-    public static final IKey WORLD_EDITOR_TOOLS_SMOOTH_FACTOR = IKey.lang("bbs.ui.world_editor.tools.smooth.factor");
-
-    public static final IKey WORLD_OBJECTS_CONTEXT_ADD = IKey.lang("bbs.ui.world_objects.context.add");
-    public static final IKey WORLD_OBJECTS_OBJECTS_PROP_HITBOX = IKey.lang("bbs.ui.world_objects.objects.prop.hitbox");
-    public static final IKey WORLD_OBJECTS_POSITION = IKey.lang("bbs.ui.world_objects.position");
-    public static final IKey WORLD_OBJECTS_ID = IKey.lang("bbs.ui.world_objects.id", "ID", WORLD_OBJECTS_POSITION);
-    public static final IKey WORLD_OBJECTS_ID_TOOLTIP = IKey.lang("bbs.ui.world_objects.id-tooltip", "The ID of this world object that can be referenced by scripts", WORLD_OBJECTS_POSITION);
-    public static final IKey WORLD_OBJECTS_CAMERA_ENABLED = IKey.lang("bbs.ui.world_objects.camera.enabled");
-    public static final IKey WORLD_OBJECTS_CAMERA_COPY_CAMERA = IKey.lang("bbs.ui.world_objects.camera.copy_camera");
-    public static final IKey WORLD_OBJECTS_CAMERA_TEXTURE = IKey.lang("bbs.ui.world_objects.camera.texture");
-    public static final IKey WORLD_OBJECTS_CAMERA_ROTATION = IKey.lang("bbs.ui.world_objects.camera.camera_rotation");
-    public static final IKey WORLD_OBJECT_EDITOR = IKey.lang("bbs.ui.world.object_editor");
-
-    public static final IKey WORLD_CONTEXT_ADD = IKey.lang("bbs.ui.world.context.add");
-    public static final IKey WORLD_CONTEXT_COPY = IKey.lang("bbs.ui.world.context.copy");
-    public static final IKey WORLD_CONTEXT_MOVE_CENTER = IKey.lang("bbs.ui.world.context.move_center");
-    public static final IKey WORLD_CONTEXT_MOVE_TO_CURSOR = IKey.lang("bbs.ui.world.context.move_to_cursor");
-    public static final IKey WORLD_CONTEXT_PASTE = IKey.lang("bbs.ui.world.context.paste");
-    public static final IKey WORLD_CONTEXT_REMOVE = IKey.lang("bbs.ui.world.context.remove");
     public static final IKey WORLD_ENTITY_EDITOR = IKey.lang("bbs.ui.world.entity_editor");
     public static final IKey WORLD_KEYS_CYCLE_PANELS = IKey.lang("bbs.ui.world.keys.cycle_panels");
     public static final IKey WORLD_KEYS_PLAYBACK_SCENE = IKey.lang("bbs.ui.world.keys.playback_scene");
     public static final IKey WORLD_KEYS_RECORD_REPLAY = IKey.lang("bbs.ui.world.keys.record_replay");
-    public static final IKey WORLD_KEYS_TOGGLE_PLAYER = IKey.lang("bbs.ui.world.keys.toggle_player");
-    public static final IKey WORLD_KEYS_TOGGLE_WALK = IKey.lang("bbs.ui.world.keys.toggle_walk");
     public static final IKey WORLD_KEYS_SAVE = IKey.lang("bbs.ui.world.keys.save");
     public static final IKey WORLD_KEYS_TOGGLE_AXES = IKey.lang("bbs.ui.world.keys.toggle_axes");
+    public static final IKey WORLD_KEYS_TOGGLE_PLAYER = IKey.lang("bbs.ui.world.keys.toggle_player");
+    public static final IKey WORLD_KEYS_TOGGLE_WALK = IKey.lang("bbs.ui.world.keys.toggle_walk");
+    public static final IKey WORLD_OBJECTS_CAMERA_COPY_CAMERA = IKey.lang("bbs.ui.world_objects.camera.copy_camera");
+    public static final IKey WORLD_OBJECTS_CAMERA_ENABLED = IKey.lang("bbs.ui.world_objects.camera.enabled");
+    public static final IKey WORLD_OBJECTS_CAMERA_ROTATION = IKey.lang("bbs.ui.world_objects.camera.camera_rotation");
+    public static final IKey WORLD_OBJECTS_CAMERA_TEXTURE = IKey.lang("bbs.ui.world_objects.camera.texture");
+    public static final IKey WORLD_OBJECTS_CONTEXT_ADD = IKey.lang("bbs.ui.world_objects.context.add");
+    public static final IKey WORLD_OBJECTS_ID = IKey.lang("bbs.ui.world_objects.id", "ID", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey WORLD_OBJECTS_ID_TOOLTIP = IKey.lang("bbs.ui.world_objects.id-tooltip", "The ID of this world object that can be referenced by scripts", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey WORLD_OBJECTS_OBJECTS_PROP_HITBOX = IKey.lang("bbs.ui.world_objects.objects.prop.hitbox");
+    public static final IKey WORLD_OBJECTS_POSITION = IKey.lang("bbs.ui.world_objects.position");
+    public static final IKey WORLD_OBJECT_EDITOR = IKey.lang("bbs.ui.world.object_editor");
+    public static final IKey WORLD_SETTINGS = IKey.lang("bbs.ui.world.settings");
+    public static final IKey WORLD_SETTINGS_CONTEXT_SHADING_FROM_CAMERA = IKey.lang("bbs.ui.world.settings.context.shading_from_camera", "From camera", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey WORLD_SETTINGS_FOG = IKey.lang("bbs.ui.world.settings.fog");
+    public static final IKey WORLD_SETTINGS_OPEN_PRESETS = IKey.lang("bbs.ui.world.settings.open_presets");
+    public static final IKey WORLD_SETTINGS_PICK_SKYBOX = IKey.lang("bbs.ui.world.settings.skybox");
+    public static final IKey WORLD_SETTINGS_PRESETS_EMPTY = IKey.lang("bbs.ui.world.settings.presets.empty");
+    public static final IKey WORLD_SETTINGS_PRESETS_SAVE_DESCRIPTION = IKey.lang("bbs.ui.world.settings.presets.save-description");
+    public static final IKey WORLD_SETTINGS_PRESETS_SAVE_TITLE = IKey.lang("bbs.ui.world.settings.presets.save-title");
+    public static final IKey WORLD_SETTINGS_PRESETS_TITLE = IKey.lang("bbs.ui.world.settings.presets.title");
+    public static final IKey WORLD_SETTINGS_SHADING = IKey.lang("bbs.ui.world.settings.shading_direction");
+    public static final IKey WORLD_SETTINGS_SKY = IKey.lang("bbs.ui.world.settings.sky");
     public static final IKey WORLD_WORLDS = IKey.lang("bbs.ui.world.worlds");
     public static final IKey WORLD_WORLD_EDITOR = IKey.lang("bbs.ui.world.world_editor");
-    public static final IKey WORLD_SETTINGS = IKey.lang("bbs.ui.world.settings");
-    public static final IKey WORLD_SETTINGS_FOG = IKey.lang("bbs.ui.world.settings.fog");
-    public static final IKey WORLD_SETTINGS_PICK_SKYBOX = IKey.lang("bbs.ui.world.settings.skybox");
-    public static final IKey WORLD_SETTINGS_PICK_LIGHTMAP = IKey.lang("bbs.ui.world.settings.pick_lightmap");
-    public static final IKey WORLD_SETTINGS_SKY = IKey.lang("bbs.ui.world.settings.sky");
-    public static final IKey WORLD_SETTINGS_ZENITH = IKey.lang("bbs.ui.world.settings.zenith");
-    public static final IKey WORLD_SETTINGS_HORIZON = IKey.lang("bbs.ui.world.settings.horizon");
-    public static final IKey WORLD_SETTINGS_BOTTOM = IKey.lang("bbs.ui.world.settings.bottom");
-    public static final IKey WORLD_SETTINGS_SHADING = IKey.lang("bbs.ui.world.settings.shading_direction");
-    public static final IKey WORLD_SETTINGS_OPEN_PRESETS = IKey.lang("bbs.ui.world.settings.open_presets");
-    public static final IKey WORLD_SETTINGS_PRESETS_TITLE = IKey.lang("bbs.ui.world.settings.presets.title");
-    public static final IKey WORLD_SETTINGS_PRESETS_EMPTY = IKey.lang("bbs.ui.world.settings.presets.empty");
-    public static final IKey WORLD_SETTINGS_CONTEXT_SHADING_FROM_CAMERA = IKey.lang("bbs.ui.world.settings.context.shading_from_camera", "From camera", WORLD_SETTINGS_SHADING);
-    public static final IKey WORLD_SETTINGS_PRESETS_SAVE_TITLE = IKey.lang("bbs.ui.world.settings.presets.save-title");
-    public static final IKey WORLD_SETTINGS_PRESETS_SAVE_DESCRIPTION = IKey.lang("bbs.ui.world.settings.presets.save-description");
-
-    public static final IKey UV_EDITOR_CONTEXT_VIEW = IKey.lang("bbs.ui.uv_editor.context.view");
-    public static final IKey UV_EDITOR_CONTEXT_PLACE = IKey.lang("bbs.ui.uv_editor.context.place");
 
     /* Key collections */
     public static final KeyCollection C_CLIP = new KeyCollection("bbs.ui.camera.clips.^")
@@ -735,7 +667,6 @@ public class UIKeys
     public static final KeyCollection C_ENTITIES = new KeyCollection("bbs.entities.^");
     public static final KeyCollection C_FONT_FORMAT = new KeyCollection("bbs.font_format.^")
         .load(BBS.getFactoryFontFormats().getStringKeys());
-
     public static final KeyCollection C_CURVE_TYPE = new KeyCollection("bbs.ui.snowstorm.curves.types.^")
         .load(EnumUtils.getKeys(ParticleCurveType.class, (c) -> c.id));
     public static final KeyCollection C_INTERPOLATION = new KeyCollection("interpolations.^")

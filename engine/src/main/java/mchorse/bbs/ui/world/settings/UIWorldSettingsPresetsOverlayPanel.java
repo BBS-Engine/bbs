@@ -62,7 +62,7 @@ public class UIWorldSettingsPresetsOverlayPanel extends UIOverlayPanel
             }
         }));
         this.settings.relative(this.content).full().x(6).w(1F, -12);
-        this.settings.search.placeholder(UIKeys.SEARCH);
+        this.settings.search.placeholder(UIKeys.GENERAL_SEARCH);
 
         this.save = new UIIcon(Icons.SAVED, (b) ->
         {

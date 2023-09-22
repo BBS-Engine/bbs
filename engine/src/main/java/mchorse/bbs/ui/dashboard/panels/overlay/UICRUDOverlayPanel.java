@@ -46,7 +46,7 @@ public abstract class UICRUDOverlayPanel extends UIOverlayPanel
         }));
         this.names.relative(this.content).full().x(6).w(1F, -12);
         this.namesList = (UIDataPathList) this.names.list;
-        this.names.label(UIKeys.SEARCH);
+        this.names.label(UIKeys.GENERAL_SEARCH);
         this.content.add(this.names);
 
         this.icons.add(this.add, this.dupe, this.rename, this.remove);
@@ -57,7 +57,7 @@ public abstract class UICRUDOverlayPanel extends UIOverlayPanel
     protected void addNewData(UIIcon element)
     {
         UIPromptOverlayPanel panel = new UIPromptOverlayPanel(
-            UIKeys.ADD,
+            UIKeys.GENERAL_ADD,
             UIKeys.PANELS_MODALS_ADD,
             (str) -> this.addNewData(this.namesList.getPath(str).toString())
         );
@@ -87,7 +87,7 @@ public abstract class UICRUDOverlayPanel extends UIOverlayPanel
     protected void dupeData(UIIcon element)
     {
         UIPromptOverlayPanel panel = new UIPromptOverlayPanel(
-            UIKeys.DUPE,
+            UIKeys.GENERAL_DUPE,
             UIKeys.PANELS_MODALS_DUPE,
             (str) -> this.dupeData(this.namesList.getPath(str).toString())
         );
@@ -103,7 +103,7 @@ public abstract class UICRUDOverlayPanel extends UIOverlayPanel
     protected void renameData(UIIcon element)
     {
         UIPromptOverlayPanel panel = new UIPromptOverlayPanel(
-            UIKeys.RENAME,
+            UIKeys.GENERAL_RENAME,
             UIKeys.PANELS_MODALS_RENAME,
             (str) -> this.renameData(this.namesList.getPath(str).toString())
         );
@@ -135,7 +135,7 @@ public abstract class UICRUDOverlayPanel extends UIOverlayPanel
     protected void removeData(UIIcon element)
     {
         UIConfirmOverlayPanel panel = new UIConfirmOverlayPanel(
-            UIKeys.REMOVE,
+            UIKeys.GENERAL_REMOVE,
             UIKeys.PANELS_MODALS_REMOVE,
             (confirm) ->
             {

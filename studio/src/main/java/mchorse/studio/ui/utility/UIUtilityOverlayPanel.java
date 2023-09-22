@@ -135,7 +135,7 @@ public class UIUtilityOverlayPanel extends UIOverlayPanel
     {
         L10nUtils.compile(BBS.getExportFolder(), BBS.getL10n().getStrings());
 
-        UIMessageFolderOverlayPanel panel = new UIMessageFolderOverlayPanel(UIKeys.SUCCESS, UIKeysApp.UTILITY_COMPILE_LANG_DESCRIPTION, BBS.getExportFolder());
+        UIMessageFolderOverlayPanel panel = new UIMessageFolderOverlayPanel(UIKeys.GENERAL_SUCCESS, UIKeysApp.UTILITY_COMPILE_LANG_DESCRIPTION, BBS.getExportFolder());
         UIOverlay.addOverlay(this.getContext(), panel);
     }
 

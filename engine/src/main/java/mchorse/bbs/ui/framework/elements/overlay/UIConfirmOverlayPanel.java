@@ -20,7 +20,7 @@ public class UIConfirmOverlayPanel extends UIMessageOverlayPanel
 
         this.callback = callback;
 
-        this.confirm = new UIButton(UIKeys.OK, (b) -> this.confirm());
+        this.confirm = new UIButton(UIKeys.GENERAL_OK, (b) -> this.confirm());
 
         this.confirm.relative(this.content).x(0.5F).y(1F, -10).w(80).anchor(0.5F, 1F);
         this.content.add(this.confirm);

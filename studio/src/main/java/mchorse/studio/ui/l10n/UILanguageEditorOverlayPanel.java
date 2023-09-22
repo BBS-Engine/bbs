@@ -93,7 +93,7 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
         this.missing = new UIIcon(Icons.SEARCH, (b) -> this.viewOnlyMissing());
         this.missing.tooltip(UIKeysApp.LANGUAGE_EDITOR_MISSING);
         this.search = new UITextbox(this::search);
-        this.search.placeholder(UIKeys.SEARCH);
+        this.search.placeholder(UIKeys.GENERAL_SEARCH);
         this.keysView = UI.scrollView(10, 6);
 
         this.missing.relative(this.content).x(1F, -26);
@@ -293,7 +293,7 @@ public class UILanguageEditorOverlayPanel extends UIOverlayPanel
 
     private void paste()
     {
-        UITextareaOverlayPanel panel = new UITextareaOverlayPanel(UIKeys.PASTE, UIKeysApp.LANGUAGE_EDITOR_PASTE_DESCRIPTION, (t) ->
+        UITextareaOverlayPanel panel = new UITextareaOverlayPanel(UIKeys.GENERAL_PASTE, UIKeysApp.LANGUAGE_EDITOR_PASTE_DESCRIPTION, (t) ->
         {
             MapType map = DataToString.mapFromString(t);
 

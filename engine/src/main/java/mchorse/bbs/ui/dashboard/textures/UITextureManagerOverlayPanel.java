@@ -76,7 +76,7 @@ public class UITextureManagerOverlayPanel extends UIOverlayPanel
                 this.panel.pickLink(rl.get(0));
             }
         }));
-        this.textures.label(UIKeys.SEARCH);
+        this.textures.label(UIKeys.GENERAL_SEARCH);
         this.textures.relative(this.content).full().x(6).w(1F, -12);
 
         this.linear = new UIIcon(Icons.GRAPH, (b) -> this.toggleLinear());

@@ -65,7 +65,7 @@ public class UICurveEditor extends UIElement
     {
         String oldName = this.particleCurve.variable.getName();
         UIPromptOverlayPanel panel = new UIPromptOverlayPanel(
-            UIKeys.RENAME,
+            UIKeys.GENERAL_RENAME,
             UIKeys.SNOWSTORM_CURVES_RENAME_OVERLAY,
             (newName) ->
             {

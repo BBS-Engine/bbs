@@ -30,12 +30,12 @@ public class UIListOverlayPanel extends UIMessageOverlayPanel
             }
         };
 
-        this.confirm = new UIButton(UIKeys.OK, (b) -> this.send());
+        this.confirm = new UIButton(UIKeys.GENERAL_OK, (b) -> this.send());
         this.confirm.relative(this.content).x(0.5F).y(1F, -10).w(100).anchor(0.5F, 1F);
 
         this.list = new UIStringList(null);
         this.list.relative(this.message).x(0.5F).y(1F, 10).w(100).hTo(this.confirm.area).anchorX(0.5F);
-        this.list.add(UIKeys.NONE.get());
+        this.list.add(UIKeys.GENERAL_NONE.get());
         this.list.setIndex(0);
 
         this.content.add(this.confirm, this.list);

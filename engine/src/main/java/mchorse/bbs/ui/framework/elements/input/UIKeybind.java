@@ -117,7 +117,7 @@ public class UIKeybind extends UIElement
     @Override
     public void render(UIContext context)
     {
-        String label = this.combo.keys.isEmpty() ? UIKeys.NONE.get() : this.combo.getKeyCombo();
+        String label = this.combo.keys.isEmpty() ? UIKeys.GENERAL_NONE.get() : this.combo.getKeyCombo();
         int w = context.font.getWidth(label) - 1;
 
         if (this.reading)

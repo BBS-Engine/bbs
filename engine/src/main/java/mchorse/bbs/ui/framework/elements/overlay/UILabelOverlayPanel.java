@@ -7,7 +7,6 @@ import mchorse.bbs.ui.framework.elements.input.list.UISearchList;
 import mchorse.bbs.ui.utils.Label;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.function.Consumer;
 
 public class UILabelOverlayPanel <T> extends UIOverlayPanel
@@ -23,7 +22,7 @@ public class UILabelOverlayPanel <T> extends UIOverlayPanel
         this.callback = callback;
 
         this.labels = new UISearchList<>(new UILabelList<>((list) -> this.accept(list.get(0))));
-        this.labels.label(UIKeys.SEARCH);
+        this.labels.label(UIKeys.GENERAL_SEARCH);
         this.labels.relative(this.content).full().x(6).w(1F, -12);
 
         for (Label<T> location : keys)

@@ -44,7 +44,7 @@ public abstract class UICommonWorldEditor <T> extends UIWorldPanel
 
         this.objects = this.createSearchList((l) -> this.fill(l.get(0), false));
         this.objects.list.cancelScrollEdge();
-        this.objects.label(UIKeys.SEARCH);
+        this.objects.label(UIKeys.GENERAL_SEARCH);
         this.objects.context((m) ->
         {
             MapType type = Window.getClipboardMap("_Copy" + this.getClass().getSimpleName());

@@ -17,8 +17,8 @@ public class UINestedEdit extends UIElement
     {
         super();
 
-        this.edit = new UIButton(UIKeys.EDIT, (b) -> callback.accept(true));
-        this.pick = new UIButton(UIKeys.PICK, (b) -> callback.accept(false));
+        this.edit = new UIButton(UIKeys.GENERAL_EDIT, (b) -> callback.accept(true));
+        this.pick = new UIButton(UIKeys.GENERAL_PICK, (b) -> callback.accept(false));
 
         this.edit.relative(this).h(1F);
         this.pick.relative(this).h(1F);

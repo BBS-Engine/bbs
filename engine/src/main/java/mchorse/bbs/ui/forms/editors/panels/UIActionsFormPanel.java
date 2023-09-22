@@ -36,7 +36,7 @@ public class UIActionsFormPanel extends UIFormPanel<ModelForm>
             this.action.name = l.get(0);
             this.form.resetAnimator();
         }));
-        this.pickAction.label(UIKeys.SEARCH).list.background();
+        this.pickAction.label(UIKeys.GENERAL_SEARCH).list.background();
         this.pickAction.h(132);
         this.loop = new UIToggle(UIKeys.FORMS_EDITORS_ACTIONS_LOOPS, (b) ->
         {

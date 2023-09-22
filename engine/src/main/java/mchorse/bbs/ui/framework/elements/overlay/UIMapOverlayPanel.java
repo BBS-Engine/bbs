@@ -75,7 +75,7 @@ public abstract class UIMapOverlayPanel <T extends IMapSerializable> extends UIS
     private void addState()
     {
         UIPromptOverlayPanel panel = new UIPromptOverlayPanel(
-            UIKeys.ADD,
+            UIKeys.GENERAL_ADD,
             this.addOverlay,
             (name) -> this.addState(name, null)
         );
@@ -112,7 +112,7 @@ public abstract class UIMapOverlayPanel <T extends IMapSerializable> extends UIS
     protected void pasteState(T state)
     {
         UIPromptOverlayPanel panel = new UIPromptOverlayPanel(
-            UIKeys.PASTE,
+            UIKeys.GENERAL_PASTE,
             this.pasteOverlay,
             (name) -> this.addState(name, state)
         );
@@ -123,7 +123,7 @@ public abstract class UIMapOverlayPanel <T extends IMapSerializable> extends UIS
     private void renameState()
     {
         UIPromptOverlayPanel panel = new UIPromptOverlayPanel(
-            UIKeys.RENAME,
+            UIKeys.GENERAL_RENAME,
             this.renameOverlay,
             this::renameState
         );
@@ -154,7 +154,7 @@ public abstract class UIMapOverlayPanel <T extends IMapSerializable> extends UIS
     private void removeState()
     {
         UIConfirmOverlayPanel panel = new UIConfirmOverlayPanel(
-            UIKeys.CONFIRM,
+            UIKeys.GENERAL_CONFIRM,
             this.removeOverlay,
             this::removeState
         );

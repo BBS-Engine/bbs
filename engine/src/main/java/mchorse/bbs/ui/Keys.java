@@ -13,9 +13,9 @@ public class Keys
     public static final KeyCombo PREV = new KeyCombo(UIKeys.CAMERA_EDITOR_KEYS_EDITOR_PREV, GLFW.GLFW_KEY_LEFT).repeatable();
     public static final KeyCombo REDO = new KeyCombo(UIKeys.CAMERA_EDITOR_KEYS_EDITOR_REDO, GLFW.GLFW_KEY_Y, GLFW.GLFW_KEY_LEFT_CONTROL);
     public static final KeyCombo UNDO = new KeyCombo(UIKeys.CAMERA_EDITOR_KEYS_EDITOR_UNDO, GLFW.GLFW_KEY_Z, GLFW.GLFW_KEY_LEFT_CONTROL);
-    public static final KeyCombo COPY = new KeyCombo(UIKeys.COPY, GLFW.GLFW_KEY_C, GLFW.GLFW_KEY_LEFT_CONTROL);
-    public static final KeyCombo PASTE = new KeyCombo(UIKeys.PASTE, GLFW.GLFW_KEY_V, GLFW.GLFW_KEY_LEFT_CONTROL);
-    public static final KeyCombo SAVE = new KeyCombo(UIKeys.SAVE, GLFW.GLFW_KEY_S, GLFW.GLFW_KEY_LEFT_CONTROL);
+    public static final KeyCombo COPY = new KeyCombo(UIKeys.GENERAL_COPY, GLFW.GLFW_KEY_C, GLFW.GLFW_KEY_LEFT_CONTROL);
+    public static final KeyCombo PASTE = new KeyCombo(UIKeys.GENERAL_PASTE, GLFW.GLFW_KEY_V, GLFW.GLFW_KEY_LEFT_CONTROL);
+    public static final KeyCombo SAVE = new KeyCombo(UIKeys.GENERAL_SAVE, GLFW.GLFW_KEY_S, GLFW.GLFW_KEY_LEFT_CONTROL);
 
     /* Camera editor */
     public static final KeyCombo ADD_AT_CURSOR = new KeyCombo(UIKeys.CAMERA_TIMELINE_CONTEXT_ADD_AT_CURSOR, GLFW.GLFW_KEY_A, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("camera");
@@ -54,10 +54,10 @@ public class Keys
 
     /* Forms */
     public static final KeyCombo FORMS_FOCUS = new KeyCombo(UIKeys.FORMS_LIST_CONTEXT_FOCUS, GLFW.GLFW_KEY_F, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("forms");
-    public static final KeyCombo FORMS_PICK = new KeyCombo(UIKeys.PICK, GLFW.GLFW_KEY_P).categoryKey("forms");
-    public static final KeyCombo FORMS_EDIT = new KeyCombo(UIKeys.EDIT, GLFW.GLFW_KEY_E).categoryKey("forms");
-    public static final KeyCombo FORMS_PICK_ALT = new KeyCombo(UIKeys.PICK, GLFW.GLFW_KEY_P, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("forms");
-    public static final KeyCombo FORMS_EDIT_ALT = new KeyCombo(UIKeys.EDIT, GLFW.GLFW_KEY_E, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("forms");
+    public static final KeyCombo FORMS_PICK = new KeyCombo(UIKeys.GENERAL_PICK, GLFW.GLFW_KEY_P).categoryKey("forms");
+    public static final KeyCombo FORMS_EDIT = new KeyCombo(UIKeys.GENERAL_EDIT, GLFW.GLFW_KEY_E).categoryKey("forms");
+    public static final KeyCombo FORMS_PICK_ALT = new KeyCombo(UIKeys.GENERAL_PICK, GLFW.GLFW_KEY_P, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("forms");
+    public static final KeyCombo FORMS_EDIT_ALT = new KeyCombo(UIKeys.GENERAL_EDIT, GLFW.GLFW_KEY_E, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("forms");
 
     /* Pixel editor */
     public static final KeyCombo PIXEL_COPY = new KeyCombo(UIKeys.TEXTURES_VIEWER_CONTEXT_COPY_HEX, GLFW.GLFW_KEY_C, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("pixels");

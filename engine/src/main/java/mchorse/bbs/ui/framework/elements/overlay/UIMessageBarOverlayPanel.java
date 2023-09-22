@@ -15,7 +15,7 @@ public abstract class UIMessageBarOverlayPanel extends UIMessageOverlayPanel
     {
         super(title, message);
 
-        this.confirm = new UIButton(UIKeys.OK, (b) -> this.confirm());
+        this.confirm = new UIButton(UIKeys.GENERAL_OK, (b) -> this.confirm());
         this.bar = UI.row(this.confirm);
 
         this.confirm.w(80);

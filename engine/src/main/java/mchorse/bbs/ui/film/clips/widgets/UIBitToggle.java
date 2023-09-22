@@ -33,9 +33,9 @@ public class UIBitToggle extends UIElement
 
     public UIBitToggle point()
     {
-        this.bits.add(new Bit(UIKeys.X, Colors.RED));
-        this.bits.add(new Bit(UIKeys.Y, Colors.GREEN));
-        this.bits.add(new Bit(UIKeys.Z, Colors.BLUE));
+        this.bits.add(new Bit(UIKeys.GENERAL_X, Colors.RED));
+        this.bits.add(new Bit(UIKeys.GENERAL_Y, Colors.GREEN));
+        this.bits.add(new Bit(UIKeys.GENERAL_Z, Colors.BLUE));
 
         return this;
     }

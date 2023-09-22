@@ -66,7 +66,7 @@ public class UIDataUtils
         context.batcher.dropCircleShadow(area.mx(), area.my() + (int) (factor * 70), 16, 0, 16, Colors.A50 | primary, primary);
         InputRenderer.renderMouseButtons(context.batcher, area.mx() - 6, area.my() - 8 + offset, 0, false, factor2 > 0, false, false);
 
-        String label = UIKeys.RIGHT_CLICK.get();
+        String label = UIKeys.GENERAL_RIGHT_CLICK.get();
         int w = (int) (area.w / 1.1F);
         int color = Colors.mulRGB(0x444444, 1 - (float) factor);
 

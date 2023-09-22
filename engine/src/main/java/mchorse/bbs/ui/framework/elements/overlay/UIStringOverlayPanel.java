@@ -49,7 +49,7 @@ public class UIStringOverlayPanel extends UIOverlayPanel
         this.callback = callback;
 
         this.strings = new UISearchList<>(new UIStringList((list) -> this.accept(list.get(0))));
-        this.strings.label(UIKeys.SEARCH);
+        this.strings.label(UIKeys.GENERAL_SEARCH);
         this.strings.relative(this.content).full().x(6).w(1F, -12);
 
         this.strings.list.add(strings);
@@ -58,7 +58,7 @@ public class UIStringOverlayPanel extends UIOverlayPanel
 
         if (this.none)
         {
-            this.strings.list.getList().add(0, UIKeys.NONE.get());
+            this.strings.list.getList().add(0, UIKeys.GENERAL_NONE.get());
             this.strings.list.update();
         }
 

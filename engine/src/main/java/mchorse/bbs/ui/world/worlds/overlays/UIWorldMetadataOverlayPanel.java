@@ -20,7 +20,6 @@ import mchorse.bbs.ui.framework.elements.overlay.UIConfirmOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
-import mchorse.bbs.ui.framework.elements.overlay.UIStringOverlayPanel;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.world.worlds.UIRange;
 import mchorse.bbs.utils.colors.Colors;
@@ -28,7 +27,6 @@ import mchorse.bbs.voxel.generation.Generator;
 import mchorse.bbs.voxel.tilesets.BlockSet;
 import mchorse.bbs.world.WorldMetadata;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -289,7 +287,7 @@ public class UIWorldMetadataOverlayPanel extends UIOverlayPanel
         if (this.id.getText().trim().isEmpty())
         {
             UIOverlay.addOverlay(this.getContext(), new UIMessageOverlayPanel(
-                UIKeys.WARNING,
+                UIKeys.GENERAL_WARNING,
                 UIKeys.WORLDS_OPTIONS_WARNING_WORLD_ID
             ));
 
@@ -304,7 +302,7 @@ public class UIWorldMetadataOverlayPanel extends UIOverlayPanel
         if (this.isMetadataEmpty(this.metadata.metadata) && !this.iDontCare)
         {
             UIOverlay.addOverlay(this.getContext(), new UIConfirmOverlayPanel(
-                UIKeys.WARNING,
+                UIKeys.GENERAL_WARNING,
                 UIKeys.WORLDS_OPTIONS_WARNING_EMPTY_DATA,
                 (confirm) -> this.iDontCare = confirm
             ));

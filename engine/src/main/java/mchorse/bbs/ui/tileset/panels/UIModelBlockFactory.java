@@ -143,7 +143,7 @@ public class UIModelBlockFactory <T extends BlockModelFactory> extends UIElement
 
     private void showRename()
     {
-        UIPromptOverlayPanel panel = new UIPromptOverlayPanel(UIKeys.RENAME, UIKeys.TILE_SET_GENERAL_RENAME_DESCRIPTION, this::renameBlockId);
+        UIPromptOverlayPanel panel = new UIPromptOverlayPanel(UIKeys.GENERAL_RENAME, UIKeys.TILE_SET_GENERAL_RENAME_DESCRIPTION, this::renameBlockId);
 
         panel.text.setText(this.model.blockId.toString());
         UIOverlay.addOverlay(this.getContext(), panel);

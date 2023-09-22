@@ -39,9 +39,9 @@ public class UIParticleSchemeMotionSection extends UIParticleSchemeModeSection<P
         {
             this.editMoLang("motion.speed", (str) -> this.speed.speed = this.parse(str, this.speed.speed), this.speed.speed);
         });
-        this.positionX = new UIButton(UIKeys.X, (str) -> this.updatePosition(0));
-        this.positionY = new UIButton(UIKeys.Y, (str) -> this.updatePosition(1));
-        this.positionZ = new UIButton(UIKeys.Z, (str) -> this.updatePosition(2));
+        this.positionX = new UIButton(UIKeys.GENERAL_X, (str) -> this.updatePosition(0));
+        this.positionY = new UIButton(UIKeys.GENERAL_Y, (str) -> this.updatePosition(1));
+        this.positionZ = new UIButton(UIKeys.GENERAL_Z, (str) -> this.updatePosition(2));
         this.positionDrag = new UIButton(UIKeys.SNOWSTORM_MOTION_POSITION_DRAG, (b) ->
         {
             ParticleComponentMotionDynamic component = (ParticleComponentMotionDynamic) this.component;

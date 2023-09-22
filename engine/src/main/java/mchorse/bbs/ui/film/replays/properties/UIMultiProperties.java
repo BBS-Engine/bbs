@@ -439,7 +439,7 @@ public class UIMultiProperties extends UIProperties
     /* Rendering */
 
     @Override
-    protected void renderGraph(UIContext context, int mouseX, int mouseY)
+    protected void renderGraph(UIContext context)
     {
         /* Draw dope property */
         int propertyCount = this.properties.size();

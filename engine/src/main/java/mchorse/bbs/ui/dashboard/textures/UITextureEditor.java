@@ -70,7 +70,7 @@ public class UITextureEditor extends UIPixelsEditor
     private void saveTexture()
     {
         UIPromptOverlayPanel panel = new UIPromptOverlayPanel(
-            UIKeys.EXPORT,
+            UIKeys.GENERAL_EXPORT,
             UIKeys.TEXTURES_SAVE,
             this::saveTexture
         );

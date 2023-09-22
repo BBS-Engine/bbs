@@ -40,15 +40,15 @@ public class UIParticleSchemeShapeSection extends UIParticleSchemeModeSection<Pa
     {
         super(parent);
 
-        this.offsetX = new UIButton(UIKeys.X, (b) ->
+        this.offsetX = new UIButton(UIKeys.GENERAL_X, (b) ->
         {
             this.editMoLang("shape.offset_x", (str) -> this.component.offset[0] = this.parse(str, this.component.offset[0]), this.component.offset[0]);
         });
-        this.offsetY = new UIButton(UIKeys.Y, (b) ->
+        this.offsetY = new UIButton(UIKeys.GENERAL_Y, (b) ->
         {
             this.editMoLang("shape.offset_y", (str) -> this.component.offset[1] = this.parse(str, this.component.offset[1]), this.component.offset[1]);
         });
-        this.offsetZ = new UIButton(UIKeys.Z, (b) ->
+        this.offsetZ = new UIButton(UIKeys.GENERAL_Z, (b) ->
         {
             this.editMoLang("shape.offset_z", (str) -> this.component.offset[2] = this.parse(str, this.component.offset[2]), this.component.offset[2]);
         });
@@ -69,9 +69,9 @@ public class UIParticleSchemeShapeSection extends UIParticleSchemeModeSection<Pa
         });
 
         this.label = UI.label(IKey.EMPTY, 20).labelAnchor(0, 1F);
-        this.x = new UIButton(UIKeys.X, (str) -> this.updateNormalDimension(0));
-        this.y = new UIButton(UIKeys.Y, (str) -> this.updateNormalDimension(1));
-        this.z = new UIButton(UIKeys.Z, (str) -> this.updateNormalDimension(2));
+        this.x = new UIButton(UIKeys.GENERAL_X, (str) -> this.updateNormalDimension(0));
+        this.y = new UIButton(UIKeys.GENERAL_Y, (str) -> this.updateNormalDimension(1));
+        this.z = new UIButton(UIKeys.GENERAL_Z, (str) -> this.updateNormalDimension(2));
         this.xyz = UI.row(this.x, this.y, this.z);
 
         this.modeLabel.label = UIKeys.SNOWSTORM_SHAPE_SHAPE;
@@ -232,19 +232,19 @@ public class UIParticleSchemeShapeSection extends UIParticleSchemeModeSection<Pa
             this.mode.addLabel(UIKeys.SNOWSTORM_SHAPE_DIRECTION_INWARDS);
             this.mode.addLabel(UIKeys.SNOWSTORM_SHAPE_DIRECTION_VECTOR);
 
-            this.x = new UIButton(UIKeys.X, (b) ->
+            this.x = new UIButton(UIKeys.GENERAL_X, (b) ->
             {
                 ShapeDirectionVector vector = this.getVector();
 
                 this.parent.editMoLang("shape.vector.z", (str) -> vector.x = this.parent.parse(str, vector.x), vector.x);
             });
-            this.y = new UIButton(UIKeys.Y, (b) ->
+            this.y = new UIButton(UIKeys.GENERAL_Y, (b) ->
             {
                 ShapeDirectionVector vector = this.getVector();
 
                 this.parent.editMoLang("shape.vector.y", (str) -> vector.y = this.parent.parse(str, vector.y), vector.y);
             });
-            this.z = new UIButton(UIKeys.Z, (b) ->
+            this.z = new UIButton(UIKeys.GENERAL_Z, (b) ->
             {
                 ShapeDirectionVector vector = this.getVector();
 
