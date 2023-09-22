@@ -752,7 +752,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         int w = (int) (area.w * BBSSettings.audioWaveformWidth.get());
         int x = area.x(0.5F, w);
 
-        AudioRenderer.renderAll(context.batcher, x, area.y + 40, w, BBSSettings.audioWaveformHeight.get(), this.dashboard.width, this.dashboard.height);
+        AudioRenderer.renderAll(context.batcher, x, this.area.y + 10, w, BBSSettings.audioWaveformHeight.get(), this.dashboard.width, this.dashboard.height);
     }
 
     @Override

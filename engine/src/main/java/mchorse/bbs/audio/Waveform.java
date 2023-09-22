@@ -5,7 +5,7 @@ import mchorse.bbs.ui.framework.elements.utils.Batcher2D;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.resources.Pixels;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL13;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +76,7 @@ public class Waveform
             texture.bind();
             texture.uploadTexture(pixels);
             texture.setFilter(GL11.GL_NEAREST);
-            texture.setParameter(GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+            texture.setParameter(GL11.GL_TEXTURE_WRAP_S, GL13.GL_CLAMP_TO_BORDER);
             texture.unbind();
 
             this.sprites.add(texture);
