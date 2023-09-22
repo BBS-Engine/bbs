@@ -115,8 +115,6 @@ public class UIClips extends UIElement
     {
         super();
 
-        this.scale.anchor(0.5F);
-
         this.delegate = delegate;
         this.factory = factory;
 
@@ -704,6 +702,8 @@ public class UIClips extends UIElement
     {
         this.clips = clips;
         this.addPreview = null;
+
+        this.scale.anchor(0F);
 
         this.updateScrollSize();
         this.vertical.scrollToEnd();
