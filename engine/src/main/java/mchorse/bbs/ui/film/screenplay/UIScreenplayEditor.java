@@ -275,7 +275,7 @@ public class UIScreenplayEditor extends UIElement
 
         uiAction.context((menu) ->
         {
-            menu.action(Icons.REMOVE, IKey.lazy("Remove replay"), Colors.NEGATIVE, () ->
+            menu.action(Icons.REMOVE, IKey.lazy("Remove action"), Colors.NEGATIVE, () ->
             {
                 this.screenplay.removeAction(action);
                 uiAction.removeFromParent();
