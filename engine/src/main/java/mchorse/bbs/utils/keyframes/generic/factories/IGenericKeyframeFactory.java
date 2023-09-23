@@ -1,8 +1,8 @@
 package mchorse.bbs.utils.keyframes.generic.factories;
 
 import mchorse.bbs.data.types.BaseType;
-import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
-import mchorse.bbs.ui.film.replays.properties.factories.UIKeyframeFactory;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories.UIKeyframeFactory;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 import mchorse.bbs.utils.math.IInterpolation;
 

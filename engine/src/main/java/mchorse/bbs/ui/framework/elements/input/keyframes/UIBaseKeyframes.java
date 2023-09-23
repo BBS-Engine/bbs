@@ -1,30 +1,23 @@
-package mchorse.bbs.ui.film.replays.properties;
+package mchorse.bbs.ui.framework.elements.input.keyframes;
 
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
-import mchorse.bbs.ui.framework.elements.input.keyframes.IAxisConverter;
 import mchorse.bbs.ui.utils.Scale;
 import mchorse.bbs.utils.OS;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.utils.colors.Colors;
-import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
-import mchorse.bbs.utils.math.IInterpolation;
 
-import java.util.List;
 import java.util.function.Consumer;
 
-public abstract class UIProperties extends UIElement
+public abstract class UIBaseKeyframes <T> extends UIElement
 {
     public static final Color COLOR = new Color();
-
-    public Consumer<GenericKeyframe> callback;
-    public int duration;
-
     public static final double MIN_ZOOM = 0.01D;
     public static final double MAX_ZOOM = 1000D;
 
-    protected boolean selected;
+    public Consumer<T> callback;
+    public int duration;
 
     /**
      * Sliding flag, whether keyframes should be sorted after
@@ -56,15 +49,16 @@ public abstract class UIProperties extends UIElement
      */
     protected boolean grabbing;
 
+    /* Last mouse and values */
     protected int lastX;
     protected int lastY;
     protected double lastT;
+    protected double lastV;
 
     protected Scale scaleX;
-
     protected IAxisConverter converter;
 
-    public UIProperties(Consumer<GenericKeyframe> callback)
+    public UIBaseKeyframes(Consumer<T> callback)
     {
         super();
 
@@ -83,7 +77,7 @@ public abstract class UIProperties extends UIElement
         return this.scaleX;
     }
 
-    protected void setKeyframe(GenericKeyframe current)
+    public void setKeyframe(T current)
     {
         if (this.callback != null)
         {
@@ -92,12 +86,6 @@ public abstract class UIProperties extends UIElement
     }
 
     /* Setters */
-
-    public abstract void setTick(double tick);
-
-    public abstract void setValue(Object value);
-
-    public abstract void setInterpolation(IInterpolation interp);
 
     public void setDuration(long duration)
     {
@@ -120,28 +108,6 @@ public abstract class UIProperties extends UIElement
 
     /* Abstract methods */
 
-    public abstract GenericKeyframe getCurrent();
-
-    public abstract List<UIProperty> getProperties();
-
-    public UIProperty getProperty(GenericKeyframe keyframe)
-    {
-        for (UIProperty property : this.getProperties())
-        {
-            for (Object object : property.channel.getKeyframes())
-            {
-                if (object == keyframe)
-                {
-                    return property;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public abstract UIProperty getProperty(int mouseY);
-
     public boolean isGrabbing()
     {
         return this.dragging && this.moving && this.grabbing;
@@ -153,6 +119,8 @@ public abstract class UIProperties extends UIElement
     public abstract void selectAll();
 
     public abstract int getSelectedCount();
+
+    public abstract boolean isSelected();
 
     public boolean isMultipleSelected()
     {
@@ -166,17 +134,7 @@ public abstract class UIProperties extends UIElement
 
     public abstract void clearSelection();
 
-    public void doubleClick(int mouseX, int mouseY)
-    {
-        if (!this.selected)
-        {
-            this.addCurrent(mouseX, mouseY);
-        }
-        else if (!this.isMultipleSelected())
-        {
-            this.removeCurrent();
-        }
-    }
+    public abstract void doubleClick(int mouseX, int mouseY);
 
     public abstract void addCurrent(int mouseX, int mouseY);
 
@@ -186,10 +144,7 @@ public abstract class UIProperties extends UIElement
 
     /* Common hooks */
 
-    protected void moveNoKeyframe(UIContext context, GenericKeyframe frame, double x, double y)
-    {}
-
-    protected void renderCursor(UIContext context)
+    protected void moveNoKeyframe(UIContext context, double x, double y)
     {}
 
     /* Mouse input handling */
@@ -208,7 +163,7 @@ public abstract class UIProperties extends UIElement
                 boolean shift = Window.isShiftPressed();
 
                 /* Duplicate the keyframe */
-                if (Window.isAltPressed() && !shift && this.selected)
+                if (Window.isAltPressed() && !shift && this.isSelected())
                 {
                     this.duplicateKeyframe(context, mouseX, mouseY);
 
@@ -282,23 +237,6 @@ public abstract class UIProperties extends UIElement
     @Override
     public boolean subMouseReleased(UIContext context)
     {
-        if (this.selected)
-        {
-            if (this.sliding)
-            {
-                /* Resort after dragging the tick thing */
-                for (UIProperty property : this.getProperties())
-                {
-                    if (!property.selected.isEmpty())
-                    {
-                        property.sort();
-                    }
-                }
-
-                this.sliding = false;
-            }
-        }
-
         this.resetMouseReleased(context);
 
         return super.subMouseReleased(context);
@@ -376,6 +314,9 @@ public abstract class UIProperties extends UIElement
         }
     }
 
+    protected void renderCursor(UIContext context)
+    {}
+
     protected abstract void renderGraph(UIContext context);
 
     protected void renderRect(UIContext context, int x, int y, int offset, int c)
@@ -411,8 +352,5 @@ public abstract class UIProperties extends UIElement
         this.scaleX.setShift(-(mouseX - this.lastX) / this.scaleX.getZoom() + this.lastT);
     }
 
-    protected GenericKeyframe moving(UIContext context, int mouseX, int mouseY)
-    {
-        return null;
-    }
+    protected abstract T moving(UIContext context, int mouseX, int mouseY);
 }

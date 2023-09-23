@@ -1,4 +1,4 @@
-package mchorse.bbs.ui.film.replays.properties;
+package mchorse.bbs.ui.framework.elements.input.keyframes.generic;
 
 import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.graphics.line.LineBuilder;
@@ -7,6 +7,7 @@ import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.UIClips;
 import mchorse.bbs.ui.framework.UIContext;
+import mchorse.bbs.ui.framework.elements.input.keyframes.UIBaseKeyframes;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
@@ -19,15 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class UIMultiProperties extends UIProperties
+public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
 {
     public static final int TOP_MARGIN = 15;
 
+    public boolean selected;
     public List<UIProperty> properties = new ArrayList<>();
 
     private IUIClipsDelegate delegate;
 
-    public UIMultiProperties(IUIClipsDelegate delegate, Consumer<GenericKeyframe> callback)
+    public UIProperties(IUIClipsDelegate delegate, Consumer<GenericKeyframe> callback)
     {
         super(callback);
 
@@ -36,7 +38,6 @@ public class UIMultiProperties extends UIProperties
 
     /* Implementation of setters */
 
-    @Override
     public void setTick(double tick)
     {
         if (this.isMultipleSelected())
@@ -58,7 +59,6 @@ public class UIMultiProperties extends UIProperties
         this.sliding = true;
     }
 
-    @Override
     public void setValue(Object value)
     {
         GenericKeyframe current = this.getCurrent();
@@ -79,7 +79,6 @@ public class UIMultiProperties extends UIProperties
         }
     }
 
-    @Override
     public void setInterpolation(IInterpolation interp)
     {
         for (UIProperty property : this.properties)
@@ -130,7 +129,6 @@ public class UIMultiProperties extends UIProperties
         }
     }
 
-    @Override
     public GenericKeyframe getCurrent()
     {
         UIProperty current = this.getCurrentSheet();
@@ -138,13 +136,27 @@ public class UIMultiProperties extends UIProperties
         return current == null ? null : current.getKeyframe();
     }
 
-    @Override
     public List<UIProperty> getProperties()
     {
         return this.properties;
     }
 
-    @Override
+    public UIProperty getProperty(GenericKeyframe keyframe)
+    {
+        for (UIProperty property : this.getProperties())
+        {
+            for (Object object : property.channel.getKeyframes())
+            {
+                if (object == keyframe)
+                {
+                    return property;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public UIProperty getProperty(int mouseY)
     {
         List<UIProperty> properties = this.properties;
@@ -299,6 +311,25 @@ public class UIMultiProperties extends UIProperties
     /* Mouse input handling */
 
     @Override
+    public boolean isSelected()
+    {
+        return this.selected;
+    }
+
+    @Override
+    public void doubleClick(int mouseX, int mouseY)
+    {
+        if (!this.selected)
+        {
+            this.addCurrent(mouseX, mouseY);
+        }
+        else if (!this.isMultipleSelected())
+        {
+            this.removeCurrent();
+        }
+    }
+
+    @Override
     protected void duplicateKeyframe(UIContext context, int mouseX, int mouseY)
     {
         long offset = (long) this.fromGraphX(mouseX);
@@ -393,6 +424,23 @@ public class UIMultiProperties extends UIProperties
     @Override
     protected void resetMouseReleased(UIContext context)
     {
+        if (this.selected)
+        {
+            if (this.sliding)
+            {
+                /* Resort after dragging the tick thing */
+                for (UIProperty property : this.getProperties())
+                {
+                    if (!property.selected.isEmpty())
+                    {
+                        property.sort();
+                    }
+                }
+
+                this.sliding = false;
+            }
+        }
+
         if (this.isGrabbing())
         {
             /* Multi select */
@@ -517,7 +565,7 @@ public class UIMultiProperties extends UIProperties
 
         if (!this.selected)
         {
-            this.moveNoKeyframe(context, frame, x, 0);
+            this.moveNoKeyframe(context, x, 0);
         }
         else
         {
@@ -538,7 +586,7 @@ public class UIMultiProperties extends UIProperties
     /* ... */
 
     @Override
-    protected void moveNoKeyframe(UIContext context, GenericKeyframe frame, double x, double y)
+    protected void moveNoKeyframe(UIContext context, double x, double y)
     {
         if (this.delegate != null)
         {

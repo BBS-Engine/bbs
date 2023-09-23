@@ -4,12 +4,12 @@ import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.UIClips;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.ui.framework.elements.input.keyframes.UIDopeSheet;
+import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframes;
 import mchorse.bbs.utils.keyframes.Keyframe;
 
 import java.util.function.Consumer;
 
-public class UIDopeSheetView extends UIDopeSheet
+public class UIDopeSheetView extends UIKeyframes
 {
     public IUIClipsDelegate editor;
 
@@ -51,7 +51,7 @@ public class UIDopeSheetView extends UIDopeSheet
     }
 
     @Override
-    protected void moveNoKeyframe(UIContext context, Keyframe frame, double x, double y)
+    protected void moveNoKeyframe(UIContext context, double x, double y)
     {
         if (this.editor != null)
         {

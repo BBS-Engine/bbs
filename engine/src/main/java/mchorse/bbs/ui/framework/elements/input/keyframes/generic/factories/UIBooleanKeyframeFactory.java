@@ -1,7 +1,7 @@
-package mchorse.bbs.ui.film.replays.properties.factories;
+package mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories;
 
 import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 

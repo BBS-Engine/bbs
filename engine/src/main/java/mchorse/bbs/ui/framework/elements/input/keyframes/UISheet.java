@@ -18,14 +18,6 @@ public class UISheet
     public int color;
     public KeyframeChannel channel;
     public List<Integer> selected = new ArrayList<>();
-    public boolean handles = true;
-
-    public UISheet(String id, IKey title, int color, KeyframeChannel channel, boolean handles)
-    {
-        this(id, title, color, channel);
-
-        this.handles = handles;
-    }
 
     public UISheet(String id, IKey title, int color, KeyframeChannel channel)
     {

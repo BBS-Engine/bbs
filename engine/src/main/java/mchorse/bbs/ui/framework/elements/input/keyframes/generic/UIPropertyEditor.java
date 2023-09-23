@@ -1,4 +1,4 @@
-package mchorse.bbs.ui.film.replays.properties;
+package mchorse.bbs.ui.framework.elements.input.keyframes.generic;
 
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
@@ -9,7 +9,6 @@ import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
-import mchorse.bbs.ui.film.replays.properties.factories.UIKeyframeFactory;
 import mchorse.bbs.ui.film.utils.UICameraUtils;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.framework.UIContext;
@@ -17,6 +16,7 @@ import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.input.keyframes.IAxisConverter;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories.UIKeyframeFactory;
 import mchorse.bbs.ui.framework.tooltips.InterpolationTooltip;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -42,7 +42,7 @@ public class UIPropertyEditor extends UIElement
     public UIIcon interp;
     public UIKeyframeFactory editor;
 
-    public UIMultiProperties properties;
+    public UIProperties properties;
 
     private int clicks;
     private long clickTimer;
@@ -83,7 +83,7 @@ public class UIPropertyEditor extends UIElement
         });
         this.interp.tooltip(tooltip);
 
-        this.properties = this.create(delegate);
+        this.properties = new UIProperties(delegate, this::fillData);
         this.properties.relative(this).full();
 
         /* Add all elements */
@@ -107,7 +107,7 @@ public class UIPropertyEditor extends UIElement
             {
                 UIContext context = this.getContext();
                 final Map<String, PastedKeyframes> keyframes = pasted;
-                double offset = this.properties.scaleX.from(context.mouseX);
+                double offset = this.properties.fromGraphX(context.mouseX);
                 int mouseY = context.mouseY;
 
                 menu.action(Icons.PASTE, UIKeys.KEYFRAMES_CONTEXT_PASTE, () -> this.pasteKeyframes(keyframes, (long) offset, mouseY));
@@ -127,7 +127,7 @@ public class UIPropertyEditor extends UIElement
             {
                 UIContext context = this.getContext();
                 final Map<String, PastedKeyframes> keyframes = pasted;
-                double offset = this.properties.scaleX.from(context.mouseX);
+                double offset = this.properties.fromGraphX(context.mouseX);
                 int mouseY = context.mouseY;
 
                 this.pasteKeyframes(keyframes, (long) offset, mouseY);
@@ -162,11 +162,6 @@ public class UIPropertyEditor extends UIElement
     public void updateConverter()
     {
         this.setConverter(UICameraDopeSheetEditor.CONVERTER);
-    }
-
-    protected UIMultiProperties create(IUIClipsDelegate delegate)
-    {
-        return new UIMultiProperties(delegate, this::fillData);
     }
 
     public void setConverter(IAxisConverter converter)

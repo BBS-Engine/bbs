@@ -1,4 +1,4 @@
-package mchorse.bbs.ui.film.replays.properties;
+package mchorse.bbs.ui.framework.elements.input.keyframes.generic;
 
 import mchorse.bbs.forms.properties.IFormProperty;
 import mchorse.bbs.l10n.keys.IKey;

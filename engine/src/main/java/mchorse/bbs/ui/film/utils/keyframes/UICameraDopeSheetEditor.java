@@ -2,7 +2,6 @@ package mchorse.bbs.ui.film.utils.keyframes;
 
 import mchorse.bbs.camera.clips.overwrite.KeyframeClip;
 import mchorse.bbs.l10n.keys.IKey;
-import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.utils.CameraAxisConverter;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIKeyframesEditor;
@@ -14,7 +13,6 @@ import java.util.List;
 
 public class UICameraDopeSheetEditor extends UIKeyframesEditor<UIDopeSheetView>
 {
-    public static final IKey[] TITLES = {UIKeys.CAMERA_PANELS_ALL, UIKeys.GENERAL_X, UIKeys.GENERAL_Y, UIKeys.GENERAL_Z, UIKeys.CAMERA_PANELS_YAW, UIKeys.CAMERA_PANELS_PITCH, UIKeys.CAMERA_PANELS_ROLL, UIKeys.CAMERA_PANELS_FOV};
     public static final int[] COLORS = {Colors.RED, Colors.GREEN, Colors.BLUE, Colors.CYAN, Colors.MAGENTA, Colors.YELLOW, Colors.LIGHTEST_GRAY};
     public static final CameraAxisConverter CONVERTER = new CameraAxisConverter();
 

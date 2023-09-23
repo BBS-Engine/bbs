@@ -1,4 +1,4 @@
-package mchorse.bbs.ui.film.replays.properties.factories;
+package mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories;
 
 import mchorse.bbs.cubic.CubicModel;
 import mchorse.bbs.data.types.MapType;
@@ -6,8 +6,8 @@ import mchorse.bbs.forms.forms.ModelForm;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.ui.film.replays.properties.UIProperty;
-import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIProperty;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.world.objects.objects.UIPropTransform;

@@ -1,9 +1,9 @@
 package mchorse.bbs.utils.keyframes.generic.factories;
 
 import mchorse.bbs.data.types.BaseType;
-import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
-import mchorse.bbs.ui.film.replays.properties.factories.UIKeyframeFactory;
-import mchorse.bbs.ui.film.replays.properties.factories.UIPoseKeyframeFactory;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories.UIKeyframeFactory;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories.UIPoseKeyframeFactory;
 import mchorse.bbs.utils.Pose;
 import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;

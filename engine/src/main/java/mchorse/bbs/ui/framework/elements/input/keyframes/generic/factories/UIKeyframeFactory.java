@@ -1,8 +1,7 @@
-package mchorse.bbs.ui.film.replays.properties.factories;
+package mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories;
 
-import mchorse.bbs.ui.film.replays.properties.UIPropertyEditor;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
 import mchorse.bbs.ui.framework.elements.UIElement;
-import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 
 public abstract class UIKeyframeFactory <T> extends UIElement
