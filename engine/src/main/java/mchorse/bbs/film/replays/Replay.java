@@ -75,7 +75,7 @@ public class Replay extends ValueGroup
             int duration = forcedDuration > 0 ? forcedDuration : (int) (b.getTick() - a.getTick());
             int offset = (int) (tick - a.getTick());
 
-            if (a == b)
+            if (a == b || a.isInstant())
             {
                 property.set(a.getValue());
             }

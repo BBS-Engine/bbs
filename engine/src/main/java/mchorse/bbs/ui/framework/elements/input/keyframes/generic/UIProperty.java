@@ -54,6 +54,19 @@ public class UIProperty
         }
     }
 
+    public void setInstant(boolean instant)
+    {
+        for (int index : this.selected)
+        {
+            GenericKeyframe keyframe = this.channel.get(index);
+
+            if (keyframe != null)
+            {
+                keyframe.setInstant(instant);
+            }
+        }
+    }
+
     public void setTick(double dx)
     {
         for (int index : this.selected)

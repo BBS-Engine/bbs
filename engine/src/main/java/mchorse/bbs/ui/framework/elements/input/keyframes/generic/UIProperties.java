@@ -38,6 +38,14 @@ public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
 
     /* Implementation of setters */
 
+    public void setInstant(boolean instant)
+    {
+        for (UIProperty property : this.properties)
+        {
+            property.setInstant(instant);
+        }
+    }
+
     public void setTick(double tick)
     {
         if (this.isMultipleSelected())
@@ -512,6 +520,7 @@ public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
 
             /* Draw points */
             int index = 0;
+            int forcedIndex = 0;
 
             for (Object object : property.channel.getKeyframes())
             {
@@ -523,12 +532,14 @@ public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
                 if (duration > 0)
                 {
                     int x2 = this.toGraphX(tick + duration);
-                    int y1 = y + h / 2 - 8 + (index % 2 == 1 ? -4 : 0);
+                    int y1 = y + h / 2 - 8 + (forcedIndex % 2 == 1 ? -4 : 0);
                     int color = property.hasSelected(index) ? Colors.WHITE :  Colors.setA(Colors.mulRGB(property.color, 0.9F), 0.75F);
 
                     context.batcher.box(x1, y1 - 2, x1 + 1, y1 + 3, color);
                     context.batcher.box(x2 - 1, y1 - 2, x2, y1 + 3, color);
                     context.batcher.box(x1 + 1, y1, x2 - 1, y1 + 1, color);
+
+                    forcedIndex += 1;
                 }
 
                 this.renderRect(context, x1, y + h / 2, 3, property.hasSelected(index) ? Colors.WHITE : property.color);

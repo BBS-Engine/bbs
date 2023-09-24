@@ -14,6 +14,7 @@ import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
+import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.input.keyframes.IAxisConverter;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories.UIKeyframeFactory;
@@ -37,6 +38,7 @@ import java.util.Map;
 public class UIPropertyEditor extends UIElement
 {
     public UIElement frameButtons;
+    public UIToggle instant;
     public UITrackpad tick;
     public UITrackpad duration;
     public UIIcon interp;
@@ -73,6 +75,7 @@ public class UIPropertyEditor extends UIElement
         this.frameButtons = new UIElement();
         this.frameButtons.relative(this).x(1F).y(1F).w(120).anchor(1F).column().vertical().stretch().padding(5);
         this.frameButtons.setVisible(false);
+        this.instant = new UIToggle(IKey.lazy("Instant"), (b) -> this.setInstant(b.getValue()));
         this.tick = new UITrackpad(this::setTick);
         this.tick.limit(Integer.MIN_VALUE, Integer.MAX_VALUE, true).tooltip(UIKeys.KEYFRAMES_TICK);
         this.duration = new UITrackpad((v) -> this.setDuration(v.intValue()));
@@ -88,6 +91,7 @@ public class UIPropertyEditor extends UIElement
 
         /* Add all elements */
         this.add(this.properties, this.frameButtons);
+        this.frameButtons.add(this.instant);
         this.frameButtons.add(UI.row(5, this.interp, this.tick, this.duration));
 
         this.context((menu) ->
@@ -369,6 +373,11 @@ public class UIPropertyEditor extends UIElement
         this.properties.removeSelectedKeyframes();
     }
 
+    private void setInstant(boolean instant)
+    {
+        this.properties.setInstant(instant);
+    }
+
     public void setTick(double tick)
     {
         this.properties.setTick(this.converter == null ? tick : this.converter.from(tick));
@@ -421,6 +430,7 @@ public class UIPropertyEditor extends UIElement
             this.frameButtons.add(this.editor);
         }
 
+        this.instant.setValue(frame.isInstant());
         this.tick.setValue(this.converter == null ? tick : this.converter.to(tick));
         this.duration.setValue(this.converter == null ? duration : this.converter.to(duration));
         this.frameButtons.resize();

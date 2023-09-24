@@ -19,6 +19,7 @@ public class GenericKeyframe <T> extends BaseValue
 
     private T value;
     private IInterpolation interp = Interpolation.LINEAR;
+    private boolean instant;
 
     private final IGenericKeyframeFactory<T> factory;
 
@@ -90,12 +91,25 @@ public class GenericKeyframe <T> extends BaseValue
         this.postNotifyParent();
     }
 
+    public boolean isInstant()
+    {
+        return this.instant;
+    }
+
+    public void setInstant(boolean instant)
+    {
+        this.preNotifyParent();
+        this.instant = instant;
+        this.postNotifyParent();
+    }
+
     public void copy(GenericKeyframe<T> keyframe)
     {
         this.tick = keyframe.tick;
         this.duration = keyframe.duration;
         this.value = this.factory.copy(keyframe.value);
         this.interp = keyframe.interp;
+        this.instant = keyframe.instant;
     }
 
     @Override
@@ -106,6 +120,7 @@ public class GenericKeyframe <T> extends BaseValue
         data.putLong("tick", this.tick);
         data.putInt("duration", this.duration);
         data.put("value", this.factory.toData(this.value));
+        data.putBool("instant", this.instant);
 
         if (this.interp != Interpolation.LINEAR) data.putString("interp", this.interp.toString());
 
@@ -126,5 +141,6 @@ public class GenericKeyframe <T> extends BaseValue
         if (map.has("duration")) this.duration = map.getInt("duration");
         if (map.has("value")) this.value = this.factory.fromData(map.get("value"));
         if (map.has("interp")) this.interp = Interpolation.valueOf(map.getString("interp"));
+        if (map.has("instant")) this.instant = map.getBool("instant");
     }
 }
