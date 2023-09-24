@@ -58,6 +58,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSupported, IUIClipsDelegate
@@ -931,8 +932,43 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     }
 
     @Override
-    public void updateClipProperty(ValueInt property, int value)
+    public <T extends BaseValue> void editMultiple(T property, Consumer<T> consumer)
     {
-        this.timeline.updateClipProperty(property, value);
+        String path = property.getRelativePath(this.getClip());
+
+        for (Clip clip : this.timeline.getClipsFromSelection())
+        {
+            BaseValue value = clip.getRecursively(path);
+
+            if (value != null && value.getClass() == property.getClass())
+            {
+                consumer.accept((T) value);
+            }
+        }
+    }
+
+    @Override
+    public void editMultiple(ValueInt property, int value)
+    {
+        int difference = value - property.get();
+        List<Clip> clips = this.timeline.getClipsFromSelection();
+
+        for (Clip clip : clips)
+        {
+            ValueInt clipValue = (ValueInt) clip.get(property.getId());
+            int newValue = clipValue.get() + difference;
+
+            if (newValue < clipValue.getMin() || newValue > clipValue.getMax())
+            {
+                return;
+            }
+        }
+
+        for (Clip clip : clips)
+        {
+            ValueInt clipValue = (ValueInt) clip.get(property.getId());
+
+            clipValue.set(clipValue.get() + difference);
+        }
     }
 }

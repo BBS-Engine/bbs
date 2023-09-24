@@ -186,6 +186,35 @@ public abstract class BaseValue implements IDataSerializable<BaseType>
         return String.join(".", this.getPathSegments());
     }
 
+    public String getRelativePath(BaseValue ancestor)
+    {
+        List<String> strings = new ArrayList<>();
+        BaseValue value = this;
+
+        while (value != null)
+        {
+            String id = value.getId();
+
+            if (!id.isEmpty())
+            {
+                strings.add(id);
+            }
+
+            value = value.getParent();
+
+            if (value == ancestor)
+            {
+                strings.add(value.getId());
+
+                Collections.reverse(strings);
+
+                return String.join(".", strings);
+            }
+        }
+
+        return null;
+    }
+
     public void copy(BaseValue value)
     {
         this.fromData(value.toData());

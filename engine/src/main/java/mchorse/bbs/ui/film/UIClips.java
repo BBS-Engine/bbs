@@ -16,6 +16,7 @@ import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.values.ValueInt;
+import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.clips.renderer.IUIClipRenderer;
@@ -45,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class UIClips extends UIElement
@@ -179,32 +181,6 @@ public class UIClips extends UIElement
     public IFactory<Clip, ClipFactoryData> getFactory()
     {
         return this.factory;
-    }
-
-    /* Update methods */
-
-    public void updateClipProperty(ValueInt property, int value)
-    {
-        int difference = value - property.get();
-        List<Clip> clips = this.getClipsFromSelection();
-
-        for (Clip clip : clips)
-        {
-            ValueInt clipValue = (ValueInt) clip.get(property.getId());
-            int newValue = clipValue.get() + difference;
-
-            if (newValue < clipValue.getMin() || newValue > clipValue.getMax())
-            {
-                return;
-            }
-        }
-
-        for (Clip clip : clips)
-        {
-            ValueInt clipValue = (ValueInt) clip.get(property.getId());
-
-            clipValue.set(clipValue.get() + difference);
-        }
     }
 
     /* Tools */

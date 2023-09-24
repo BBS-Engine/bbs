@@ -19,7 +19,7 @@ public abstract class BaseValueGroup extends BaseValue
 
         if (value == null && path.contains("."))
         {
-            value = this.searchRecursively(path.split("\\."), path);
+            value = this.searchRecursively(path.split("\\."));
         }
 
         if (value == null)
@@ -30,7 +30,7 @@ public abstract class BaseValueGroup extends BaseValue
         return value;
     }
 
-    private BaseValue searchRecursively(String[] splits, String name)
+    private BaseValue searchRecursively(String[] splits)
     {
         int i = 0;
         BaseValue current = this;
@@ -53,7 +53,7 @@ public abstract class BaseValueGroup extends BaseValue
             return null;
         }
 
-        return current.getPath().equals(name) ? current : null;
+        return current;
     }
 
     public abstract void copy(BaseValueGroup group);

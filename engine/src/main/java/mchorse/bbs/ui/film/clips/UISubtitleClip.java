@@ -41,24 +41,60 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         this.y = new UITrackpad((v) -> this.clip.y.set(v.intValue()));
         this.y.integer();
 
-        this.size = new UITrackpad((v) -> this.clip.size.set(v.floatValue()));
-        this.anchorX = new UITrackpad((v) -> this.clip.anchorX.set(v.floatValue()));
-        this.anchorY = new UITrackpad((v) -> this.clip.anchorY.set(v.floatValue()));
-        this.color = new UIColor((c) -> this.clip.color.set(c));
+        this.size = new UITrackpad((v) -> this.editor.editMultiple(this.clip.size, (value) ->
+        {
+            value.set(v.floatValue());
+        }));
+        this.anchorX = new UITrackpad((v) -> this.editor.editMultiple(this.clip.anchorX, (value) ->
+        {
+            value.set(v.floatValue());
+        }));
+        this.anchorY = new UITrackpad((v) -> this.editor.editMultiple(this.clip.anchorY, (value) ->
+        {
+            value.set(v.floatValue());
+        }));
+        this.color = new UIColor((c) -> this.editor.editMultiple(this.clip.color, (value) ->
+        {
+            value.set(c);
+        }));
 
-        this.windowX = new UITrackpad((v) -> this.clip.windowX.set(v.floatValue()));
-        this.windowY = new UITrackpad((v) -> this.clip.windowY.set(v.floatValue()));
+        this.windowX = new UITrackpad((v) -> this.editor.editMultiple(this.clip.windowX, (value) ->
+        {
+            value.set(v.floatValue());
+        }));
+        this.windowY = new UITrackpad((v) -> this.editor.editMultiple(this.clip.windowY, (value) ->
+        {
+            value.set(v.floatValue());
+        }));
 
-        this.background = new UIColor((c) -> this.clip.background.set(c)).withAlpha();
-        this.backgroundOffset = new UITrackpad((v) -> this.clip.backgroundOffset.set(v.floatValue()));
-        this.shadow = new UITrackpad((v) -> this.clip.shadow.set(v.floatValue())).limit(0);
+        this.background = new UIColor((c) -> this.editor.editMultiple(this.clip.background, (value) ->
+        {
+            value.set(c);
+        })).withAlpha();
+        this.backgroundOffset = new UITrackpad((v) -> this.editor.editMultiple(this.clip.backgroundOffset, (value) ->
+        {
+            value.set(v.floatValue());
+        }));
+        this.shadow = new UITrackpad((v) -> this.editor.editMultiple(this.clip.shadow, (value) ->
+        {
+            value.set(v.floatValue());
+        })).limit(0);
 
-        this.transform = new UIPropTransform((t) -> this.clip.transform.set(t.copy()));
+        this.transform = new UIPropTransform((t) -> this.editor.editMultiple(this.clip.transform, (value) ->
+        {
+            value.set(t.copy());
+        }));
         this.transform.verticalCompact().noLabels();
 
-        this.lineHeight = new UITrackpad((v) -> this.clip.lineHeight.set(v.intValue()));
+        this.lineHeight = new UITrackpad((v) -> this.editor.editMultiple(this.clip.lineHeight, (value) ->
+        {
+            value.set(v.intValue());
+        }));
         this.lineHeight.limit(0).integer().tooltip(IKey.lazy("Line height"), Direction.BOTTOM);
-        this.maxWidth = new UITrackpad((v) -> this.clip.maxWidth.set(v.intValue()));
+        this.maxWidth = new UITrackpad((v) -> this.editor.editMultiple(this.clip.maxWidth, (value) ->
+        {
+            value.set(v.intValue());
+        }));
         this.maxWidth.limit(0).integer().tooltip(IKey.lazy("Max width"), Direction.BOTTOM);
     }
 

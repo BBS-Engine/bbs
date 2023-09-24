@@ -67,7 +67,10 @@ public class ValueChangeUndo extends FilmEditorUndo
     {
         BaseValue value = context.getRecursively(this.name);
 
-        value.fromData(this.oldValue);
+        if (value.getPath().equals(this.name))
+        {
+            value.fromData(this.oldValue);
+        }
     }
 
     @Override
@@ -75,6 +78,9 @@ public class ValueChangeUndo extends FilmEditorUndo
     {
         BaseValue value = context.getRecursively(this.name);
 
-        value.fromData(this.newValue);
+        if (value.getPath().equals(this.name))
+        {
+            value.fromData(this.newValue);
+        }
     }
 }
