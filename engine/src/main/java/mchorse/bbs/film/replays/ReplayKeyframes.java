@@ -139,14 +139,14 @@ public class ReplayKeyframes extends ValueGroup
 
             if (extra1)
             {
-                this.triggerLeft.insert(tick, component.sticks[6]);
-                this.triggerRight.insert(tick, component.sticks[7]);
+                this.extra1X.insert(tick, component.sticks[6]);
+                this.extra1Y.insert(tick, component.sticks[7]);
             }
 
             if (extra2)
             {
-                this.triggerLeft.insert(tick, component.sticks[8]);
-                this.triggerRight.insert(tick, component.sticks[9]);
+                this.extra2X.insert(tick, component.sticks[8]);
+                this.extra2Y.insert(tick, component.sticks[9]);
             }
         }
     }
