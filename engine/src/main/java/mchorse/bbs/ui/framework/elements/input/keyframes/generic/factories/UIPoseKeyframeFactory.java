@@ -54,7 +54,7 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
                 this.pickBone(current);
             });
         });
-        this.transform = new UIPoseTransforms(this.keyframe);
+        this.transform = new UIPoseTransforms(this.keyframe).enableHotkeys();
         this.transform.verticalCompact();
 
         UIProperty property = editor.properties.getProperty(keyframe);
