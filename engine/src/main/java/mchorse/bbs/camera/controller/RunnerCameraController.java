@@ -3,6 +3,7 @@ package mchorse.bbs.camera.controller;
 import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.data.Position;
+import mchorse.bbs.ui.film.UIFilmPanel;
 
 public class RunnerCameraController extends CameraWorkCameraController
 {
@@ -10,11 +11,13 @@ public class RunnerCameraController extends CameraWorkCameraController
 
     private float lastTransition = 0;
     private Position manual;
+    private UIFilmPanel panel;
 
-    public RunnerCameraController(IBridge bridge)
+    public RunnerCameraController(IBridge bridge, UIFilmPanel panel)
     {
         super(bridge);
 
+        this.panel = panel;
         this.context.playing = false;
     }
 
@@ -69,5 +72,7 @@ public class RunnerCameraController extends CameraWorkCameraController
         {
             this.apply(camera, this.ticks, this.context.playing ? transition : this.lastTransition);
         }
+
+        this.panel.getController().handleCamera(camera, transition);
     }
 }

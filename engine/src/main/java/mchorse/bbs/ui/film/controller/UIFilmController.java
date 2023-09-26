@@ -305,7 +305,7 @@ public class UIFilmController extends UIElement
         {
             Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());
 
-            if (area.isInside(context) && this.panel.getCameraController().has(this.orbit))
+            if (area.isInside(context) && this.orbit.enabled)
             {
                 this.orbit.start(context);
 
@@ -321,7 +321,7 @@ public class UIFilmController extends UIElement
     {
         Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());
 
-        if (area.isInside(context) && this.panel.getCameraController().has(this.orbit))
+        if (area.isInside(context) && this.orbit.enabled)
         {
             this.orbit.handleDistance(context);
 
@@ -416,15 +416,14 @@ public class UIFilmController extends UIElement
 
     private void toggleOrbit()
     {
-        CameraController cameraController = this.panel.getCameraController();
+        this.orbit.enabled = !this.orbit.enabled;
+    }
 
-        if (cameraController.has(this.orbit))
+    public void handleCamera(Camera camera, float transition)
+    {
+        if (this.orbit.enabled)
         {
-            cameraController.remove(this.orbit);
-        }
-        else
-        {
-            cameraController.add(this.orbit);
+            this.orbit.setup(camera, transition);
         }
     }
 

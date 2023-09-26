@@ -15,6 +15,8 @@ public class OrbitFilmCameraController implements ICameraController
 {
     private UIFilmController controller;
 
+    public boolean enabled;
+
     private boolean orbiting;
     private Vector2f orbitRotation = new Vector2f();
     private Vector2i orbitLast = new Vector2i();

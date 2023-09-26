@@ -108,7 +108,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     {
         super(dashboard);
 
-        this.runner = new RunnerCameraController(dashboard.bridge);
+        this.runner = new RunnerCameraController(dashboard.bridge, this);
 
         this.main = new UIElement();
         this.main.relative(this.editor).w(0.75F).h(1F);
