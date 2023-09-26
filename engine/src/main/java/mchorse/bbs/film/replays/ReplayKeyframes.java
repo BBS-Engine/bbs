@@ -16,8 +16,10 @@ public class ReplayKeyframes extends ValueGroup
     public static final String GROUP_LEFT_STICK = "lstick";
     public static final String GROUP_RIGHT_STICK = "rstick";
     public static final String GROUP_TRIGGERS = "triggers";
+    public static final String GROUP_EXTRA1 = "extra1";
+    public static final String GROUP_EXTRA2 = "extra2";
 
-    public static final List<String> CURATED_CHANNELS = Arrays.asList("x", "y", "z", "pitch", "yaw", "bodyYaw", "sneaking", "stick_lx", "stick_ly", "stick_rx", "stick_ry", "trigger_l", "trigger_r", "grounded", "vX", "vY", "vZ");
+    public static final List<String> CURATED_CHANNELS = Arrays.asList("x", "y", "z", "pitch", "yaw", "bodyYaw", "sneaking", "stick_lx", "stick_ly", "stick_rx", "stick_ry", "trigger_l", "trigger_r", "extra1_x", "extra1_y", "extra2_x", "extra2_y", "grounded");
 
     public final KeyframeChannel x = new KeyframeChannel("x");
     public final KeyframeChannel y = new KeyframeChannel("y");
@@ -42,6 +44,12 @@ public class ReplayKeyframes extends ValueGroup
     public final KeyframeChannel triggerLeft = new KeyframeChannel("trigger_l");
     public final KeyframeChannel triggerRight = new KeyframeChannel("trigger_r");
 
+    /* Miscellaneous animatable keyframe channels */
+    public final KeyframeChannel extra1X = new KeyframeChannel("extra1_x");
+    public final KeyframeChannel extra1Y = new KeyframeChannel("extra1_y");
+    public final KeyframeChannel extra2X = new KeyframeChannel("extra2_x");
+    public final KeyframeChannel extra2Y = new KeyframeChannel("extra2_y");
+
     public ReplayKeyframes(String id)
     {
         super(id);
@@ -64,6 +72,10 @@ public class ReplayKeyframes extends ValueGroup
         this.add(this.stickRightY);
         this.add(this.triggerLeft);
         this.add(this.triggerRight);
+        this.add(this.extra1X);
+        this.add(this.extra1Y);
+        this.add(this.extra2X);
+        this.add(this.extra2Y);
     }
 
     public void record(int tick, Entity entity, List<String> groups)
@@ -76,6 +88,8 @@ public class ReplayKeyframes extends ValueGroup
         boolean leftStick = empty || groups.contains(GROUP_LEFT_STICK);
         boolean rightStick = empty || groups.contains(GROUP_RIGHT_STICK);
         boolean triggers = empty || groups.contains(GROUP_TRIGGERS);
+        boolean extra1 = empty || groups.contains(GROUP_EXTRA1);
+        boolean extra2 = empty || groups.contains(GROUP_EXTRA2);
 
         /* Position and rotation */
         if (position)
@@ -122,6 +136,18 @@ public class ReplayKeyframes extends ValueGroup
                 this.triggerLeft.insert(tick, component.sticks[4]);
                 this.triggerRight.insert(tick, component.sticks[5]);
             }
+
+            if (extra1)
+            {
+                this.triggerLeft.insert(tick, component.sticks[6]);
+                this.triggerRight.insert(tick, component.sticks[7]);
+            }
+
+            if (extra2)
+            {
+                this.triggerLeft.insert(tick, component.sticks[8]);
+                this.triggerRight.insert(tick, component.sticks[9]);
+            }
         }
     }
 
@@ -137,6 +163,8 @@ public class ReplayKeyframes extends ValueGroup
         boolean leftStick = empty || !groups.contains(GROUP_LEFT_STICK);
         boolean rightStick = empty || !groups.contains(GROUP_RIGHT_STICK);
         boolean triggers = empty || !groups.contains(GROUP_TRIGGERS);
+        boolean extra1 = empty || !groups.contains(GROUP_EXTRA1);
+        boolean extra2 = empty || !groups.contains(GROUP_EXTRA2);
 
         if (position)
         {
@@ -175,6 +203,18 @@ public class ReplayKeyframes extends ValueGroup
             {
                 component.sticks[4] = (float) this.triggerLeft.interpolate(tick);
                 component.sticks[5] = (float) this.triggerRight.interpolate(tick);
+            }
+
+            if (extra1)
+            {
+                component.sticks[6] = (float) this.extra1X.interpolate(tick);
+                component.sticks[7] = (float) this.extra1Y.interpolate(tick);
+            }
+
+            if (extra2)
+            {
+                component.sticks[8] = (float) this.extra2X.interpolate(tick);
+                component.sticks[9] = (float) this.extra2Y.interpolate(tick);
             }
         }
     }

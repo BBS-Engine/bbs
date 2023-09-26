@@ -111,7 +111,7 @@ public class UIFilmController extends UIElement
 
     private int getMouseMode()
     {
-        return this.mouseMode % 4;
+        return this.mouseMode % 6;
     }
 
     private void setMouseMode(int mode)
@@ -374,7 +374,7 @@ public class UIFilmController extends UIElement
 
                 return true;
             }
-            else if (context.getKeyAction() == KeyAction.PRESSED && context.getKeyCode() >= GLFW.GLFW_KEY_1 && context.getKeyCode() <= GLFW.GLFW_KEY_4)
+            else if (context.getKeyAction() == KeyAction.PRESSED && context.getKeyCode() >= GLFW.GLFW_KEY_1 && context.getKeyCode() <= GLFW.GLFW_KEY_6)
             {
                 /* Switch mouse input mode */
                 this.setMouseMode(context.getKeyCode() - GLFW.GLFW_KEY_1);
@@ -579,6 +579,14 @@ public class UIFilmController extends UIElement
                 else if (mode == 3)
                 {
                     label = "Triggers";
+                }
+                else if (mode == 4)
+                {
+                    label = "Extra 1";
+                }
+                else if (mode == 5)
+                {
+                    label = "Extra 2";
                 }
 
                 context.batcher.textCard(context.font, label, area.x + 5, area.ey() - 5 - context.font.getHeight(), Colors.WHITE, BBSSettings.primaryColor(Colors.A100));

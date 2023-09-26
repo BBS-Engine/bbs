@@ -31,6 +31,10 @@ public class MolangHelper
         parser.register("joystick.r_y");
         parser.register("joystick.l_trigger");
         parser.register("joystick.r_trigger");
+        parser.register("extra1.x");
+        parser.register("extra1.y");
+        parser.register("extra2.x");
+        parser.register("extra2.y");
     }
 
     public static void setMolangVariables(MolangParser parser, Entity target, float frame, float transition)
@@ -78,6 +82,10 @@ public class MolangHelper
                 parser.setValue("joystick.r_y", Interpolations.lerp(prev[3], sticks[3], transition));
                 parser.setValue("joystick.l_trigger", Interpolations.lerp(prev[4], sticks[4], transition));
                 parser.setValue("joystick.r_trigger", Interpolations.lerp(prev[5], sticks[5], transition));
+                parser.setValue("extra1.x", Interpolations.lerp(prev[6], sticks[6], transition));
+                parser.setValue("extra1.y", Interpolations.lerp(prev[7], sticks[7], transition));
+                parser.setValue("extra2.x", Interpolations.lerp(prev[8], sticks[8], transition));
+                parser.setValue("extra2.y", Interpolations.lerp(prev[9], sticks[9], transition));
             }
         }
         else
@@ -88,6 +96,10 @@ public class MolangHelper
             parser.setValue("joystick.r_y", 0);
             parser.setValue("joystick.l_bumper", 0);
             parser.setValue("joystick.r_bumper", 0);
+            parser.setValue("extra1.x", 0);
+            parser.setValue("extra1.y", 0);
+            parser.setValue("extra2.x", 0);
+            parser.setValue("extra2.y", 0);
         }
 
         float groundSpeed = (float) Math.sqrt(dx * dx + dz * dz);

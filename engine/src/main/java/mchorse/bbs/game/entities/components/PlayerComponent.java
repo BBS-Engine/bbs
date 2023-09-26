@@ -8,8 +8,8 @@ import java.nio.FloatBuffer;
 public class PlayerComponent extends Component
 {
     /* Joystick options */
-    public final float[] prevSticks = new float[6];
-    public final float[] sticks = new float[6];
+    public final float[] prevSticks = new float[10];
+    public final float[] sticks = new float[10];
 
     @Override
     public void preUpdate()
