@@ -85,7 +85,7 @@ public class UIPixelsEditor extends UICanvasEditor
         Supplier<Boolean> texture = () -> this.pixels != null;
         Supplier<Boolean> editing = () -> this.editing;
 
-        this.keys().register(Keys.PIXEL_COPY, this::copyPixel).inside().active(texture).category(category);
+        this.keys().register(Keys.COPY, this::copyPixel).label(UIKeys.TEXTURES_VIEWER_CONTEXT_COPY_HEX).inside().active(texture).category(category);
         this.keys().register(Keys.PIXEL_SWAP, this::swapColors).inside().active(editing).category(category);
         this.keys().register(Keys.PIXEL_PICK, this::pickColor).inside().active(editing).category(category);
         this.keys().register(Keys.UNDO, this::undo).inside().active(editing).category(category);

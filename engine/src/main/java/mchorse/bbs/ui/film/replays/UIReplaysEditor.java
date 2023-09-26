@@ -53,6 +53,7 @@ public class UIReplaysEditor extends UIElement
     public UIIcon toggleKeyframes;
     public UIIcon toggleProperties;
     public UIIcon record;
+    public UIIcon keyframe;
     public UIElement icons;
     public UIReplayList replays;
 
@@ -94,8 +95,13 @@ public class UIReplaysEditor extends UIElement
         int w = 120;
 
         this.record = new UIIcon(Icons.SPHERE, (b) -> this.delegate.getController().pickRecording());
+        this.record.tooltip(IKey.lazy("Record replay"));
+        this.keyframe = new UIIcon(Icons.KEY, (b) -> this.delegate.getController().insertFrame());
+        this.keyframe.tooltip(IKey.lazy("Insert keyframe"));
         this.toggleKeyframes = new UIIcon(Icons.GRAPH, (b) -> this.toggleProperties(false));
+        this.toggleKeyframes.tooltip(IKey.lazy("Open entity keyframes editor"));
         this.toggleProperties = new UIIcon(Icons.MORE, (b) -> this.toggleProperties(true));
+        this.toggleProperties.tooltip(IKey.lazy("Open form keyframes editor"));
 
         this.keyframes = new UIElement();
         this.keyframes.relative(this).x(w).w(1F, -w).h(1F);
@@ -103,7 +109,7 @@ public class UIReplaysEditor extends UIElement
         this.replays = new UIReplayList((l) -> this.setReplay(l.get(0)), this.delegate);
         this.replays.relative(this).y(20).w(w).h(1F, -20);
 
-        this.icons = UI.row(0, this.record, this.toggleKeyframes, this.toggleProperties);
+        this.icons = UI.row(0, this.record, this.keyframe, this.toggleKeyframes, this.toggleProperties);
         this.icons.relative(this.replays).y(-20).w(60).h(20);
 
         this.add(this.replays, this.icons, this.keyframes);

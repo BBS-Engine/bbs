@@ -60,7 +60,6 @@ public class Keys
     public static final KeyCombo FORMS_EDIT_ALT = new KeyCombo(UIKeys.GENERAL_EDIT, GLFW.GLFW_KEY_E, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("forms");
 
     /* Pixel editor */
-    public static final KeyCombo PIXEL_COPY = new KeyCombo(UIKeys.TEXTURES_VIEWER_CONTEXT_COPY_HEX, GLFW.GLFW_KEY_C, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("pixels");
     public static final KeyCombo PIXEL_SWAP = new KeyCombo(UIKeys.TEXTURES_KEYS_SWAP, GLFW.GLFW_KEY_X).categoryKey("pixels");
     public static final KeyCombo PIXEL_PICK = new KeyCombo(UIKeys.TEXTURES_KEYS_PICK, GLFW.GLFW_KEY_R).categoryKey("pixels");
 
@@ -77,11 +76,8 @@ public class Keys
     /* World menu */
     public static final KeyCombo WORLD_MOVE_CENTER = new KeyCombo(UIKeys.WORLD_CONTEXT_MOVE_CENTER, GLFW.GLFW_KEY_F, GLFW.GLFW_KEY_LEFT_CONTROL, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("world");
     public static final KeyCombo WORLD_MOVE_TO_CURSOR = new KeyCombo(UIKeys.WORLD_CONTEXT_MOVE_TO_CURSOR, GLFW.GLFW_KEY_G, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("world");
-    public static final KeyCombo WORLD_RECORD_REPLAY = new KeyCombo(UIKeys.WORLD_KEYS_RECORD_REPLAY, GLFW.GLFW_KEY_RIGHT_ALT).categoryKey("world");
-    public static final KeyCombo WORLD_PLAYBACK_SCENE = new KeyCombo(UIKeys.WORLD_KEYS_PLAYBACK_SCENE, GLFW.GLFW_KEY_RIGHT_CONTROL).categoryKey("world");
     public static final KeyCombo WORLD_TOGGLE_WALK = new KeyCombo(UIKeys.WORLD_KEYS_TOGGLE_WALK, GLFW.GLFW_KEY_B, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("world");
     public static final KeyCombo WORLD_CYCLE_PANELS = new KeyCombo(UIKeys.WORLD_KEYS_CYCLE_PANELS, GLFW.GLFW_KEY_TAB).categoryKey("world");
-    public static final KeyCombo WORLD_TOGGLE_PLAYER = new KeyCombo(UIKeys.WORLD_KEYS_TOGGLE_PLAYER, GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("world");
     public static final KeyCombo WORLD_SAVE = new KeyCombo(UIKeys.WORLD_KEYS_SAVE, GLFW.GLFW_KEY_S, GLFW.GLFW_KEY_LEFT_CONTROL, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("world");
     public static final KeyCombo WORLD_TOGGLE_AXES = new KeyCombo(UIKeys.WORLD_KEYS_TOGGLE_AXES, GLFW.GLFW_KEY_T, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("world");
 
@@ -92,9 +88,7 @@ public class Keys
     public static final KeyCombo WE_FILL_SPHERE = new KeyCombo(UIKeys.WORLD_EDITOR_ACTIONS_FILL_SPHERE, GLFW.GLFW_KEY_2, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("world_editor");
     public static final KeyCombo WE_FILL_CYLINDER = new KeyCombo(UIKeys.WORLD_EDITOR_ACTIONS_FILL_CYLINDER, GLFW.GLFW_KEY_3, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("world_editor");
     public static final KeyCombo WE_CLEAR = new KeyCombo(UIKeys.WORLD_EDITOR_ACTIONS_CLEAR, GLFW.GLFW_KEY_DELETE).categoryKey("world_editor");
-    public static final KeyCombo WE_COPY = new KeyCombo(UIKeys.WORLD_EDITOR_ACTIONS_COPY, GLFW.GLFW_KEY_C, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("world_editor");
     public static final KeyCombo WE_CUT = new KeyCombo(UIKeys.WORLD_EDITOR_ACTIONS_CUT, GLFW.GLFW_KEY_X, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("world_editor");
-    public static final KeyCombo WE_PASTE = new KeyCombo(UIKeys.WORLD_EDITOR_ACTIONS_PASTE, GLFW.GLFW_KEY_V, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("world_editor");
     public static final KeyCombo WE_ROTATE = new KeyCombo(UIKeys.WORLD_EDITOR_ACTIONS_ROTATE, GLFW.GLFW_KEY_PERIOD).categoryKey("world_editor");
     public static final KeyCombo WE_ROTATE_CC = new KeyCombo(UIKeys.WORLD_EDITOR_ACTIONS_ROTATE_CC, GLFW.GLFW_KEY_COMMA).categoryKey("world_editor");
     public static final KeyCombo WE_FLIP_H = new KeyCombo(UIKeys.WORLD_EDITOR_ACTIONS_FLIP_H, GLFW.GLFW_KEY_V, GLFW.GLFW_KEY_LEFT_SHIFT).categoryKey("world_editor");

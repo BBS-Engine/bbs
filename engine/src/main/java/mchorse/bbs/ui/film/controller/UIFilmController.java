@@ -4,7 +4,6 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
-import mchorse.bbs.camera.controller.CameraController;
 import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.core.input.MouseInput;
 import mchorse.bbs.data.types.BaseType;
@@ -33,6 +32,7 @@ import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.StencilFormFramebuffer;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.keys.KeyAction;
+import mchorse.bbs.ui.utils.keys.KeyCombo;
 import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.Pair;
@@ -83,6 +83,13 @@ public class UIFilmController extends UIElement
     public UIFilmController(UIFilmPanel panel)
     {
         this.panel = panel;
+
+        IKey category = IKey.lazy("Player controller");
+
+        this.keys().register(new KeyCombo(IKey.lazy("Start recording"), GLFW.GLFW_KEY_R, GLFW.GLFW_KEY_LEFT_CONTROL), this::pickRecording).category(category);
+        this.keys().register(new KeyCombo(IKey.lazy("Insert keyframe"), GLFW.GLFW_KEY_I), this::insertFrame).category(category);
+        this.keys().register(new KeyCombo(IKey.lazy("Toggle orbit"), GLFW.GLFW_KEY_O), this::toggleOrbit).category(category);
+        this.keys().register(new KeyCombo(IKey.lazy("Toggle actor control"), GLFW.GLFW_KEY_H), this::toggleControl).category(category);
 
         this.noCulling();
     }
@@ -342,25 +349,7 @@ public class UIFilmController extends UIElement
     @Override
     protected boolean subKeyPressed(UIContext context)
     {
-        if (context.isPressed(GLFW.GLFW_KEY_R) && Window.isCtrlPressed())
-        {
-            this.pickRecording();
-
-            return true;
-        }
-        else if (context.isPressed(GLFW.GLFW_KEY_O) && !context.isFocused())
-        {
-            this.toggleOrbit();
-
-            return true;
-        }
-        else if (context.isPressed(GLFW.GLFW_KEY_H) && !context.isFocused())
-        {
-            this.toggleControl();
-
-            return true;
-        }
-        else if (this.canControl())
+        if (this.canControl())
         {
             int key = context.getKeyCode();
 
@@ -382,12 +371,6 @@ public class UIFilmController extends UIElement
             else if (context.isPressed(GLFW.GLFW_KEY_SPACE))
             {
                 this.jump();
-
-                return true;
-            }
-            else if (context.isPressed(GLFW.GLFW_KEY_I))
-            {
-                this.insertFrame();
 
                 return true;
             }
@@ -435,7 +418,7 @@ public class UIFilmController extends UIElement
         this.controlled.basic.grounded = false;
     }
 
-    private void insertFrame()
+    public void insertFrame()
     {
         Window.toggleMousePointer(false);
 
@@ -451,11 +434,16 @@ public class UIFilmController extends UIElement
                     return;
                 }
 
-                BaseValue.edit(replay.keyframes, (keyframes) -> keyframes.record(this.getTick(), this.controlled, groups));
+                BaseValue.edit(replay.keyframes, (keyframes) ->
+                {
+                    Entity entity = this.entities.get(this.panel.replays.replays.getIndex());
+
+                    keyframes.record(this.getTick(), entity, groups);
+                });
             }
         );
 
-        panel.onClose((event) -> Window.toggleMousePointer(true));
+        panel.onClose((event) -> Window.toggleMousePointer(this.controlled != null));
 
         UIOverlay.addOverlay(this.getContext(), panel);
     }

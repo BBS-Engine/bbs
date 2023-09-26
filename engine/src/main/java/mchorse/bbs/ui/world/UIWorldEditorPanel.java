@@ -298,9 +298,9 @@ public class UIWorldEditorPanel extends UIWorldPanel
         this.keys().register(Keys.WE_FILL_SPHERE, this.fillSphere::clickItself).category(selectionCategory).active(selected);
         this.keys().register(Keys.WE_FILL_CYLINDER, this.fillCylinder::clickItself).category(selectionCategory).active(selected);
         this.keys().register(Keys.WE_CLEAR, this.fillClear::clickItself).category(selectionCategory).active(selected);
-        this.keys().register(Keys.WE_COPY, this.copy::clickItself).category(selectionCategory).active(selected);
+        this.keys().register(Keys.COPY, this.copy::clickItself).label(UIKeys.WORLD_EDITOR_ACTIONS_COPY).category(selectionCategory).active(selected);
         this.keys().register(Keys.WE_CUT, this.cut::clickItself).category(selectionCategory).active(selected);
-        this.keys().register(Keys.WE_PASTE, this.paste::clickItself).category(selectionCategory).active(selected);
+        this.keys().register(Keys.PASTE, this.paste::clickItself).label(UIKeys.WORLD_EDITOR_ACTIONS_PASTE).category(selectionCategory).active(selected);
         this.keys().register(Keys.WE_ROTATE, this.rotateC::clickItself).category(selectionCategory).active(hasCopy);
         this.keys().register(Keys.WE_ROTATE_CC, this.rotateCC::clickItself).category(selectionCategory).active(hasCopy);
         this.keys().register(Keys.WE_FLIP_H, this.flipH::clickItself).category(selectionCategory).active(hasCopy);
