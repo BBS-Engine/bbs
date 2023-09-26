@@ -1,5 +1,6 @@
 package mchorse.bbs.ui.film.screenplay;
 
+import mchorse.bbs.BBSSettings;
 import mchorse.bbs.audio.ColorCode;
 import mchorse.bbs.audio.SoundBuffer;
 import mchorse.bbs.audio.SoundPlayer;
@@ -192,6 +193,11 @@ public class UIAudioPlayer extends UIElement implements IUITreeEventListener
             int x = this.area.x + 20 + (int) (playback * this.waveform.getPixelsPerSecond() - offset * PIXELS);
 
             context.batcher.box(x, this.area.y, x + 1, this.area.ey(), Colors.CURSOR);
+
+            int color = BBSSettings.primaryColor(Colors.A50);
+            String label = String.format("%.1f/%.1f", this.player.getPlaybackPosition(), this.player.getBuffer().getDuration());
+
+            context.batcher.textCard(context.font, label, this.area.ex() - 5 - context.font.getWidth(label), this.area.y + (this.area.h - context.font.getHeight()) / 2, Colors.WHITE, color);
         }
 
         if (this.player != null && this.wasPlaying != this.player.isPlaying())
