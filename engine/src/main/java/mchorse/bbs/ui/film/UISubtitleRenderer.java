@@ -95,7 +95,7 @@ public class UISubtitleRenderer
 
             for (String string : strings)
             {
-                w = Math.max(w, context.font.getWidth(string));
+                w = Math.max(w, context.font.getWidth(string.trim()));
             }
 
             h = (strings.size() - 1) * subtitle.lineHeight + context.font.getHeight();
@@ -112,6 +112,8 @@ public class UISubtitleRenderer
 
             for (String string : strings)
             {
+                string = string.trim();
+
                 int xx = 5 + (w - context.font.getWidth(string)) / 2;
 
                 if (Colors.getAlpha(subtitle.backgroundColor) > 0)

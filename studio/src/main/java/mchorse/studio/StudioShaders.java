@@ -9,6 +9,8 @@ import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.graphics.texture.TextureFormat;
 import mchorse.bbs.graphics.vao.VBOAttributes;
+import org.joml.Matrix4f;
+import org.joml.Vector3d;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
@@ -27,6 +29,11 @@ public class StudioShaders
 
     public Map<String, Buffer> textures = new HashMap<>();
     public List<Stage> stages = new ArrayList<>();
+
+    public Matrix4f prevProjection = new Matrix4f();
+    public Matrix4f prevView = new Matrix4f();
+    public Vector3d prevPosition = new Vector3d();
+    public int frames;
 
     public StudioShaders(ShaderPipeline pipeline)
     {

@@ -53,7 +53,7 @@ public class CameraObject extends WorldObject
                 this.camera.position.set(this.position).add(0.5D, 0.5D, 0.5D);
                 this.camera.rotation.set(this.rotation);
 
-                context.getWorld().bridge.get(IBridgeRender.class).renderSceneTo(this.camera, framebuffer, 1, 1);
+                context.getWorld().bridge.get(IBridgeRender.class).renderSceneTo(this.camera, framebuffer, 1, true, 1);
             });
         }
 

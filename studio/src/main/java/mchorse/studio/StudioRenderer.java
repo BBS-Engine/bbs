@@ -80,11 +80,6 @@ public class StudioRenderer implements IComponent
     private RenderWorldEvent renderWorld;
 
     private int ticks;
-    private int frames;
-
-    private Matrix4f prevProjection = new Matrix4f();
-    private Matrix4f prevView = new Matrix4f();
-    private Vector3d prevPosition = new Vector3d();
 
     private Entity dummy = EntityArchitect.createDummy();
 
@@ -275,8 +270,6 @@ public class StudioRenderer implements IComponent
         this.renderFinalQuad();
 
         this.context.runRunnables();
-
-        this.frames += 1;
     }
 
     private void renderFinal(Camera camera, StudioShaders shaders)
@@ -311,9 +304,10 @@ public class StudioRenderer implements IComponent
         GLStates.activeTexture(0);
         GLStates.resetViewport();
 
-        this.prevProjection.set(camera.projection);
-        this.prevView.set(camera.view);
-        this.prevPosition.set(camera.position);
+        shaders.prevProjection.set(camera.projection);
+        shaders.prevView.set(camera.view);
+        shaders.prevPosition.set(camera.position);
+        shaders.frames += 1;
     }
 
     private void setupCompositeShader(StudioShaders shaders, Shader shader, Camera camera, Framebuffer framebuffer)
@@ -341,7 +335,7 @@ public class StudioRenderer implements IComponent
         if (view != null) view.set(camera.view);
         if (projectionInverse != null) projectionInverse.set(Matrices.TEMP_4F.set(camera.projection).invert());
         if (viewInverse != null) viewInverse.set(Matrices.TEMP_4F.set(camera.view).invert());
-        if (frames != null) frames.set(this.frames);
+        if (frames != null) frames.set(shaders.frames);
         if (near != null) near.set(camera.near);
         if (far != null) far.set(camera.far);
         if (screenSize != null)
@@ -351,9 +345,9 @@ public class StudioRenderer implements IComponent
             screenSize.set(mainTexture.width, mainTexture.height);
         }
 
-        if (prevPosition != null) prevPosition.set(this.prevPosition);
-        if (prevProjection != null) prevProjection.set(this.prevProjection);
-        if (prevView != null) prevView.set(this.prevView);
+        if (prevPosition != null) prevPosition.set(shaders.prevPosition);
+        if (prevProjection != null) prevProjection.set(shaders.prevProjection);
+        if (prevView != null) prevView.set(shaders.prevView);
 
         if (shaders.shadow != null)
         {

@@ -170,6 +170,11 @@ public abstract class UICommonWorldEditor <T> extends UIWorldPanel
     @Override
     public void renderInWorld(RenderingContext context)
     {
+        if (!this.canBeSeen())
+        {
+            return;
+        }
+
         MouseInput input = BBS.getEngine().mouse;
         Camera camera = context.getCamera();
 
