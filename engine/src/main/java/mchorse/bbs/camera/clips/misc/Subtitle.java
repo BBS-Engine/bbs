@@ -16,6 +16,7 @@ public class Subtitle
     public int backgroundColor;
     public float backgroundOffset;
     public float shadow;
+    public boolean shadowOpaque;
 
     public Transform transform;
     public float factor;
@@ -40,11 +41,12 @@ public class Subtitle
         this.windowY = y;
     }
 
-    public void updateBackground(int backgroundColor, float backgroundOffset, float shadow)
+    public void updateBackground(int backgroundColor, float backgroundOffset, float shadow, boolean shadowOpaque)
     {
         this.backgroundColor = backgroundColor;
         this.backgroundOffset = backgroundOffset;
         this.shadow = shadow;
+        this.shadowOpaque = shadowOpaque;
     }
 
     public void updateTransform(Transform transform, float factor)

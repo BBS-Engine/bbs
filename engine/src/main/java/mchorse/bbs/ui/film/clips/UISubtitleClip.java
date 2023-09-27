@@ -3,6 +3,7 @@ package mchorse.bbs.ui.film.clips;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
+import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.utils.UI;
@@ -22,6 +23,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
     public UIColor background;
     public UITrackpad backgroundOffset;
     public UITrackpad shadow;
+    public UIToggle shadowOpaque;
     public UIPropTransform transform;
     public UITrackpad lineHeight;
     public UITrackpad maxWidth;
@@ -79,6 +81,10 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         {
             value.set(v.floatValue());
         })).limit(0);
+        this.shadowOpaque = new UIToggle(IKey.lazy("Opaque"), (b) -> this.editor.editMultiple(this.clip.shadowOpaque, (value) ->
+        {
+            value.set(b.getValue());
+        }));
 
         this.transform = new UIPropTransform((t) -> this.editor.editMultiple(this.clip.transform, (value) ->
         {
@@ -108,7 +114,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         this.panels.add(UIClip.label(IKey.lazy("Anchor")).marginTop(6), UI.row(this.anchorX, this.anchorY));
         this.panels.add(UIClip.label(IKey.lazy("Window")).marginTop(6), UI.row(this.windowX, this.windowY));
         this.panels.add(UIClip.label(IKey.lazy("Background")).marginTop(6), this.background, this.backgroundOffset);
-        this.panels.add(UIClip.label(IKey.lazy("Shadow")).marginTop(6), this.shadow);
+        this.panels.add(UIClip.label(IKey.lazy("Shadow")).marginTop(6), this.shadow, this.shadowOpaque);
         this.panels.add(UIClip.label(IKey.lazy("Transform")).marginTop(6), this.transform);
         this.panels.add(UIClip.label(IKey.lazy("Constraints")).marginTop(6), UI.row(this.lineHeight, this.maxWidth));
     }
@@ -129,6 +135,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         this.background.setColor(this.clip.background.get());
         this.backgroundOffset.setValue(this.clip.backgroundOffset.get());
         this.shadow.setValue(this.clip.shadow.get());
+        this.shadowOpaque.setValue(this.clip.shadowOpaque.get());
         this.transform.setTransform(this.clip.transform.get());
         this.lineHeight.setValue(this.clip.lineHeight.get());
         this.maxWidth.setValue(this.clip.maxWidth.get());

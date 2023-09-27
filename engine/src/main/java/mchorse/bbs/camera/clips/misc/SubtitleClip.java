@@ -3,6 +3,7 @@ package mchorse.bbs.camera.clips.misc;
 import mchorse.bbs.camera.clips.CameraClip;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.camera.values.ValueTransform;
+import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueFloat;
 import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.utils.Transform;
@@ -26,6 +27,7 @@ public class SubtitleClip extends CameraClip
     public ValueInt background = new ValueInt("background", 0);
     public ValueFloat backgroundOffset = new ValueFloat("backgroundOffset", 2F);
     public ValueFloat shadow = new ValueFloat("shadow", 0F);
+    public ValueBoolean shadowOpaque = new ValueBoolean("shadowOpaque", false);
     public ValueTransform transform = new ValueTransform("transform", new Transform());
     public ValueInt lineHeight = new ValueInt("lineHeight", 12);
     public ValueInt maxWidth = new ValueInt("maxWidth", 0);
@@ -64,6 +66,7 @@ public class SubtitleClip extends CameraClip
         this.add(this.background);
         this.add(this.backgroundOffset);
         this.add(this.shadow);
+        this.add(this.shadowOpaque);
         this.add(this.transform);
         this.add(this.lineHeight);
         this.add(this.maxWidth);
@@ -78,7 +81,7 @@ public class SubtitleClip extends CameraClip
 
         this.subtitle.update(this.title.get(), this.x.get(), this.y.get(), this.size.get(), this.anchorX.get(), this.anchorY.get(), color);
         this.subtitle.updateWindow(this.windowX.get(), this.windowY.get());
-        this.subtitle.updateBackground(this.background.get(), this.backgroundOffset.get(), this.shadow.get());
+        this.subtitle.updateBackground(this.background.get(), this.backgroundOffset.get(), this.shadow.get(), this.shadowOpaque.get());
         this.subtitle.updateTransform(this.transform.get(), factor);
         this.subtitle.updateConstraints(this.lineHeight.get(), this.maxWidth.get());
         subtitles.add(this.subtitle);

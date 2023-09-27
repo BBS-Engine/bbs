@@ -30,47 +30,78 @@ out vec4 out_color;
 
 uniform vec4 u_color;
 uniform sampler2D u_texture;
-uniform float u_blur;
+uniform vec2 u_blur;
 uniform vec2 u_texture_size;
 
-vec4 texture_blur(sampler2D tex, vec2 uv)
+vec4 texture_blur(sampler2D tex, vec2 uv, float blur)
 {
-    float Pi = 6.28318530718; // Pi*2
+    float tau = 6.28318530718;
 
-    float Directions = 24.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
-    float Quality = 3.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
-    float Size = u_blur; // BLUR SIZE (Radius)
+    float directions = 24.0;
+    float quality = 3.0;
 
-    vec2 Radius = Size/u_texture_size;
-    vec4 Color = texture(tex, uv);
+    vec2 radius = blur / u_texture_size;
+    vec4 color = texture(tex, uv);
 
-    for (float d = 0.0; d < Pi; d += Pi / Directions)
+    for (float d = 0.0; d < tau; d += tau / directions)
     {
-        for (float i= 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
+        for (float i= 1.0 / quality; i <= 1.0; i += 1.0 / quality)
         {
-            Color += texture(tex, uv + vec2(cos(d), sin(d)) * Radius * i);
+            color += texture(tex, uv + vec2(cos(d), sin(d)) * radius * i);
         }
     }
 
     // Output to screen
-    Color /= Quality * Directions - 15.0;
+    color /= quality * directions - 15.0;
 
-    return Color;
+    return color;
+}
+
+void texture_opaque_blur(inout vec4 out_color, sampler2D tex, vec2 uv, float blur)
+{
+    if (out_color.a < 1)
+    {
+        vec2 radius = blur / u_texture_size;
+
+        for (float x = -blur; x <= blur; x++)
+        {
+            for (float y = -blur; y <= blur; y++)
+            {
+                if (texture(u_texture, pass_uv + radius * vec2(x, y)).a >= 1)
+                {
+                    out_color.rgb = vec3(0, 0, 0);
+                    out_color.a = 1.0;
+
+                    return;
+                }
+            }
+        }
+    }
 }
 
 void main()
 {
     out_color = texture(u_texture, pass_uv);
 
-    if (u_blur > 0)
-    {
-        vec4 blurredColor = texture_blur(u_texture, pass_uv);
+    float blur = u_blur.x;
+    float opaque = u_blur.y;
 
-        if (out_color.a < 1)
+    if (blur > 0)
+    {
+        if (opaque > 0)
         {
-            blurredColor.rgb = vec3(0, 0, 0);
-            blurredColor.a *= 0.5;
-            out_color = blurredColor;
+            texture_opaque_blur(out_color, u_texture, pass_uv, blur);
+        }
+        else
+        {
+            vec4 blurred_color = texture_blur(u_texture, pass_uv, blur);
+
+            if (out_color.a < 1)
+            {
+                blurred_color.rgb = vec3(0, 0, 0);
+                blurred_color.a *= 0.5;
+                out_color = blurred_color;
+            }
         }
     }
 

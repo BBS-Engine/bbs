@@ -7,7 +7,6 @@ import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
-import mchorse.bbs.graphics.shaders.uniforms.UniformFloat;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector2;
 import mchorse.bbs.graphics.text.TextUtils;
 import mchorse.bbs.graphics.texture.Texture;
@@ -144,9 +143,9 @@ public class UISubtitleRenderer
             transform.apply(context.render.stack);
 
             UniformVector2 textureSize = blurShader.getUniform("u_texture_size", UniformVector2.class);
-            UniformFloat blur = blurShader.getUniform("u_blur", UniformFloat.class);
+            UniformVector2 blur = blurShader.getUniform("u_blur", UniformVector2.class);
 
-            if (blur != null) blur.set(subtitle.shadow);
+            if (blur != null) blur.set(subtitle.shadow, subtitle.shadowOpaque ? 1F : 0F);
             if (textureSize != null) textureSize.set(mainTexture.width, mainTexture.height);
 
             context.batcher.fullTexturedBox(blurShader, mainTexture, Colors.setA(Colors.WHITE, alpha), (int) (-fw * subtitle.anchorX), (int) (-fh * subtitle.anchorX), mainTexture.width, mainTexture.height);

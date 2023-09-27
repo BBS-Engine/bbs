@@ -30,7 +30,7 @@ public abstract class CameraClip extends Clip
 
         float factor = this.envelope.factorEnabled(this.duration.get(), context.relativeTick + context.transition);
 
-        if (factor >= 1)
+        if (factor == 1)
         {
             this.applyClip(context, position);
         }
