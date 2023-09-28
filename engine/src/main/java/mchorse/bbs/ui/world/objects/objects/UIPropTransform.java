@@ -173,21 +173,18 @@ public class UIPropTransform extends UITransform
             else if (context.isPressed(GLFW.GLFW_KEY_X))
             {
                 this.axis = Axis.X;
-                this.getValue().set(this.cache);
 
                 return true;
             }
             else if (context.isPressed(GLFW.GLFW_KEY_Y))
             {
                 this.axis = Axis.Y;
-                this.getValue().set(this.cache);
 
                 return true;
             }
             else if (context.isPressed(GLFW.GLFW_KEY_Z))
             {
                 this.axis = Axis.Z;
-                this.getValue().set(this.cache);
 
                 return true;
             }
