@@ -1,9 +1,9 @@
 package mchorse.bbs.ui.utils.keys;
 
 import mchorse.bbs.BBS;
+import mchorse.bbs.events.register.RegisterKeybindsClassesEvent;
 import mchorse.bbs.settings.SettingsBuilder;
 import mchorse.bbs.settings.values.ValueKeyCombo;
-import mchorse.bbs.events.register.RegisterKeybindsClassesEvent;
 import mchorse.bbs.ui.Keys;
 
 import java.lang.reflect.Field;
@@ -37,7 +37,6 @@ public class KeybindSettings
 
         keys.sort(Comparator.comparing((a) -> a));
 
-
         for (String key : keys)
         {
             List<KeyCombo> comboList = combos.get(key);
@@ -46,7 +45,7 @@ public class KeybindSettings
 
             for (KeyCombo combo : comboList)
             {
-                builder.register(new ValueKeyCombo(combo.label.getKey(), combo));
+                builder.register(new ValueKeyCombo(combo.id, combo));
             }
         }
     }

@@ -24,10 +24,4 @@ public class CompoundKey implements IKey
 
         return builder.toString();
     }
-
-    @Override
-    public String getKey()
-    {
-        throw new UnsupportedOperationException("CompoundKey doesn't have a key!");
-    }
 }

@@ -51,8 +51,6 @@ public interface IKey
 
     public String get();
 
-    public String getKey();
-
     public default IKey format(Object... args)
     {
         return new FormatKey(this, args);

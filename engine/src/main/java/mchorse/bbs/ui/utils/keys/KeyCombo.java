@@ -8,11 +8,19 @@ import java.util.List;
 
 public class KeyCombo
 {
+    public String id = "";
     public IKey label;
     public IKey category = IKey.EMPTY;
     public String categoryKey = "all";
     public boolean repeatable;
     public List<Integer> keys = new ArrayList<>();
+
+    public KeyCombo(String id, IKey label, int... keys)
+    {
+        this(label, keys);
+
+        this.id = id;
+    }
 
     public KeyCombo(IKey label, int... keys)
     {

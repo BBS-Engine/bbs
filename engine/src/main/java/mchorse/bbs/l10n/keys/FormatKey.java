@@ -22,17 +22,11 @@ public class FormatKey implements IKey
         }
         catch (Exception e)
         {
-            String key = this.lang instanceof LangKey ? this.lang.getKey() : this.lang.get();
+            String key = this.lang instanceof LangKey ? ((LangKey) this.lang).key : this.lang.get();
             System.out.println("Failed to format string: " + key);
             e.printStackTrace();
 
             return key;
         }
-    }
-
-    @Override
-    public String getKey()
-    {
-        throw new UnsupportedOperationException("FormatKey doesn't have a key!");
     }
 }

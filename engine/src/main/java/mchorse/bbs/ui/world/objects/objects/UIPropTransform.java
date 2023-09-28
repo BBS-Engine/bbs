@@ -4,9 +4,9 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.UITransform;
-import mchorse.bbs.ui.utils.keys.KeyCombo;
 import mchorse.bbs.utils.Axis;
 import mchorse.bbs.utils.Timer;
 import mchorse.bbs.utils.Transform;
@@ -16,6 +16,7 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class UIPropTransform extends UITransform
 {
@@ -45,10 +46,14 @@ public class UIPropTransform extends UITransform
     public UIPropTransform enableHotkeys()
     {
         IKey category = IKey.lazy("Transformations");
+        Supplier<Boolean> active = () -> this.editing;
 
-        this.keys().register(new KeyCombo(IKey.lazy("Translate"), GLFW.GLFW_KEY_G), () -> this.enableMode(0)).category(category);
-        this.keys().register(new KeyCombo(IKey.lazy("Scale"), GLFW.GLFW_KEY_S), () -> this.enableMode(1)).category(category);
-        this.keys().register(new KeyCombo(IKey.lazy("Rotate"), GLFW.GLFW_KEY_R), () -> this.enableMode(2)).category(category);
+        this.keys().register(Keys.TRANSFORMATIONS_TRANSLATE, () -> this.enableMode(0)).category(category);
+        this.keys().register(Keys.TRANSFORMATIONS_SCALE, () -> this.enableMode(1)).category(category);
+        this.keys().register(Keys.TRANSFORMATIONS_ROTATE, () -> this.enableMode(2)).category(category);
+        this.keys().register(Keys.TRANSFORMATIONS_X, () -> this.axis = Axis.X).active(active).category(category);
+        this.keys().register(Keys.TRANSFORMATIONS_Y, () -> this.axis = Axis.Y).active(active).category(category);
+        this.keys().register(Keys.TRANSFORMATIONS_Z, () -> this.axis = Axis.Z).active(active).category(category);
 
         return this;
     }
@@ -167,24 +172,6 @@ public class UIPropTransform extends UITransform
                 this.disable();
                 this.submit();
                 this.setTransform(this.transform);
-
-                return true;
-            }
-            else if (context.isPressed(GLFW.GLFW_KEY_X))
-            {
-                this.axis = Axis.X;
-
-                return true;
-            }
-            else if (context.isPressed(GLFW.GLFW_KEY_Y))
-            {
-                this.axis = Axis.Y;
-
-                return true;
-            }
-            else if (context.isPressed(GLFW.GLFW_KEY_Z))
-            {
-                this.axis = Axis.Z;
 
                 return true;
             }

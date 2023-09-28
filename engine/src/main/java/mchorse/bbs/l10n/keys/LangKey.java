@@ -24,12 +24,6 @@ public class LangKey implements IKey
         return this.content;
     }
 
-    @Override
-    public String getKey()
-    {
-        return this.key;
-    }
-
     public void setOrigin(Link origin)
     {
         this.origin = origin;

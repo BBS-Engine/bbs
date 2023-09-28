@@ -16,12 +16,6 @@ public class StringKey implements IKey
     }
 
     @Override
-    public String getKey()
-    {
-        throw new UnsupportedOperationException("StringKey doesn't have a key!");
-    }
-
-    @Override
     public String toString()
     {
         return this.string;
