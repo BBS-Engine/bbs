@@ -1,18 +1,14 @@
 package mchorse.bbs.ui.dashboard.panels;
 
 import mchorse.bbs.game.utils.ContentType;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.ui.Keys;
-import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.overlay.UICRUDOverlayPanel;
 import mchorse.bbs.ui.dashboard.panels.overlay.UIDataOverlayPanel;
-import mchorse.bbs.ui.dashboard.panels.overlay.UIOptionsOverlayPanel;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
-import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.UIDataUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -22,11 +18,7 @@ import java.util.List;
 
 public abstract class UIDataDashboardPanel <T extends ValueGroup> extends UICRUDDashboardPanel
 {
-    public static final IKey KEYS_CATEGORY = UIKeys.PANELS_KEYS_CATEGORY;
-
     public UIIcon saveIcon;
-    public UIIcon optionsIcon;
-    public UIOptionsOverlayPanel options;
 
     protected T data;
     protected boolean save;
@@ -35,21 +27,11 @@ public abstract class UIDataDashboardPanel <T extends ValueGroup> extends UICRUD
     {
         super(dashboard);
 
-        this.options = new UIOptionsOverlayPanel();
         this.saveIcon = new UIIcon(Icons.SAVED, (b) -> this.save());
-        this.optionsIcon = new UIIcon(Icons.GEAR, (b) ->
-        {
-            UIOverlay.addOverlayRight(this.getContext(), this.options, 200, 20).noBackground();
-        });
 
         this.iconBar.add(this.saveIcon);
 
         this.keys().register(Keys.SAVE, this.saveIcon::clickItself).active(() -> this.data != null);
-    }
-
-    protected void addOptions()
-    {
-        this.iconBar.addAfter(this.saveIcon, this.optionsIcon);
     }
 
     public T getData()
@@ -91,7 +73,6 @@ public abstract class UIDataDashboardPanel <T extends ValueGroup> extends UICRUD
         this.overlay.dupe.setEnabled(data != null);
         this.overlay.rename.setEnabled(data != null);
         this.overlay.remove.setEnabled(data != null);
-        this.optionsIcon.setEnabled(data != null);
     }
 
     public void fillDefaultData(T data)
