@@ -1,5 +1,6 @@
 package mchorse.bbs.ui.world.objects.objects;
 
+import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
@@ -7,6 +8,7 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.UITransform;
 import mchorse.bbs.ui.utils.keys.KeyCombo;
 import mchorse.bbs.utils.Axis;
+import mchorse.bbs.utils.Timer;
 import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.MathUtils;
@@ -19,6 +21,9 @@ public class UIPropTransform extends UITransform
 {
     public static final IKey EDITING_LABEL = IKey.lazy("Editing...");
 
+    private static final double[] CURSOR_X = new double[1];
+    private static final double[] CURSOR_Y = new double[1];
+
     private Transform transform;
     private Consumer<Transform> callback;
 
@@ -26,8 +31,8 @@ public class UIPropTransform extends UITransform
     private int mode;
     private Axis axis = Axis.X;
     private int lastX;
-    private int lastY;
     private Vector3f cache = new Vector3f();
+    private Timer checker = new Timer(30);
 
     public UIPropTransform()
     {}
@@ -65,7 +70,6 @@ public class UIPropTransform extends UITransform
         UIContext context = this.getContext();
 
         this.lastX = context.mouseX;
-        this.lastY = context.mouseY;
         this.cache.set(this.getValue());
     }
 
@@ -195,23 +199,51 @@ public class UIPropTransform extends UITransform
     @Override
     public void render(UIContext context)
     {
-        if (this.editing)
+        if (this.editing && this.checker.isTime())
         {
-            int dx = context.mouseX - this.lastX;
-            int dy = context.mouseY - this.lastY;
-            Vector3f vector = this.getValue();
-            boolean all = Window.isAltPressed();
+            /* UIContext.mouseX can't be used because when cursor is outside of window
+             * its position stops being updated. That's why it has to be queried manually
+             * through GLFW...
+             *
+             * It gets updated outside the window only when one of mouse buttons is
+             * being held! */
+            GLFW.glfwGetCursorPos(Window.getWindow(), CURSOR_X, CURSOR_Y);
 
-            float factor = this.mode == 0 ? 0.05F : (this.mode == 1 ? 0.01F : MathUtils.toRad(0.5F));
+            double rawX = CURSOR_X[0];
+            double fx = Math.ceil(Window.width / (double) context.menu.width);
+            int border = 5;
+            int borderPadding = border + 1;
 
-            if (this.axis == Axis.X || all) vector.x += factor * dx;
-            if (this.axis == Axis.Y || all) vector.y += factor * dx;
-            if (this.axis == Axis.Z || all) vector.z += factor * dx;
+            if (rawX <= border)
+            {
+                Window.moveCursor(Window.width - borderPadding, BBS.getEngine().mouse.y);
 
-            this.setTransform(this.transform);
+                this.lastX = context.menu.width - (int) (borderPadding / fx);
+                this.checker.mark();
+            }
+            else if (rawX >= Window.width - border)
+            {
+                Window.moveCursor(borderPadding, BBS.getEngine().mouse.y);
 
-            this.lastX = context.mouseX;
-            this.lastY = context.mouseY;
+                this.lastX = (int) (borderPadding / fx);
+                this.checker.mark();
+            }
+            else
+            {
+                int dx = context.mouseX - this.lastX;
+                Vector3f vector = this.getValue();
+                boolean all = Window.isAltPressed();
+
+                float factor = this.mode == 0 ? 0.05F : (this.mode == 1 ? 0.01F : MathUtils.toRad(0.5F));
+
+                if (this.axis == Axis.X || all) vector.x += factor * dx;
+                if (this.axis == Axis.Y || all) vector.y += factor * dx;
+                if (this.axis == Axis.Z || all) vector.z += factor * dx;
+
+                this.setTransform(this.transform);
+
+                this.lastX = context.mouseX;
+            }
         }
 
         super.render(context);
