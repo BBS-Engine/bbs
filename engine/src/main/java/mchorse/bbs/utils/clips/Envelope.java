@@ -2,6 +2,8 @@ package mchorse.bbs.utils.clips;
 
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.camera.values.ValueInterpolation;
+import mchorse.bbs.data.types.BaseType;
+import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.settings.values.ValueBoolean;
 import mchorse.bbs.settings.values.ValueFloat;
 import mchorse.bbs.settings.values.ValueGroup;
@@ -16,7 +18,8 @@ public class Envelope extends ValueGroup
     public final ValueFloat fadeIn = new ValueFloat("fadeIn", 10F);
     public final ValueFloat fadeOut = new ValueFloat("fadeOut", 10F);
 
-    public final ValueInterpolation interpolation = new ValueInterpolation("interpolation");
+    public final ValueInterpolation pre = new ValueInterpolation("pre");
+    public final ValueInterpolation post = new ValueInterpolation("post");
 
     public final ValueBoolean keyframes = new ValueBoolean("keyframes");
     public final KeyframeChannel channel = new KeyframeChannel("channel");
@@ -28,7 +31,8 @@ public class Envelope extends ValueGroup
         this.add(this.enabled);
         this.add(this.fadeIn);
         this.add(this.fadeOut);
-        this.add(this.interpolation);
+        this.add(this.pre);
+        this.add(this.post);
         this.add(this.keyframes);
         this.add(this.channel);
 
@@ -79,8 +83,10 @@ public class Envelope extends ValueGroup
         }
         else
         {
-            envelope = Interpolations.envelope(tick, 0, this.fadeIn.get(), this.getEndDuration(duration), this.getEndX(duration));
-            envelope = this.interpolation.get().interpolate(0, 1, envelope);
+            float lowOut = this.fadeIn.get();
+
+            envelope = Interpolations.envelope(tick, 0, lowOut, this.getEndDuration(duration), this.getEndX(duration));
+            envelope = (tick <= lowOut ? this.pre : this.post).get().interpolate(0, 1, envelope);
         }
 
         return envelope;
@@ -92,5 +98,24 @@ public class Envelope extends ValueGroup
         original.envelope.fadeOut.set(0F);
 
         this.channel.moveX(-offset);
+    }
+
+    @Override
+    public void fromData(BaseType data)
+    {
+        super.fromData(data);
+
+        if (data.isMap())
+        {
+            MapType map = data.asMap();
+
+            if (map.has("interpolation"))
+            {
+                BaseType interpolation = map.get("interpolation");
+
+                this.pre.fromData(interpolation);
+                this.post.fromData(interpolation);
+            }
+        }
     }
 }

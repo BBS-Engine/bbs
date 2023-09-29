@@ -1,6 +1,7 @@
 package mchorse.bbs.ui.film.clips.widgets;
 
 import mchorse.bbs.camera.utils.TimeUtils;
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.clips.UIClip;
 import mchorse.bbs.ui.film.utils.UICameraUtils;
@@ -21,7 +22,8 @@ public class UIEnvelope extends UIElement
     public UIClip<? extends Clip> panel;
 
     public UIToggle enabled;
-    public UIButton pickInterpolation;
+    public UIButton pre;
+    public UIButton post;
     public UITrackpad fadeIn;
     public UITrackpad fadeOut;
 
@@ -35,20 +37,29 @@ public class UIEnvelope extends UIElement
 
         this.panel = panel;
 
-        InterpolationTooltip tooltip = new InterpolationTooltip(1F, 0.5F, () -> this.get().interpolation.get());
+        InterpolationTooltip preTooltip = new InterpolationTooltip(0F, 0.5F, () -> this.get().pre.get());
+        InterpolationTooltip postTooltip = new InterpolationTooltip(0F, 0.5F, () -> this.get().post.get());
 
         this.enabled = new UIToggle(UIKeys.CAMERA_PANELS_ENABLED, (b) ->
         {
             this.panel.editor.editMultiple(this.get().enabled, (value) -> value.set(b.getValue()));
         });
-        this.pickInterpolation = new UIButton(UIKeys.CAMERA_PANELS_INTERPOLATION, (b) ->
+        this.pre = new UIButton(IKey.lazy("Pre"), (b) ->
         {
-            UICameraUtils.interps(this.getContext(), this.get().interpolation.get(), (v) ->
+            UICameraUtils.interps(this.getContext(), this.get().pre.get(), (v) ->
             {
-                this.panel.editor.editMultiple(this.get().interpolation, (value) -> value.set(v));
+                this.panel.editor.editMultiple(this.get().pre, (value) -> value.set(v));
             });
         });
-        this.pickInterpolation.tooltip(tooltip);
+        this.pre.tooltip(preTooltip);
+        this.post = new UIButton(IKey.lazy("Post"), (b) ->
+        {
+            UICameraUtils.interps(this.getContext(), this.get().post.get(), (v) ->
+            {
+                this.panel.editor.editMultiple(this.get().post, (value) -> value.set(v));
+            });
+        });
+        this.post.tooltip(postTooltip);
 
         this.fadeIn = new UITrackpad((v) ->
         {
@@ -88,7 +99,7 @@ public class UIEnvelope extends UIElement
         }
         else
         {
-            this.add(this.pickInterpolation, UI.row(this.fadeIn, this.fadeOut));
+            this.add(UI.row(this.pre, this.post), UI.row(this.fadeIn, this.fadeOut));
         }
 
         this.add(this.keyframes);
