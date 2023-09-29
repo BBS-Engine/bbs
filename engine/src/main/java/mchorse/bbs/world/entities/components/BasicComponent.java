@@ -6,6 +6,9 @@ import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.math.Interpolations;
 import mchorse.bbs.utils.math.MathUtils;
+import mchorse.bbs.voxel.raytracing.RayTraceResult;
+import mchorse.bbs.voxel.raytracing.RayTraceType;
+import mchorse.bbs.voxel.raytracing.RayTracer;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
@@ -122,6 +125,25 @@ public class BasicComponent extends Component
             if (Math.abs(this.velocity.z) < 0.001F) this.velocity.z = 0;
             else this.velocity.z *= slowdown;
         }
+
+        /* TODO: add an option auto-jump
+        if (this.velocity.x != 0 && this.velocity.z != 0 && this.grounded)
+        {
+            RayTraceResult result = new RayTraceResult();
+            Vector3f rotate = Matrices.rotation(-rotation.x, MathUtils.PI - rotation.y);
+
+            RayTracer.trace(result, this.entity.world.chunks, new Vector3d(this.position).add(0, 0.5D, 0), rotate, 2F);
+
+            if (result.type == RayTraceType.BLOCK)
+            {
+                if (this.entity.world.chunks.getBlock(result.block.x, result.block.y, result.block.z).getModel().collision)
+                {
+                    this.velocity.y = 0.325F;
+                    this.grounded = false;
+                }
+            }
+        }
+        */
     }
 
     @Override

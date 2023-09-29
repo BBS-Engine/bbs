@@ -40,12 +40,17 @@ import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.MathUtils;
+import mchorse.bbs.voxel.blocks.IBlockVariant;
+import mchorse.bbs.voxel.raytracing.RayTraceResult;
+import mchorse.bbs.voxel.raytracing.RayTraceType;
+import mchorse.bbs.voxel.raytracing.RayTracer;
 import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.BasicComponent;
 import mchorse.bbs.world.entities.components.FormComponent;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
@@ -79,6 +84,8 @@ public class UIFilmController extends UIElement
     private StencilFormFramebuffer stencil = new StencilFormFramebuffer();
 
     public final OrbitFilmCameraController orbit = new OrbitFilmCameraController(this);
+    private int pov;
+    private RayTraceResult result = new RayTraceResult();
 
     public UIFilmController(UIFilmPanel panel)
     {
@@ -90,6 +97,7 @@ public class UIFilmController extends UIElement
         this.keys().register(new KeyCombo(IKey.lazy("Insert keyframe"), GLFW.GLFW_KEY_I), this::insertFrame).category(category);
         this.keys().register(new KeyCombo(IKey.lazy("Toggle orbit"), GLFW.GLFW_KEY_O), this::toggleOrbit).category(category);
         this.keys().register(new KeyCombo(IKey.lazy("Toggle actor control"), GLFW.GLFW_KEY_H), this::toggleControl).category(category);
+        this.keys().register(new KeyCombo(IKey.lazy("Toggle orbit mode"), GLFW.GLFW_KEY_P), () -> this.setPov(this.pov + 1)).category(category);
 
         this.noCulling();
     }
@@ -107,6 +115,28 @@ public class UIFilmController extends UIElement
     public StencilFormFramebuffer getStencil()
     {
         return this.stencil;
+    }
+
+    public Entity getCurrentEntity()
+    {
+        int index = this.panel.replays.replays.getIndex();
+
+        if (CollectionUtils.inRange(this.entities, index))
+        {
+            return this.entities.get(index);
+        }
+
+        return null;
+    }
+
+    private int getPovMode()
+    {
+        return this.pov % 4;
+    }
+
+    public void setPov(int pov)
+    {
+        this.pov = pov;
     }
 
     private int getMouseMode()
@@ -180,7 +210,7 @@ public class UIFilmController extends UIElement
         }
         else if (this.panel.replays.replays.isSelected())
         {
-            this.controlled = this.entities.get(this.panel.replays.replays.getIndex());
+            this.controlled = this.getCurrentEntity();
         }
 
         this.walkDirection.set(0, 0);
@@ -406,7 +436,73 @@ public class UIFilmController extends UIElement
     {
         if (this.orbit.enabled)
         {
-            this.orbit.setup(camera, transition);
+            int mode = this.getPovMode();
+
+            if (mode == 0)
+            {
+                this.orbit.setup(camera, transition);
+            }
+            else
+            {
+                this.handleFirstThirdPerson(camera, transition, mode);
+            }
+        }
+    }
+
+    private void handleFirstThirdPerson(Camera camera, float transition, int mode)
+    {
+        Entity controller = this.getCurrentEntity();
+        Vector3d position = new Vector3d();
+        Vector3f rotation = new Vector3f();
+        float distance = this.orbit.getDistance();
+        boolean back = mode == 2;
+
+        BasicComponent basic = controller.basic;
+
+        position.set(basic.prevPosition);
+        position.lerp(basic.position, transition);
+        position.y += basic.getEyeHeight();
+
+        rotation.set(basic.prevRotation);
+        rotation.lerp(basic.rotation, transition);
+
+        camera.fov = BBSSettings.getFov();
+
+        if (mode == 1)
+        {
+            camera.position.set(position);
+            camera.rotation.set(rotation.x, rotation.y, 0F);
+
+            return;
+        }
+
+        Vector3f rotate = Matrices.rotation(-rotation.x, (back ? 0F : MathUtils.PI) - rotation.y);
+        World world = this.panel.dashboard.bridge.get(IBridgeWorld.class).getWorld();
+
+        RayTracer.trace(this.result, world.chunks, position, rotate, distance, true, (b) ->
+        {
+            IBlockVariant block = world.chunks.getBlock(b.block.x, b.block.y, b.block.z);
+
+            return block.getModel().opaque;
+        });
+
+        if (this.result.type == RayTraceType.BLOCK)
+        {
+            distance = (float) position.distance(this.result.hit) - 0.1F;
+        }
+
+        rotate.mul(distance);
+        position.add(rotate);
+
+        camera.position.set(position);
+
+        if (back)
+        {
+            camera.rotation.set(rotation.x, rotation.y, 0);
+        }
+        else
+        {
+            camera.rotation.set(-rotation.x, MathUtils.PI + rotation.y, 0);
         }
     }
 
@@ -436,7 +532,7 @@ public class UIFilmController extends UIElement
 
                 BaseValue.edit(replay.keyframes, (keyframes) ->
                 {
-                    Entity entity = this.entities.get(this.panel.replays.replays.getIndex());
+                    Entity entity = this.getCurrentEntity();
 
                     keyframes.record(this.getTick(), entity, groups);
                 });
@@ -666,7 +762,10 @@ public class UIFilmController extends UIElement
     {
         for (Entity entity : this.entities)
         {
-            entity.render(context);
+            if (!(this.getPovMode() == 1 && entity == getCurrentEntity() && this.orbit.enabled))
+            {
+                entity.render(context);
+            }
         }
 
         this.rayTraceEntity(context);
@@ -772,14 +871,13 @@ public class UIFilmController extends UIElement
             return;
         }
 
-        int index = this.panel.replays.replays.getIndex();
+        Entity entity = this.getCurrentEntity();
 
-        if (!CollectionUtils.inRange(this.entities, index))
+        if (entity != null)
         {
             return;
         }
 
-        Entity entity = this.entities.get(index);
         Camera camera = context.render.getCamera();
 
         this.ensureStencilFramebuffer();
