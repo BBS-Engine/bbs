@@ -90,7 +90,7 @@ public class Scale
 
     public void calculateMultiplier()
     {
-        this.mult = this.recalcMultiplier(this.zoom);
+        this.mult = this.recalcMultiplier(this.getZoom());
     }
 
     protected int recalcMultiplier(double zoom)
@@ -181,7 +181,7 @@ public class Scale
 
     public double getZoom()
     {
-        return this.zoom;
+        return this.zoom == 0 ? 1D : this.zoom;
     }
 
     public int getMult()
@@ -199,7 +199,7 @@ public class Scale
         double factor = (this.inverse
             ? -value + this.shift
             : value - this.shift
-        ) * this.zoom;
+        ) * this.getZoom();
 
         if (this.area != null)
         {
@@ -220,8 +220,8 @@ public class Scale
         }
 
         return this.inverse
-            ? -(coordinate / this.zoom - this.shift)
-            : coordinate / this.zoom + this.shift;
+            ? -(coordinate / this.getZoom() - this.shift)
+            : coordinate / this.getZoom() + this.shift;
     }
 
     public double getMinValue()
@@ -268,8 +268,8 @@ public class Scale
 
         if (offset != 0)
         {
-            min -= offset / this.zoom;
-            max += offset / this.zoom;
+            min -= offset / this.getZoom();
+            max += offset / this.getZoom();
         }
 
         if (this.lockViewport && (min < this.lockMin || max > this.lockMax))
@@ -314,7 +314,7 @@ public class Scale
 
     public void zoom(double amount, double min, double max)
     {
-        this.setZoom(MathUtils.clamp(this.zoom + amount, min, max));
+        this.setZoom(MathUtils.clamp(this.getZoom() + amount, min, max));
     }
 
     public void zoomAnchor(float newAnchor, double amount, double min, double max)
@@ -325,13 +325,13 @@ public class Scale
             {
                 double shift = this.direction.getPosition(this.area, this.anchor) - this.direction.getPosition(this.area, newAnchor);
 
-                this.shift += shift / this.zoom;
+                this.shift += shift / this.getZoom();
             }
             else
             {
                 double shift = this.direction.getPosition(this.area, this.anchor) - this.direction.getPosition(this.area, newAnchor);
 
-                this.shift -= shift / this.zoom;
+                this.shift -= shift / this.getZoom();
             }
         }
 
@@ -342,7 +342,7 @@ public class Scale
 
     public double getZoomFactor()
     {
-        return this.getZoomFactor(this.zoom);
+        return this.getZoomFactor(this.getZoom());
     }
 
     public double getZoomFactor(double zoom)

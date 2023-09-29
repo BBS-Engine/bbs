@@ -418,6 +418,13 @@ public class UIFilmController extends UIElement
 
     public void pickRecording()
     {
+        if (this.recording)
+        {
+            this.stopRecording();
+
+            return;
+        }
+
         Window.toggleMousePointer(false);
 
         UIOverlay.addOverlay(this.getContext(), new UIRecordOverlayPanel(
@@ -873,7 +880,7 @@ public class UIFilmController extends UIElement
 
         Entity entity = this.getCurrentEntity();
 
-        if (entity != null)
+        if (entity == null)
         {
             return;
         }
