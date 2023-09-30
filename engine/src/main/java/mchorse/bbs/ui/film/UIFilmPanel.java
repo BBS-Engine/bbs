@@ -5,6 +5,7 @@ import mchorse.bbs.BBSSettings;
 import mchorse.bbs.audio.AudioRenderer;
 import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.bridge.IBridgeRender;
+import mchorse.bbs.bridge.IBridgeVideoScreenshot;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.camera.controller.CameraController;
@@ -17,6 +18,7 @@ import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.texture.Texture;
+import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.values.ValueGroup;
@@ -45,6 +47,7 @@ import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.utils.math.MathUtils;
+import mchorse.bbs.utils.recording.ScreenshotRecorder;
 import mchorse.bbs.utils.undo.CompoundUndo;
 import mchorse.bbs.utils.undo.IUndo;
 import mchorse.bbs.utils.undo.UndoManager;
@@ -81,6 +84,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
     public UIIcon plause;
     public UIIcon record;
+    public UIIcon screenshot;
     public UIIcon openVideos;
     public UIIcon openCamera;
     public UIIcon openReplays;
@@ -133,11 +137,21 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.plause.tooltip(UIKeys.CAMERA_EDITOR_KEYS_EDITOR_PLAUSE, Direction.BOTTOM);
         this.record = new UIIcon(Icons.SPHERE, (b) -> this.recorder.startRecording(this.data.camera.calculateDuration(), this.getFramebuffer()));
         this.record.tooltip(UIKeys.CAMERA_TOOLTIPS_RECORD, Direction.LEFT);
+        this.screenshot = new UIIcon(Icons.CAMERA, (b) ->
+        {
+            ScreenshotRecorder recorder = this.dashboard.bridge.get(IBridgeVideoScreenshot.class).getScreenshotRecorder();
+
+            recorder.takeScreenshot(Window.isAltPressed() ? null : recorder.getScreenshotFile(), this.getFramebuffer().getMainTexture());
+        });
+        this.screenshot.tooltip(IKey.lazy("Take a screenshot"), Direction.LEFT);
         this.openVideos = new UIIcon(Icons.FILM, (b) -> this.recorder.openMovies());
         this.openVideos.tooltip(UIKeys.CAMERA_TOOLTIPS_OPEN_VIDEOS, Direction.LEFT);
         this.openCamera = new UIIcon(Icons.FRUSTUM, (b) -> this.showPanel(this.clips));
+        this.openCamera.tooltip(IKey.lazy("Open camera editor"), Direction.LEFT);
         this.openReplays = new UIIcon(Icons.SCENE, (b) -> this.showPanel(this.replays));
+        this.openReplays.tooltip(IKey.lazy("Open replay editor"), Direction.LEFT);
         this.openScreenplay = new UIIcon(Icons.FILE, (b) -> this.showPanel(this.screenplay));
+        this.openScreenplay.tooltip(IKey.lazy("Open voice line editor"), Direction.LEFT);
 
         this.draggable = new UIDraggable((context) ->
         {
@@ -148,7 +162,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         });
         this.draggable.hoverOnly().relative(this.main).x(1F, -3).y(0.5F, -40).wh(6, 80);
 
-        this.iconBar.add(this.plause, this.record, this.openVideos, this.openCamera, this.openReplays, this.openScreenplay);
+        this.iconBar.add(this.plause, this.record, this.screenshot, this.openVideos, this.openCamera, this.openReplays, this.openScreenplay);
 
         /* Adding everything */
         UIRenderable renderable = new UIRenderable(this::renderIcons);
@@ -357,6 +371,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
         this.plause.setEnabled(data != null);
         this.record.setEnabled(data != null);
+        this.screenshot.setEnabled(data != null);
         this.openCamera.setEnabled(data != null);
         this.openReplays.setEnabled(data != null);
         this.openScreenplay.setEnabled(data != null);
@@ -548,7 +563,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     {
         Area area = this.getFramebufferArea(this.getViewportArea());
 
-        if (area.isInside(context) && this.replays.isVisible())
+        if (area.isInside(context))
         {
             return this.replays.clickViewport(context, area);
         }

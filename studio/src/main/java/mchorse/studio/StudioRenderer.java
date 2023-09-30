@@ -45,8 +45,6 @@ import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.architect.EntityArchitect;
 import mchorse.bbs.world.objects.WorldObject;
 import mchorse.studio.settings.StudioSettings;
-import org.joml.Matrix4f;
-import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
@@ -363,12 +361,17 @@ public class StudioRenderer implements IComponent
     {
         GLStates.depthMask(false);
 
-        Texture texture = this.shaders.stages.get(this.shaders.stages.size() - 1).framebuffer.getMainTexture();
+        Texture texture = this.getMainTexture();
 
         texture.bind(0);
         Framebuffer.renderToQuad(this.context, this.finalShader);
 
         GLStates.depthMask(true);
+    }
+
+    public Texture getMainTexture()
+    {
+        return this.shaders.stages.get(this.shaders.stages.size() - 1).framebuffer.getMainTexture();
     }
 
     public void renderFrameToQuality(Camera camera, Framebuffer framebuffer, int pass, boolean renderScreen, float quality, Consumer<Framebuffer> rendering)

@@ -390,6 +390,11 @@ public class UIReplaysEditor extends UIElement
 
             if (pair != null)
             {
+                if (!this.isVisible())
+                {
+                    this.delegate.showPanel(this);
+                }
+
                 if (context.mouseButton == 0)
                 {
                     this.pickForm(pair.a, pair.b);
@@ -404,7 +409,7 @@ public class UIReplaysEditor extends UIElement
                 }
             }
         }
-        else if (context.mouseButton == 1)
+        else if (context.mouseButton == 1 && this.isVisible())
         {
             RayTraceResult traceResult = new RayTraceResult();
             World world = context.menu.bridge.get(IBridgeWorld.class).getWorld();

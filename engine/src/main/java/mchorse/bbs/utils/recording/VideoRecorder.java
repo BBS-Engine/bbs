@@ -2,7 +2,6 @@ package mchorse.bbs.utils.recording;
 
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.core.Engine;
-import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.ui.utils.UIUtils;
 import org.lwjgl.opengl.GL11;
@@ -33,7 +32,7 @@ public class VideoRecorder
     private boolean recording;
 
     private ByteBuffer buffer;
-    private Framebuffer framebuffer;
+    private Texture texture;
 
     public VideoRecorder(File movies, Engine engine)
     {
@@ -51,16 +50,14 @@ public class VideoRecorder
     /**
      * Start recording the video using ffmpeg
      */
-    public void startRecording(Framebuffer framebuffer)
+    public void startRecording(Texture texture)
     {
         if (this.recording)
         {
             return;
         }
 
-        this.framebuffer = framebuffer;
-
-        Texture texture = framebuffer.getMainTexture();
+        this.texture = texture;
 
         int width = texture.width;
         int height = texture.height;
@@ -119,7 +116,7 @@ public class VideoRecorder
             return;
         }
 
-        this.framebuffer = null;
+        this.texture = null;
 
         if (this.buffer != null)
         {
@@ -166,11 +163,9 @@ public class VideoRecorder
             return;
         }
 
-        Texture mainTexture = this.framebuffer.getMainTexture();
-
         this.buffer.rewind();
-        mainTexture.bind();
-        GL11.glGetTexImage(mainTexture.target, 0, GL12.GL_BGR, GL11.GL_UNSIGNED_BYTE, this.buffer);
+        this.texture.bind();
+        GL11.glGetTexImage(this.texture.target, 0, GL12.GL_BGR, GL11.GL_UNSIGNED_BYTE, this.buffer);
         this.buffer.rewind();
 
         try
@@ -188,7 +183,7 @@ public class VideoRecorder
     /**
      * Toggle recording of the video
      */
-    public void toggleRecording(Framebuffer framebuffer)
+    public void toggleRecording(Texture texture)
     {
         if (this.recording)
         {
@@ -196,7 +191,7 @@ public class VideoRecorder
         }
         else
         {
-            this.startRecording(framebuffer);
+            this.startRecording(this.texture);
         }
 
         UIUtils.playClick();

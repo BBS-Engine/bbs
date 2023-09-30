@@ -1,6 +1,6 @@
 package mchorse.bbs.ui.film;
 
-import mchorse.bbs.bridge.IBridgeVideoRecorder;
+import mchorse.bbs.bridge.IBridgeVideoScreenshot;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
@@ -26,14 +26,19 @@ public class UIFilmRecorder extends UIElement
         this.noCulling();
     }
 
+    public boolean isRecording()
+    {
+        return this.getRecorder().isRecording();
+    }
+
     private UIContext getUIContext()
     {
-        return ((UIElement) this.editor).getContext();
+        return this.editor.getContext();
     }
 
     private VideoRecorder getRecorder()
     {
-        return this.getUIContext().menu.bridge.get(IBridgeVideoRecorder.class).getVideoRecorder();
+        return this.getUIContext().menu.bridge.get(IBridgeVideoScreenshot.class).getVideoRecorder();
     }
 
     private boolean isRunning()
@@ -60,7 +65,7 @@ public class UIFilmRecorder extends UIElement
 
         try
         {
-            recorder.startRecording(framebuffer);
+            recorder.startRecording(framebuffer.getMainTexture());
         }
         catch (Exception e)
         {

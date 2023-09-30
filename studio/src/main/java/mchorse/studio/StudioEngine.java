@@ -7,7 +7,7 @@ import mchorse.bbs.bridge.IBridge;
 import mchorse.bbs.bridge.IBridgeCamera;
 import mchorse.bbs.bridge.IBridgeMenu;
 import mchorse.bbs.bridge.IBridgeRender;
-import mchorse.bbs.bridge.IBridgeVideoRecorder;
+import mchorse.bbs.bridge.IBridgeVideoScreenshot;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.controller.CameraController;
 import mchorse.bbs.core.Engine;
@@ -87,7 +87,7 @@ public class StudioEngine extends Engine implements IBridge, IFileDropListener
         this.apis.put(IBridgeCamera.class, new BridgeCamera(this));
         this.apis.put(IBridgeMenu.class, new BridgeMenu(this));
         this.apis.put(IBridgeRender.class, new BridgeRender(this));
-        this.apis.put(IBridgeVideoRecorder.class, new BridgeVideoRecorder(this));
+        this.apis.put(IBridgeVideoScreenshot.class, new BridgeVideoRecorder(this));
         this.apis.put(IBridgeWorld.class, new BridgeWorld(this));
 
         BBS.events.register(this);

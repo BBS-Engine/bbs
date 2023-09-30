@@ -3,14 +3,13 @@ package mchorse.bbs.utils.recording;
 import mchorse.bbs.BBS;
 import mchorse.bbs.audio.SoundPlayer;
 import mchorse.bbs.core.Engine;
+import mchorse.bbs.graphics.texture.Texture;
 import mchorse.bbs.resources.Link;
-import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.utils.PNGEncoder;
 import mchorse.bbs.utils.resources.Pixels;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import javax.imageio.ImageIO;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -69,15 +68,34 @@ public class ScreenshotRecorder
     }
 
     /**
-     * Take a screenshot and save it to designated file
+     * Take a screenshot from a texture and save it to designated file
      */
-    private void takeScreenshot(File output, int width, int height)
+    public void takeScreenshot(File output, Texture texture)
+    {
+        FloatBuffer pixelData = BufferUtils.createFloatBuffer(texture.width * texture.height * 4);
+
+        texture.bind();
+        GL11.glGetTexImage(texture.target, 0, GL11.GL_RGBA, GL11.GL_FLOAT, pixelData);
+        pixelData.rewind();
+
+        this.saveScreenshot(pixelData, output, texture.width, texture.height);
+    }
+
+    /**
+     * Take a screenshot from the screen and save it to designated file
+     */
+    public void takeScreenshot(File output, int width, int height)
     {
         FloatBuffer pixelData = BufferUtils.createFloatBuffer(width * height * 4);
 
         GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_FLOAT, pixelData);
         pixelData.rewind();
 
+        this.saveScreenshot(pixelData, output, width, height);
+    }
+
+    private void saveScreenshot(FloatBuffer pixelData, File output, int width, int height)
+    {
         /* Pixel data must be converted first from floats to 32 bit hex */
         int[] pixels = new int[width * height];
 
@@ -103,7 +121,7 @@ public class ScreenshotRecorder
     /**
      * Get screenshot file for a screenshot
      */
-    private File getScreenshotFile()
+    public File getScreenshotFile()
     {
         String fileName = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
 
