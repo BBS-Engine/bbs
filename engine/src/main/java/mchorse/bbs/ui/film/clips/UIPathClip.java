@@ -177,12 +177,12 @@ public class UIPathClip extends UIClip<PathClip>
 
         index = MathUtils.clamp(index, 0, points - 1);
 
+        this.points.fill(this.clip);
         this.position = this.getPosition(index);
         this.points.index = index;
 
         this.point.fill(this.position.getPoint());
         this.angle.fill(this.position.getAngle());
-        this.points.fill(this.clip);
         this.updateSpeedPanel();
 
         this.autoCenter.setValue(this.clip.circularAutoCenter.get());

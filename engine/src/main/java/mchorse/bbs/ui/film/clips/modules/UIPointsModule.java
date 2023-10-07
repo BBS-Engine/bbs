@@ -201,6 +201,11 @@ public class UIPointsModule extends UIAbstractModule
     @Override
     public void render(UIContext context)
     {
+        if (this.path == null)
+        {
+            return;
+        }
+
         /* Scroll this view */
         this.scroll.drag(context);
 

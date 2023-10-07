@@ -275,6 +275,31 @@ public class UIScreenplayEditor extends UIElement
 
         uiAction.context((menu) ->
         {
+            menu.action(Icons.MOVE_UP, IKey.lazy("Move up"), () ->
+            {
+                if (this.screenplay.moveAction(action, -1))
+                {
+                    this.fillData();
+
+                    for (UIScreenplayAction presentUiAction : this.getChildren(UIScreenplayAction.class))
+                    {
+                        presentUiAction.load();
+                    }
+                }
+            });
+            menu.action(Icons.MOVE_DOWN, IKey.lazy("Move down"), () ->
+            {
+                if (this.screenplay.moveAction(action, 1))
+                {
+                    this.fillData();
+
+                    for (UIScreenplayAction presentUiAction : this.getChildren(UIScreenplayAction.class))
+                    {
+                        presentUiAction.load();
+                    }
+                }
+            });
+
             menu.action(Icons.REMOVE, IKey.lazy("Remove action"), Colors.NEGATIVE, () ->
             {
                 this.screenplay.removeAction(action);

@@ -60,11 +60,13 @@ public class UIReplayList extends UIList<Replay>
 
     private void openFormEditor(ValueForm form, boolean editing)
     {
-        UIFormPalette.open(this.getParentContainer(), editing, form.get(), (f) ->
+        UIFormPalette palette = UIFormPalette.open(this.getParentContainer(), editing, form.get(), (f) ->
         {
             form.set(f);
             this.updateFilmEditor();
         });
+
+        palette.updatable();
     }
 
     private void addReplay()

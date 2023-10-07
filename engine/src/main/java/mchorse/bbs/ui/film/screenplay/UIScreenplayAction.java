@@ -11,6 +11,7 @@ import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.framework.tooltips.ITooltip;
 import mchorse.bbs.ui.utils.UI;
+import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.colors.Colors;
 
@@ -62,6 +63,7 @@ public class UIScreenplayAction extends UIElement
                 return;
             }
 
+            menu.action(Icons.FOLDER, IKey.lazy("Open folder..."), () -> UIUtils.openFolder(folder));
             menu.action(Icons.POINTER, IKey.lazy("Pick a variant..."), () ->
             {
                 this.getContext().replaceContextMenu((m) ->
