@@ -50,6 +50,16 @@ public class AudioClip extends CameraClip
             float tickTime = (context.relativeTick + context.transition) / 20F;
             float time = player.getPlaybackPosition();
 
+            if (tickTime >= player.getBuffer().getDuration())
+            {
+                if (!player.isStopped())
+                {
+                    player.stop();
+                }
+
+                return;
+            }
+
             if (player.isStopped())
             {
                 player.setPlaybackPosition(0);
