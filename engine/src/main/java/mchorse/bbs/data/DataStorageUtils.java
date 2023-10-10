@@ -1,6 +1,7 @@
 package mchorse.bbs.data;
 
 import mchorse.bbs.data.types.ListType;
+import org.joml.Matrix3f;
 import org.joml.Vector2i;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
@@ -115,6 +116,44 @@ public class DataStorageUtils
         if (element != null && element.size() >= 4)
         {
             return new Vector4f(element.getFloat(0), element.getFloat(1), element.getFloat(2), element.getFloat(3));
+        }
+
+        return defaultValue;
+    }
+
+    /* Matrix3f */
+
+    public static ListType matrix3fToData(Matrix3f matrix)
+    {
+        ListType list = new ListType();
+
+        list.addFloat(matrix.m00);
+        list.addFloat(matrix.m01);
+        list.addFloat(matrix.m02);
+        list.addFloat(matrix.m10);
+        list.addFloat(matrix.m11);
+        list.addFloat(matrix.m12);
+        list.addFloat(matrix.m20);
+        list.addFloat(matrix.m21);
+        list.addFloat(matrix.m22);
+
+        return list;
+    }
+
+    public static Matrix3f matrix3fFromData(ListType element)
+    {
+        return matrix3fFromData(element, new Matrix3f());
+    }
+
+    public static Matrix3f matrix3fFromData(ListType element, Matrix3f defaultValue)
+    {
+        if (element != null && element.size() >= 9)
+        {
+            return new Matrix3f(
+                element.getFloat(0), element.getFloat(1), element.getFloat(2),
+                element.getFloat(3), element.getFloat(4), element.getFloat(5),
+                element.getFloat(6), element.getFloat(7), element.getFloat(8)
+            );
         }
 
         return defaultValue;

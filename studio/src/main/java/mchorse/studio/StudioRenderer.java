@@ -18,6 +18,7 @@ import mchorse.bbs.graphics.shaders.ShaderRepository;
 import mchorse.bbs.graphics.shaders.pipeline.ShaderPipeline;
 import mchorse.bbs.graphics.shaders.uniforms.UniformFloat;
 import mchorse.bbs.graphics.shaders.uniforms.UniformInt;
+import mchorse.bbs.graphics.shaders.uniforms.UniformMatrix3;
 import mchorse.bbs.graphics.shaders.uniforms.UniformMatrix4;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector2;
 import mchorse.bbs.graphics.shaders.uniforms.UniformVector3;
@@ -324,10 +325,6 @@ public class StudioRenderer implements IComponent
         UniformMatrix4 prevProjection = shader.getUniform("u_prev_projection", UniformMatrix4.class);
         UniformMatrix4 prevView = shader.getUniform("u_prev_view", UniformMatrix4.class);
 
-        UniformMatrix4 shadowProjection = shader.getUniform("u_shadow_projection", UniformMatrix4.class);
-        UniformMatrix4 shadowView = shader.getUniform("u_shadow_view", UniformMatrix4.class);
-        UniformFloat shadowResolution = shader.getUniform("u_shadow_resolution", UniformFloat.class);
-
         if (position != null) position.set(camera.position);
         if (projection != null) projection.set(camera.projection);
         if (view != null) view.set(camera.view);
@@ -349,6 +346,10 @@ public class StudioRenderer implements IComponent
 
         if (shaders.shadow != null)
         {
+            UniformMatrix4 shadowProjection = shader.getUniform("u_shadow_projection", UniformMatrix4.class);
+            UniformMatrix4 shadowView = shader.getUniform("u_shadow_view", UniformMatrix4.class);
+            UniformFloat shadowResolution = shader.getUniform("u_shadow_resolution", UniformFloat.class);
+
             if (shadowProjection != null) shadowProjection.set(this.shadowCamera.projection);
             if (shadowView != null) shadowView.set(this.shadowCamera.view);
             if (shadowResolution != null) shadowResolution.set(shaders.shadow.getMainTexture().width);
@@ -534,6 +535,16 @@ public class StudioRenderer implements IComponent
 
         if (dayCycle != null) dayCycle.set(settings.dayCycle);
         if (dayYaw != null) dayYaw.set(settings.dayYaw);
+
+        UniformMatrix3 skySunrise = shader.getUniform("u_sky_sunrise", UniformMatrix3.class);
+        UniformMatrix3 skyNoon = shader.getUniform("u_sky_noon", UniformMatrix3.class);
+        UniformMatrix3 skySunset = shader.getUniform("u_sky_sunset", UniformMatrix3.class);
+        UniformMatrix3 skyMidnight = shader.getUniform("u_sky_midnight", UniformMatrix3.class);
+
+        if (skySunrise != null) skySunrise.set(settings.skySunrise);
+        if (skyNoon != null) skyNoon.set(settings.skyNoon);
+        if (skySunset != null) skySunset.set(settings.skySunset);
+        if (skyMidnight != null) skyMidnight.set(settings.skyMidnight);
     }
 
     private void renderScene(RenderingContext context)
