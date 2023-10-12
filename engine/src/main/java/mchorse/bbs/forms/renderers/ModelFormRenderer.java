@@ -5,8 +5,10 @@ import mchorse.bbs.cubic.CubicModelAnimator;
 import mchorse.bbs.cubic.CubicModelRenderer;
 import mchorse.bbs.cubic.data.model.ModelGroup;
 import mchorse.bbs.forms.forms.BodyPart;
+import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.forms.forms.ModelForm;
 import mchorse.bbs.graphics.GLStates;
+import mchorse.bbs.graphics.MatrixStack;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
@@ -14,6 +16,7 @@ import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.UIRenderingContext;
+import mchorse.bbs.utils.StringUtils;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.architect.EntityArchitect;
@@ -190,6 +193,72 @@ public class ModelFormRenderer extends FormRenderer<ModelForm>
 
             context.stack.pop();
         }
+
+        this.bones.clear();
+    }
+
+    @Override
+    public void collectMatrices(Entity entity, MatrixStack stack, Map<String, Matrix4f> matrices, String prefix, float transition)
+    {
+        stack.push();
+        stack.multiply(this.form.transform.get(transition).createMatrix());
+
+        matrices.put(prefix, new Matrix4f(stack.getModelMatrix()));
+
+        /* Collect bones and add them to matrix list */
+        CubicModel model = this.form.getModel();
+
+        if (this.form.getAnimator() != null && model != null)
+        {
+            CubicModelAnimator.resetPose(model.model);
+
+            this.form.getAnimator().applyActions(entity, model.model, transition);
+            this.form.getPose(transition).apply(model.model);
+
+            stack.rotateY(MathUtils.PI);
+            model.getRenderer().applyTransforms();
+            this.captureMatrices(model);
+        }
+
+        for (Map.Entry<String, Matrix4f> entry : this.bones.entrySet())
+        {
+            stack.push();
+            stack.multiply(entry.getValue());
+            matrices.put(StringUtils.combinePaths(prefix, entry.getKey()), new Matrix4f(stack.getModelMatrix()));
+            stack.pop();
+        }
+
+        int i = 0;
+
+        /* Recursively do the same thing with body parts */
+        for (BodyPart part : this.form.parts.getAll())
+        {
+            Form form = part.getForm();
+
+            if (form != null)
+            {
+                Matrix4f matrix = this.bones.get(part.bone);
+
+                stack.push();
+
+                if (matrix != null)
+                {
+                    stack.multiply(matrix);
+                }
+                else
+                {
+                    stack.rotateY(MathUtils.PI);
+                }
+
+                form.getRenderer().collectMatrices(entity, stack, matrices, StringUtils.combinePaths(prefix, String.valueOf(i)), transition);
+
+                stack.pop();
+            }
+
+            i += 1;
+        }
+
+        stack.pop();
 
         this.bones.clear();
     }

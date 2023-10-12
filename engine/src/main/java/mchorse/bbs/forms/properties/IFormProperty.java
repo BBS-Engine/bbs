@@ -33,6 +33,12 @@ public interface IFormProperty <T> extends IMapSerializable
     public T get(float transition);
 
     /**
+     * Get previous value of the property (which isn't affected by tweening).
+     * It could be null.
+     */
+    public T getLast();
+
+    /**
      * Update current property (needed for tweening).
      */
     public void update();
@@ -51,6 +57,11 @@ public interface IFormProperty <T> extends IMapSerializable
      * Get tween factor (0 - started tweening, 1 - finished tweening).
      */
     public float getTweenFactor(float transition);
+
+    /**
+     * Get tween factor with interpolation applied (0 - started tweening, 1 - finished tweening).
+     */
+    public float getTweenFactorInterpolated(float transition);
 
     /**
      * Checks whether this property can create a generic keyframe channel

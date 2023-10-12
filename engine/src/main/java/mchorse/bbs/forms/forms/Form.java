@@ -25,6 +25,7 @@ public abstract class Form implements IMapSerializable
     public final StringProperty name = new StringProperty(this, "name", "");
     public final TransformProperty transform = new TransformProperty(this, "transform", new Transform());
     public final BodyPartManager parts = new BodyPartManager(this);
+    public final StringProperty anchor = new StringProperty(this, "anchor", "");
 
     /* Hitbox properties */
     public final BooleanProperty hitbox = new BooleanProperty(this, "hitbox", false);
@@ -43,6 +44,7 @@ public abstract class Form implements IMapSerializable
 
         this.register(this.name);
         this.register(this.transform);
+        this.register(this.anchor);
 
         this.hitbox.cantAnimate();
         this.hitboxWidth.cantAnimate();

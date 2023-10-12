@@ -388,7 +388,7 @@ public class UIReplaysEditor extends UIElement
         {
             Pair<Form, String> pair = stencil.getPicked();
 
-            if (pair != null)
+            if (pair != null && context.mouseButton < 2)
             {
                 if (!this.isVisible())
                 {

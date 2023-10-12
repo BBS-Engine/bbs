@@ -67,6 +67,12 @@ public abstract class BaseProperty <T> implements IFormProperty<T>
     }
 
     @Override
+    public T getLast()
+    {
+        return this.lastValue;
+    }
+
+    @Override
     public void update()
     {
         if (this.ticks >= 0 && this.playing)
@@ -103,6 +109,14 @@ public abstract class BaseProperty <T> implements IFormProperty<T>
         }
 
         return 1 - (this.ticks - (this.playing ? transition : 0)) / (float) this.duration;
+    }
+
+    @Override
+    public float getTweenFactorInterpolated(float transition)
+    {
+        float factor = this.getTweenFactor(transition);
+
+        return this.interpolation == null ? factor : this.interpolation.interpolate(0F, 1F, factor);
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.joml.Matrix3d;
 import org.joml.Matrix3f;
 import org.joml.Matrix4d;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class Matrices
@@ -21,6 +22,13 @@ public class Matrices
 
     private static final Matrix3f rotation = new Matrix3f();
     private static final Vector3f forward = new Vector3f();
+
+    private static final Matrix3f lerpA = new Matrix3f();
+    private static final Matrix3f lerpB = new Matrix3f();
+    private static final Quaternionf lerpQa = new Quaternionf();
+    private static final Quaternionf lerpQb = new Quaternionf();
+    private static final Vector3f lerpVa = new Vector3f();
+    private static final Vector3f lerpVb = new Vector3f();
 
     public static Vector3f rotate(Vector3f vector, float pitch, float yaw)
     {
@@ -62,5 +70,38 @@ public class Matrices
         direction.m22 = up.z;
 
         return direction;
+    }
+
+    public static Matrix4f lerp(Matrix4f a, Matrix4f b, float t)
+    {
+        return lerp(a, b, t, TEMP_4F);
+    }
+
+    public static Matrix4f lerp(Matrix4f a, Matrix4f b, float t, Matrix4f dest)
+    {
+        Quaternionf q1 = lerpQa.setFromNormalized(lerpA.set(a));
+        Quaternionf q2 = lerpQb.setFromNormalized(lerpB.set(b));
+
+        q1.slerp(q2, t);
+
+        dest.identity().rotate(q1);
+        dest.setTranslation(a.getTranslation(lerpVa).lerp(b.getTranslation(lerpVb), t));
+
+        return dest;
+    }
+
+    public static String toString(Matrix3f m)
+    {
+        return m.m00() + ", " + m.m10() + ", " + m.m20() + "\n" +
+            m.m01() + ", " + m.m11() + ", " + m.m21() + "\n" +
+            m.m02() + ", " + m.m12() + ", " + m.m22();
+    }
+
+    public static String toString(Matrix4f m)
+    {
+        return m.m00() + ", " + m.m10() + ", " + m.m20() + ", " + m.m30() + "\n" +
+            m.m01() + ", " + m.m11() + ", " + m.m21() + ", " + m.m31() + "\n" +
+            m.m02() + ", " + m.m12() + ", " + m.m22() + ", " + m.m32() + "\n" +
+            m.m03() + ", " + m.m13() + ", " + m.m23() + ", " + m.m33() + "\n";
     }
 }

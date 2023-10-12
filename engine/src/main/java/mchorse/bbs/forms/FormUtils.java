@@ -10,6 +10,7 @@ import mchorse.bbs.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class FormUtils
@@ -110,6 +111,17 @@ public class FormUtils
         List<String> properties = new ArrayList<>();
 
         collectPropertyPaths(form, properties, "");
+
+        /* There is no need to animate body part anchor properties */
+        Iterator<String> it = properties.iterator();
+
+        while (it.hasNext())
+        {
+            if (it.next().endsWith("/anchor"))
+            {
+                it.remove();
+            }
+        }
 
         return properties;
     }

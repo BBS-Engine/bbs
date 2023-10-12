@@ -14,6 +14,7 @@ import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.game.entities.components.PlayerComponent;
 import mchorse.bbs.graphics.Draw;
+import mchorse.bbs.graphics.MatrixStack;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
@@ -38,6 +39,7 @@ import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Matrices;
+import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.voxel.blocks.IBlockVariant;
@@ -48,6 +50,7 @@ import mchorse.bbs.world.World;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.BasicComponent;
 import mchorse.bbs.world.entities.components.FormComponent;
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3d;
@@ -55,7 +58,9 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UIFilmController extends UIElement
 {
@@ -769,10 +774,12 @@ public class UIFilmController extends UIElement
     {
         for (Entity entity : this.entities)
         {
-            if (!(this.getPovMode() == 1 && entity == getCurrentEntity() && this.orbit.enabled))
+            if (this.getPovMode() == 1 && entity == getCurrentEntity() && this.orbit.enabled)
             {
-                entity.render(context);
+                continue;
             }
+
+            this.renderEntity(context, entity);
         }
 
         this.rayTraceEntity(context);
@@ -819,6 +826,90 @@ public class UIFilmController extends UIElement
         }
 
         this.lastMouse.set(x, y);
+    }
+
+    private void renderEntity(RenderingContext context, Entity entity)
+    {
+        FormComponent component = entity.get(FormComponent.class);
+
+        if (component != null && component.form != null)
+        {
+            String value = component.form.anchor.get();
+            String last = component.form.anchor.getLast();
+
+            if (value != null && last != null)
+            {
+                Matrix4f defaultMatrix = entity.getMatrixForRenderWithRotation(context.getCamera(), context.getTransition());
+                Matrix4f matrix = this.getEntityMatrix(context, value, defaultMatrix);
+                Matrix4f lastMatrix = this.getEntityMatrix(context, last, defaultMatrix);
+
+                if (matrix != null && lastMatrix != null && matrix != lastMatrix)
+                {
+                    float factor = component.form.anchor.getTweenFactorInterpolated(context.getTransition());
+
+                    context.stack.push();
+                    context.stack.multiply(Matrices.lerp(lastMatrix, matrix, factor));
+
+                    Vector3d position = Vectors.TEMP_3D.set(entity.basic.prevPosition).lerp(entity.basic.position, context.getTransition());
+                    Vector2f lighting = entity.world.getLighting(position.x, position.y + entity.basic.hitbox.h / 2, position.z);
+
+                    for (Shader shader : context.getShaders().getAll())
+                    {
+                        CommonShaderAccess.setLightMapCoords(shader, lighting.x, lighting.y);
+                    }
+
+                    component.form.getRenderer().render(entity, context);
+
+                    context.stack.pop();
+
+                    return;
+                }
+            }
+        }
+
+        entity.render(context);
+    }
+
+    private Matrix4f getEntityMatrix(RenderingContext context, String selector, Matrix4f defaultMatrix)
+    {
+        int dot = selector.indexOf('.');
+
+        if (dot > 0)
+        {
+            try
+            {
+                int entityIndex = Integer.parseInt(selector.substring(0, dot));
+
+                if (CollectionUtils.inRange(this.entities, entityIndex))
+                {
+                    Entity entity = this.entities.get(entityIndex);
+                    Matrix4f basic = new Matrix4f(entity.getMatrixForRenderWithRotation(context.getCamera(), context.getTransition()));
+
+                    Map<String, Matrix4f> map = new HashMap<>();
+                    MatrixStack stack = new MatrixStack();
+
+                    FormComponent component = entity.get(FormComponent.class);
+
+                    if (component.form != null)
+                    {
+                        component.form.getRenderer().collectMatrices(entity, stack, map, "", context.getTransition());
+
+                        Matrix4f matrix = map.get(selector.substring(dot + 1));
+
+                        if (matrix != null)
+                        {
+                            basic.mul(matrix);
+                        }
+                    }
+
+                    return basic;
+                }
+            }
+            catch (Exception e)
+            {}
+        }
+
+        return defaultMatrix;
     }
 
     private void rayTraceEntity(RenderingContext context)
@@ -897,7 +988,7 @@ public class UIFilmController extends UIElement
 
         this.stencil.apply(context);
         context.render.setCamera(this.stencilCamera);
-        entity.render(context.render);
+        this.renderEntity(context.render, entity);
         context.render.setCamera(camera);
 
         Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());

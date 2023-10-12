@@ -63,6 +63,12 @@ public class CubicModelRenderer
         this.renderer = new CubicMatrixRenderer(model);
     }
 
+    public void applyTransforms()
+    {
+        this.stack.reset();
+        CubicRenderer.processRenderModel(this.renderer, null, this.stack, this.model.model);
+    }
+
     public void renderVAO(RenderingContext context, Shader shader)
     {
         if (this.vaoModel == null)
@@ -70,8 +76,7 @@ public class CubicModelRenderer
             this.createVAO();
         }
 
-        this.stack.reset();
-        CubicRenderer.processRenderModel(this.renderer, null, this.stack, this.model.model);
+        this.applyTransforms();
 
         CommonShaderAccess.setBones(shader, this.renderer.matrices);
         shader.bind();
