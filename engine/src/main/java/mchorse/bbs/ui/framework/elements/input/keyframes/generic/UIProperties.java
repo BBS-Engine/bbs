@@ -36,6 +36,11 @@ public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
         this.delegate = delegate;
     }
 
+    public IUIClipsDelegate getDelegate()
+    {
+        return this.delegate;
+    }
+
     /* Implementation of setters */
 
     public void setInstant(boolean instant)

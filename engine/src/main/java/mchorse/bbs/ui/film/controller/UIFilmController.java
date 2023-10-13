@@ -12,6 +12,7 @@ import mchorse.bbs.film.replays.Replay;
 import mchorse.bbs.film.replays.ReplayKeyframes;
 import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
+import mchorse.bbs.forms.properties.AnchorProperty;
 import mchorse.bbs.game.entities.components.PlayerComponent;
 import mchorse.bbs.graphics.Draw;
 import mchorse.bbs.graphics.MatrixStack;
@@ -834,8 +835,8 @@ public class UIFilmController extends UIElement
 
         if (component != null && component.form != null)
         {
-            String value = component.form.anchor.get();
-            String last = component.form.anchor.getLast();
+            AnchorProperty.Anchor value = component.form.anchor.get();
+            AnchorProperty.Anchor last = component.form.anchor.getLast();
 
             if (value != null && last != null)
             {
@@ -870,43 +871,33 @@ public class UIFilmController extends UIElement
         entity.render(context);
     }
 
-    private Matrix4f getEntityMatrix(RenderingContext context, String selector, Matrix4f defaultMatrix)
+    private Matrix4f getEntityMatrix(RenderingContext context, AnchorProperty.Anchor selector, Matrix4f defaultMatrix)
     {
-        int dot = selector.indexOf('.');
+        int entityIndex = selector.actor;
 
-        if (dot > 0)
+        if (CollectionUtils.inRange(this.entities, entityIndex))
         {
-            try
+            Entity entity = this.entities.get(entityIndex);
+            Matrix4f basic = new Matrix4f(entity.getMatrixForRenderWithRotation(context.getCamera(), context.getTransition()));
+
+            Map<String, Matrix4f> map = new HashMap<>();
+            MatrixStack stack = new MatrixStack();
+
+            FormComponent component = entity.get(FormComponent.class);
+
+            if (component.form != null)
             {
-                int entityIndex = Integer.parseInt(selector.substring(0, dot));
+                component.form.getRenderer().collectMatrices(entity, stack, map, "", context.getTransition());
 
-                if (CollectionUtils.inRange(this.entities, entityIndex))
+                Matrix4f matrix = map.get(selector.attachment);
+
+                if (matrix != null)
                 {
-                    Entity entity = this.entities.get(entityIndex);
-                    Matrix4f basic = new Matrix4f(entity.getMatrixForRenderWithRotation(context.getCamera(), context.getTransition()));
-
-                    Map<String, Matrix4f> map = new HashMap<>();
-                    MatrixStack stack = new MatrixStack();
-
-                    FormComponent component = entity.get(FormComponent.class);
-
-                    if (component.form != null)
-                    {
-                        component.form.getRenderer().collectMatrices(entity, stack, map, "", context.getTransition());
-
-                        Matrix4f matrix = map.get(selector.substring(dot + 1));
-
-                        if (matrix != null)
-                        {
-                            basic.mul(matrix);
-                        }
-                    }
-
-                    return basic;
+                    basic.mul(matrix);
                 }
             }
-            catch (Exception e)
-            {}
+
+            return basic;
         }
 
         return defaultMatrix;

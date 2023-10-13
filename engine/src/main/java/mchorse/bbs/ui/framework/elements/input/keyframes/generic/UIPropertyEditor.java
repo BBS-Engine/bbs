@@ -51,14 +51,11 @@ public class UIPropertyEditor extends UIElement
 
     private IAxisConverter converter;
 
-    protected IUIClipsDelegate delegate;
     protected List<BaseValue> valueChannels = new ArrayList<>();
 
     public UIPropertyEditor(IUIClipsDelegate delegate)
     {
         super();
-
-        this.delegate = delegate;
 
         InterpolationTooltip tooltip = new InterpolationTooltip(0F, 1F, () ->
         {

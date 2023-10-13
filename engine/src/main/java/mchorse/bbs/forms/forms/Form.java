@@ -4,6 +4,7 @@ import mchorse.bbs.BBS;
 import mchorse.bbs.data.IMapSerializable;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.FormArchitect;
+import mchorse.bbs.forms.properties.AnchorProperty;
 import mchorse.bbs.forms.properties.BooleanProperty;
 import mchorse.bbs.forms.properties.FloatProperty;
 import mchorse.bbs.forms.properties.IFormProperty;
@@ -25,7 +26,7 @@ public abstract class Form implements IMapSerializable
     public final StringProperty name = new StringProperty(this, "name", "");
     public final TransformProperty transform = new TransformProperty(this, "transform", new Transform());
     public final BodyPartManager parts = new BodyPartManager(this);
-    public final StringProperty anchor = new StringProperty(this, "anchor", "");
+    public final AnchorProperty anchor = new AnchorProperty(this, "anchor");
 
     /* Hitbox properties */
     public final BooleanProperty hitbox = new BooleanProperty(this, "hitbox", false);

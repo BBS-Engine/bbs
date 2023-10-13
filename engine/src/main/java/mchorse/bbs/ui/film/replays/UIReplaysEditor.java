@@ -13,15 +13,15 @@ import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.dashboard.panels.UIDashboardPanels;
 import mchorse.bbs.ui.film.UIFilmPanel;
-import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIProperty;
-import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
-import mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories.UIPoseKeyframeFactory;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
 import mchorse.bbs.ui.film.utils.undo.ValueChangeUndo;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UISheet;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIProperty;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories.UIPoseKeyframeFactory;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.StencilFormFramebuffer;
 import mchorse.bbs.ui.utils.UI;
@@ -63,7 +63,7 @@ public class UIReplaysEditor extends UIElement
     public UIPropertyEditor propertyEditor;
 
     /* Clips */
-    private UIFilmPanel delegate;
+    private UIFilmPanel filmPanel;
     private Film film;
     private Replay replay;
 
@@ -88,15 +88,15 @@ public class UIReplaysEditor extends UIElement
         COLORS.put("color", Colors.INACTIVE);
     }
 
-    public UIReplaysEditor(UIFilmPanel delegate)
+    public UIReplaysEditor(UIFilmPanel filmPanel)
     {
-        this.delegate = delegate;
+        this.filmPanel = filmPanel;
 
         int w = 120;
 
-        this.record = new UIIcon(Icons.SPHERE, (b) -> this.delegate.getController().pickRecording());
+        this.record = new UIIcon(Icons.SPHERE, (b) -> this.filmPanel.getController().pickRecording());
         this.record.tooltip(IKey.lazy("Record replay"));
-        this.keyframe = new UIIcon(Icons.KEY, (b) -> this.delegate.getController().insertFrame());
+        this.keyframe = new UIIcon(Icons.KEY, (b) -> this.filmPanel.getController().insertFrame());
         this.keyframe.tooltip(IKey.lazy("Insert keyframe"));
         this.toggleKeyframes = new UIIcon(Icons.GRAPH, (b) -> this.toggleProperties(false));
         this.toggleKeyframes.tooltip(IKey.lazy("Open entity keyframes editor"));
@@ -106,7 +106,7 @@ public class UIReplaysEditor extends UIElement
         this.keyframes = new UIElement();
         this.keyframes.relative(this).x(w).w(1F, -w).h(1F);
 
-        this.replays = new UIReplayList((l) -> this.setReplay(l.get(0)), this.delegate);
+        this.replays = new UIReplayList((l) -> this.setReplay(l.get(0)), this.filmPanel);
         this.replays.relative(this).y(20).w(w).h(1F, -20);
 
         this.icons = UI.row(0, this.record, this.keyframe, this.toggleKeyframes, this.toggleProperties);
@@ -248,7 +248,7 @@ public class UIReplaysEditor extends UIElement
             tempKeyframesColors.add(COLORS.getOrDefault(key, Colors.ACTIVE));
         }
 
-        this.keyframeEditor = new UICameraDopeSheetEditor(this.delegate);
+        this.keyframeEditor = new UICameraDopeSheetEditor(this.filmPanel);
         this.keyframeEditor.setChannels(keyframes, tempKeyframesColors);
         this.keyframeEditor.relative(this.keyframes).full();
 
@@ -278,7 +278,7 @@ public class UIReplaysEditor extends UIElement
 
         if (!properties.isEmpty())
         {
-            this.propertyEditor = new UIPropertyEditor(this.delegate);
+            this.propertyEditor = new UIPropertyEditor(this.filmPanel);
             this.propertyEditor.setChannels(properties, formProperties, propertiesColors);
             this.propertyEditor.relative(this.keyframes).full();
             this.propertyEditor.setVisible(false);
@@ -351,7 +351,7 @@ public class UIReplaysEditor extends UIElement
 
     private void pickProperty(String bone, UIProperty property, boolean insert)
     {
-        int tick = this.delegate.getRunner().ticks;
+        int tick = this.filmPanel.getRunner().ticks;
 
         if (insert)
         {
@@ -376,13 +376,13 @@ public class UIReplaysEditor extends UIElement
                 ((UIPoseKeyframeFactory) this.propertyEditor.editor).selectBone(bone);
             }
 
-            this.delegate.setCursor((int) closest.getTick());
+            this.filmPanel.setCursor((int) closest.getTick());
         }
     }
 
     public boolean clickViewport(UIContext context, Area area)
     {
-        StencilFormFramebuffer stencil = this.delegate.getController().getStencil();
+        StencilFormFramebuffer stencil = this.filmPanel.getController().getStencil();
 
         if (stencil.hasPicked())
         {
@@ -392,7 +392,7 @@ public class UIReplaysEditor extends UIElement
             {
                 if (!this.isVisible())
                 {
-                    this.delegate.showPanel(this);
+                    this.filmPanel.showPanel(this);
                 }
 
                 if (context.mouseButton == 0)
@@ -413,7 +413,7 @@ public class UIReplaysEditor extends UIElement
         {
             RayTraceResult traceResult = new RayTraceResult();
             World world = context.menu.bridge.get(IBridgeWorld.class).getWorld();
-            Camera camera = this.delegate.getCamera();
+            Camera camera = this.filmPanel.getCamera();
 
             RayTracer.trace(traceResult, world.chunks, camera.position, camera.getMouseDirection(context.mouseX, context.mouseY, area), 64F);
 
@@ -429,7 +429,7 @@ public class UIReplaysEditor extends UIElement
                     {
                         if (this.replay != null)
                         {
-                            int cursor = this.delegate.getCursor();
+                            int cursor = this.filmPanel.getCursor();
 
                             this.replay.keyframes.x.insert(cursor, traceResult.hit.x);
                             this.replay.keyframes.y.insert(cursor, traceResult.hit.y);

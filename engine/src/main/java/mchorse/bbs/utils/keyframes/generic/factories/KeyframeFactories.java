@@ -15,6 +15,7 @@ public class KeyframeFactories
     public static final IntegerKeyframeFactory INTEGER = new IntegerKeyframeFactory();
     public static final LinkKeyframeFactory LINK = new LinkKeyframeFactory();
     public static final Vector4fKeyframeFactory VECTOR4F = new Vector4fKeyframeFactory();
+    public static final AnchorKeyframeFactory ANCHOR = new AnchorKeyframeFactory();
 
     static
     {
@@ -27,5 +28,6 @@ public class KeyframeFactories
         FACTORIES.put("integer", INTEGER);
         FACTORIES.put("link", LINK);
         FACTORIES.put("vector4f", VECTOR4F);
+        FACTORIES.put("anchor", ANCHOR);
     }
 }
