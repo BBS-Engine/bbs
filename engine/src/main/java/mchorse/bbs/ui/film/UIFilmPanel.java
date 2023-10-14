@@ -33,6 +33,7 @@ import mchorse.bbs.ui.film.clips.UIClip;
 import mchorse.bbs.ui.film.controller.UIFilmController;
 import mchorse.bbs.ui.film.replays.UIReplaysEditor;
 import mchorse.bbs.ui.film.screenplay.UIScreenplayEditor;
+import mchorse.bbs.ui.film.utils.undo.FilmEditorUndo;
 import mchorse.bbs.ui.film.utils.undo.ValueChangeUndo;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
@@ -101,8 +102,8 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
     private UndoManager<ValueGroup> undoManager;
     private List<Integer> cachedSelection = new ArrayList<>();
-    private List<List<Integer>> cachedKeyframeSelection = new ArrayList<>();
-    private Vector2i cachedKeyframeSelected = new Vector2i(-1, -1);
+    private FilmEditorUndo.KeyframeSelection cachedKeyframeSelection;
+    private FilmEditorUndo.KeyframeSelection cachedPropertiesSelection;
     private Map<BaseValue, BaseType> cachedUndo = new HashMap<>();
 
     /**
@@ -392,10 +393,18 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
             this.cachedSelection.addAll(this.timeline.getSelection());
         }
 
-        if (this.cachedKeyframeSelection.isEmpty())
+        if (this.cachedKeyframeSelection == null)
         {
-            this.cachedKeyframeSelection.addAll(this.replays.collectSelection());
-            this.cachedKeyframeSelected.set(this.replays.findSelected());
+            this.cachedKeyframeSelection = this.replays.keyframeEditor == null
+                ? new FilmEditorUndo.KeyframeSelection()
+                : this.replays.keyframeEditor.keyframes.createSelection();
+        }
+
+        if (this.cachedPropertiesSelection == null)
+        {
+            this.cachedPropertiesSelection = this.replays.propertyEditor == null
+                ? new FilmEditorUndo.KeyframeSelection()
+                : this.replays.propertyEditor.properties.createSelection();
         }
 
         if (!this.cachedUndo.containsKey(baseValue))
@@ -447,7 +456,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
             ValueChangeUndo undo = new ValueChangeUndo(value.getPath(), entry.getValue(), value.toData());
 
             undo.editor(this);
-            undo.selectedBefore(this.cachedSelection, this.cachedKeyframeSelection, this.cachedKeyframeSelected);
+            undo.selectedBefore(this.cachedSelection, this.cachedKeyframeSelection, this.cachedPropertiesSelection);
             changeUndos.add(undo);
         }
 
@@ -461,6 +470,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         }
 
         this.cachedUndo.clear();
+        this.cachedKeyframeSelection = this.cachedPropertiesSelection = null;
     }
 
     private void handleUndos(IUndo<ValueGroup> undo, boolean redo)

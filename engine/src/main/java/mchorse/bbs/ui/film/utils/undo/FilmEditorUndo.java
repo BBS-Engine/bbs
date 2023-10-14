@@ -18,28 +18,28 @@ public abstract class FilmEditorUndo implements IUndo<ValueGroup>
     public int scroll;
     public int panel;
 
-    /* Replays */
-    private List<List<Integer>> keyframesSelectedBefore = new ArrayList<>();
-    private List<List<Integer>> keyframesSelectedAfter = new ArrayList<>();
-    private Vector2i keyframeSelectedBefore = new Vector2i();
-    private Vector2i keyframeSelectedAfter = new Vector2i();
-
     private List<Integer> selectedBefore = new ArrayList<>();
     private List<Integer> selectedAfter = new ArrayList<>();
+
+    /* Replays */
+    private KeyframeSelection keyframesBefore = new KeyframeSelection();
+    private KeyframeSelection keyframesAfter = new KeyframeSelection();
+    private KeyframeSelection propertiesBefore = new KeyframeSelection();
+    private KeyframeSelection propertiesAfter = new KeyframeSelection();
 
     public List<Integer> getSelection(boolean redo)
     {
         return redo ? this.selectedAfter : this.selectedBefore;
     }
 
-    public List<List<Integer>> getKeyframeSelection(boolean redo)
+    public KeyframeSelection getKeyframeSelection(boolean redo)
     {
-        return redo ? this.keyframesSelectedAfter : this.keyframesSelectedBefore;
+        return redo ? this.keyframesAfter : this.keyframesBefore;
     }
 
-    public Vector2i getKeyframeSelected(boolean redo)
+    public KeyframeSelection getPropertiesSelection(boolean redo)
     {
-        return redo ? this.keyframeSelectedAfter : this.keyframeSelectedBefore;
+        return redo ? this.propertiesAfter : this.propertiesBefore;
     }
 
     public void editor(UIFilmPanel editor)
@@ -63,19 +63,29 @@ public abstract class FilmEditorUndo implements IUndo<ValueGroup>
         this.selectedAfter.addAll(timeline.getSelection());
         this.selectedBefore.addAll(this.selectedAfter);
 
-        this.keyframesSelectedAfter.addAll(editor.replays.collectSelection());
-        this.keyframesSelectedBefore.addAll(this.keyframesSelectedAfter);
-        this.keyframeSelectedAfter.set(editor.replays.findSelected());
-        this.keyframeSelectedBefore.set(this.keyframeSelectedAfter);
+        this.keyframesBefore = this.keyframesAfter = editor.replays.keyframeEditor == null
+            ? new KeyframeSelection()
+            : editor.replays.keyframeEditor.keyframes.createSelection();
+
+        this.propertiesBefore = this.propertiesAfter = editor.replays.propertyEditor == null
+            ? new KeyframeSelection()
+            : editor.replays.propertyEditor.properties.createSelection();
     }
 
-    public void selectedBefore(List<Integer> selection, List<List<Integer>> keyframeSelection, Vector2i keyframeSelected)
+    public void selectedBefore(List<Integer> selection, KeyframeSelection keyframe, KeyframeSelection properties)
     {
         this.selectedBefore.clear();
         this.selectedBefore.addAll(selection);
 
-        this.keyframesSelectedBefore.clear();
-        this.keyframesSelectedBefore.addAll(keyframeSelection);
-        this.keyframeSelectedBefore.set(keyframeSelected);
+        this.keyframesBefore = keyframe;
+        this.propertiesBefore = properties;
+    }
+
+    public static class KeyframeSelection
+    {
+        public List<List<Integer>> selected = new ArrayList<>();
+        public Vector2i current = new Vector2i(-1, -1);
+        public double min;
+        public double max;
     }
 }

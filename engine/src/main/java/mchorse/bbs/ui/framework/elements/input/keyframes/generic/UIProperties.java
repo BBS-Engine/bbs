@@ -6,9 +6,11 @@ import mchorse.bbs.graphics.line.SolidColorLineRenderer;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.UIClips;
+import mchorse.bbs.ui.film.utils.undo.FilmEditorUndo;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIBaseKeyframes;
 import mchorse.bbs.ui.utils.Area;
+import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
@@ -619,6 +621,70 @@ public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
             String label = TimeUtils.formatTime(this.delegate.getCursor()) + "/" + TimeUtils.formatTime(this.duration);
 
             UIClips.renderCursor(context, label, this.area, cx - 1);
+        }
+    }
+
+    /* Undo/redo */
+
+    @Override
+    public FilmEditorUndo.KeyframeSelection createSelection()
+    {
+        FilmEditorUndo.KeyframeSelection selection = super.createSelection();
+        GenericKeyframe keyframe = this.getCurrent();
+        List<UIProperty> properties = this.getProperties();
+
+        for (UIProperty property : properties)
+        {
+            selection.selected.add(new ArrayList<>(property.selected));
+        }
+
+        if (keyframe != null)
+        {
+            main:
+            for (int i = 0; i < properties.size(); i++)
+            {
+                UIProperty property = properties.get(i);
+
+                for (int j = 0; j < property.channel.getKeyframes().size(); j++)
+                {
+                    if (property.channel.getKeyframes().get(j) == keyframe)
+                    {
+                        selection.current.set(i, j);
+
+                        break main;
+                    }
+                }
+            }
+        }
+
+        return selection;
+    }
+
+    @Override
+    public void applySelection(FilmEditorUndo.KeyframeSelection selection)
+    {
+        super.applySelection(selection);
+
+        this.clearSelection();
+
+        List<UIProperty> properties = this.getProperties();
+
+        for (int i = 0; i < properties.size(); i++)
+        {
+            if (CollectionUtils.inRange(selection.selected, i))
+            {
+                properties.get(i).selected.addAll(selection.selected.get(i));
+            }
+        }
+
+        if (
+            CollectionUtils.inRange(properties, selection.current.x) &&
+            CollectionUtils.inRange(properties.get(selection.current.x).channel.getKeyframes(), selection.current.y)
+        ) {
+            GenericKeyframe keyframe = (GenericKeyframe) properties.get(selection.current.x).channel.getKeyframes().get(selection.current.y);
+
+            this.selected = true;
+            this.setKeyframe(keyframe);
         }
     }
 }

@@ -4,11 +4,13 @@ import mchorse.bbs.graphics.line.Line;
 import mchorse.bbs.graphics.line.LineBuilder;
 import mchorse.bbs.graphics.line.SolidColorLineRenderer;
 import mchorse.bbs.graphics.window.Window;
+import mchorse.bbs.ui.film.utils.undo.FilmEditorUndo;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.Scale;
 import mchorse.bbs.ui.utils.ScrollDirection;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.Keyframe;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
@@ -1092,5 +1094,69 @@ public class UIKeyframes extends UIBaseKeyframes<Keyframe>
         }
 
         return frame;
+    }
+
+    /* Undo/redo */
+
+    @Override
+    public FilmEditorUndo.KeyframeSelection createSelection()
+    {
+        FilmEditorUndo.KeyframeSelection selection = super.createSelection();
+        Keyframe keyframe = this.getCurrent();
+        List<UISheet> sheets = this.getSheets();
+
+        for (UISheet sheet : sheets)
+        {
+            selection.selected.add(new ArrayList<>(sheet.selected));
+        }
+
+        if (keyframe != null)
+        {
+            main:
+            for (int i = 0; i < sheets.size(); i++)
+            {
+                UISheet sheet = sheets.get(i);
+
+                for (int j = 0; j < sheet.channel.getKeyframes().size(); j++)
+                {
+                    if (sheet.channel.getKeyframes().get(j) == keyframe)
+                    {
+                        selection.current.set(i, j);
+
+                        break main;
+                    }
+                }
+            }
+        }
+
+        return selection;
+    }
+
+    @Override
+    public void applySelection(FilmEditorUndo.KeyframeSelection selection)
+    {
+        super.applySelection(selection);
+
+        this.clearSelection();
+
+        List<UISheet> sheets = this.getSheets();
+
+        for (int i = 0; i < sheets.size(); i++)
+        {
+            if (CollectionUtils.inRange(selection.selected, i))
+            {
+                sheets.get(i).selected.addAll(selection.selected.get(i));
+            }
+        }
+
+        if (
+            CollectionUtils.inRange(sheets, selection.current.x) &&
+            CollectionUtils.inRange(sheets.get(selection.current.x).channel.getKeyframes(), selection.current.y)
+        ) {
+            Keyframe keyframe = sheets.get(selection.current.x).channel.getKeyframes().get(selection.current.y);
+
+            this.which = Selection.KEYFRAME;
+            this.setKeyframe(keyframe);
+        }
     }
 }

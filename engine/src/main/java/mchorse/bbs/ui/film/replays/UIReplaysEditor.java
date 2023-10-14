@@ -18,7 +18,6 @@ import mchorse.bbs.ui.film.utils.undo.ValueChangeUndo;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
-import mchorse.bbs.ui.framework.elements.input.keyframes.UISheet;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIProperty;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories.UIPoseKeyframeFactory;
@@ -30,7 +29,6 @@ import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.StringUtils;
 import mchorse.bbs.utils.colors.Colors;
-import mchorse.bbs.utils.keyframes.Keyframe;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
@@ -39,7 +37,6 @@ import mchorse.bbs.voxel.raytracing.RayTraceResult;
 import mchorse.bbs.voxel.raytracing.RayTraceType;
 import mchorse.bbs.voxel.raytracing.RayTracer;
 import mchorse.bbs.world.World;
-import org.joml.Vector2i;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -128,77 +125,15 @@ public class UIReplaysEditor extends UIElement
 
     public void handleUndo(ValueChangeUndo change, boolean redo)
     {
-        /* TODO: wrap up undo/redo handler */
-
-        List<List<Integer>> selection = change.getKeyframeSelection(redo);
-        Vector2i selected = change.getKeyframeSelected(redo);
-
         if (this.keyframeEditor != null)
         {
-            this.keyframeEditor.select(selection, selected);
+            this.keyframeEditor.keyframes.applySelection(change.getKeyframeSelection(redo));
         }
-        else if (this.propertyEditor != null)
+
+        if (this.propertyEditor != null)
         {
-            this.propertyEditor.select(selection, selected);
+            this.propertyEditor.properties.applySelection(change.getPropertiesSelection(redo));
         }
-    }
-
-    public Vector2i findSelected()
-    {
-        if (this.keyframeEditor != null)
-        {
-            Keyframe keyframe = this.keyframeEditor.keyframes.getCurrent();
-            List<UISheet> sheets = this.keyframeEditor.keyframes.getSheets();
-
-            for (int i = 0; i < sheets.size(); i++)
-            {
-                int index = sheets.get(i).channel.getKeyframes().indexOf(keyframe);
-
-                if (index >= 0)
-                {
-                    return new Vector2i(i, index);
-                }
-            }
-        }
-        else if (this.propertyEditor != null)
-        {
-            GenericKeyframe keyframe = this.propertyEditor.properties.getCurrent();
-            List<UIProperty> properties = this.propertyEditor.properties.getProperties();
-
-            for (int i = 0; i < properties.size(); i++)
-            {
-                int index = properties.get(i).channel.getKeyframes().indexOf(keyframe);
-
-                if (index >= 0)
-                {
-                    return new Vector2i(i, index);
-                }
-            }
-        }
-
-        return new Vector2i(-1, -1);
-    }
-
-    public List<List<Integer>> collectSelection()
-    {
-        List<List<Integer>> list = new ArrayList<>();
-
-        if (this.keyframeEditor != null)
-        {
-            for (UISheet sheet : this.keyframeEditor.keyframes.getSheets())
-            {
-                list.add(new ArrayList<>(sheet.selected));
-            }
-        }
-        else if (this.propertyEditor != null)
-        {
-            for (UIProperty property : this.propertyEditor.properties.getProperties())
-            {
-                list.add(new ArrayList<>(property.selected));
-            }
-        }
-
-        return list;
     }
 
     public void setFilm(Film film)
