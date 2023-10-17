@@ -465,6 +465,12 @@ public class UIFilmController extends UIElement
     private void handleFirstThirdPerson(Camera camera, float transition, int mode)
     {
         Entity controller = this.getCurrentEntity();
+
+        if (controller == null)
+        {
+            return;
+        }
+
         Vector3d position = new Vector3d();
         Vector3f rotation = new Vector3f();
         float distance = this.orbit.getDistance();
@@ -489,7 +495,7 @@ public class UIFilmController extends UIElement
             return;
         }
 
-        Vector3f rotate = Matrices.rotation(-rotation.x, (back ? 0F : MathUtils.PI) - rotation.y);
+        Vector3f rotate = Matrices.rotation(rotation.x * (back ? -1 : 1), (back ? 0F : MathUtils.PI) - rotation.y);
         World world = this.panel.dashboard.bridge.get(IBridgeWorld.class).getWorld();
 
         RayTracer.trace(this.result, world.chunks, position, rotate, distance, true, (b) ->
@@ -508,15 +514,7 @@ public class UIFilmController extends UIElement
         position.add(rotate);
 
         camera.position.set(position);
-
-        if (back)
-        {
-            camera.rotation.set(rotation.x, rotation.y, 0);
-        }
-        else
-        {
-            camera.rotation.set(-rotation.x, MathUtils.PI + rotation.y, 0);
-        }
+        camera.rotation.set(rotation.x * (back ? 1 : -1), rotation.y + (back ? 0 : MathUtils.PI), 0);
     }
 
     private void jump()
