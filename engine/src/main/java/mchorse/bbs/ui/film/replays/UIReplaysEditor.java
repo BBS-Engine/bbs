@@ -159,6 +159,18 @@ public class UIReplaysEditor extends UIElement
         this.replays.setCurrentScroll(replay);
     }
 
+    public void moveReplay(double x, double y, double z)
+    {
+        if (this.replay != null)
+        {
+            int cursor = this.filmPanel.getCursor();
+
+            this.replay.keyframes.x.insert(cursor, x);
+            this.replay.keyframes.y.insert(cursor, y);
+            this.replay.keyframes.z.insert(cursor, z);
+        }
+    }
+
     public void updateChannelsList()
     {
         if (this.keyframeEditor != null) this.keyframeEditor.removeFromParent();
@@ -360,21 +372,7 @@ public class UIReplaysEditor extends UIElement
                     float yaw = camera.rotation.y + MathUtils.PI;
 
                     menu.action(Icons.ADD, IKey.lazy("Add a replay here"), () -> this.replays.addReplay(traceResult.hit, pitch, yaw));
-                    menu.action(Icons.POINTER, IKey.lazy("Move replay here"), () ->
-                    {
-                        if (this.replay != null)
-                        {
-                            int cursor = this.filmPanel.getCursor();
-
-                            this.replay.keyframes.x.insert(cursor, traceResult.hit.x);
-                            this.replay.keyframes.y.insert(cursor, traceResult.hit.y);
-                            this.replay.keyframes.z.insert(cursor, traceResult.hit.z);
-
-                            this.replay.keyframes.pitch.insert(cursor, pitch);
-                            this.replay.keyframes.yaw.insert(cursor, yaw);
-                            this.replay.keyframes.bodyYaw.insert(cursor, yaw);
-                        }
-                    });
+                    menu.action(Icons.POINTER, IKey.lazy("Move replay here"), () -> this.moveReplay(traceResult.hit.x, traceResult.hit.y, traceResult.hit.z));
                 });
 
                 return true;

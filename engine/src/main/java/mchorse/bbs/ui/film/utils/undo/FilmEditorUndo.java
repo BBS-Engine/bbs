@@ -54,6 +54,10 @@ public abstract class FilmEditorUndo implements IUndo<ValueGroup>
         {
             this.panel = 1;
         }
+        else
+        {
+            this.panel = 0;
+        }
 
         this.tick = editor.getCursor();
         this.viewMin = timeline.scale.getMinValue();

@@ -237,6 +237,11 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         return new Area(this.clips.area.ex(), this.area.y, this.iconBar.area.x - this.clips.area.ex(), this.area.h);
     }
 
+    public Area getFramebufferViewport()
+    {
+        return this.getFramebufferArea(this.getViewportArea());
+    }
+
     public Area getFramebufferArea(Area viewport)
     {
         int width = BBSSettings.videoWidth.get();
@@ -571,7 +576,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     @Override
     protected boolean subMouseClicked(UIContext context)
     {
-        Area area = this.getFramebufferArea(this.getViewportArea());
+        Area area = this.getFramebufferViewport();
 
         if (area.isInside(context))
         {

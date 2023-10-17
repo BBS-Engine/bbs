@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class UIFilmController extends UIElement
 {
@@ -99,11 +100,28 @@ public class UIFilmController extends UIElement
 
         IKey category = IKey.lazy("Player controller");
 
-        this.keys().register(new KeyCombo(IKey.lazy("Start recording"), GLFW.GLFW_KEY_R, GLFW.GLFW_KEY_LEFT_CONTROL), this::pickRecording).category(category);
-        this.keys().register(new KeyCombo(IKey.lazy("Insert keyframe"), GLFW.GLFW_KEY_I), this::insertFrame).category(category);
+        Supplier<Boolean> hasActor = () -> this.getCurrentEntity() != null;
+
+        this.keys().register(new KeyCombo(IKey.lazy("Start recording"), GLFW.GLFW_KEY_R, GLFW.GLFW_KEY_LEFT_CONTROL), this::pickRecording).active(hasActor).category(category);
+        this.keys().register(new KeyCombo(IKey.lazy("Insert keyframe"), GLFW.GLFW_KEY_I), this::insertFrame).active(hasActor).category(category);
         this.keys().register(new KeyCombo(IKey.lazy("Toggle orbit"), GLFW.GLFW_KEY_O), this::toggleOrbit).category(category);
         this.keys().register(new KeyCombo(IKey.lazy("Toggle actor control"), GLFW.GLFW_KEY_H), this::toggleControl).category(category);
         this.keys().register(new KeyCombo(IKey.lazy("Toggle orbit mode"), GLFW.GLFW_KEY_P), () -> this.setPov(this.pov + 1)).category(category);
+        this.keys().register(new KeyCombo(IKey.lazy("Move replay to cursor"), GLFW.GLFW_KEY_G, GLFW.GLFW_KEY_LEFT_CONTROL), () ->
+        {
+            Area area = this.panel.getFramebufferViewport();
+            RayTraceResult traceResult = new RayTraceResult();
+            UIContext context = this.getContext();
+            World world = context.menu.bridge.get(IBridgeWorld.class).getWorld();
+            Camera camera = this.panel.getCamera();
+
+            RayTracer.trace(traceResult, world.chunks, camera.position, camera.getMouseDirection(context.mouseX, context.mouseY, area), 64F);
+
+            if (traceResult.type == RayTraceType.BLOCK)
+            {
+                this.panel.replays.moveReplay(traceResult.hit.x, traceResult.hit.y, traceResult.hit.z);
+            }
+        }).active(hasActor).category(category);
 
         this.noCulling();
     }
@@ -346,7 +364,7 @@ public class UIFilmController extends UIElement
         }
         else if (context.mouseButton == 2)
         {
-            Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());
+            Area area = this.panel.getFramebufferViewport();
 
             if (area.isInside(context) && this.orbit.enabled)
             {
@@ -362,7 +380,7 @@ public class UIFilmController extends UIElement
     @Override
     protected boolean subMouseScrolled(UIContext context)
     {
-        Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());
+        Area area = this.panel.getFramebufferViewport();
 
         if (area.isInside(context) && this.orbit.enabled)
         {
@@ -911,7 +929,7 @@ public class UIFilmController extends UIElement
         }
 
         UIContext c = this.getContext();
-        Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());
+        Area area = this.panel.getFramebufferViewport();
 
         if (!area.isInside(c))
         {
@@ -949,7 +967,7 @@ public class UIFilmController extends UIElement
 
     private void renderStencil(UIContext context)
     {
-        Area viewport = this.panel.getFramebufferArea(this.panel.getViewportArea());
+        Area viewport = this.panel.getFramebufferViewport();
 
         if (!viewport.isInside(context) || this.controlled != null)
         {
@@ -980,7 +998,7 @@ public class UIFilmController extends UIElement
         this.renderEntity(context.render, entity);
         context.render.setCamera(camera);
 
-        Area area = this.panel.getFramebufferArea(this.panel.getViewportArea());
+        Area area = this.panel.getFramebufferViewport();
         int x = (int) ((context.mouseX - area.x) / (float) area.w * mainTexture.width);
         int y = (int) ((1F - (context.mouseY - area.y) / (float) area.h) * mainTexture.height);
 
