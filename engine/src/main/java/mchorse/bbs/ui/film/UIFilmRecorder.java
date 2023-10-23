@@ -10,11 +10,13 @@ import mchorse.bbs.ui.framework.elements.overlay.UIMessageOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.utils.recording.VideoRecorder;
+import org.lwjgl.glfw.GLFW;
 
 public class UIFilmRecorder extends UIElement
 {
     public UIFilmPanel editor;
 
+    private UIExit exit = new UIExit(this);
     private int end;
 
     public UIFilmRecorder(UIFilmPanel editor)
@@ -79,10 +81,13 @@ public class UIFilmRecorder extends UIElement
         this.editor.togglePlayback();
         context.menu.main.setEnabled(false);
         context.menu.overlay.add(this);
+        context.menu.getRoot().add(this.exit);
     }
 
     public void stop()
     {
+        this.exit.removeFromParent();
+
         if (this.getRecorder().isRecording())
         {
             try
@@ -118,6 +123,29 @@ public class UIFilmRecorder extends UIElement
         if (!this.isRunning() || ticks >= this.end)
         {
             this.stop();
+        }
+    }
+
+    public static class UIExit extends UIElement
+    {
+        private UIFilmRecorder recorder;
+
+        public UIExit(UIFilmRecorder recorder)
+        {
+            this.recorder = recorder;
+        }
+
+        @Override
+        protected boolean subKeyPressed(UIContext context)
+        {
+            if (context.isPressed(GLFW.GLFW_KEY_ESCAPE))
+            {
+                this.recorder.stop();
+
+                return true;
+            }
+
+            return super.subKeyPressed(context);
         }
     }
 }
