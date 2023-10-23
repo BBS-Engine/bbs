@@ -163,6 +163,13 @@ public class Texture implements IDisposable
 
     public void uploadTexture(int target, int level, Pixels pixels)
     {
+        /* Some textures might not be pixel aligned. For example FunkyFight's 398x444 avatar
+         * wasn't aligned, and it caused some interesting visual issues when loading
+         * the texture. This fixes it.
+         *
+         * https://www.khronos.org/opengl/wiki/Pixel_Transfer#Pixel_layout */
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+
         this.setFormat(pixels.bits == 4 ? TextureFormat.RGBA_U8 : TextureFormat.RGB_U8);
         this.uploadTexture(target, level, pixels.width, pixels.height, pixels.getBuffer());
 
