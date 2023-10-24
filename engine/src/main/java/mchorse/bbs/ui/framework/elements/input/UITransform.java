@@ -27,6 +27,9 @@ public abstract class UITransform extends UIElement
     public UITrackpad rx;
     public UITrackpad ry;
     public UITrackpad rz;
+    public UITrackpad r2x;
+    public UITrackpad r2y;
+    public UITrackpad r2z;
 
     protected boolean vertical;
 
@@ -78,18 +81,28 @@ public abstract class UITransform extends UIElement
         this.rz.tooltip(UIKeys.TRANSFORMS_Z);
         this.rz.textbox.setColor(Colors.BLUE);
 
+        this.r2x = new UITrackpad((value) -> this.internalSetR2(value, this.r2y.value, this.r2z.value)).degrees();
+        this.r2x.tooltip(UIKeys.TRANSFORMS_X);
+        this.r2x.textbox.setColor(Colors.RED);
+        this.r2y = new UITrackpad((value) -> this.internalSetR2(this.r2x.value, value, this.r2z.value)).degrees();
+        this.r2y.tooltip(UIKeys.TRANSFORMS_Y);
+        this.r2y.textbox.setColor(Colors.GREEN);
+        this.r2z = new UITrackpad((value) -> this.internalSetR2(this.r2x.value, this.r2y.value, value)).degrees();
+        this.r2z.tooltip(UIKeys.TRANSFORMS_Z);
+        this.r2z.textbox.setColor(Colors.BLUE);
+
         UIElement first = new UIElement();
         UIElement second = new UIElement();
         UIElement third = new UIElement();
 
         first.relative(this).w(1F).h(20).row().height(20);
-        first.add(this.tx, sx, rx);
+        first.add(this.tx, this.sx, this.rx, this.r2x);
 
         second.relative(this).y(0.5F, -10).w(1F).h(20).row().height(20);
-        second.add(this.ty, sy, ry);
+        second.add(this.ty, this.sy, this.ry, this.r2y);
 
         third.relative(this).y(1F, -20).w(1F).h(20).row().height(20);
-        third.add(this.tz, sz, rz);
+        third.add(this.tz, this.sz, this.rz, this.r2z);
 
         this.add(first, second, third);
 
@@ -127,25 +140,6 @@ public abstract class UITransform extends UIElement
         return this;
     }
 
-    public UITransform vertical()
-    {
-        this.vertical = true;
-
-        for (UITrackpad trackpad : this.getChildren(UITrackpad.class))
-        {
-            trackpad.removeFromParent();
-        }
-
-        this.removeAll();
-        this.resetFlex().w(1F).h(120).column().stretch().vertical();
-
-        this.add(UI.label(UIKeys.TRANSFORMS_TRANSLATE), this.tx, this.ty, this.tz);
-        this.add(UI.label(UIKeys.TRANSFORMS_SCALE).marginTop(4), this.sx, this.sy, this.sz);
-        this.add(UI.label(UIKeys.TRANSFORMS_ROTATE).marginTop(4), this.rx, this.ry, this.rz);
-
-        return this;
-    }
-
     public UITransform verticalCompact()
     {
         this.vertical = true;
@@ -161,6 +155,7 @@ public abstract class UITransform extends UIElement
         this.add(UI.row(this.tx, this.ty, this.tz));
         this.add(UI.row(this.sx, this.sy, this.sz));
         this.add(UI.row(this.rx, this.ry, this.rz));
+        this.add(UI.row(this.r2x, this.r2y, this.r2z));
 
         return this;
     }
@@ -192,6 +187,12 @@ public abstract class UITransform extends UIElement
         this.setR(x, y, z);
     }
 
+    public void fillSetR2(double x, double y, double z)
+    {
+        this.fillR2(x, y, z);
+        this.setR2(x, y, z);
+    }
+
     public void fillT(double x, double y, double z)
     {
         this.tx.setValue(x);
@@ -211,6 +212,13 @@ public abstract class UITransform extends UIElement
         this.rx.setValue(x);
         this.ry.setValue(y);
         this.rz.setValue(z);
+    }
+
+    public void fillR2(double x, double y, double z)
+    {
+        this.r2x.setValue(x);
+        this.r2y.setValue(y);
+        this.r2z.setValue(z);
     }
     
     private void internalSetT(double x, double y, double z)
@@ -249,11 +257,25 @@ public abstract class UITransform extends UIElement
         }
     }
 
+    private void internalSetR2(double x, double y, double z)
+    {
+        try
+        {
+            this.setR2(x, y, z);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public abstract void setT(double x, double y, double z);
 
     public abstract void setS(double x, double y, double z);
 
     public abstract void setR(double x, double y, double z);
+
+    public abstract void setR2(double x, double y, double z);
 
     private void copyTransformations()
     {
@@ -268,6 +290,9 @@ public abstract class UITransform extends UIElement
         list.addDouble(this.rx.value);
         list.addDouble(this.ry.value);
         list.addDouble(this.rz.value);
+        list.addDouble(this.r2x.value);
+        list.addDouble(this.r2y.value);
+        list.addDouble(this.r2z.value);
 
         Window.setClipboard(list);
     }
@@ -325,6 +350,7 @@ public abstract class UITransform extends UIElement
         this.fillSetT(0, 0, 0);
         this.fillSetS(1, 1, 1);
         this.fillSetR(0, 0, 0);
+        this.fillSetR2(0, 0, 0);
     }
 
     @Override

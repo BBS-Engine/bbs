@@ -26,13 +26,13 @@ public interface ICubicRenderer
 
     public static void rotateGroup(MatrixStack stack, ModelGroup group)
     {
-        float z = group.current.rotate.z;
-        float y = group.current.rotate.y;
-        float x = group.current.rotate.x;
+        if (group.current.rotate.z != 0F) stack.rotateZ(MathUtils.toRad(group.current.rotate.z));
+        if (group.current.rotate.y != 0F) stack.rotateY(MathUtils.toRad(group.current.rotate.y));
+        if (group.current.rotate.x != 0F) stack.rotateX(MathUtils.toRad(group.current.rotate.x));
 
-        if (z != 0F) stack.rotateZ(MathUtils.toRad(z));
-        if (y != 0F) stack.rotateY(MathUtils.toRad(y));
-        if (x != 0F) stack.rotateX(MathUtils.toRad(x));
+        if (group.current.rotate2.z != 0F) stack.rotateZ(MathUtils.toRad(group.current.rotate2.z));
+        if (group.current.rotate2.y != 0F) stack.rotateY(MathUtils.toRad(group.current.rotate2.y));
+        if (group.current.rotate2.x != 0F) stack.rotateX(MathUtils.toRad(group.current.rotate2.x));
     }
 
     public static void scaleGroup(MatrixStack stack, ModelGroup group)

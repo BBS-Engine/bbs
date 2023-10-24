@@ -9,7 +9,6 @@ import mchorse.bbs.cubic.data.model.ModelGroup;
 import mchorse.bbs.utils.Axis;
 import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.math.Interpolations;
-import mchorse.bbs.world.entities.Entity;
 import org.joml.Vector3d;
 
 import java.util.List;
@@ -30,9 +29,7 @@ public class CubicModelAnimator
 
     private static void resetGroup(ModelGroup group)
     {
-        group.current.translate.set(group.initial.translate);
-        group.current.scale.set(group.initial.scale);
-        group.current.rotate.set(group.initial.rotate);
+        group.current.copy(group.initial);
 
         for (ModelGroup childGroup : group.children)
         {
@@ -40,7 +37,7 @@ public class CubicModelAnimator
         }
     }
 
-    public static void animate(Entity target, Model model, Animation animation, float frame, float blend, boolean skipInitial)
+    public static void animate(Model model, Animation animation, float frame, float blend, boolean skipInitial)
     {
         for (ModelGroup group : model.topGroups)
         {
@@ -66,17 +63,9 @@ public class CubicModelAnimator
             Transform initial = group.initial;
             Transform current = group.current;
 
-            current.translate.x = Interpolations.lerp(current.translate.x, initial.translate.x, blend);
-            current.translate.y = Interpolations.lerp(current.translate.y, initial.translate.y, blend);
-            current.translate.z = Interpolations.lerp(current.translate.z, initial.translate.z, blend);
-
-            current.scale.x = Interpolations.lerp(current.scale.x, initial.scale.x, blend);
-            current.scale.y = Interpolations.lerp(current.scale.y, initial.scale.y, blend);
-            current.scale.z = Interpolations.lerp(current.scale.z, initial.scale.z, blend);
-
-            current.rotate.x = Interpolations.lerp(current.rotate.x, initial.rotate.x, blend);
-            current.rotate.y = Interpolations.lerp(current.rotate.y, initial.rotate.y, blend);
-            current.rotate.z = Interpolations.lerp(current.rotate.z, initial.rotate.z, blend);
+            current.translate.lerp(initial.translate, blend);
+            current.scale.lerp(initial.scale, blend);
+            current.rotate.lerp(initial.rotate, blend);
         }
 
         for (ModelGroup childGroup : group.children)

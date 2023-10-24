@@ -193,7 +193,7 @@ public class ActionPlayback
 
         MolangHelper.setMolangVariables(armature.parser, target, tick, transition);
 
-        CubicModelAnimator.animate(target, armature, this.action, tick, blend, skipInitial);
+        CubicModelAnimator.animate(armature, this.action, tick, blend, skipInitial);
     }
 
     public static enum Fade

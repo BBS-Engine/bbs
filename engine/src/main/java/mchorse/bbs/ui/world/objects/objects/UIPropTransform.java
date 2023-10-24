@@ -65,6 +65,7 @@ public class UIPropTransform extends UITransform
         this.fillT(transform.translate.x, transform.translate.y, transform.translate.z);
         this.fillS(transform.scale.x, transform.scale.y, transform.scale.z);
         this.fillR(MathUtils.toDeg(transform.rotate.x), MathUtils.toDeg(transform.rotate.y), MathUtils.toDeg(transform.rotate.z));
+        this.fillR2(MathUtils.toDeg(transform.rotate2.x), MathUtils.toDeg(transform.rotate2.y), MathUtils.toDeg(transform.rotate2.z));
     }
 
     private void enableMode(int mode)
@@ -115,6 +116,13 @@ public class UIPropTransform extends UITransform
     public void setR(double x, double y, double z)
     {
         this.transform.rotate.set(MathUtils.toRad((float) x), MathUtils.toRad((float) y), MathUtils.toRad((float) z));
+        this.submit();
+    }
+
+    @Override
+    public void setR2(double x, double y, double z)
+    {
+        this.transform.rotate2.set(MathUtils.toRad((float) x), MathUtils.toRad((float) y), MathUtils.toRad((float) z));
         this.submit();
     }
 

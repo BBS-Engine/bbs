@@ -118,5 +118,13 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
             super.setR(x, y, z);
             this.keyframe.postNotifyParent();
         }
+
+        @Override
+        public void setR2(double x, double y, double z)
+        {
+            this.keyframe.preNotifyParent();
+            super.setR2(x, y, z);
+            this.keyframe.postNotifyParent();
+        }
     }
 }
