@@ -8,7 +8,9 @@ import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.utils.resources.Pixels;
+import org.lwjgl.system.MemoryUtil;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,6 +68,7 @@ public class TextureExtruder
 
         VAO vao = this.generate(pixels);
 
+        pixels.delete();
         this.extruded.put(key, vao);
 
         return vao;
@@ -73,8 +76,9 @@ public class TextureExtruder
 
     private VAO generate(Pixels pixels)
     {
+        ByteBuffer buffer = MemoryUtil.memAlloc(this.countBytes(pixels, 6 * VBOAttributes.VERTEX_NORMAL_UV_RGBA.getBytes()));
         VAO vao = new VAO().register(VBOAttributes.VERTEX_NORMAL_UV_RGBA);
-        VAOBuilder builder = BBS.getRender().getVAO().setup(vao, null);
+        VAOBuilder builder = BBS.getRender().getVAO().setup(vao, null).buffer(buffer);
 
         builder.begin();
 
@@ -110,14 +114,15 @@ public class TextureExtruder
         {
             for (int j = 0; j < pixels.height; j++)
             {
-                if (hasPixel(pixels, i, j))
+                if (this.hasPixel(pixels, i, j))
                 {
-                    generateNeighbors(pixels, builder, i, j, i, j, d);
+                    this.generateNeighbors(pixels, builder, i, j, i, j, d);
                 }
             }
         }
 
         builder.flush();
+        MemoryUtil.memFree(buffer);
 
         return vao;
     }
@@ -129,7 +134,7 @@ public class TextureExtruder
         float u = (x + 0.5F) / w;
         float v = (y + 0.5F) / h;
 
-        if (!hasPixel(pixels, x - 1, y) || i == 0)
+        if (!this.hasPixel(pixels, x - 1, y) || i == 0)
         {
             Draw.fillTexturedNormalQuad(builder,
                 i / w - 0.5F, -(j + 1) / h + 0.5F, -d,
@@ -142,7 +147,7 @@ public class TextureExtruder
             );
         }
 
-        if (!hasPixel(pixels, x + 1, y) || i == 15)
+        if (!this.hasPixel(pixels, x + 1, y) || i == 15)
         {
             Draw.fillTexturedNormalQuad(builder,
                 (i + 1) / w - 0.5F, -(j + 1) / h + 0.5F, d,
@@ -155,7 +160,7 @@ public class TextureExtruder
             );
         }
 
-        if (!hasPixel(pixels, x, y - 1) || j == 0)
+        if (!this.hasPixel(pixels, x, y - 1) || j == 0)
         {
             Draw.fillTexturedNormalQuad(builder,
                 (i + 1) / w - 0.5F, -j / h + 0.5F, d,
@@ -168,7 +173,7 @@ public class TextureExtruder
             );
         }
 
-        if (!hasPixel(pixels, x, y + 1) || j == 15)
+        if (!this.hasPixel(pixels, x, y + 1) || j == 15)
         {
             Draw.fillTexturedNormalQuad(builder,
                 (i + 1) / w - 0.5F, -(j + 1) / h + 0.5F, -d,
@@ -180,6 +185,31 @@ public class TextureExtruder
                 0F, -1F, 0F
             );
         }
+    }
+
+    /**
+     * Calculate how many bytes will given extruded picture will occupy.
+     */
+    private int countBytes(Pixels pixels, int size)
+    {
+        /* Front and back faces don't require extrusion */
+        int bytes = size * 2;
+
+        for (int i = 0; i < pixels.width; i++)
+        {
+            for (int j = 0; j < pixels.height; j++)
+            {
+                if (this.hasPixel(pixels, i, j))
+                {
+                    if (!this.hasPixel(pixels, i - 1, j) || i == 0) bytes += size;
+                    if (!this.hasPixel(pixels, i + 1, j) || i == 15) bytes += size;
+                    if (!this.hasPixel(pixels, i, j - 1) || j == 0) bytes += size;
+                    if (!this.hasPixel(pixels, i, j + 1) || j == 15) bytes += size;
+                }
+            }
+        }
+
+        return bytes;
     }
 
     private boolean hasPixel(Pixels pixels, int x, int y)

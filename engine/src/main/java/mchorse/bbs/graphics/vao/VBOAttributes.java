@@ -71,6 +71,18 @@ public class VBOAttributes
         return this;
     }
 
+    public int getBytes()
+    {
+        int size = 0;
+
+        for (VBOAttribute attribute : this.elements)
+        {
+            size += attribute.getBytes();
+        }
+
+        return size;
+    }
+
     public void bindForRender()
     {
         for (int i = 0; i < this.elements.size(); i++)

@@ -76,6 +76,21 @@ public class VAOBuilder
         return this;
     }
 
+    public VAOBuilder buffer(ByteBuffer buffer)
+    {
+        this.buffer = buffer;
+
+        return this;
+    }
+
+    public VAOBuilder buffer(ByteBuffer buffer, IntBuffer indices)
+    {
+        this.buffer = buffer;
+        this.indices = indices;
+
+        return this;
+    }
+
     /* Building methods */
 
     public boolean hasIndex()
@@ -272,5 +287,6 @@ public class VAOBuilder
         this.shader = null;
         this.stack = null;
         this.uploading = false;
+        this.buffer = VAO.DATA;
     }
 }
