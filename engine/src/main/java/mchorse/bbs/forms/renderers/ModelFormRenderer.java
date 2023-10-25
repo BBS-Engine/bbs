@@ -250,7 +250,12 @@ public class ModelFormRenderer extends FormRenderer<ModelForm>
                     stack.rotateY(MathUtils.PI);
                 }
 
+                stack.push();
+                stack.multiply(part.getTransform().createMatrix());
+
                 form.getRenderer().collectMatrices(entity, stack, matrices, StringUtils.combinePaths(prefix, String.valueOf(i)), transition);
+
+                stack.pop();
 
                 stack.pop();
             }

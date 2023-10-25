@@ -34,6 +34,16 @@ public class FormUtils
         return form == null ? null : form.copy();
     }
 
+    public static Form getRoot(Form form)
+    {
+        while (form.getParent() != null)
+        {
+            form = form.getParent();
+        }
+
+        return form;
+    }
+
     public static String getPath(Form form)
     {
         if (form.getParent() == null)

@@ -105,7 +105,12 @@ public abstract class FormRenderer <T extends Form>
 
             if (form != null)
             {
+                stack.push();
+                stack.multiply(part.getTransform().createMatrix());
+
                 form.getRenderer().collectMatrices(entity, stack, matrices, StringUtils.combinePaths(prefix, String.valueOf(i)), transition);
+
+                stack.pop();
             }
 
             i += 1;

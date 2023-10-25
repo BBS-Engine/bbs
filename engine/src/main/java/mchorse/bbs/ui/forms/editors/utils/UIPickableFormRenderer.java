@@ -2,31 +2,33 @@ package mchorse.bbs.ui.forms.editors.utils;
 
 import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.graphics.Draw;
+import mchorse.bbs.graphics.GLStates;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
 import mchorse.bbs.graphics.texture.Texture;
+import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.ui.forms.editors.UIFormEditor;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.utils.StencilFormFramebuffer;
 import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
-
-import java.util.function.Consumer;
 
 public class UIPickableFormRenderer extends UIFormRenderer
 {
-    public Consumer<Pair<Form, String>> callback;
+    public UIFormEditor formEditor;
 
     private boolean update;
 
     private StencilFormFramebuffer stencil = new StencilFormFramebuffer();
 
-    public UIPickableFormRenderer(Consumer<Pair<Form, String>> callback)
+    public UIPickableFormRenderer(UIFormEditor formEditor)
     {
-        this.callback = callback;
+        this.formEditor = formEditor;
     }
 
     public void updatable()
@@ -51,13 +53,13 @@ public class UIPickableFormRenderer extends UIFormRenderer
     @Override
     public boolean subMouseClicked(UIContext context)
     {
-        if (this.stencil.hasPicked() && this.callback != null && context.mouseButton == 1)
+        if (this.stencil.hasPicked() && context.mouseButton == 1)
         {
             Pair<Form, String> pair = this.stencil.getPicked();
 
             if (pair != null)
             {
-                this.callback.accept(pair);
+                this.formEditor.pickFormFromRenderer(pair);
 
                 return true;
             }
@@ -81,7 +83,9 @@ public class UIPickableFormRenderer extends UIFormRenderer
             this.renderFormHitbox(context.render);
         }
 
-        if (this.callback != null && this.area.isInside(context))
+        this.renderAxes(context);
+
+        if (this.area.isInside(context))
         {
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
@@ -97,6 +101,49 @@ public class UIPickableFormRenderer extends UIFormRenderer
         {
             this.stencil.clearPicking();
         }
+    }
+
+    private void renderAxes(UIContext context)
+    {
+        Matrix4f matrix = this.formEditor.editor.getOrigin(context.getTransition());
+        final float axisSize = 0.1F;
+        final float axisOffset = 0.005F;
+        final float outlineSize = axisSize + 0.005F;
+        final float outlineOffset = axisOffset + 0.005F;
+
+        Shader shader = context.render.getShaders().get(VBOAttributes.VERTEX_RGBA);
+
+        context.render.stack.push();
+
+        if (matrix != null)
+        {
+            context.render.stack.multiply(matrix);
+        }
+
+        CommonShaderAccess.setModelView(shader, context.render.stack);
+
+        context.render.stack.pop();
+
+        /* Draw axes */
+        VAOBuilder builder = context.render.getVAO().setup(shader);
+
+        GLStates.depthTest(false);
+
+        builder.begin();
+
+        Draw.fillBox(builder, 0, -outlineOffset, -outlineOffset, outlineSize, outlineOffset, outlineOffset, 0, 0, 0);
+        Draw.fillBox(builder, -outlineOffset, 0, -outlineOffset, outlineOffset, outlineSize, outlineOffset, 0, 0, 0);
+        Draw.fillBox(builder, -outlineOffset, -outlineOffset, 0, outlineOffset, outlineOffset, outlineSize, 0, 0, 0);
+        Draw.fillBox(builder, -outlineOffset, -outlineOffset, -outlineOffset, outlineOffset, outlineOffset, outlineOffset, 0, 0, 0);
+
+        Draw.fillBox(builder, 0, -axisOffset, -axisOffset, axisSize, axisOffset, axisOffset, 1, 0, 0);
+        Draw.fillBox(builder, -axisOffset, 0, -axisOffset, axisOffset, axisSize, axisOffset, 0, 1, 0);
+        Draw.fillBox(builder, -axisOffset, -axisOffset, 0, axisOffset, axisOffset, axisSize, 0, 0, 1);
+        Draw.fillBox(builder, -axisOffset, -axisOffset, -axisOffset, axisOffset, axisOffset, axisOffset, 1, 1, 1);
+
+        builder.render();
+
+        GLStates.depthTest(true);
     }
 
     private void renderFormHitbox(RenderingContext context)
@@ -145,7 +192,7 @@ public class UIPickableFormRenderer extends UIFormRenderer
         CommonShaderAccess.setTarget(shader, index);
         context.batcher.texturedBox(shader, texture, Colors.WHITE, this.area.x, this.area.y, this.area.w, this.area.h, 0, h, w, 0, w, h);
 
-        if (this.callback != null && pair != null)
+        if (pair != null)
         {
             String label = pair.a.getIdOrName();
 

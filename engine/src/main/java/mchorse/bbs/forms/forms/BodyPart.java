@@ -27,8 +27,6 @@ public class BodyPart implements IMapSerializable
 
     private Entity entity = EntityArchitect.createDummy();
 
-    public Transform puppetTransform;
-
     void setManager(BodyPartManager manager)
     {
         this.manager = manager;
@@ -71,10 +69,8 @@ public class BodyPart implements IMapSerializable
             return;
         }
 
-        Transform transform = this.puppetTransform == null ? this.transform : this.puppetTransform;
-
         context.stack.push();
-        context.stack.multiply(transform.createMatrix());
+        context.stack.multiply(this.transform.createMatrix());
 
         this.form.getRenderer().render(this.useTarget ? target : this.entity, context);
 

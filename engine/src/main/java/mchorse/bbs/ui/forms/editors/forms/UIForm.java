@@ -1,6 +1,8 @@
 package mchorse.bbs.ui.forms.editors.forms;
 
+import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.forms.forms.Form;
+import mchorse.bbs.graphics.MatrixStack;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.forms.editors.UIFormEditor;
 import mchorse.bbs.ui.forms.editors.panels.UIFormPanel;
@@ -10,6 +12,11 @@ import mchorse.bbs.ui.framework.elements.UIPanelBase;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.colors.Colors;
+import mchorse.bbs.utils.joml.Matrices;
+import org.joml.Matrix4f;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class UIForm <T extends Form> extends UIPanelBase<UIFormPanel<T>>
 {
@@ -23,9 +30,22 @@ public abstract class UIForm <T extends Form> extends UIPanelBase<UIFormPanel<T>
         super(Direction.LEFT);
     }
 
-    public void refreshFormList()
+    public Matrix4f getOrigin(float transition)
     {
-        this.editor.refreshFormList();
+        return this.getOrigin(transition, FormUtils.getPath(this.form));
+    }
+
+    protected Matrix4f getOrigin(float transition, String path)
+    {
+        Form root = FormUtils.getRoot(this.form);
+        MatrixStack stack = new MatrixStack();
+        Map<String, Matrix4f> map = new HashMap<>();
+
+        root.getRenderer().collectMatrices(this.editor.renderer.getEntity(), stack, map, "", transition);
+
+        Matrix4f matrix = map.get(path);
+
+        return matrix == null ? Matrices.EMPTY_4F : matrix;
     }
 
     protected void registerDefaultPanels()

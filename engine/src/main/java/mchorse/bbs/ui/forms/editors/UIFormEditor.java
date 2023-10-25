@@ -107,7 +107,7 @@ public class UIFormEditor extends UIElement implements IUIFormList
         this.editArea = new UIElement();
         this.editArea.relative(this).x(TREE_WIDTH).w(1F, -TREE_WIDTH).h(1F);
 
-        this.renderer = new UIPickableFormRenderer(this::pickFormFromRenderer);
+        this.renderer = new UIPickableFormRenderer(this);
         this.renderer.relative(this.editArea).full();
 
         this.finish = new UIIcon(Icons.IN, (b) -> this.palette.exit());
@@ -127,7 +127,7 @@ public class UIFormEditor extends UIElement implements IUIFormList
         this.add(this.formsArea, this.editArea);
     }
 
-    private void pickFormFromRenderer(Pair<Form, String> pair)
+    public void pickFormFromRenderer(Pair<Form, String> pair)
     {
         this.forms.setCurrentForm(pair.a);
         this.pickForm(this.forms.getCurrentFirst());
