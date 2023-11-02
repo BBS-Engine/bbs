@@ -86,7 +86,9 @@ public class UIFilmRecorder extends UIElement
 
     public void stop()
     {
-        this.exit.removeFromParent();
+        UIContext context = this.getUIContext();
+
+        context.render.postRunnable(this.exit::removeFromParent);
 
         if (this.getRecorder().isRecording())
         {
@@ -100,8 +102,6 @@ public class UIFilmRecorder extends UIElement
             {
                 this.editor.togglePlayback();
             }
-
-            UIContext context = this.getUIContext();
 
             context.menu.main.setEnabled(true);
             context.render.postRunnable(this::removeFromParent);
