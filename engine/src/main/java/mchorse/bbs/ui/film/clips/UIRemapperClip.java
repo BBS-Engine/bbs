@@ -37,7 +37,7 @@ public class UIRemapperClip extends UIClip<RemapperClip>
     {
         super.registerPanels();
 
-        this.panels.add(UIClip.label(IKey.lazy("Remapper")).marginTop(12), this.editChannel);
+        this.panels.add(UIClip.label(UIKeys.C_CLIP.get("bbs:remapper")).marginTop(12), this.editChannel);
     }
 
     @Override

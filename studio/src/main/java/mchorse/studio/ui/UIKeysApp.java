@@ -19,7 +19,11 @@ public class UIKeysApp
     public static final IKey UTILITY_RESIZE_WINDOW = IKey.lang("studio.ui.utility.resize");
     public static final IKey UTILITY_TITLE = IKey.lang("studio.ui.utility.title");
     public static final IKey UTILITY_COMPILE_LANG_DESCRIPTION = IKey.lang("studio.ui.utility.compile_lang-description");
-    public static final IKey UTILITY_OPEN_EXPORT = IKey.lang("studio.ui.utility.open_export");
+
+    public static final IKey UTILITY_OPEN_FOLDER = IKey.lang("studio.ui.utility.open_folder", "Open folder...", UTILITY_ANALYZE_LANG);
+    public static final IKey UTILITY_OPEN_GAME_FOLDER = IKey.lang("studio.ui.utility.open_game_folder", "Game", UTILITY_ANALYZE_LANG);
+    public static final IKey UTILITY_OPEN_AUDIO_FOLDER = IKey.lang("studio.ui.utility.open_audio_folder", "Audio", UTILITY_ANALYZE_LANG);
+    public static final IKey UTILITY_OPEN_MODELS_FOLDER = IKey.lang("studio.ui.utility.open_models_folder", "Models", UTILITY_ANALYZE_LANG);
 
     /* Non-creative pause menu */
     public static final IKey PAUSE_RESUME = IKey.lang("studio.ui.pause.resume");
@@ -30,27 +34,19 @@ public class UIKeysApp
     public static final IKey WELCOME_FEATURES_BLOCKBENCH_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.blockbench-description");
     public static final IKey WELCOME_FEATURES_FILM_EDITOR = IKey.lang("studio.ui.welcome.main_features.film_editor");
     public static final IKey WELCOME_FEATURES_FILM_EDITOR_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.film_editor-description");
-    public static final IKey WELCOME_FEATURES_DIALOGUES = IKey.lang("studio.ui.welcome.main_features.dialogues");
-    public static final IKey WELCOME_FEATURES_DIALOGUES_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.dialogues-description");
     public static final IKey WELCOME_FEATURES_MORE = IKey.lang("studio.ui.welcome.main_features.and_more");
     public static final IKey WELCOME_FEATURES_MORE_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.and_more-description");
     public static final IKey WELCOME_FEATURES_PARTICLES = IKey.lang("studio.ui.welcome.main_features.particles");
     public static final IKey WELCOME_FEATURES_PARTICLES_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.particles-description");
-    public static final IKey WELCOME_FEATURES_SCRIPTS = IKey.lang("studio.ui.welcome.main_features.scripting");
-    public static final IKey WELCOME_FEATURES_SCRIPTS_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.scripting-description");
     public static final IKey WELCOME_FEATURES_TILE_SETS = IKey.lang("studio.ui.welcome.main_features.tile_sets");
     public static final IKey WELCOME_FEATURES_TILE_SETS_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.tile_sets-description");
-    public static final IKey WELCOME_FEATURES_TRIGGERS = IKey.lang("studio.ui.welcome.main_features.triggers");
-    public static final IKey WELCOME_FEATURES_TRIGGERS_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.triggers-description");
     public static final IKey WELCOME_FEATURES_WORLD_EDITOR = IKey.lang("studio.ui.welcome.main_features.world_editor");
     public static final IKey WELCOME_FEATURES_WORLD_EDITOR_DESCRIPTION = IKey.lang("studio.ui.welcome.main_features.world_editor-description");
     public static final IKey WELCOME_KEYS_BACKSLASH = IKey.lang("studio.ui.welcome.main_keys.backslash");
-    public static final IKey WELCOME_KEYS_ESCAPE = IKey.lang("studio.ui.welcome.main_keys.escape");
     public static final IKey WELCOME_KEYS_F1 = IKey.lang("studio.ui.welcome.main_keys.f1");
     public static final IKey WELCOME_KEYS_F11 = IKey.lang("studio.ui.welcome.main_keys.f11");
     public static final IKey WELCOME_KEYS_F2 = IKey.lang("studio.ui.welcome.main_keys.f2");
     public static final IKey WELCOME_KEYS_F3 = IKey.lang("studio.ui.welcome.main_keys.f3");
-    public static final IKey WELCOME_KEYS_F4 = IKey.lang("studio.ui.welcome.main_keys.f4");
     public static final IKey WELCOME_KEYS_F6 = IKey.lang("studio.ui.welcome.main_keys.f6");
     public static final IKey WELCOME_KEYS_F9 = IKey.lang("studio.ui.welcome.main_keys.f9");
     public static final IKey WELCOME_KEYS_NEXT = IKey.lang("studio.ui.welcome.keys.next_page");

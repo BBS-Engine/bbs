@@ -4,8 +4,8 @@ import mchorse.bbs.cubic.CubicModel;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.ModelForm;
 import mchorse.bbs.graphics.window.Window;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIProperty;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
@@ -28,7 +28,7 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
         this.groups.scroll.cancelScrolling();
         this.groups.context((menu) ->
         {
-            menu.action(Icons.COPY, IKey.lazy("Copy pose"), () ->
+            menu.action(Icons.COPY, UIKeys.POSE_CONTEXT_COPY, () ->
             {
                 Window.setClipboard(this.keyframe.getValue().toData(), "_ModelCopyPose");
             });
@@ -37,7 +37,7 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
 
             if (data != null)
             {
-                menu.action(Icons.PASTE, IKey.lazy("Paste pose"), () ->
+                menu.action(Icons.PASTE, UIKeys.POSE_CONTEXT_PASTE, () ->
                 {
                     String current = this.groups.getCurrentFirst();
 
@@ -46,7 +46,7 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
                 });
             }
 
-            menu.action(Icons.REFRESH, IKey.lazy("Reset pose"), () ->
+            menu.action(Icons.REFRESH, UIKeys.POSE_CONTEXT_RESET, () ->
             {
                 String current = this.groups.getCurrentFirst();
 

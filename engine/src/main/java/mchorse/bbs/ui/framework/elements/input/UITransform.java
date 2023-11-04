@@ -40,13 +40,13 @@ public abstract class UITransform extends UIElement
         super();
 
         this.tx = new UITrackpad((value) -> this.internalSetT(value, this.ty.value, this.tz.value)).block();
-        this.tx.tooltip(UIKeys.TRANSFORMS_X);
+        this.tx.tooltip(UIKeys.GENERAL_X);
         this.tx.textbox.setColor(Colors.RED);
         this.ty = new UITrackpad((value) -> this.internalSetT(this.tx.value, value, this.tz.value)).block();
-        this.ty.tooltip(UIKeys.TRANSFORMS_Y);
+        this.ty.tooltip(UIKeys.GENERAL_Y);
         this.ty.textbox.setColor(Colors.GREEN);
         this.tz = new UITrackpad((value) -> this.internalSetT(this.tx.value, this.ty.value, value)).block();
-        this.tz.tooltip(UIKeys.TRANSFORMS_Z);
+        this.tz.tooltip(UIKeys.GENERAL_Z);
         this.tz.textbox.setColor(Colors.BLUE);
 
         this.sx = new UITrackpad((value) ->
@@ -54,41 +54,41 @@ public abstract class UITransform extends UIElement
             this.internalSetS(value, this.sy.value, this.sz.value);
             this.syncScale(value);
         });
-        this.sx.tooltip(UIKeys.TRANSFORMS_X);
+        this.sx.tooltip(UIKeys.GENERAL_X);
         this.sx.textbox.setColor(Colors.RED);
         this.sy = new UITrackpad((value) ->
         {
             this.internalSetS(this.sx.value, value, this.sz.value);
             this.syncScale(value);
         });
-        this.sy.tooltip(UIKeys.TRANSFORMS_Y);
+        this.sy.tooltip(UIKeys.GENERAL_Y);
         this.sy.textbox.setColor(Colors.GREEN);
         this.sz = new UITrackpad((value) ->
         {
             this.internalSetS(this.sx.value, this.sy.value, value);
             this.syncScale(value);
         });
-        this.sz.tooltip(UIKeys.TRANSFORMS_Z);
+        this.sz.tooltip(UIKeys.GENERAL_Z);
         this.sz.textbox.setColor(Colors.BLUE);
 
         this.rx = new UITrackpad((value) -> this.internalSetR(value, this.ry.value, this.rz.value)).degrees();
-        this.rx.tooltip(UIKeys.TRANSFORMS_X);
+        this.rx.tooltip(UIKeys.GENERAL_X);
         this.rx.textbox.setColor(Colors.RED);
         this.ry = new UITrackpad((value) -> this.internalSetR(this.rx.value, value, this.rz.value)).degrees();
-        this.ry.tooltip(UIKeys.TRANSFORMS_Y);
+        this.ry.tooltip(UIKeys.GENERAL_Y);
         this.ry.textbox.setColor(Colors.GREEN);
         this.rz = new UITrackpad((value) -> this.internalSetR(this.rx.value, this.ry.value, value)).degrees();
-        this.rz.tooltip(UIKeys.TRANSFORMS_Z);
+        this.rz.tooltip(UIKeys.GENERAL_Z);
         this.rz.textbox.setColor(Colors.BLUE);
 
         this.r2x = new UITrackpad((value) -> this.internalSetR2(value, this.r2y.value, this.r2z.value)).degrees();
-        this.r2x.tooltip(UIKeys.TRANSFORMS_X);
+        this.r2x.tooltip(UIKeys.GENERAL_X);
         this.r2x.textbox.setColor(Colors.RED);
         this.r2y = new UITrackpad((value) -> this.internalSetR2(this.r2x.value, value, this.r2z.value)).degrees();
-        this.r2y.tooltip(UIKeys.TRANSFORMS_Y);
+        this.r2y.tooltip(UIKeys.GENERAL_Y);
         this.r2y.textbox.setColor(Colors.GREEN);
         this.r2z = new UITrackpad((value) -> this.internalSetR2(this.r2x.value, this.r2y.value, value)).degrees();
-        this.r2z.tooltip(UIKeys.TRANSFORMS_Z);
+        this.r2z.tooltip(UIKeys.GENERAL_Z);
         this.r2z.textbox.setColor(Colors.BLUE);
 
         UIElement first = new UIElement();

@@ -39,7 +39,7 @@ public class UIShakeClip extends UIClip<ShakeClip>
     {
         super.registerPanels();
 
-        this.panels.add(UIClip.label(IKey.lazy("Shake")).marginTop(12), UI.row(5, 0, 20, this.shake, this.shakeAmount), this.active);
+        this.panels.add(UIClip.label(UIKeys.C_CLIP.get("bbs:shake")).marginTop(12), UI.row(5, 0, 20, this.shake, this.shakeAmount), this.active);
     }
 
     @Override

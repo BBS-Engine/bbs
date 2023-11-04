@@ -1,6 +1,7 @@
 package mchorse.bbs.film.tts;
 
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlayPanel;
@@ -13,7 +14,7 @@ public class UIVoiceColorsOverlayPanel extends UIOverlayPanel
 
     public UIVoiceColorsOverlayPanel(ValueVoiceColors colors)
     {
-        super(IKey.lazy("Voice colors"));
+        super(UIKeys.VOICE_COLORS_TITLE);
 
         this.colors = colors;
 

@@ -33,17 +33,6 @@ public interface IKey
         return new StringKey(string);
     }
 
-    /**
-     * This method is used for referencing lazy language strings before they
-     * are extracted to the language file.
-     *
-     * Ideally, this method should have no references in the release version!
-     */
-    public static IKey lazy(String string)
-    {
-        return new StringKey(string);
-    }
-
     public static IKey comp(List<IKey> keys)
     {
         return new CompoundKey(keys);
@@ -54,10 +43,5 @@ public interface IKey
     public default IKey format(Object... args)
     {
         return new FormatKey(this, args);
-    }
-
-    public default String formatString(Object... args)
-    {
-        return String.format(this.get(), args);
     }
 }

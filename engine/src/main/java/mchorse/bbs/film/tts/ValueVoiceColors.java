@@ -2,9 +2,9 @@ package mchorse.bbs.film.tts;
 
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.settings.values.base.IValueUIProvider;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
@@ -41,7 +41,7 @@ public class ValueVoiceColors extends BaseValue implements IValueUIProvider
     @Override
     public List<UIElement> getFields(UIElement ui)
     {
-        UIButton button = new UIButton(IKey.lazy("Edit voice colors..."), (b) ->
+        UIButton button = new UIButton(UIKeys.VOICE_COLORS_OPEN, (b) ->
         {
             UIOverlay.addOverlay(ui.getContext(), new UIVoiceColorsOverlayPanel(this));
         });

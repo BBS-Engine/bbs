@@ -144,15 +144,15 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
             recorder.takeScreenshot(Window.isAltPressed() ? null : recorder.getScreenshotFile(), this.getFramebuffer().getMainTexture());
         });
-        this.screenshot.tooltip(IKey.lazy("Take a screenshot"), Direction.LEFT);
+        this.screenshot.tooltip(UIKeys.FILM_SCREENSHOT, Direction.LEFT);
         this.openVideos = new UIIcon(Icons.FILM, (b) -> this.recorder.openMovies());
         this.openVideos.tooltip(UIKeys.CAMERA_TOOLTIPS_OPEN_VIDEOS, Direction.LEFT);
         this.openCamera = new UIIcon(Icons.FRUSTUM, (b) -> this.showPanel(this.clips));
-        this.openCamera.tooltip(IKey.lazy("Open camera editor"), Direction.LEFT);
+        this.openCamera.tooltip(UIKeys.FILM_OPEN_CAMERA_EDITOR, Direction.LEFT);
         this.openReplays = new UIIcon(Icons.SCENE, (b) -> this.showPanel(this.replays));
-        this.openReplays.tooltip(IKey.lazy("Open replay editor"), Direction.LEFT);
+        this.openReplays.tooltip(UIKeys.FILM_OPEN_REPLAY_EDITOR, Direction.LEFT);
         this.openScreenplay = new UIIcon(Icons.FILE, (b) -> this.showPanel(this.screenplay));
-        this.openScreenplay.tooltip(IKey.lazy("Open voice line editor"), Direction.LEFT);
+        this.openScreenplay.tooltip(UIKeys.FILM_OPEN_VOICE_LINE_EDITOR, Direction.LEFT);
 
         this.draggable = new UIDraggable((context) ->
         {
@@ -349,7 +349,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     @Override
     public IKey getTitle()
     {
-        return IKey.lazy("Films");
+        return UIKeys.FILM_TITLE;
     }
 
     @Override

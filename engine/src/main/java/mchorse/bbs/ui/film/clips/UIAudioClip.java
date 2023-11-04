@@ -35,6 +35,6 @@ public class UIAudioClip extends UIClip<AudioClip>
     {
         super.registerPanels();
 
-        this.panels.add(UIClip.label(IKey.lazy("Audio")).marginTop(12), this.pickAudio);
+        this.panels.add(UIClip.label(UIKeys.C_CLIP.get("bbs:audio")).marginTop(12), this.pickAudio);
     }
 }

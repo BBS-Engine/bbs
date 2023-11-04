@@ -13,7 +13,7 @@ import mchorse.bbs.film.screenplay.Screenplay;
 import mchorse.bbs.film.screenplay.ScreenplayAction;
 import mchorse.bbs.film.tts.ElevenLabsAPI;
 import mchorse.bbs.film.tts.ElevenLabsResult;
-import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
@@ -57,11 +57,11 @@ public class UIScreenplayEditor extends UIElement
 
         this.master = new UIAudioPlayer();
         this.generate = new UIIcon(Icons.SOUND, (b) -> this.generate());
-        this.generate.tooltip(IKey.lazy("Compile generated audio"));
+        this.generate.tooltip(UIKeys.VOICE_LINE_COMPILE);
         this.subtitles = new UIIcon(Icons.FONT, (b) -> this.generateSubtitles());
-        this.subtitles.tooltip(IKey.lazy("Generate subtitle clips"));
+        this.subtitles.tooltip(UIKeys.VOICE_LINE_SUBTITLES);
         this.save = new UIIcon(Icons.SAVED, (b) -> this.saveAudio());
-        this.save.tooltip(IKey.lazy("Save compiled audio"));
+        this.save.tooltip(UIKeys.VOICE_LINE_SAVE);
         this.masterBar = UI.row(this.master, this.save, this.subtitles, this.generate);
         this.masterBar.relative(this).x(10).y(10).w(1F, -20).h(20);
 
@@ -72,7 +72,7 @@ public class UIScreenplayEditor extends UIElement
             this.editor.addBefore(this.add, this.createAction(this.screenplay.addAction()));
             this.resize();
         });
-        this.add.tooltip(IKey.lazy("Add new action..."), Direction.TOP);
+        this.add.tooltip(UIKeys.VOICE_LINE_ADD_ACTION, Direction.TOP);
 
         this.add(this.editor, this.masterBar);
         this.markContainer();
@@ -204,8 +204,8 @@ public class UIScreenplayEditor extends UIElement
             DataToString.writeSilently(new File(folder, filename + ".json"), colorCodes, true);
 
             UIOverlay.addOverlay(this.getContext(), new UIMessageFolderOverlayPanel(
-                IKey.lazy("Compiled"),
-                IKey.lazy("Generated voice lines were successfully generated to " + filename + "!"),
+                UIKeys.VOICE_LINE_SAVE_AUDIO_TITLE,
+                UIKeys.VOICE_LINE_SAVE_AUDIO_DESCRIPTION.format(filename),
                 folder
             ));
         }
@@ -233,25 +233,25 @@ public class UIScreenplayEditor extends UIElement
             {
                 if (result.status == ElevenLabsResult.Status.INITIALIZED)
                 {
-                    this.getContext().notify(IKey.lazy("Starting TTS generation!"), Colors.BLUE | Colors.A100);
+                    this.getContext().notify(UIKeys.VOICE_LINE_NOTIFICATIONS_COMMENCING, Colors.BLUE | Colors.A100);
                 }
                 else if (result.status == ElevenLabsResult.Status.GENERATED)
                 {
-                    this.getContext().notify(IKey.lazy(result.message), Colors.BLUE | Colors.A100);
+                    this.getContext().notify(result.message, Colors.BLUE | Colors.A100);
                 }
                 else if (result.status == ElevenLabsResult.Status.ERROR)
                 {
-                    this.getContext().notify(IKey.lazy("An error has occurred when generating a voice line: " + result.message), Colors.RED | Colors.A100);
+                    this.getContext().notify(UIKeys.VOICE_LINE_NOTIFICATIONS_ERROR_GENERATING.format(result.message), Colors.RED | Colors.A100);
                 }
                 else if (result.status == ElevenLabsResult.Status.TOKEN_MISSING)
                 {
-                    this.getContext().notify(IKey.lazy("You haven't specified a token in BBS' settings!"), Colors.RED | Colors.A100);
+                    this.getContext().notify(UIKeys.VOICE_LINE_NOTIFICATIONS_MISSING_TOKEN, Colors.RED | Colors.A100);
                 }
                 else if (result.status == ElevenLabsResult.Status.VOICE_IS_MISSING)
                 {
                     this.getContext().notify(!result.missingVoices.isEmpty()
-                        ? IKey.lazy("Following voices in the screenplay are missing: " + String.join(", ", result.missingVoices))
-                        : IKey.lazy("A list of voices couldn't get loaded!"),
+                        ? UIKeys.VOICE_LINE_NOTIFICATIONS_MISSING_VOICES.format(String.join(", ", result.missingVoices))
+                        : UIKeys.VOICE_LINE_NOTIFICATIONS_ERROR_LOADING_VOICES,
                 Colors.RED | Colors.A100);
                 }
                 else /* SUCCESS */
@@ -275,7 +275,7 @@ public class UIScreenplayEditor extends UIElement
 
         uiAction.context((menu) ->
         {
-            menu.action(Icons.MOVE_UP, IKey.lazy("Move up"), () ->
+            menu.action(Icons.MOVE_UP, UIKeys.VOICE_LINE_CONTEXT_MOVE_UP, () ->
             {
                 if (this.screenplay.moveAction(action, -1))
                 {
@@ -287,7 +287,7 @@ public class UIScreenplayEditor extends UIElement
                     }
                 }
             });
-            menu.action(Icons.MOVE_DOWN, IKey.lazy("Move down"), () ->
+            menu.action(Icons.MOVE_DOWN, UIKeys.VOICE_LINE_CONTEXT_MOVE_DOWN, () ->
             {
                 if (this.screenplay.moveAction(action, 1))
                 {
@@ -300,7 +300,7 @@ public class UIScreenplayEditor extends UIElement
                 }
             });
 
-            menu.action(Icons.REMOVE, IKey.lazy("Remove action"), Colors.NEGATIVE, () ->
+            menu.action(Icons.REMOVE, UIKeys.VOICE_LINE_CONTEXT_REMOVE, Colors.NEGATIVE, () ->
             {
                 this.screenplay.removeAction(action);
                 uiAction.removeFromParent();

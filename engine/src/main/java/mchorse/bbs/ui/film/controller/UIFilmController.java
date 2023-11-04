@@ -25,6 +25,7 @@ import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.film.replays.UIRecordOverlayPanel;
 import mchorse.bbs.ui.framework.UIContext;
@@ -98,16 +99,16 @@ public class UIFilmController extends UIElement
     {
         this.panel = panel;
 
-        IKey category = IKey.lazy("Player controller");
+        IKey category = UIKeys.FILM_CONTROLLER_KEYS_CATEGORY;
 
         Supplier<Boolean> hasActor = () -> this.getCurrentEntity() != null;
 
-        this.keys().register(new KeyCombo(IKey.lazy("Start recording"), GLFW.GLFW_KEY_R, GLFW.GLFW_KEY_LEFT_CONTROL), this::pickRecording).active(hasActor).category(category);
-        this.keys().register(new KeyCombo(IKey.lazy("Insert keyframe"), GLFW.GLFW_KEY_I), this::insertFrame).active(hasActor).category(category);
-        this.keys().register(new KeyCombo(IKey.lazy("Toggle orbit"), GLFW.GLFW_KEY_O), this::toggleOrbit).category(category);
-        this.keys().register(new KeyCombo(IKey.lazy("Toggle actor control"), GLFW.GLFW_KEY_H), this::toggleControl).category(category);
-        this.keys().register(new KeyCombo(IKey.lazy("Toggle orbit mode"), GLFW.GLFW_KEY_P), () -> this.setPov(this.pov + 1)).category(category);
-        this.keys().register(new KeyCombo(IKey.lazy("Move replay to cursor"), GLFW.GLFW_KEY_G, GLFW.GLFW_KEY_LEFT_CONTROL), () ->
+        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_START_RECORDING, GLFW.GLFW_KEY_R, GLFW.GLFW_KEY_LEFT_CONTROL), this::pickRecording).active(hasActor).category(category);
+        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_INSERT_FRAME, GLFW.GLFW_KEY_I), this::insertFrame).active(hasActor).category(category);
+        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_TOGGLE_ORBIT, GLFW.GLFW_KEY_O), this::toggleOrbit).category(category);
+        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_TOGGLE_CONTROL, GLFW.GLFW_KEY_H), this::toggleControl).category(category);
+        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_TOGGLE_ORBIT_MODE, GLFW.GLFW_KEY_P), () -> this.setPov(this.pov + 1)).category(category);
+        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_MOVE_REPLAY_TO_CURSOR, GLFW.GLFW_KEY_G, GLFW.GLFW_KEY_LEFT_CONTROL), () ->
         {
             Area area = this.panel.getFramebufferViewport();
             RayTraceResult traceResult = new RayTraceResult();
@@ -452,8 +453,8 @@ public class UIFilmController extends UIElement
         Window.toggleMousePointer(false);
 
         UIOverlay.addOverlay(this.getContext(), new UIRecordOverlayPanel(
-            IKey.lazy("Record"),
-            IKey.lazy("Pick a keyframe group that you want to record:"),
+            UIKeys.FILM_CONTROLLER_RECORD_TITLE,
+            UIKeys.FILM_CONTROLLER_RECORD_DESCRIPTION,
             this::startRecording
         ));
     }
@@ -548,8 +549,8 @@ public class UIFilmController extends UIElement
         Window.toggleMousePointer(false);
 
         UIRecordOverlayPanel panel = new UIRecordOverlayPanel(
-            IKey.lazy("Insert keyframe"),
-            IKey.lazy("Pick a keyframe group that you want to insert:"),
+            UIKeys.FILM_CONTROLLER_INSERT_FRAME_TITLE,
+            UIKeys.FILM_CONTROLLER_INSERT_FRAME_DESCRIPTION,
             (groups) ->
             {
                 Replay replay = this.getReplay();

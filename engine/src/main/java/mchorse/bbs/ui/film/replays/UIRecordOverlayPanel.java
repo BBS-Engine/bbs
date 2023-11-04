@@ -2,6 +2,7 @@ package mchorse.bbs.ui.film.replays;
 
 import mchorse.bbs.film.replays.ReplayKeyframes;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageOverlayPanel;
@@ -42,14 +43,14 @@ public class UIRecordOverlayPanel extends UIMessageOverlayPanel
         this.position = new UIIcon(Icons.ALL_DIRECTIONS, (b) -> this.submit(Arrays.asList(ReplayKeyframes.GROUP_POSITION)));
         this.rotation = new UIIcon(Icons.REFRESH, (b) -> this.submit(Arrays.asList(ReplayKeyframes.GROUP_ROTATION)));
 
-        this.all.tooltip(IKey.lazy("All groups"));
-        this.left.tooltip(IKey.lazy("Left stick"));
-        this.right.tooltip(IKey.lazy("Right stick"));
-        this.triggers.tooltip(IKey.lazy("Triggers"));
-        this.extra1.tooltip(IKey.lazy("Extra 1"));
-        this.extra2.tooltip(IKey.lazy("Extra 2"));
-        this.position.tooltip(IKey.lazy("Only position"));
-        this.rotation.tooltip(IKey.lazy("Only rotation"));
+        this.all.tooltip(UIKeys.FILM_GROUPS_ALL);
+        this.left.tooltip(UIKeys.FILM_GROUPS_LEFT_STICK);
+        this.right.tooltip(UIKeys.FILM_GROUPS_RIGHT_STICK);
+        this.triggers.tooltip(UIKeys.FILM_GROUPS_TRIGGERS);
+        this.extra1.tooltip(UIKeys.FILM_GROUPS_EXTRA_1);
+        this.extra2.tooltip(UIKeys.FILM_GROUPS_EXTRA_2);
+        this.position.tooltip(UIKeys.FILM_GROUPS_ONLY_POSITION);
+        this.rotation.tooltip(UIKeys.FILM_GROUPS_ONLY_ROTATION);
 
         UIElement bar = UI.row(this.all, this.left, this.right, this.triggers, this.extra1, this.extra2, this.position, this.rotation);
 

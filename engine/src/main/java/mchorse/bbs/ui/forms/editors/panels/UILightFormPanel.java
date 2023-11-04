@@ -1,7 +1,7 @@
 package mchorse.bbs.ui.forms.editors.panels;
 
 import mchorse.bbs.forms.forms.LightForm;
-import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.forms.editors.forms.UIForm;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
@@ -20,8 +20,8 @@ public class UILightFormPanel extends UIFormPanel<LightForm>
         this.color = new UIColor((c) -> this.form.color.set(new Color().set(c, false)));
         this.distance = new UITrackpad((v) -> this.form.distance.set(v.floatValue()));
 
-        this.options.add(UI.label(IKey.lazy("Color")).background(), this.color.marginBottom(6));
-        this.options.add(UI.label(IKey.lazy("Distance")).background(), this.distance);
+        this.options.add(UI.label(UIKeys.FORMS_EDITORS_LIGHT_COLOR).background(), this.color.marginBottom(6));
+        this.options.add(UI.label(UIKeys.FORMS_EDITORS_LIGHT_DISTANCE).background(), this.distance);
     }
 
     @Override

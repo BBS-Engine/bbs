@@ -11,6 +11,7 @@ import mchorse.bbs.forms.properties.IFormProperty;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.panels.UIDashboardPanels;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.film.utils.keyframes.UICameraDopeSheetEditor;
@@ -92,13 +93,13 @@ public class UIReplaysEditor extends UIElement
         int w = 120;
 
         this.record = new UIIcon(Icons.SPHERE, (b) -> this.filmPanel.getController().pickRecording());
-        this.record.tooltip(IKey.lazy("Record replay"));
+        this.record.tooltip(UIKeys.FILM_REPLAY_RECORD);
         this.keyframe = new UIIcon(Icons.KEY, (b) -> this.filmPanel.getController().insertFrame());
-        this.keyframe.tooltip(IKey.lazy("Insert keyframe"));
+        this.keyframe.tooltip(UIKeys.FILM_REPLAY_INSERT);
         this.toggleKeyframes = new UIIcon(Icons.GRAPH, (b) -> this.toggleProperties(false));
-        this.toggleKeyframes.tooltip(IKey.lazy("Open entity keyframes editor"));
+        this.toggleKeyframes.tooltip(UIKeys.FILM_REPLAY_ENTITY_KEYFRAMES);
         this.toggleProperties = new UIIcon(Icons.MORE, (b) -> this.toggleProperties(true));
-        this.toggleProperties.tooltip(IKey.lazy("Open form keyframes editor"));
+        this.toggleProperties.tooltip(UIKeys.FILM_REPLAY_FORM_KEYFRAMES);
 
         this.keyframes = new UIElement();
         this.keyframes.relative(this).x(w).w(1F, -w).h(1F);
@@ -371,8 +372,8 @@ public class UIReplaysEditor extends UIElement
                     float pitch = camera.rotation.x;
                     float yaw = camera.rotation.y + MathUtils.PI;
 
-                    menu.action(Icons.ADD, IKey.lazy("Add a replay here"), () -> this.replays.addReplay(traceResult.hit, pitch, yaw));
-                    menu.action(Icons.POINTER, IKey.lazy("Move replay here"), () -> this.moveReplay(traceResult.hit.x, traceResult.hit.y, traceResult.hit.z));
+                    menu.action(Icons.ADD, UIKeys.FILM_REPLAY_CONTEXT_ADD, () -> this.replays.addReplay(traceResult.hit, pitch, yaw));
+                    menu.action(Icons.POINTER, UIKeys.FILM_REPLAY_CONTEXT_MOVE_HERE, () -> this.moveReplay(traceResult.hit.x, traceResult.hit.y, traceResult.hit.z));
                 });
 
                 return true;

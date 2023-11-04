@@ -1,7 +1,7 @@
 package mchorse.bbs.ui.film.clips;
 
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
-import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.framework.elements.buttons.UIToggle;
 import mchorse.bbs.ui.framework.elements.input.UIColor;
@@ -81,7 +81,7 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         {
             value.set(v.floatValue());
         })).limit(0);
-        this.shadowOpaque = new UIToggle(IKey.lazy("Opaque"), (b) -> this.editor.editMultiple(this.clip.shadowOpaque, (value) ->
+        this.shadowOpaque = new UIToggle(UIKeys.CAMERA_PANELS_SUBTITLE_OPAQUE, (b) -> this.editor.editMultiple(this.clip.shadowOpaque, (value) ->
         {
             value.set(b.getValue());
         }));
@@ -96,12 +96,12 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
         {
             value.set(v.intValue());
         }));
-        this.lineHeight.limit(0).integer().tooltip(IKey.lazy("Line height"), Direction.BOTTOM);
+        this.lineHeight.limit(0).integer().tooltip(UIKeys.CAMERA_PANELS_SUBTITLE_LINE_HEIGHT, Direction.BOTTOM);
         this.maxWidth = new UITrackpad((v) -> this.editor.editMultiple(this.clip.maxWidth, (value) ->
         {
             value.set(v.intValue());
         }));
-        this.maxWidth.limit(0).integer().tooltip(IKey.lazy("Max width"), Direction.BOTTOM);
+        this.maxWidth.limit(0).integer().tooltip(UIKeys.CAMERA_PANELS_SUBTITLE_MAX_WIDTH, Direction.BOTTOM);
     }
 
     @Override
@@ -109,14 +109,14 @@ public class UISubtitleClip extends UIClip<SubtitleClip>
     {
         super.registerPanels();
 
-        this.panels.add(UIClip.label(IKey.lazy("Offset")).marginTop(6), UI.row(this.x, this.y));
-        this.panels.add(UIClip.label(IKey.lazy("Size")).marginTop(6), this.size, this.color);
-        this.panels.add(UIClip.label(IKey.lazy("Anchor")).marginTop(6), UI.row(this.anchorX, this.anchorY));
-        this.panels.add(UIClip.label(IKey.lazy("Window")).marginTop(6), UI.row(this.windowX, this.windowY));
-        this.panels.add(UIClip.label(IKey.lazy("Background")).marginTop(6), this.background, this.backgroundOffset);
-        this.panels.add(UIClip.label(IKey.lazy("Shadow")).marginTop(6), this.shadow, this.shadowOpaque);
-        this.panels.add(UIClip.label(IKey.lazy("Transform")).marginTop(6), this.transform);
-        this.panels.add(UIClip.label(IKey.lazy("Constraints")).marginTop(6), UI.row(this.lineHeight, this.maxWidth));
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_SUBTITLE_OFFSET).marginTop(6), UI.row(this.x, this.y));
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_SUBTITLE_SIZE).marginTop(6), this.size, this.color);
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_SUBTITLE_ANCHOR).marginTop(6), UI.row(this.anchorX, this.anchorY));
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_SUBTITLE_WINDOW).marginTop(6), UI.row(this.windowX, this.windowY));
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_SUBTITLE_BACKGROUND).marginTop(6), this.background, this.backgroundOffset);
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_SUBTITLE_SHADOW).marginTop(6), this.shadow, this.shadowOpaque);
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_SUBTITLE_TRANSFORM).marginTop(6), this.transform);
+        this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_SUBTITLE_CONSTRAINT).marginTop(6), UI.row(this.lineHeight, this.maxWidth));
     }
 
     @Override

@@ -1,7 +1,6 @@
 package mchorse.bbs.ui.world.settings;
 
 import mchorse.bbs.bridge.IBridgeCamera;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.forms.UIFormPalette;
 import mchorse.bbs.ui.forms.UINestedEdit;
@@ -50,7 +49,7 @@ public class UIWorldSettings extends UIElement
     {
         this.settings = settings;
 
-        this.terrain = new UIToggle(IKey.lazy("Terrain"), (b) -> this.settings.terrain = b.getValue());
+        this.terrain = new UIToggle(UIKeys.WORLD_SETTINGS_TERRAIN, (b) -> this.settings.terrain = b.getValue());
         this.terrain.setValue(settings.terrain);
         this.sky = new UIToggle(UIKeys.WORLD_SETTINGS_SKY, (b) -> this.settings.sky = b.getValue());
         this.sky.setValue(settings.sky);
@@ -68,10 +67,10 @@ public class UIWorldSettings extends UIElement
         this.pickSkyForm.setForm(settings.skyForm);
 
         this.lightmap00 = new UIColor((c) -> this.settings.lightmap00.set(c, false));
-        this.lightmap00.tooltip(IKey.lazy("Lightmap (no lighting)"));
+        this.lightmap00.tooltip(UIKeys.WORLD_SETTINGS_LIGHTMAP0);
         this.lightmap00.setColor(this.settings.lightmap00.getRGBColor());
         this.lightmap10 = new UIColor((c) -> this.settings.lightmap10.set(c, false));
-        this.lightmap10.tooltip(IKey.lazy("Lightmap (with lighting)"));
+        this.lightmap10.tooltip(UIKeys.WORLD_SETTINGS_LIGHTMAP1);
         this.lightmap10.setColor(this.settings.lightmap10.getRGBColor());
         this.dayCycle = new UITrackpad((v) -> this.settings.dayCycle = v.floatValue());
         this.dayCycle.setValue(this.settings.dayCycle);
@@ -118,13 +117,13 @@ public class UIWorldSettings extends UIElement
 
         this.add(UI.label(UIKeys.WORLD_SETTINGS_PICK_SKYBOX).background(), this.pickSkyForm);
         this.add(this.terrain.marginTop(8), this.sky, this.fog, UI.row(this.lightmap00, this.lightmap10));
-        this.add(UI.label(IKey.lazy("Day cycle and yaw")).marginTop(8), this.dayCycle, this.dayYaw);
+        this.add(UI.label(UIKeys.WORLD_SETTINGS_DAY_CYCLE_YAW).marginTop(8), this.dayCycle, this.dayYaw);
         this.add(
-            UI.label(IKey.lazy("Skybox colors")).marginTop(8),
-            UI.row(this.skySunrise1, this.skySunrise2, this.skySunrise3).tooltip(IKey.lazy("Sunrise"), Direction.LEFT),
-            UI.row(this.skyNoon1, this.skyNoon2, this.skyNoon3).tooltip(IKey.lazy("Noon"), Direction.LEFT),
-            UI.row(this.skySunset1, this.skySunset2, this.skySunset3).tooltip(IKey.lazy("Sunset"), Direction.LEFT),
-            UI.row(this.skyMidnight1, this.skyMidnight2, this.skyMidnight3).tooltip(IKey.lazy("Midnight"), Direction.LEFT)
+            UI.label(UIKeys.WORLD_SETTINGS_SKYBOX_COLORS).marginTop(8),
+            UI.row(this.skySunrise1, this.skySunrise2, this.skySunrise3).tooltip(UIKeys.WORLD_SETTINGS_SUNRISE, Direction.LEFT),
+            UI.row(this.skyNoon1, this.skyNoon2, this.skyNoon3).tooltip(UIKeys.WORLD_SETTINGS_NOON, Direction.LEFT),
+            UI.row(this.skySunset1, this.skySunset2, this.skySunset3).tooltip(UIKeys.WORLD_SETTINGS_SUNSET, Direction.LEFT),
+            UI.row(this.skyMidnight1, this.skyMidnight2, this.skyMidnight3).tooltip(UIKeys.WORLD_SETTINGS_MIDNIGHT, Direction.LEFT)
         );
         this.add(UI.label(UIKeys.WORLD_SETTINGS_SHADING).marginTop(8), this.shadingDirection);
 

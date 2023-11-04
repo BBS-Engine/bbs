@@ -1,6 +1,5 @@
 package mchorse.bbs.ui.utils.keys;
 
-import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 
 import java.util.ArrayList;
@@ -63,24 +62,6 @@ public class KeyCombo
     public int getMainKey()
     {
         return this.keys.isEmpty() ? -1 : this.keys.get(0);
-    }
-
-    public boolean isDown(int offset)
-    {
-        if (offset >= this.keys.size())
-        {
-            return true;
-        }
-
-        for (int i = offset; i < this.keys.size(); i++)
-        {
-            if (!Window.isKeyPressed(this.keys.get(i)))
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     public String getKeyCombo()

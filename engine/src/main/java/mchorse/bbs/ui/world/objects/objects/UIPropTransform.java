@@ -5,6 +5,7 @@ import mchorse.bbs.BBSSettings;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.Keys;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.UITransform;
 import mchorse.bbs.utils.Axis;
@@ -20,8 +21,6 @@ import java.util.function.Supplier;
 
 public class UIPropTransform extends UITransform
 {
-    public static final IKey EDITING_LABEL = IKey.lazy("Editing...");
-
     private static final double[] CURSOR_X = new double[1];
     private static final double[] CURSOR_Y = new double[1];
 
@@ -45,7 +44,7 @@ public class UIPropTransform extends UITransform
 
     public UIPropTransform enableHotkeys()
     {
-        IKey category = IKey.lazy("Transformations");
+        IKey category = UIKeys.TRANSFORMS_KEYS_CATEGORY;
         Supplier<Boolean> active = () -> this.editing;
 
         this.keys().register(Keys.TRANSFORMATIONS_TRANSLATE, () -> this.enableMode(0)).category(category);
@@ -242,7 +241,7 @@ public class UIPropTransform extends UITransform
 
         if (this.editing)
         {
-            String label = EDITING_LABEL.get();
+            String label = UIKeys.TRANSFORMS_EDITING.get();
             int x = this.area.mx(context.font.getWidth(label));
             int y = this.area.my(context.font.getHeight());
 

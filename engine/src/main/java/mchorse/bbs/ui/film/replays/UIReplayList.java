@@ -5,7 +5,6 @@ import mchorse.bbs.camera.Camera;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.replays.Replay;
 import mchorse.bbs.forms.forms.Form;
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.settings.values.ValueForm;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.UIFilmPanel;
@@ -51,8 +50,8 @@ public class UIReplayList extends UIList<Replay>
 
                 if (this.isSelected())
                 {
-                    menu.action(Icons.POSE, IKey.lazy("Pick form..."), () -> this.openFormEditor(this.getCurrentFirst().form, false));
-                    menu.action(Icons.EDIT, IKey.lazy("Edit form..."), () -> this.openFormEditor(this.getCurrentFirst().form, true));
+                    menu.action(Icons.POSE, UIKeys.SCENE_REPLAYS_CONTEXT_PICK_FORM, () -> this.openFormEditor(this.getCurrentFirst().form, false));
+                    menu.action(Icons.EDIT, UIKeys.SCENE_REPLAYS_CONTEXT_EDIT_FORM, () -> this.openFormEditor(this.getCurrentFirst().form, true));
                 }
             }
         });

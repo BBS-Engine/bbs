@@ -72,11 +72,11 @@ public class UIPropertyEditor extends UIElement
         this.frameButtons = new UIElement();
         this.frameButtons.relative(this).x(1F).y(1F).w(120).anchor(1F).column().vertical().stretch().padding(5);
         this.frameButtons.setVisible(false);
-        this.instant = new UIToggle(IKey.lazy("Instant"), (b) -> this.setInstant(b.getValue()));
+        this.instant = new UIToggle(UIKeys.KEYFRAMES_INSTANT, (b) -> this.setInstant(b.getValue()));
         this.tick = new UITrackpad(this::setTick);
         this.tick.limit(Integer.MIN_VALUE, Integer.MAX_VALUE, true).tooltip(UIKeys.KEYFRAMES_TICK);
         this.duration = new UITrackpad((v) -> this.setDuration(v.intValue()));
-        this.duration.limit(0, Integer.MAX_VALUE, true).tooltip(IKey.lazy("Forced duration"));
+        this.duration.limit(0, Integer.MAX_VALUE, true).tooltip(UIKeys.KEYFRAMES_FORCED_DURATION);
         this.interp = new UIIcon(Icons.GRAPH, (b) ->
         {
             UICameraUtils.interps(this.getContext(), (Interpolation) this.properties.getCurrent().getInterpolation(), this::pickInterpolation);

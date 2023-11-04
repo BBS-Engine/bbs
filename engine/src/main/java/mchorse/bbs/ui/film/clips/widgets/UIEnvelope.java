@@ -44,7 +44,7 @@ public class UIEnvelope extends UIElement
         {
             this.panel.editor.editMultiple(this.get().enabled, (value) -> value.set(b.getValue()));
         });
-        this.pre = new UIButton(IKey.lazy("Pre"), (b) ->
+        this.pre = new UIButton(UIKeys.CAMERA_PANELS_ENVELOPES_PRE, (b) ->
         {
             UICameraUtils.interps(this.getContext(), this.get().pre.get(), (v) ->
             {
@@ -52,7 +52,7 @@ public class UIEnvelope extends UIElement
             });
         });
         this.pre.tooltip(preTooltip);
-        this.post = new UIButton(IKey.lazy("Post"), (b) ->
+        this.post = new UIButton(UIKeys.CAMERA_PANELS_ENVELOPES_POST, (b) ->
         {
             UICameraUtils.interps(this.getContext(), this.get().post.get(), (v) ->
             {

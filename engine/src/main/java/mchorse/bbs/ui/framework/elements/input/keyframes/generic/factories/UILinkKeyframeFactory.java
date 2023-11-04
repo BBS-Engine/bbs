@@ -1,10 +1,10 @@
 package mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories;
 
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
-import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.input.UITexturePicker;
+import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 
 public class UILinkKeyframeFactory extends UIKeyframeFactory<Link>
@@ -13,7 +13,7 @@ public class UILinkKeyframeFactory extends UIKeyframeFactory<Link>
     {
         super(keyframe, editor);
 
-        UIButton button = new UIButton(IKey.lazy("Pick texture..."), (b) ->
+        UIButton button = new UIButton(UIKeys.GENERIC_KEYFRAMES_LINK_PICK_TEXTURE, (b) ->
         {
             UITexturePicker.open(this.getParentContainer(), this.keyframe.getValue(), this.keyframe::setValue);
         });

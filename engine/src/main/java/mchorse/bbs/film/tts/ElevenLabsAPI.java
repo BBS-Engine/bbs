@@ -6,6 +6,7 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.film.screenplay.ScreenplayAction;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.utils.FFMpegUtils;
 import mchorse.bbs.utils.StringUtils;
 
@@ -123,7 +124,7 @@ public class ElevenLabsAPI implements Runnable
 
         if (thread != null)
         {
-            callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.ERROR, "The process is still in progress!"));
+            callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.ERROR, UIKeys.VOICE_LINE_NOTIFICATIONS_IN_PROGRESS));
 
             return;
         }
@@ -245,7 +246,7 @@ public class ElevenLabsAPI implements Runnable
                 {
                     writeToFile(connection, file);
 
-                    this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.GENERATED, "Voice line " + action.uuid.get() + " was generated!"));
+                    this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.GENERATED, UIKeys.VOICE_LINE_NOTIFICATIONS_GENERATED.format(action.uuid.get())));
 
                     File wav = new File(StringUtils.removeExtension(file.getAbsolutePath()) + ".wav");
 
@@ -263,7 +264,7 @@ public class ElevenLabsAPI implements Runnable
                 }
                 else
                 {
-                    this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.ERROR, "The server returned status code: " + responseCode));
+                    this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.ERROR, UIKeys.VOICE_LINE_NOTIFICATIONS_ERROR_SERVER.format(responseCode)));
                 }
             }
             catch (Exception e)

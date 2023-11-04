@@ -5,6 +5,7 @@ import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.forms.properties.AnchorProperty;
 import mchorse.bbs.graphics.MatrixStack;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
@@ -30,8 +31,8 @@ public class UIAnchorKeyframeFactory extends UIKeyframeFactory<AnchorProperty.An
     {
         super(keyframe, editor);
 
-        this.actor = new UIButton(IKey.lazy("Pick actor..."), (b) -> this.displayActors());
-        this.attachment = new UIButton(IKey.lazy("Pick attachment..."), (b) -> this.displayAttachments());
+        this.actor = new UIButton(UIKeys.GENERIC_KEYFRAMES_ANCHOR_PICK_ACTOR, (b) -> this.displayActors());
+        this.attachment = new UIButton(UIKeys.GENERIC_KEYFRAMES_ANCHOR_PICK_ATTACHMENT, (b) -> this.displayAttachments());
 
         this.add(this.actor, this.attachment);
     }
@@ -43,14 +44,14 @@ public class UIAnchorKeyframeFactory extends UIKeyframeFactory<AnchorProperty.An
             UIFilmPanel panel = this.getPanel();
             int value = this.keyframe.getValue().actor;
 
-            menu.action(Icons.CLOSE, IKey.lazy("None"), Colors.NEGATIVE, () -> this.setActor(-1));
+            menu.action(Icons.CLOSE, UIKeys.GENERAL_NONE, Colors.NEGATIVE, () -> this.setActor(-1));
 
             for (int i = 0; i < panel.getController().entities.size(); i++)
             {
                 Entity entity = panel.getController().entities.get(i);
                 Form form = entity.get(FormComponent.class).form;
                 final int actor = i;
-                IKey label = IKey.lazy(i + (form == null ? "" : " - " + form.getIdOrName()));
+                IKey label = IKey.raw(i + (form == null ? "" : " - " + form.getIdOrName()));
 
                 if (actor == value)
                 {
@@ -104,11 +105,11 @@ public class UIAnchorKeyframeFactory extends UIKeyframeFactory<AnchorProperty.An
             {
                 if (attachment.equals(value))
                 {
-                    menu.action(Icons.LIMB, IKey.lazy(attachment), BBSSettings.primaryColor(0), () -> this.setAttachment(attachment));
+                    menu.action(Icons.LIMB, IKey.raw(attachment), BBSSettings.primaryColor(0), () -> this.setAttachment(attachment));
                 }
                 else
                 {
-                    menu.action(Icons.LIMB, IKey.lazy(attachment), () -> this.setAttachment(attachment));
+                    menu.action(Icons.LIMB, IKey.raw(attachment), () -> this.setAttachment(attachment));
                 }
             }
         });

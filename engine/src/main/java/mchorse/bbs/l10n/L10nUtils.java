@@ -52,27 +52,12 @@ public class L10nUtils
         }
 
         /* Calculate missing and surplus strings */
-        List<LangKey> missing = new ArrayList<>();
-        List<LangKey> surplus = new ArrayList<>();
-
-        for (LangKey key : strings.values())
-        {
-            if (key.getOrigin() == null)
-            {
-                missing.add(key);
-            }
-            else if (!key.wasRequested)
-            {
-                surplus.add(key);
-            }
-        }
-
-        sortList(missing);
-        sortList(surplus);
+        List<LangKey> missing = findMissing(strings);
+        List<LangKey> surplus = findSurplus(strings);
 
         if (!missing.isEmpty())
         {
-            builder.append("\nMissing strings:\n");
+            builder.append("\nMissing strings (" + missing.size() + "):\n");
 
             for (LangKey key : missing)
             {
@@ -89,7 +74,7 @@ public class L10nUtils
 
         if (!surplus.isEmpty())
         {
-            builder.append("\nSurplus strings:\n");
+            builder.append("\nSurplus strings (" + surplus.size() + "):\n");
 
             for (LangKey key : surplus)
             {
@@ -110,6 +95,46 @@ public class L10nUtils
         return builder.toString();
     }
 
+    /**
+     * Find language keys that aren't used by the system
+     */
+    public static List<LangKey> findSurplus(Map<String, LangKey> strings)
+    {
+        List<LangKey> surplus = new ArrayList<>();
+
+        for (LangKey key : strings.values())
+        {
+            if (!key.wasRequested)
+            {
+                surplus.add(key);
+            }
+        }
+
+        sortList(surplus);
+
+        return surplus;
+    }
+
+    /**
+     * Find language keys that are missing in the given language map
+     */
+    public static List<LangKey> findMissing(Map<String, LangKey> strings)
+    {
+        List<LangKey> missing = new ArrayList<>();
+
+        for (LangKey key : strings.values())
+        {
+            if (key.getOrigin() == null)
+            {
+                missing.add(key);
+            }
+        }
+
+        sortList(missing);
+
+        return missing;
+    }
+
     public static void compile(File export, Map<String, LangKey> strings)
     {
         Map<Link, List<LangKey>> keysPerFile = new HashMap<>();
@@ -128,6 +153,8 @@ public class L10nUtils
             sortList(list);
         }
 
+        List<LangKey> surplus = findSurplus(strings);
+
         for (Map.Entry<Link, List<LangKey>> entry : keysPerFile.entrySet())
         {
             Link key = entry.getKey();
@@ -136,6 +163,11 @@ public class L10nUtils
 
             for (LangKey k : entry.getValue())
             {
+                if (surplus.contains(k))
+                {
+                    continue;
+                }
+
                 out.putString(k.key, k.content);
             }
 

@@ -1,6 +1,5 @@
 package mchorse.bbs.ui;
 
-import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.utils.keys.KeyCombo;
 import org.lwjgl.glfw.GLFW;
 
@@ -102,9 +101,9 @@ public class Keys
     public static final KeyCombo WE_RELOAD_CHUNKS = new KeyCombo("reload_chunks", UIKeys.WORLD_EDITOR_CONTEXT_UTILITY_RELOAD_CHUNKS, GLFW.GLFW_KEY_R, GLFW.GLFW_KEY_LEFT_ALT).categoryKey("world_editor");
 
     /* Transformations */
-    public static final KeyCombo TRANSFORMATIONS_TRANSLATE = new KeyCombo("translate", IKey.lazy("Translate"), GLFW.GLFW_KEY_G).categoryKey("transformations");
-    public static final KeyCombo TRANSFORMATIONS_SCALE = new KeyCombo("scale", IKey.lazy("Scale"), GLFW.GLFW_KEY_S).categoryKey("transformations");
-    public static final KeyCombo TRANSFORMATIONS_ROTATE = new KeyCombo("rotate", IKey.lazy("Rotate"), GLFW.GLFW_KEY_R).categoryKey("transformations");
+    public static final KeyCombo TRANSFORMATIONS_TRANSLATE = new KeyCombo("translate", UIKeys.TRANSFORMS_TRANSLATE, GLFW.GLFW_KEY_G).categoryKey("transformations");
+    public static final KeyCombo TRANSFORMATIONS_SCALE = new KeyCombo("scale", UIKeys.TRANSFORMS_SCALE, GLFW.GLFW_KEY_S).categoryKey("transformations");
+    public static final KeyCombo TRANSFORMATIONS_ROTATE = new KeyCombo("rotate", UIKeys.TRANSFORMS_ROTATE, GLFW.GLFW_KEY_R).categoryKey("transformations");
     public static final KeyCombo TRANSFORMATIONS_X = new KeyCombo("x", UIKeys.GENERAL_X, GLFW.GLFW_KEY_X).categoryKey("transformations");
     public static final KeyCombo TRANSFORMATIONS_Y = new KeyCombo("y", UIKeys.GENERAL_Y, GLFW.GLFW_KEY_Y).categoryKey("transformations");
     public static final KeyCombo TRANSFORMATIONS_Z = new KeyCombo("z", UIKeys.GENERAL_Z, GLFW.GLFW_KEY_Z).categoryKey("transformations");

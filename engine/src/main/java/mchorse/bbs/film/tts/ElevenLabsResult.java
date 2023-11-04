@@ -1,5 +1,7 @@
 package mchorse.bbs.film.tts;
 
+import mchorse.bbs.l10n.keys.IKey;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ public class ElevenLabsResult
     public Status status;
     public File folder;
     public List<String> missingVoices = new ArrayList<>();
-    public String message;
+    public IKey message;
 
     public ElevenLabsResult(Status status)
     {
@@ -22,7 +24,7 @@ public class ElevenLabsResult
         this.folder = folder;
     }
 
-    public ElevenLabsResult(Status status, String message)
+    public ElevenLabsResult(Status status, IKey message)
     {
         this.status = status;
         this.message = message;

@@ -269,7 +269,7 @@ public class UIDashboard extends UIBaseMenu
 
     protected void registerPanels()
     {
-        this.panels.registerPanel(new UIFilmPanel(this), IKey.lazy("Films"), Icons.FILM);
+        this.panels.registerPanel(new UIFilmPanel(this), UIKeys.FILM_TITLE, Icons.FILM);
 
         this.panels.registerPanel(new UIWorldEditorPanel(this), UIKeys.WORLD_WORLD_EDITOR, Icons.BLOCK).marginLeft(10);
         this.panels.registerPanel(new UIWorldObjectsPanel(this), UIKeys.WORLD_OBJECT_EDITOR, Icons.SPHERE);

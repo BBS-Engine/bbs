@@ -40,9 +40,9 @@ public class UIUtilityOverlayPanel extends UIOverlayPanel
         this.view = UI.scrollView(5, 10, 140);
         this.view.relative(this.content).full();
 
-        UIButton openGameDirectory = new UIButton(IKey.lazy("Game"), (b) -> this.openFolder(BBS.getGameFolder()));
-        UIButton openAudioDirectory = new UIButton(IKey.lazy("Audio"), (b) -> this.openFolder(BBS.getAssetsPath("audio")));
-        UIButton openModelsDirectory = new UIButton(IKey.lazy("Models"), (b) -> this.openFolder(BBS.getAssetsPath("models")));
+        UIButton openGameDirectory = new UIButton(UIKeysApp.UTILITY_OPEN_GAME_FOLDER, (b) -> this.openFolder(BBS.getGameFolder()));
+        UIButton openAudioDirectory = new UIButton(UIKeysApp.UTILITY_OPEN_AUDIO_FOLDER, (b) -> this.openFolder(BBS.getAssetsPath("audio")));
+        UIButton openModelsDirectory = new UIButton(UIKeysApp.UTILITY_OPEN_MODELS_FOLDER, (b) -> this.openFolder(BBS.getAssetsPath("models")));
 
         UIIcon shaders = new UIIcon(Icons.SPHERE, (b) ->
         {
@@ -103,7 +103,7 @@ public class UIUtilityOverlayPanel extends UIOverlayPanel
        UIButton compile = new UIButton(UIKeysApp.UTILITY_COMPILE_LANG, (b) -> this.compileLanguageStrings());
        UIButton langEditor = new UIButton(UIKeysApp.UTILITY_LANG_EDITOR, (b) -> this.openLangEditor());
 
-       this.view.add(UI.label(IKey.lazy("Open folder...")), UI.row(openGameDirectory, openModelsDirectory, openAudioDirectory).marginBottom(8));
+       this.view.add(UI.label(UIKeysApp.UTILITY_OPEN_FOLDER), UI.row(openGameDirectory, openModelsDirectory, openAudioDirectory).marginBottom(8));
        this.view.add(UI.label(UIKeysApp.UTILITY_RELOAD_LABEL), UI.row(shaders, textures, language, models, sounds, terrain).marginBottom(8));
        this.view.add(UI.column(UI.label(UIKeysApp.UTILITY_RESIZE_WINDOW), UI.row(this.width, this.height)).marginBottom(8));
        this.view.add(UI.label(UIKeysApp.UTILITY_LANG_LABEL), UI.row(analyze, compile), langEditor);

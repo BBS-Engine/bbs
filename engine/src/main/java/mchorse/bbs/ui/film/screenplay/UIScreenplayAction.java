@@ -5,6 +5,7 @@ import mchorse.bbs.film.screenplay.ScreenplayAction;
 import mchorse.bbs.film.tts.ElevenLabsAPI;
 import mchorse.bbs.film.tts.ElevenLabsVoice;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
@@ -38,17 +39,17 @@ public class UIScreenplayAction extends UIElement
         this.pickVoice = new UIIcon(Icons.VOICE, (b) -> this.pickVoice());
 
         this.pause = new UITrackpad((v) -> this.action.pause.set(v.floatValue()));
-        this.pause.tooltip(IKey.lazy("Pause (silence)")).w(60);
+        this.pause.tooltip(UIKeys.VOICE_LINE_ACTION_PAUSE).w(60);
         this.cutoff = new UITrackpad((v) ->
         {
             this.action.cutoff.set(v.floatValue());
             this.load();
         });
-        this.cutoff.delayedInput().tooltip(IKey.lazy("Cutoff")).w(60);
+        this.cutoff.delayedInput().tooltip(UIKeys.VOICE_LINE_ACTION_CUTOFF).w(60);
         this.audioPlayer = new UIAudioPlayer();
         this.audioPlayer.context((menu) ->
         {
-            menu.action(Icons.SOUND, IKey.lazy("Generate voice line (ElevenLabs)"), () ->
+            menu.action(Icons.SOUND, UIKeys.VOICE_LINE_ACTION_CONTEXT_GENERATE, () ->
             {
                 this.editor.generateTTS(Arrays.asList(this.action), (actions) ->
                 {
@@ -63,8 +64,8 @@ public class UIScreenplayAction extends UIElement
                 return;
             }
 
-            menu.action(Icons.FOLDER, IKey.lazy("Open folder..."), () -> UIUtils.openFolder(folder));
-            menu.action(Icons.POINTER, IKey.lazy("Pick a variant..."), () ->
+            menu.action(Icons.FOLDER, UIKeys.VOICE_LINE_ACTION_CONTEXT_OPEN_FOLDER, () -> UIUtils.openFolder(folder));
+            menu.action(Icons.POINTER, UIKeys.VOICE_LINE_ACTION_CONTEXT_PICK_VARIANT, () ->
             {
                 this.getContext().replaceContextMenu((m) ->
                 {
@@ -113,7 +114,7 @@ public class UIScreenplayAction extends UIElement
                 }
             }
 
-            menu.action(Icons.CLOSE, IKey.lazy("No voice"), Colors.NEGATIVE, () -> this.setVoice(""));
+            menu.action(Icons.CLOSE, UIKeys.VOICE_LINE_ACTION_NO_VOICE, Colors.NEGATIVE, () -> this.setVoice(""));
         });
     }
 

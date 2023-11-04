@@ -25,7 +25,7 @@ public class UIKeyframeClip extends UIClip<KeyframeClip>
 
         this.dope = new UICameraDopeSheetEditor(this.editor);
 
-        this.edit = new UIButton(IKey.lazy("Edit..."), (b) ->
+        this.edit = new UIButton(UIKeys.GENERAL_EDIT, (b) ->
         {
             this.editor.embedView(this.dope);
             this.dope.resetView();

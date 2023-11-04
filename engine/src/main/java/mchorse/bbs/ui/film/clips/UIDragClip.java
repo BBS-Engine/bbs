@@ -50,7 +50,7 @@ public class UIDragClip extends UIClip<DragClip>
     {
         super.registerPanels();
 
-        this.panels.add(UIClip.label(IKey.lazy("Drag")).marginTop(12), this.deterministic);
+        this.panels.add(UIClip.label(UIKeys.C_CLIP.get("bbs:drag")).marginTop(12), this.deterministic);
         this.panels.add(UIClip.label(UIKeys.CAMERA_PANELS_FACTOR).marginTop(6), this.factor, this.rate, this.active);
     }
 

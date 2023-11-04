@@ -95,7 +95,7 @@ public abstract class UIKeyframesEditor <T extends UIKeyframes> extends UIElemen
         {
             menu.action(Icons.MAXIMIZE, UIKeys.KEYFRAMES_CONTEXT_MAXIMIZE, this::resetView);
             menu.action(Icons.FULLSCREEN, UIKeys.KEYFRAMES_CONTEXT_SELECT_ALL, this::selectAll);
-            menu.action(Icons.MINIMIZE, IKey.lazy("Simplify"), this::simplify);
+            menu.action(Icons.MINIMIZE, UIKeys.KEYFRAMES_CONTEXT_SIMPLIFY, this::simplify);
 
             if (this.keyframes.which != Selection.NOT_SELECTED)
             {
