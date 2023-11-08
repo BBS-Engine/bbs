@@ -53,7 +53,7 @@ public class UIPickableFormRenderer extends UIFormRenderer
     @Override
     public boolean subMouseClicked(UIContext context)
     {
-        if (this.stencil.hasPicked() && context.mouseButton == 1)
+        if (this.stencil.hasPicked() && context.mouseButton == 0)
         {
             Pair<Form, String> pair = this.stencil.getPicked();
 
