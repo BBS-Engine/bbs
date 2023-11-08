@@ -2,14 +2,13 @@ package mchorse.bbs.ui.film.replays;
 
 import mchorse.bbs.film.replays.ReplayKeyframes;
 import mchorse.bbs.l10n.keys.IKey;
+import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageOverlayPanel;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.ui.utils.keys.KeyCombo;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,14 +56,14 @@ public class UIRecordOverlayPanel extends UIMessageOverlayPanel
         bar.relative(this.content).x(0.5F).y(1F, -6).w(1F, -12).anchor(0.5F, 1F).row().resize();
         this.content.add(bar);
 
-        this.keys().register(new KeyCombo(this.all.tooltip.getLabel(), GLFW.GLFW_KEY_1), this.all::clickItself);
-        this.keys().register(new KeyCombo(this.left.tooltip.getLabel(), GLFW.GLFW_KEY_2), this.left::clickItself);
-        this.keys().register(new KeyCombo(this.right.tooltip.getLabel(), GLFW.GLFW_KEY_3), this.right::clickItself);
-        this.keys().register(new KeyCombo(this.triggers.tooltip.getLabel(), GLFW.GLFW_KEY_4), this.triggers::clickItself);
-        this.keys().register(new KeyCombo(this.extra1.tooltip.getLabel(), GLFW.GLFW_KEY_5), this.extra1::clickItself);
-        this.keys().register(new KeyCombo(this.extra2.tooltip.getLabel(), GLFW.GLFW_KEY_6), this.extra2::clickItself);
-        this.keys().register(new KeyCombo(this.position.tooltip.getLabel(), GLFW.GLFW_KEY_7), this.position::clickItself);
-        this.keys().register(new KeyCombo(this.rotation.tooltip.getLabel(), GLFW.GLFW_KEY_8), this.rotation::clickItself);
+        this.keys().register(Keys.RECORDING_GROUP_ALL, this.all::clickItself);
+        this.keys().register(Keys.RECORDING_GROUP_LEFT_STICK, this.left::clickItself);
+        this.keys().register(Keys.RECORDING_GROUP_RIGHT_STICK, this.right::clickItself);
+        this.keys().register(Keys.RECORDING_GROUP_TRIGGERS, this.triggers::clickItself);
+        this.keys().register(Keys.RECORDING_GROUP_EXTRA_1, this.extra1::clickItself);
+        this.keys().register(Keys.RECORDING_GROUP_EXTRA_2, this.extra2::clickItself);
+        this.keys().register(Keys.RECORDING_GROUP_ONLY_POSITION, this.position::clickItself);
+        this.keys().register(Keys.RECORDING_GROUP_ONLY_ROTATION, this.rotation::clickItself);
     }
 
     private void submit(List<String> groups)

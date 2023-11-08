@@ -25,6 +25,7 @@ import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.values.base.BaseValue;
+import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.film.replays.UIRecordOverlayPanel;
@@ -35,7 +36,6 @@ import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.StencilFormFramebuffer;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.keys.KeyAction;
-import mchorse.bbs.ui.utils.keys.KeyCombo;
 import mchorse.bbs.utils.AABB;
 import mchorse.bbs.utils.CollectionUtils;
 import mchorse.bbs.utils.Pair;
@@ -103,12 +103,12 @@ public class UIFilmController extends UIElement
 
         Supplier<Boolean> hasActor = () -> this.getCurrentEntity() != null;
 
-        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_START_RECORDING, GLFW.GLFW_KEY_R, GLFW.GLFW_KEY_LEFT_CONTROL), this::pickRecording).active(hasActor).category(category);
-        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_INSERT_FRAME, GLFW.GLFW_KEY_I), this::insertFrame).active(hasActor).category(category);
-        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_TOGGLE_ORBIT, GLFW.GLFW_KEY_O), this::toggleOrbit).category(category);
-        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_TOGGLE_CONTROL, GLFW.GLFW_KEY_H), this::toggleControl).category(category);
-        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_TOGGLE_ORBIT_MODE, GLFW.GLFW_KEY_P), () -> this.setPov(this.pov + 1)).category(category);
-        this.keys().register(new KeyCombo(UIKeys.FILM_CONTROLLER_KEYS_MOVE_REPLAY_TO_CURSOR, GLFW.GLFW_KEY_G, GLFW.GLFW_KEY_LEFT_CONTROL), () ->
+        this.keys().register(Keys.FILM_CONTROLLER_START_RECORDING, this::pickRecording).active(hasActor).category(category);
+        this.keys().register(Keys.FILM_CONTROLLER_INSERT_FRAME, this::insertFrame).active(hasActor).category(category);
+        this.keys().register(Keys.FILM_CONTROLLER_TOGGLE_ORBIT, this::toggleOrbit).category(category);
+        this.keys().register(Keys.FILM_CONTROLLER_TOGGLE_CONTROL, this::toggleControl).category(category);
+        this.keys().register(Keys.FILM_CONTROLLER_TOGGLE_ORBIT_MODE, () -> this.setPov(this.pov + 1)).category(category);
+        this.keys().register(Keys.FILM_CONTROLLER_MOVE_REPLAY_TO_CURSOR, () ->
         {
             Area area = this.panel.getFramebufferViewport();
             RayTraceResult traceResult = new RayTraceResult();

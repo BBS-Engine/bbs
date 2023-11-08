@@ -970,5 +970,9 @@
     "keybinds.config.world.title": "World",
     "keybinds.config.world.tooltip": "Keybinds that are available in world menu",
     "keybinds.config.world_editor.title": "World editor",
-    "keybinds.config.world_editor.tooltip": "Keybinds that are available in the world menu's world editor panel"
+    "keybinds.config.world_editor.tooltip": "Keybinds that are available in the world menu's world editor panel",
+    "keybinds.config.film_controller.title": "Film controller",
+    "keybinds.config.film_controller.tooltip": "Keybinds that are available in the film editor panel responsible for controlling the current replay",
+    "keybinds.config.recording_groups.title": "Recording groups",
+    "keybinds.config.recording_groups.tooltip": "Keybinds that are available when you start recording or inserting a frame in the overlay panel to select the recording group"
 }

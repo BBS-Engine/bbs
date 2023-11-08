@@ -23,7 +23,7 @@ import java.nio.channels.FileLock;
 
 public class Studio
 {
-    public static final String VERSION = "0.1.3";
+    public static final String VERSION = "0.1.3-rc1";
     public static final String GIT_HASH = "@GIT_HASH@";
     public static final String FULL_VERSION = VERSION + (GIT_HASH.startsWith("@") ? " (dev)" : " (" + GIT_HASH + ")");
 

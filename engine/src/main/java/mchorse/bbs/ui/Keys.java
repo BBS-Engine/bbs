@@ -1,8 +1,13 @@
 package mchorse.bbs.ui;
 
+import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.utils.keys.KeyCombo;
 import org.lwjgl.glfw.GLFW;
 
+/**
+ * IF THE KEYS DON'T APPEAR IN THE CONFIGURATION MENU, you used wrong constructor!
+ * Use {@link KeyCombo#KeyCombo(String, IKey, int...)} intead of {@link KeyCombo#KeyCombo(IKey, int...)}!
+ */
 public class Keys
 {
     /* General */
@@ -107,4 +112,22 @@ public class Keys
     public static final KeyCombo TRANSFORMATIONS_X = new KeyCombo("x", UIKeys.GENERAL_X, GLFW.GLFW_KEY_X).categoryKey("transformations");
     public static final KeyCombo TRANSFORMATIONS_Y = new KeyCombo("y", UIKeys.GENERAL_Y, GLFW.GLFW_KEY_Y).categoryKey("transformations");
     public static final KeyCombo TRANSFORMATIONS_Z = new KeyCombo("z", UIKeys.GENERAL_Z, GLFW.GLFW_KEY_Z).categoryKey("transformations");
+
+    /* Film controller */
+    public static final KeyCombo FILM_CONTROLLER_START_RECORDING = new KeyCombo("start_recording", UIKeys.FILM_CONTROLLER_KEYS_START_RECORDING, GLFW.GLFW_KEY_R, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("film_controller");
+    public static final KeyCombo FILM_CONTROLLER_INSERT_FRAME = new KeyCombo("insert_frame", UIKeys.FILM_CONTROLLER_KEYS_INSERT_FRAME, GLFW.GLFW_KEY_I).categoryKey("film_controller");
+    public static final KeyCombo FILM_CONTROLLER_TOGGLE_ORBIT = new KeyCombo("toggle_orbit", UIKeys.FILM_CONTROLLER_KEYS_TOGGLE_ORBIT, GLFW.GLFW_KEY_O).categoryKey("film_controller");
+    public static final KeyCombo FILM_CONTROLLER_TOGGLE_CONTROL = new KeyCombo("toggle_control", UIKeys.FILM_CONTROLLER_KEYS_TOGGLE_CONTROL, GLFW.GLFW_KEY_H).categoryKey("film_controller");
+    public static final KeyCombo FILM_CONTROLLER_TOGGLE_ORBIT_MODE = new KeyCombo("toggle_orbit_mode", UIKeys.FILM_CONTROLLER_KEYS_TOGGLE_ORBIT_MODE, GLFW.GLFW_KEY_P).categoryKey("film_controller");
+    public static final KeyCombo FILM_CONTROLLER_MOVE_REPLAY_TO_CURSOR = new KeyCombo("move_replay_to_cursor", UIKeys.FILM_CONTROLLER_KEYS_MOVE_REPLAY_TO_CURSOR, GLFW.GLFW_KEY_G, GLFW.GLFW_KEY_LEFT_CONTROL).categoryKey("film_controller");
+
+    /* Recording groups */
+    public static final KeyCombo RECORDING_GROUP_ALL = new KeyCombo("all", UIKeys.FILM_GROUPS_ALL, GLFW.GLFW_KEY_1).categoryKey("recording_groups");
+    public static final KeyCombo RECORDING_GROUP_LEFT_STICK = new KeyCombo("left_stick", UIKeys.FILM_GROUPS_LEFT_STICK, GLFW.GLFW_KEY_2).categoryKey("recording_groups");
+    public static final KeyCombo RECORDING_GROUP_RIGHT_STICK = new KeyCombo("right_stick", UIKeys.FILM_GROUPS_RIGHT_STICK, GLFW.GLFW_KEY_3).categoryKey("recording_groups");
+    public static final KeyCombo RECORDING_GROUP_TRIGGERS = new KeyCombo("triggers", UIKeys.FILM_GROUPS_TRIGGERS, GLFW.GLFW_KEY_4).categoryKey("recording_groups");
+    public static final KeyCombo RECORDING_GROUP_EXTRA_1 = new KeyCombo("extra_1", UIKeys.FILM_GROUPS_EXTRA_1, GLFW.GLFW_KEY_5).categoryKey("recording_groups");
+    public static final KeyCombo RECORDING_GROUP_EXTRA_2 = new KeyCombo("extra_2", UIKeys.FILM_GROUPS_EXTRA_2, GLFW.GLFW_KEY_6).categoryKey("recording_groups");
+    public static final KeyCombo RECORDING_GROUP_ONLY_POSITION = new KeyCombo("only_position", UIKeys.FILM_GROUPS_ONLY_POSITION, GLFW.GLFW_KEY_7).categoryKey("recording_groups");
+    public static final KeyCombo RECORDING_GROUP_ONLY_ROTATION = new KeyCombo("only_rotation", UIKeys.FILM_GROUPS_ONLY_ROTATION, GLFW.GLFW_KEY_8).categoryKey("recording_groups");
 }
