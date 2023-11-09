@@ -16,20 +16,13 @@ import mchorse.bbs.ui.framework.elements.overlay.UIPromptOverlayPanel;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.world.UIWorldEditorPanel;
-import mchorse.bbs.ui.world.tools.schematic.UISchematicOverlayPanel;
 import mchorse.bbs.utils.Direction;
 import mchorse.bbs.voxel.Chunk;
-import mchorse.bbs.voxel.StructureManager;
 import mchorse.bbs.voxel.processor.PasteProcessor;
 import mchorse.bbs.voxel.raytracing.RayTraceResult;
 import mchorse.bbs.voxel.storage.data.ChunkDisplay;
 import mchorse.bbs.voxel.tilesets.BlockSet;
-import net.querz.nbt.io.NBTUtil;
-import net.querz.nbt.tag.CompoundTag;
 import org.joml.Vector3i;
-
-import java.io.File;
-import java.io.IOException;
 
 public class UIToolPaste extends UITool
 {
@@ -91,32 +84,7 @@ public class UIToolPaste extends UITool
             (name) ->
             {
                 BlockSet models = this.editor.getBridge().get(IBridgeWorld.class).getChunkBuilder().models;
-                Chunk chunk = null;
-
-                if (name.endsWith(StructureManager.SCHEMATIC))
-                {
-                    try
-                    {
-                        CompoundTag tag = (CompoundTag) NBTUtil.read(new File(BBS.getStructures().folder, name)).getTag();
-                        UISchematicOverlayPanel schematic = new UISchematicOverlayPanel(models, tag, (c) ->
-                        {
-                            if (c != null)
-                            {
-                                this.editor.setBuffer(c);
-                            }
-                        });
-
-                        UIOverlay.addOverlay(this.editor.getContext(), schematic, 0.8F, 0.8F);
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-                else
-                {
-                    chunk = BBS.getStructures().load(name, models);
-                }
+                Chunk chunk = BBS.getStructures().load(name, models);
 
                 if (chunk != null)
                 {

@@ -8,6 +8,7 @@ import mchorse.bbs.events.register.RegisterWorldEditorToolsEvent;
 import mchorse.bbs.graphics.Draw;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.text.FontRenderer;
+import mchorse.bbs.graphics.window.IFileDropListener;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.Keys;
@@ -19,6 +20,7 @@ import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIButton;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.UITrackpad;
+import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -35,6 +37,7 @@ import mchorse.bbs.ui.world.tools.UIToolSelection;
 import mchorse.bbs.ui.world.tools.UIToolSmooth;
 import mchorse.bbs.ui.world.tools.UIToolSphere;
 import mchorse.bbs.ui.world.tools.UIToolSpray;
+import mchorse.bbs.ui.world.tools.schematic.UISchematicOverlayPanel;
 import mchorse.bbs.ui.world.utils.WorldEditorChunkProxy;
 import mchorse.bbs.utils.Axis;
 import mchorse.bbs.utils.Direction;
@@ -44,6 +47,7 @@ import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.utils.undo.UndoManager;
 import mchorse.bbs.voxel.Chunk;
 import mchorse.bbs.voxel.ChunkBuilder;
+import mchorse.bbs.voxel.StructureManager;
 import mchorse.bbs.voxel.blocks.IBlockVariant;
 import mchorse.bbs.voxel.processor.CopyProcessor;
 import mchorse.bbs.voxel.processor.CylinderProcessor;
@@ -55,16 +59,20 @@ import mchorse.bbs.voxel.processor.WallProcessor;
 import mchorse.bbs.voxel.raytracing.RayTraceResult;
 import mchorse.bbs.voxel.raytracing.RayTraceType;
 import mchorse.bbs.voxel.raytracing.RayTracer;
+import mchorse.bbs.voxel.tilesets.BlockSet;
 import mchorse.bbs.voxel.tilesets.factory.BlockModelFactory;
 import mchorse.bbs.voxel.undo.ChunkProxy;
 import mchorse.bbs.voxel.utils.BlockSelection;
 import mchorse.bbs.world.World;
+import net.querz.nbt.io.NBTUtil;
+import net.querz.nbt.tag.CompoundTag;
 import org.joml.Matrix3f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFW;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -73,7 +81,7 @@ import java.util.Stack;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class UIWorldEditorPanel extends UIWorldPanel
+public class UIWorldEditorPanel extends UIWorldPanel implements IFileDropListener
 {
     /* UI fields */
     public UIButton block;
@@ -815,6 +823,44 @@ public class UIWorldEditorPanel extends UIWorldPanel
             Vector3i min = this.selection.getMin();
 
             Draw.renderBox(context, min.x, min.y, min.z, size.x, size.y, size.z, 0, 0.5F, 1F);
+        }
+    }
+
+    @Override
+    public void acceptFilePaths(String[] paths)
+    {
+        if (paths.length == 0)
+        {
+            return;
+        }
+
+        File file = new File(paths[0]);
+        BlockSet models = this.getBridge().get(IBridgeWorld.class).getChunkBuilder().models;
+
+        /* If the path is to a .schematic file, then we show a special overlay panel that
+         * lets us edit the block palette before inserting it into the copy-paste buffer
+         * of the world editor! */
+        if (!file.getName().toLowerCase().endsWith(StructureManager.SCHEMATIC))
+        {
+            return;
+        }
+
+        try
+        {
+            CompoundTag tag = (CompoundTag) NBTUtil.read(file).getTag();
+            UISchematicOverlayPanel schematic = new UISchematicOverlayPanel(models, tag, (c) ->
+            {
+                if (c != null)
+                {
+                    this.setBuffer(c);
+                }
+            });
+
+            UIOverlay.addOverlay(this.getContext(), schematic, 0.8F, 0.8F);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }

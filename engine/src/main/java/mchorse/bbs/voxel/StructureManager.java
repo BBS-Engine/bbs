@@ -71,10 +71,6 @@ public class StructureManager implements IDisposable
             {
                 list.add(name.substring(0, name.length() - 4));
             }
-            else if (includeSchematics && name.endsWith(SCHEMATIC))
-            {
-                list.add(name);
-            }
         }
 
         return list;
