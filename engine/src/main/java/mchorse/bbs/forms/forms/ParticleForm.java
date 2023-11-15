@@ -2,6 +2,7 @@ package mchorse.bbs.forms.forms;
 
 import mchorse.bbs.BBSData;
 import mchorse.bbs.forms.properties.BooleanProperty;
+import mchorse.bbs.forms.properties.LinkProperty;
 import mchorse.bbs.forms.properties.StringProperty;
 import mchorse.bbs.forms.renderers.FormRenderer;
 import mchorse.bbs.forms.renderers.ParticleFormRenderer;
@@ -14,6 +15,7 @@ public class ParticleForm extends Form
 {
     public StringProperty effect = new StringProperty(this, "effect", null);
     public BooleanProperty paused = new BooleanProperty(this, "paused", false);
+    public LinkProperty texture = new LinkProperty(this, "texture", null);
 
     private ParticleEmitter emitter;
     private boolean checked;
@@ -26,6 +28,7 @@ public class ParticleForm extends Form
 
         this.register(this.effect);
         this.register(this.paused);
+        this.register(this.texture);
     }
 
     public ParticleEmitter getEmitter()

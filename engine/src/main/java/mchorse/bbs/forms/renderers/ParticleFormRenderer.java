@@ -7,11 +7,9 @@ import mchorse.bbs.graphics.MatrixStack;
 import mchorse.bbs.graphics.RenderingContext;
 import mchorse.bbs.graphics.shaders.CommonShaderAccess;
 import mchorse.bbs.graphics.shaders.Shader;
-import mchorse.bbs.graphics.vao.VAOBuilder;
 import mchorse.bbs.graphics.vao.VBOAttributes;
 import mchorse.bbs.particles.emitter.ParticleEmitter;
 import mchorse.bbs.ui.framework.UIContext;
-import mchorse.bbs.utils.joml.Matrices;
 import mchorse.bbs.utils.joml.Vectors;
 import mchorse.bbs.world.entities.Entity;
 import org.joml.Matrix4f;
@@ -43,6 +41,7 @@ public class ParticleFormRenderer extends FormRenderer<ParticleForm>
             stack.translate((x2 + x1) / 2, (y2 + y1) / 2, 40);
             stack.scale(scale, scale, scale);
 
+            this.updateTexture(context.getTransition());
             emitter.lastGlobal.set(new Vector3f(0, 0, 0));
             emitter.rotation.identity();
             emitter.renderUI(context.render);
@@ -72,11 +71,17 @@ public class ParticleFormRenderer extends FormRenderer<ParticleForm>
 
             CommonShaderAccess.setModelView(shader);
 
+            this.updateTexture(context.getTransition());
             vector.add(camera.position);
             emitter.lastGlobal.set(vector);
             emitter.rotation.set(context.stack.getModelMatrix());
             emitter.setupCameraProperties(camera);
             emitter.render(context, shader);
         }
+    }
+
+    private void updateTexture(float transition)
+    {
+        this.form.getEmitter().texture = this.form.texture.get(transition);
     }
 }

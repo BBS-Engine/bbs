@@ -15,6 +15,7 @@ import mchorse.bbs.particles.components.IComponentEmitterUpdate;
 import mchorse.bbs.particles.components.IComponentParticleInitialize;
 import mchorse.bbs.particles.components.IComponentParticleRender;
 import mchorse.bbs.particles.components.IComponentParticleUpdate;
+import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.framework.UIRenderingContext;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.world.World;
@@ -35,6 +36,7 @@ public class ParticleEmitter
     public List<Particle> particles = new ArrayList<>();
     public Map<String, IExpression> variables;
 
+    public Link texture;
     public Entity target;
     public World world;
     public boolean lit;
@@ -81,11 +83,6 @@ public class ParticleEmitter
     private Variable varEmitterRandom2;
     private Variable varEmitterRandom3;
     private Variable varEmitterRandom4;
-
-    public boolean isFinished()
-    {
-        return !this.running && this.particles.isEmpty();
-    }
 
     public double getAge()
     {
@@ -387,6 +384,8 @@ public class ParticleEmitter
             {
                 render.renderUI(this.uiParticle, builder, transition);
             }
+
+            builder.render();
         }
     }
 
@@ -440,7 +439,7 @@ public class ParticleEmitter
 
     private void bindTexture()
     {
-        BBS.getTextures().bind(this.scheme.texture);
+        BBS.getTextures().bind(this.texture == null ? this.scheme.texture : this.texture);
     }
 
     public void setupCameraProperties(Camera camera)
