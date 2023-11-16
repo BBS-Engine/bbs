@@ -13,8 +13,11 @@ This update features bug fixes, QoL tweaks and two awesome features: anchor form
 * Added `Escape` key to stop video recording during video recording in film editor.
 * Added anchor preview (axes renderer) to form editor.
 * Added a second set of rotation fields to transforms UI (FunkyFight).
+* Added particle form option to change the texture.
 * Changed `X`, `Y` and `Z` keys to not reset the angle when switching between axes during `G`, `R`, `S` transform editing (FunkyFight).
 * Changed default key for toggling camera clips from `H` to `J`.
+* Changed right click to left click to pick form/body part in form editor.
+* Changed `.schematic` loading from the load structure overlay panel to drag and dropping a `.schematic` file when world editor panel is opened.
 * Fixed audio clip starts playback after finishing playing (FunkyFight).
 * Fixed a couple of NPE crashes (FunkyFight).
 * Fixed undo/redo not reselecting keyframes properly.
