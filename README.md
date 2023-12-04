@@ -14,7 +14,7 @@ This version of BBS is fully focused on making machinimas/animations, and hence 
 
 To build, you need Java **8+** and Gradle **7.5.1**.
 
-As for IDE, BBS was developed in IntelliJ **2022.3.1** (Community Edition). Build is as easy as executing `./buil.sh`, that should compile **BBS** to `release/`, and you should be able to run it by double-clicking `launcher.jar`.
+As for IDE, BBS was developed in IntelliJ **2022.3.1** (Community Edition). Build is as easy as executing `./build.sh`, that should compile **BBS** to `release/`, and you should be able to run it by double-clicking `launcher.jar`.
 
 ## Developing
 
