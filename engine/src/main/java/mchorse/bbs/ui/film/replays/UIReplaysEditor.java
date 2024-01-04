@@ -196,7 +196,7 @@ public class UIReplaysEditor extends UIElement
             tempKeyframesColors.add(COLORS.getOrDefault(key, Colors.ACTIVE));
         }
 
-        this.keyframeEditor = new UICameraDopeSheetEditor(this.filmPanel);
+        this.keyframeEditor = new UICameraDopeSheetEditor(this.filmPanel.cameraClips);
         this.keyframeEditor.setChannels(keyframes, tempKeyframesColors);
         this.keyframeEditor.relative(this.keyframes).full();
 
@@ -226,7 +226,7 @@ public class UIReplaysEditor extends UIElement
 
         if (!properties.isEmpty())
         {
-            this.propertyEditor = new UIPropertyEditor(this.filmPanel);
+            this.propertyEditor = new UIPropertyEditor(this.filmPanel.cameraClips);
             this.propertyEditor.setChannels(properties, formProperties, propertiesColors);
             this.propertyEditor.relative(this.keyframes).full();
             this.propertyEditor.setVisible(false);

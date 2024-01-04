@@ -196,6 +196,7 @@
     "bbs.ui.camera.clips.bbs:shake": "Shake",
     "bbs.ui.camera.clips.bbs:subtitle": "Subtitle",
     "bbs.ui.camera.clips.bbs:translate": "Translate",
+    "bbs.ui.camera.clips.bbs:voice_line": "Voice line",
     "bbs.ui.camera.editor.keys.clips.deselect": "Deselect current clip",
     "bbs.ui.camera.editor.keys.clips.title": "Clips",
     "bbs.ui.camera.editor.keys.editor.jump_backward": "Jump backward",

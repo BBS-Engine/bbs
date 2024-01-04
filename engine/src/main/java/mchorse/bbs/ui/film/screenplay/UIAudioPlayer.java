@@ -67,63 +67,10 @@ public class UIAudioPlayer extends UIElement implements IUITreeEventListener
         this.player = null;
     }
 
-    public void loadAudio(File file)
-    {
-        this.loadAudio(file, 0F);
-    }
-
-    public void loadAudio(File file, float cutoff)
-    {
-        if (file == null || !file.exists())
-        {
-            this.delete();
-        }
-        else
-        {
-            try
-            {
-                this.loadAudio(new WaveReader().read(new FileInputStream(file)), null, cutoff);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void loadAudio(Wave wave)
-    {
-        this.loadAudio(wave, null, 0F);
-    }
-
     public void loadAudio(Wave wave, List<ColorCode> colorCodes)
-    {
-        this.loadAudio(wave, colorCodes, 0F);
-    }
-
-    public void loadAudio(Wave wave, List<ColorCode> colorCodes, float cutoff)
     {
         this.wave = wave;
         this.waveform = new Waveform();
-
-        if (cutoff != 0)
-        {
-            float newLength = Math.max(wave.getDuration() - Math.abs(cutoff), 0);
-
-            if (newLength > 0)
-            {
-                int newLengthBytes = (int) (newLength * wave.byteRate);
-
-                newLengthBytes -= newLengthBytes % wave.getBytesPerSample();
-
-                int newOffset = cutoff < 0 ? wave.data.length - newLengthBytes : 0;
-                byte[] bytes = new byte[newLengthBytes];
-
-                System.arraycopy(wave.data, newOffset, bytes, 0, newLengthBytes);
-
-                wave.data = bytes;
-            }
-        }
 
         this.waveform.generate(this.wave, colorCodes, (int) PIXELS, 20);
 

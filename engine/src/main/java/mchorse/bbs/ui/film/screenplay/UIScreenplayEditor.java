@@ -5,35 +5,37 @@ import mchorse.bbs.BBSSettings;
 import mchorse.bbs.audio.ColorCode;
 import mchorse.bbs.audio.Wave;
 import mchorse.bbs.audio.wav.WaveWriter;
+import mchorse.bbs.camera.clips.misc.AudioClip;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
+import mchorse.bbs.camera.clips.misc.VoicelineClip;
 import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.film.Film;
-import mchorse.bbs.film.screenplay.Screenplay;
-import mchorse.bbs.film.screenplay.ScreenplayAction;
-import mchorse.bbs.film.tts.ElevenLabsAPI;
-import mchorse.bbs.film.tts.ElevenLabsResult;
+import mchorse.bbs.graphics.window.Window;
+import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.UIKeys;
+import mchorse.bbs.ui.film.UIClipsPanel;
 import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
-import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.text.highlighting.SyntaxStyle;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageFolderOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
+import mchorse.bbs.utils.math.MathUtils;
+import org.lwjgl.system.MemoryUtil;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Map;
 
 public class UIScreenplayEditor extends UIElement
 {
@@ -43,11 +45,10 @@ public class UIScreenplayEditor extends UIElement
     public UIIcon subtitles;
     public UIIcon save;
 
-    public UIScrollView editor;
-    public UIIcon add;
+    public UIClipsPanel editor;
 
     private UIFilmPanel panel;
-    private Screenplay screenplay;
+    private Film film;
     private SyntaxStyle style = new SyntaxStyle();
     private List<ColorCode> colorCodes = new ArrayList<>();
 
@@ -65,14 +66,8 @@ public class UIScreenplayEditor extends UIElement
         this.masterBar = UI.row(this.master, this.save, this.subtitles, this.generate);
         this.masterBar.relative(this).x(10).y(10).w(1F, -20).h(20);
 
-        this.editor = UI.scrollView(15, 10);
+        this.editor = new UIClipsPanel(panel, BBS.getFactoryScreenplayClips());
         this.editor.relative(this).y(40).w(1F).h(1F, -40);
-        this.add = new UIIcon(Icons.ADD, (b) ->
-        {
-            this.editor.addBefore(this.add, this.createAction(this.screenplay.addAction()));
-            this.resize();
-        });
-        this.add.tooltip(UIKeys.VOICE_LINE_ADD_ACTION, Direction.TOP);
 
         this.add(this.editor, this.masterBar);
         this.markContainer();
@@ -80,59 +75,91 @@ public class UIScreenplayEditor extends UIElement
 
     private void generate()
     {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
         Wave lastWave = null;
-        float offset = 0;
+        float total = this.film.voiceLines.calculateDuration() / 20F;
+        Map<VoicelineClip, Wave> map = new HashMap<>();
 
         this.colorCodes.clear();
 
-        for (UIScreenplayAction uiAction : this.editor.getChildren(UIScreenplayAction.class))
+        for (Clip aClip : this.film.voiceLines.get())
         {
-            Wave wave = uiAction.audioPlayer.getWave();
-
-            if (wave == null)
+            if (!(aClip instanceof VoicelineClip))
             {
                 continue;
             }
 
-            ScreenplayAction action = uiAction.getAction();
-            float pause = action.pause.get();
-            int pauseBytes = (int) (Math.abs(pause) * wave.byteRate);
+            VoicelineClip clip = (VoicelineClip) aClip;
+            Wave wave = UIFilmPanel.getVoiceLines().get(clip).a;
 
-            pauseBytes -= pauseBytes % wave.getBytesPerSample();
+            if (wave != null)
+            {
+                map.put(clip, wave);
+            }
+        }
+
+        int totalBytes = (int) (total * map.values().iterator().next().byteRate);
+        byte[] bytes = new byte[totalBytes + totalBytes % 2];
+        ByteBuffer buffer = MemoryUtil.memAlloc(2);
+
+        for (Clip aClip : this.film.voiceLines.get())
+        {
+            if (!(aClip instanceof VoicelineClip))
+            {
+                continue;
+            }
+
+            VoicelineClip clip = (VoicelineClip) aClip;
 
             try
             {
-                if (pause < 0)
+                float time = clip.tick.get() / 20F;
+                float duration = clip.duration.get() / 20F;
+                Wave wave = map.get(clip);
+
+                int offset = (int) (time * wave.byteRate);
+                int length = (int) (duration * wave.byteRate);
+
+                offset -= offset % 2;
+
+                length = Math.min(wave.data.length, MathUtils.clamp(length, 0, bytes.length - offset));
+                length -= length % 2;
+
+                for (int i = 0; i < length; i += 2)
                 {
-                    output.write(new byte[pauseBytes]);
+                    buffer.position(0);
+                    buffer.put(wave.data[i]);
+                    buffer.put(wave.data[i + 1]);
+
+                    int waveShort = buffer.getShort(0);
+
+                    buffer.position(0);
+                    buffer.put(bytes[offset + i]);
+                    buffer.put(bytes[offset + i + 1]);
+
+                    int bytesShort = buffer.getShort(0);
+                    int finalShort = waveShort + bytesShort;
+
+                    buffer.putShort(0, (short) MathUtils.clamp(finalShort, Short.MIN_VALUE, Short.MAX_VALUE));
+
+                    bytes[offset + i + 1] = buffer.get(1);
+                    bytes[offset + i] =     buffer.get(0);
                 }
 
-                output.write(wave.data);
+                this.colorCodes.add(new ColorCode(time, time + duration, BBSSettings.elevenVoiceColors.getColor(clip.voice.get())));
 
-                if (pause > 0)
-                {
-                    output.write(new byte[pauseBytes]);
-                }
-
-                float time = offset + (pause < 0 ? -pause : 0);
-                float waveDuration = wave.getDuration();
-
-                this.colorCodes.add(new ColorCode(time, time + waveDuration, BBSSettings.elevenVoiceColors.getColor(action.voice.get())));
-
-                offset += Math.abs(pause) + waveDuration;
+                lastWave = wave;
             }
             catch (Exception e)
             {
                 e.printStackTrace();
             }
-
-            lastWave = wave;
         }
+
+        MemoryUtil.memFree(buffer);
 
         if (lastWave != null)
         {
-            Wave wave = new Wave(lastWave.audioFormat, lastWave.numChannels, lastWave.sampleRate, lastWave.bitsPerSample, output.toByteArray());
+            Wave wave = new Wave(lastWave.audioFormat, lastWave.numChannels, lastWave.sampleRate, lastWave.bitsPerSample, bytes);
 
             this.master.loadAudio(wave, this.colorCodes);
         }
@@ -141,42 +168,28 @@ public class UIScreenplayEditor extends UIElement
     private void generateSubtitles()
     {
         Film data = this.panel.getData();
-        float offset = 0;
-        int layer = 0;
+        int layer = data.camera.getTopLayer();
 
-        for (Clip clip : data.camera.get())
+        for (Clip aClip : this.film.voiceLines.get())
         {
-            layer = Math.max(layer, clip.layer.get());
-        }
-
-        for (UIScreenplayAction uiAction : this.editor.getChildren(UIScreenplayAction.class))
-        {
-            Wave wave = uiAction.audioPlayer.getWave();
-
-            if (wave == null)
+            if (!(aClip instanceof VoicelineClip))
             {
                 continue;
             }
 
-            ScreenplayAction action = uiAction.getAction();
-            float pause = action.pause.get();
-            float time = offset + (pause < 0 ? -pause : 0);
-            float duration = wave.getDuration();
-
+            VoicelineClip action = (VoicelineClip) aClip;
             SubtitleClip clip = new SubtitleClip();
 
             clip.title.set(action.content.get());
-            clip.tick.set((int) (time * 20));
-            clip.duration.set((int) (duration * 20));
+            clip.tick.set(action.tick.get());
+            clip.duration.set(action.duration.get());
             clip.layer.set(layer + 1);
             clip.color.set(BBSSettings.elevenVoiceColors.getColor(action.voice.get()));
 
             data.camera.addClip(clip);
-
-            offset += pause + duration;
         }
 
-        this.panel.showPanel(this.panel.clips);
+        this.panel.showPanel(this.panel.cameraClips);
     }
 
     private void saveAudio()
@@ -203,11 +216,28 @@ public class UIScreenplayEditor extends UIElement
 
             DataToString.writeSilently(new File(folder, filename + ".json"), colorCodes, true);
 
-            UIOverlay.addOverlay(this.getContext(), new UIMessageFolderOverlayPanel(
-                UIKeys.VOICE_LINE_SAVE_AUDIO_TITLE,
-                UIKeys.VOICE_LINE_SAVE_AUDIO_DESCRIPTION.format(filename),
-                folder
-            ));
+            if (Window.isCtrlPressed())
+            {
+                Film film = this.panel.getFilm();
+                int layer = film.camera.getTopLayer();
+
+                AudioClip clip = new AudioClip();
+
+                clip.duration.set((int) (wave.getDuration() * 20));
+                clip.layer.set(layer + 1);
+                clip.audio.set(Link.assets("audio/" + filename));
+
+                film.camera.addClip(clip);
+                this.panel.showPanel(this.panel.cameraClips);
+            }
+            else
+            {
+                UIOverlay.addOverlay(this.getContext(), new UIMessageFolderOverlayPanel(
+                    UIKeys.VOICE_LINE_SAVE_AUDIO_TITLE,
+                    UIKeys.VOICE_LINE_SAVE_AUDIO_DESCRIPTION.format(filename),
+                    folder
+                ));
+            }
         }
         catch (IOException e)
         {
@@ -215,124 +245,17 @@ public class UIScreenplayEditor extends UIElement
         }
     }
 
-    public File getSoundsFolder()
+    public void setFilm(Film film)
     {
-        return BBS.getAssetsPath("audio/elevenlabs/" + this.panel.getData().getId());
-    }
-
-    public void generateTTS(List<ScreenplayAction> actions)
-    {
-        this.generateTTS(actions, null);
-    }
-
-    public void generateTTS(List<ScreenplayAction> actions, Consumer<List<ScreenplayAction>> callback)
-    {
-        try
-        {
-            ElevenLabsAPI.generate(this.getSoundsFolder(), actions, (result) ->
-            {
-                if (result.status == ElevenLabsResult.Status.INITIALIZED)
-                {
-                    this.getContext().notify(UIKeys.VOICE_LINE_NOTIFICATIONS_COMMENCING, Colors.BLUE | Colors.A100);
-                }
-                else if (result.status == ElevenLabsResult.Status.GENERATED)
-                {
-                    this.getContext().notify(result.message, Colors.BLUE | Colors.A100);
-                }
-                else if (result.status == ElevenLabsResult.Status.ERROR)
-                {
-                    this.getContext().notify(UIKeys.VOICE_LINE_NOTIFICATIONS_ERROR_GENERATING.format(result.message), Colors.RED | Colors.A100);
-                }
-                else if (result.status == ElevenLabsResult.Status.TOKEN_MISSING)
-                {
-                    this.getContext().notify(UIKeys.VOICE_LINE_NOTIFICATIONS_MISSING_TOKEN, Colors.RED | Colors.A100);
-                }
-                else if (result.status == ElevenLabsResult.Status.VOICE_IS_MISSING)
-                {
-                    this.getContext().notify(!result.missingVoices.isEmpty()
-                        ? UIKeys.VOICE_LINE_NOTIFICATIONS_MISSING_VOICES.format(String.join(", ", result.missingVoices))
-                        : UIKeys.VOICE_LINE_NOTIFICATIONS_ERROR_LOADING_VOICES,
-                Colors.RED | Colors.A100);
-                }
-                else /* SUCCESS */
-                {
-                    if (callback != null)
-                    {
-                        callback.accept(actions);
-                    }
-                }
-            });
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    private UIScreenplayAction createAction(ScreenplayAction action)
-    {
-        UIScreenplayAction uiAction = new UIScreenplayAction(this, action);
-
-        uiAction.context((menu) ->
-        {
-            menu.action(Icons.MOVE_UP, UIKeys.VOICE_LINE_CONTEXT_MOVE_UP, () ->
-            {
-                if (this.screenplay.moveAction(action, -1))
-                {
-                    this.fillData();
-
-                    for (UIScreenplayAction presentUiAction : this.getChildren(UIScreenplayAction.class))
-                    {
-                        presentUiAction.load();
-                    }
-                }
-            });
-            menu.action(Icons.MOVE_DOWN, UIKeys.VOICE_LINE_CONTEXT_MOVE_DOWN, () ->
-            {
-                if (this.screenplay.moveAction(action, 1))
-                {
-                    this.fillData();
-
-                    for (UIScreenplayAction presentUiAction : this.getChildren(UIScreenplayAction.class))
-                    {
-                        presentUiAction.load();
-                    }
-                }
-            });
-
-            menu.action(Icons.REMOVE, UIKeys.VOICE_LINE_CONTEXT_REMOVE, Colors.NEGATIVE, () ->
-            {
-                this.screenplay.removeAction(action);
-                uiAction.removeFromParent();
-                this.editor.resize();
-            });
-        });
-
-        return uiAction;
-    }
-
-    public void setScreenplay(Screenplay screenplay)
-    {
-        this.screenplay = screenplay;
+        this.film = film;
 
         this.fillData();
-
-        for (UIScreenplayAction action : this.getChildren(UIScreenplayAction.class))
-        {
-            action.load();
-        }
     }
 
     private void fillData()
     {
-        this.editor.removeAll();
+        this.editor.clips.setClips(this.film.voiceLines);
 
-        for (ScreenplayAction action : this.screenplay.getList())
-        {
-            this.editor.add(this.createAction(action));
-        }
-
-        this.editor.add(this.add);
         this.resize();
     }
 

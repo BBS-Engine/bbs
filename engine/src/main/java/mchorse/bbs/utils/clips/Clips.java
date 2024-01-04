@@ -27,6 +27,18 @@ public class Clips extends ValueGroup
         this.factory = factory;
     }
 
+    public int getTopLayer()
+    {
+        int layer = 0;
+
+        for (Clip clip : this.clips)
+        {
+            layer = Math.max(layer, clip.layer.get());
+        }
+
+        return layer;
+    }
+
     /**
      * Calculate total duration of this camera work.
      */

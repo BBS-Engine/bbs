@@ -13,24 +13,15 @@ public abstract class FilmEditorUndo implements IUndo<ValueGroup>
 {
     /* Timeline */
     public int tick;
-    public double viewMin;
-    public double viewMax;
-    public int scroll;
+    public ClipsData cameraClips;
+    public ClipsData voiceLinesClips;
     public int panel;
-
-    private List<Integer> selectedBefore = new ArrayList<>();
-    private List<Integer> selectedAfter = new ArrayList<>();
 
     /* Replays */
     private KeyframeSelection keyframesBefore = new KeyframeSelection();
     private KeyframeSelection keyframesAfter = new KeyframeSelection();
     private KeyframeSelection propertiesBefore = new KeyframeSelection();
     private KeyframeSelection propertiesAfter = new KeyframeSelection();
-
-    public List<Integer> getSelection(boolean redo)
-    {
-        return redo ? this.selectedAfter : this.selectedBefore;
-    }
 
     public KeyframeSelection getKeyframeSelection(boolean redo)
     {
@@ -44,7 +35,8 @@ public abstract class FilmEditorUndo implements IUndo<ValueGroup>
 
     public void editor(UIFilmPanel editor)
     {
-        UIClips timeline = editor.timeline;
+        UIClips cameraClips = editor.cameraClips.clips;
+        UIClips voiceLineClips = editor.screenplay.editor.clips;
 
         if (editor.screenplay.isVisible())
         {
@@ -60,12 +52,8 @@ public abstract class FilmEditorUndo implements IUndo<ValueGroup>
         }
 
         this.tick = editor.getCursor();
-        this.viewMin = timeline.scale.getMinValue();
-        this.viewMax = timeline.scale.getMaxValue();
-        this.scroll = timeline.vertical.scroll;
-
-        this.selectedAfter.addAll(timeline.getSelection());
-        this.selectedBefore.addAll(this.selectedAfter);
+        this.cameraClips = new ClipsData(cameraClips);
+        this.voiceLinesClips = new ClipsData(voiceLineClips);
 
         this.keyframesBefore = this.keyframesAfter = editor.replays.keyframeEditor == null
             ? new KeyframeSelection()
@@ -76,10 +64,13 @@ public abstract class FilmEditorUndo implements IUndo<ValueGroup>
             : editor.replays.propertyEditor.properties.createSelection();
     }
 
-    public void selectedBefore(List<Integer> selection, KeyframeSelection keyframe, KeyframeSelection properties)
+    public void selectedBefore(List<Integer> cameraClipsSelection, List<Integer> voiceLineSelection, KeyframeSelection keyframe, KeyframeSelection properties)
     {
-        this.selectedBefore.clear();
-        this.selectedBefore.addAll(selection);
+        this.cameraClips.selectedBefore.clear();
+        this.cameraClips.selectedBefore.addAll(cameraClipsSelection);
+
+        this.voiceLinesClips.selectedBefore.clear();
+        this.voiceLinesClips.selectedBefore.addAll(voiceLineSelection);
 
         this.keyframesBefore = keyframe;
         this.propertiesBefore = properties;
@@ -91,5 +82,36 @@ public abstract class FilmEditorUndo implements IUndo<ValueGroup>
         public Vector2i current = new Vector2i(-1, -1);
         public double min;
         public double max;
+    }
+
+    public static class ClipsData
+    {
+        public double viewMin;
+        public double viewMax;
+        public int scroll;
+
+        public List<Integer> selectedBefore = new ArrayList<>();
+        public List<Integer> selectedAfter = new ArrayList<>();
+
+        public ClipsData(UIClips clips)
+        {
+            this.viewMin = clips.scale.getMinValue();
+            this.viewMax = clips.scale.getMaxValue();
+            this.scroll = clips.vertical.scroll;
+
+            this.selectedAfter.addAll(clips.getSelection());
+            this.selectedBefore.addAll(this.selectedAfter);
+        }
+
+        public List<Integer> getSelection(boolean redo)
+        {
+            return redo ? this.selectedAfter : this.selectedBefore;
+        }
+
+        public void apply(UIClips clips)
+        {
+            clips.scale.view(this.viewMin, this.viewMax);
+            clips.vertical.scrollTo(this.scroll);
+        }
     }
 }

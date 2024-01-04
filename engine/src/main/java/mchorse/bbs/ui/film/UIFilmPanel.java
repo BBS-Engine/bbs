@@ -13,6 +13,7 @@ import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.film.Film;
+import mchorse.bbs.film.VoiceLines;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
@@ -22,14 +23,12 @@ import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.settings.values.ValueGroup;
-import mchorse.bbs.settings.values.ValueInt;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.IFlightSupported;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
-import mchorse.bbs.ui.film.clips.UIClip;
 import mchorse.bbs.ui.film.controller.UIFilmController;
 import mchorse.bbs.ui.film.replays.UIReplaysEditor;
 import mchorse.bbs.ui.film.screenplay.UIScreenplayEditor;
@@ -62,12 +61,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSupported, IUIClipsDelegate
+public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSupported
 {
-    private static Map<Class, Integer> scrolls = new HashMap<>();
+    private static VoiceLines voiceLines = new VoiceLines(null);
 
     private RunnerCameraController runner;
     private boolean lastRunning;
@@ -77,8 +75,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public UIElement main;
     public UIFilmRecorder recorder;
 
-    public UIElement clips;
-    public UIClips timeline;
+    public UIClipsPanel cameraClips;
     public UIReplaysEditor replays;
 
     public UIScreenplayEditor screenplay;
@@ -91,7 +88,6 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public UIIcon openReplays;
     public UIIcon openScreenplay;
 
-    public UIClip panel;
     public UIRenderable renderableOverlay;
     public UIDraggable draggable;
 
@@ -100,11 +96,18 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     /* Entity control */
     private UIFilmController controller = new UIFilmController(this);
 
+    /* Undo and caches */
     private UndoManager<ValueGroup> undoManager;
-    private List<Integer> cachedSelection = new ArrayList<>();
+    private List<Integer> cachedCameraSelection = new ArrayList<>();
+    private List<Integer> cachedVoicelineSelection = new ArrayList<>();
     private FilmEditorUndo.KeyframeSelection cachedKeyframeSelection;
     private FilmEditorUndo.KeyframeSelection cachedPropertiesSelection;
     private Map<BaseValue, BaseType> cachedUndo = new HashMap<>();
+
+    public static VoiceLines getVoiceLines()
+    {
+        return voiceLines;
+    }
 
     /**
      * Initialize the camera editor with a camera profile.
@@ -118,12 +121,10 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.main = new UIElement();
         this.main.relative(this.editor).w(0.75F).h(1F);
 
-        this.clips = new UIElement();
-        this.clips.relative(this.main).full();
+        this.cameraClips = new UIClipsPanel(this, BBS.getFactoryCameraClips());
+        this.cameraClips.relative(this.main).full();
 
         this.recorder = new UIFilmRecorder(this);
-        this.timeline = new UIClips(this, BBS.getFactoryCameraClips());
-        this.timeline.relative(this.clips).full();
 
         this.replays = new UIReplaysEditor(this);
         this.replays.relative(this.main).full();
@@ -147,7 +148,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.screenshot.tooltip(UIKeys.FILM_SCREENSHOT, Direction.LEFT);
         this.openVideos = new UIIcon(Icons.FILM, (b) -> this.recorder.openMovies());
         this.openVideos.tooltip(UIKeys.CAMERA_TOOLTIPS_OPEN_VIDEOS, Direction.LEFT);
-        this.openCamera = new UIIcon(Icons.FRUSTUM, (b) -> this.showPanel(this.clips));
+        this.openCamera = new UIIcon(Icons.FRUSTUM, (b) -> this.showPanel(this.cameraClips));
         this.openCamera.tooltip(UIKeys.FILM_OPEN_CAMERA_EDITOR, Direction.LEFT);
         this.openReplays = new UIIcon(Icons.SCENE, (b) -> this.showPanel(this.replays));
         this.openReplays.tooltip(UIKeys.FILM_OPEN_REPLAY_EDITOR, Direction.LEFT);
@@ -169,8 +170,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         UIRenderable renderable = new UIRenderable(this::renderIcons);
 
         this.editor.add(this.main, renderable);
-        this.clips.add(this.timeline);
-        this.main.add(this.clips, this.replays, this.screenplay, this.draggable);
+        this.main.add(this.cameraClips, this.replays, this.screenplay, this.draggable);
         this.add(this.controller);
         this.overlay.namesList.setFileIcon(Icons.FILM);
 
@@ -189,8 +189,8 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.keys().register(Keys.REDO, this::redo).category(editor);
         this.keys().register(Keys.FLIGHT, () -> this.setFlight(this.isFlightDisabled())).active(() -> this.data != null).category(modes);
         this.keys().register(Keys.LOOPING, () -> BBSSettings.editorLoop.set(!BBSSettings.editorLoop.get())).active(active).category(looping);
-        this.keys().register(Keys.LOOPING_SET_MIN, () -> this.timeline.setLoopMin()).active(active).category(looping);
-        this.keys().register(Keys.LOOPING_SET_MAX, () -> this.timeline.setLoopMax()).active(active).category(looping);
+        this.keys().register(Keys.LOOPING_SET_MIN, () -> this.cameraClips.clips.setLoopMin()).active(active).category(looping);
+        this.keys().register(Keys.LOOPING_SET_MAX, () -> this.cameraClips.clips.setLoopMax()).active(active).category(looping);
         this.keys().register(Keys.JUMP_FORWARD, () -> this.setCursor(this.getCursor() + BBSSettings.editorJump.get())).active(active).category(editor);
         this.keys().register(Keys.JUMP_BACKWARD, () -> this.setCursor(this.getCursor() - BBSSettings.editorJump.get())).active(active).category(editor);
 
@@ -199,7 +199,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
     public void showPanel(UIElement element)
     {
-        this.clips.setVisible(false);
+        this.cameraClips.setVisible(false);
         this.replays.setVisible(false);
         this.screenplay.setVisible(false);
 
@@ -234,7 +234,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
     public Area getViewportArea()
     {
-        return new Area(this.clips.area.ex(), this.area.y, this.iconBar.area.x - this.clips.area.ex(), this.area.h);
+        return new Area(this.cameraClips.area.ex(), this.area.y, this.iconBar.area.x - this.cameraClips.area.ex(), this.area.h);
     }
 
     public Area getFramebufferViewport()
@@ -266,10 +266,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     {
         super.open();
 
-        if (this.panel != null)
-        {
-            this.panel.cameraEditorWasOpened();
-        }
+        this.cameraClips.open();
     }
 
     @Override
@@ -297,7 +294,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
         CameraController cameraController = this.getCameraController();
 
-        this.timeline.embedView(null);
+        this.cameraClips.embedView(null);
         this.setFlight(false);
         cameraController.remove(this.runner);
         cameraController.remove(this.controller.orbit);
@@ -358,6 +355,9 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         if (this.data != null)
         {
             this.disableContext();
+
+            voiceLines.delete();
+            voiceLines = new VoiceLines(BBS.getAssetsPath("audio/elevenlabs/" + data.getId()));
         }
 
         if (data != null)
@@ -383,9 +383,9 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.openScreenplay.setEnabled(data != null);
 
         this.runner.setWork(data == null ? null : data.camera);
-        this.timeline.setClips(data == null ? null : data.camera);
+        this.cameraClips.clips.setClips(data == null ? null : data.camera);
         this.replays.setFilm(data);
-        this.pickClip(null);
+        this.cameraClips.pickClip(null);
 
         this.fillData();
         this.controller.createEntities();
@@ -393,9 +393,14 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
     private void handlePreValues(BaseValue baseValue)
     {
-        if (this.cachedSelection.isEmpty())
+        if (this.cachedCameraSelection.isEmpty())
         {
-            this.cachedSelection.addAll(this.timeline.getSelection());
+            this.cachedCameraSelection.addAll(this.cameraClips.clips.getSelection());
+        }
+
+        if (this.cachedVoicelineSelection.isEmpty())
+        {
+            this.cachedVoicelineSelection.addAll(this.screenplay.editor.clips.getSelection());
         }
 
         if (this.cachedKeyframeSelection == null)
@@ -461,7 +466,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
             ValueChangeUndo undo = new ValueChangeUndo(value.getPath(), entry.getValue(), value.toData());
 
             undo.editor(this);
-            undo.selectedBefore(this.cachedSelection, this.cachedKeyframeSelection, this.cachedPropertiesSelection);
+            undo.selectedBefore(this.cachedCameraSelection, this.cachedVoicelineSelection, this.cachedKeyframeSelection, this.cachedPropertiesSelection);
             changeUndos.add(undo);
         }
 
@@ -490,34 +495,48 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         if (anotherUndo instanceof ValueChangeUndo)
         {
             ValueChangeUndo change = (ValueChangeUndo) anotherUndo;
-            List<Integer> selection = change.getSelection(redo);
 
-            this.showPanel(change.panel == 1 ? this.replays : (change.panel == 2 ? this.screenplay : this.clips));
+            this.showPanel(change.panel == 1 ? this.replays : (change.panel == 2 ? this.screenplay : this.cameraClips));
 
-            if (selection.isEmpty())
+            List<Integer> cameraSelection = change.cameraClips.getSelection(redo);
+            List<Integer> voiceLineSelection = change.voiceLinesClips.getSelection(redo);
+
+            if (cameraSelection.isEmpty())
             {
-                this.pickClip(null);
+                this.cameraClips.pickClip(null);
             }
             else
             {
-                this.timeline.setSelection(selection);
+                this.cameraClips.clips.setSelection(cameraSelection);
 
-                Clip last = this.data.camera.get(selection.get(selection.size() - 1));
+                Clip last = this.data.camera.get(cameraSelection.get(cameraSelection.size() - 1));
 
-                this.pickClip(last);
+                this.cameraClips.pickClip(last);
             }
 
-            this.timeline.scale.view(change.viewMin, change.viewMax);
+            if (voiceLineSelection.isEmpty())
+            {
+                this.screenplay.editor.pickClip(null);
+            }
+            else
+            {
+                this.screenplay.editor.clips.setSelection(voiceLineSelection);
+
+                Clip last = this.data.voiceLines.get(voiceLineSelection.get(voiceLineSelection.size() - 1));
+
+                this.screenplay.editor.pickClip(last);
+            }
+
+            change.cameraClips.apply(this.cameraClips.clips);
+            change.voiceLinesClips.apply(this.screenplay.editor.clips);
+
             this.setCursor(change.tick);
-            this.timeline.vertical.scrollTo(change.scroll);
             this.controller.createEntities();
             this.replays.handleUndo(change, redo);
         }
 
-        if (this.panel != null)
-        {
-            this.panel.handleUndo(undo, redo);
-        }
+        this.cameraClips.handleUndo(undo, redo);
+        this.screenplay.editor.handleUndo(undo, redo);
 
         this.fillData();
     }
@@ -558,11 +577,6 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
                 this.lastPosition.set(Position.ZERO);
             }
         }
-    }
-
-    public int getSelected()
-    {
-        return this.panel == null ? -1 : this.data.camera.getIndex(this.panel.clip);
     }
 
     /**
@@ -615,7 +629,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
      */
     private void updateLogic(UIContext context)
     {
-        Clip clip = this.getClip();
+        Clip clip = this.cameraClips.getClip();
 
         /* Loop fixture */
         if (BBSSettings.editorLoop.get() && this.isRunning())
@@ -629,10 +643,12 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
                 max = min + clip.duration.get();
             }
 
-            if (this.timeline.loopMin != this.timeline.loopMax && this.timeline.loopMin >= 0 && this.timeline.loopMin < this.timeline.loopMax)
+            UIClips clips = this.cameraClips.clips;
+
+            if (clips.loopMin != clips.loopMax && clips.loopMin >= 0 && clips.loopMin < clips.loopMax)
             {
-                min = this.timeline.loopMin;
-                max = this.timeline.loopMax;
+                min = clips.loopMin;
+                max = clips.loopMax;
             }
 
             max = Math.min(max, this.data.camera.calculateDuration());
@@ -650,11 +666,11 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
             Position current = new Position(this.getCamera());
 
-            if (this.panel != null && this.clips.isVisible())
+            if (this.cameraClips.getClip() != null && this.cameraClips.isVisible())
             {
                 if (!this.lastPosition.equals(current))
                 {
-                    this.panel.editClip(current);
+                    this.cameraClips.editClip(current);
                 }
             }
 
@@ -796,13 +812,11 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
 
     /* IUICameraWorkDelegate implementation */
 
-    @Override
     public Film getFilm()
     {
         return this.data;
     }
 
-    @Override
     public Camera getCamera()
     {
         return this.camera;
@@ -818,98 +832,21 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         return this.dashboard.bridge.get(IBridgeCamera.class).getCameraController();
     }
 
-    @Override
-    public Clip getClip()
-    {
-        return this.panel == null ? null : this.panel.clip;
-    }
-
-    @Override
-    public void pickClip(Clip clip)
-    {
-        if (this.panel != null)
-        {
-            if (this.panel.clip == clip)
-            {
-                this.panel.fillData();
-
-                return;
-            }
-            else
-            {
-                this.panel.removeFromParent();
-            }
-        }
-
-        if (clip == null)
-        {
-            this.panel = null;
-
-            this.timeline.w(1F, 0);
-            this.timeline.clearSelection();
-            this.clips.resize();
-
-            return;
-        }
-
-        try
-        {
-            if (this.panel != null)
-            {
-                scrolls.put(this.panel.getClass(), this.panel.panels.scroll.scroll);
-            }
-
-            this.timeline.embedView(null);
-
-            UIClip panel = (UIClip) BBS.getFactoryCameraClips().getData(clip).panelUI.getConstructors()[0].newInstance(clip, this);
-
-            this.panel = panel;
-            this.panel.relative(this.clips).x(1F, -160).w(160).h(1F);
-            this.clips.add(this.panel);
-
-            this.panel.fillData();
-
-            Integer scroll = scrolls.get(this.panel.getClass());
-
-            if (scroll != null)
-            {
-                this.panel.panels.scroll.scroll = scroll;
-                this.panel.panels.scroll.clamp();
-            }
-
-            if (!this.isFlightDisabled())
-            {
-                this.setCursor(clip.tick.get());
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        this.timeline.w(1F, -160);
-        this.clips.resize();
-    }
-
-    @Override
     public int getCursor()
     {
         return this.runner.ticks;
     }
 
-    @Override
     public void setCursor(int value)
     {
         this.runner.ticks = Math.max(0, value);
     }
 
-    @Override
     public boolean isRunning()
     {
         return this.runner.isRunning();
     }
 
-    @Override
     public void togglePlayback()
     {
         this.setFlight(false);
@@ -919,33 +856,21 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.updatePlauseButton();
     }
 
-    @Override
     public boolean canUseKeybinds()
     {
         return this.isFlightDisabled();
     }
 
-    @Override
     public void fillData()
     {
-        if (this.panel != null)
-        {
-            this.panel.fillData();
-        }
+        this.cameraClips.fillData();
 
         if (this.data != null)
         {
-            this.screenplay.setScreenplay(this.data.screenplay);
+            this.screenplay.setFilm(this.data);
         }
     }
 
-    @Override
-    public void embedView(UIElement element)
-    {
-        this.timeline.embedView(element);
-    }
-
-    @Override
     public void markLastUndoNoMerging()
     {
         if (this.data == null)
@@ -958,47 +883,6 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         if (undo != null)
         {
             undo.noMerging();
-        }
-    }
-
-    @Override
-    public <T extends BaseValue> void editMultiple(T property, Consumer<T> consumer)
-    {
-        String path = property.getRelativePath(this.getClip());
-
-        for (Clip clip : this.timeline.getClipsFromSelection())
-        {
-            BaseValue value = clip.getRecursively(path);
-
-            if (value != null && value.getClass() == property.getClass())
-            {
-                consumer.accept((T) value);
-            }
-        }
-    }
-
-    @Override
-    public void editMultiple(ValueInt property, int value)
-    {
-        int difference = value - property.get();
-        List<Clip> clips = this.timeline.getClipsFromSelection();
-
-        for (Clip clip : clips)
-        {
-            ValueInt clipValue = (ValueInt) clip.get(property.getId());
-            int newValue = clipValue.get() + difference;
-
-            if (newValue < clipValue.getMin() || newValue > clipValue.getMax())
-            {
-                return;
-            }
-        }
-
-        for (Clip clip : clips)
-        {
-            ValueInt clipValue = (ValueInt) clip.get(property.getId());
-
-            clipValue.set(clipValue.get() + difference);
         }
     }
 }

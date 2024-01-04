@@ -13,6 +13,7 @@ import mchorse.bbs.camera.clips.converters.PathToDollyConverter;
 import mchorse.bbs.camera.clips.converters.PathToKeyframeConverter;
 import mchorse.bbs.camera.clips.misc.AudioClip;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
+import mchorse.bbs.camera.clips.misc.VoicelineClip;
 import mchorse.bbs.camera.clips.modifiers.AngleClip;
 import mchorse.bbs.camera.clips.modifiers.DragClip;
 import mchorse.bbs.camera.clips.modifiers.LookClip;
@@ -84,6 +85,7 @@ import mchorse.bbs.ui.film.clips.UIRemapperClip;
 import mchorse.bbs.ui.film.clips.UIShakeClip;
 import mchorse.bbs.ui.film.clips.UISubtitleClip;
 import mchorse.bbs.ui.film.clips.UITranslateClip;
+import mchorse.bbs.ui.film.clips.UIVoicelineClip;
 import mchorse.bbs.ui.font.format.UIBaseFontFormat;
 import mchorse.bbs.ui.font.format.UIColorFontFormat;
 import mchorse.bbs.ui.forms.editors.forms.UIBillboardForm;
@@ -173,6 +175,7 @@ public class BBS
     /* Data factories */
     private static MapFactory<WorldObject, Class<? extends UIWorldObject>> factoryWorldObjects;
     private static MapFactory<Clip, ClipFactoryData> factoryCameraClips;
+    private static MapFactory<Clip, ClipFactoryData> factoryScreenplayClips;
     private static MapFactory<BlockModelFactory, BlockModelFactoryData> factoryBlockModels;
     private static MapFactory<Generator, Void> factoryGenerators;
     private static MapFactory<Component, Class<? extends UIEntityComponent>> factoryEntityComponents;
@@ -324,6 +327,11 @@ public class BBS
     public static MapFactory<Clip, ClipFactoryData> getFactoryCameraClips()
     {
         return factoryCameraClips;
+    }
+
+    public static MapFactory<Clip, ClipFactoryData> getFactoryScreenplayClips()
+    {
+        return factoryScreenplayClips;
     }
 
     public static MapFactory<BlockModelFactory, BlockModelFactoryData> getFactoryBlockModels()
@@ -482,6 +490,9 @@ public class BBS
             .register(Link.bbs("remapper"), RemapperClip.class, new ClipFactoryData(Icons.TIME, 0x222222, UIRemapperClip.class))
             .register(Link.bbs("audio"), AudioClip.class, new ClipFactoryData(Icons.SOUND, 0xffc825, UIAudioClip.class))
             .register(Link.bbs("subtitle"), SubtitleClip.class, new ClipFactoryData(Icons.FONT, 0x888899, UISubtitleClip.class));
+
+        factoryScreenplayClips = new MapFactory<Clip, ClipFactoryData>()
+            .register(Link.bbs("voice_line"), VoicelineClip.class, new ClipFactoryData(Icons.SOUND, 0xffc825, UIVoicelineClip.class));
 
         /* Register forms */
         forms = new FormArchitect();

@@ -1,11 +1,11 @@
 package mchorse.bbs.film.tts;
 
 import mchorse.bbs.BBSSettings;
+import mchorse.bbs.camera.clips.misc.VoicelineClip;
 import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
-import mchorse.bbs.film.screenplay.ScreenplayAction;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.utils.FFMpegUtils;
 import mchorse.bbs.utils.StringUtils;
@@ -35,14 +35,14 @@ public class ElevenLabsAPI implements Runnable
 
     private final String token;
     private final File folder;
-    private final List<ScreenplayAction> actions;
+    private final List<VoicelineClip> voiceLines;
     private final Consumer<ElevenLabsResult> callback;
 
-    public ElevenLabsAPI(String token, File folder, List<ScreenplayAction> actions, Consumer<ElevenLabsResult> callback)
+    public ElevenLabsAPI(String token, File folder, List<VoicelineClip> voiceLines, Consumer<ElevenLabsResult> callback)
     {
         this.token = token;
         this.folder = folder;
-        this.actions = actions;
+        this.voiceLines = voiceLines;
         this.callback = callback;
     }
 
@@ -111,7 +111,7 @@ public class ElevenLabsAPI implements Runnable
     /**
      * Generate audio voice lines from a film using ElevenLabs API
      */
-    public static void generate(File folder, List<ScreenplayAction> actions, Consumer<ElevenLabsResult> callback)
+    public static void generate(File folder, List<VoicelineClip> actions, Consumer<ElevenLabsResult> callback)
     {
         String token = getToken();
 
@@ -136,7 +136,7 @@ public class ElevenLabsAPI implements Runnable
     /**
      * Fill JSON data for the request
      */
-    private static void fillJSONData(HttpURLConnection connection, String reply) throws IOException
+    private static void fillJSONData(HttpURLConnection connection, String voiceLine) throws IOException
     {
         MapType data = new MapType();
         MapType voiceSettings = new MapType();
@@ -144,7 +144,7 @@ public class ElevenLabsAPI implements Runnable
         voiceSettings.putFloat("stability", 0.5F);
         voiceSettings.putFloat("similarity_boost", 0.5F);
 
-        data.putString("text", reply);
+        data.putString("text", voiceLine);
         data.putString("model_id", "eleven_monolingual_v1");
         data.put("voice_settings", voiceSettings);
 
@@ -205,13 +205,13 @@ public class ElevenLabsAPI implements Runnable
             return;
         }
 
-        for (ScreenplayAction reply : this.actions)
+        for (VoicelineClip voiceLine : this.voiceLines)
         {
-            if (!voices.containsKey(reply.voice.get().toLowerCase()))
+            if (!voices.containsKey(voiceLine.voice.get().toLowerCase()))
             {
                 ElevenLabsResult result = new ElevenLabsResult(ElevenLabsResult.Status.VOICE_IS_MISSING);
 
-                result.missingVoices.add(reply.voice.get());
+                result.missingVoices.add(voiceLine.voice.get());
                 this.callback.accept(result);
 
                 thread = null;
@@ -222,13 +222,13 @@ public class ElevenLabsAPI implements Runnable
 
         this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.INITIALIZED));
 
-        for (ScreenplayAction action : this.actions)
+        for (VoicelineClip voiceLine : this.voiceLines)
         {
-            File file = this.getFile(action);
+            File file = this.getFile(voiceLine);
 
             try
             {
-                String voiceID = voices.get(action.voice.get().toLowerCase()).id;
+                String voiceID = voices.get(voiceLine.voice.get().toLowerCase()).id;
 
                 HttpURLConnection connection = (HttpURLConnection) new URL(TTS_URL + voiceID).openConnection();
 
@@ -238,7 +238,7 @@ public class ElevenLabsAPI implements Runnable
                 connection.setRequestProperty("xi-api-key", this.token);
                 connection.setDoOutput(true);
 
-                fillJSONData(connection, action.content.get());
+                fillJSONData(connection, voiceLine.content.get());
 
                 int responseCode = connection.getResponseCode();
 
@@ -246,7 +246,7 @@ public class ElevenLabsAPI implements Runnable
                 {
                     writeToFile(connection, file);
 
-                    this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.GENERATED, UIKeys.VOICE_LINE_NOTIFICATIONS_GENERATED.format(action.uuid.get())));
+                    this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.GENERATED, UIKeys.VOICE_LINE_NOTIFICATIONS_GENERATED.format(voiceLine.uuid.get())));
 
                     File wav = new File(StringUtils.removeExtension(file.getAbsolutePath()) + ".wav");
 
@@ -260,7 +260,7 @@ public class ElevenLabsAPI implements Runnable
                         e.printStackTrace();
                     }
 
-                    action.variant.set(wav.getName());
+                    voiceLine.variant.set(wav.getName());
                 }
                 else
                 {
@@ -278,10 +278,10 @@ public class ElevenLabsAPI implements Runnable
         thread = null;
     }
 
-    private File getFile(ScreenplayAction action)
+    private File getFile(VoicelineClip voiceLine)
     {
         int i = 1;
-        File folder = new File(this.folder, action.uuid.get());
+        File folder = new File(this.folder, voiceLine.uuid.get());
         File file = new File(folder, i + ".wav");
 
         folder.mkdirs();

@@ -1,6 +1,7 @@
 package mchorse.bbs.ui.film.clips.renderer;
 
 import mchorse.bbs.BBS;
+import mchorse.bbs.camera.clips.misc.VoicelineClip;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.camera.clips.misc.AudioClip;
 
@@ -18,6 +19,7 @@ public class UIClipRenderers
         this.defaultRenderer = new UIClipRenderer();
 
         this.register(AudioClip.class, new UIAudioClipRenderer());
+        this.register(VoicelineClip.class, new UIVoicelineClipRenderer());
 
         BBS.events.post(new RegisterUIClipRenderers(this));
     }

@@ -116,6 +116,10 @@ public class UIKeys
     public static final IKey CAMERA_PANELS_SUBTITLE_SIZE = IKey.lang("bbs.ui.camera.panels.subtitle.size", "Size", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey CAMERA_PANELS_SUBTITLE_TRANSFORM = IKey.lang("bbs.ui.camera.panels.subtitle.transform", "Transform", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey CAMERA_PANELS_SUBTITLE_WINDOW = IKey.lang("bbs.ui.camera.panels.subtitle.window", "Window", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey CAMERA_PANELS_VOICE_LINE_GENERATE = IKey.lang("bbs.ui.camera.panels.voice_line.generate", "Generate via TTS", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey CAMERA_PANELS_VOICE_LINE_VOICE = IKey.lang("bbs.ui.camera.panels.voice_line.voice", "Change voice...", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey CAMERA_PANELS_VOICE_LINE_VARIANT = IKey.lang("bbs.ui.camera.panels.voice_line.variant", "Pick a variant...", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey CAMERA_PANELS_VOICE_LINE_FOLDER = IKey.lang("bbs.ui.camera.panels.voice_line.folder", "Open a folder...", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey CAMERA_PANELS_TICK = IKey.lang("bbs.ui.camera.panels.tick");
     public static final IKey CAMERA_PANELS_TITLE = IKey.lang("bbs.ui.camera.panels.title");
     public static final IKey CAMERA_PANELS_TITLE_TOOLTIP = IKey.lang("bbs.ui.camera.panels.title_tooltip");
