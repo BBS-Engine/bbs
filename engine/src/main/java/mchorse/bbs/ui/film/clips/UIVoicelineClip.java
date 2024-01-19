@@ -12,6 +12,8 @@ import mchorse.bbs.ui.film.UIFilmPanel;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
+import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
+import mchorse.bbs.ui.framework.elements.overlay.UIPromptOverlayPanel;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
@@ -29,6 +31,7 @@ public class UIVoicelineClip extends UIClip<VoicelineClip>
     public UIIcon voice;
     public UIIcon variant;
     public UIIcon folder;
+    public UIIcon uuid;
 
     public UIVoicelineClip(VoicelineClip clip, IUIClipsDelegate editor)
     {
@@ -45,11 +48,24 @@ public class UIVoicelineClip extends UIClip<VoicelineClip>
         this.voice = new UIIcon(Icons.VOICE, (b) -> this.pickVoice());
         this.variant = new UIIcon(Icons.SOUND, (b) -> this.pickVariant());
         this.folder = new UIIcon(Icons.FOLDER, (b) -> UIUtils.openFolder(this.getFolder()));
+        this.uuid = new UIIcon(Icons.EDIT, (b) ->
+        {
+            UIPromptOverlayPanel panel = new UIPromptOverlayPanel(
+                UIKeys.CAMERA_PANELS_VOICE_UUID_TITLE,
+                UIKeys.CAMERA_PANELS_VOICE_UUID_DESCRIPTION,
+                (s) -> this.clip.uuid.set(s)
+            );
+
+            panel.text.setText(this.clip.uuid.get());
+
+            UIOverlay.addOverlay(this.getContext(), panel);
+        });
 
         this.generate.w(0).tooltip(UIKeys.CAMERA_PANELS_VOICE_LINE_GENERATE);
         this.voice.w(0).tooltip(UIKeys.CAMERA_PANELS_VOICE_LINE_VOICE);
         this.variant.w(0).tooltip(UIKeys.CAMERA_PANELS_VOICE_LINE_VARIANT);
         this.folder.w(0).tooltip(UIKeys.CAMERA_PANELS_VOICE_LINE_FOLDER);
+        this.uuid.w(0).tooltip(UIKeys.CAMERA_PANELS_VOICE_UUID);
     }
 
     private void generate()
@@ -171,7 +187,7 @@ public class UIVoicelineClip extends UIClip<VoicelineClip>
         super.registerPanels();
 
         this.panels.add(UIClip.label(UIKeys.C_CLIP.get("bbs:voice_line")).marginTop(12), this.content);
-        this.panels.add(UI.row(this.generate, this.voice, this.variant, this.folder));
+        this.panels.add(UI.row(this.generate, this.voice, this.variant, this.folder, this.uuid));
     }
 
     @Override

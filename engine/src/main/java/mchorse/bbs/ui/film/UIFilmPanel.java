@@ -355,13 +355,13 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         if (this.data != null)
         {
             this.disableContext();
-
-            voiceLines.delete();
-            voiceLines = new VoiceLines(BBS.getAssetsPath("audio/elevenlabs/" + data.getId()));
         }
 
         if (data != null)
         {
+            voiceLines.delete();
+            voiceLines = new VoiceLines(BBS.getAssetsPath("audio/elevenlabs/" + data.getId()));
+
             data.preCallback(this::handlePreValues);
             data.postCallback(this::handlePostValues);
 
