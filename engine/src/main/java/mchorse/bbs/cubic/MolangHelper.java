@@ -87,6 +87,19 @@ public class MolangHelper
                 parser.setValue("extra2.x", Interpolations.lerp(prev[8], sticks[8], transition));
                 parser.setValue("extra2.y", Interpolations.lerp(prev[9], sticks[9], transition));
             }
+            else
+            {
+                parser.setValue("joystick.l_x", 0);
+                parser.setValue("joystick.l_y", 0);
+                parser.setValue("joystick.r_x", 0);
+                parser.setValue("joystick.r_y", 0);
+                parser.setValue("joystick.l_trigger", 0);
+                parser.setValue("joystick.r_trigger", 0);
+                parser.setValue("extra1.x", 0);
+                parser.setValue("extra1.y", 0);
+                parser.setValue("extra2.x", 0);
+                parser.setValue("extra2.y", 0);
+            }
         }
         else
         {
