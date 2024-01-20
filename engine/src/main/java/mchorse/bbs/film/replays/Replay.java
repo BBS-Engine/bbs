@@ -6,9 +6,8 @@ import mchorse.bbs.forms.properties.IFormProperty;
 import mchorse.bbs.settings.values.ValueForm;
 import mchorse.bbs.settings.values.ValueGroup;
 import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.utils.Pair;
-import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeSegment;
 import mchorse.bbs.world.entities.Entity;
 import mchorse.bbs.world.entities.components.FormComponent;
 
@@ -60,28 +59,23 @@ public class Replay extends ValueGroup
     private void applyProperty(int tick, boolean playing, Form form, GenericKeyframeChannel value)
     {
         IFormProperty property = FormUtils.getProperty(form, value.getId());
-        Pair segment = value.findSegment(tick);
 
         if (property == null)
         {
             return;
         }
 
+        GenericKeyframeSegment segment = value.find(tick);
+
         if (segment != null)
         {
-            GenericKeyframe a = (GenericKeyframe) segment.a;
-            GenericKeyframe b = (GenericKeyframe) segment.b;
-            int forcedDuration = a.getDuration();
-            int duration = forcedDuration > 0 ? forcedDuration : (int) (b.getTick() - a.getTick());
-            int offset = (int) (tick - a.getTick());
-
-            if (a == b || a.isInstant())
+            if (segment.isSame() || segment.a.isInstant())
             {
-                property.set(a.getValue());
+                property.set(segment.a.getValue());
             }
             else
             {
-                property.tween(b.getValue(), a.getValue(), duration, a.getInterpolation(), offset, playing);
+                property.tween(segment.b.getValue(), segment.a.getValue(), segment.duration, segment.a.getInterpolation(), (int) segment.offset, playing);
             }
         }
         else

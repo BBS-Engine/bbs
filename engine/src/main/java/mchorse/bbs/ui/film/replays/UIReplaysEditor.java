@@ -33,6 +33,7 @@ import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.KeyframeChannel;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeSegment;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.voxel.raytracing.RayTraceResult;
 import mchorse.bbs.voxel.raytracing.RayTraceType;
@@ -309,13 +310,11 @@ public class UIReplaysEditor extends UIElement
             return;
         }
 
-        Pair segment = property.channel.findSegment(tick);
+        GenericKeyframeSegment segment = property.channel.find(tick);
 
         if (segment != null)
         {
-            GenericKeyframe a = (GenericKeyframe) segment.a;
-            GenericKeyframe b = (GenericKeyframe) segment.b;
-            GenericKeyframe closest = Math.abs(a.getTick() - tick) > Math.abs(b.getTick() - tick) ? b : a;
+            GenericKeyframe closest = segment.getClosest();
 
             this.propertyEditor.pickKeyframe(closest);
 

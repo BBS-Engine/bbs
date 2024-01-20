@@ -8,12 +8,15 @@ import mchorse.bbs.bridge.IBridgeRender;
 import mchorse.bbs.bridge.IBridgeVideoScreenshot;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
+import mchorse.bbs.camera.clips.overwrite.IdleClip;
 import mchorse.bbs.camera.controller.CameraController;
 import mchorse.bbs.camera.controller.RunnerCameraController;
 import mchorse.bbs.camera.data.Position;
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.film.Film;
 import mchorse.bbs.film.VoiceLines;
+import mchorse.bbs.film.replays.Replay;
+import mchorse.bbs.forms.FormUtils;
 import mchorse.bbs.game.utils.ContentType;
 import mchorse.bbs.graphics.Framebuffer;
 import mchorse.bbs.graphics.GLStates;
@@ -29,6 +32,7 @@ import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.dashboard.panels.IFlightSupported;
 import mchorse.bbs.ui.dashboard.panels.UIDataDashboardPanel;
+import mchorse.bbs.ui.dashboard.panels.overlay.UICRUDOverlayPanel;
 import mchorse.bbs.ui.film.controller.UIFilmController;
 import mchorse.bbs.ui.film.replays.UIReplaysEditor;
 import mchorse.bbs.ui.film.screenplay.UIScreenplayEditor;
@@ -37,6 +41,8 @@ import mchorse.bbs.ui.film.utils.undo.ValueChangeUndo;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
+import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
+import mchorse.bbs.ui.framework.elements.overlay.UIPromptOverlayPanel;
 import mchorse.bbs.ui.framework.elements.utils.UIDraggable;
 import mchorse.bbs.ui.framework.elements.utils.UIRenderable;
 import mchorse.bbs.ui.utils.Area;
@@ -46,6 +52,9 @@ import mchorse.bbs.utils.Direction;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.joml.Vectors;
+import mchorse.bbs.utils.keyframes.KeyframeChannel;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeChannel;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeSegment;
 import mchorse.bbs.utils.math.MathUtils;
 import mchorse.bbs.utils.recording.ScreenshotRecorder;
 import mchorse.bbs.utils.undo.CompoundUndo;
@@ -87,6 +96,8 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public UIIcon openCamera;
     public UIIcon openReplays;
     public UIIcon openScreenplay;
+
+    public UIIcon duplicateFilm;
 
     public UIRenderable renderableOverlay;
     public UIDraggable draggable;
@@ -262,6 +273,103 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     }
 
     @Override
+    protected UICRUDOverlayPanel createOverlayPanel()
+    {
+        UICRUDOverlayPanel crudPanel = super.createOverlayPanel();
+
+        this.duplicateFilm = new UIIcon(Icons.SCENE, (b) ->
+        {
+            UIPromptOverlayPanel panel = new UIPromptOverlayPanel(
+                UIKeys.GENERAL_DUPE,
+                UIKeys.PANELS_MODALS_DUPE,
+                (str) -> this.dupeData(crudPanel.namesList.getPath(str).toString())
+            );
+
+            panel.text.setText(crudPanel.namesList.getCurrentFirst().getLast());
+            panel.text.filename();
+
+            UIOverlay.addOverlay(this.getContext(), panel);
+        });
+
+        crudPanel.icons.add(this.duplicateFilm);
+
+        return crudPanel;
+    }
+
+    private void dupeData(String name)
+    {
+        if (this.getData() != null && !this.overlay.namesList.getList().contains(name))
+        {
+            this.save();
+            this.overlay.namesList.addFile(name);
+
+            Film data = new Film();
+            Position position = new Position();
+            IdleClip idle = new IdleClip();
+            int tick = this.runner.ticks;
+
+            position.set(this.getCamera());
+            idle.duration.set(BBSSettings.getDefaultDuration());
+            idle.position.set(position);
+            data.camera.addClip(idle);
+            data.setId(name);
+
+            for (Replay replay : this.data.replays.getList())
+            {
+                Replay copy = new Replay(replay.getId());
+
+                copy.form.set(FormUtils.copy(replay.form.get()));
+
+                for (BaseValue value : replay.keyframes.getAll())
+                {
+                    if (!(value instanceof KeyframeChannel))
+                    {
+                        continue;
+                    }
+
+                    KeyframeChannel channel = (KeyframeChannel) value;
+
+                    if (!channel.isEmpty())
+                    {
+                        KeyframeChannel newChannel = (KeyframeChannel) copy.keyframes.get(channel.getId());
+
+                        newChannel.insert(0, channel.interpolate(tick));
+                    }
+                }
+
+                for (Map.Entry<String, GenericKeyframeChannel> entry : replay.properties.properties.entrySet())
+                {
+                    GenericKeyframeChannel channel = entry.getValue();
+
+                    if (channel.isEmpty())
+                    {
+                        continue;
+                    }
+
+                    GenericKeyframeChannel newChannel = new GenericKeyframeChannel(channel.getId(), channel.getFactory());
+                    GenericKeyframeSegment segment = channel.find(tick);
+
+                    if (segment != null)
+                    {
+                        newChannel.insert(0, segment.createInterpolated());
+                    }
+
+                    if (!newChannel.isEmpty())
+                    {
+                        copy.properties.properties.put(newChannel.getId(), newChannel);
+                        copy.properties.add(newChannel);
+                    }
+                }
+
+                data.replays.add(copy);
+            }
+
+            this.fill(data);
+            this.save();
+        }
+    }
+
+    @Override
     public void open()
     {
         super.open();
@@ -381,6 +489,7 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
         this.openCamera.setEnabled(data != null);
         this.openReplays.setEnabled(data != null);
         this.openScreenplay.setEnabled(data != null);
+        this.duplicateFilm.setEnabled(data != null);
 
         this.runner.setWork(data == null ? null : data.camera);
         this.cameraClips.clips.setClips(data == null ? null : data.camera);

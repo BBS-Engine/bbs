@@ -55,6 +55,22 @@ public class GenericKeyframeChannel <T> extends ValueList<GenericKeyframe<T>>
         return this.has(index) ? this.list.get(index) : null;
     }
 
+    public GenericKeyframeSegment find(float ticks)
+    {
+        Pair<GenericKeyframe<T>, GenericKeyframe<T>> pair = this.findSegment(ticks);
+
+        if (pair == null)
+        {
+            return null;
+        }
+
+        GenericKeyframeSegment<T> segment = new GenericKeyframeSegment(pair.a, pair.b);
+
+        segment.setup(ticks);
+
+        return segment;
+    }
+
     /**
      * Find a keyframe segment at given ticks
      */

@@ -11,9 +11,9 @@ import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.keyframes.UIBaseKeyframes;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.utils.CollectionUtils;
-import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.keyframes.generic.GenericKeyframeSegment;
 import mchorse.bbs.utils.keyframes.generic.factories.IGenericKeyframeFactory;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.utils.math.Interpolation;
@@ -259,7 +259,7 @@ public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
         }
 
         Object value;
-        Pair segment = property.channel.findSegment(tick);
+        GenericKeyframeSegment segment = property.channel.find(tick);
 
         if (segment == null)
         {
@@ -267,19 +267,14 @@ public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
         }
         else
         {
-            GenericKeyframe a = (GenericKeyframe) segment.a;
-            GenericKeyframe b = (GenericKeyframe) segment.b;
-
-            if (a == b)
+            if (segment.isSame())
             {
-                value = a.getValue();
+                value = factory.copy(segment.a.getValue());
             }
             else
             {
-                value = factory.interpolate(a.getValue(), b.getValue(), a.getInterpolation(), (tick - a.getTick()) / (float) (b.getTick() - a.getTick()));
+                value = segment.createInterpolated();
             }
-
-            value = factory.copy(value);
         }
 
         property.selected.clear();
