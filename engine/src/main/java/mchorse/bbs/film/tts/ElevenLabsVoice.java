@@ -9,9 +9,9 @@ public class ElevenLabsVoice implements IMapSerializable
     public String name = "";
     public String category = "";
 
-    public boolean isCloned()
+    public boolean isAllowed()
     {
-        return this.category.equals("cloned");
+        return this.category.equals("cloned") || this.category.equals("generated");
     }
 
     @Override

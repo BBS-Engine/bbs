@@ -3,6 +3,7 @@ package mchorse.bbs.ui.film.screenplay;
 import mchorse.bbs.BBS;
 import mchorse.bbs.BBSSettings;
 import mchorse.bbs.audio.ColorCode;
+import mchorse.bbs.audio.SoundPlayer;
 import mchorse.bbs.audio.Wave;
 import mchorse.bbs.audio.wav.WaveWriter;
 import mchorse.bbs.camera.clips.misc.AudioClip;
@@ -73,8 +74,23 @@ public class UIScreenplayEditor extends UIElement
         this.markContainer();
     }
 
+    public void setCursor(int ticks)
+    {
+        SoundPlayer player = this.master.getPlayer();
+
+        if (player != null)
+        {
+            player.setPlaybackPosition(ticks / 20F);
+        }
+    }
+
     private void generate()
     {
+        if (this.master.getPlayer() != null)
+        {
+            this.master.getPlayer().stop();
+        }
+
         Wave lastWave = null;
         float total = this.film.voiceLines.calculateDuration() / 20F;
         Map<VoicelineClip, Wave> map = new HashMap<>();
@@ -162,6 +178,12 @@ public class UIScreenplayEditor extends UIElement
             Wave wave = new Wave(lastWave.audioFormat, lastWave.numChannels, lastWave.sampleRate, lastWave.bitsPerSample, bytes);
 
             this.master.loadAudio(wave, this.colorCodes);
+
+            SoundPlayer player = this.master.getPlayer();
+
+            player.play();
+            player.setPlaybackPosition(this.editor.getCursor() / 20F);
+            player.pause();
         }
     }
 

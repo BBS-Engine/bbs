@@ -124,16 +124,22 @@ public class UIVoicelineClip extends UIClip<VoicelineClip>
         {
             for (ElevenLabsVoice voice : ElevenLabsAPI.getVoices().values())
             {
-                if (!voice.isCloned())
+                if (!voice.isAllowed())
                 {
                     continue;
                 }
 
                 String name = voice.name;
+                int color = BBSSettings.elevenVoiceColors.getColor(name) & 0xffffff;
 
                 if (name.equalsIgnoreCase(this.clip.voice.get()))
                 {
-                    menu.action(Icons.VOICE, IKey.raw(name), BBSSettings.primaryColor(0), () -> this.setVoice(name));
+                    color = BBSSettings.primaryColor(0);
+                }
+
+                if (color != 0xffffff)
+                {
+                    menu.action(Icons.VOICE, IKey.raw(name), color, () -> this.setVoice(name));
                 }
                 else
                 {

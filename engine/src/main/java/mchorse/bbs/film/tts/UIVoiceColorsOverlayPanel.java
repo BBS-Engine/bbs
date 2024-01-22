@@ -22,7 +22,7 @@ public class UIVoiceColorsOverlayPanel extends UIOverlayPanel
 
         for (ElevenLabsVoice voice : ElevenLabsAPI.getVoices().values())
         {
-            if (!voice.isCloned())
+            if (!voice.isAllowed())
             {
                 continue;
             }

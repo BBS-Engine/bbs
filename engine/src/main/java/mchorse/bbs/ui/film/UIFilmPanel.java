@@ -949,6 +949,8 @@ public class UIFilmPanel extends UIDataDashboardPanel<Film> implements IFlightSu
     public void setCursor(int value)
     {
         this.runner.ticks = Math.max(0, value);
+
+        this.screenplay.setCursor(this.runner.ticks);
     }
 
     public boolean isRunning()
