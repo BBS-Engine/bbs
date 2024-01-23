@@ -6,6 +6,16 @@ import mchorse.bbs.utils.StringUtils;
 
 public class TimeUtils
 {
+    public static int toTick(float seconds)
+    {
+        return (int) (seconds * 20);
+    }
+
+    public static float toSeconds(int tick)
+    {
+        return tick / 20F;
+    }
+
     public static String formatTime(long ticks)
     {
         if (BBSSettings.editorSeconds.get())

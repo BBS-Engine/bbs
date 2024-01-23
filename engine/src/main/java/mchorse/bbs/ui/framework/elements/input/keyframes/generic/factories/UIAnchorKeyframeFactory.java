@@ -131,6 +131,6 @@ public class UIAnchorKeyframeFactory extends UIKeyframeFactory<AnchorProperty.An
 
     private UIFilmPanel getPanel()
     {
-        return (UIFilmPanel) this.editor.properties.getDelegate();
+        return this.getContext().menu.getRoot().getChildren(UIFilmPanel.class).get(0);
     }
 }

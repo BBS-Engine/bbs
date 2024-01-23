@@ -612,6 +612,9 @@ public class UIKeys
     public static final IKey VOICE_LINE_NOTIFICATIONS_MISSING_TOKEN = IKey.lang("bbs.ui.voice_line.notification.missing_token", "You haven't specified a token in BBS' settings!", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey VOICE_LINE_NOTIFICATIONS_MISSING_VOICES = IKey.lang("bbs.ui.voice_line.notification.missing_voices", "Following voices in the screenplay are missing: %s", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey VOICE_LINE_SAVE = IKey.lang("bbs.ui.voice_line.save", "Save compiled audio", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey VOICE_LINE_FOUNTAIN = IKey.lang("bbs.ui.voice_line.fountain", "Import fountain screenplay...", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey VOICE_LINE_FOUNTAIN_TITLE = IKey.lang("bbs.ui.voice_line.fountain-title", "Import fountain screenplay", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey VOICE_LINE_FOUNTAIN_DESCRIPTION = IKey.lang("bbs.ui.voice_line.fountain-description", "Type in or paste the screenplay in fountain (only character replies work) format to import voice lines:", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey VOICE_LINE_SAVE_AUDIO_DESCRIPTION = IKey.lang("bbs.ui.voice_line.save_audio-description", "The server returned status code: %s", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey VOICE_LINE_SAVE_AUDIO_TITLE = IKey.lang("bbs.ui.voice_line.save_audio-title", "Compiled", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey VOICE_LINE_SUBTITLES = IKey.lang("bbs.ui.voice_line.subtitles", "Generate subtitle clips", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);

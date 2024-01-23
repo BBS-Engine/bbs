@@ -1,5 +1,6 @@
 package mchorse.bbs.film.tts;
 
+import mchorse.bbs.camera.clips.misc.VoicelineClip;
 import mchorse.bbs.l10n.keys.IKey;
 
 import java.io.File;
@@ -12,6 +13,7 @@ public class ElevenLabsResult
     public File folder;
     public List<String> missingVoices = new ArrayList<>();
     public IKey message;
+    public VoicelineClip clip;
 
     public ElevenLabsResult(Status status)
     {
@@ -26,8 +28,14 @@ public class ElevenLabsResult
 
     public ElevenLabsResult(Status status, IKey message)
     {
+        this(status, message, null);
+    }
+
+    public ElevenLabsResult(Status status, IKey message, VoicelineClip clip)
+    {
         this.status = status;
         this.message = message;
+        this.clip = clip;
     }
 
     public static enum Status

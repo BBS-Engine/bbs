@@ -9,7 +9,6 @@ import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.IUIClipsDelegate;
 import mchorse.bbs.ui.film.UIFilmPanel;
-import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.text.UITextbox;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
@@ -75,47 +74,13 @@ public class UIVoicelineClip extends UIClip<VoicelineClip>
 
     public void generateTTS(List<VoicelineClip> actions, Consumer<List<VoicelineClip>> callback)
     {
-        try
+        ElevenLabsAPI.generateStandard(this.getContext(), UIFilmPanel.getVoiceLines().getFolder(), actions, (result) ->
         {
-            UIContext context = this.getContext();
-
-            ElevenLabsAPI.generate(UIFilmPanel.getVoiceLines().getFolder(), actions, (result) ->
+            if (callback != null && result.status == ElevenLabsResult.Status.SUCCESS)
             {
-                if (result.status == ElevenLabsResult.Status.INITIALIZED)
-                {
-                    context.notify(UIKeys.VOICE_LINE_NOTIFICATIONS_COMMENCING, Colors.BLUE | Colors.A100);
-                }
-                else if (result.status == ElevenLabsResult.Status.GENERATED)
-                {
-                    context.notify(result.message, Colors.BLUE | Colors.A100);
-                }
-                else if (result.status == ElevenLabsResult.Status.ERROR)
-                {
-                    context.notify(UIKeys.VOICE_LINE_NOTIFICATIONS_ERROR_GENERATING.format(result.message), Colors.RED | Colors.A100);
-                }
-                else if (result.status == ElevenLabsResult.Status.TOKEN_MISSING)
-                {
-                    context.notify(UIKeys.VOICE_LINE_NOTIFICATIONS_MISSING_TOKEN, Colors.RED | Colors.A100);
-                }
-                else if (result.status == ElevenLabsResult.Status.VOICE_IS_MISSING)
-                {
-                    context.notify(!result.missingVoices.isEmpty()
-                        ? UIKeys.VOICE_LINE_NOTIFICATIONS_MISSING_VOICES.format(String.join(", ", result.missingVoices))
-                        : UIKeys.VOICE_LINE_NOTIFICATIONS_ERROR_LOADING_VOICES, Colors.RED | Colors.A100);
-                }
-                else /* SUCCESS */
-                {
-                    if (callback != null)
-                    {
-                        callback.accept(actions);
-                    }
-                }
-            });
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+                callback.accept(actions);
+            }
+        });
     }
 
     private void pickVoice()

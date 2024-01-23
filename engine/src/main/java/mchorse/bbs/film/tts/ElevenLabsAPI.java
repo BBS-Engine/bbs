@@ -7,8 +7,11 @@ import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.ui.UIKeys;
+import mchorse.bbs.ui.film.UIFilmPanel;
+import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.utils.FFMpegUtils;
 import mchorse.bbs.utils.StringUtils;
+import mchorse.bbs.utils.colors.Colors;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -106,6 +109,44 @@ public class ElevenLabsAPI implements Runnable
     private static String getToken()
     {
         return BBSSettings.elevenLabsToken.get();
+    }
+
+    public static void generateStandard(UIContext context, File folder, List<VoicelineClip> actions, Consumer<ElevenLabsResult> callback)
+    {
+        try
+        {
+            generate(UIFilmPanel.getVoiceLines().getFolder(), actions, (result) ->
+            {
+                if (result.status == ElevenLabsResult.Status.INITIALIZED)
+                {
+                    context.notify(UIKeys.VOICE_LINE_NOTIFICATIONS_COMMENCING, Colors.BLUE | Colors.A100);
+                }
+                else if (result.status == ElevenLabsResult.Status.GENERATED)
+                {
+                    context.notify(result.message, Colors.BLUE | Colors.A100);
+                }
+                else if (result.status == ElevenLabsResult.Status.ERROR)
+                {
+                    context.notify(UIKeys.VOICE_LINE_NOTIFICATIONS_ERROR_GENERATING.format(result.message), Colors.RED | Colors.A100);
+                }
+                else if (result.status == ElevenLabsResult.Status.TOKEN_MISSING)
+                {
+                    context.notify(UIKeys.VOICE_LINE_NOTIFICATIONS_MISSING_TOKEN, Colors.RED | Colors.A100);
+                }
+                else if (result.status == ElevenLabsResult.Status.VOICE_IS_MISSING)
+                {
+                    context.notify(!result.missingVoices.isEmpty()
+                        ? UIKeys.VOICE_LINE_NOTIFICATIONS_MISSING_VOICES.format(String.join(", ", result.missingVoices))
+                        : UIKeys.VOICE_LINE_NOTIFICATIONS_ERROR_LOADING_VOICES, Colors.RED | Colors.A100);
+                }
+
+                callback.accept(result);
+            });
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -246,8 +287,6 @@ public class ElevenLabsAPI implements Runnable
                 {
                     writeToFile(connection, file);
 
-                    this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.GENERATED, UIKeys.VOICE_LINE_NOTIFICATIONS_GENERATED.format(voiceLine.uuid.get())));
-
                     File wav = new File(StringUtils.removeExtension(file.getAbsolutePath()) + ".wav");
 
                     try
@@ -261,6 +300,12 @@ public class ElevenLabsAPI implements Runnable
                     }
 
                     voiceLine.variant.set(wav.getName());
+
+                    this.callback.accept(new ElevenLabsResult(
+                        ElevenLabsResult.Status.GENERATED,
+                        UIKeys.VOICE_LINE_NOTIFICATIONS_GENERATED.format(voiceLine.uuid.get()),
+                        voiceLine
+                    ));
                 }
                 else
                 {
@@ -273,7 +318,7 @@ public class ElevenLabsAPI implements Runnable
             }
         }
 
-        this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.SUCCESS, folder));
+        this.callback.accept(new ElevenLabsResult(ElevenLabsResult.Status.SUCCESS, this.folder));
 
         thread = null;
     }

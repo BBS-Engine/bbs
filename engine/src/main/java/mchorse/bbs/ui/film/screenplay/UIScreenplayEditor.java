@@ -5,6 +5,7 @@ import mchorse.bbs.BBSSettings;
 import mchorse.bbs.audio.ColorCode;
 import mchorse.bbs.audio.SoundPlayer;
 import mchorse.bbs.audio.Wave;
+import mchorse.bbs.audio.Waveform;
 import mchorse.bbs.audio.wav.WaveWriter;
 import mchorse.bbs.camera.clips.misc.AudioClip;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
@@ -12,6 +13,9 @@ import mchorse.bbs.camera.clips.misc.VoicelineClip;
 import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.film.Film;
+import mchorse.bbs.film.Fountain;
+import mchorse.bbs.film.tts.ElevenLabsAPI;
+import mchorse.bbs.film.tts.ElevenLabsResult;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.resources.Link;
 import mchorse.bbs.ui.UIKeys;
@@ -23,8 +27,10 @@ import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.input.text.highlighting.SyntaxStyle;
 import mchorse.bbs.ui.framework.elements.overlay.UIMessageFolderOverlayPanel;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
+import mchorse.bbs.ui.framework.elements.overlay.UITextareaOverlayPanel;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.utils.Pair;
 import mchorse.bbs.utils.clips.Clip;
 import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.utils.math.MathUtils;
@@ -37,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class UIScreenplayEditor extends UIElement
 {
@@ -69,9 +76,66 @@ public class UIScreenplayEditor extends UIElement
 
         this.editor = new UIClipsPanel(panel, BBS.getFactoryScreenplayClips());
         this.editor.relative(this).y(40).w(1F).h(1F, -40);
+        this.editor.clips.context((menu) ->
+        {
+            if (this.film == null)
+            {
+                return;
+            }
+
+            menu.action(Icons.FILE, UIKeys.VOICE_LINE_FOUNTAIN, () ->
+            {
+                UITextareaOverlayPanel overlayPanel = new UITextareaOverlayPanel(
+                    UIKeys.VOICE_LINE_FOUNTAIN_TITLE,
+                    UIKeys.VOICE_LINE_FOUNTAIN_DESCRIPTION,
+                    this::parseFountain
+                );
+
+                UIOverlay.addOverlay(this.getContext(), overlayPanel);
+            });
+        });
 
         this.add(this.editor, this.masterBar);
         this.markContainer();
+    }
+
+    private void parseFountain(String str)
+    {
+        List<VoicelineClip> clips = new ArrayList<>();
+        int layer = this.film.voiceLines.getTopLayer();
+
+        for (Fountain.Reply reply : Fountain.parseReplies(str))
+        {
+            VoicelineClip clip = new VoicelineClip();
+
+            clip.layer.set(layer);
+            clip.voice.set(reply.name.toLowerCase());
+            clip.content.set(reply.reply);
+
+            clips.add(clip);
+        }
+
+        AtomicInteger newOffset = new AtomicInteger();
+        UIContext context = this.getContext();
+
+        ElevenLabsAPI.generateStandard(context, UIFilmPanel.getVoiceLines().getFolder(), clips, (result) ->
+        {
+            /* Post runnable is necessary because callback is calling from non-main thread */
+            context.render.postRunnable(() ->
+            {
+                if (result.clip != null && result.status == ElevenLabsResult.Status.GENERATED)
+                {
+                    Pair<Wave, Waveform> pair = UIFilmPanel.getVoiceLines().get(result.clip);
+                    int duration = (int) (pair.a.getDuration() * 20);
+
+                    result.clip.tick.set(newOffset.get());
+                    result.clip.duration.set(duration);
+
+                    newOffset.set(newOffset.get() + duration);
+                    this.film.voiceLines.addClip(result.clip);
+                }
+            });
+        });
     }
 
     public void setCursor(int ticks)
