@@ -86,7 +86,7 @@ public class UIAudioPlayer extends UIElement implements IUITreeEventListener
         this.player.stop();
     }
 
-    private void togglePlaying()
+    public void togglePlaying()
     {
         if (this.player != null)
         {

@@ -15,8 +15,6 @@ import mchorse.bbs.forms.forms.Form;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.l10n.keys.IKey;
 import mchorse.bbs.resources.Link;
-import mchorse.bbs.settings.values.ValueInt;
-import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.clips.renderer.IUIClipRenderer;
@@ -46,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class UIClips extends UIElement
@@ -176,6 +173,8 @@ public class UIClips extends UIElement
         this.keys().register(Keys.CLIP_DURATION, this::shiftDurationToCursor).category(KEYS_CATEGORY).active(canUseKeybinds);
         this.keys().register(Keys.CLIP_REMOVE, this::removeSelected).category(KEYS_CATEGORY).active(canUseKeybinds);
         this.keys().register(Keys.CLIP_ENABLE, this::toggleEnabled).category(KEYS_CATEGORY).active(canUseKeybinds);
+        this.keys().register(Keys.CLIP_SELECT_AFTER, this::selectAfter).category(KEYS_CATEGORY).active(canUseKeybinds);
+        this.keys().register(Keys.CLIP_SELECT_BEFORE, this::selectBefore).category(KEYS_CATEGORY).active(canUseKeybinds);
     }
 
     public IFactory<Clip, ClipFactoryData> getFactory()
@@ -587,6 +586,44 @@ public class UIClips extends UIElement
         }
 
         this.delegate.fillData();
+    }
+
+    private void selectBefore()
+    {
+        int i = 0;
+
+        this.clearSelection();
+
+        for (Clip clip : this.clips.get())
+        {
+            if (clip.tick.get() < this.delegate.getCursor())
+            {
+                this.selection.add(i);
+            }
+
+            i += 1;
+        }
+
+        this.delegate.pickClip(this.selection.isEmpty() ? null : this.clips.get(this.selection.get(0)));
+    }
+
+    private void selectAfter()
+    {
+        int i = 0;
+
+        this.clearSelection();
+
+        for (Clip clip : this.clips.get())
+        {
+            if (clip.tick.get() + clip.duration.get() > this.delegate.getCursor())
+            {
+                this.selection.add(i);
+            }
+
+            i += 1;
+        }
+
+        this.delegate.pickClip(this.selection.isEmpty() ? null : this.clips.get(this.selection.get(0)));
     }
 
     /* Selection */

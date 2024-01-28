@@ -16,15 +16,15 @@ public class Pose implements IMapSerializable
 
     public boolean staticPose;
 
-    public final Map<String, Transform> transforms = new HashMap<>();
+    public final Map<String, PoseTransform> transforms = new HashMap<>();
 
-    public Transform get(String name)
+    public PoseTransform get(String name)
     {
-        Transform transform = this.transforms.get(name);
+        PoseTransform transform = this.transforms.get(name);
 
         if (transform == null)
         {
-            transform = new Transform();
+            transform = new PoseTransform();
 
             this.transforms.put(name, transform);
         }
@@ -39,14 +39,18 @@ public class Pose implements IMapSerializable
             return;
         }
 
-        for (Map.Entry<String, Transform> entry : this.transforms.entrySet())
+        for (Map.Entry<String, PoseTransform> entry : this.transforms.entrySet())
         {
-            Transform transform = entry.getValue();
+            PoseTransform transform = entry.getValue();
             ModelGroup group = model.getGroup(entry.getKey());
 
             if (this.staticPose)
             {
                 group.current.copy(group.initial);
+            }
+            else if (transform.fix > 0F)
+            {
+                group.current.lerp(group.initial, transform.fix);
             }
 
             if (group != null)
@@ -119,11 +123,11 @@ public class Pose implements IMapSerializable
             return;
         }
 
-        for (Map.Entry<String, Transform> entry : pose.transforms.entrySet())
+        for (Map.Entry<String, PoseTransform> entry : pose.transforms.entrySet())
         {
             if (!entry.getValue().isDefault())
             {
-                this.transforms.put(entry.getKey(), entry.getValue().copy());
+                this.transforms.put(entry.getKey(), (PoseTransform) entry.getValue().copy());
             }
         }
     }
@@ -140,7 +144,7 @@ public class Pose implements IMapSerializable
 
         MapType pose = new MapType();
 
-        for (Map.Entry<String, Transform> entry : this.transforms.entrySet())
+        for (Map.Entry<String, PoseTransform> entry : this.transforms.entrySet())
         {
             if (!entry.getValue().isDefault())
             {
@@ -163,7 +167,7 @@ public class Pose implements IMapSerializable
 
             for (String key : pose.keys())
             {
-                Transform transform = new Transform();
+                PoseTransform transform = new PoseTransform();
 
                 transform.fromData(pose.getMap(key));
 

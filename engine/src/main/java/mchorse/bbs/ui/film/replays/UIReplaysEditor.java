@@ -71,6 +71,9 @@ public class UIReplaysEditor extends UIElement
         COLORS.put("x", Colors.RED);
         COLORS.put("y", Colors.GREEN);
         COLORS.put("z", Colors.BLUE);
+        COLORS.put("vX", Colors.RED);
+        COLORS.put("vY", Colors.GREEN);
+        COLORS.put("vZ", Colors.BLUE);
         COLORS.put("yaw", Colors.YELLOW);
         COLORS.put("pitch", Colors.CYAN);
         COLORS.put("bodyYaw", Colors.MAGENTA);

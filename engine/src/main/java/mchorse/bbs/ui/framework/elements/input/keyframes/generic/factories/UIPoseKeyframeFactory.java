@@ -6,17 +6,22 @@ import mchorse.bbs.forms.forms.ModelForm;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.settings.values.base.BaseValue;
 import mchorse.bbs.ui.UIKeys;
+import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIProperty;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
 import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
+import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.world.objects.objects.UIPropTransform;
 import mchorse.bbs.utils.Pose;
+import mchorse.bbs.utils.PoseTransform;
+import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
 
 public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
 {
     private UIStringList groups;
+    private UITrackpad fix;
     private UIPropTransform transform;
 
     public UIPoseKeyframeFactory(GenericKeyframe<Pose> keyframe, UIPropertyEditor editor)
@@ -54,6 +59,20 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
                 this.pickBone(current);
             });
         });
+        this.fix = new UITrackpad((v) ->
+        {
+            Transform t = this.transform.getTransform();
+
+            if (t instanceof PoseTransform)
+            {
+                PoseTransform poseTransform = (PoseTransform) t;
+
+                this.keyframe.preNotifyParent();
+                poseTransform.fix = v.floatValue();
+                this.keyframe.postNotifyParent();
+            }
+        });
+        this.fix.tooltip(UIKeys.POSE_CONTEXT_FIX_TOOLTIP);
         this.transform = new UIPoseTransforms(this.keyframe).enableHotkeys();
         this.transform.verticalCompact();
 
@@ -70,12 +89,15 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
             this.pickBone(this.groups.getCurrentFirst());
         }
 
-        this.add(this.groups, this.transform);
+        this.add(this.groups, UI.label(UIKeys.POSE_CONTEXT_FIX), this.fix, this.transform);
     }
 
     private void pickBone(String bone)
     {
-        this.transform.setTransform(this.keyframe.getValue().get(bone));
+        PoseTransform poseTransform = this.keyframe.getValue().get(bone);
+
+        this.fix.setValue(poseTransform.fix);
+        this.transform.setTransform(poseTransform);
     }
 
     public void selectBone(String bone)

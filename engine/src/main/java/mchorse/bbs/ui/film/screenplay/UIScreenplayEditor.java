@@ -10,6 +10,7 @@ import mchorse.bbs.audio.wav.WaveWriter;
 import mchorse.bbs.camera.clips.misc.AudioClip;
 import mchorse.bbs.camera.clips.misc.SubtitleClip;
 import mchorse.bbs.camera.clips.misc.VoicelineClip;
+import mchorse.bbs.camera.utils.TimeUtils;
 import mchorse.bbs.data.DataToString;
 import mchorse.bbs.data.types.ListType;
 import mchorse.bbs.film.Film;
@@ -18,6 +19,7 @@ import mchorse.bbs.film.tts.ElevenLabsAPI;
 import mchorse.bbs.film.tts.ElevenLabsResult;
 import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.resources.Link;
+import mchorse.bbs.ui.Keys;
 import mchorse.bbs.ui.UIKeys;
 import mchorse.bbs.ui.film.UIClipsPanel;
 import mchorse.bbs.ui.film.UIFilmPanel;
@@ -97,6 +99,8 @@ public class UIScreenplayEditor extends UIElement
 
         this.add(this.editor, this.masterBar);
         this.markContainer();
+
+        this.keys().register(Keys.PLAUSE, () -> this.master.play.clickItself());
     }
 
     private void parseFountain(String str)
@@ -348,6 +352,13 @@ public class UIScreenplayEditor extends UIElement
     @Override
     public void render(UIContext context)
     {
+        SoundPlayer player = this.master.getPlayer();
+
+        if (player != null)
+        {
+            this.panel.getRunner().ticks = TimeUtils.toTick(player.getPlaybackPosition());
+        }
+
         this.area.render(context.batcher, this.style.background | Colors.A100);
 
         super.render(context);

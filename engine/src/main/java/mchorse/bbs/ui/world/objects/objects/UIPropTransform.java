@@ -57,6 +57,11 @@ public class UIPropTransform extends UITransform
         return this;
     }
 
+    public Transform getTransform()
+    {
+        return this.transform;
+    }
+
     public void setTransform(Transform transform)
     {
         this.transform = transform;

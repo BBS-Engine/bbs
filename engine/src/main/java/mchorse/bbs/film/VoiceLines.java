@@ -1,5 +1,7 @@
 package mchorse.bbs.film;
 
+import mchorse.bbs.BBSSettings;
+import mchorse.bbs.audio.ColorCode;
 import mchorse.bbs.audio.Wave;
 import mchorse.bbs.audio.Waveform;
 import mchorse.bbs.audio.wav.WaveReader;
@@ -9,7 +11,9 @@ import mchorse.bbs.utils.Pair;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class VoiceLines implements IDisposable
@@ -42,11 +46,15 @@ public class VoiceLines implements IDisposable
         try
         {
             File file = new File(this.folder, clip.uuid.get() + "/" + clip.variant.get());
+            List<ColorCode> colorCodes = new ArrayList<>();
+            int color = BBSSettings.elevenVoiceColors.getColor(clip.voice.get());
 
             wave = new WaveReader().read(new FileInputStream(file));
             waveform = new Waveform();
 
-            waveform.generate(wave, null, 40, 20);
+            colorCodes.add(new ColorCode(0, wave.getDuration(), color));
+
+            waveform.generate(wave, colorCodes, 40, 20);
         }
         catch (Exception e)
         {

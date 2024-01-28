@@ -24,6 +24,7 @@ public class UIRecordOverlayPanel extends UIMessageOverlayPanel
     public UIIcon extra2;
     public UIIcon position;
     public UIIcon rotation;
+    public UIIcon posRot;
 
     private Consumer<List<String>> callback;
 
@@ -41,6 +42,7 @@ public class UIRecordOverlayPanel extends UIMessageOverlayPanel
         this.extra2 = new UIIcon(Icons.CURVES, (b) -> this.submit(Arrays.asList(ReplayKeyframes.GROUP_EXTRA2)));
         this.position = new UIIcon(Icons.ALL_DIRECTIONS, (b) -> this.submit(Arrays.asList(ReplayKeyframes.GROUP_POSITION)));
         this.rotation = new UIIcon(Icons.REFRESH, (b) -> this.submit(Arrays.asList(ReplayKeyframes.GROUP_ROTATION)));
+        this.posRot = new UIIcon(Icons.FULLSCREEN, (b) -> this.submit(Arrays.asList(ReplayKeyframes.GROUP_POSITION, ReplayKeyframes.GROUP_ROTATION)));
 
         this.all.tooltip(UIKeys.FILM_GROUPS_ALL);
         this.left.tooltip(UIKeys.FILM_GROUPS_LEFT_STICK);
@@ -50,8 +52,9 @@ public class UIRecordOverlayPanel extends UIMessageOverlayPanel
         this.extra2.tooltip(UIKeys.FILM_GROUPS_EXTRA_2);
         this.position.tooltip(UIKeys.FILM_GROUPS_ONLY_POSITION);
         this.rotation.tooltip(UIKeys.FILM_GROUPS_ONLY_ROTATION);
+        this.posRot.tooltip(UIKeys.FILM_GROUPS_ONLY_POS_ROT);
 
-        UIElement bar = UI.row(this.all, this.left, this.right, this.triggers, this.extra1, this.extra2, this.position, this.rotation);
+        UIElement bar = UI.row(this.all, this.left, this.right, this.triggers, this.extra1, this.extra2, this.position, this.rotation, this.posRot);
 
         bar.relative(this.content).x(0.5F).y(1F, -6).w(1F, -12).anchor(0.5F, 1F).row().resize();
         this.content.add(bar);
@@ -64,6 +67,7 @@ public class UIRecordOverlayPanel extends UIMessageOverlayPanel
         this.keys().register(Keys.RECORDING_GROUP_EXTRA_2, this.extra2::clickItself);
         this.keys().register(Keys.RECORDING_GROUP_ONLY_POSITION, this.position::clickItself);
         this.keys().register(Keys.RECORDING_GROUP_ONLY_ROTATION, this.rotation::clickItself);
+        this.keys().register(Keys.RECORDING_GROUP_POS_ROT, this.posRot::clickItself);
     }
 
     private void submit(List<String> groups)

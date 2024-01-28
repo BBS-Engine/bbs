@@ -17,6 +17,8 @@ public class UIKeys
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_JUMP_FORWARD = IKey.lang("bbs.ui.camera.editor.keys.editor.jump_forward", "Jump forward", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_NEXT = IKey.lang("bbs.ui.camera.editor.keys.editor.next");
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_NEXT_CLIP = IKey.lang("bbs.ui.camera.editor.keys.editor.next_clip");
+    public static final IKey CAMERA_EDITOR_KEYS_EDITOR_SELECT_AFTER = IKey.lang("bbs.ui.camera.editor.keys.editor.select_after", "Select after", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey CAMERA_EDITOR_KEYS_EDITOR_SELECT_BEFORE = IKey.lang("bbs.ui.camera.editor.keys.editor.select_before", "Select before", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_PLAUSE = IKey.lang("bbs.ui.camera.editor.keys.editor.plause");
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_PREV = IKey.lang("bbs.ui.camera.editor.keys.editor.prev");
     public static final IKey CAMERA_EDITOR_KEYS_EDITOR_PREV_CLIP = IKey.lang("bbs.ui.camera.editor.keys.editor.prev_clip");
@@ -189,6 +191,7 @@ public class UIKeys
     public static final IKey FILM_GROUPS_LEFT_STICK = IKey.lang("bbs.ui.film.groups.left_stick", "Left stick", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey FILM_GROUPS_ONLY_POSITION = IKey.lang("bbs.ui.film.groups.only_position", "Only position", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey FILM_GROUPS_ONLY_ROTATION = IKey.lang("bbs.ui.film.groups.only_rotation", "Only rotation", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey FILM_GROUPS_ONLY_POS_ROT = IKey.lang("bbs.ui.film.groups.pos_rot", "Position + rotation", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey FILM_GROUPS_RIGHT_STICK = IKey.lang("bbs.ui.film.groups.right_stick", "Right stick", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey FILM_GROUPS_TRIGGERS = IKey.lang("bbs.ui.film.groups.triggers", "Triggers", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey FILM_OPEN_CAMERA_EDITOR = IKey.lang("bbs.ui.film.open_camera_editor", "Open camera editor", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
@@ -376,6 +379,8 @@ public class UIKeys
     public static final IKey POSE_CONTEXT_COPY = IKey.lang("bbs.ui.pose.context.copy", "Copy pose", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey POSE_CONTEXT_PASTE = IKey.lang("bbs.ui.pose.context.paste", "Paste pose", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey POSE_CONTEXT_RESET = IKey.lang("bbs.ui.pose.context.reset", "Reset pose", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey POSE_CONTEXT_FIX = IKey.lang("bbs.ui.pose.context.fix", "Fix", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey POSE_CONTEXT_FIX_TOOLTIP = IKey.lang("bbs.ui.pose.context.fix-tooltip", "When enabled disables the influence of the model's animation", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey SCENE_REPLAYS_CONTEXT_ADD = IKey.lang("bbs.ui.scene.replays.context.add");
     public static final IKey SCENE_REPLAYS_CONTEXT_DUPE = IKey.lang("bbs.ui.scene.replays.context.dupe");
     public static final IKey SCENE_REPLAYS_CONTEXT_EDIT_FORM = IKey.lang("bbs.ui.scene.replays.context.edit_form", "Edit form...", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
