@@ -302,6 +302,12 @@ public abstract class UITransform extends UIElement
         this.pasteTranslation(list);
         this.pasteScale(list);
         this.pasteRotation(list);
+
+        Vector3d rotation = this.getVector(list, 9);
+
+        this.r2x.setValue(rotation.x);
+        this.r2y.setValue(rotation.y);
+        this.r2z.setValueAndNotify(rotation.z);
     }
 
     public void pasteTranslation(ListType list)
