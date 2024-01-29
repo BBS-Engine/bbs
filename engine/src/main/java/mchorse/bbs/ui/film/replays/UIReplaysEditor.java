@@ -323,7 +323,7 @@ public class UIReplaysEditor extends UIElement
 
             if (this.propertyEditor.editor instanceof UIPoseKeyframeFactory)
             {
-                ((UIPoseKeyframeFactory) this.propertyEditor.editor).selectBone(bone);
+                ((UIPoseKeyframeFactory) this.propertyEditor.editor).poseEditor.selectBone(bone);
             }
 
             this.filmPanel.setCursor((int) closest.getTick());

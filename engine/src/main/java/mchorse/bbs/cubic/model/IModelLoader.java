@@ -51,5 +51,5 @@ public interface IModelLoader
         return newLinks;
     }
 
-    public CubicModel load(ModelManager models, Link model, Collection<Link> links) throws Exception;
+    public CubicModel load(String id, ModelManager models, Link model, Collection<Link> links) throws Exception;
 }

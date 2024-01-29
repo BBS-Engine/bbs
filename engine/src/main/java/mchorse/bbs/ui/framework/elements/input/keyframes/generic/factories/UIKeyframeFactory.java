@@ -14,6 +14,6 @@ public abstract class UIKeyframeFactory <T> extends UIElement
         this.keyframe = keyframe;
         this.editor = editor;
 
-        this.column(5).vertical().stretch();
+        this.column().vertical().stretch();
     }
 }

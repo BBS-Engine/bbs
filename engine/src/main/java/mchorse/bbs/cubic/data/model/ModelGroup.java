@@ -1,6 +1,6 @@
 package mchorse.bbs.cubic.data.model;
 
-import mchorse.bbs.utils.Transform;
+import mchorse.bbs.utils.pose.Transform;
 
 import java.util.ArrayList;
 import java.util.List;

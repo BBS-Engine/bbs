@@ -11,7 +11,7 @@ import mchorse.bbs.forms.properties.IFormProperty;
 import mchorse.bbs.forms.properties.StringProperty;
 import mchorse.bbs.forms.properties.TransformProperty;
 import mchorse.bbs.forms.renderers.FormRenderer;
-import mchorse.bbs.utils.Transform;
+import mchorse.bbs.utils.pose.Transform;
 import mchorse.bbs.utils.math.IInterpolation;
 import mchorse.bbs.world.entities.Entity;
 

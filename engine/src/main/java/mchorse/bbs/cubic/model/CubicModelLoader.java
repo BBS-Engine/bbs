@@ -19,7 +19,7 @@ import java.util.List;
 public class CubicModelLoader implements IModelLoader
 {
     @Override
-    public CubicModel load(ModelManager models, Link model, Collection<Link> links) throws Exception
+    public CubicModel load(String id, ModelManager models, Link model, Collection<Link> links) throws Exception
     {
         List<Link> modelBBS = IModelLoader.getLinks(links, ".bbs.json");
         Link modelTexture = IModelLoader.getLink(model.combine("model.png"), links, ".png");
@@ -53,7 +53,7 @@ public class CubicModelLoader implements IModelLoader
             return null;
         }
 
-        CubicModel newModel = new CubicModel(null, new Animations(), modelTexture);
+        CubicModel newModel = new CubicModel(id, null, new Animations(), modelTexture);
 
         for (int i = 0; i < modelStreams.size(); i++)
         {

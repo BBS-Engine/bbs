@@ -15,6 +15,7 @@ import mchorse.bbs.ui.dashboard.UIDashboard;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIScrollView;
 import mchorse.bbs.ui.framework.elements.input.list.UISearchList;
+import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.utils.AABB;
@@ -30,7 +31,7 @@ import java.util.function.Consumer;
 
 public abstract class UICommonWorldEditor <T> extends UIWorldPanel
 {
-    public static final int LIST_HEIGHT = 20 + 16 * 6;
+    public static final int LIST_HEIGHT = 20 + UIStringList.DEFAULT_HEIGHT * 6;
 
     public UISearchList<T> objects;
     public UIScrollView editor;

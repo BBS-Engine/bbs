@@ -1,80 +1,25 @@
 package mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories;
 
 import mchorse.bbs.cubic.CubicModel;
-import mchorse.bbs.data.types.MapType;
 import mchorse.bbs.forms.forms.ModelForm;
-import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.settings.values.base.BaseValue;
-import mchorse.bbs.ui.UIKeys;
-import mchorse.bbs.ui.framework.elements.input.UITrackpad;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIProperty;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
-import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
-import mchorse.bbs.ui.utils.UI;
-import mchorse.bbs.ui.utils.icons.Icons;
+import mchorse.bbs.ui.utils.pose.UIPoseEditor;
 import mchorse.bbs.ui.world.objects.objects.UIPropTransform;
-import mchorse.bbs.utils.Pose;
-import mchorse.bbs.utils.PoseTransform;
-import mchorse.bbs.utils.Transform;
 import mchorse.bbs.utils.keyframes.generic.GenericKeyframe;
+import mchorse.bbs.utils.pose.Pose;
+import mchorse.bbs.utils.pose.PoseTransform;
 
 public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
 {
-    private UIStringList groups;
-    private UITrackpad fix;
-    private UIPropTransform transform;
+    public UIPoseFactoryEditor poseEditor;
 
     public UIPoseKeyframeFactory(GenericKeyframe<Pose> keyframe, UIPropertyEditor editor)
     {
         super(keyframe, editor);
 
-        this.groups = new UIStringList((l) -> this.pickBone(l.get(0)));
-        this.groups.background().h(16 * 8);
-        this.groups.scroll.cancelScrolling();
-        this.groups.context((menu) ->
-        {
-            menu.action(Icons.COPY, UIKeys.POSE_CONTEXT_COPY, () ->
-            {
-                Window.setClipboard(this.keyframe.getValue().toData(), "_ModelCopyPose");
-            });
-
-            MapType data = Window.getClipboardMap("_ModelCopyPose");
-
-            if (data != null)
-            {
-                menu.action(Icons.PASTE, UIKeys.POSE_CONTEXT_PASTE, () ->
-                {
-                    String current = this.groups.getCurrentFirst();
-
-                    BaseValue.edit(this.keyframe, (kf) -> kf.getValue().fromData(data));
-                    this.pickBone(current);
-                });
-            }
-
-            menu.action(Icons.REFRESH, UIKeys.POSE_CONTEXT_RESET, () ->
-            {
-                String current = this.groups.getCurrentFirst();
-
-                BaseValue.edit(this.keyframe, (kf) -> kf.getValue().transforms.clear());
-                this.pickBone(current);
-            });
-        });
-        this.fix = new UITrackpad((v) ->
-        {
-            Transform t = this.transform.getTransform();
-
-            if (t instanceof PoseTransform)
-            {
-                PoseTransform poseTransform = (PoseTransform) t;
-
-                this.keyframe.preNotifyParent();
-                poseTransform.fix = v.floatValue();
-                this.keyframe.postNotifyParent();
-            }
-        });
-        this.fix.tooltip(UIKeys.POSE_CONTEXT_FIX_TOOLTIP);
-        this.transform = new UIPoseTransforms(this.keyframe).enableHotkeys();
-        this.transform.verticalCompact();
+        this.poseEditor = new UIPoseFactoryEditor(keyframe);
 
         UIProperty property = editor.properties.getProperty(keyframe);
         ModelForm form = (ModelForm) property.property.getForm();
@@ -82,38 +27,53 @@ public class UIPoseKeyframeFactory extends UIKeyframeFactory<Pose>
 
         if (model != null)
         {
-            this.groups.add(model.model.getAllGroupKeys());
-            this.groups.sort();
-
-            this.groups.setIndex(0);
-            this.pickBone(this.groups.getCurrentFirst());
+            this.poseEditor.setPose(keyframe.getValue(), model.poseGroup);
+            this.poseEditor.fillGroups(model.model.getAllGroupKeys());
         }
 
-        this.add(this.groups, UI.label(UIKeys.POSE_CONTEXT_FIX), this.fix, this.transform);
+        this.add(this.poseEditor);
     }
 
-    private void pickBone(String bone)
+    public static class UIPoseFactoryEditor extends UIPoseEditor
     {
-        PoseTransform poseTransform = this.keyframe.getValue().get(bone);
+        private GenericKeyframe<Pose> keyframe;
 
-        this.fix.setValue(poseTransform.fix);
-        this.transform.setTransform(poseTransform);
-    }
+        public UIPoseFactoryEditor(GenericKeyframe<Pose> keyframe)
+        {
+            super();
 
-    public void selectBone(String bone)
-    {
-        this.groups.setCurrentScroll(bone);
-        this.pickBone(bone);
+            this.keyframe = keyframe;
+
+            ((UIPoseTransforms) this.transform).setKeyframe(keyframe);
+        }
+
+        @Override
+        protected UIPropTransform createTransformEditor()
+        {
+            return new UIPoseTransforms().enableHotkeys();
+        }
+
+        @Override
+        protected void changedPose(Runnable runnable)
+        {
+            BaseValue.edit(this.keyframe, (kf) -> runnable.run());
+        }
+
+        @Override
+        protected void setFix(PoseTransform transform, float value)
+        {
+            this.keyframe.preNotifyParent();
+            super.setFix(transform, value);
+            this.keyframe.postNotifyParent();
+        }
     }
 
     public static class UIPoseTransforms extends UIPropTransform
     {
         private GenericKeyframe<Pose> keyframe;
 
-        public UIPoseTransforms(GenericKeyframe<Pose> keyframe)
+        public void setKeyframe(GenericKeyframe<Pose> keyframe)
         {
-            super();
-
             this.keyframe = keyframe;
         }
 

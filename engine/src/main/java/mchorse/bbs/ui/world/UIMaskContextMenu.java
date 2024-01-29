@@ -1,12 +1,10 @@
 package mchorse.bbs.ui.world;
 
-import mchorse.bbs.BBSSettings;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.buttons.UIIcon;
 import mchorse.bbs.ui.framework.elements.context.UIContextMenu;
 import mchorse.bbs.ui.utils.icons.Icons;
-import mchorse.bbs.utils.colors.Colors;
 import mchorse.bbs.voxel.blocks.IBlockVariant;
 import mchorse.bbs.voxel.undo.ChunkProxy;
 
@@ -91,15 +89,5 @@ public class UIMaskContextMenu extends UIContextMenu
     public void setMouse(UIContext context)
     {
         this.xy(context.mouseX(), context.mouseY()).w(150).grid(5).width(24).height(24).padding(5);
-    }
-
-    @Override
-    public void render(UIContext context)
-    {
-        int color = BBSSettings.primaryColor.get();
-
-        context.batcher.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
-
-        super.render(context);
     }
 }

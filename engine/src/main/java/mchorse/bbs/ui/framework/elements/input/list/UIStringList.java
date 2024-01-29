@@ -8,11 +8,13 @@ import java.util.function.Consumer;
 
 public class UIStringList extends UIList<String>
 {
+    public static final int DEFAULT_HEIGHT = 16;
+
     public UIStringList(Consumer<List<String>> callback)
     {
         super(callback);
 
-        this.scroll.scrollItemSize = 16;
+        this.scroll.scrollItemSize = DEFAULT_HEIGHT;
     }
 
     @Override

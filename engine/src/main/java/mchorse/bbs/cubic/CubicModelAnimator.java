@@ -7,7 +7,7 @@ import mchorse.bbs.cubic.data.animation.AnimationVector;
 import mchorse.bbs.cubic.data.model.Model;
 import mchorse.bbs.cubic.data.model.ModelGroup;
 import mchorse.bbs.utils.Axis;
-import mchorse.bbs.utils.Transform;
+import mchorse.bbs.utils.pose.Transform;
 import mchorse.bbs.utils.math.Interpolations;
 import org.joml.Vector3d;
 

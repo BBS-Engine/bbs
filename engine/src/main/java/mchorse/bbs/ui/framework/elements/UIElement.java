@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class UIElement implements IUIElement
 {
@@ -64,6 +65,11 @@ public class UIElement implements IUIElement
 
     /**
      * Context menu supplier
+     */
+    private Supplier<UIContextMenu> contextSupplier;
+
+    /**
+     * Context menu options
      */
     private List<Consumer<ContextMenuManager>> contextOptions;
 
@@ -470,6 +476,16 @@ public class UIElement implements IUIElement
         this.contextOptions = null;
     }
 
+    public UIElement context(Supplier<UIContextMenu> supplier)
+    {
+        if (supplier != null)
+        {
+            this.contextSupplier = supplier;
+        }
+
+        return this;
+    }
+
     public UIElement context(Consumer<ContextMenuManager> consumer)
     {
         if (consumer != null)
@@ -493,6 +509,11 @@ public class UIElement implements IUIElement
      */
     public UIContextMenu createContextMenu(UIContext context)
     {
+        if (this.contextSupplier != null)
+        {
+            return this.contextSupplier.get();
+        }
+
         if (this.contextOptions == null)
         {
             return null;

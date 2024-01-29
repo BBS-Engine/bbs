@@ -1,4 +1,4 @@
-package mchorse.bbs.utils;
+package mchorse.bbs.utils.pose;
 
 import mchorse.bbs.data.DataStorageUtils;
 import mchorse.bbs.data.IMapSerializable;

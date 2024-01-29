@@ -21,7 +21,7 @@ import java.util.Collection;
 public class VoxModelLoader implements IModelLoader
 {
     @Override
-    public CubicModel load(ModelManager models, Link model, Collection<Link> links) throws Exception
+    public CubicModel load(String id, ModelManager models, Link model, Collection<Link> links) throws Exception
     {
         Link modelVox = IModelLoader.getLink(model.combine("model.vox"), links, ".vox");
         Link pallete = IModelLoader.getLink(model.combine("palette.png"), links, ".palette");
@@ -57,7 +57,7 @@ public class VoxModelLoader implements IModelLoader
 
         this.ensurePalette(models.provider, document, modelVox, pallete);
 
-        return new CubicModel(newModel, new Animations(), pallete);
+        return new CubicModel(id, newModel, new Animations(), pallete);
     }
 
     private void ensurePalette(AssetProvider provider, VoxDocument document, Link vox, Link pallete)

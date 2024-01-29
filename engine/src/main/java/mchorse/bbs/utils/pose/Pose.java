@@ -1,4 +1,4 @@
-package mchorse.bbs.utils;
+package mchorse.bbs.utils.pose;
 
 import mchorse.bbs.cubic.data.model.Model;
 import mchorse.bbs.cubic.data.model.ModelGroup;
@@ -161,20 +161,17 @@ public class Pose implements IMapSerializable
         this.staticPose = data.getBool("static");
         this.transforms.clear();
 
-        if (data.has("pose"))
+        MapType pose = data.getMap("pose");
+
+        for (String key : pose.keys())
         {
-            MapType pose = data.getMap("pose");
+            PoseTransform transform = new PoseTransform();
 
-            for (String key : pose.keys())
+            transform.fromData(pose.getMap(key));
+
+            if (!transform.isDefault())
             {
-                PoseTransform transform = new PoseTransform();
-
-                transform.fromData(pose.getMap(key));
-
-                if (!transform.isDefault())
-                {
-                    this.transforms.put(key, transform);
-                }
+                this.transforms.put(key, transform);
             }
         }
     }

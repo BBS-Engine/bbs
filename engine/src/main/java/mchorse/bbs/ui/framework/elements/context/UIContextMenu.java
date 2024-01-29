@@ -1,5 +1,6 @@
 package mchorse.bbs.ui.framework.elements.context;
 
+import mchorse.bbs.BBSSettings;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.utils.EventPropagation;
@@ -51,6 +52,9 @@ public abstract class UIContextMenu extends UIElement
     @Override
     public void render(UIContext context)
     {
+        int color = BBSSettings.primaryColor.get();
+
+        context.batcher.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
         this.area.render(context.batcher, Colors.A100);
 
         super.render(context);

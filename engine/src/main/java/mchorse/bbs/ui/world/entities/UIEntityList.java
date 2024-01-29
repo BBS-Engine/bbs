@@ -2,6 +2,7 @@ package mchorse.bbs.ui.world.entities;
 
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.list.UIList;
+import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
 import mchorse.bbs.world.entities.Entity;
 import org.joml.Vector3d;
 
@@ -14,7 +15,7 @@ public class UIEntityList extends UIList<Entity>
     {
         super(callback);
 
-        this.scroll.scrollItemSize = 16;
+        this.scroll.scrollItemSize = UIStringList.DEFAULT_HEIGHT;
     }
 
     @Override

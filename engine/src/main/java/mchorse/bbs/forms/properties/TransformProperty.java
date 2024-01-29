@@ -1,7 +1,7 @@
 package mchorse.bbs.forms.properties;
 
 import mchorse.bbs.forms.forms.Form;
-import mchorse.bbs.utils.Transform;
+import mchorse.bbs.utils.pose.Transform;
 import mchorse.bbs.utils.keyframes.generic.factories.KeyframeFactories;
 
 public class TransformProperty extends BaseTweenProperty<Transform>

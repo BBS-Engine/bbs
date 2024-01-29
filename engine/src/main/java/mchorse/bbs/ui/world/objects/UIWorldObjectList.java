@@ -1,6 +1,7 @@
 package mchorse.bbs.ui.world.objects;
 
 import mchorse.bbs.ui.framework.elements.input.list.UIList;
+import mchorse.bbs.ui.framework.elements.input.list.UIStringList;
 import mchorse.bbs.world.objects.WorldObject;
 
 import java.util.List;
@@ -12,6 +13,6 @@ public class UIWorldObjectList extends UIList<WorldObject>
     {
         super(callback);
 
-        this.scroll.scrollItemSize = 16;
+        this.scroll.scrollItemSize = UIStringList.DEFAULT_HEIGHT;
     }
 }

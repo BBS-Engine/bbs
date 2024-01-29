@@ -1,10 +1,8 @@
 package mchorse.bbs.ui.framework.elements.context;
 
-import mchorse.bbs.BBSSettings;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.input.list.UIList;
 import mchorse.bbs.ui.utils.context.ContextAction;
-import mchorse.bbs.utils.colors.Colors;
 
 public class UISimpleContextMenu extends UIContextMenu
 {
@@ -59,16 +57,6 @@ public class UISimpleContextMenu extends UIContextMenu
         }
 
         return super.subMouseReleased(context);
-    }
-
-    @Override
-    public void render(UIContext context)
-    {
-        int color = BBSSettings.primaryColor.get();
-
-        context.batcher.dropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, Colors.A25 | color, color);
-
-        super.render(context);
     }
 
     public void pick(int index)

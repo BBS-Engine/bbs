@@ -2,7 +2,6 @@ package mchorse.bbs.forms.forms;
 
 import mchorse.bbs.BBS;
 import mchorse.bbs.cubic.CubicModel;
-import mchorse.bbs.cubic.animation.ActionPlayback;
 import mchorse.bbs.cubic.animation.ActionsConfig;
 import mchorse.bbs.cubic.animation.Animator;
 import mchorse.bbs.forms.properties.ActionsConfigProperty;
@@ -12,7 +11,7 @@ import mchorse.bbs.forms.properties.PoseProperty;
 import mchorse.bbs.forms.properties.StringProperty;
 import mchorse.bbs.forms.renderers.FormRenderer;
 import mchorse.bbs.forms.renderers.ModelFormRenderer;
-import mchorse.bbs.utils.Pose;
+import mchorse.bbs.utils.pose.Pose;
 import mchorse.bbs.utils.colors.Color;
 import mchorse.bbs.world.entities.Entity;
 

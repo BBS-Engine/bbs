@@ -7,24 +7,28 @@ import mchorse.bbs.resources.Link;
 
 public class CubicModel
 {
+    public final String id;
     public Model model;
     public Animations animations;
     public Link texture;
     public long loadTime;
 
+    public String poseGroup = "";
     public boolean normals = true;
     public boolean culling = true;
     public boolean overlap;
 
     private CubicModelRenderer renderer;
 
-    public CubicModel(Model model, Animations animations, Link texture)
+    public CubicModel(String id, Model model, Animations animations, Link texture)
     {
+        this.id = id;
         this.model = model;
         this.animations = animations;
         this.texture = texture;
 
         this.loadTime = System.currentTimeMillis();
+        this.poseGroup = id;
     }
 
     public CubicModelRenderer getRenderer()
@@ -47,5 +51,6 @@ public class CubicModel
         this.normals = config.getBool("normals", this.normals);
         this.culling = config.getBool("culling", this.culling);
         this.overlap = config.getBool("overlap", this.overlap);
+        this.poseGroup = config.getString("pose_group", this.poseGroup);
     }
 }

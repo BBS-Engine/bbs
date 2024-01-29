@@ -36,22 +36,22 @@ public class ModelManager implements IDisposable, IWatchDogListener
         this.loaders.add(new VoxModelLoader());
     }
 
-    public CubicModel getModel(String name)
+    public CubicModel getModel(String id)
     {
-        if (this.models.containsKey(name))
+        if (this.models.containsKey(id))
         {
-            return this.models.get(name);
+            return this.models.get(id);
         }
 
         CubicModel model = null;
-        Link modelLink = Link.assets("models/" + name);
+        Link modelLink = Link.assets("models/" + id);
         Collection<Link> links = this.provider.getLinksFromPath(modelLink, false);
 
         for (IModelLoader loader : this.loaders)
         {
             try
             {
-                model = loader.load(this, modelLink, links);
+                model = loader.load(id, this, modelLink, links);
 
                 if (model != null)
                 {
@@ -66,14 +66,14 @@ public class ModelManager implements IDisposable, IWatchDogListener
 
         if (model == null)
         {
-            System.err.println("Model \"" + name + "\" wasn't loaded properly, or was loaded with no top level groups!");
+            System.err.println("Model \"" + id + "\" wasn't loaded properly, or was loaded with no top level groups!");
         }
         else
         {
-            System.out.println("Model \"" + name + "\" was loaded!");
+            System.out.println("Model \"" + id + "\" was loaded!");
         }
 
-        this.models.put(name, model);
+        this.models.put(id, model);
 
         return model;
     }

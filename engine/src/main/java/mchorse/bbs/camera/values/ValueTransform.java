@@ -2,7 +2,7 @@ package mchorse.bbs.camera.values;
 
 import mchorse.bbs.data.types.BaseType;
 import mchorse.bbs.settings.values.base.BaseValueBasic;
-import mchorse.bbs.utils.Transform;
+import mchorse.bbs.utils.pose.Transform;
 
 public class ValueTransform extends BaseValueBasic<Transform>
 {

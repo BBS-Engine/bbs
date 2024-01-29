@@ -28,7 +28,7 @@ public class UIModelForm extends UIForm<ModelForm>
     {
         String path = FormUtils.getPath(this.form);
 
-        return this.getOrigin(transition, StringUtils.combinePaths(path, this.modelPanel.groups.getCurrentFirst()));
+        return this.getOrigin(transition, StringUtils.combinePaths(path, this.modelPanel.poseEditor.groups.getCurrentFirst()));
     }
 
     @Override
