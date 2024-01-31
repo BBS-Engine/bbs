@@ -28,7 +28,7 @@ public class BlockModelCrop extends BlockModelFactory
         float u = this.allUV.x;
         float v = this.allUV.y;
 
-        QuadGeometry xFront = new QuadGeometry(0, 1, 0);
+        QuadGeometry xFront = model.createQuad(0, 1, 0);
         xFront.p1.set(x1, y1, firstRow);
         xFront.p2.set(x2, y1, firstRow);
         xFront.p3.set(x1, y2, firstRow);
@@ -37,7 +37,7 @@ public class BlockModelCrop extends BlockModelFactory
         xFront.t2.set(u + BlockModelAll.DEFAULT_SIZE, v + BlockModelAll.DEFAULT_SIZE);
         xFront.both = true;
 
-        QuadGeometry xBack = new QuadGeometry(0, 1, 0);
+        QuadGeometry xBack = model.createQuad(0, 1, 0);
         xBack.p1.set(x2, y1, secondRow);
         xBack.p2.set(x1, y1, secondRow);
         xBack.p3.set(x2, y2, secondRow);
@@ -46,7 +46,7 @@ public class BlockModelCrop extends BlockModelFactory
         xBack.t2.set(u + BlockModelAll.DEFAULT_SIZE, v + BlockModelAll.DEFAULT_SIZE);
         xBack.both = true;
 
-        QuadGeometry zFront = new QuadGeometry(0, 1, 0);
+        QuadGeometry zFront = model.createQuad(0, 1, 0);
         zFront.p1.set(firstRow, y1, z2);
         zFront.p2.set(firstRow, y1, z1);
         zFront.p3.set(firstRow, y2, z2);
@@ -55,7 +55,7 @@ public class BlockModelCrop extends BlockModelFactory
         zFront.t2.set(u + BlockModelAll.DEFAULT_SIZE, v + BlockModelAll.DEFAULT_SIZE);
         zFront.both = true;
 
-        QuadGeometry zBack = new QuadGeometry(0, 1, 0);
+        QuadGeometry zBack = model.createQuad(0, 1, 0);
         zBack.p1.set(secondRow, y1, z2);
         zBack.p2.set(secondRow, y1, z1);
         zBack.p3.set(secondRow, y2, z2);

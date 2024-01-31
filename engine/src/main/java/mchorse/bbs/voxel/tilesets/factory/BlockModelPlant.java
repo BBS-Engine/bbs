@@ -25,7 +25,7 @@ public class BlockModelPlant extends BlockModelFactory
         float u = this.allUV.x;
         float v = this.allUV.y;
 
-        QuadGeometry left = new QuadGeometry(0, 1, 0);
+        QuadGeometry left = model.createQuad(0, 1, 0);
         left.p1.set(x1, y1, z1);
         left.p2.set(x2, y1, z2);
         left.p3.set(x1, y2, z1);
@@ -34,7 +34,7 @@ public class BlockModelPlant extends BlockModelFactory
         left.t2.set(u + BlockModelAll.DEFAULT_SIZE, v + BlockModelAll.DEFAULT_SIZE);
         left.both = true;
 
-        QuadGeometry right = new QuadGeometry(0, 1, 0);
+        QuadGeometry right = model.createQuad(0, 1, 0);
         right.p1.set(x2, y1, z1);
         right.p2.set(x1, y1, z2);
         right.p3.set(x2, y2, z1);

@@ -29,6 +29,7 @@ public class UIModelBlockFactory <T extends BlockModelFactory> extends UIElement
     public UIToggle collision;
     public UIToggle opaque;
     public UIToggle ao;
+    public UIToggle ignoreAO;
     public UIColor color;
     public UITrackpad lighting;
     public UIButton all;
@@ -68,6 +69,11 @@ public class UIModelBlockFactory <T extends BlockModelFactory> extends UIElement
             this.model.ao = b.getValue();
             this.recompile();
         });
+        this.ignoreAO = new UIToggle(UIKeys.TILE_SET_GENERAL_IGNORE_AO, (b) ->
+        {
+            this.model.ignoreAO = b.getValue();
+            this.recompile();
+        });
         this.color = new UIColor((c) ->
         {
             this.model.color.set(c, false);
@@ -85,7 +91,7 @@ public class UIModelBlockFactory <T extends BlockModelFactory> extends UIElement
         this.title = UI.label(IKey.EMPTY).background();
 
         this.view.add(this.title.marginBottom(6));
-        this.view.add(this.rename, this.collision, this.opaque, this.ao, this.color, this.lighting);
+        this.view.add(this.rename, this.collision, this.opaque, this.ao, this.ignoreAO, this.color, this.lighting);
         this.view.add(this.all);
         this.add(this.view);
     }
@@ -184,6 +190,7 @@ public class UIModelBlockFactory <T extends BlockModelFactory> extends UIElement
         this.collision.setValue(model.collision);
         this.opaque.setValue(model.opaque);
         this.ao.setValue(model.ao);
+        this.ignoreAO.setValue(model.ignoreAO);
         this.color.setColor(model.color.getRGBColor());
         this.lighting.setValue(model.lighting);
 

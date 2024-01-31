@@ -561,6 +561,7 @@ public class UIKeys
     public static final IKey TILE_SET_EACH_RIGHT = IKey.lang("bbs.ui.tile_set.each.right");
     public static final IKey TILE_SET_GENERAL_ALL = IKey.lang("bbs.ui.tile_set.general.all");
     public static final IKey TILE_SET_GENERAL_BAKED_AO = IKey.lang("bbs.ui.tile_set.general.baked_ao");
+    public static final IKey TILE_SET_GENERAL_IGNORE_AO = IKey.lang("bbs.ui.tile_set.general.ignore_ao", "Ignore AO", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey TILE_SET_GENERAL_COLLISION = IKey.lang("bbs.ui.tile_set.general.collision");
     public static final IKey TILE_SET_GENERAL_COLLISION_BOX = IKey.lang("bbs.ui.tile_set.general.collision_box");
     public static final IKey TILE_SET_GENERAL_COLLISION_D = IKey.lang("bbs.ui.tile_set.general.collision_d");

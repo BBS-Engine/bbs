@@ -8,6 +8,7 @@ import mchorse.bbs.voxel.ChunkBuilder;
 import mchorse.bbs.voxel.blocks.IBlockVariant;
 import mchorse.bbs.voxel.tilesets.factory.BlockModelFactory;
 import mchorse.bbs.voxel.tilesets.geometry.BlockGeometry;
+import mchorse.bbs.voxel.tilesets.geometry.QuadGeometry;
 import org.joml.Vector3i;
 
 public class BlockModel
@@ -19,6 +20,7 @@ public class BlockModel
     public boolean collision = true;
     public boolean opaque = true;
     public boolean ao = true;
+    public boolean ignoreAO;
     public Color color = new Color(1F, 1F, 1F);
     public int lighting;
 
@@ -55,11 +57,21 @@ public class BlockModel
         return model;
     }
 
+    public QuadGeometry createQuad(float nx, float ny, float nz)
+    {
+        QuadGeometry quadGeometry = new QuadGeometry(nx, ny, nz);
+
+        quadGeometry.ao = !this.ignoreAO;
+
+        return quadGeometry;
+    }
+
     public void copy(BlockModel model)
     {
         this.collision = model.collision;
         this.opaque = model.opaque;
         this.ao = model.ao;
+        this.ignoreAO = model.ignoreAO;
         this.color.copy(model.color);
         this.lighting = model.lighting;
 

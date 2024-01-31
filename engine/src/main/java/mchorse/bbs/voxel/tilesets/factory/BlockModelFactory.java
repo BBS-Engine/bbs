@@ -28,6 +28,7 @@ public abstract class BlockModelFactory implements IMapSerializable
     public boolean collision = true;
     public boolean opaque = true;
     public boolean ao = true;
+    public boolean ignoreAO;
     public Color color = new Color(1F, 1F, 1F);
     public int lighting;
 
@@ -61,6 +62,7 @@ public abstract class BlockModelFactory implements IMapSerializable
         model.collision = this.collision;
         model.opaque = this.opaque;
         model.ao = this.ao;
+        model.ignoreAO = this.ignoreAO;
         model.collisionBox.set(this.collisionBox);
         model.color.copy(this.color);
         model.lighting = this.lighting;
@@ -96,6 +98,7 @@ public abstract class BlockModelFactory implements IMapSerializable
         data.putBool("collision", this.collision);
         data.putBool("opaque", this.opaque);
         data.putBool("ao", this.ao);
+        data.putBool("ignoreAo", this.ignoreAO);
         data.putInt("color", this.color.getRGBColor());
         data.putInt("lighting", this.lighting);
         data.put("all", DataStorageUtils.vector2iToData(this.allUV));
@@ -105,41 +108,14 @@ public abstract class BlockModelFactory implements IMapSerializable
     @Override
     public void fromData(MapType data)
     {
-        if (data.has("blockId"))
-        {
-            this.blockId = LinkUtils.create(data.get("blockId"));
-        }
-
-        if (data.has("collision"))
-        {
-            this.collision = data.getBool("collision");
-        }
-
-        if (data.has("opaque"))
-        {
-            this.opaque = data.getBool("opaque");
-        }
-
-        if (data.has("ao"))
-        {
-            this.ao = data.getBool("ao");
-        }
-
-        if (data.has("color"))
-        {
-            this.color.set(data.getInt("color"), false);
-        }
-
-        if (data.has("lighting"))
-        {
-            this.lighting = data.getInt("lighting");
-        }
-
-        if (data.has("all", BaseType.TYPE_LIST))
-        {
-            this.allUV.set(DataStorageUtils.vector2iFromData(data.getList("all")));
-        }
-
+        if (data.has("blockId")) this.blockId = LinkUtils.create(data.get("blockId"));
+        if (data.has("collision")) this.collision = data.getBool("collision");
+        if (data.has("opaque")) this.opaque = data.getBool("opaque");
+        if (data.has("ao")) this.ao = data.getBool("ao");
+        if (data.has("ignoreAo")) this.ignoreAO = data.getBool("ignoreAo");
+        if (data.has("color")) this.color.set(data.getInt("color"), false);
+        if (data.has("lighting")) this.lighting = data.getInt("lighting");
+        if (data.has("all", BaseType.TYPE_LIST)) this.allUV.set(DataStorageUtils.vector2iFromData(data.getList("all")));
         if (data.has("collisionBox", BaseType.TYPE_LIST))
         {
             ListType box = data.getList("collisionBox");

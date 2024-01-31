@@ -25,7 +25,7 @@ public class BlockModelAll extends BlockModelFactory
         float u2 = ox + u + w;
         float v2 = oy + v + d;
 
-        QuadGeometry top = new QuadGeometry(0, 1, 0);
+        QuadGeometry top = model.createQuad(0, 1, 0);
         top.p1.set(x1, y2, z1);
         top.p2.set(x2, y2, z1);
         top.p3.set(x1, y2, z2);
@@ -33,7 +33,7 @@ public class BlockModelAll extends BlockModelFactory
         top.t1.set(u1, v1);
         top.t2.set(u2, v2);
 
-        QuadGeometry bottom = new QuadGeometry(0, -1, 0);
+        QuadGeometry bottom = model.createQuad(0, -1, 0);
         bottom.p1.set(x1, y1, z2);
         bottom.p2.set(x2, y1, z2);
         bottom.p3.set(x1, y1, z1);
@@ -48,7 +48,7 @@ public class BlockModelAll extends BlockModelFactory
         u2 = ox + u + d;
         v2 = oy + v + h;
 
-        QuadGeometry right = new QuadGeometry(1, 0, 0);
+        QuadGeometry right = model.createQuad(1, 0, 0);
         right.p1.set(x2, y1, z1);
         right.p2.set(x2, y1, z2);
         right.p3.set(x2, y2, z1);
@@ -63,7 +63,7 @@ public class BlockModelAll extends BlockModelFactory
         u2 = ox + u + d;
         v2 = oy + v + h;
 
-        QuadGeometry left = new QuadGeometry(-1, 0, 0);
+        QuadGeometry left = model.createQuad(-1, 0, 0);
         left.p1.set(x1, y1, z2);
         left.p2.set(x1, y1, z1);
         left.p3.set(x1, y2, z2);
@@ -77,7 +77,7 @@ public class BlockModelAll extends BlockModelFactory
         u2 = ox + u + w;
         v2 = oy + v + h;
 
-        QuadGeometry front = new QuadGeometry(0, 0, 1);
+        QuadGeometry front = model.createQuad(0, 0, 1);
         front.p1.set(x2, y1, z2);
         front.p2.set(x1, y1, z2);
         front.p3.set(x2, y2, z2);
@@ -91,7 +91,7 @@ public class BlockModelAll extends BlockModelFactory
         u2 = ox + u + w;
         v2 = oy + v + h;
 
-        QuadGeometry back = new QuadGeometry(0, 0, -1);
+        QuadGeometry back = model.createQuad(0, 0, -1);
         back.p1.set(x1, y1, z1);
         back.p2.set(x2, y1, z1);
         back.p3.set(x1, y2, z1);
@@ -105,7 +105,6 @@ public class BlockModelAll extends BlockModelFactory
         model.left = left;
         model.front = front;
         model.back = back;
-        top.ao = bottom.ao = right.ao = left.ao = front.ao = back.ao = true;
     }
 
     public BlockModelAll()

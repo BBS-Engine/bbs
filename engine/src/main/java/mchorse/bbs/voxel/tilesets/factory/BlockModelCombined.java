@@ -69,7 +69,7 @@ public class BlockModelCombined extends BlockModelFactory
 
                 normal.normalize();
 
-                QuadGeometry geometry = new QuadGeometry(normal.x, normal.y, normal.z);
+                QuadGeometry geometry = model.createQuad(normal.x, normal.y, normal.z);
                 geometry.t1.set(p4.uv).mul(256);
                 geometry.t2.set(p2.uv).mul(256);
                 geometry.p1.set(this.applyTransform(stack, p2.vertex));
