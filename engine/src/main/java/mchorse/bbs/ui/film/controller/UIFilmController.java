@@ -34,6 +34,7 @@ import mchorse.bbs.ui.framework.elements.UIElement;
 import mchorse.bbs.ui.framework.elements.overlay.UIOverlay;
 import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.StencilFormFramebuffer;
+import mchorse.bbs.ui.utils.UIUtils;
 import mchorse.bbs.ui.utils.icons.Icons;
 import mchorse.bbs.ui.utils.keys.KeyAction;
 import mchorse.bbs.utils.AABB;
@@ -60,6 +61,8 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -546,32 +549,56 @@ public class UIFilmController extends UIElement
 
     public void insertFrame()
     {
-        Window.toggleMousePointer(false);
+        Replay replay = this.getReplay();
 
-        UIRecordOverlayPanel panel = new UIRecordOverlayPanel(
-            UIKeys.FILM_CONTROLLER_INSERT_FRAME_TITLE,
-            UIKeys.FILM_CONTROLLER_INSERT_FRAME_DESCRIPTION,
-            (groups) ->
-            {
-                Replay replay = this.getReplay();
+        if (replay == null)
+        {
+            return;
+        }
 
-                if (replay == null)
+        if (Window.isCtrlPressed())
+        {
+            Window.toggleMousePointer(false);
+
+            UIRecordOverlayPanel panel = new UIRecordOverlayPanel(
+                UIKeys.FILM_CONTROLLER_INSERT_FRAME_TITLE,
+                UIKeys.FILM_CONTROLLER_INSERT_FRAME_DESCRIPTION,
+                (groups) ->
                 {
-                    return;
+                    BaseValue.edit(replay.keyframes, (keyframes) ->
+                    {
+                        Entity entity = this.getCurrentEntity();
+
+                        keyframes.record(this.getTick(), entity, groups);
+                    });
                 }
+            );
 
-                BaseValue.edit(replay.keyframes, (keyframes) ->
-                {
-                    Entity entity = this.getCurrentEntity();
+            panel.onClose((event) -> Window.toggleMousePointer(this.controlled != null));
 
-                    keyframes.record(this.getTick(), entity, groups);
-                });
-            }
-        );
+            UIOverlay.addOverlay(this.getContext(), panel);
+        }
+        else
+        {
+            List<String> chosenGroups = Arrays.asList(ReplayKeyframes.GROUP_POSITION, ReplayKeyframes.GROUP_ROTATION);
 
-        panel.onClose((event) -> Window.toggleMousePointer(this.controlled != null));
+            if (this.mouseMode == 1) chosenGroups = Collections.singletonList(ReplayKeyframes.GROUP_LEFT_STICK);
+            else if (this.mouseMode == 2) chosenGroups = Collections.singletonList(ReplayKeyframes.GROUP_RIGHT_STICK);
+            else if (this.mouseMode == 3) chosenGroups = Collections.singletonList(ReplayKeyframes.GROUP_TRIGGERS);
+            else if (this.mouseMode == 4) chosenGroups = Collections.singletonList(ReplayKeyframes.GROUP_EXTRA1);
+            else if (this.mouseMode == 5) chosenGroups = Collections.singletonList(ReplayKeyframes.GROUP_EXTRA1);
 
-        UIOverlay.addOverlay(this.getContext(), panel);
+            final List<String> groups = chosenGroups;
+
+            BaseValue.edit(replay.keyframes, (keyframes) ->
+            {
+                Entity entity = this.getCurrentEntity();
+
+                keyframes.record(this.getTick(), entity, groups);
+            });
+
+            UIUtils.playClick();
+        }
     }
 
     /* Update */
