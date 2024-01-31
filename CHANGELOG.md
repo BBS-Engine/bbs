@@ -1,3 +1,26 @@
+## BBS 0.1.5
+
+This is an update that features new tweaks and features to improve the editing process.
+
+* Added film duplication from the current tick, this feature allows to copy a scene from specific point helping you continue working on a scene in another film (for organization purposes and easier recording of breaking down big scenes)
+* Added UUID changing dialog to voice line clip
+* Added colors to context menu to pick voice in voice line clip
+* Added generated voices to the list of available voices
+* Added context menu option in voice line editor to import dialogue into timeline in fountain format (character names must match voices in your ElevenLabs voice lab)
+* Added back `vX`, `vY` and `vZ` keyframes for replay editing
+* Added `Ctrl + ,` and `Ctrl + .` keybinds to select clips before or after timeline's cursor, respectively
+* Added **Position + rotation** recording group
+* Added fix option to pose editor which allows to fixate the movement of a limb in the model
+* Added pose presets to pose editor
+* Added `pose_group` property to model's `config.json` which allows to specify specific ID for pose presets (so similar models could share same presets)
+* Added **Ignore AO** option to blocks to avoid blocks receiving AO shading from neighbor blocks
+* Changed voice line (ElevenLabs TTS) editor to clips
+* Changed pose editor's context menu layout
+* Improved UX in voice line editor by allowing previewing playback of compiled audio within timeline
+* Improved **Insert keyframe** feature in film editor, instead of showing the dialog by default, it now inserts the keyframe at given tick. Holding Ctrl while pressing they keycombo or button allows to show the dialog
+* Fixed prop objects get model variables from the last actor
+* Fixed pasting transform not pasting second rotation numbers
+
 ## BBS 0.1.4
 
 This update features bug fixes, QoL tweaks and two awesome features: anchor form property and second set of rotation fields to transforms UI.
