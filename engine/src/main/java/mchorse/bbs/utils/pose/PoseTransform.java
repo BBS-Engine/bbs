@@ -5,7 +5,9 @@ import mchorse.bbs.utils.math.Interpolations;
 
 public class PoseTransform extends Transform
 {
-    public float fix = 0F;
+    private static PoseTransform DEFAULT = new PoseTransform();
+
+    public float fix;
 
     @Override
     public void identity()
@@ -63,16 +65,22 @@ public class PoseTransform extends Transform
     @Override
     public void toData(MapType data)
     {
-        data.putFloat("fix", this.fix);
-
         super.toData(data);
+
+        data.putFloat("fix", this.fix);
     }
 
     @Override
     public void fromData(MapType data)
     {
-        this.fix = data.getFloat("fix");
-
         super.fromData(data);
+
+        this.fix = data.getFloat("fix");
+    }
+
+    @Override
+    public boolean isDefault()
+    {
+        return this.equals(DEFAULT);
     }
 }
