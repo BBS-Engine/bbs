@@ -4,6 +4,7 @@ import mchorse.bbs.graphics.window.Window;
 import mchorse.bbs.ui.film.utils.undo.FilmEditorUndo;
 import mchorse.bbs.ui.framework.UIContext;
 import mchorse.bbs.ui.framework.elements.UIElement;
+import mchorse.bbs.ui.utils.Area;
 import mchorse.bbs.ui.utils.Scale;
 import mchorse.bbs.utils.OS;
 import mchorse.bbs.utils.colors.Color;
@@ -97,6 +98,13 @@ public abstract class UIBaseKeyframes <T> extends UIElement
 
     public abstract void resetView();
 
+    protected boolean isInside(double x, double y, int mouseX, int mouseY)
+    {
+        double d = Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2);
+
+        return d < 25;
+    }
+
     public int toGraphX(double tick)
     {
         return (int) this.scaleX.to(tick);
@@ -112,6 +120,15 @@ public abstract class UIBaseKeyframes <T> extends UIElement
     public boolean isGrabbing()
     {
         return this.dragging && this.moving && this.grabbing;
+    }
+
+    public Area getGrabbingArea(UIContext context)
+    {
+        Area area = new Area();
+
+        area.setPoints(this.lastX, this.lastY, context.mouseX, context.mouseY, 3);
+
+        return area;
     }
 
     public void selectByDuration(long duration)

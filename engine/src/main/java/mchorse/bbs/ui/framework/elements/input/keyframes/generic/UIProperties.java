@@ -424,13 +424,6 @@ public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
         return finished;
     }
 
-    private boolean isInside(double x, double y, int mouseX, int mouseY)
-    {
-        double d = Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2);
-
-        return Math.sqrt(d) < 4;
-    }
-
     @Override
     protected void resetMouseReleased(UIContext context)
     {
@@ -454,10 +447,7 @@ public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
         if (this.isGrabbing())
         {
             /* Multi select */
-            Area area = new Area();
-
-            area.setPoints(this.lastX, this.lastY, context.mouseX, context.mouseY, 3);
-
+            Area area = this.getGrabbingArea(context);
             int count = this.properties.size();
             int h = (this.area.h - TOP_MARGIN) / count;
             int y = this.area.ey() - h * count;
@@ -515,10 +505,11 @@ public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
             COLOR.set(property.color, false);
 
             LineBuilder line = new LineBuilder(0.75F);
+            boolean hover = this.area.isInside(context) && context.mouseY >= y && context.mouseY < y + h;
 
             line.add(this.area.x, y + h / 2);
             line.add(this.area.ex(), y + h / 2);
-            line.render(context.batcher, SolidColorLineRenderer.get(COLOR.r, COLOR.g, COLOR.b, 0.65F));
+            line.render(context.batcher, SolidColorLineRenderer.get(COLOR.r, COLOR.g, COLOR.b, hover ? 1F : 0.45F));
 
             /* Draw points */
             int index = 0;
@@ -544,7 +535,14 @@ public class UIProperties extends UIBaseKeyframes<GenericKeyframe>
                     forcedIndex += 1;
                 }
 
-                this.renderRect(context, x1, y + h / 2, 3, property.hasSelected(index) ? Colors.WHITE : property.color);
+                boolean isPointHover = this.isInside(this.toGraphX(frame.getTick()), y + h / 2, context.mouseX, context.mouseY);
+
+                if (this.isGrabbing())
+                {
+                    isPointHover = isPointHover || this.getGrabbingArea(context).isInside(this.toGraphX(frame.getTick()), y + h / 2);
+                }
+
+                this.renderRect(context, x1, y + h / 2, 3, property.hasSelected(index) || isPointHover ? Colors.WHITE : property.color);
 
                 index++;
             }

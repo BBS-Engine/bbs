@@ -398,9 +398,9 @@ public class UIKeyframes extends UIBaseKeyframes<Keyframe>
 
             for (UISheet sheet : sheets)
             {
-                this.editArea.set(this.area.x, y, 20, h);
+                Area editArea = this.setupEditArea(y, h);
 
-                if (this.editArea.isInside(context))
+                if (editArea.isInside(context))
                 {
                     this.editSheet(this.current == null ? sheet : null);
 
@@ -412,6 +412,13 @@ public class UIKeyframes extends UIBaseKeyframes<Keyframe>
         }
 
         return super.subMouseClicked(context);
+    }
+
+    private Area setupEditArea(int y, int h)
+    {
+        this.editArea.set(this.area.x, y, 10, h);
+
+        return this.editArea;
     }
 
     @Override
@@ -581,20 +588,13 @@ public class UIKeyframes extends UIBaseKeyframes<Keyframe>
         return false;
     }
 
-    private boolean isInside(double x, double y, int mouseX, int mouseY)
-    {
-        double d = Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2);
-
-        return d < 16;
-    }
-
     private boolean isInsideTickValue(double tick, double value, int mouseX, int mouseY)
     {
         int x = this.toGraphX(tick);
         int y = this.toGraphY(value);
         double d = Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2);
 
-        return d < 16;
+        return d < 25;
     }
 
     @Override
@@ -657,10 +657,7 @@ public class UIKeyframes extends UIBaseKeyframes<Keyframe>
             if (this.current == null)
             {
                 /* Multi select */
-                Area area = new Area();
-
-                area.setPoints(this.lastX, this.lastY, context.mouseX, context.mouseY, 3);
-
+                Area area = this.getGrabbingArea(context);
                 List<UISheet> sheets = this.getSheets();
                 int count = sheets.size();
                 int h = (this.area.h - TOP_MARGIN) / count;
@@ -695,10 +692,8 @@ public class UIKeyframes extends UIBaseKeyframes<Keyframe>
             {
                 /* Multi select */
                 UISheet sheet = this.current;
-                Area area = new Area();
+                Area area = this.getGrabbingArea(context);
                 KeyframeChannel channel = sheet.channel;
-
-                area.setPoints(this.lastX, this.lastY, context.mouseX, context.mouseY, 3);
 
                 for (int i = 0, c = channel.getKeyframes().size(); i < c; i ++)
                 {
@@ -790,10 +785,11 @@ public class UIKeyframes extends UIBaseKeyframes<Keyframe>
             COLOR.set(sheet.color, false);
 
             LineBuilder line = new LineBuilder(0.75F);
+            boolean hover = this.area.isInside(context) && context.mouseY >= y && context.mouseY < y + h;
 
             line.add(this.area.x, y + h / 2);
             line.add(this.area.ex(), y + h / 2);
-            line.render(context.batcher, SolidColorLineRenderer.get(COLOR.r, COLOR.g, COLOR.b, 0.65F));
+            line.render(context.batcher, SolidColorLineRenderer.get(COLOR.r, COLOR.g, COLOR.b, hover ? 1F : 0.45F));
 
             /* Draw points */
             int index = 0;
@@ -802,7 +798,14 @@ public class UIKeyframes extends UIBaseKeyframes<Keyframe>
 
             for (Keyframe frame : sheet.channel.getKeyframes())
             {
-                this.renderRect(context, this.toGraphX(frame.getTick()), y + h / 2, 3, sheet.hasSelected(index) ? Colors.WHITE : sheet.color);
+                boolean isPointHover = this.isInside(this.toGraphX(frame.getTick()), y + h / 2, context.mouseX, context.mouseY);
+
+                if (this.isGrabbing())
+                {
+                    isPointHover = isPointHover || this.getGrabbingArea(context).isInside(this.toGraphX(frame.getTick()), y + h / 2);
+                }
+
+                this.renderRect(context, this.toGraphX(frame.getTick()), y + h / 2, 3, sheet.hasSelected(index) || isPointHover ? Colors.WHITE : sheet.color);
 
                 if (frame.getInterpolation().isBezier() && index != count - 1)
                 {
@@ -843,9 +846,9 @@ public class UIKeyframes extends UIBaseKeyframes<Keyframe>
             context.batcher.gradientHBox(this.area.ex() - lw - 10, y, this.area.ex(), y + h, sheet.color, Colors.A75 | sheet.color);
             context.batcher.textShadow(sheet.title.get(), this.area.ex() - lw + 5, y + (h - context.font.getHeight()) / 2);
 
-            this.editArea.set(this.area.x, y, 20, h);
+            Area editArea = this.setupEditArea(y, h);
 
-            if (this.editArea.isInside(context))
+            if (editArea.isInside(context))
             {
                 context.batcher.icon(Icons.EDIT, Colors.WHITE, this.area.x + 4, y + h / 2, 0F, 0.5F);
             }
@@ -944,7 +947,14 @@ public class UIKeyframes extends UIBaseKeyframes<Keyframe>
 
         for (Keyframe frame : channel.getKeyframes())
         {
-            this.renderRect(context, this.toGraphX(frame.getTick()), this.toGraphY(frame.getValue()), 3, Colors.WHITE);
+            boolean isPointHover = this.isInside(this.toGraphX(frame.getTick()), this.toGraphY(frame.getValue()), context.mouseX, context.mouseY);
+
+            if (this.isGrabbing())
+            {
+                isPointHover = isPointHover || this.getGrabbingArea(context).isInside(this.toGraphX(frame.getTick()), this.toGraphY(frame.getValue()));
+            }
+
+            this.renderRect(context, this.toGraphX(frame.getTick()), this.toGraphY(frame.getValue()), 3, sheet.hasSelected(index) || isPointHover ? Colors.WHITE : sheet.color);
 
             if (frame.getInterpolation().isBezier() && index != count - 1)
             {
@@ -986,9 +996,9 @@ public class UIKeyframes extends UIBaseKeyframes<Keyframe>
         int y = this.area.y + TOP_MARGIN;
         int h = this.area.ey() - y;
 
-        this.editArea.set(this.area.x, y, 20, h);
+        Area editArea = this.setupEditArea(y, h);
 
-        if (this.editArea.isInside(context))
+        if (editArea.isInside(context))
         {
             context.batcher.icon(Icons.CLOSE, Colors.WHITE, this.area.x + 4, y + h / 2, 0F, 0.5F);
         }
