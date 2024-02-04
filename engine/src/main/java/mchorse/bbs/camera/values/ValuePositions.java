@@ -34,7 +34,7 @@ public class ValuePositions extends ValueList<ValuePosition>
 
         this.preNotifyParent();
 
-        this.getList().add(index, new ValuePosition("", position));
+        this.list.add(index, new ValuePosition("", position));
         this.sync();
 
         this.postNotifyParent();
