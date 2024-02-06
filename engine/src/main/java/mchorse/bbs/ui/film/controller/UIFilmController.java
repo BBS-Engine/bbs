@@ -260,6 +260,11 @@ public class UIFilmController extends UIElement
 
     /* Recording */
 
+    public boolean isRecording()
+    {
+        return this.recording;
+    }
+
     public void startRecording(List<String> groups)
     {
         this.recordingTick = this.getTick();

@@ -60,6 +60,8 @@ public abstract class UIBaseKeyframes <T> extends UIElement
     protected Scale scaleX;
     protected IAxisConverter converter;
 
+    protected Consumer<UIContext> backgroundRender;
+
     public UIBaseKeyframes(Consumer<T> callback)
     {
         super();
@@ -67,6 +69,11 @@ public abstract class UIBaseKeyframes <T> extends UIElement
         this.callback = callback;
         this.scaleX = new Scale(this.area);
         this.scaleX.anchor(0.5F);
+    }
+
+    public void setBackgroundRender(Consumer<UIContext> backgroundRender)
+    {
+        this.backgroundRender = backgroundRender;
     }
 
     public void setConverter(IAxisConverter converter)
@@ -311,6 +318,11 @@ public abstract class UIBaseKeyframes <T> extends UIElement
 
     protected void renderGrid(UIContext context)
     {
+        if (this.backgroundRender != null)
+        {
+            this.backgroundRender.accept(context);
+        }
+
         /* Draw scaling grid */
         int mult = this.scaleX.getMult();
         int hx = this.duration / mult;

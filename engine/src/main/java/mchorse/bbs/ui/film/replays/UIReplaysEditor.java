@@ -1,5 +1,9 @@
 package mchorse.bbs.ui.film.replays;
 
+import mchorse.bbs.BBS;
+import mchorse.bbs.BBSSettings;
+import mchorse.bbs.audio.SoundPlayer;
+import mchorse.bbs.audio.Waveform;
 import mchorse.bbs.bridge.IBridgeWorld;
 import mchorse.bbs.camera.Camera;
 import mchorse.bbs.film.Film;
@@ -23,6 +27,7 @@ import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIProperty;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.UIPropertyEditor;
 import mchorse.bbs.ui.framework.elements.input.keyframes.generic.factories.UIPoseKeyframeFactory;
 import mchorse.bbs.ui.utils.Area;
+import mchorse.bbs.ui.utils.Scale;
 import mchorse.bbs.ui.utils.StencilFormFramebuffer;
 import mchorse.bbs.ui.utils.UI;
 import mchorse.bbs.ui.utils.context.ContextMenuManager;
@@ -204,6 +209,7 @@ public class UIReplaysEditor extends UIElement
         this.keyframeEditor.setChannels(keyframes, tempKeyframesColors);
         this.keyframeEditor.relative(this.keyframes).full();
 
+        this.keyframeEditor.keyframes.setBackgroundRender(this::renderBackground);
         this.keyframeEditor.keyframes.absolute();
         this.keyframeEditor.keyframes.duration = duration;
 
@@ -235,6 +241,7 @@ public class UIReplaysEditor extends UIElement
             this.propertyEditor.relative(this.keyframes).full();
             this.propertyEditor.setVisible(false);
 
+            this.propertyEditor.properties.setBackgroundRender(this::renderBackground);
             this.propertyEditor.properties.duration = duration;
 
             this.keyframes.add(this.propertyEditor);
@@ -383,6 +390,38 @@ public class UIReplaysEditor extends UIElement
         }
 
         return false;
+    }
+
+    private void renderBackground(UIContext context)
+    {
+        if (!BBSSettings.audioWaveformVisible.get())
+        {
+            return;
+        }
+
+        UIPropertyEditor propertyEditor = this.propertyEditor;
+
+        Scale scale = this.keyframeEditor.keyframes.getScaleX();
+
+        if (propertyEditor != null && propertyEditor.isVisible())
+        {
+            scale = propertyEditor.properties.getScaleX();
+        }
+
+        for (SoundPlayer file : BBS.getSounds().getPlayers())
+        {
+            Waveform wave = file.getBuffer().getWaveform();
+
+            if (wave != null && !file.isStopped())
+            {
+                float duration = file.getBuffer().getDuration();
+
+                int x1 = (int) scale.to(0F);
+                int x2 = (int) scale.to(duration * 20);
+
+                wave.render(context.batcher, Colors.WHITE, x1, this.area.y + 16, x2 - x1, 20, 0F, duration);
+            }
+        }
     }
 
     @Override
