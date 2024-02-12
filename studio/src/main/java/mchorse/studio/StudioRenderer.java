@@ -453,6 +453,8 @@ public class StudioRenderer implements IComponent
             this.engine.screen.renderWorld(this.context);
         }
 
+        context.getLights().submitLights();
+
         shaders.gbuffer.unbind();
 
         GLStates.resetViewport();
@@ -470,8 +472,6 @@ public class StudioRenderer implements IComponent
         }
 
         this.renderScene(context);
-
-        context.getLights().submitLights();
     }
 
     private void renderSkybox()
