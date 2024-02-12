@@ -61,6 +61,14 @@ void apply_lightmap(inout vec4 result, vec3 color, vec2 coords)
     result.rgb = mix(result.rgb, color * mix(u_lightmap00, u_lightmap10, coords.x), coords.x);
 }
 
+float fallOffAttenuation(vec3 posToLight, float lightInvRadius)
+{
+    float distanceSquare = dot(posToLight, posToLight);
+    float factor = distanceSquare / (lightInvRadius * lightInvRadius);
+    float smoothFactor = clamp(1.0 - factor, 0.0, 0.7);
+    return (smoothFactor * smoothFactor) / distanceSquare;
+}
+
 void main()
 {
     vec2 uv = (pass_uv / 2) + 0.5;
@@ -103,24 +111,14 @@ void main()
         for (int i = 0; i < u_lights_count; i++)
         {
             Light light = u_lights[i];
-            vec3 diff = light.position.xyz - position;
+            vec3 diff =  light.position.xyz - position;
 
             float d = diff.x * diff.x + diff.y * diff.y + diff.z * diff.z;
             float ld = light.distance * light.distance;
+            float NoL = clamp(dot(normal, normalize(diff)), 0.0, 1.0);
 
-            if (d <= ld)
-            {
-                float factor = 1 - d / ld;
-
-                additive += light.color * factor * factor * factor;
-                additiveFactor += factor * factor * factor;
-            }
+            out_color.rgb += color.rgb * light.color * fallOffAttenuation(diff, light.distance) * 1 * NoL;
         }
-
-        // float mixFactor = additive.x * additive.x + additive.y * additive.y + additive.z * additive.z;
-
-        // out_color.rgb = mix(out_color.rgb, color.rgb * shadingFactor * clamp(additive, 0, 1), mixFactor * mixFactor * mixFactor);
-        out_color.rgb = mix(out_color.rgb, color.rgb * out_ao.r * clamp(additive, 0, 1), clamp(additiveFactor, 0, 1));
     }
 
     if (u_fog > 0 && !is_sky)
