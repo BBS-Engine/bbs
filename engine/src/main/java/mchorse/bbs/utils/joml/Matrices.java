@@ -1,5 +1,6 @@
 package mchorse.bbs.utils.joml;
 
+import mchorse.bbs.utils.math.MathUtils;
 import org.joml.Matrix3d;
 import org.joml.Matrix3f;
 import org.joml.Matrix4d;
@@ -103,5 +104,24 @@ public class Matrices
             m.m01() + ", " + m.m11() + ", " + m.m21() + ", " + m.m31() + "\n" +
             m.m02() + ", " + m.m12() + ", " + m.m22() + ", " + m.m32() + "\n" +
             m.m03() + ", " + m.m13() + ", " + m.m23() + ", " + m.m33() + "\n";
+    }
+
+    public static Vector3f getEulerXYZ(Matrix3f m)
+    {
+        double yaw = Math.atan2(m.m02, Math.sqrt(m.m00 * m.m00 + m.m01 * m.m01));
+        double pitch = Math.atan2(m.m12, m.m22);
+        double roll = Math.atan2(m.m01, m.m00);
+
+        if (m.m00 < 0)
+        {
+            yaw = -yaw + Math.PI;
+            pitch = -pitch;
+        }
+        else
+        {
+            yaw += Math.PI;
+        }
+
+        return new Vector3f((float) pitch, (float) yaw, (float) roll);
     }
 }

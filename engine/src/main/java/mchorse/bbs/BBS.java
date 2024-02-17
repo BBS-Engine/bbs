@@ -41,6 +41,7 @@ import mchorse.bbs.forms.categories.ParticleFormCategory;
 import mchorse.bbs.forms.categories.RecentFormCategory;
 import mchorse.bbs.forms.forms.BillboardForm;
 import mchorse.bbs.forms.forms.BlockForm;
+import mchorse.bbs.forms.forms.CameraForm;
 import mchorse.bbs.forms.forms.ExtrudedForm;
 import mchorse.bbs.forms.forms.LabelForm;
 import mchorse.bbs.forms.forms.LightForm;
@@ -90,6 +91,7 @@ import mchorse.bbs.ui.font.format.UIBaseFontFormat;
 import mchorse.bbs.ui.font.format.UIColorFontFormat;
 import mchorse.bbs.ui.forms.editors.forms.UIBillboardForm;
 import mchorse.bbs.ui.forms.editors.forms.UIBlockForm;
+import mchorse.bbs.ui.forms.editors.forms.UICameraForm;
 import mchorse.bbs.ui.forms.editors.forms.UIExtrudedForm;
 import mchorse.bbs.ui.forms.editors.forms.UILabelForm;
 import mchorse.bbs.ui.forms.editors.forms.UILightForm;
@@ -107,7 +109,6 @@ import mchorse.bbs.ui.utils.keys.KeybindSettings;
 import mchorse.bbs.ui.world.entities.components.UIBasicEntityComponent;
 import mchorse.bbs.ui.world.entities.components.UIEntityComponent;
 import mchorse.bbs.ui.world.entities.components.UIFormEntityComponent;
-import mchorse.bbs.ui.world.objects.objects.UICameraWorldObject;
 import mchorse.bbs.ui.world.objects.objects.UIPropWorldObject;
 import mchorse.bbs.ui.world.objects.objects.UIWorldObject;
 import mchorse.bbs.utils.clips.Clip;
@@ -131,7 +132,6 @@ import mchorse.bbs.world.entities.components.BasicComponent;
 import mchorse.bbs.world.entities.components.CollisionComponent;
 import mchorse.bbs.world.entities.components.Component;
 import mchorse.bbs.world.entities.components.FormComponent;
-import mchorse.bbs.world.objects.CameraObject;
 import mchorse.bbs.world.objects.PropObject;
 import mchorse.bbs.world.objects.WorldObject;
 import org.greenrobot.eventbus.EventBus;
@@ -425,6 +425,7 @@ public class BBS
         StructureForm structure = new StructureForm();
         LightForm light = new LightForm();
         ExtrudedForm extruded = new ExtrudedForm();
+        CameraForm camera = new CameraForm();
 
         billboard.texture.set(Link.assets("textures/error.png"));
         extruded.texture.set(Link.assets("textures/error.png"));
@@ -435,6 +436,7 @@ public class BBS
         extra.forms.add(structure);
         extra.forms.add(light);
         extra.forms.add(extruded);
+        extra.forms.add(camera);
 
         forms.categories.add(new RecentFormCategory());
         forms.readUserCategories();
@@ -459,8 +461,7 @@ public class BBS
     {
         /* Register world objects */
         factoryWorldObjects = new MapFactory<WorldObject, Class<? extends UIWorldObject>>()
-            .register(Link.bbs("prop"), PropObject.class, UIPropWorldObject.class)
-            .register(Link.bbs("camera"), CameraObject.class, UICameraWorldObject.class);
+            .register(Link.bbs("prop"), PropObject.class, UIPropWorldObject.class);
 
         /* Register camera clips */
         factoryCameraClips = new MapFactory<Clip, ClipFactoryData>()
@@ -504,7 +505,8 @@ public class BBS
             .register(Link.bbs("block"), BlockForm.class, (f) -> new UIBlockForm())
             .register(Link.bbs("structure"), StructureForm.class, (f) -> new UIStructureForm())
             .register(Link.bbs("light"), LightForm.class, (f) -> new UILightForm())
-            .register(Link.bbs("extruded"), ExtrudedForm.class, (f) -> new UIExtrudedForm());
+            .register(Link.bbs("extruded"), ExtrudedForm.class, (f) -> new UIExtrudedForm())
+            .register(Link.bbs("camera"), CameraForm.class, (f) -> new UICameraForm());
 
         /* Register block models */
         factoryBlockModels = new MapFactory<BlockModelFactory, BlockModelFactoryData>()

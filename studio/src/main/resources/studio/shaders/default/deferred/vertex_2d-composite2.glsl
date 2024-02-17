@@ -66,6 +66,7 @@ float fallOffAttenuation(vec3 posToLight, float lightInvRadius)
     float distanceSquare = dot(posToLight, posToLight);
     float factor = distanceSquare / (lightInvRadius * lightInvRadius);
     float smoothFactor = clamp(1.0 - factor, 0.0, 0.7);
+
     return (smoothFactor * smoothFactor) / distanceSquare;
 }
 

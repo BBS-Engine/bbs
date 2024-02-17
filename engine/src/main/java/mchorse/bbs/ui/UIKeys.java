@@ -275,6 +275,9 @@ public class UIKeys
     public static final IKey FORMS_EDITORS_BILLBOARD_ROTATION = IKey.lang("bbs.ui.forms.editors.billboard.rotation");
     public static final IKey FORMS_EDITORS_BILLBOARD_TITLE = IKey.lang("bbs.ui.forms.editors.billboard.title");
     public static final IKey FORMS_EDITORS_BILLBOARD_UV_SHIFT = IKey.lang("bbs.ui.forms.editors.billboard.uv_shift");
+    public static final IKey FORMS_EDITORS_CAMERA_TITLE = IKey.lang("bbs.ui.forms.editors.camera.title", "Camera", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey FORMS_EDITORS_CAMERA_ENABLED = IKey.lang("bbs.ui.forms.editors.camera.enabled", "Enabled", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
+    public static final IKey FORMS_EDITORS_CAMERA_TEXTURE = IKey.lang("bbs.ui.forms.editors.camera.texture", "Texture", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey FORMS_EDITORS_BLOCK_TITLE = IKey.lang("bbs.ui.forms.editors.block.title");
     public static final IKey FORMS_EDITORS_EXTRUDED_TITLE = IKey.lang("bbs.ui.forms.editors.extruded.title", "Extruded", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey FORMS_EDITORS_GENERAL = IKey.lang("bbs.ui.forms.editors.general");
@@ -725,10 +728,6 @@ public class UIKeys
     public static final IKey WORLD_KEYS_SAVE = IKey.lang("bbs.ui.world.keys.save");
     public static final IKey WORLD_KEYS_TOGGLE_AXES = IKey.lang("bbs.ui.world.keys.toggle_axes");
     public static final IKey WORLD_KEYS_TOGGLE_WALK = IKey.lang("bbs.ui.world.keys.toggle_walk");
-    public static final IKey WORLD_OBJECTS_CAMERA_COPY_CAMERA = IKey.lang("bbs.ui.world_objects.camera.copy_camera");
-    public static final IKey WORLD_OBJECTS_CAMERA_ENABLED = IKey.lang("bbs.ui.world_objects.camera.enabled");
-    public static final IKey WORLD_OBJECTS_CAMERA_ROTATION = IKey.lang("bbs.ui.world_objects.camera.camera_rotation");
-    public static final IKey WORLD_OBJECTS_CAMERA_TEXTURE = IKey.lang("bbs.ui.world_objects.camera.texture");
     public static final IKey WORLD_OBJECTS_CONTEXT_ADD = IKey.lang("bbs.ui.world_objects.context.add");
     public static final IKey WORLD_OBJECTS_ID = IKey.lang("bbs.ui.world_objects.id", "ID", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
     public static final IKey WORLD_OBJECTS_ID_TOOLTIP = IKey.lang("bbs.ui.world_objects.id-tooltip", "The ID of this world object that can be referenced by scripts", BLOCK_VARIANT_CONTEXT_INSERT_EMPTY);
